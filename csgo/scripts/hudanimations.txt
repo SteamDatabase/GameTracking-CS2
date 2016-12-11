@@ -1,0 +1,321 @@
+// sample animation script
+//
+//
+// commands:
+//	Animate <panel name> <variable> <target value> <interpolator> <start time> <duration>
+//		variables:
+//			FgColor
+//			BgColor
+//			Position
+//			Size
+//			Blur		(hud panels only)
+//			TextColor	(hud panels only)
+//			Ammo2Color	(hud panels only)
+//			Alpha		(hud weapon selection only)
+//			SelectionAlpha  (hud weapon selection only)
+//			TextScan	(hud weapon selection only)
+//
+//		interpolator:
+//			Linear
+//			Accel - starts moving slow, ends fast
+//			Deaccel - starts moving fast, ends slow
+//			Spline - simple ease in/out curve
+//			Pulse - < freq > over the duration, the value is pulsed (cosine) freq times ending at the dest value (assuming freq is integral)
+//			Flicker - < randomness factor 0.0 to 1.0 > over duration, each frame if random # is less than factor, use end value, otherwise use prev value
+//
+//	RunEvent <event name> <start time>
+//		starts another even running at the specified time
+//
+//	StopEvent <event name> <start time>
+//		stops another event that is current running at the specified time
+//
+//	StopAnimation <panel name> <variable> <start time>
+//		stops all animations refering to the specified variable in the specified panel
+//
+//	StopPanelAnimations <panel name> <start time>
+//		stops all active animations operating on the specified panel
+//
+//  SetFont <panel name> <fontparameter> <fontname from scheme> <set time> 
+//
+//	SetTexture <panel name> <textureidname> <texturefilename> <set time>
+//
+//  SetString <panel name> <string varname> <stringvalue> <set time>
+
+event LevelInit
+{
+}
+
+event OpenWeaponSelectionMenu
+{
+	StopEvent CloseWeaponSelectionMenu	0.0
+	StopEvent WeaponPickup				0.0
+
+	// make the display visible
+	Animate HudWeaponSelection Alpha 		"128"		Linear 0.0 0.1
+	Animate HudWeaponSelection SelectionAlpha 	"255"	Linear 0.0 0.1
+	Animate HudWeaponSelection FgColor		"FgColor"	Linear 0.0 0.1
+	//Animate HudWeaponSelection TextColor	"BrightFg"	Linear 0.0 0.1
+	Animate HudWeaponSelection TextScan		"1" 		Linear 0.0 0.1
+}
+
+event CloseWeaponSelectionMenu
+{
+	StopEvent CloseWeaponSelectionMenu	0.0
+	StopEvent WeaponPickup				0.0
+
+	// make the display visible
+	Animate HudWeaponSelection Alpha 		"128"		Linear 0.0 0.1
+	Animate HudWeaponSelection SelectionAlpha 	"255"	Linear 0.0 0.1
+	Animate HudWeaponSelection FgColor		"FgColor"	Linear 0.0 0.1
+	//Animate HudWeaponSelection TextColor	"BrightFg"	Linear 0.0 0.1
+	Animate HudWeaponSelection TextScan		"1" 		Linear 0.0 0.1
+}
+
+
+event MenuOpen
+{
+	StopEvent	MenuClose 0.0 
+
+	// fade in
+	Animate HudMenu Alpha 		"255"		Linear 0.0 0.1
+	Animate HudMenu SelectionAlpha 	"255"		Linear 0.0 0.1
+	Animate HudMenu FgColor		"FgColor"		Linear 0.0 0.1
+	Animate HudMenu MenuColor		"MenuColor"	Linear  0.0 0.1
+	Animate HudMenu ItemColor		"ItemColor"	Linear 0.0 0.1
+	Animate HudMenu TextScan		"1"		Linear 0.0 0.1
+
+	// Undo any blur
+	Animate HudMenu		Blur		"1"			Linear	0.0		0.01
+}
+
+event MenuClose
+{	
+	// Hide it
+	Animate HudMenu Alpha 		"0" Linear 0.0 1
+	Animate HudMenu SelectionAlpha 	"0" Linear 0.0 1
+	Animate HudMenu FgColor		"0 0 0 0" Linear 0.0 1
+	Animate HudMenu MenuColor		"0 0 0 0" Linear 0.0 1
+	Animate HudMenu ItemColor		"0 0 0 0" Linear 0.0 1
+}
+
+event MenuPulse
+{
+	Animate HudMenu		Blur		"7"			Linear	0.0		0.1
+	Animate HudMenu		Blur		"2"			Deaccel	0.1		0.1
+	Animate HudMenu		Blur		"7"			Linear	0.2		0.1
+	Animate HudMenu		Blur		"2"			Deaccel	0.3		0.1
+	Animate HudMenu		Blur		"7"			Linear	0.4		0.1
+	Animate HudMenu		Blur		"2"			Deaccel	0.5		0.1
+	Animate	HudMenu		Blur		"1"			Deaccel	0.6		0.4
+}
+
+event TimerIncrement
+{
+	Animate HudTimer		Blur		"7"			Linear	0.0	0.1
+	Animate HudTimer		Blur		"2"			Deaccel	0.1		0.8
+	Animate	HudTimer		Blur		"0"			Deaccel	1.1		1.5
+}
+
+event TimerDecrement
+{
+	Animate HudTimer		Blur		"7"			Linear	0.0	0.1
+	Animate HudTimer		Blur		"2"			Deaccel	0.1		0.8
+	Animate	HudTimer		Blur		"0"			Deaccel	1.1		1.5
+}
+
+
+event ResourceIncrement
+{
+	Animate HudResources		Blur			"3"			Linear	0.0	0.0
+	Animate HudResources		PulseAmount		"0"			Linear	0.0	0.01
+	Animate HudResources		Blur			"1"			Deaccel	0.1	1.5
+	Animate HudResources		PulseAmount		"1"			Linear	0.1	2
+
+	Animate HudResources		PulseAmount		"0"			Linear	2	2
+}
+
+event ResourceDecrement
+{
+	Animate HudResources		Blur			"7"			Linear	0.0	0.0
+	Animate HudResources		PulseAmount		"0"			Linear	0.0	0.01
+	Animate HudResources		Blur			"1"			Deaccel	0.1	1.5
+	Animate HudResources		PulseAmount		"1"			Linear	0.1	2
+
+	Animate HudResources		PulseAmount		"0"			Linear	2	2
+}
+
+event ResourcePickup
+{
+	Animate HudResourcesPickup	Alpha			"255"			Linear	0	0
+	Animate HudResourcesPickup	Position		"80 r40"		Linear	0	0
+	Animate HudResourcesPickup	Position		"80 r120"		Deaccel	0	1
+	Animate HudResourcesPickup	Blur			"7"			Deaccel 0	0.2
+	Animate HudResourcesPickup	Alpha			"0"			Deaccel	.8	0.2
+	Animate	HudResourcesPickup	Blur		"1"			Deaccel	0.2	0.3
+}
+
+event PrimaryAmmoIncrement
+{
+}
+
+event PrimaryAmmoDecrement
+{
+	Animate HudAmmoPrimary  FgColor "HudIcon_Red" Linear 0.0 0.0001
+	Animate HudAmmoPrimary  FgColor "FgColor"   Accel 0.0 3.0
+}
+
+event PrimaryAmmoEmpty
+{
+}
+
+
+event SecondaryAmmoIncrement
+{
+}
+
+event SecondaryAmmoDecrement
+{
+	Animate HudAmmoPrimary  FgColor "HudIcon_Red" Linear 0.0 0.0001
+	Animate HudAmmoPrimary  FgColor "FgColor"   Accel 0.0 3.0
+}
+
+event SecondaryAmmoEmpty
+{
+}
+
+event ShowPrimaryAmmoClipShowSecondaryAmmo
+{
+	// Turn on secondary
+	Animate HudAmmoSecondary		Alpha		"255"	Linear	0.0		0.4
+	// Turn on secondary
+	Animate HudAmmoPrimaryClip		Alpha		"255"	Linear	0.0		0.4
+
+	// Move primary to left
+//	Animate HudAmmoPrimary			Position	"r125 400"	Deaccel	0.0		0.4
+//	Animate HudAmmoPrimaryClip		Position	"r55 400"	Deaccel	0.0		0.4
+
+}
+
+event ShowPrimaryAmmoClipHideSecondaryAmmo
+{
+	// Turn off secondary
+	Animate HudAmmoSecondary		Alpha		"0"	Linear	0.0		0.4
+	// Turn on secondary
+	Animate HudAmmoPrimaryClip		Alpha		"255"	Linear	0.0		0.4
+
+	// Move primary to left
+//	Animate HudAmmoPrimary			Position	"r100 400"	Deaccel	0.0		0.4
+//	Animate HudAmmoPrimaryClip		Position	"r30 400"	Deaccel	0.0		0.4
+}
+
+event HidePrimaryAmmoClipShowSecondaryAmmo
+{
+	// Turn on secondary
+	Animate HudAmmoSecondary		Alpha		"255"	Linear	0.0		0.4
+	// Turn off secondary
+	Animate HudAmmoPrimaryClip		Alpha		"0"	Linear	0.0		0.4
+
+	// Move primary to left
+//	Animate HudAmmoPrimary			Position	"100 400"	Deaccel	0.0		0.4
+//	Animate HudAmmoPrimaryClip		Position	"r30 400"	Deaccel	0.0		0.4
+}
+
+event HidePrimaryAmmoClipHideSecondaryAmmo
+{
+	// Turn off secondary
+	Animate HudAmmoSecondary		Alpha		"0"	Linear	0.0		0.4
+	// Turn off secondary
+	Animate HudAmmoPrimaryClip		Alpha		"0"	Linear	0.0		0.4
+
+	// Move primary to left
+//	Animate HudAmmoPrimary			Position	"r70 400"	Deaccel	0.0		0.4
+//	Animate HudAmmoPrimaryClip		Position	"r30 400"	Deaccel	0.0		0.4
+}
+
+//activecolor - instantly turn red, fade back to yellow
+event AccountMoneyRemoved
+{
+	Animate HudAccount		FgColor	"HudIcon_Red" Linear 0.0 0.0001
+	Animate HudAccount		FgColor	"OrangeDim" Accel 0.0 3.0
+
+	Animate	HudAccount		Ammo2Color "HudIcon_Red" Linear 0.0 0.0001
+	Animate HudAccount		Ammo2Color "0 0 0 0" Accel 0.0 3.0
+}
+
+//activecolor - instantly turn green, fade back to yellow
+event AccountMoneyAdded
+{
+	Animate HudAccount		FgColor	"HudIcon_Green" Linear 0.0 0.0001
+	Animate HudAccount		FgColor	"OrangeDim" Accel 0.0 3.0
+
+	Animate HudAccount		Ammo2Color "HudIcon_Green" Accel 0.0 0.0001
+	Animate HudAccount		Ammo2Color "0 0 0 0" Accel 0.0 3.0
+}
+
+event AccountMoneyInvisible
+{
+	Animate HudAccount		FgColor	"OrangeDim" Accel 0.0 0.0001
+	Animate HudAccount		Ammo2Color "0 0 0 0" Accel 0.0 0.0001
+}
+
+event HealthRestored
+{
+	StopPanelAnimations HudHealth	0.0
+	Animate HudHealth		FgColor	"OrangeDim"		Linear 0.0 0.01
+	Animate HudHealth		Blur	"7"			Deaccel 0.0 0.2
+	Animate HudHealth		Blur	"1"			Deaccel 0.2 1.0
+}
+
+event HealthTookDamage
+{
+	Animate HudHealth		FgColor	"HudIcon_Red"		Linear 0.0 0.1
+	Animate HudHealth		FgColor	"OrangeDim"		Pulse 	4 0.1 1.0
+	Animate HudHealth		Blur	"7"			Deaccel 0.0 0.2
+	Animate HudHealth		Blur	"1"			Deaccel 0.2 0.3
+}
+
+event HealthLow
+{
+	Animate HudHealth		FgColor	"HudIcon_Red"		Linear 0.0 0.1
+	Animate HudHealth		FgColor	"OrangeDim"		Pulse 2000 0.1 1000.0
+}
+
+event HintMessageShow
+{
+	// show the hints
+	Animate HudHintDisplay Alpha	255 Linear 0.0 0.5
+	Animate HudHintDisplay FgColor	"HintMessageFg"		Linear 0.0 0.01
+
+	// hide the panel after a while	
+	Animate HudHintDisplay Alpha	0 Linear 6.0 1.0
+}
+
+event HintMessageHide
+{
+	Animate HudHintDisplay Alpha	0 Linear 0.0 0.5
+}
+
+event MapOff
+{
+	Animate overview Position "0 0" Linear 0.0 0.001
+	Animate overview Size "0 0" Linear 0.0 0.001
+}
+
+event MapZoomToSmall
+{
+	Animate overview Position "16 16" Linear 0.0 0.2
+	Animate overview Size "160 120" Linear 0.0 0.2
+	
+	StopAnimation overview zoom 0.0
+	Animate overview zoom "1.0" Linear 0.0 0.0001
+	Animate overview zoom "3.0" Spline 0.0001 1.0
+}
+
+event MapZoomToLarge
+{
+	Animate overview Position "c-300 20" Linear 0.0 0.2
+	Animate overview Size "600 440" Linear 0.0 0.2
+	
+	StopAnimation overview zoom 0.0
+	Animate overview zoom "1.0" Spline 0.0 0.2
+}

@@ -1,0 +1,56 @@
+"Resource/UI/ControllerSpinnerListItem.res"
+{
+	"ControllerSpinnerListItem"
+	{
+		"ControlName"					"EditablePanel"
+		"fieldName"						"ControllerListItem"
+		"wide"							"f8"
+		"tall"							"30"
+		"autoResize"					"0"
+		"pinCorner"						"0"
+		"visible"						"1"
+		"enabled"						"1"
+		"tabPosition"					"0"
+		"proportionalToParent"			"1"
+		"paintBorder"					"0"
+		"leftFadeWidth"					"100"
+		"rightFadeWidth"				"50"
+		"focusBgColor"					"128 0 0 255"
+		"unfocusBgColor"				"64 64 64 255"
+	}
+
+	"LblCommand"
+	{
+		"ControlName"					"Label"
+		"fieldName"						"LblCommand"
+		"xpos"							"5"
+		"ypos"							"5"
+		"wide"							"200"
+		"autoResize"					"0"
+		"pinCorner"						"0"
+		"visible"						"1"
+		"enabled"						"1"
+		"tabPosition"					"0"
+		"proportionalToParent"			"1"
+		"labelText"						""
+		"Font"                          "DefaultLarge"
+	}
+		
+	"LblCurrentValue"
+	{
+		"ControlName"					"Label"
+		"fieldName"						"LblCurrentValue"
+		"xpos"							"275"
+		"ypos"							"5"
+		"wide"							"300"
+		"tall"							"25"
+		"autoResize"					"0"
+		"pinCorner"						"0"
+		"visible"						"1"
+		"enabled"						"1"
+		"tabPosition"					"0"
+		"proportionalToParent"			"1"
+		"labelText"						"SPINNERSPINNER"
+		"Font"                          "DefaultLarge"
+	}
+}

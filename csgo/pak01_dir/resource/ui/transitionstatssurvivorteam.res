@@ -1,0 +1,131 @@
+"Resource/UI/TransitionStatsSurvivorTeam.res"
+{	
+	"BackgroundImage"
+	{
+		"ControlName"	"ScalableImagePanel"
+		"fieldName"		"BackgroundImage"
+		"xpos"			"3"
+		"ypos"			"3"
+		"wide"			"410"
+		"tall"			"65"
+		"visible"		"1"
+		"enabled"		"1"
+		"scaleImage"	"1"	
+		"image"			"../vgui/hud/ScalablePanel_bgMidGrey"
+		"src_corner_height"		"16"			// pixels inside the image
+		"src_corner_width"		"16"
+		"draw_corner_width"		"8"				// screen size of the corners ( and sides ), proportional
+		"draw_corner_height" 	"8"	
+	}
+
+	"TeenGirl"
+	{
+		"ControlName"		"CIconPanel"
+		"fieldName"			"TeenGirl"
+		"icon"				"teengirl_outline"
+		"xpos"				"5"
+		"ypos"				"0"
+		"wide"				"30"
+		"tall"				"60"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"scaleimage"		"1"
+		"iconcolor"			"115 115 115 255"
+	}
+
+	"NamVet"
+	{
+		"ControlName"		"CIconPanel"
+		"fieldName"			"NamVet"
+		"icon"				"namvet_outline"
+		"xpos"				"27"
+		"ypos"				"0"
+		"wide"				"30"
+		"tall"				"60"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"scaleimage"		"1"
+		"iconcolor"			"162 162 162 255"
+	}
+
+	"Biker"
+	{
+		"ControlName"		"CIconPanel"
+		"fieldName"			"Biker"
+		"icon"				"biker_outline"
+		"xpos"				"50"
+		"ypos"				"0"
+		"wide"				"30"
+		"tall"				"60"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"scaleimage"		"1"
+		"iconcolor"			"231 231 231 255"
+	}
+
+	"Manager"
+	{
+		"ControlName"		"CIconPanel"
+		"fieldName"			"Manager"
+		"icon"				"manager_outline"
+		"xpos"				"79"
+		"ypos"				"0"
+		"wide"				"30"
+		"tall"				"60"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"scaleimage"		"1"
+		"iconcolor"			"162 162 162 255"
+	}
+
+	"PerformanceLabel"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"PerformanceLabel"
+		"xpos"				"108"
+		"ypos"				"28"
+		"wide"				"300"
+		"tall"				"12"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			"#L4D_ReportScreen_Performance"
+		"textAlignment"		"north-west"
+		"dulltext"			"0"
+		"brighttext"		"0"
+		"fgcolor_override"	"White"
+		"wrap"				"0"
+		"font"				"MenuSubTitle"
+	}
+
+	"RatingStars"
+	{
+		"ControlName"		"CIconPanel"
+		"fieldName"			"RatingStars"
+		"icon"				"rating_3_stars"
+		"xpos"				"330"
+		"ypos"				"28"
+		"wide"				"64"
+		"tall"				"10"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"scaleimage"		"1"
+	}
+
+}

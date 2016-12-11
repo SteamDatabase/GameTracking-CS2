@@ -1,0 +1,71 @@
+"Resource/UI/SinglePlayer.res"
+{
+	"SinglePlayer"
+	{
+		"ControlName"	"Frame"
+		"fieldName"		"SinglePlayer"
+		"xpos"			"c-250"
+		"ypos"			"c-150"
+		"wide"			"500"
+		"tall"			"300"
+		"autoResize"	"0"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+	}
+
+	"BtnStartGame"
+	{
+		"ControlName"	"ImageButton"
+		"fieldName"		"BtnStartGame"
+		"xpos"			"15"
+		"ypos"			"35"
+		"zpos"			"1"
+		"wide"			"256"
+		"tall"			"64"
+		"autoResize"	"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"navUp"			"SpnCampaign"
+		"navDown"		"SpnDifficulty"
+	}
+
+	"SpnDifficulty"
+	{
+		"ControlName"	"SpinnerControl"
+		"fieldName"		"SpnDifficulty"
+		"xpos"			"15"
+		"ypos"			"95"
+		"wide"			"400"
+		"tall"			"50"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"navUp"			"BtnStartGame"
+		"navDown"		"SpnCampaign"
+		"title"			"#L4D360UI_Difficulty"
+	}
+
+	"SpnCampaign"
+	{
+		"ControlName"	"SpinnerControl"
+		"fieldName"		"SpnCampaign"
+		"xpos"			"15"
+		"ypos"			"135"
+		"wide"			"400"
+		"tall"			"50"
+		"autoResize"	"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+		"navUp"			"SpnDifficulty"
+		"navDown"		"BtnStartGame"
+		"title"			"#L4D360UI_Scenario"
+	}
+}

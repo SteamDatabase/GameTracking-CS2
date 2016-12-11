@@ -1,0 +1,48 @@
+"Resource\WorkshopPreviewVTFs.res"
+{
+	"UVChartPopup"
+	{
+		"ControlName"			"CUVChartPopup"
+		"fieldName"				"UVChartPopup"
+		"xpos"					"100"
+		"ypos"					"80"
+		"wide"					"528"
+		"tall"					"544"
+		"autoResize"			"0"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"settitlebarvisible"	"1"
+		"title"					"#Workshop_Preview_UVChart"
+	}
+	"PatternPopup"
+	{
+		"ControlName"			"CPatterPopup"
+		"fieldName"				"PatternPopup"
+		"xpos"					"100"
+		"ypos"					"80"
+		"wide"					"528"
+		"tall"					"544"
+		"autoResize"			"0"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"settitlebarvisible"	"1"
+		"title"					"#Workshop_Preview_Pattern"
+	}
+	"VTFPanel"
+	{
+		"ControlName"	"CVTFPreviewPanel"
+		"fieldName"		"VTFPanel"
+		"xpos"			"8"
+		"ypos"			"24"
+		"wide"			"512"
+		"tall"			"512"
+		"autoresize"	"3"
+		"pincorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+}

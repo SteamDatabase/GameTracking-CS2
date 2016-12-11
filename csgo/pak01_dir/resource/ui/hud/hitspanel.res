@@ -1,0 +1,146 @@
+"Resource/UI/HUD/HitsPanel.res"
+{
+// HitsPanel is 		"wide"			"142"
+//						"tall"			"35"
+
+	"TotalHitsImage"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"TotalHitsImage"
+		"xpos"			"5"
+		"ypos"			"2"
+		"wide"			"17"
+		"tall"			"17"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+	"TotalHitsLabel"
+	{
+		"ControlName"	"Label"
+		"fieldName"		"TotalHitsLabel"
+		"xpos"			"5"
+		"ypos"			"20"
+		"wide"			"17"
+		"tall"			"12"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		""
+		"textAlignment"	"east"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"font"			"HudHintText"
+	}
+
+	"SmokerHitsImage"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"TotalHitsImage"
+		"xpos"			"51"
+		"ypos"			"2"
+		"wide"			"17"
+		"tall"			"17"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+	"SmokerHitsLabel"
+	{
+		"ControlName"	"Label"
+		"fieldName"		"TotalHitsLabel"
+		"xpos"			"51"
+		"ypos"			"20"
+		"wide"			"17"
+		"tall"			"12"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		""
+		"textAlignment"	"east"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"font"			"HudHintText"
+	}
+
+	"BoomerHitsImage"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"TotalHitsImage"
+		"xpos"			"74"
+		"ypos"			"2"
+		"wide"			"17"
+		"tall"			"17"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+	"BoomerHitsLabel"
+	{
+		"ControlName"	"Label"
+		"fieldName"		"TotalHitsLabel"
+		"xpos"			"74"
+		"ypos"			"20"
+		"wide"			"17"
+		"tall"			"12"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		""
+		"textAlignment"	"east"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"font"			"HudHintText"
+	}
+
+	"HunterHitsImage"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"TotalHitsImage"
+		"xpos"			"97"
+		"ypos"			"2"
+		"wide"			"17"
+		"tall"			"17"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+	"HunterHitsLabel"
+	{
+		"ControlName"	"Label"
+		"fieldName"		"TotalHitsLabel"
+		"xpos"			"97"
+		"ypos"			"20"
+		"wide"			"17"
+		"tall"			"12"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		""
+		"textAlignment"	"east"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"font"			"HudHintText"
+	}
+
+	"HulkHitsImage"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"TotalHitsImage"
+		"xpos"			"120"
+		"ypos"			"2"
+		"wide"			"17"
+		"tall"			"17"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+	"HulkHitsLabel"
+	{
+		"ControlName"	"Label"
+		"fieldName"		"TotalHitsLabel"
+		"xpos"			"120"
+		"ypos"			"20"
+		"wide"			"17"
+		"tall"			"12"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		""
+		"textAlignment"	"east"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"font"			"HudHintText"
+	}
+
+}

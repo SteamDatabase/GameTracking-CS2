@@ -1,0 +1,68 @@
+"Resource/UI/DropDownGameAccess.res"
+{
+	"PnlBackground"
+	{
+		"ControlName"		"Panel"
+		"fieldName"			"PnlBackground"
+		"xpos"				"0"
+		"ypos"				"0"
+		"zpos"				"1"
+		"wide"				"146"
+		"tall"				"45"	[$X360]
+		"tall"				"45"	[$WIN32]
+		"visible"			"1"
+		"enabled"			"1"
+		"paintbackground"	"1"
+		"paintborder"		"1"
+	}
+
+	"BtnPrivate"
+	{
+		"ControlName"			"L4D360HybridButton"
+		"fieldName"				"BtnPrivate"
+		"xpos"					"0"
+		"ypos"					"0"
+		"zpos"					"2"
+		"wide"					"140"
+		"tall"					"20"
+		"autoResize"			"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"wrap"					"1"
+		"navUp"					"BtnFriends"
+		"navDown"				"BtnFriends"
+		"labelText"				"#L4D360UI_Access_Invite"
+		"tooltiptext"			"#L4D360UI_Lobby_MakePrivate_Tip"
+		"disabled_tooltiptext"	"#L4D360UI_GameSettings_Tooltip_Access_Disabled"
+		"style"					"FlyoutMenuButton"
+		"command"				"GameAccess_private"
+		"EnableCondition" 		"LiveRequired"		
+	}	
+	
+	"BtnFriends"
+	{
+		"ControlName"			"L4D360HybridButton"
+		"fieldName"				"BtnFriends"
+		"xpos"					"0"
+		"ypos"					"20"
+		"zpos"					"2"
+		"wide"					"140"
+		"tall"					"20"
+		"autoResize"			"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"wrap"					"1"
+		"navUp"					"BtnPrivate"
+		"navDown"				"BtnPrivate"
+		"labelText"				"#L4D360UI_Access_Friends"
+		"tooltiptext"			"#L4D360UI_Lobby_MakeFriendOnly_Tip"
+		"disabled_tooltiptext"	"#L4D360UI_GameSettings_Tooltip_Access_Disabled"
+		"style"					"FlyoutMenuButton"
+		"command"				"GameAccess_friends"
+		"EnableCondition" 		"LiveRequired"		
+	}
+}

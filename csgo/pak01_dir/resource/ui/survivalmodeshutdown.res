@@ -1,0 +1,81 @@
+"Resource/UI/SurvivalModeShutdown.res"
+{
+	"survival_shutting_down"
+	{
+		"ControlName"		"CSurvivalModeShutdown"
+		"fieldName"			"survival_shutting_down"
+		"xpos"				"0"
+		"ypos"				"0"
+		"wide"				"f0"
+		"tall"				"480"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"PaintBackgroundType"	"2"
+	}
+	
+	"BackgroundImage"
+	{
+		"ControlName"	"ScalableImagePanel"
+		"fieldName"		"BackgroundImage"
+		"xpos"			"c-150"
+		"ypos"			"c-70"
+		"zpos"			"0"
+		"wide"			"300"
+		"tall"			"90"
+		"visible"		"1"
+		"enabled"		"1"
+		"scaleImage"	"1"	
+		"image"			"../vgui/hud/ScalablePanel_bgBlack_outlineGrey"
+		"zpos"			"-2"
+		
+		"src_corner_height"		"16"				// pixels inside the image
+		"src_corner_width"		"16"
+			
+		"draw_corner_width"		"8"				// screen size of the corners ( and sides ), proportional
+		"draw_corner_height" 	"8"	
+	}
+	"ModeTitle"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"ModeTitle"
+		"xpos"				"c-130"
+		"ypos"				"c-60"
+		"zpos"				"1"
+		"wide"				"200"
+		"tall"				"25"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			"#L4D_VS_Shutdown_Title"
+		"textAlignment"		"west"
+		"dulltext"			"0"
+		"brighttext"		"0"
+		"font"				"FrameTitle"
+		"fgcolor_override"	"White"
+	}
+	"SpawnModeOneText"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"SpawnModeOneText"
+		"xpos"				"c-130"
+		"ypos"				"c-35"
+		"zpos"				"1"
+		"wide"				"260"
+		"tall"				"50"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			"#L4D_ServerShuttingDownIdle"
+		"textAlignment"		"north-west"
+		"dulltext"			"0"
+		"brighttext"		"0"
+		"wrap"				"1"
+		"font"				"DefaultMedium"
+		"fgcolor_override"	"White"
+	}
+}

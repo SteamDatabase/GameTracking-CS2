@@ -1,0 +1,71 @@
+"Resource/UI/Tips.res"
+{
+	"loadingtippanel"
+	{
+		"ControlName"		"EditablePanel"
+		"fieldName"		"loadingtippanel"
+		"xpos"			"0"
+		"ypos"			"0"
+		"wide"			"300"
+		"tall"			"50"
+		"autoResize"		"0"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"PaintBackgroundType"	"2"
+	}
+
+	"TipIcon"
+	{
+		"ControlName"		"ImagePanel"
+		"fieldName"			"TipIcon"
+		"xpos"				"22"
+		"ypos"				"3"
+		"wide"				"55"
+		"tall"				"55"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"image"				""
+		"tabPosition"		"0"
+		"scaleimage"		"1"
+	}
+
+	"TipTitle"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"TipTitle"
+		"xpos"				"80"
+		"ypos"				"1"
+		"wide"				"300"
+		"tall"				"15"
+		"wrap"				"1"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			""
+		"textAlignment"		"north-west"
+		"font"				"DefaultMedium"
+		"zpos"				"40"
+	}
+
+	"TipText"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"TipText"
+		"xpos"				"80"
+		"ypos"				"15"
+		"wide"				"300"
+		"tall"				"40"
+		"wrap"				"1"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			""
+		"textAlignment"		"north-west"
+		"font"				"DefaultSmall"
+//		"fgcolor_override"	"164 164 164 255"
+		"zpos"				"40"
+	}
+}
