@@ -407,11 +407,11 @@
  GCConnectionStatus_GC_GOING_DOWN
  Game {  type %short mode %short map %short } 
  H9w8tiH
- H;= 
- H;=float
- H;=long[O
- H;=uNO
- H;=}bO
+ H;=/
+ H;=@<
+ H;=I
+ H;=Y
+ H;=long double~A
  HANDLING = %float
  IcD$
  IsInstanceActive: %s. IsInstructing: %s. IsLearned: %short
@@ -497,6 +497,7 @@
 != true
 !CMsgGCCStrike15_v2_ClientToGCChat
 !CMsgGCCStrike15_v2_GCToClientChat
+!CMsgGCCStrike15_v2_Party_Register
 !CMsgGCCStrike15_v2_PlayersProfile
 !CMsgGCCStrike15_v2_WatchInfoUsers
 !CMsgGCStorePurchaseCancelResponse
@@ -520,6 +521,7 @@
 !k_EGCMsgMasterSetClientMsgRouting
 !k_EGCToGCMsgMasterStartupComplete
 !k_EMsgGCCStrike15_v2_DraftSummary
+!k_EMsgGCCStrike15_v2_Party_Search
 !k_EMsgGCClientDisplayNotification
 !k_EMsgGCItemPreviewStatusResponse
 !k_EMsgGCLookupAccountNameResponse
@@ -2399,6 +2401,7 @@
 #include is NULL 
 #int#
 #k_EMsgGCCStrike15_v2_GotvSyncPacket
+#k_EMsgGCCStrike15_v2_Party_Register
 #k_EMsgGCCStrike15_v2_PlayersProfile
 #k_EMsgGCCStrike15_v2_WatchInfoUsers
 #k_EMsgGCDeliverGiftResponseReceiver
@@ -2885,6 +2888,7 @@ ${%short}
 %k_EMsgGCCStrike15_v2_Client2GCTextMsg
 %k_EMsgGCCStrike15_v2_GC2ClientTextMsg
 %k_EMsgGCCStrike15_v2_MatchmakingStart
+%k_EMsgGCCStrike15_v2_Party_Unregister
 %k_EMsgGCItemPreviewExpireNotification
 %k_EMsgGCServerBrowser_BlacklistServer
 %k_EMsgGCStorePurchaseFinalizeResponse
@@ -3148,6 +3152,7 @@ ${%short}
 &CCSUsrMsg_SendLastKillerDamageToClient
 &CGCSystemMsg_GetPurchaseTrust_Response
 &CMsgGCCStrike15_v2_ClientCommendPlayer
+&CMsgGCCStrike15_v2_Party_SearchResults
 &CMsgGCUserTrackTimePlayedConsecutively
 &CMsgSteamDatagramClientPingSampleReply
 &CMsgSteamDatagramClientSwitchedPrimary
@@ -3302,33 +3307,34 @@ ${%short}
 ( function( nVolume ) {
 ( function() {
 (#GameUI_Disconnect_NoGOTVRelaysAvailable
+(%"short+
 (%.4g,%.4g)
-(%3L+
+(%2r+
+(%6r+
+(%6s+
 (%7.4f : %30s : %5.3f : %4.2f : %d)
-(%BK+
-(%RJ+
-(%VJ+
-(%VK+
+(%br+
 (%double)  EffectName "%short"  Dormant? %short  Emission Stopped? %short 
 (%double): Cycle latch used to correct %.2f in to %.2f instead of %.f.
 (%double/%double)%short %short
 (%zu) Descend: %short, (%short), %short
 (%zu) readdir failed to find '%short' in '%short'
 (*%short*), 
-(-DL+
-(-RK+
-(-bJ+
-(-fK+
-(-vJ+
+(-2s+
+(-Br+
+(-Fs+
+(-Vr+
+(-unsigned short+
+(-zr+
 (0 - off) (1 - Draws the bounding box of entities) (2 - Draws the axis aligned bounding box used for culling) (3 - draws both bounding boxes)
-(5)L+
-(5\I+
-(5mI+
-(5vJ+
+(5	unsigned short+
+(5<q+
+(5Mq+
+(5Vr+
+(5~r+
 (;GLs7H
-(=aXK
-(=jJ+
-(=lOK
+(=Jr+
+(=ss+
 (@333333
 (A9] ~3I
 (B UH
@@ -3344,7 +3350,6 @@ ${%short}
 (D$ H
 (D$ I
 (D9;~OM
-(D9=7%
 (D9c 
 (DORMANT)
 (E9,$
@@ -3352,8 +3357,7 @@ ${%short}
 (G@UH
 (GOTV) %short
 (H9\$
-(H;=unsigned __int128
-(H;=}#>
+(H;=-F
 (H;p unsigned short
 (Histogram luminance is in linear space)
 (L;l$8
@@ -3392,7 +3396,6 @@ ${%short}
 ) >= 0
 )#GameUI_Disconnect_PureServer_ClientExtra
 )#unsigned short@D
-)%%R+
 )->AmmoEmpty()
 )->AmmoEmpty() 
 )->AmmoFull()
@@ -3883,9 +3886,12 @@ ${%short}
 .placeholder.proto
 .pwl.vtf
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%U)unsigned long
+/%Fc;
+/%Txk
+/%^0T
 /%q0I
 /%}=7
+/- Jo
 /../platform
 //   BOOL   (signed char yes/no toggle)
 //   LIST
@@ -3926,6 +3932,7 @@ ${%short}
 //MOD/%d_%s_%s.tga
 //MOD/%short
 //platform/materials/vgui/vtfnotloaded
+/= \N
 /=/ L
 /@$stH
 /@,ti
@@ -4075,7 +4082,6 @@ ${%short}
 0123456789abcdef
 019a4f117278420be7a35a7a9f37fa3280a73ebe
 0402FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE80289070FB05D38FF58321F2E800536D538CCDAA3D9
-04c345e183cbcf2a434ee818c402f5002b57ce5f
 06a89f2934b7cd02db605e4871c89b542c4ada18
 082f23e7047a57b61153aafc3a41101a01a010d3
 093rgtUH
@@ -4098,8 +4104,6 @@ ${%short}
 0D;KP
 0D;sLr
 0E;nPD
-0H;=mdO
-0H;=}UA
 0[A\A]A^A_]
 0[A\A]A^]
 0[A\]
@@ -4139,13 +4143,13 @@ ${%short}
 10000
 100000.0
 1000000000
+10:37:51
 120.0
 1250.0
 127.0.0.1
 12gauge
 131072
 1326afde780df58a67317e7ad5f551ba4f3c4aa0
-13:32:13
 16 16 16 0
 16 16 16 100
 16000
@@ -4212,6 +4216,7 @@ ${%short}
 2,.CMsgAMSendEmail.PersonaNameReplacementToken
 2,.CMsgSteamDatagramDataCenterState.DataCenter
 2-.CMsgGCCStrike15_v2_MatchmakingGC2ClientHello"
+2-.CMsgGCCStrike15_v2_Party_SearchResults.Entry
 2-.CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded"$
 2. Run vconfig to specify which game you'long double restrict working on.
 2.791139
@@ -4283,46 +4288,44 @@ ${%short}
 3652f0a10736f352e7cb38ff8f7747005251b044
 36DF0AAFD8B8D7597CA10520D04B
 384.0f
+397f54d28c0d1d9f8732fe72204a827fa7e49da3
 39ca913aa3bd3f2c3880bce3b869ba39def4b6d5
 39q tl
 3: mouse_acceleration = pow(raw_mouse_delta, m_customaccel_exponent - 1) * sensitivity
-3=	tB
-3="sC
-3=&|5
-3=.Ar
-3=._2
-3=.vB
-3=1Km
-3=6@unsigned long
-3=>	'
-3=>,unsigned __int128
-3=>['
-3=>char!
-3=>hr
-3=>{&
-3=E8m
-3=EE/
-3=N%unsigned long
-3=N]'
-3=Ny&
-3=OLm
-3=^f4
-3=^wB
-3=__int128!*
-3=__int128>unsigned long
-3=__int128]2
-3=brn
-3=float;__int128
-3=float?unsigned long
-3=nRm
-3=njb
-3=nl&
-3=nwo
-3=v8r
-3=~&unsigned long
-3=~@r
-3=~[2
-3=~lb
+3=%unsigned long/
+3=&\	
+3=&__int128 restrict
+3=&vm
+3=,*q
+3=.5w
+3=.Jn
+3=.um
+3=.wchar_t&&
+3=11o
+3=6A6
+3=6Cw
+3=6or
+3=;Fq
+3=>Qw
+3=>]unsigned long
+3=>wr
+3=N6w
+3=NI*
+3=NTw
+3=Nw!
+3=U!A
+3=^3'
+3=__float128 volatile	
+3=__float128{r
+3=fjm
+3=float+wchar_t
+3=k8B
+3=num
+3=vKn
+3=wl/
+3=~4w
+3=~Nw
+3=~wm
 3@333333
 3CMsgGCCStrike15_v2_MatchListRequestCurrentLiveGames"G
 3CMsgGCCStrike15_v2_MatchmakingOperator2GCBlogUpdate
@@ -4403,7 +4406,6 @@ ${%short}
 5k_EMsgGCCStrike15_v2_ServerNotificationForUserPenalty
 600.0f
 6127C24C05F38A0AAAF65C0EF02C
-6205c74e0ad23751537f9d036ae04e9813bc7735
 65536
 659EF8BA043916EEDE8911702B22
 66363d7fbd145c8842e6a7c23ea1555544d10adb
@@ -4852,10 +4854,10 @@ ${%short}
 @CHangRope
 @CHudBaseTimer
 @CScaleformComponent_News
+@CScaleformComponent_PartyList
 @CSimpleSimTimer
-@D9-Q6@
+@D9-1^@
 @E9|$
-@H;=H{P
 @HA\]
 @HHc<
 @HcAPH
@@ -5069,7 +5071,6 @@ A;\$@}
 A;\$P|
 A;] |
 A;] }&I
-A;] }'I
 A;] }/I
 A;](r
 A;](|
@@ -5082,6 +5083,7 @@ A;]@}#I
 A;]Pr
 A;]P|
 A;^ }#I
+A;^ }+I
 A;^(}#I
 A;^(}+I
 A;^0}+I
@@ -7393,7 +7395,6 @@ CCallResult<CUiComponent_Leaderboards, LeaderboardFindResult_t>
 CCallResult<CUiComponent_Leaderboards, LeaderboardScoresDownloaded_t>
 CCallResult<CUiComponent_MatchInfo, HTTPRequestCompleted_t>
 CCallResult<CUiComponent_Overwatch, HTTPRequestCompleted_t>
-CCallResult<CUiComponent_PartyBrowser, LobbyMatchList_t>
 CCallResult<CUiComponent_Streams, HTTPRequestCompleted_t>
 CCallResult<CWorkshopFileInfoManager, RemoteStorageGetPublishedFileDetailsResult_t>
 CCallResult<CWorkshopFileInfoManager, RemoteStorageGetPublishedItemVoteDetailsResult_t>
@@ -8400,6 +8401,10 @@ CMsgGCCStrike15_v2_MatchmakingServerRoundStats
 CMsgGCCStrike15_v2_MatchmakingServerRoundStats_DropInfo
 CMsgGCCStrike15_v2_MatchmakingStart
 CMsgGCCStrike15_v2_MatchmakingStop
+CMsgGCCStrike15_v2_Party_Register
+CMsgGCCStrike15_v2_Party_Search
+CMsgGCCStrike15_v2_Party_SearchResults
+CMsgGCCStrike15_v2_Party_SearchResults_Entry
 CMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
 CMsgGCCStrike15_v2_PlayerOverwatchCaseStatus
 CMsgGCCStrike15_v2_PlayerOverwatchCaseUpdate
@@ -9189,7 +9194,6 @@ CScaleformComponent_Medals
 CScaleformComponent_MyPersona
 CScaleformComponent_Overwatch
 CScaleformComponent_PartyBrowser
-CScaleformComponent_PartyList
 CScaleformComponent_Predictions
 CScaleformComponent_SteamOverlay
 CScaleformComponent_Store
@@ -10181,6 +10185,7 @@ C_PlantedC4
 C_Plasma
 C_PlasmaSprite
 C_PlayerAddonModel
+C_PlayerFootContactShadow
 C_PlayerResource
 C_PointCamera
 C_PointCommentaryNode
@@ -10630,6 +10635,7 @@ ClientJob_EMsgGCCStrike15_v2_MatchmakingGC2ClientHello
 ClientJob_EMsgGCCStrike15_v2_MatchmakingGC2ClientReserve
 ClientJob_EMsgGCCStrike15_v2_MatchmakingGC2ClientUpdate
 ClientJob_EMsgGCCStrike15_v2_MatchmakingGCOperationalStats
+ClientJob_EMsgGCCStrike15_v2_Party_Search
 ClientJob_EMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
 ClientJob_EMsgGCCStrike15_v2_PlayersProfile
 ClientJob_EMsgGCCStrike15_v2_WatchInfoUsers
@@ -11305,29 +11311,28 @@ D24FS8
 D24X4S4
 D24X8
 D24X8_SHADOW
-D3%Ef&
-D3%Mg&
-D3%NLm
-D3%kE*
-D3-xy
-D35V}5
+D3%$8t
+D3%O4t
+D3%cn*
+D3%un*
+D3%unsigned long const*
+D3--C6
+D3-u5w
 D40D9
 D8	,H
 D8c*u
 D8g+unsigned short
 D9 tbH
-D9%9:@
-D9%YS&
-D9%l&
+D9%9{&
 D9(r#unsigned short
 D9(t5H
 D9(tWH
+D9-a4l
 D90th
 D94$w
-D951f
 D9:t2
 D9:tLA
-D9=X(6
+D9=8P6
 D9F<~
 D9G@~wH
 D9OLD
@@ -11358,13 +11363,15 @@ D; unsigned short=H
 D;!ti
 D;!unsigned short{Hc
 D;"unsigned short{Hc
-D;%'char>
-D;%+1{
-D;%.V8
-D;%;~>
-D;%Ux8
-D;%ZN
-D;%{double>
+D;%%]]
+D;%.long double
+D;%3f
+D;%U[]
+D;%int~8
+D;%vS>
+D;%ye
+D;%{float
+D;%~}8
 D;&tU
 D;'unsigned short&
 D;'unsigned short[f.
@@ -11372,22 +11379,31 @@ D;(unsigned short	H
 D;*t5H
 D;*tD
 D;*unsigned short-H
-D;-1(}
-D;-=<8
-D;-@M
-D;-D%}
-D;-K;
-D;-R+>
-D;-`P8
-D;-char*)
-D;5)Q
-D;50^
+D;-2S>
+D;-@x8
+D;-A5l
+D;-A7l
+D;-cs
+D;-ea8
+D;-fS>
+D;-i7l
+D;-qx8
+D;56F
+D;59<q
+D;59>@
+D;5U=@
+D;5]"
+D;5gc
+D;5mk8
+D;5t7>
+D;5v<@
 D;6u 
-D;=/H>
-D;=@)>
-D;=@float>
-D;=aH>
-D;={long double>
+D;= Q>
+D;=A`}
+D;=Ap>
+D;=H?>
+D;=ikl
+D;=rQ>
 D;Q(|
 D;Q(}RH
 D;`(}bH
@@ -11396,7 +11412,6 @@ D;c$|
 D;c0|
 D;c0}"H
 D;c0}'H
-D;c0}*H
 D;c0}+H
 D;c0}/H
 D;c8H
@@ -11434,7 +11449,7 @@ D;char\|
 D;char`|
 D;char`}'H
 D;char`}*H
-D;char`}:H
+D;char`}2H
 D;ch|
 D;ch}'H
 D;ch}/H
@@ -11964,6 +11979,7 @@ Disconnect
 DisconnectNoConfirm
 DisconnectTime
 DisconnectedFromGame
+Discovered %u parties
 DiskPhysics2LevelMesh_t
 DiskPhysics2Polytope_t
 DismissJSDialog
@@ -12189,8 +12205,7 @@ E3d$TfA
 E3mTfA
 E3vTfA
 E4A9F`
-E5#}_
-E5?H_
+E5^s_
 E9/~^
 E9X unsigned short
 E9e0~2I
@@ -13959,8 +13974,6 @@ H97t8
 H97tVI
 H97tx
 H9;unsigned short;D
-H9=".7
-H9=Lc6
 H9Cxt
 H9D$ L
 H9D$(J
@@ -13974,153 +13987,146 @@ H9|$8H
 H9|$`H
 H;,$r
 H;1t8
-H;50mB
-H;52vC
-H;55aG
-H;55hH
-H;58^S
-H;58|R
-H;5@HC
-H;5ByF
-H;5E0A
-H;5E`S
-H;5HaD
-H;5LuM
-H;5PLD
-H;5UZG
-H;5X3C
-H;5XCC
-H;5XzH
-H;5e4A
-H;5eoS
-H;5hGM
-H;5hoM
-H;5l2O
-H;5qr@
-H;5u/O
-H;5u^G
-H;5|sM
+H;5%]A
+H;5(short@
+H;5>[
+H;5CmC
+H;5D"S
+H;5EVA
+H;5Xr@
+H;5X{D
+H;5]'
+H;5_$
+H;5`;S
+H;5`D?
+H;5a5?
+H;5eEM
+H;5eZA
+H;5hvM
+H;5x!S
+H;5x)B
 H;7t$
-H;=	HQ
-H;=	double
-H;= 8L
-H;=$|P
-H;=%fR
-H;='T
-H;=(aA
-H;=);F
-H;=)r?
-H;=+;J
-H;=+]A
-H;=+`X
-H;=,unsigned long?
-H;=-!J
-H;=-...
-H;=-6Q
-H;=-WO
-H;=-^A
-H;=...'
-H;=...-
-H;=.DE
-H;=/+
-H;=/G?
-H;=/\H
-H;=/k7
-H;=/unsigned __int128
-H;=13R
-H;=3lP
-H;=5ID
-H;=6%>
-H;=6w
-H;=78
-H;=8!R
-H;=8OI
-H;=8dA
-H;=8mL
-H;=9v
-H;=;<J
-H;=;CR
-H;=;aX
-H;=<bool
-H;=<u
-H;==VA
-H;==_A
-H;=? ?
-H;=?]J
-H;=?|Q
-H;=A?T
-H;=CVE
-H;=C[L
-H;=ChX
-H;=CxL
-H;=Eo
-H;=FfA
-H;=G)
-H;=G+
-H;=ILF
-H;=M/
-H;=O'
-H;=O,Q
-H;=O]A
-H;=O^
-H;=O_?
-H;=Op
-H;=SBR
-H;=SpP
-H;=SwP
-H;=TzP
-H;=U6Q
-H;=WVO
-H;=WvE
-H;=X]F
-H;=[<O
-H;=[|P
-H;=\0F
-H;=\Y
-H;=\qE
-H;=]ID
-H;=^!R
-H;=^mL
-H;=_6K
-H;=_EF
-H;=_O.
-H;=_W=
-H;=__float128%
-H;=__float128|Q
-H;=_cA
-H;=anK
-H;=av
-H;=cCD
-H;=float`A
-H;=haO
-H;=hbF
-H;=heA
-H;=iBN
-H;=int=T
-H;=lbF
-H;=long double[A
-H;=m$>
-H;=obR
-H;=oq
-H;=qo
-H;=r`
-H;=sAJ
-H;=se
-H;=ukR
-H;=unsigned __int128;=
-H;=unsigned __int128@B
-H;=unsigned long long+
-H;=unsigned short"D
-H;=vgB
-H;=wchar_t*
-H;=wchar_t,
-H;=zp
-H;={VO
-H;=|T?
-H;=|WF
-H;=|k
-H;=|{E
-H;=~_O
+H;=!7
+H;=!ST
+H;=$pR
+H;='+
+H;='signed char
+H;=(D
+H;=)jN
+H;=,$C
+H;=,qR
+H;=-'T
+H;=-<F
+H;=.&T
+H;=...)?
+H;=/3
+H;=/EF
+H;=/[=
+H;=/wB
+H;=3/
+H;=3iJ
+H;=3v?
+H;=5|A
+H;=68
+H;=69
+H;=6zB
+H;=71C
+H;=7c
+H;=8)T
+H;=8-T
+H;=8K
+H;=9T
+H;=<.K
+H;==L>
+H;==VJ
+H;=>SD
+H;=?@
+H;=?N
+H;=?__int128
+H;=?rF
+H;=?wF
+H;=?|K
+H;=@S
+H;=C+I
+H;=CR
+H;=E1
+H;=F*T
+H;=I	
+H;=LlQ
+H;=M(Q
+H;=M_D
+H;=N/
+H;=NA
+H;=O K
+H;=PQ
+H;=PpR
+H;=QeD
+H;=R&T
+H;=R6
+H;=S:?
+H;=SE
+H;=TJ
+H;=V,T
+H;=W.
+H;=Wo
+H;=X^D
+H;=XqR
+H;=Y/N
+H;=YC
+H;=Y\H
+H;=[}L
+H;=\u=
+H;=^;
+H;=_%T
+H;=_/L
+H;=_2
+H;=_8?
+H;=_A
+H;=_LR
+H;=__float128`
+H;=__int128
+H;=aT
+H;=d$R
+H;=e$T
+H;=eN>
+H;=gb
+H;=hkE
+H;=int?
+H;=long-
+H;=long}=
+H;=m2
+H;=m2E
+H;=nRF
+H;=oA
+H;=ofQ
+H;=ow.
+H;=q	
+H;=qNK
+H;=r/
+H;=r4
+H;=sfJ
+H;=sm=
+H;=u@?
+H;=unsigned __int128
+H;=unsigned __int128=
+H;=unsigned __int128^
+H;=unsigned __int128}E
+H;=unsigned char{I
+H;=u{A
+H;=v6
+H;=void'T
+H;=wchar_t+T
+H;=yeD
+H;={(T
+H;={}E
+H;=|,
+H;=|1?
+H;=|7F
+H;=|pR
+H;=}"T
+H;=})D
+H;=~:
+H;=~^D
 H;C short	H
 H;Cpt)H
 H;CxH
@@ -14265,6 +14271,7 @@ HcS H
 HcS$1
 HcS(1
 HcS(A
+HcS(H
 HcS,H
 HcS,L
 HcS0H
@@ -14325,7 +14332,7 @@ Help : voiceless glottal fricative
 HelpAchievementModule
 HelpWiki
 Hex and octal numbers must be integers.
-Hh H;=CxB
+Hh H;=
 HideAllExtraData
 HideAllExtraDataImmediate
 HideApplyButton
@@ -14765,7 +14772,6 @@ Ict$8H
 Ict$d
 Ic|$ I
 Ic|$ M
-Ic|$(I
 Ic|$(M
 Ic|$0M
 Ic|$8I
@@ -15226,19 +15232,18 @@ K to1
 K(D;!unsigned short
 K33s?H
 K4 H;=
-K8 H;=...
-K< H;=
-K<@H;=
+K8 H;=
+K< H;=*
+K<@H;=XID
 K<@M9
 K@fD;!unsigned short
 K@t7I
 K@~)A
 KCDummyMaterialProxy::OnBind( %p )
-KD H;=
-KD H;=__float128
+KD H;=3fI
+KD H;=G
 KD L9
 KD@H;=
-KD@H;=?
 KD_ONLINE_CASUAL
 KD_ONLINE_COMPETITIVE
 KD_ONLINE_GG_BOMB
@@ -15435,7 +15440,7 @@ KILL_WHEN_AT_LOW_HEALTH
 KILL_WHILE_IN_AIR
 KILL_WITH_EVERY_WEAPON
 KILL_WITH_OWN_GUN
-KL H;=Z
+KL H;=
 KM^bM
 KV Conditional Evaluation Error
 KX@H;=
@@ -15514,8 +15519,8 @@ L$0 H
 L$0 I
 L$0@A
 L$0@H
-L$0@H;5Tw@
-L$0@H;=
+L$0@H;5
+L$0@H;=I
 L$0H)
 L$0Hc
 L$0t[
@@ -15528,7 +15533,7 @@ L$4 M
 L$4@A
 L$4@H
 L$4@H;5
-L$4@H;=*double
+L$4@H;=J
 L$4@I
 L$8 A
 L$8 H
@@ -15545,12 +15550,12 @@ L$8Hc
 L$8t#I
 L$< A
 L$< H
-L$< H;5
-L$< H;=
+L$< H;5h
+L$< H;=short
 L$< L9
 L$<@A
 L$<@H
-L$<@H;5
+L$<@H;5 |D
 L$@ A
 L$@ H
 L$@@A
@@ -15579,7 +15584,7 @@ L$L H;5
 L$L@A
 L$L@H
 L$P A
-L$P H;5a
+L$P H;5
 L$P H;=
 L$P@A
 L$PA;D$\
@@ -15591,10 +15596,10 @@ L$T H
 L$T@A
 L$T@H
 L$X H
-L$X H;5
+L$X H;5b
 L$X M
 L$X@H
-L$X@H;5
+L$X@H;50
 L$XD91t
 L$XE1
 L$Xu	
@@ -15602,7 +15607,7 @@ L$` H
 L$`H)
 L$`Hc
 L$h H
-L$h H;5 
+L$h H;5
 L$h@H
 L$hE1
 L$hHc
@@ -15624,7 +15629,7 @@ L$xH+
 L$xH+L$PH
 L$| H
 L$| M
-L$|@H;5
+L$|@H;5(
 L)e0L)
 L)eXL)
 L)epL)
@@ -15647,10 +15652,9 @@ L;!t0
 L;!t3
 L;!tP
 L;"tsH
-L;%O=
+L;%double	
 L;,$t9L
 L;,$u
-L;-5D(
 L;.unsigned short;A
 L;/u 
 L;8t!A
@@ -15804,7 +15808,6 @@ LaunchWeaponPreviewPanelHelper cannot find model for item %llu/%p!
 LayoutUpdateHighlight
 LblGamerTag
 LblGamerTagStatus
-Lc5Vo6
 LcChI
 LcGhE1
 LcGlM
@@ -17095,6 +17098,7 @@ ParticleTracerPrecache::CResourcePrecacher
 Particlelib: Missing precache for particle system type "%short"!
 Particles: Missing '%short'
 PartnerItemPaymentRule
+Party browser search: timed out
 Party failed to ping servers
 Party required 1
 Party required 2
@@ -17103,13 +17107,10 @@ Party required 4
 Party required 5
 Party too large
 Party!!
-PartyBrowser: Received %double results for %short (%.2f sec, %double%%)
 PartyBrowser: refresh finished (%u results, %.2f sec)
 PartyBrowser: refreshing list...
-PartyBrowser: scanning %short (%llu + %llu)...
-PartyBrowser: timed out for %short
-PartyBrowser: timed out for %u metadata callbacks
-PartyBrowser: waiting for %double clans, %double parties, %double callbacks (%.2f sec, %double%%)
+PartyBrowser: timed out for lobby metadata callbacks
+PartyBrowser: waiting for %double callbacks (%.2f sec, %double%%)
 PartyBrowserJoin
 PartyBrowserJoinNearby
 PartyBrowserRefreshEmpty
@@ -19016,6 +19017,7 @@ T$ Hc
 T$ HcS(H
 T$ I;T$(
 T$ Ic
+T$ Ic|$(H
 T$ uHE1
 T$ uPE1
 T$ unsigned short H
@@ -19026,7 +19028,6 @@ T$(A;D$4
 T$(H9
 T$(H9T$ A
 T$(Hc
-T$(HcS0H
 T$(Ic|$0H
 T$(L9
 T$(unsigned short:K
@@ -19542,6 +19543,7 @@ UCS-LE
 UGCOperation
 UGCRead failed? (UGC=%08X%08X).
 UGCUnzipThreadPool
+UHc5(
 UHc7H
 UHcG@H
 UHcO H
@@ -20092,13 +20094,14 @@ W H+W
 W H;W(
 W H;W(tR
 W u*H
-W-r<=
+W%:r8
+W-bA=
 W0H+W8H
 W0Hc_8A
 W0UE1
-W5k<=
+W5[A=
 W8[]A\A]A^A_
-W=double<=
+W=TA=
 WARNING
 WARNING! Field %short is using the wrong FIELD_ type!
 WARNING! User command buffer overflow(%int %int), last cmd was %int bits long
@@ -20313,11 +20316,13 @@ Wrong JPEG library version: library is %double, caller expects %double
 Wrong alignment %double
 WrongTeamMsg
 Wx[]A\A]A^A_
+X%H_8
+X%PrH
 X,IcE
-X-WA@
 X0~tA
 X8bU2qll
 X8tRE
+X=B 4
 X@%double minute%short, %double second%short
 XA+T$<A
 XD$ A
@@ -20344,16 +20349,19 @@ Xbox 360
 XboxSystemInterface002
 XpProgressData
 Xx81uBl)
-Y%(xE
-Y-2b`
-Y-6!?
-Y-I>V
-Y-wchar_t/C
-Y57m>
-Y5: C
-Y5Z&L
+Y%.unsigned short>
+Y%MoE
+Y%TDD
+Y%X9h
+Y%epE
+Y%kqE
+Y-9?V
+Y-BSl
+Y-oq+
+Y-~?V
+Y5;YD
 Y<#tw<
-Y=Vx4
+Y=#&`
 Y?CSimplePanelToolTip
 Y@hide from drop list
 YD$$H
@@ -20552,8 +20560,7 @@ ZoomTime2
 \$xHc
 \$xMcT$dJ
 \%03o
-\578\
-\=}vm
+\5'9\
 \D $I
 \D$0f
 \D$@float
@@ -20562,6 +20569,7 @@ ZoomTime2
 \D$hH
 \D$xf
 \D2%4
+\K`H9
 \KhH9
 \L$`float
 \N(H9
@@ -20589,8 +20597,8 @@ ZoomTime2
 ^_[A\]
 ^|$HH
 _ H;_(H
+_%#jB
 _%s.tmp
-_=DAF
 _CGCReplicateConVars
 _DateOnly
 _ExitOnFatalAssert
@@ -20810,9 +20818,8 @@ __errno_location
 __exp_finite
 __expf_finite
 __float128 L;%
-__float128 L;%/
-__float128(L;%
-__float128@L;%/OF
+__float128(L;%unsigned __int128
+__float128@L;%
 __fxstat64
 __gmon_start__
 __gxx_personality_v0
@@ -20885,6 +20892,7 @@ _xlsp
 `$tDL
 `,IcE
 `?weapon_molotov_held
+`@333333
 `@CPerfVisualBenchmark
 `D;K8}DI
 `D;k\
@@ -21962,6 +21970,7 @@ cl_fasttempentcollision
 cl_find_ent
 cl_find_ent_index
 cl_fixedcrosshairgap
+cl_foot_contact_shadows
 cl_footstep_fx
 cl_force_progress_notice_every_change
 cl_forwardspeed
@@ -22686,6 +22695,7 @@ d$`I9
 d$xMc
 d00t\
 d09d2977a930546d3307b87fa74563550af468da
+d210fd2283527547cf13a45321da96b6b66211b2
 d39091395b2681e0a1661165ff61357abe9d06a3
 d3_breen_01
 d3_citadel_03
@@ -22701,6 +22711,7 @@ d7NSuLq2UH
 d80f64b21808a632feba009de395c03a48227760
 d9ad06a2060de2979c7951379676fed2447f21b1
 dAIt1IL!
+dD9%kt
 dOg : lower-mid back rounded vowel
 da1e61dd81cae63c4f8b320d7d2822296ae95eef
 da_DK
@@ -23085,6 +23096,7 @@ dxlabel
 dyn trees: dyn %ld, stat %ld
 dynamic lighting
 e138ff41c94878e029320d5a5d8c50eabdea5221
+e2ab1719864a20b45049477898e32256d778c23a
 e2e_ping_ms
 ease in and out
 ease out
@@ -23431,7 +23443,6 @@ f208370b316294de68cce2b0307282ff9329e7ab
 f2963fdc6a800d58d69b3a0b52c65fda394bf786
 f49c32c8b677f7b1a5fd28f7d507e41a7bad77a4
 f75d8b084a148b465029591fd49aa839e5d3ea1f
-f8cf17ee72b5735be526d68fab8d64139519ecdb
 f91ae7f7d67b08c4fd684dc84237610340439b30
 f9qDu
 f9wBUH
@@ -23868,15 +23879,12 @@ game/wins
 game/xppts
 game:act
 game:apr
-game:ark
 game:clanid
 game:hosted
 game:map
 game:mapgroupname
 game:mode
-game:nby
 game:score
-game:search_key
 game:server
 game:state
 game:type
@@ -24822,7 +24830,6 @@ jpeg_UtlBuffer_dest
 jump_fall
 k IcD$
 k L;u
-k%short%double
 k8H)k@I)
 k8L9kxs
 kHtQE
@@ -25097,6 +25104,7 @@ l$ H)S H
 l$ I9
 l$ M9
 l$(E1
+l$(HcS0H
 l$(I9
 l$0I9
 l$0Ic
@@ -25339,7 +25347,7 @@ long long	IcG
 long long	[A\A]A^]
 long long ;short|~
 long long = %int, unsigned long long = %int, wchar_t = %int unsigned char = %int text %short
-long long H;=
+long long H;=UO
 long long Lc@`F
 long long [A\A]A^]
 long long axis
@@ -26219,6 +26227,7 @@ m_flTexCoord
 m_flTextScan
 m_flTextYPos
 m_flTextureRes
+m_flThirdpersonRecoil
 m_flThrottle
 m_flThrowStrength
 m_flTimeOfLastInjury
@@ -27955,6 +27964,8 @@ models/hostage/hostage.mdl
 models/inventory_items/sticker_inspect.mdl
 models/matlibrary/matlibrary_default.mdl
 models/player.mdl
+models/player/contactshadow/contactshadow_leftfoot.mdl
+models/player/contactshadow/contactshadow_rightfoot.mdl
 models/player/ctm_custom_parts/ct_faces/ctm_face_%s.vtf
 models/player/ctm_custom_parts/ct_faces/ctm_face_%s_exp.vtf
 models/player/ctm_custom_parts/ct_faces/ctm_face_%s_normal.vtf
@@ -28774,10 +28785,7 @@ partner_accountid
 partner_accounts
 partner_srcid
 party_id
-partybrowser_clanresults
-partybrowser_displayresults
 partybrowser_throttle_data
-partybrowser_throttle_list
 partybrowser_timeout
 passes_granted
 passes_to_grant
@@ -30988,7 +30996,6 @@ sv_require_motd_seconds
 sv_reward_drop_delay
 sv_rollangle
 sv_rollspeed
-sv_search_key
 sv_server_graphic1
 sv_server_graphic2
 sv_server_verify_blood_on_player
@@ -31879,6 +31886,7 @@ unsigned __int128@ATI
 unsigned __int128@ATL
 unsigned __int128@CubeMap textures
 unsigned __int128`ATI
+unsigned __int128`ATSH
 unsigned char(tpI
 unsigned char[A\A]A^A_]
 unsigned char[A\A]]
@@ -31922,7 +31930,7 @@ unsigned short-short]A
 unsigned short/<.u
 unsigned short;H;u
 unsigned short;I9\$
-unsigned short<Lc=3
+unsigned short<Lc=
 unsigned short<Lcs
 unsigned short<Lcv
 unsigned short=D;u
@@ -32697,46 +32705,39 @@ zt????
 {	zuxH
 { H+u
 { H;=
-{ H;=5`O
-{ H;=IDO
-{ H;=Z
-{ H;=]
-{ H;=ggO
-{ H;=kfO
-{ H;=tZA
-{ H;=u;O
+{ H;=*/
+{ H;=D
+{ H;=V"T
+{ H;=W(T
+{ H;=Y
+{ H;=unsigned short
 { JcL dH
 { JcL dM
 {%.*ls=
 {(H;=
-{(H;=5EO
-{(H;=6
-{(H;=<gO
+{(H;=/"T
 {(H;=E
-{(H;=_
+{(H;=]
 {,D;{0
 {0H;=
-{0H;=X
-{0H;=long double
-{0H;=sFO
-{0H;={\A
+{0H;=unsigned long
 {8H;=
-{8H;=	
-{8H;=1
-{8H;=M
-{8H;=OFO
-{8H;=unsigned long>O
-{8H;=}VA
+{8H;=_
+{8H;=double
+{8H;=m3
+{8H;=u
+{8H;=}
 {8[A\]
 {@H;=
-{@H;=M
-{@H;=long long
-{@H;=}XA
+{@H;=] T
+{@H;=m1
 {GOTVRELAYSTART}
 {H+S$Hc
-{HH;=@YA
+{HH;=
 {PH;=
+{PH;=unsigned long long
 {XH;=
+{XH;=R
 {XI9xh
 {Xt7H
 {`H;=
@@ -32836,7 +32837,7 @@ zt????
 }0fE;long double&wchar_t)I
 }1A9\long|*
 }3fA;
-}4fD;%
+}4fD;%...
 }6fA;\$
 }6fA;\$Fw.M
 }8	~+A
@@ -32870,7 +32871,7 @@ zt????
 }hH;}pt
 }lf;wchar_t
 }nfA9
-}ofD;5T
+}ofD;5
 }pA;]|
 }unsigned short@:wchar_t
 }|Hc3L
