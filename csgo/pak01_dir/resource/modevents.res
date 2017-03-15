@@ -508,6 +508,9 @@
 	"player_blind"
 	{
 		"userid"	"short"
+		"attacker"		"short"	 	// user ID who threw the flash 
+		"entityid"		"short"		// the flashbang going off
+		"blind_duration"	"float"
 	}
 
 	"player_falldamage"
