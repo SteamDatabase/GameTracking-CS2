@@ -87,11 +87,17 @@ $BASETEXTURE3
 $BASETEXTURE4
 $BASETEXTUREOFFSET
 $BASETEXTURESCALE
+$BASETEXTURETRANSFORM2
 $BBMAX
 $BBMIN
 $BLENDFRAMES
 $BLENDMODULATETEXTURE
+$BLENDMODULATETRANSFORM
+$BLENDSOFTNESS
 $BLENDTINTBYBASEALPHA
+$BLENDWITHSMOKEGRENADE
+$BLENDWITHSMOKEGRENADEPOSENTITY
+$BLENDWITHSMOKEGRENADEPOSSMOKE
 $BLOBBYSHADOWS
 $BLOOMAMOUNT
 $BLOOMENABLE
@@ -226,6 +232,7 @@ $DETAILBLENDFACTOR4
 $DETAILBLENDMODE
 $DETAILENVBOOST
 $DETAILFRAME
+$DETAILFRAME2
 $DETAILGRUNGE
 $DETAILMETALNESS
 $DETAILNORMAL
@@ -233,8 +240,10 @@ $DETAILNORMALDEPTH
 $DETAILPHONGALBEDOTINT
 $DETAILPHONGBOOST
 $DETAILSCALE
+$DETAILSCALE2
 $DETAILTEXTURETRANSFORM
 $DETAILTINT
+$DETAILTINT2
 $DETAILWARPINDEX
 $DETAIL_ALPHA_MASK_BASE_TEXTURE
 $DIFFUSESCALE
@@ -276,8 +285,12 @@ $ENVMAPFRESNELMINMAXEXP
 $ENVMAPLIGHTSCALE
 $ENVMAPLIGHTSCALEMINMAX
 $ENVMAPMASK
+$ENVMAPMASK2
 $ENVMAPMASKFRAME
+$ENVMAPMASKFRAME2
+$ENVMAPMASKINTINTMASKTEXTURE
 $ENVMAPMASKTRANSFORM
+$ENVMAPMASKTRANSFORM2
 $ENVMAPSATURATION
 $ENVMAPTINT
 $EXPONENTMODE
@@ -429,6 +442,17 @@ $IRISFRAME
 $IRISU
 $IRISV
 $KERNEL
+$LAYERBORDEROFFSET
+$LAYERBORDERSOFTNESS
+$LAYERBORDERSTRENGTH
+$LAYERBORDERTINT
+$LAYEREDGENORMAL
+$LAYEREDGEOFFSET
+$LAYEREDGEPUNCHIN
+$LAYEREDGESOFTNESS
+$LAYEREDGESTRENGTH
+$LAYERTINT1
+$LAYERTINT2
 $LEAFCENTER
 $LERPCOLOR1
 $LERPCOLOR2
@@ -488,6 +512,7 @@ $MIRRORABOUTVIEWPORTEDGES
 $MIRRORHORIZONTAL
 $MOD2X
 $MODE
+$MODELDECALIGNOREZ
 $MODELFORMAT
 $MOTIONBLURINTERNAL
 $MOTIONBLURVIEWPORTINTERNAL
@@ -502,6 +527,7 @@ $NEARPLANE
 $NEEDSNORMALS
 $NEEDSTANGENTS
 $NEEDSTANGENTT
+$NEWLAYERBLENDING
 $NOCOLORWRITE
 $NODIFFUSEBUMPLIGHTING
 $NOENVMAPMIP
@@ -736,6 +762,7 @@ $THIRDPERSON
 $TILING
 $TIME
 $TINT
+$TINTMASKTEXTURE
 $TOOLCOLORCORRECTION
 $TOOLMODE
 $TOOLTIME
@@ -755,6 +782,7 @@ $TREESWAYSPEEDLERPEND
 $TREESWAYSPEEDLERPSTART
 $TREESWAYSTARTHEIGHT
 $TREESWAYSTARTRADIUS
+$TREESWAYSTATIC
 $TREESWAYSTRENGTH
 $TV_GAMMA
 $UNLIT
@@ -815,12 +843,15 @@ $alpha
 $baseTexture texcoord offset
 $baseTexture texcoord scale
 $basetexture
+$basetexture2 texcoord transform
 $basetexturetransform
+$blendmodulatetexture texcoord transform
 $bumpmap texcoord transform
 $color
 $color2
 $detail texcoord transform
 $envmapmask texcoord transform
+$envmapmask2 texcoord transform
 $flags
 $flags2
 $flags_defined
@@ -830,6 +861,7 @@ $flashlighttextureframe
 $frame
 $normalmap texcoord transform
 $srgbtint
+$tI<M
 $texture2 texcoord transform
 %%.%if%short
 %-80s
@@ -945,12 +977,14 @@ $texture2 texcoord transform
 &yuml;
 '_? A1> A1> A1> A1>
 ( IsGameConsole() ) ? ( bCSMEnabled ? 1 : 0 ) : 0
+( IsPS3() ) ? MIN( 2, lightState.m_nNumLights ) : lightState.m_nNumLights
+( IsPS3() ) ? MIN(2, lightState.m_nNumLights) : lightState.m_nNumLights
 ( IsPlatformOSX() ? 0 : ( bCSMEnabled ? 1 : 0 ) )
 ( bHasVertexColor || bHasVertexAlpha )
 ( fPhongAlbedoFactor < 1.0f )
 ( g_pHardwareConfig->SupportsCascadedShadowMapping() && !ToolsEnabled() ) ? nCSMQualityComboValue : 0
 ( g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight && !bDisableCSMLookup ) ? nCSMQualityComboValue : 0
-( g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight ) ? nCSMQualityComboValue : 0
+( g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight && g_pConfig->nFullbright != 1 ) ? nCSMQualityComboValue : 0
 ( int )vertexCompression
 ( nDecalStyle == 4 ) || ( nDecalStyle == 5 )
 ( numBones > 0 )
@@ -970,7 +1004,6 @@ $texture2 texcoord transform
 (g_pHardwareConfig->GetHDRType() == HDR_TYPE_FLOAT) ? true : false
 (int)vertexCompression
 (int)vertexCompression && ( nTessellationMode == TESSELLATION_MODE_DISABLED )
-(lightState.m_bAmbientLight ? 1 : 0 )
 (params[USEALTERNATEVIEWMATRIX]->GetIntValue() != 0)
 ***need to set $abovewater for material %short
 +C$;C
@@ -1018,7 +1051,7 @@ $texture2 texcoord transform
 0 - support three color streams, 1 - use avg of three streams, 2 - single color stream
 0 0 0
 0 = always face camera, 1 = rotate around ..., 2= parallel to ground 3=use normal 4=face camera POS
-0 = disable, 1 = default, 2 = visualize phong component only (no diffuse), 3 = visualize material generated phong masks only
+0 = disable, 1 = default, 2 = visualize phong component only (no diffuse)
 0 == Use diffuse bump lighting, 1 = No diffuse bump lighting
 0 == write ..., 1 = no write ...
 0 default, 1 used for laying off 360 movies
@@ -1041,9 +1074,9 @@ $texture2 texcoord transform
 2D map for warping specular
 2D rate to scroll $flowmap
 333?CSolidEnergy_DX9_Context
-3=.J+
-3=F~*
-3=^long long*
+3=&W.
+3=Fp+
+3=vT+
 3RT]float
 3[A\]
 400.0
@@ -1083,6 +1116,7 @@ $texture2 texcoord transform
 @Unaccounted
 @VortWarp_dx9
 @[A\]
+@hA]A^]
 A+L$$Hc
 A+t$$Hc
 A+|$$Hc
@@ -1130,10 +1164,10 @@ AWAVAUA
 AWAVAUATA
 AWAVAUATE1
 AWAVAUATI
+AWAVAUATM
 AWAVAUATS
 AWAVAUATSH
 AWAVAUATSHc
-AWAVAUATSL
 AWAVAUATUSH
 AWAVAUE
 AWAVAUI
@@ -1403,7 +1437,9 @@ Enable glow/shadow for distance coded textures.
 Enable interior layer
 Enable local contrast enhancement
 Enable magnification of refracted image around the $magnifyCenter screen position by $magnifyScale
+Enable new layer blend math
 Enable noise
+Enable normals on layer edge
 Enable outline for distance coded textures.
 Enable phong albedo tint for preview render
 Enable phong shading
@@ -1422,6 +1458,7 @@ Engine_Post_ps20
 Engine_Post_ps20b
 Engine_Post_ps30
 Environment cubemap
+Envmap mask is stored in ting mask texture (instead of normal map alpha)
 Envmap tint
 Error
 EventSystem001
@@ -1507,6 +1544,7 @@ GLIBC_2.2.5
 GameUISystemMgr001
 Gamma for posterization
 GetCPUInformation
+GipWn;
 Give signed char programmer signed char repro case, or look at your modified vmt files
 Glass/glasswindowbreak070b
 Glossiness of eye (1 is default, 0 is not glossy at all)
@@ -1534,14 +1572,14 @@ HIGH_PRECISION_DEPTH
 HSV::CShader
 H[A\A]A^A_]
 H[A\A]]
-HcAdI
-HcB0I
+HcAxI
 HcB8I
-HcBHI
-HcBLI
-HcBPI
-HcBTI
+HcBDI
 HcBXI
+HcB\I
+HcB`I
+HcBdI
+HcBhI
 HcC$1
 HcC$I
 HcC(1
@@ -1564,11 +1602,13 @@ HcCDI
 HcCL1
 HcCLI
 HcCP1
+HcCPE1
 HcCTI
 HcCXH
 HcCXI
 HcC\I
 HcC`1
+HcC`H
 HcC`I
 HcCdI
 HcCh1
@@ -1581,14 +1621,14 @@ HcCtI
 HcCxI
 HcC|I
 HcF$I
-HcF0I
-HcF8I
+HcFDI
+HcFLI
 HcK$I
 HcKHI
 HcKTI
 HcKXI
-HcNTI
-HcQ0I
+HcNhI
+HcQDI
 HcS@I
 HcSHI
 HcSLI
@@ -1596,10 +1636,11 @@ HcSPH
 HcSPI
 HcSTD
 HcS`I
+HcShI
 HcStI
 HcSxI
-HcVLI
-HcVPI
+HcV`I
+HcVdI
 HcWPH
 Highlight size opposite drop shadow effect
 Highlight the edges of the sticker
@@ -1622,7 +1663,6 @@ Ic@TH
 IcD$ 
 IcD$$
 IcD$$1
-IcD$$H
 IcD$$I
 IcD$(
 IcD$(1
@@ -1683,54 +1723,39 @@ IcD$|
 IcD$|1
 IcE I
 IcE$I
-IcE(E1
-IcE(H
 IcE(I
 IcE,E1
-IcE0H
 IcE0I
 IcE0L
 IcE0M
 IcE4E1
 IcE4I
 IcE4L
-IcE8H
 IcE8I
 IcE8L
 IcE<I
 IcE<M
 IcE@I
 IcEDI
-IcEHH
 IcEHI
-IcELH
 IcELI
-IcEPH
 IcEPI
-IcETH
 IcETI
 IcEXI
-IcE\H
 IcE\I
 IcE`I
-IcEdH
 IcEdI
-IcEhH
-IcElH
 IcF$H
-IcF(H
 IcF,1
 IcF,H
 IcF0H
-IcF41
 IcF4H
 IcF81
 IcF8H
 IcF<H
 IcF@1
 IcF@H
-IcFD1
-IcFDH
+IcFH1
 IcFHH
 IcFLH
 IcFP1
@@ -1742,11 +1767,12 @@ IcF\H
 IcF`H
 IcFd1
 IcFdH
+IcFhH
+IcFl1
+IcFlH
 IcMdH
 IcU,E
-IcU0A
 IcULH
-IcUTH
 IcUlH
 IcUpH
 IcUxH
@@ -1772,6 +1798,7 @@ IntroScreenSpaceEffect_ps20
 IntroScreenSpaceEffect_ps20b
 Invalid DetailBlendMode in %short, %double not supported!
 Invalid mat_dof_quality value. Resetting to 0.
+Invert normals on layer edge
 IsBoolSet( info.m_nSeparateDetailUVs, params )
 IsGameConsole() ? ( bCSMEnabled ? 1 : 0 ) : 0
 IsHDREnabled()
@@ -1786,6 +1813,13 @@ LINEAR_OUTPUT
 LINEAR_TO_SRGB
 LOCAL_CONTRAST_ENABLE
 LOG_GENERAL
+Layer blend softness
+Layer border offset
+Layer border softness
+Layer border strength
+Layer edge normal blend offset
+Layer edge normal blend softness
+Layer edge normal strength
 Lerp color 1
 Lerp color 2
 LightmappedGeneric
@@ -1874,7 +1908,6 @@ P(IcD$dH
 PACKED_INTERPOLATOR
 PALETTIZE
 PHONGALBEDOFACTORMODE
-PHONG_DEBUG
 PHONG_HALFLAMBERT
 PIXELFOGTYPE
 PORTALGHOSTOVERLAY
@@ -1975,6 +2008,7 @@ SELFILLUM
 SEPARATE_DETAIL_UVS
 SHADER_SRGB_READ
 SKINNING
+SMOKEGRENADEBLEND
 SOFT_MASK
 SPRITECARDVERTEXFOG
 SRGB_INPUT_ADAPTER
@@ -1998,6 +2032,7 @@ Select which color channel to use
 Self illum fresnel
 Self illum fresnel min, max, exp
 Self-illumination tint
+Separate tint mask texture (as opposed to using basetexture alpha)
 Set if this customization style needs signed char different (non-default) underlying diffuse map for this weapon
 Set to 1 to an exponent texture for the given style rather than signed char base diffuse
 ShaderApiFast( pShaderAPI )->GetCurrentNumBones() > 0
@@ -2375,6 +2410,7 @@ bBlend
 bBlend && bRefraction
 bBlendFrames
 bBlendFrames || ( params[MAXLUMFRAMEBLEND1]->GetIntValue() != 0 )
+bBlendWithSmokeGrenade
 bBlobbyShadows
 bBlurredVignetteEnable
 bBump2
@@ -2438,6 +2474,8 @@ bHasBaseTexture
 bHasBlendModulateTexture
 bHasBounceColor
 bHasCheapFlow
+bHasDecalTexture ? __int128 int::*( nDecalBlendMode, 1 ) : 2
+bHasDecalTexture ? nDecalBlendMode : 2
 bHasDetailAlpha
 bHasDiffuseWarp && !bHasSelfIllumFresnel
 bHasDiffuseWarp && !bHasSelfIllumFresnel && !bHasFlashlight
@@ -2463,6 +2501,7 @@ bHasSelfIllumInEnvMapMask && !bHasFlashlight
 bHasShadowSaturation
 bHasSimpleOverlay
 bHasStatic
+bHasTintMaskTexture
 bHasVertexAlpha
 bHasVertexColor
 bHasVertexColor || bHasVertexAlpha
@@ -2485,7 +2524,6 @@ bMod2X
 bModel
 bMulOutputByAlpha
 bNeedsSRGBAdapter
-bNoEnvmapMip
 bNoiseEnable
 bNvidiaStereoActiveThisFrame
 bOpacityTexture
@@ -2526,6 +2564,7 @@ bSoftEdges
 bSoftMask
 bSphereTexKillCombo ? 1 : 0
 bStaticBlendTexture
+bStaticLight3
 bSupportsCSM
 bSwapPatternMasks
 bTangentS
@@ -2545,8 +2584,9 @@ bUsePattern1
 bUsePattern2
 bUsePatternOffset
 bUseRampTexture
+bUseStaticControlFlow ? 0 : ( IsPS3() ) ? MIN(2, lightState.m_nNumLights) : lightState.m_nNumLights
+bUseStaticControlFlow ? 0 : ( lightState.m_nNumLights )
 bUseStaticControlFlow ? 0 : lightState.m_nNumLights
-bUseStaticControlFlow ? 0 : nNumLights
 bUsesColor
 bVertexColorOrAlpha ? 1 : 0
 bVertexShaderFastPath
@@ -2555,9 +2595,9 @@ bVomitEnable
 bVortex1
 bVortex2
 bWorldNormal
-bWorldNormal ? 0 : (lightState.m_bAmbientLight ? 1 : 0 )
 bWorldNormal ? 0 : bFlashlightShadows
-bWorldNormal ? 0 : nNumLights
+bWorldNormal ? 0 : lightState.m_nNumLights
+bWorldNormal ? false : ( lightState.m_bAmbientLight && !bStaticLight3 )
 bWriteDepthToAlpha
 bWriteWaterFogToAlpha
 bWriteZ && bFullyOpaque && pShaderAPI->ShouldWriteDepthToDestAlpha()
@@ -2572,6 +2612,7 @@ black
 black_ps20
 black_ps20b
 black_vs20
+blend amount for detail texture 2.
 blend amount for detail texture on texture 2.
 blend amount for detail texture on texture 3.
 blend amount for detail texture on texture 4.
@@ -2641,6 +2682,9 @@ colCorrectNumLookups
 color multiplier
 color of outline for distance coded images.
 color of outter glow for distance coded line art.
+color tint for layer 1
+color tint for layer 2
+color tint for layer border
 colorcorrection_ps20
 colorcorrection_ps20b
 colorout_ps20
@@ -2696,6 +2740,7 @@ detail 1 blend mode: 0=add, 1=mod2x, 2=mul, 3=detailmul (mul with detail1)
 detail map 1
 detail map 2
 detail scale
+detail texture 2 tint
 detail texture tint
 detail1 texcoord transform
 dev/flat_normal
@@ -2747,6 +2792,7 @@ environment map
 envmap
 envmap frame number
 envmap mask
+envmap mask 2
 envmap tint
 envmap_variant
 error with $spriteOrientation
@@ -2825,6 +2871,7 @@ frame number for $basetexture3
 frame number for $basetexture4
 frame number for $bumpmap
 frame number for $detail
+frame number for $detail2
 frame number for $flowmap
 frame number for $normalmap
 frame number for $texture2
@@ -2834,8 +2881,8 @@ fresnel params
 g_VProfCurrentProfile
 g_pHardwareConfig->GetHDRType()
 g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM
-g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight
 g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight && !bDisableCSMLookup
+g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight && g_pConfig->nFullbright != 1
 g_pHardwareConfig->SupportsPixelShaders_2_b()
 g_pMemAlloc
 gamecontrols_ps20
@@ -2857,6 +2904,8 @@ hasBaseTexture2 || hasBump2
 hasBump
 hasBumpMask
 hasDetailTexture
+hasDetailTexture ? ( hasDetailTexture2 ? 2 : 1 ) : 0
+hasDetailTexture2
 hasDiffuseLighting
 hasDiffuseWarp
 hasEnvmap
@@ -2864,7 +2913,6 @@ hasEnvmapMask
 hasFlashlight
 hasNormalMapAlphaEnvmapMask
 hasPhong
-hasPhong ? ( mat_phong_lightmappedgeneric.GetInt() == 3 ? true : false ) : false
 hasSelfIllum
 hasVertexColor
 hdr color scale
@@ -2922,6 +2970,7 @@ libtier0_client.so
 libuuid.so.1
 libvstdlib_client.so
 lightState.HasDynamicLight()
+lightState.m_bAmbientLight && !bStaticLight3
 lightState.m_bAmbientLight ? 1 : 0
 lightState.m_bStaticLight && bStaticLight3Streams
 lightState.m_bStaticLight ? 1 : 0
@@ -3011,18 +3060,18 @@ monitorscreen_ps20b
 nBumpMapVariant
 nCSMQualityComboValue
 nColorDepth
-nDecalBlendMode
 nDecalStyle
 nDetail1BlendMode
 nDetail2BlendMode
 nDetailBlendMode
 nFadeType
+nFancyBlendMode
 nFixedLightingMode ? 0 : lightState.m_nNumLights
 nFixedLightingMode ? false : bFlashlightShadows
 nLightingPreviewMode
 nLightingPreviewMode != 0
 nLightingPreviewMode == 3
-nLightingPreviewMode ? 0 : nNumLights
+nLightingPreviewMode ? 0 : lightState.m_nNumLights
 nLightingPreviewMode ? false : bFlashlightShadows
 nLightingPreviewMode ? false : bWriteWaterFogToAlpha
 nNumBlurSamples
@@ -3031,6 +3080,7 @@ nPS20NumLights
 nPaintStyle
 nShadowFilterMode
 nStage
+nStaticLightVsCombo
 nTessellationMode
 nTexture3BlendMode
 nTexture4BlendMode
@@ -3091,13 +3141,14 @@ particlesphere_ps20b
 particlesphere_vs20
 phong exponent
 phongInfo.m_bHasBaseTextureWrinkle
-phongInfo.m_bHasDecalTexture
+phongInfo.m_bHasDecalTexture ? nDecalBlendMode : 2
 phongInfo.m_bHasDetailTexture
 phongInfo.m_bHasDiffuseWarp && phongInfo.m_bHasPhong
 phongInfo.m_bHasPhongWarp && phongInfo.m_bHasPhong
 phongInfo.m_bHasRimLight
 phongInfo.m_bHasSelfIllum && !bHasFlashlightOnly
 phongInfo.m_bHasSelfIllumFresnel && !bHasFlashlightOnly
+phongInfo.m_bHasTintMaskTexture
 phong_ps20b
 phong_ps30
 phong_vs20
@@ -3138,6 +3189,7 @@ r_rimlight
 r_shader_srgbread
 r_showz_power
 r_staticlight_streams
+r_staticlight_streams_indirect_only
 rand@@GLIBC_2.2.5
 reflection texture
 reflection tint
@@ -3154,6 +3206,7 @@ saturation 0 == greyscale 1 == normal
 scale 1 1 translate 0 0 rotate 0
 scale detail1 as multiplier of base UVs
 scale of the detail texture
+scale of the detail texture 2
 scale to tweak fog fade
 scales ambient light in the interior volume
 scales backlighting in the interior volume
