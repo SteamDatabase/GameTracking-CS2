@@ -218,6 +218,12 @@
 		"weapon"	"string" 	// weapon name used
 	}
 
+	"grenade_thrown"
+	{
+		"userid"	"short"
+		"weapon"	"string" 	// weapon name used
+	}
+
 	"weapon_outofammo"
 	{
 		"userid"	"short"
