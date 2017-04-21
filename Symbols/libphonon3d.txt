@@ -60,6 +60,7 @@
  D _edata
  D backend_lib
  D fftw3_mkl
+ D gDefaultHrtfData
  D i_calloc
  D i_free
  D i_malloc
@@ -67,11 +68,12 @@
  D mkl_avx_d_all_gemm_ker
  D mkl_avx_s_all_gemm_ker
  D mkl_dft_avx2_bkd1_c
+ D mkl_dft_avx2_bkd1m_c2c_1d
  D mkl_dft_avx2_bkd_as2s_1_m
  D mkl_dft_avx2_bkd_as2s_n_m
- D mkl_dft_avx2_bkd_c1d_colbatch_2pow
- D mkl_dft_avx2_bkd_c1d_rowbatch_2pow
- D mkl_dft_avx2_bkd_c2d_2pow
+ D mkl_dft_avx2_bkd_c1d_colbatch
+ D mkl_dft_avx2_bkd_c1d_rowbatch
+ D mkl_dft_avx2_bkd_c2d
  D mkl_dft_avx2_bkd_cpmd_c168
  D mkl_dft_avx2_bkd_gene_c96
  D mkl_dft_avx2_bkd_sc2c_3d
@@ -80,6 +82,8 @@
  D mkl_dft_avx2_bkd_ss2s_1_1
  D mkl_dft_avx2_bluestein_c
  D mkl_dft_avx2_bluestein_s
+ D mkl_dft_avx2_dnn_s2c_1d_small_batch
+ D mkl_dft_avx2_dnn_s2c_2d_small_batch
  D mkl_dft_avx2_par_1d_r2c_s
  D mkl_dft_avx2_rect_2d_c2c_sp
  D mkl_dft_avx2_tiny_2d_c2c
@@ -87,25 +91,41 @@
  D mkl_dft_avx2_tiny_3d_c2c
  D mkl_dft_avx2_tiny_3d_c2s
  D mkl_dft_avx512_bkd1_c
+ D mkl_dft_avx512_bkd1m_c2c_1d
  D mkl_dft_avx512_bkd_as2s_1_m
  D mkl_dft_avx512_bkd_as2s_n_m
+ D mkl_dft_avx512_bkd_c1d_colbatch
+ D mkl_dft_avx512_bkd_c1d_rowbatch
+ D mkl_dft_avx512_bkd_c2d
  D mkl_dft_avx512_bkd_gene_c96
+ D mkl_dft_avx512_bkd_large_c1d
  D mkl_dft_avx512_bkd_sc2c_3d
  D mkl_dft_avx512_bkd_sr2c_2d
  D mkl_dft_avx512_bkd_sr2c_3d
  D mkl_dft_avx512_bkd_ss2s_1_1
  D mkl_dft_avx512_bluestein_c
  D mkl_dft_avx512_bluestein_s
+ D mkl_dft_avx512_dnn_s2c_1d_small_batch
+ D mkl_dft_avx512_dnn_s2c_2d_small_batch
+ D mkl_dft_avx512_even_real_f32
  D mkl_dft_avx512_mic_bkd1_c
+ D mkl_dft_avx512_mic_bkd1m_c2c_1d
  D mkl_dft_avx512_mic_bkd_as2s_1_m
  D mkl_dft_avx512_mic_bkd_as2s_n_m
+ D mkl_dft_avx512_mic_bkd_c1d_colbatch
+ D mkl_dft_avx512_mic_bkd_c2d
+ D mkl_dft_avx512_mic_bkd_large_c1d
  D mkl_dft_avx512_mic_bkd_sc2c_3d
  D mkl_dft_avx512_mic_bkd_sr2c_2d
  D mkl_dft_avx512_mic_bkd_sr2c_3d
  D mkl_dft_avx512_mic_bkd_ss2s_1_1
  D mkl_dft_avx512_mic_bluestein_c
  D mkl_dft_avx512_mic_bluestein_s
+ D mkl_dft_avx512_mic_dnn_s2c_1d_small_batch
+ D mkl_dft_avx512_mic_dnn_s2c_2d_small_batch
+ D mkl_dft_avx512_mic_even_real_f32
  D mkl_dft_avx512_mic_par_1d_r2c_s
+ D mkl_dft_avx512_mic_square_1d_c2c
  D mkl_dft_avx512_mic_square_2d_c2c
  D mkl_dft_avx512_mic_tiny_2d_c2c
  D mkl_dft_avx512_mic_tiny_2d_c2s
@@ -120,8 +140,8 @@
  D mkl_dft_avx_bkd1_c
  D mkl_dft_avx_bkd_as2s_1_m
  D mkl_dft_avx_bkd_as2s_n_m
- D mkl_dft_avx_bkd_c1d_colbatch_2pow
- D mkl_dft_avx_bkd_c2d_2pow
+ D mkl_dft_avx_bkd_c1d_colbatch
+ D mkl_dft_avx_bkd_c2d
  D mkl_dft_avx_bkd_cpmd_c168
  D mkl_dft_avx_bkd_gene_c96
  D mkl_dft_avx_bkd_sc2c_3d
@@ -130,6 +150,8 @@
  D mkl_dft_avx_bkd_ss2s_1_1
  D mkl_dft_avx_bluestein_c
  D mkl_dft_avx_bluestein_s
+ D mkl_dft_avx_dnn_s2c_1d_small_batch
+ D mkl_dft_avx_dnn_s2c_2d_small_batch
  D mkl_dft_avx_par_1d_r2c_s
  D mkl_dft_avx_rect_2d_c2c_sp
  D mkl_dft_avx_tiny_2d_c2c
@@ -363,6 +385,7 @@
  T ipl::HRTFDatabase::loadNumHrirs(unsigned char const*&)
  T ipl::HRTFDatabase::loadNumSamplesForSamplingRate(int, unsigned char const*&)
  T ipl::HRTFDatabase::lowerAndUpperBound(std::vector<float, ipl::StlAllocator<float> > const&, float) const
+ T ipl::HRTFDatabase::nearestNeighbor(std::vector<float, ipl::StlAllocator<float> > const&, float) const
  T ipl::HRTFDatabase::projectHrirsIntoAmbisonics()
  T ipl::HRTFDatabase::transformAmbisonicsHrirs(int)
  T ipl::HRTFDatabase::verifyDataHeader(unsigned char const*&)
@@ -499,6 +522,7 @@
  T mkl_be_buf_read
  T mkl_be_buf_wait
  T mkl_be_buf_write
+ T mkl_be_current_device_type
  T mkl_be_device_alloc
  T mkl_be_device_count
  T mkl_be_device_fini
@@ -510,6 +534,7 @@
  T mkl_be_init
  T mkl_be_invoke
  T mkl_be_invoke_sync
+ T mkl_be_prv_current_coi_device_type
  T mkl_be_register
  T mkl_be_unregister
  T mkl_blas_avx2_d_generic_fullacopybcopy
@@ -527,6 +552,7 @@
  T mkl_blas_avx2_dgemm_free_bufs
  T mkl_blas_avx2_dgemm_get_blks_size
  T mkl_blas_avx2_dgemm_get_bufs
+ T mkl_blas_avx2_dgemm_get_bufs_pack
  T mkl_blas_avx2_dgemm_get_bufs_size
  T mkl_blas_avx2_dgemm_get_kernel
  T mkl_blas_avx2_dgemm_get_kernel_version
@@ -539,39 +565,28 @@
  T mkl_blas_avx2_dgemm_kernel_0
  T mkl_blas_avx2_dgemm_kernel_0_b0
  T mkl_blas_avx2_dgemm_kernel_0_bdz
+ T mkl_blas_avx2_dgemm_kernel_nocopy_NN_b0
+ T mkl_blas_avx2_dgemm_kernel_nocopy_NN_b1
+ T mkl_blas_avx2_dgemm_kernel_nocopy_NN_bn
+ T mkl_blas_avx2_dgemm_kernel_nocopy_NT_b0
+ T mkl_blas_avx2_dgemm_kernel_nocopy_NT_b1
+ T mkl_blas_avx2_dgemm_kernel_nocopy_NT_bn
+ T mkl_blas_avx2_dgemm_kernel_nocopy_TN_b0
+ T mkl_blas_avx2_dgemm_kernel_nocopy_TN_b1
+ T mkl_blas_avx2_dgemm_kernel_nocopy_TN_bn
+ T mkl_blas_avx2_dgemm_kernel_nocopy_TT_b0
+ T mkl_blas_avx2_dgemm_kernel_nocopy_TT_b1
+ T mkl_blas_avx2_dgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx2_dgemm_mscale
  T mkl_blas_avx2_dgemm_mscale_wrapper
- T mkl_blas_avx2_dgemm_nocopy
- T mkl_blas_avx2_dgemm_nocopy_anbn
- T mkl_blas_avx2_dgemm_nocopy_anbn_b0
- T mkl_blas_avx2_dgemm_nocopy_anbn_meq12_keq12_b0
  T mkl_blas_avx2_dgemm_nocopy_anbn_meq6_keq6
  T mkl_blas_avx2_dgemm_nocopy_anbn_meq6_keq6_b0
- T mkl_blas_avx2_dgemm_nocopy_anbn_meq9_keq9_b0
- T mkl_blas_avx2_dgemm_nocopy_anbt
- T mkl_blas_avx2_dgemm_nocopy_anbt_b0
- T mkl_blas_avx2_dgemm_nocopy_atbn
- T mkl_blas_avx2_dgemm_nocopy_atbn_b0
- T mkl_blas_avx2_dgemm_nocopy_atbt
- T mkl_blas_avx2_dgemm_nocopy_atbt_b0
  T mkl_blas_avx2_dgemm_num_kernels
  T mkl_blas_avx2_dgemm_pst
  T mkl_blas_avx2_dgemm_set_blks_size
- T mkl_blas_avx2_dgemm_sm_01
- T mkl_blas_avx2_dgemm_sm_01_10
- T mkl_blas_avx2_dgemm_sm_02
- T mkl_blas_avx2_dgemm_sm_03
- T mkl_blas_avx2_dgemm_sm_04
- T mkl_blas_avx2_dgemm_sm_05
- T mkl_blas_avx2_dgemm_sm_06
- T mkl_blas_avx2_dgemm_sm_07
- T mkl_blas_avx2_dgemm_sm_08
- T mkl_blas_avx2_dgemm_sm_09
- T mkl_blas_avx2_dgemm_sm_10
+ T mkl_blas_avx2_dgemm_set_bufs_pack
  T mkl_blas_avx2_dgemm_zero_desc
  T mkl_blas_avx2_dgemmt_nobufs
- T mkl_blas_avx2_drotm
- T mkl_blas_avx2_dscal
  T mkl_blas_avx2_dsymm_copy_lower_left
  T mkl_blas_avx2_dsymm_copy_lower_right
  T mkl_blas_avx2_dsymm_copy_upper_left
@@ -649,6 +664,7 @@
  T mkl_blas_avx2_dtrxm_copy_right_lower
  T mkl_blas_avx2_dtrxm_copy_right_upper
  T mkl_blas_avx2_dtrxm_initialize_buffers
+ T mkl_blas_avx2_get_kernel_api_version
  T mkl_blas_avx2_s_generic_fullacopybcopy
  T mkl_blas_avx2_s_pst_wrapper
  T mkl_blas_avx2_sgemm_blk_info_bdz
@@ -660,6 +676,7 @@
  T mkl_blas_avx2_sgemm_free_bufs
  T mkl_blas_avx2_sgemm_get_blks_size
  T mkl_blas_avx2_sgemm_get_bufs
+ T mkl_blas_avx2_sgemm_get_bufs_pack
  T mkl_blas_avx2_sgemm_get_bufs_size
  T mkl_blas_avx2_sgemm_get_kernel
  T mkl_blas_avx2_sgemm_get_kernel_version
@@ -672,47 +689,30 @@
  T mkl_blas_avx2_sgemm_kernel_0
  T mkl_blas_avx2_sgemm_kernel_0_b0
  T mkl_blas_avx2_sgemm_kernel_0_bdz
+ T mkl_blas_avx2_sgemm_kernel_nocopy_NN_b0
+ T mkl_blas_avx2_sgemm_kernel_nocopy_NN_b1
+ T mkl_blas_avx2_sgemm_kernel_nocopy_NN_bn
+ T mkl_blas_avx2_sgemm_kernel_nocopy_NT_b0
+ T mkl_blas_avx2_sgemm_kernel_nocopy_NT_b1
+ T mkl_blas_avx2_sgemm_kernel_nocopy_NT_bn
+ T mkl_blas_avx2_sgemm_kernel_nocopy_TN_b0
+ T mkl_blas_avx2_sgemm_kernel_nocopy_TN_b1
+ T mkl_blas_avx2_sgemm_kernel_nocopy_TN_bn
+ T mkl_blas_avx2_sgemm_kernel_nocopy_TT_b0
+ T mkl_blas_avx2_sgemm_kernel_nocopy_TT_b1
+ T mkl_blas_avx2_sgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx2_sgemm_mscale
  T mkl_blas_avx2_sgemm_mscale_wrapper
- T mkl_blas_avx2_sgemm_nocopy
- T mkl_blas_avx2_sgemm_nocopy_anbn
- T mkl_blas_avx2_sgemm_nocopy_anbn_b0
  T mkl_blas_avx2_sgemm_nocopy_anbn_meq6_keq6
  T mkl_blas_avx2_sgemm_nocopy_anbn_meq6_keq6_b0
- T mkl_blas_avx2_sgemm_nocopy_anbt
- T mkl_blas_avx2_sgemm_nocopy_anbt_b0
- T mkl_blas_avx2_sgemm_nocopy_atbn
- T mkl_blas_avx2_sgemm_nocopy_atbn_b0
- T mkl_blas_avx2_sgemm_nocopy_atbt
- T mkl_blas_avx2_sgemm_nocopy_atbt_b0
  T mkl_blas_avx2_sgemm_num_kernels
  T mkl_blas_avx2_sgemm_pst
  T mkl_blas_avx2_sgemm_scopy_down24_ea
- T mkl_blas_avx2_sgemm_scopy_down24_na
- T mkl_blas_avx2_sgemm_scopy_down24_no
  T mkl_blas_avx2_sgemm_scopy_down4_ea
- T mkl_blas_avx2_sgemm_scopy_down4_na
- T mkl_blas_avx2_sgemm_scopy_down4_no
- T mkl_blas_avx2_sgemm_scopy_down_opt
  T mkl_blas_avx2_sgemm_scopy_right24_ea
- T mkl_blas_avx2_sgemm_scopy_right24_na
- T mkl_blas_avx2_sgemm_scopy_right24_no
  T mkl_blas_avx2_sgemm_scopy_right4_ea
- T mkl_blas_avx2_sgemm_scopy_right4_na
- T mkl_blas_avx2_sgemm_scopy_right4_no
- T mkl_blas_avx2_sgemm_scopy_right_opt
  T mkl_blas_avx2_sgemm_set_blks_size
- T mkl_blas_avx2_sgemm_sm_01
- T mkl_blas_avx2_sgemm_sm_01_10
- T mkl_blas_avx2_sgemm_sm_02
- T mkl_blas_avx2_sgemm_sm_03
- T mkl_blas_avx2_sgemm_sm_04
- T mkl_blas_avx2_sgemm_sm_05
- T mkl_blas_avx2_sgemm_sm_06
- T mkl_blas_avx2_sgemm_sm_07
- T mkl_blas_avx2_sgemm_sm_08
- T mkl_blas_avx2_sgemm_sm_09
- T mkl_blas_avx2_sgemm_sm_10
+ T mkl_blas_avx2_sgemm_set_bufs_pack
  T mkl_blas_avx2_sgemm_zero_desc
  T mkl_blas_avx2_sgemmt_nobufs
  T mkl_blas_avx2_ssymm_copy_lower_left
@@ -791,6 +791,7 @@
  T mkl_blas_avx2_xdgemm_acopiedbcopy
  T mkl_blas_avx2_xdgemm_bdz
  T mkl_blas_avx2_xdgemm_hi_thr_bdz
+ T mkl_blas_avx2_xdgemm_nocopy_driver
  T mkl_blas_avx2_xdgemm_par
  T mkl_blas_avx2_xdgemmger
  T mkl_blas_avx2_xdgemv
@@ -799,6 +800,8 @@
  T mkl_blas_avx2_xdger
  T mkl_blas_avx2_xdnrm2
  T mkl_blas_avx2_xdrot
+ T mkl_blas_avx2_xdrotm
+ T mkl_blas_avx2_xdscal
  T mkl_blas_avx2_xdswap
  T mkl_blas_avx2_xdsyrk_acopiedbcopy
  T mkl_blas_avx2_xdsyrk_fullacopybcopy
@@ -819,6 +822,7 @@
  T mkl_blas_avx2_xsgemm_acopiedbcopy
  T mkl_blas_avx2_xsgemm_bdz
  T mkl_blas_avx2_xsgemm_hi_thr_bdz
+ T mkl_blas_avx2_xsgemm_nocopy_driver
  T mkl_blas_avx2_xsgemm_par
  T mkl_blas_avx2_xsgemmger
  T mkl_blas_avx2_xsgemv
@@ -848,31 +852,32 @@
  T mkl_blas_avx512_dgemm_dcopy_right8_ea
  T mkl_blas_avx512_dgemm_free_bufs
  T mkl_blas_avx512_dgemm_get_bufs
+ T mkl_blas_avx512_dgemm_get_bufs_pack
  T mkl_blas_avx512_dgemm_initialize_buffers
  T mkl_blas_avx512_dgemm_initialize_kernel_info
  T mkl_blas_avx512_dgemm_initialize_strategy
  T mkl_blas_avx512_dgemm_ker0
  T mkl_blas_avx512_dgemm_kernel_0
  T mkl_blas_avx512_dgemm_kernel_0_b0
+ T mkl_blas_avx512_dgemm_kernel_nocopy_NN_b0
+ T mkl_blas_avx512_dgemm_kernel_nocopy_NN_b1
+ T mkl_blas_avx512_dgemm_kernel_nocopy_NN_bn
+ T mkl_blas_avx512_dgemm_kernel_nocopy_NT_b0
+ T mkl_blas_avx512_dgemm_kernel_nocopy_NT_b1
+ T mkl_blas_avx512_dgemm_kernel_nocopy_NT_bn
+ T mkl_blas_avx512_dgemm_kernel_nocopy_TN_b0
+ T mkl_blas_avx512_dgemm_kernel_nocopy_TN_b1
+ T mkl_blas_avx512_dgemm_kernel_nocopy_TN_bn
+ T mkl_blas_avx512_dgemm_kernel_nocopy_TT_b0
+ T mkl_blas_avx512_dgemm_kernel_nocopy_TT_b1
+ T mkl_blas_avx512_dgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx512_dgemm_mscale
  T mkl_blas_avx512_dgemm_mscale_wrapper
  T mkl_blas_avx512_dgemm_pst
- T mkl_blas_avx512_dgemm_sm_01
- T mkl_blas_avx512_dgemm_sm_01_10
- T mkl_blas_avx512_dgemm_sm_02
- T mkl_blas_avx512_dgemm_sm_03
- T mkl_blas_avx512_dgemm_sm_04
- T mkl_blas_avx512_dgemm_sm_05
- T mkl_blas_avx512_dgemm_sm_06
- T mkl_blas_avx512_dgemm_sm_07
- T mkl_blas_avx512_dgemm_sm_08
- T mkl_blas_avx512_dgemm_sm_09
- T mkl_blas_avx512_dgemm_sm_10
+ T mkl_blas_avx512_dgemm_set_bufs_pack
  T mkl_blas_avx512_dgemmt_nobufs
  T mkl_blas_avx512_dgemv_n_intrinsics
  T mkl_blas_avx512_dgemv_t_intrinsics
- T mkl_blas_avx512_drotm
- T mkl_blas_avx512_dscal
  T mkl_blas_avx512_dsymm_copy_lower_left
  T mkl_blas_avx512_dsymm_copy_lower_right
  T mkl_blas_avx512_dsymm_copy_upper_left
@@ -918,51 +923,49 @@
  T mkl_blas_avx512_dtrxm_copy_right_lower
  T mkl_blas_avx512_dtrxm_copy_right_upper
  T mkl_blas_avx512_dtrxm_initialize_buffers
+ T mkl_blas_avx512_get_kernel_api_version
  T mkl_blas_avx512_mic_d_generic_fullacopybcopy
  T mkl_blas_avx512_mic_d_pst_wrapper
- T mkl_blas_avx512_mic_dcopy_down30x8zzoi
- T mkl_blas_avx512_mic_dcopy_down8x8zzai
- T mkl_blas_avx512_mic_dcopy_right30x8zzoi
- T mkl_blas_avx512_mic_dcopy_right8x8zzai
  T mkl_blas_avx512_mic_dgemm_copyan
  T mkl_blas_avx512_mic_dgemm_copyat
  T mkl_blas_avx512_mic_dgemm_copybn
  T mkl_blas_avx512_mic_dgemm_copybt
+ T mkl_blas_avx512_mic_dgemm_dcopy_down28_ea
+ T mkl_blas_avx512_mic_dgemm_dcopy_down8_ea
+ T mkl_blas_avx512_mic_dgemm_dcopy_right28_ea
+ T mkl_blas_avx512_mic_dgemm_dcopy_right8_ea
  T mkl_blas_avx512_mic_dgemm_free_bufs
  T mkl_blas_avx512_mic_dgemm_get_bufs
+ T mkl_blas_avx512_mic_dgemm_get_bufs_pack
  T mkl_blas_avx512_mic_dgemm_initialize_buffers
  T mkl_blas_avx512_mic_dgemm_initialize_kernel_info
  T mkl_blas_avx512_mic_dgemm_initialize_strategy
  T mkl_blas_avx512_mic_dgemm_ker0
  T mkl_blas_avx512_mic_dgemm_kernel_0
  T mkl_blas_avx512_mic_dgemm_kernel_0_b0
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_NN_b0
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_NN_b1
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_NN_bn
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_NT_b0
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_NT_b1
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_NT_bn
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TN_b0
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TN_b1
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TN_bn
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TT_b0
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TT_b1
+ T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx512_mic_dgemm_mscale
  T mkl_blas_avx512_mic_dgemm_mscale_wrapper
  T mkl_blas_avx512_mic_dgemm_pst
- T mkl_blas_avx512_mic_dgemm_sm_01
- T mkl_blas_avx512_mic_dgemm_sm_01_10
- T mkl_blas_avx512_mic_dgemm_sm_02
- T mkl_blas_avx512_mic_dgemm_sm_03
- T mkl_blas_avx512_mic_dgemm_sm_04
- T mkl_blas_avx512_mic_dgemm_sm_05
- T mkl_blas_avx512_mic_dgemm_sm_06
- T mkl_blas_avx512_mic_dgemm_sm_07
- T mkl_blas_avx512_mic_dgemm_sm_08
- T mkl_blas_avx512_mic_dgemm_sm_09
- T mkl_blas_avx512_mic_dgemm_sm_10
+ T mkl_blas_avx512_mic_dgemm_set_bufs_pack
  T mkl_blas_avx512_mic_dgemmt_nobufs
  T mkl_blas_avx512_mic_dgemv_n_intrinsics
  T mkl_blas_avx512_mic_dgemv_t_intrinsics
- T mkl_blas_avx512_mic_drotm
- T mkl_blas_avx512_mic_dscal
  T mkl_blas_avx512_mic_dsymm_copy_lower_left
- T mkl_blas_avx512_mic_dsymm_copy_lower_left_zz
  T mkl_blas_avx512_mic_dsymm_copy_lower_right
- T mkl_blas_avx512_mic_dsymm_copy_lower_right_zz
  T mkl_blas_avx512_mic_dsymm_copy_upper_left
- T mkl_blas_avx512_mic_dsymm_copy_upper_left_zz
  T mkl_blas_avx512_mic_dsymm_copy_upper_right
- T mkl_blas_avx512_mic_dsymm_copy_upper_right_zz
  T mkl_blas_avx512_mic_dsymm_pst
  T mkl_blas_avx512_mic_dsyr2k_nobufs
  T mkl_blas_avx512_mic_dsyrk_kernel_lower
@@ -973,64 +976,80 @@
  T mkl_blas_avx512_mic_dsyrk_mscale
  T mkl_blas_avx512_mic_dsyrk_nobufs
  T mkl_blas_avx512_mic_dsyrk_upper_ker0
- T mkl_blas_avx512_mic_dtrmm_left
- T mkl_blas_avx512_mic_dtrmm_left_ker
- T mkl_blas_avx512_mic_dtrmm_lln
- T mkl_blas_avx512_mic_dtrmm_llt
- T mkl_blas_avx512_mic_dtrmm_lun
- T mkl_blas_avx512_mic_dtrmm_lut
- T mkl_blas_avx512_mic_dtrmm_right
- T mkl_blas_avx512_mic_dtrmm_right_ker
- T mkl_blas_avx512_mic_dtrmm_rln
- T mkl_blas_avx512_mic_dtrmm_rlt
- T mkl_blas_avx512_mic_dtrmm_run
- T mkl_blas_avx512_mic_dtrmm_rut
+ T mkl_blas_avx512_mic_dtrmm_kernel_left_lower
+ T mkl_blas_avx512_mic_dtrmm_kernel_left_upper
+ T mkl_blas_avx512_mic_dtrmm_kernel_ll_0
+ T mkl_blas_avx512_mic_dtrmm_kernel_lu_0
+ T mkl_blas_avx512_mic_dtrmm_kernel_right_lower
+ T mkl_blas_avx512_mic_dtrmm_kernel_right_upper
+ T mkl_blas_avx512_mic_dtrmm_kernel_rl_0
+ T mkl_blas_avx512_mic_dtrmm_kernel_ru_0
+ T mkl_blas_avx512_mic_dtrmm_nobuf
+ T mkl_blas_avx512_mic_dtrmm_scale_left_unit
+ T mkl_blas_avx512_mic_dtrmm_scale_right_unit
  T mkl_blas_avx512_mic_dtrmm_sm
  T mkl_blas_avx512_mic_dtrmv_in
+ T mkl_blas_avx512_mic_dtrsm_kernel_left_lower
+ T mkl_blas_avx512_mic_dtrsm_kernel_left_upper
+ T mkl_blas_avx512_mic_dtrsm_kernel_ll_0
+ T mkl_blas_avx512_mic_dtrsm_kernel_lu_0
+ T mkl_blas_avx512_mic_dtrsm_kernel_right_lower
+ T mkl_blas_avx512_mic_dtrsm_kernel_right_upper
+ T mkl_blas_avx512_mic_dtrsm_kernel_rl_0
+ T mkl_blas_avx512_mic_dtrsm_kernel_ru_0
+ T mkl_blas_avx512_mic_dtrsm_nobuf
+ T mkl_blas_avx512_mic_dtrsm_scale_left
+ T mkl_blas_avx512_mic_dtrsm_scale_left_unit
+ T mkl_blas_avx512_mic_dtrsm_scale_right
+ T mkl_blas_avx512_mic_dtrsm_scale_right_unit
+ T mkl_blas_avx512_mic_dtrxm_copy_left_lower
+ T mkl_blas_avx512_mic_dtrxm_copy_left_upper
+ T mkl_blas_avx512_mic_dtrxm_copy_right_lower
+ T mkl_blas_avx512_mic_dtrxm_copy_right_upper
  T mkl_blas_avx512_mic_dtrxm_initialize_buffers
+ T mkl_blas_avx512_mic_get_kernel_api_version
  T mkl_blas_avx512_mic_s_generic_fullacopybcopy
  T mkl_blas_avx512_mic_s_pst_wrapper
- T mkl_blas_avx512_mic_scopy_down16x16zzai
- T mkl_blas_avx512_mic_scopy_down30x16zzoi
- T mkl_blas_avx512_mic_scopy_right16x16zzai
- T mkl_blas_avx512_mic_scopy_right30x16zzoi
  T mkl_blas_avx512_mic_sgemm_copyan
  T mkl_blas_avx512_mic_sgemm_copyat
  T mkl_blas_avx512_mic_sgemm_copybn
  T mkl_blas_avx512_mic_sgemm_copybt
  T mkl_blas_avx512_mic_sgemm_free_bufs
  T mkl_blas_avx512_mic_sgemm_get_bufs
+ T mkl_blas_avx512_mic_sgemm_get_bufs_pack
  T mkl_blas_avx512_mic_sgemm_initialize_buffers
  T mkl_blas_avx512_mic_sgemm_initialize_kernel_info
  T mkl_blas_avx512_mic_sgemm_initialize_strategy
  T mkl_blas_avx512_mic_sgemm_ker0
  T mkl_blas_avx512_mic_sgemm_kernel_0
  T mkl_blas_avx512_mic_sgemm_kernel_0_b0
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_NN_b0
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_NN_b1
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_NN_bn
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_NT_b0
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_NT_b1
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_NT_bn
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_TN_b0
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_TN_b1
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_TN_bn
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_TT_b0
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_TT_b1
+ T mkl_blas_avx512_mic_sgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx512_mic_sgemm_mscale
  T mkl_blas_avx512_mic_sgemm_mscale_wrapper
  T mkl_blas_avx512_mic_sgemm_pst
- T mkl_blas_avx512_mic_sgemm_sm_01
- T mkl_blas_avx512_mic_sgemm_sm_01_10
- T mkl_blas_avx512_mic_sgemm_sm_02
- T mkl_blas_avx512_mic_sgemm_sm_03
- T mkl_blas_avx512_mic_sgemm_sm_04
- T mkl_blas_avx512_mic_sgemm_sm_05
- T mkl_blas_avx512_mic_sgemm_sm_06
- T mkl_blas_avx512_mic_sgemm_sm_07
- T mkl_blas_avx512_mic_sgemm_sm_08
- T mkl_blas_avx512_mic_sgemm_sm_09
- T mkl_blas_avx512_mic_sgemm_sm_10
+ T mkl_blas_avx512_mic_sgemm_scopy_down16_ea
+ T mkl_blas_avx512_mic_sgemm_scopy_down28_ea
+ T mkl_blas_avx512_mic_sgemm_scopy_right16_ea
+ T mkl_blas_avx512_mic_sgemm_scopy_right28_ea
+ T mkl_blas_avx512_mic_sgemm_set_bufs_pack
  T mkl_blas_avx512_mic_sgemmt_nobufs
  T mkl_blas_avx512_mic_sgemv_n_intrinsics
  T mkl_blas_avx512_mic_sgemv_t_intrinsics
  T mkl_blas_avx512_mic_ssymm_copy_lower_left
- T mkl_blas_avx512_mic_ssymm_copy_lower_left_zz
  T mkl_blas_avx512_mic_ssymm_copy_lower_right
- T mkl_blas_avx512_mic_ssymm_copy_lower_right_zz
  T mkl_blas_avx512_mic_ssymm_copy_upper_left
- T mkl_blas_avx512_mic_ssymm_copy_upper_left_zz
  T mkl_blas_avx512_mic_ssymm_copy_upper_right
- T mkl_blas_avx512_mic_ssymm_copy_upper_right_zz
  T mkl_blas_avx512_mic_ssymm_pst
  T mkl_blas_avx512_mic_ssyr2k_nobufs
  T mkl_blas_avx512_mic_ssyrk_kernel_lower
@@ -1041,31 +1060,79 @@
  T mkl_blas_avx512_mic_ssyrk_mscale
  T mkl_blas_avx512_mic_ssyrk_nobufs
  T mkl_blas_avx512_mic_ssyrk_upper_ker0
+ T mkl_blas_avx512_mic_strmm_kernel_left_lower
+ T mkl_blas_avx512_mic_strmm_kernel_left_upper
+ T mkl_blas_avx512_mic_strmm_kernel_ll_0
+ T mkl_blas_avx512_mic_strmm_kernel_lu_0
+ T mkl_blas_avx512_mic_strmm_kernel_right_lower
+ T mkl_blas_avx512_mic_strmm_kernel_right_upper
+ T mkl_blas_avx512_mic_strmm_kernel_rl_0
+ T mkl_blas_avx512_mic_strmm_kernel_ru_0
+ T mkl_blas_avx512_mic_strmm_nobuf
+ T mkl_blas_avx512_mic_strmm_scale_left_unit
+ T mkl_blas_avx512_mic_strmm_scale_right_unit
+ T mkl_blas_avx512_mic_strsm_kernel_left_lower
+ T mkl_blas_avx512_mic_strsm_kernel_left_upper
+ T mkl_blas_avx512_mic_strsm_kernel_ll_0
+ T mkl_blas_avx512_mic_strsm_kernel_lu_0
+ T mkl_blas_avx512_mic_strsm_kernel_right_lower
+ T mkl_blas_avx512_mic_strsm_kernel_right_upper
+ T mkl_blas_avx512_mic_strsm_kernel_rl_0
+ T mkl_blas_avx512_mic_strsm_kernel_ru_0
+ T mkl_blas_avx512_mic_strsm_nobuf
+ T mkl_blas_avx512_mic_strsm_scale_left
+ T mkl_blas_avx512_mic_strsm_scale_left_unit
+ T mkl_blas_avx512_mic_strsm_scale_right
+ T mkl_blas_avx512_mic_strsm_scale_right_unit
+ T mkl_blas_avx512_mic_strxm_copy_left_lower
+ T mkl_blas_avx512_mic_strxm_copy_left_upper
+ T mkl_blas_avx512_mic_strxm_copy_right_lower
+ T mkl_blas_avx512_mic_strxm_copy_right_upper
  T mkl_blas_avx512_mic_strxm_initialize_buffers
  T mkl_blas_avx512_mic_xdaxpy
  T mkl_blas_avx512_mic_xdaxpy_incs
  T mkl_blas_avx512_mic_xdcopy
  T mkl_blas_avx512_mic_xdgemm
  T mkl_blas_avx512_mic_xdgemm_acopiedbcopy
+ T mkl_blas_avx512_mic_xdgemm_nocopy_driver
  T mkl_blas_avx512_mic_xdgemmger
  T mkl_blas_avx512_mic_xdgemv
  T mkl_blas_avx512_mic_xdger
  T mkl_blas_avx512_mic_xdnrm2
  T mkl_blas_avx512_mic_xdrot
+ T mkl_blas_avx512_mic_xdrotm
+ T mkl_blas_avx512_mic_xdscal
  T mkl_blas_avx512_mic_xdswap
  T mkl_blas_avx512_mic_xdsyrk_acopiedbcopy
  T mkl_blas_avx512_mic_xdsyrk_fullacopybcopy
  T mkl_blas_avx512_mic_xdtrmm
+ T mkl_blas_avx512_mic_xdtrmm_left_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xdtrmm_left_upper_fullacopybcopy
+ T mkl_blas_avx512_mic_xdtrmm_right_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xdtrmm_right_upper_fullacopybcopy
  T mkl_blas_avx512_mic_xdtrmv
+ T mkl_blas_avx512_mic_xdtrsm_left_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xdtrsm_left_upper_fullacopybcopy
+ T mkl_blas_avx512_mic_xdtrsm_right_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xdtrsm_right_upper_fullacopybcopy
  T mkl_blas_avx512_mic_xsaxpy
  T mkl_blas_avx512_mic_xscopy
  T mkl_blas_avx512_mic_xsgemm
  T mkl_blas_avx512_mic_xsgemm_acopiedbcopy
+ T mkl_blas_avx512_mic_xsgemm_nocopy_driver
  T mkl_blas_avx512_mic_xsgemmger
  T mkl_blas_avx512_mic_xsgemv
  T mkl_blas_avx512_mic_xsger
  T mkl_blas_avx512_mic_xssyrk_acopiedbcopy
  T mkl_blas_avx512_mic_xssyrk_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrmm_left_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrmm_left_upper_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrmm_right_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrmm_right_upper_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrsm_left_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrsm_left_upper_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrsm_right_lower_fullacopybcopy
+ T mkl_blas_avx512_mic_xstrsm_right_upper_fullacopybcopy
  T mkl_blas_avx512_s_generic_fullacopybcopy
  T mkl_blas_avx512_s_pst_wrapper
  T mkl_blas_avx512_sgemm_copyan
@@ -1074,12 +1141,25 @@
  T mkl_blas_avx512_sgemm_copybt
  T mkl_blas_avx512_sgemm_free_bufs
  T mkl_blas_avx512_sgemm_get_bufs
+ T mkl_blas_avx512_sgemm_get_bufs_pack
  T mkl_blas_avx512_sgemm_initialize_buffers
  T mkl_blas_avx512_sgemm_initialize_kernel_info
  T mkl_blas_avx512_sgemm_initialize_strategy
  T mkl_blas_avx512_sgemm_ker0
  T mkl_blas_avx512_sgemm_kernel_0
  T mkl_blas_avx512_sgemm_kernel_0_b0
+ T mkl_blas_avx512_sgemm_kernel_nocopy_NN_b0
+ T mkl_blas_avx512_sgemm_kernel_nocopy_NN_b1
+ T mkl_blas_avx512_sgemm_kernel_nocopy_NN_bn
+ T mkl_blas_avx512_sgemm_kernel_nocopy_NT_b0
+ T mkl_blas_avx512_sgemm_kernel_nocopy_NT_b1
+ T mkl_blas_avx512_sgemm_kernel_nocopy_NT_bn
+ T mkl_blas_avx512_sgemm_kernel_nocopy_TN_b0
+ T mkl_blas_avx512_sgemm_kernel_nocopy_TN_b1
+ T mkl_blas_avx512_sgemm_kernel_nocopy_TN_bn
+ T mkl_blas_avx512_sgemm_kernel_nocopy_TT_b0
+ T mkl_blas_avx512_sgemm_kernel_nocopy_TT_b1
+ T mkl_blas_avx512_sgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx512_sgemm_mscale
  T mkl_blas_avx512_sgemm_mscale_wrapper
  T mkl_blas_avx512_sgemm_pst
@@ -1087,17 +1167,7 @@
  T mkl_blas_avx512_sgemm_scopy_down8_ea
  T mkl_blas_avx512_sgemm_scopy_right48_ea
  T mkl_blas_avx512_sgemm_scopy_right8_ea
- T mkl_blas_avx512_sgemm_sm_01
- T mkl_blas_avx512_sgemm_sm_01_10
- T mkl_blas_avx512_sgemm_sm_02
- T mkl_blas_avx512_sgemm_sm_03
- T mkl_blas_avx512_sgemm_sm_04
- T mkl_blas_avx512_sgemm_sm_05
- T mkl_blas_avx512_sgemm_sm_06
- T mkl_blas_avx512_sgemm_sm_07
- T mkl_blas_avx512_sgemm_sm_08
- T mkl_blas_avx512_sgemm_sm_09
- T mkl_blas_avx512_sgemm_sm_10
+ T mkl_blas_avx512_sgemm_set_bufs_pack
  T mkl_blas_avx512_sgemmt_nobufs
  T mkl_blas_avx512_ssymm_copy_lower_left
  T mkl_blas_avx512_ssymm_copy_lower_right
@@ -1146,11 +1216,14 @@
  T mkl_blas_avx512_xdcopy
  T mkl_blas_avx512_xdgemm
  T mkl_blas_avx512_xdgemm_acopiedbcopy
+ T mkl_blas_avx512_xdgemm_nocopy_driver
  T mkl_blas_avx512_xdgemmger
  T mkl_blas_avx512_xdgemv
  T mkl_blas_avx512_xdger
  T mkl_blas_avx512_xdnrm2
  T mkl_blas_avx512_xdrot
+ T mkl_blas_avx512_xdrotm
+ T mkl_blas_avx512_xdscal
  T mkl_blas_avx512_xdswap
  T mkl_blas_avx512_xdsyrk_acopiedbcopy
  T mkl_blas_avx512_xdsyrk_fullacopybcopy
@@ -1168,6 +1241,7 @@
  T mkl_blas_avx512_xscopy
  T mkl_blas_avx512_xsgemm
  T mkl_blas_avx512_xsgemm_acopiedbcopy
+ T mkl_blas_avx512_xsgemm_nocopy_driver
  T mkl_blas_avx512_xsgemmger
  T mkl_blas_avx512_xsgemv
  T mkl_blas_avx512_xsger
@@ -1229,7 +1303,6 @@
  T mkl_blas_avx_dgemv_n_odd
  T mkl_blas_avx_dgemv_t_even
  T mkl_blas_avx_dgemv_t_odd
- T mkl_blas_avx_dscal
  T mkl_blas_avx_dtrmm_copya
  T mkl_blas_avx_dtrmm_left
  T mkl_blas_avx_dtrmm_left_ker
@@ -1245,6 +1318,7 @@
  T mkl_blas_avx_dtrmm_sm
  T mkl_blas_avx_dtrmv_in
  T mkl_blas_avx_dtrmv_in_cnr
+ T mkl_blas_avx_get_kernel_api_version
  T mkl_blas_avx_sgemm_copya_ext
  T mkl_blas_avx_sgemm_copyan
  T mkl_blas_avx_sgemm_copyat
@@ -1296,6 +1370,7 @@
  T mkl_blas_avx_xdger
  T mkl_blas_avx_xdnrm2
  T mkl_blas_avx_xdrot
+ T mkl_blas_avx_xdscal
  T mkl_blas_avx_xdswap
  T mkl_blas_avx_xdtrmm
  T mkl_blas_avx_xdtrmv
@@ -1334,7 +1409,6 @@
  T mkl_blas_cnr_def_dgemm_pst
  T mkl_blas_cnr_def_dgemm_pst_brc
  T mkl_blas_cnr_def_dgemm_scalm
- T mkl_blas_cnr_def_dscal
  T mkl_blas_cnr_def_dtrmm_inn
  T mkl_blas_cnr_def_dtrmm_l1
  T mkl_blas_cnr_def_dtrmm_l2
@@ -1347,6 +1421,7 @@
  T mkl_blas_cnr_def_dtrmml_lun
  T mkl_blas_cnr_def_dtrmml_lut
  T mkl_blas_cnr_def_dtrmv_in
+ T mkl_blas_cnr_def_get_kernel_api_version
  T mkl_blas_cnr_def_sgemm_blk_info_1_brc
  T mkl_blas_cnr_def_sgemm_copyan
  T mkl_blas_cnr_def_sgemm_copyan_1_0_brc
@@ -1380,6 +1455,7 @@
  T mkl_blas_cnr_def_xdger
  T mkl_blas_cnr_def_xdnrm2
  T mkl_blas_cnr_def_xdrot
+ T mkl_blas_cnr_def_xdscal
  T mkl_blas_cnr_def_xdswap
  T mkl_blas_cnr_def_xdtrmm
  T mkl_blas_cnr_def_xdtrmv
@@ -1420,7 +1496,6 @@
  T mkl_blas_def_dgemm_pst
  T mkl_blas_def_dgemm_pst_brc
  T mkl_blas_def_dgemm_scalm
- T mkl_blas_def_dscal
  T mkl_blas_def_dtrmm_inn
  T mkl_blas_def_dtrmm_l1
  T mkl_blas_def_dtrmm_l2
@@ -1433,6 +1508,7 @@
  T mkl_blas_def_dtrmml_lun
  T mkl_blas_def_dtrmml_lut
  T mkl_blas_def_dtrmv_in
+ T mkl_blas_def_get_kernel_api_version
  T mkl_blas_def_sgemm_blk_info_1_brc
  T mkl_blas_def_sgemm_blk_info_bdz
  T mkl_blas_def_sgemm_copyan
@@ -1479,6 +1555,7 @@
  T mkl_blas_def_xdger
  T mkl_blas_def_xdnrm2
  T mkl_blas_def_xdrot
+ T mkl_blas_def_xdscal
  T mkl_blas_def_xdswap
  T mkl_blas_def_xdtrmm
  T mkl_blas_def_xdtrmv
@@ -1499,6 +1576,7 @@
  T mkl_blas_dtrmm
  T mkl_blas_errchk_dgemm
  T mkl_blas_errchk_sgemm
+ T mkl_blas_get_kernel_api_version
  T mkl_blas_mc3_cgemm_blk_info_htn
  T mkl_blas_mc3_cgemm_copyac_htn
  T mkl_blas_mc3_cgemm_copyan_htn
@@ -1573,7 +1651,6 @@
  T mkl_blas_mc3_dgemv_n_odd
  T mkl_blas_mc3_dgemv_t_even
  T mkl_blas_mc3_dgemv_t_odd
- T mkl_blas_mc3_dscal
  T mkl_blas_mc3_dtrmm_copya
  T mkl_blas_mc3_dtrmm_left
  T mkl_blas_mc3_dtrmm_left_ker
@@ -1588,6 +1665,7 @@
  T mkl_blas_mc3_dtrmm_rut
  T mkl_blas_mc3_dtrmm_sm_01_08
  T mkl_blas_mc3_dtrmv_in
+ T mkl_blas_mc3_get_kernel_api_version
  T mkl_blas_mc3_sgemm_blk_info_0
  T mkl_blas_mc3_sgemm_blk_info_htn
  T mkl_blas_mc3_sgemm_copya_ext
@@ -1656,6 +1734,7 @@
  T mkl_blas_mc3_xdger
  T mkl_blas_mc3_xdnrm2
  T mkl_blas_mc3_xdrot
+ T mkl_blas_mc3_xdscal
  T mkl_blas_mc3_xdswap
  T mkl_blas_mc3_xdtrmm
  T mkl_blas_mc3_xdtrmv
@@ -1744,7 +1823,6 @@
  T mkl_blas_mc_dgemv_n_odd
  T mkl_blas_mc_dgemv_t_even
  T mkl_blas_mc_dgemv_t_odd
- T mkl_blas_mc_dscal
  T mkl_blas_mc_dtrmm_copya
  T mkl_blas_mc_dtrmm_ll
  T mkl_blas_mc_dtrmm_lln_r
@@ -1764,6 +1842,7 @@
  T mkl_blas_mc_dtrmm_rut_r
  T mkl_blas_mc_dtrmm_sm_01_08
  T mkl_blas_mc_dtrmv_in
+ T mkl_blas_mc_get_kernel_api_version
  T mkl_blas_mc_sgemm_copya_ext
  T mkl_blas_mc_sgemm_copya_ext_htn
  T mkl_blas_mc_sgemm_copyan
@@ -1826,6 +1905,7 @@
  T mkl_blas_mc_xdger
  T mkl_blas_mc_xdnrm2
  T mkl_blas_mc_xdrot
+ T mkl_blas_mc_xdscal
  T mkl_blas_mc_xdswap
  T mkl_blas_mc_xdtrmm
  T mkl_blas_mc_xdtrmv
@@ -1849,6 +1929,7 @@
  T mkl_blas_xdger
  T mkl_blas_xdnrm2
  T mkl_blas_xdrot
+ T mkl_blas_xdscal
  T mkl_blas_xdswap
  T mkl_blas_xdtrmm
  T mkl_blas_xdtrmv
@@ -1889,31 +1970,39 @@
  T mkl_dft_avx2_coDFTBatch_Compact_Bwd_v_96_s
  T mkl_dft_avx2_coDFTBatch_Compact_Fwd_v_96_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_10_s
+ T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_11_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_12_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_14_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_15_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_16_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_18_s
+ T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_25_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_32_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_64_s
+ T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_6_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_7_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Bwd_v_8_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_10_s
+ T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_11_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_12_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_14_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_15_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_16_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_18_s
+ T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_25_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_32_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_64_s
+ T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_6_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_7_s
  T mkl_dft_avx2_coDFTColBatch_Compact_Fwd_v_8_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_10_s
+ T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_11_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_12_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_14_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_15_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_16_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_18_s
+ T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_25_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_32_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_5_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_6_s
@@ -1921,11 +2010,13 @@
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_8_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Bwd_v_9_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_10_s
+ T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_11_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_12_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_14_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_15_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_16_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_18_s
+ T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_25_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_32_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_5_s
  T mkl_dft_avx2_coDFTColTwid_Compact_Fwd_v_6_s
@@ -2046,6 +2137,7 @@
  T mkl_dft_avx2_dfti_create_sr1d
  T mkl_dft_avx2_dfti_create_srmd
  T mkl_dft_avx2_gather_c_c
+ T mkl_dft_avx2_gather_s_c
  T mkl_dft_avx2_gather_s_s
  T mkl_dft_avx2_gather_ss_ss
  T mkl_dft_avx2_ipp_can_scale
@@ -3294,6 +3386,7 @@
  T mkl_dft_avx2_sc2_r_dft
  T mkl_dft_avx2_scal_ss
  T mkl_dft_avx2_scatter_c_c
+ T mkl_dft_avx2_scatter_s_c
  T mkl_dft_avx2_scatter_s_s
  T mkl_dft_avx2_scatter_ss_ss
  T mkl_dft_avx2_ssc1_nd_out_par
@@ -3356,6 +3449,14 @@
  T mkl_dft_avx512_Iotensor_print
  T mkl_dft_avx512_Iotensor_remove1
  T mkl_dft_avx512_Iotensor_sort
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Bwd_v_16_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Bwd_v_32_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Bwd_v_64_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Bwd_v_8_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Fwd_v_16_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Fwd_v_32_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Fwd_v_64_s
+ T mkl_dft_avx512_cDFTBatch_CompactTrans_Fwd_v_8_s
  T mkl_dft_avx512_c_complex_for_real_by_row
  T mkl_dft_avx512_c_ipp_real_init
  T mkl_dft_avx512_ccs1_nd_out_par
@@ -3366,6 +3467,64 @@
  T mkl_dft_avx512_ciDFTBatch_Compact_Fwd_v_96_s
  T mkl_dft_avx512_coDFTBatch_Compact_Bwd_v_96_s
  T mkl_dft_avx512_coDFTBatch_Compact_Fwd_v_96_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_10_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_11_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_12_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_14_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_15_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_16_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_18_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_25_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_32_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_64_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_6_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_7_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Bwd_v_8_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_10_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_11_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_12_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_14_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_15_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_16_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_18_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_25_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_32_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_64_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_6_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_7_s
+ T mkl_dft_avx512_coDFTColBatch_Compact_Fwd_v_8_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_10_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_11_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_12_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_14_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_15_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_16_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_18_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_25_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_32_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_5_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_6_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_7_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_8_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Bwd_v_9_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_10_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_11_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_12_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_14_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_15_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_16_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_18_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_25_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_32_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_5_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_6_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_7_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_8_s
+ T mkl_dft_avx512_coDFTColTwid_Compact_Fwd_v_9_s
+ T mkl_dft_avx512_coDFTTwid_Compact_Bwd_v_16_s
+ T mkl_dft_avx512_coDFTTwid_Compact_Bwd_v_32_s
+ T mkl_dft_avx512_coDFTTwid_Compact_Fwd_v_16_s
+ T mkl_dft_avx512_coDFTTwid_Compact_Fwd_v_32_s
  T mkl_dft_avx512_commit_descriptor_core_s_c2c_1d
  T mkl_dft_avx512_commit_descriptor_core_s_c2c_md
  T mkl_dft_avx512_commit_descriptor_core_s_r2c_1d
@@ -3400,11 +3559,9 @@
  T mkl_dft_avx512_dft_row_ccopy_8
  T mkl_dft_avx512_dft_row_ccopy_8_r_mod8
  T mkl_dft_avx512_dft_row_ccopy_back_16
- T mkl_dft_avx512_dft_row_ccopy_back_16_rout_mod8
  T mkl_dft_avx512_dft_row_ccopy_back_2
  T mkl_dft_avx512_dft_row_ccopy_back_4
  T mkl_dft_avx512_dft_row_ccopy_back_8
- T mkl_dft_avx512_dft_row_ccopy_back_8_rout_mod8
  T mkl_dft_avx512_dft_row_scopy_1
  T mkl_dft_avx512_dft_row_scopy_10
  T mkl_dft_avx512_dft_row_scopy_11
@@ -3474,6 +3631,7 @@
  T mkl_dft_avx512_dfti_create_sr1d
  T mkl_dft_avx512_dfti_create_srmd
  T mkl_dft_avx512_gather_c_c
+ T mkl_dft_avx512_gather_s_c
  T mkl_dft_avx512_gather_s_s
  T mkl_dft_avx512_gather_ss_ss
  T mkl_dft_avx512_ipp_can_scale
@@ -3967,12 +4125,16 @@
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact4_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact5_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact5_64fc
+ T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact7_32fc
+ T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact7_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Fact_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime3_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime3_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime5_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime5_64fc
+ T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime7_32fc
+ T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime7_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdFwd_Prime_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact2_32fc
@@ -3983,12 +4145,16 @@
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact4_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact5_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact5_64fc
+ T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact7_32fc
+ T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact7_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Fact_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime3_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime3_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime5_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime5_64fc
+ T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime7_32fc
+ T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime7_64fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime_32fc
  T mkl_dft_avx512_ipps_cDftOutOrdInv_Prime_64fc
  T mkl_dft_avx512_ipps_cDft_Conv_32f
@@ -4139,12 +4305,16 @@
  T mkl_dft_avx512_ipps_crDftFwd_Fact4_64f
  T mkl_dft_avx512_ipps_crDftFwd_Fact5_32f
  T mkl_dft_avx512_ipps_crDftFwd_Fact5_64f
+ T mkl_dft_avx512_ipps_crDftFwd_Fact7_32f
+ T mkl_dft_avx512_ipps_crDftFwd_Fact7_64f
  T mkl_dft_avx512_ipps_crDftFwd_Fact_32f
  T mkl_dft_avx512_ipps_crDftFwd_Fact_64f
  T mkl_dft_avx512_ipps_crDftFwd_Prime3_32f
  T mkl_dft_avx512_ipps_crDftFwd_Prime3_64f
  T mkl_dft_avx512_ipps_crDftFwd_Prime5_32f
  T mkl_dft_avx512_ipps_crDftFwd_Prime5_64f
+ T mkl_dft_avx512_ipps_crDftFwd_Prime7_32f
+ T mkl_dft_avx512_ipps_crDftFwd_Prime7_64f
  T mkl_dft_avx512_ipps_crDftFwd_PrimeFact_32f
  T mkl_dft_avx512_ipps_crDftFwd_PrimeFact_64f
  T mkl_dft_avx512_ipps_crDftFwd_Prime_32f
@@ -4157,12 +4327,16 @@
  T mkl_dft_avx512_ipps_crDftInv_Fact4_64f
  T mkl_dft_avx512_ipps_crDftInv_Fact5_32f
  T mkl_dft_avx512_ipps_crDftInv_Fact5_64f
+ T mkl_dft_avx512_ipps_crDftInv_Fact7_32f
+ T mkl_dft_avx512_ipps_crDftInv_Fact7_64f
  T mkl_dft_avx512_ipps_crDftInv_Fact_32f
  T mkl_dft_avx512_ipps_crDftInv_Fact_64f
  T mkl_dft_avx512_ipps_crDftInv_Prime3_32f
  T mkl_dft_avx512_ipps_crDftInv_Prime3_64f
  T mkl_dft_avx512_ipps_crDftInv_Prime5_32f
  T mkl_dft_avx512_ipps_crDftInv_Prime5_64f
+ T mkl_dft_avx512_ipps_crDftInv_Prime7_32f
+ T mkl_dft_avx512_ipps_crDftInv_Prime7_64f
  T mkl_dft_avx512_ipps_crDftInv_PrimeFact_32f
  T mkl_dft_avx512_ipps_crDftInv_PrimeFact_64f
  T mkl_dft_avx512_ipps_crDftInv_Prime_32f
@@ -4355,12 +4529,16 @@
  T mkl_dft_avx512_ipps_rDftFwd_Fact3_64f
  T mkl_dft_avx512_ipps_rDftFwd_Fact5_32f
  T mkl_dft_avx512_ipps_rDftFwd_Fact5_64f
+ T mkl_dft_avx512_ipps_rDftFwd_Fact7_32f
+ T mkl_dft_avx512_ipps_rDftFwd_Fact7_64f
  T mkl_dft_avx512_ipps_rDftFwd_Fact_32f
  T mkl_dft_avx512_ipps_rDftFwd_Fact_64f
  T mkl_dft_avx512_ipps_rDftFwd_Prime3_32f
  T mkl_dft_avx512_ipps_rDftFwd_Prime3_64f
  T mkl_dft_avx512_ipps_rDftFwd_Prime5_32f
  T mkl_dft_avx512_ipps_rDftFwd_Prime5_64f
+ T mkl_dft_avx512_ipps_rDftFwd_Prime7_32f
+ T mkl_dft_avx512_ipps_rDftFwd_Prime7_64f
  T mkl_dft_avx512_ipps_rDftFwd_PrimeFact_32f
  T mkl_dft_avx512_ipps_rDftFwd_PrimeFact_64f
  T mkl_dft_avx512_ipps_rDftFwd_Prime_32f
@@ -4375,12 +4553,16 @@
  T mkl_dft_avx512_ipps_rDftInv_Fact3_64f
  T mkl_dft_avx512_ipps_rDftInv_Fact5_32f
  T mkl_dft_avx512_ipps_rDftInv_Fact5_64f
+ T mkl_dft_avx512_ipps_rDftInv_Fact7_32f
+ T mkl_dft_avx512_ipps_rDftInv_Fact7_64f
  T mkl_dft_avx512_ipps_rDftInv_Fact_32f
  T mkl_dft_avx512_ipps_rDftInv_Fact_64f
  T mkl_dft_avx512_ipps_rDftInv_Prime3_32f
  T mkl_dft_avx512_ipps_rDftInv_Prime3_64f
  T mkl_dft_avx512_ipps_rDftInv_Prime5_32f
  T mkl_dft_avx512_ipps_rDftInv_Prime5_64f
+ T mkl_dft_avx512_ipps_rDftInv_Prime7_32f
+ T mkl_dft_avx512_ipps_rDftInv_Prime7_64f
  T mkl_dft_avx512_ipps_rDftInv_PrimeFact_32f
  T mkl_dft_avx512_ipps_rDftInv_PrimeFact_64f
  T mkl_dft_avx512_ipps_rDftInv_Prime_32f
@@ -4444,6 +4626,60 @@
  T mkl_dft_avx512_mic_ccs2_c_dft
  T mkl_dft_avx512_mic_ccs2_nd_out_par
  T mkl_dft_avx512_mic_ccs2_r_out_dft
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_10_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_11_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_12_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_14_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_15_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_16_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_18_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_25_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_32_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_64_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_6_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_7_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Bwd_v_8_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_10_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_11_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_12_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_14_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_15_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_16_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_18_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_25_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_32_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_64_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_6_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_7_s
+ T mkl_dft_avx512_mic_coDFTColBatch_Compact_Fwd_v_8_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_10_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_11_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_12_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_14_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_15_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_16_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_18_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_25_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_32_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_5_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_6_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_7_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_8_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Bwd_v_9_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_10_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_11_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_12_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_14_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_15_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_16_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_18_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_25_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_32_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_5_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_6_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_7_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_8_s
+ T mkl_dft_avx512_mic_coDFTColTwid_Compact_Fwd_v_9_s
  T mkl_dft_avx512_mic_commit_descriptor_core_s_c2c_1d
  T mkl_dft_avx512_mic_commit_descriptor_core_s_c2c_md
  T mkl_dft_avx512_mic_commit_descriptor_core_s_r2c_1d
@@ -4478,11 +4714,9 @@
  T mkl_dft_avx512_mic_dft_row_ccopy_8
  T mkl_dft_avx512_mic_dft_row_ccopy_8_r_mod8
  T mkl_dft_avx512_mic_dft_row_ccopy_back_16
- T mkl_dft_avx512_mic_dft_row_ccopy_back_16_rout_mod8
  T mkl_dft_avx512_mic_dft_row_ccopy_back_2
  T mkl_dft_avx512_mic_dft_row_ccopy_back_4
  T mkl_dft_avx512_mic_dft_row_ccopy_back_8
- T mkl_dft_avx512_mic_dft_row_ccopy_back_8_rout_mod8
  T mkl_dft_avx512_mic_dft_row_scopy_1
  T mkl_dft_avx512_mic_dft_row_scopy_10
  T mkl_dft_avx512_mic_dft_row_scopy_11
@@ -4546,12 +4780,14 @@
  T mkl_dft_avx512_mic_dft_row_sscopy_back_8
  T mkl_dft_avx512_mic_dft_row_sscopy_back_9
  T mkl_dft_avx512_mic_dft_sscal
+ T mkl_dft_avx512_mic_dft_vmul_c
  T mkl_dft_avx512_mic_dfti_create_node
  T mkl_dft_avx512_mic_dfti_create_sc1d
  T mkl_dft_avx512_mic_dfti_create_scmd
  T mkl_dft_avx512_mic_dfti_create_sr1d
  T mkl_dft_avx512_mic_dfti_create_srmd
  T mkl_dft_avx512_mic_gather_c_c
+ T mkl_dft_avx512_mic_gather_s_c
  T mkl_dft_avx512_mic_gather_s_s
  T mkl_dft_avx512_mic_gather_ss_ss
  T mkl_dft_avx512_mic_ipp_can_scale
@@ -5045,12 +5281,16 @@
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact4_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact5_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact5_64fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact7_32fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact7_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Fact_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime3_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime3_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime5_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime5_64fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime7_32fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime7_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdFwd_Prime_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact2_32fc
@@ -5061,12 +5301,16 @@
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact4_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact5_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact5_64fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact7_32fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact7_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Fact_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime3_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime3_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime5_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime5_64fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime7_32fc
+ T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime7_64fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime_32fc
  T mkl_dft_avx512_mic_ipps_cDftOutOrdInv_Prime_64fc
  T mkl_dft_avx512_mic_ipps_cDft_Conv_32f
@@ -5217,12 +5461,16 @@
  T mkl_dft_avx512_mic_ipps_crDftFwd_Fact4_64f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Fact5_32f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Fact5_64f
+ T mkl_dft_avx512_mic_ipps_crDftFwd_Fact7_32f
+ T mkl_dft_avx512_mic_ipps_crDftFwd_Fact7_64f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Fact_32f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Fact_64f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Prime3_32f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Prime3_64f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Prime5_32f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Prime5_64f
+ T mkl_dft_avx512_mic_ipps_crDftFwd_Prime7_32f
+ T mkl_dft_avx512_mic_ipps_crDftFwd_Prime7_64f
  T mkl_dft_avx512_mic_ipps_crDftFwd_PrimeFact_32f
  T mkl_dft_avx512_mic_ipps_crDftFwd_PrimeFact_64f
  T mkl_dft_avx512_mic_ipps_crDftFwd_Prime_32f
@@ -5235,12 +5483,16 @@
  T mkl_dft_avx512_mic_ipps_crDftInv_Fact4_64f
  T mkl_dft_avx512_mic_ipps_crDftInv_Fact5_32f
  T mkl_dft_avx512_mic_ipps_crDftInv_Fact5_64f
+ T mkl_dft_avx512_mic_ipps_crDftInv_Fact7_32f
+ T mkl_dft_avx512_mic_ipps_crDftInv_Fact7_64f
  T mkl_dft_avx512_mic_ipps_crDftInv_Fact_32f
  T mkl_dft_avx512_mic_ipps_crDftInv_Fact_64f
  T mkl_dft_avx512_mic_ipps_crDftInv_Prime3_32f
  T mkl_dft_avx512_mic_ipps_crDftInv_Prime3_64f
  T mkl_dft_avx512_mic_ipps_crDftInv_Prime5_32f
  T mkl_dft_avx512_mic_ipps_crDftInv_Prime5_64f
+ T mkl_dft_avx512_mic_ipps_crDftInv_Prime7_32f
+ T mkl_dft_avx512_mic_ipps_crDftInv_Prime7_64f
  T mkl_dft_avx512_mic_ipps_crDftInv_PrimeFact_32f
  T mkl_dft_avx512_mic_ipps_crDftInv_PrimeFact_64f
  T mkl_dft_avx512_mic_ipps_crDftInv_Prime_32f
@@ -5433,12 +5685,16 @@
  T mkl_dft_avx512_mic_ipps_rDftFwd_Fact3_64f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Fact5_32f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Fact5_64f
+ T mkl_dft_avx512_mic_ipps_rDftFwd_Fact7_32f
+ T mkl_dft_avx512_mic_ipps_rDftFwd_Fact7_64f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Fact_32f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Fact_64f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Prime3_32f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Prime3_64f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Prime5_32f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Prime5_64f
+ T mkl_dft_avx512_mic_ipps_rDftFwd_Prime7_32f
+ T mkl_dft_avx512_mic_ipps_rDftFwd_Prime7_64f
  T mkl_dft_avx512_mic_ipps_rDftFwd_PrimeFact_32f
  T mkl_dft_avx512_mic_ipps_rDftFwd_PrimeFact_64f
  T mkl_dft_avx512_mic_ipps_rDftFwd_Prime_32f
@@ -5453,12 +5709,16 @@
  T mkl_dft_avx512_mic_ipps_rDftInv_Fact3_64f
  T mkl_dft_avx512_mic_ipps_rDftInv_Fact5_32f
  T mkl_dft_avx512_mic_ipps_rDftInv_Fact5_64f
+ T mkl_dft_avx512_mic_ipps_rDftInv_Fact7_32f
+ T mkl_dft_avx512_mic_ipps_rDftInv_Fact7_64f
  T mkl_dft_avx512_mic_ipps_rDftInv_Fact_32f
  T mkl_dft_avx512_mic_ipps_rDftInv_Fact_64f
  T mkl_dft_avx512_mic_ipps_rDftInv_Prime3_32f
  T mkl_dft_avx512_mic_ipps_rDftInv_Prime3_64f
  T mkl_dft_avx512_mic_ipps_rDftInv_Prime5_32f
  T mkl_dft_avx512_mic_ipps_rDftInv_Prime5_64f
+ T mkl_dft_avx512_mic_ipps_rDftInv_Prime7_32f
+ T mkl_dft_avx512_mic_ipps_rDftInv_Prime7_64f
  T mkl_dft_avx512_mic_ipps_rDftInv_PrimeFact_32f
  T mkl_dft_avx512_mic_ipps_rDftInv_PrimeFact_64f
  T mkl_dft_avx512_mic_ipps_rDftInv_Prime_32f
@@ -5518,6 +5778,7 @@
  T mkl_dft_avx512_mic_sc2_r_dft
  T mkl_dft_avx512_mic_scal_ss
  T mkl_dft_avx512_mic_scatter_c_c
+ T mkl_dft_avx512_mic_scatter_s_c
  T mkl_dft_avx512_mic_scatter_s_s
  T mkl_dft_avx512_mic_scatter_ss_ss
  T mkl_dft_avx512_mic_ssc1_nd_out_par
@@ -5584,6 +5845,7 @@
  T mkl_dft_avx512_sc2_r_dft
  T mkl_dft_avx512_scal_ss
  T mkl_dft_avx512_scatter_c_c
+ T mkl_dft_avx512_scatter_s_c
  T mkl_dft_avx512_scatter_s_s
  T mkl_dft_avx512_scatter_ss_ss
  T mkl_dft_avx512_ssc1_nd_out_par
@@ -5663,31 +5925,39 @@
  T mkl_dft_avx_coDFTBatch_Compact_Bwd_v_96_s
  T mkl_dft_avx_coDFTBatch_Compact_Fwd_v_96_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_10_s
+ T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_11_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_12_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_14_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_15_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_16_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_18_s
+ T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_25_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_32_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_64_s
+ T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_6_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_7_s
  T mkl_dft_avx_coDFTColBatch_Compact_Bwd_v_8_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_10_s
+ T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_11_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_12_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_14_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_15_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_16_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_18_s
+ T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_25_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_32_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_64_s
+ T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_6_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_7_s
  T mkl_dft_avx_coDFTColBatch_Compact_Fwd_v_8_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_10_s
+ T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_11_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_12_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_14_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_15_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_16_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_18_s
+ T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_25_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_32_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_5_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_6_s
@@ -5695,11 +5965,13 @@
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_8_s
  T mkl_dft_avx_coDFTColTwid_Compact_Bwd_v_9_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_10_s
+ T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_11_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_12_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_14_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_15_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_16_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_18_s
+ T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_25_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_32_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_5_s
  T mkl_dft_avx_coDFTColTwid_Compact_Fwd_v_6_s
@@ -11789,8 +12061,12 @@
  T mkl_serv_cbwr_get_auto_branch
  T mkl_serv_cbwr_get_nolock
  T mkl_serv_cbwr_set
+ T mkl_serv_check_fast_memory_size
  T mkl_serv_check_ptr
  T mkl_serv_check_ptr_and_warn
+ T mkl_serv_cmpxchg
+ T mkl_serv_core_cleanup
+ T mkl_serv_core_register_cleanup
  T mkl_serv_cpu_detect
  T mkl_serv_cpuhasnhm
  T mkl_serv_cpuhaspnr
@@ -11802,6 +12078,7 @@
  T mkl_serv_cpuisskl
  T mkl_serv_d_int
  T mkl_serv_d_powi
+ T mkl_serv_d_round
  T mkl_serv_d_sign
  T mkl_serv_deallocate
  T mkl_serv_default_progress
@@ -11855,9 +12132,17 @@
  T mkl_serv_intel_cpu_true
  T mkl_serv_invoke_safe_mem_constraint_handler
  T mkl_serv_invoke_safe_str_constraint_handler
+ T mkl_serv_is_avx2_enabled
  T mkl_serv_is_avx512_enabled
  T mkl_serv_is_avx512_mic_enabled
+ T mkl_serv_is_avx_enabled
+ T mkl_serv_is_sse4_2_enabled
+ T mkl_serv_jit_alloc
+ T mkl_serv_jit_free
+ T mkl_serv_jit_set_exec
  T mkl_serv_libc_is_static
+ T mkl_serv_libm_sincos
+ T mkl_serv_libm_sincos_reduce
  T mkl_serv_libm_sincosf
  T mkl_serv_libm_sincosf_reduce
  T mkl_serv_lock
@@ -11890,6 +12175,7 @@
  T mkl_serv_s_cos
  T mkl_serv_s_int
  T mkl_serv_s_powi
+ T mkl_serv_s_round
  T mkl_serv_s_sign
  T mkl_serv_second
  T mkl_serv_set_dynamic
@@ -11955,6 +12241,7 @@
  T mkl_trans_avx2_mkl_somatcopy2_n
  T mkl_trans_avx2_mkl_somatcopy2_seq
  T mkl_trans_avx2_mkl_somatcopy2_t
+ T mkl_trans_avx2_mkl_unrollcopy
  T mkl_trans_avx512_csqtrans
  T mkl_trans_avx512_csqtrans_team
  T mkl_trans_avx512_mic_csqtrans
@@ -11984,6 +12271,7 @@
  T mkl_trans_avx512_mic_mkl_somatcopy2_n
  T mkl_trans_avx512_mic_mkl_somatcopy2_seq
  T mkl_trans_avx512_mic_mkl_somatcopy2_t
+ T mkl_trans_avx512_mic_mkl_unrollcopy
  T mkl_trans_avx512_mkl_cimatcopy
  T mkl_trans_avx512_mkl_cimatcopy_mipt_c
  T mkl_trans_avx512_mkl_cimatcopy_mipt_n
@@ -12009,6 +12297,7 @@
  T mkl_trans_avx512_mkl_somatcopy2_n
  T mkl_trans_avx512_mkl_somatcopy2_seq
  T mkl_trans_avx512_mkl_somatcopy2_t
+ T mkl_trans_avx512_mkl_unrollcopy
  T mkl_trans_avx_csqtrans
  T mkl_trans_avx_csqtrans_team
  T mkl_trans_avx_mkl_cimatcopy
@@ -12036,6 +12325,7 @@
  T mkl_trans_avx_mkl_somatcopy2_n
  T mkl_trans_avx_mkl_somatcopy2_seq
  T mkl_trans_avx_mkl_somatcopy2_t
+ T mkl_trans_avx_mkl_unrollcopy
  T mkl_trans_def_csqtrans
  T mkl_trans_def_csqtrans_team
  T mkl_trans_def_mkl_cimatcopy
@@ -12063,6 +12353,7 @@
  T mkl_trans_def_mkl_somatcopy2_n
  T mkl_trans_def_mkl_somatcopy2_seq
  T mkl_trans_def_mkl_somatcopy2_t
+ T mkl_trans_def_mkl_unrollcopy
  T mkl_trans_mc3_csqtrans
  T mkl_trans_mc3_csqtrans_team
  T mkl_trans_mc3_mkl_cimatcopy
@@ -12090,6 +12381,7 @@
  T mkl_trans_mc3_mkl_somatcopy2_n
  T mkl_trans_mc3_mkl_somatcopy2_seq
  T mkl_trans_mc3_mkl_somatcopy2_t
+ T mkl_trans_mc3_mkl_unrollcopy
  T mkl_trans_mc_csqtrans
  T mkl_trans_mc_csqtrans_team
  T mkl_trans_mc_mkl_cimatcopy
@@ -12117,6 +12409,7 @@
  T mkl_trans_mc_mkl_somatcopy2_n
  T mkl_trans_mc_mkl_somatcopy2_seq
  T mkl_trans_mc_mkl_somatcopy2_t
+ T mkl_trans_mc_mkl_unrollcopy
  T mkl_trans_mkl_cimatcopy_square_t_par
  T mkl_trans_mkl_comatcopy2_par
  T mkl_trans_mkl_comatcopy2_seq
@@ -12334,33 +12627,36 @@
  __pthread_key_create@@GLIBC_2.2.5
  __stack_chk_fail@@GLIBC_2.4
  __xstat@@GLIBC_2.2.5
- abort@@GLIBC_2.2.5
  acos@@GLIBC_2.2.5
  asinf@@GLIBC_2.2.5
  atan2@@GLIBC_2.2.5
  atan2f@@GLIBC_2.2.5
+ b COILoader.973.0.57
+ b COILoaderLoaded.973.0.57
  b DispLibCWD
  b DispLibPath
  b EXEPath
  b FunctionAddress.189.0.1
  b FunctionAddress.203.0.1
- b FunctionAddress.274.0.1
+ b FunctionAddress.283.0.1
  b _ENABLED_AVX512
  b __intel_mkl_feature_indicator
  b __intel_mkl_feature_indicator_x
  b __sngl_was_called
- b c_one.3445.0.1
- b c_zero.3445.0.1
+ b c_zero.3283.0.1
  b cacheSize
  b card_buff_addr
- b completed.6973
+ b cleanup_list
+ b cleanup_list_items
+ b completed.7002
+ b current_device_type.540.0.1
  b current_stat
  b custom_core_exit
- b detect_data_caches_lock.250.0.5
- b done.5342.0.7
- b env_processed.474.0.17
- b env_read.639.0.3
- b env_read_lock.607.0.12
+ b detect_data_caches_lock.239.0.5
+ b done.718.0.10
+ b env_processed.548.0.17
+ b env_read.652.0.4
+ b env_read_lock.742.0.12
  b g_device_data
  b g_offload_report_level
  b g_timers_enabled
@@ -12369,16 +12665,18 @@
  b global_threading_params
  b head_alloc_node
  b head_buff_node
- b info.434.0.5
+ b info.443.0.5
  b ipl::sh::(anonymous namespace)::cosine_lobe
- b lib_status.657.0.7
- b lib_status.796.0.23
+ b lib_status.667.0.7
+ b lib_status.812.0.23
+ b lock.271.0.1
+ b lock.274.0.2
  b mask_prev
  b max_stat
  b mem_handler
  b mem_stat_lock
  b message_catalog
- b mic_enable_env.470.0.16
+ b mic_enable_env.544.0.16
  b mkl_aa_flags
  b mkl_aa_fw_mutex
  b mkl_cache_sizes
@@ -12389,7 +12687,7 @@
  b mkl_hbw_free
  b mkl_hbw_malloc
  b mkl_hbw_malloc_psize
- b mkl_init_lock.793.0.12
+ b mkl_init_lock.1138.0.11
  b mkl_progress_address
  b mkl_set_memory_limit_lock
  b mkl_xerbla_address
@@ -12398,15 +12696,15 @@
  b mm_fast_memory_update_limit_lock
  b mm_tid
  b mm_vector_lock
- b mpi_ppn.645.0.15
+ b mpi_ppn.838.0.15
  b print_buf
- b print_lock.412.0.4
- b printed.412.0.4
- b r_zero.3445.0.1
- b registration_state_lock.944.0.64
+ b print_lock.306.0.4
+ b printed.306.0.4
+ b r_zero.3283.0.1
+ b registration_state_lock.1373.0.69
  b registrations
  b static_mklapi_entries
- b stats_gc_lock.994.0.30
+ b stats_gc_lock.1525.0.32
  b std::__ioinit
  b str_handler
  b sys_alloc
@@ -12415,10 +12713,10 @@
  b sys_free
  b sys_realloc
  b tls_key_status
- b unknown.407.0.1
- b unknown.409.0.2
- b verbose_val_lock.412.0.3
- b want_dump_env_read_lock.2542.0.1
+ b unknown.297.0.1
+ b unknown.300.0.2
+ b verbose_val_lock.309.0.3
+ b want_dump_env_read_lock.2555.0.1
  cabsf@@GLIBC_2.2.5
  calloc@@GLIBC_2.2.5
  catgets@@GLIBC_2.2.5
@@ -12426,14 +12724,21 @@
  cos@@GLIBC_2.2.5
  cosf@@GLIBC_2.2.5
  d
- d BDFT
+ d BATCH_CDFT
+ d BATCH_CDFT_VL
+ d BATCH_CRDFT
+ d BATCH_CRDFT_INV
  d CDFT
  d DW.ref._ZTIN3ipl9ExceptionE
  d DW.ref.__gxx_personality_v0
  d MKL_UEAA_TIMER_ZERO
  d RDFT
- d SEPARATOR.844.0.5
+ d SEPARATOR.860.0.5
  d _DYNAMIC
+ d _ENABLED_AVX
+ d _ENABLED_AVX2
+ d _ENABLED_AVX512_MIC
+ d _ENABLED_SSE4_2
  d _GLOBAL_OFFSET_TABLE_
  d __HT
  d __JCR_END__
@@ -12456,28 +12761,38 @@
  d __omp_num_threads
  d __threads_env_NOT_readed
  d api_probe_is_called
- d base_b.3445.0.1
- d batchfft.3594.0.7
- d cin.3445.0.1
- d device_count.435.0.1
+ d base_b.3283.0.1
+ d batchfft.4164.0.7
+ d c_one.3283.0.1
+ d cached.362.0.5
+ d cached.365.0.4
+ d cached_mei.718.0.10
+ d cin.3283.0.1
+ d device_count.509.0.1
  d disable_fast_mm
  d dll_cfg_names
- d dll_memkind_name.787.0.10
- d emax_b.3445.0.1
- d emin_b.3445.0.1
+ d dll_memkind_name.1117.0.9
+ d emax_b.3283.0.1
+ d emin_b.3283.0.1
  d enable_global_stat
  d env_has_been_cached
  d env_read
- d eps_b.3445.0.1
+ d eps_b.3283.0.1
+ d factorization_db
  d first_msg
  d ftrans
+ d func_b0.431.0.0.1
+ d func_b1.431.0.0.1
+ d func_bn.431.0.0.1
  d g_offload_report_enabled
  d g_timers_need_reset
- d in_one.3445.0.1
- d itisAtomSSE4_2.5138.0.11
- d itisAtomSSSE3.5141.0.12
- d itisBarcelona.5144.0.13
- d itisBulldozer.5136.0.10
+ d in_one.3283.0.1
+ d itisAtomSSE4_2.396.0.11
+ d itisAtomSSSE3.403.0.12
+ d itisBarcelona.410.0.13
+ d itisBulldozer.391.0.10
+ d ker_notw_db
+ d ker_twid_db
  d legacy
  d mkl_clocks_freq
  d mkl_cpu_freq
@@ -12486,7 +12801,7 @@
  d mkl_verbose_val
  d mm_book
  d mm_fast_memory_limit
- d mm_init_done.793.0.12
+ d mm_init_done.1138.0.11
  d ownStatus
  d owngDFTFwdBatch_32fcw7_env10_vtable
  d owngDFTFwdBatch_32fcw7_env11_vtable
@@ -12570,25 +12885,23 @@
  d owngDFTInvBatch_32fcw7_envlambda3_vtable
  d owngDFTInvBatch_32fcw7_envlambda6_vtable
  d owngDFTInvBatch_32fcw7_envlambda9_vtable
- d prec_b.3445.0.1
- d r_one.3445.0.1
- d registration_state.944.0.64
- d rmax_b.3445.0.1
- d rmin_b.3445.0.1
- d rnd_b.3445.0.1
- d sfmax2_b.3445.0.1
- d sfmin2_b.3445.0.1
- d sfmin_b.3445.0.1
- d small1_b.3445.0.1
- d sminv1_b.3445.0.1
+ d prec_b.3283.0.1
+ d r_one.3283.0.1
+ d registration_state.1373.0.69
+ d rmax_b.3283.0.1
+ d rmin_b.3283.0.1
+ d rnd_b.3283.0.1
+ d sfmax2_b.3283.0.1
+ d sfmin2_b.3283.0.1
+ d sfmin_b.3283.0.1
+ d small1_b.3283.0.1
+ d sminv1_b.3283.0.1
  d static_bkdown_list
  d static_methods
  d suggest_optimal_nt
- d t_b.3445.0.1
+ d t_b.3283.0.1
  d tableCache
  d tbl
- d tbl_blk_order
- d tbl_buf_order
  d tbl_cDFTfwd_small
  d tbl_cDFTfwd_small_scale
  d tbl_cDFTinv_small
@@ -12605,7 +12918,6 @@
  d tbl_crFFTfwd_small_scale
  d tbl_crFFTinv_small
  d tbl_crFFTinv_small_scale
- d tbl_len_conv
  d tbl_rDFTfwd_small
  d tbl_rDFTfwd_small_scale
  d tbl_rDFTinv_small
@@ -12614,10 +12926,10 @@
  d tbl_rFFTfwd_small_scale
  d tbl_rFFTinv_small
  d tbl_rFFTinv_small_scale
- d tol_b.3445.0.1
+ d tol_b.3283.0.1
  d use_internal_msg
- d verbose_ptr.274.0.1
- d want_dump.2540.0.1
+ d verbose_ptr.283.0.1
+ d want_dump.2553.0.1
  difftime@@GLIBC_2.2.5
  dladdr@@GLIBC_2.2.5
  dlerror@@GLIBC_2.2.5
@@ -12625,6 +12937,7 @@
  dlsym@@GLIBC_2.2.5
  dlvsym@@GLIBC_2.2.5
  exit@@GLIBC_2.2.5
+ exp@@GLIBC_2.2.5
  fclose@@GLIBC_2.2.5
  fflush@@GLIBC_2.2.5
  fgets@@GLIBC_2.2.5
@@ -12646,6 +12959,9 @@
  memcpy@@GLIBC_2.14
  memmove@@GLIBC_2.2.5
  memset@@GLIBC_2.2.5
+ mmap@@GLIBC_2.2.5
+ mprotect@@GLIBC_2.2.5
+ munmap@@GLIBC_2.2.5
  operator delete(void*)@@GLIBCXX_3.4
  operator new(unsigned long)@@GLIBCXX_3.4
  posix_memalign@@GLIBC_2.2.5
@@ -12654,34 +12970,14 @@
  printf@@GLIBC_2.2.5
  pthread_getspecific@@GLIBC_2.2.5
  pthread_key_create@@GLIBC_2.2.5
+ pthread_key_delete@@GLIBC_2.2.5
  pthread_mutex_lock@@GLIBC_2.2.5
  pthread_mutex_trylock@@GLIBC_2.2.5
  pthread_mutex_unlock@@GLIBC_2.2.5
  pthread_setspecific@@GLIBC_2.2.5
- r .2.294_2.switchtab.0.0.294
- r .L_2__cnst_pck.8
- r .L_2il0floatpacket.0
- r .L_2il0floatpacket.1
- r .L_2il0floatpacket.10
- r .L_2il0floatpacket.11
- r .L_2il0floatpacket.13
- r .L_2il0floatpacket.16
- r .L_2il0floatpacket.17
- r .L_2il0floatpacket.18
- r .L_2il0floatpacket.2
- r .L_2il0floatpacket.25
- r .L_2il0floatpacket.3
- r .L_2il0floatpacket.4
- r .L_2il0floatpacket.40
- r .L_2il0floatpacket.41
- r .L_2il0floatpacket.42
- r .L_2il0floatpacket.5
- r .L_2il0floatpacket.6
- r .L_2il0floatpacket.7
- r .L_2il0floatpacket.8
  r ._106
  r .eh_frame_seg
- r A0.1001.0.0.33
+ r A0.1544.0.0.35
  r CC_12_9
  r CC_15_32
  r CC_1_11
@@ -12724,6 +13020,8 @@
  r IM_1_8
  r IM_2_16
  r IM_3_16
+ r KEY_N_SOCKETS_ar.1011.0.0.25
+ r N_physical_id_ar.1011.0.0.25
  r P
  r PI04
  r PONE
@@ -12792,32 +13090,50 @@
  r SS_7_32
  r SS_9_16
  r SS_9_32
- r W.7188.0.36
- r W.7189.0.37
- r W.7192.0.40
- r W.7193.0.41
- r W.7460.0.36
- r W.7461.0.37
- r W.7464.0.40
- r W.7465.0.41
+ r W.2383.0.36
+ r W.2384.0.37
+ r W.2387.0.40
+ r W.2388.0.41
+ r W.2655.0.36
+ r W.2656.0.37
+ r W.2659.0.40
+ r W.2660.0.41
+ r _CP
  r _CP0
  r _CP1
  r _CP2
+ r _CQ0
+ r _CQ1
+ r _CQ2
  r _FPI
  r _INV_PI04
  r _K4onPi
  r _MAGIC_64
  r _PI04_HI
  r _PI04_LO
+ r _Pi4Inv
+ r _Pi4x3
+ r _Pi4x4
  r _Pion4K
+ r _SCALE
  r _SCDN
  r _SCT
  r _SCUP
+ r _SP
  r _SP0
  r _SP1
  r _SP2
+ r _SQ0
+ r _SQ1
+ r _SQ2
+ r _TWO_12H
+ r _TWO_32H
+ r _TWO_40H
  r _TWO_52H
+ r __4onpi_31l
+ r __4onpi_d
  r __FRAME_END__
+ r __GNU_EH_FRAME_HDR
  r __NLITPACK_0.0.1
  r __NLITPACK_1.0.1
  r __NLITPACK_2.0.1
@@ -12971,7 +13287,6 @@
  r __STRLITPACK_228
  r __STRLITPACK_229
  r __STRLITPACK_23
- r __STRLITPACK_230
  r __STRLITPACK_231
  r __STRLITPACK_232
  r __STRLITPACK_233
@@ -12995,18 +13310,9 @@
  r __STRLITPACK_25
  r __STRLITPACK_250
  r __STRLITPACK_251
- r __STRLITPACK_252
- r __STRLITPACK_253
- r __STRLITPACK_254
- r __STRLITPACK_255
- r __STRLITPACK_256
  r __STRLITPACK_257
- r __STRLITPACK_258
- r __STRLITPACK_259
  r __STRLITPACK_26
  r __STRLITPACK_260
- r __STRLITPACK_261
- r __STRLITPACK_262
  r __STRLITPACK_263
  r __STRLITPACK_264
  r __STRLITPACK_265
@@ -13016,7 +13322,6 @@
  r __STRLITPACK_269
  r __STRLITPACK_27
  r __STRLITPACK_270
- r __STRLITPACK_271
  r __STRLITPACK_272
  r __STRLITPACK_273
  r __STRLITPACK_274
@@ -13026,18 +13331,10 @@
  r __STRLITPACK_278
  r __STRLITPACK_279
  r __STRLITPACK_28
- r __STRLITPACK_280
- r __STRLITPACK_281
  r __STRLITPACK_282
- r __STRLITPACK_283
- r __STRLITPACK_284
  r __STRLITPACK_285
- r __STRLITPACK_286
- r __STRLITPACK_287
  r __STRLITPACK_288
- r __STRLITPACK_289
  r __STRLITPACK_29
- r __STRLITPACK_290
  r __STRLITPACK_291
  r __STRLITPACK_292
  r __STRLITPACK_293
@@ -13046,81 +13343,51 @@
  r __STRLITPACK_296
  r __STRLITPACK_297
  r __STRLITPACK_298
- r __STRLITPACK_299
  r __STRLITPACK_3
  r __STRLITPACK_30
  r __STRLITPACK_300
- r __STRLITPACK_301
  r __STRLITPACK_302
  r __STRLITPACK_303
  r __STRLITPACK_304
- r __STRLITPACK_305
  r __STRLITPACK_306
  r __STRLITPACK_307
- r __STRLITPACK_308
  r __STRLITPACK_309
  r __STRLITPACK_31
- r __STRLITPACK_310
- r __STRLITPACK_311
- r __STRLITPACK_312
- r __STRLITPACK_313
- r __STRLITPACK_314
- r __STRLITPACK_315
- r __STRLITPACK_316
  r __STRLITPACK_317
- r __STRLITPACK_318
- r __STRLITPACK_319
  r __STRLITPACK_32
- r __STRLITPACK_320
- r __STRLITPACK_321
- r __STRLITPACK_322
- r __STRLITPACK_323
  r __STRLITPACK_324
  r __STRLITPACK_325
  r __STRLITPACK_326
- r __STRLITPACK_327
- r __STRLITPACK_328
  r __STRLITPACK_329
  r __STRLITPACK_33
  r __STRLITPACK_330
  r __STRLITPACK_331
- r __STRLITPACK_332
  r __STRLITPACK_333
  r __STRLITPACK_334
- r __STRLITPACK_335
  r __STRLITPACK_336
- r __STRLITPACK_337
- r __STRLITPACK_338
- r __STRLITPACK_339
  r __STRLITPACK_34
- r __STRLITPACK_340
- r __STRLITPACK_341
- r __STRLITPACK_342
- r __STRLITPACK_343
  r __STRLITPACK_344
- r __STRLITPACK_345
- r __STRLITPACK_346
- r __STRLITPACK_347
- r __STRLITPACK_348
  r __STRLITPACK_349
  r __STRLITPACK_35
  r __STRLITPACK_350
  r __STRLITPACK_351
  r __STRLITPACK_352
  r __STRLITPACK_353
- r __STRLITPACK_354
  r __STRLITPACK_355
- r __STRLITPACK_356
- r __STRLITPACK_357
- r __STRLITPACK_358
- r __STRLITPACK_359
  r __STRLITPACK_36
- r __STRLITPACK_360
- r __STRLITPACK_361
  r __STRLITPACK_362
+ r __STRLITPACK_363
+ r __STRLITPACK_364
+ r __STRLITPACK_365
+ r __STRLITPACK_366
+ r __STRLITPACK_367
  r __STRLITPACK_37
+ r __STRLITPACK_370
  r __STRLITPACK_38
+ r __STRLITPACK_386
+ r __STRLITPACK_387
  r __STRLITPACK_39
+ r __STRLITPACK_392
  r __STRLITPACK_4
  r __STRLITPACK_40
  r __STRLITPACK_41
@@ -13187,18 +13454,22 @@
  r __STRLITPACK_97
  r __STRLITPACK_98
  r __STRLITPACK_99
- r __mkl_tmp_one.4733.0.0.24
- r __mkl_tmp_one.4749.0.0.25
- r __mkl_tmp_one.4913.0.0.24
- r __mkl_tmp_one.4929.0.0.25
+ r __mkl_tmp_one.4373.0.0.24
+ r __mkl_tmp_one.4389.0.0.25
+ r __mkl_tmp_one.4553.0.0.24
+ r __mkl_tmp_one.4569.0.0.25
+ r __mkl_tmp_one.4635.0.0.24
+ r __mkl_tmp_one.4651.0.0.25
  r _infs
  r _ones
+ r _pi04_2d
+ r _pi04_3d
+ r _pi04_5d
  r _small_value_32
+ r _small_value_64
  r _zeros
- r c.4042.0.0.23
- r c.4044.0.0.24
- r c.4117.0.0.27
- r c.4297.0.0.27
+ r c.4207.0.0.23
+ r c.4208.0.0.24
  r c2_p1m1
  r c3_p1m1
  r c4_p1m1
@@ -13341,106 +13612,109 @@
  r cr_re_7_64
  r cr_re_8_64
  r cr_re_9_64
- r emmConst_80.5186.0.0.83
- r emmConst_80.5236.0.0.83
- r emmConst_80.8983.0.0.60
- r emmConst_80.9301.0.0.78
- r emmTmp0.4818.0.0.68
- r emmTmp0.4834.0.0.69
- r emmTmp0.4868.0.0.68
- r emmTmp0.4868.0.0.70
- r emmTmp0.4884.0.0.69
- r emmTmp0.4918.0.0.70
- r emmTmp0.4980.0.0.74
- r emmTmp0.4987.0.0.75
- r emmTmp0.5003.0.0.76
- r emmTmp0.5010.0.0.77
- r emmTmp0.5030.0.0.74
- r emmTmp0.5037.0.0.75
- r emmTmp0.5053.0.0.76
- r emmTmp0.5060.0.0.77
- r emmTmp0.5155.0.0.81
- r emmTmp0.5205.0.0.81
- r emmTmp0.8639.0.0.46
- r emmTmp0.8655.0.0.47
- r emmTmp0.8689.0.0.48
- r emmTmp0.8801.0.0.52
- r emmTmp0.8808.0.0.53
- r emmTmp0.8824.0.0.54
- r emmTmp0.8831.0.0.55
- r emmTmp0.8957.0.0.64
- r emmTmp0.8973.0.0.65
- r emmTmp0.8976.0.0.59
- r emmTmp0.9007.0.0.66
- r emmTmp0.9119.0.0.70
- r emmTmp0.9126.0.0.71
- r emmTmp0.9142.0.0.72
- r emmTmp0.9149.0.0.73
- r emmTmp0.9294.0.0.77
- r emmTmp1.4818.0.0.68
- r emmTmp1.4834.0.0.69
- r emmTmp1.4868.0.0.68
- r emmTmp1.4868.0.0.70
- r emmTmp1.4884.0.0.69
- r emmTmp1.4918.0.0.70
- r emmTmp1.4980.0.0.74
- r emmTmp1.4987.0.0.75
- r emmTmp1.5003.0.0.76
- r emmTmp1.5010.0.0.77
- r emmTmp1.5030.0.0.74
- r emmTmp1.5037.0.0.75
- r emmTmp1.5053.0.0.76
- r emmTmp1.5060.0.0.77
- r emmTmp1.5155.0.0.81
- r emmTmp1.5205.0.0.81
- r emmTmp1.8639.0.0.46
- r emmTmp1.8655.0.0.47
- r emmTmp1.8689.0.0.48
- r emmTmp1.8801.0.0.52
- r emmTmp1.8808.0.0.53
- r emmTmp1.8824.0.0.54
- r emmTmp1.8831.0.0.55
- r emmTmp1.8957.0.0.64
- r emmTmp1.8973.0.0.65
- r emmTmp1.8976.0.0.59
- r emmTmp1.9007.0.0.66
- r emmTmp1.9119.0.0.70
- r emmTmp1.9126.0.0.71
- r emmTmp1.9142.0.0.72
- r emmTmp1.9149.0.0.73
- r emmTmp1.9294.0.0.77
- r gDefaultHrtfData
- r iTmp.3003.0.0.3
- r iTmp.3053.0.0.3
- r iTmp.3058.0.0.5
- r iTmp.3108.0.0.5
- r iTmp.5228.0.0.85
- r iTmp.5278.0.0.85
- r iTmp.7235.0.0.2
- r iTmp.7264.0.0.3
- r iTmp.9001.0.0.61
- r iTmp.9319.0.0.79
- r lock_buf.584.0.0.4
+ r emmConst_80.4324.0.0.60
+ r emmConst_80.4642.0.0.78
+ r emmConst_80.4738.0.0.83
+ r emmTmp0.3980.0.0.46
+ r emmTmp0.3996.0.0.47
+ r emmTmp0.4030.0.0.48
+ r emmTmp0.4142.0.0.52
+ r emmTmp0.4149.0.0.53
+ r emmTmp0.4165.0.0.54
+ r emmTmp0.4172.0.0.55
+ r emmTmp0.4298.0.0.64
+ r emmTmp0.4314.0.0.65
+ r emmTmp0.4317.0.0.59
+ r emmTmp0.4348.0.0.66
+ r emmTmp0.4370.0.0.68
+ r emmTmp0.4386.0.0.69
+ r emmTmp0.4420.0.0.70
+ r emmTmp0.4460.0.0.70
+ r emmTmp0.4467.0.0.71
+ r emmTmp0.4483.0.0.72
+ r emmTmp0.4490.0.0.73
+ r emmTmp0.4532.0.0.74
+ r emmTmp0.4539.0.0.75
+ r emmTmp0.4555.0.0.76
+ r emmTmp0.4562.0.0.77
+ r emmTmp0.4635.0.0.77
+ r emmTmp0.4707.0.0.81
+ r emmTmp1.3980.0.0.46
+ r emmTmp1.3996.0.0.47
+ r emmTmp1.4030.0.0.48
+ r emmTmp1.4142.0.0.52
+ r emmTmp1.4149.0.0.53
+ r emmTmp1.4165.0.0.54
+ r emmTmp1.4172.0.0.55
+ r emmTmp1.4298.0.0.64
+ r emmTmp1.4314.0.0.65
+ r emmTmp1.4317.0.0.59
+ r emmTmp1.4348.0.0.66
+ r emmTmp1.4370.0.0.68
+ r emmTmp1.4386.0.0.69
+ r emmTmp1.4420.0.0.70
+ r emmTmp1.4460.0.0.70
+ r emmTmp1.4467.0.0.71
+ r emmTmp1.4483.0.0.72
+ r emmTmp1.4490.0.0.73
+ r emmTmp1.4532.0.0.74
+ r emmTmp1.4539.0.0.75
+ r emmTmp1.4555.0.0.76
+ r emmTmp1.4562.0.0.77
+ r emmTmp1.4635.0.0.77
+ r emmTmp1.4707.0.0.81
+ r iTmp.2555.0.0.3
+ r iTmp.2576.0.0.2
+ r iTmp.2605.0.0.3
+ r iTmp.2610.0.0.5
+ r iTmp.4342.0.0.61
+ r iTmp.4660.0.0.79
+ r iTmp.4780.0.0.85
+ r info.516.0.0.3
+ r key_cpu_cores.1011.0.0.25
+ r key_physical_id.1011.0.0.25
+ r key_processor.1011.0.0.25
+ r key_processor.1012.0.0.25
+ r key_siblings.1011.0.0.25
+ r lock_buf.699.0.0.4
  r mkl_ao_fft_ctr_worker
  r mkl_ao_fft_dtr_worker
  r mkl_ao_fft_fwd_worker
  r mkl_ao_fft_inv_worker
- r ntz1.3332.0.0.1
- r ntz1.3512.0.0.1
- r one.4731.0.0.24
- r one.4745.0.0.25
- r one.4911.0.0.24
- r one.4925.0.0.25
+ r ntz1.3902.0.0.1
+ r ntz1.4082.0.0.1
+ r one.4371.0.0.24
+ r one.4385.0.0.25
+ r one.4551.0.0.24
+ r one.4565.0.0.25
+ r one.4633.0.0.24
+ r one.4647.0.0.25
  r ones
- r scale.4127.0.0.2
- r scale.4133.0.0.2
- r scale.4307.0.0.2
- r scale.4313.0.0.2
- r stat.876.0.0.62
- r thread.3330.0.0.2
- r unlock_buf.543.0.0.2
- r unlock_buf.543.0.0.3
- r verbose_unknown.274.0.1
+ r scale.4188.0.0.4
+ r scale.4194.0.0.4
+ r scale.4456.0.0.4
+ r scale.4462.0.0.4
+ r stat.1299.0.0.67
+ r strd.4076.0.0.15
+ r strd.4256.0.0.15
+ r strd.4338.0.0.15
+ r tbl_blk_order
+ r tbl_buf_order
+ r tbl_len_conv
+ r thread.3900.0.0.2
+ r unlock_buf.658.0.0.2
+ r unlock_buf.658.0.0.3
+ r verbose_unknown.283.0.1
+ r zero.4183.0.0.26
+ r zero.4188.0.0.27
+ r zero.4253.0.0.33
+ r zero.4363.0.0.26
+ r zero.4368.0.0.27
+ r zero.4433.0.0.33
+ r zero.4451.0.0.26
+ r zero.4456.0.0.27
+ r zero.4515.0.0.33
+ r zero_none
  r zerone
  realloc@@GLIBC_2.2.5
  roundf@@GLIBC_2.2.5
@@ -13487,6 +13761,7 @@
  syscall@@GLIBC_2.2.5
  t
  t FFT
+ t IMATCOPY_SQUARE
  t LA16X8_N1_First_Step_Endgas_1
  t LA16X8_N1_Loop_M16_Oddgas_1
  t LA16X8_N1_Loop_M16gas_1
@@ -13999,21 +14274,38 @@
  t __intel_mkl_features_init
  t __intel_mkl_features_init_body
  t __intel_mkl_features_init_x
+ t _best_factor
+ t _ceiling_sqrt
+ t _col_1d_dft_twist
  t _free_data_1d_via_2d
+ t _mm256_reverse_ps
  t _row_1d_dft_twist
+ t _row_1d_dft_twist_transpose
+ t _scatter_twist_rows
  t _setup_twiddle_table
+ t _tiled1_scatter_twist_rows
+ t _twist_bundle_transpose
  t aligned_tQxQN
  t atQxQ
  t atexit
  t avx2_gather_c_c_n8x_m8_mdist1
+ t balance220
  t batch_fwd
+ t batch_fwd_2d
  t batch_inv
+ t batch_inv_2d
  t bi16
  t bi2
  t bi32
  t bi4
  t bi64
  t bi8
+ t bkd_free
+ t bkd_init
+ t bkd_r2c_3d_free
+ t bkd_r2c_3d_init
+ t bkd_r2c_3d_init_bwd_2nd_dim
+ t bkd_task
  t bluestein_forward
  t bluestein_inverse
  t bluestein_memset
@@ -14033,6 +14325,7 @@
  t bo4
  t bo64
  t bo8
+ t c2r
  t cDFTfwd_10
  t cDFTfwd_11
  t cDFTfwd_12
@@ -14102,8 +14395,13 @@
  t cFftFwd_BlkStep
  t cFftInv_BlkStep
  t cFft_Blk_R2
+ t c_tile
+ t c_trw4x4
+ t c_tw4x4
  t check_strategy
  t commit
+ t compute_2d
+ t compute_2d_fwd
  t compute_bi
  t compute_bo
  t compute_bwd
@@ -14111,6 +14409,11 @@
  t compute_bwd_o
  t compute_bwd_task
  t compute_bx
+ t compute_col_after_shuffle
+ t compute_col_p2_tf_shuffle_inplace
+ t compute_col_p2_tf_shuffle_not_inplace
+ t compute_col_tf_shuffle_inplace
+ t compute_col_tf_shuffle_not_inplace
  t compute_fi
  t compute_fo
  t compute_fwd
@@ -14119,8 +14422,33 @@
  t compute_fwd_task
  t compute_fx
  t compute_inv
+ t compute_large_1d
+ t compute_large_1d_bwd
+ t compute_large_1d_fwd
  t compute_task
  t copy_node
+ t crDFTfwd_10
+ t crDFTfwd_11
+ t crDFTfwd_12
+ t crDFTfwd_13
+ t crDFTfwd_14
+ t crDFTfwd_15
+ t crDFTfwd_3
+ t crDFTfwd_5
+ t crDFTfwd_6
+ t crDFTfwd_7
+ t crDFTfwd_9
+ t crDFTinv_10
+ t crDFTinv_11
+ t crDFTinv_12
+ t crDFTinv_13
+ t crDFTinv_14
+ t crDFTinv_15
+ t crDFTinv_3
+ t crDFTinv_5
+ t crDFTinv_6
+ t crDFTinv_7
+ t crDFTinv_9
  t crDftFwd_Fact11_2a
  t crDftFwd_Fact11_2m
  t crDftFwd_Fact11_4a
@@ -14139,19 +14467,56 @@
  t crDftInv_Fact13_4a
  t crDftInv_Fact13_4m
  t crDftInv_StepPrimeFact
+ t crFFTfwd_1
+ t crFFTfwd_16
+ t crFFTfwd_2
+ t crFFTfwd_32
+ t crFFTfwd_4
+ t crFFTfwd_8
+ t crFFTinv_1
+ t crFFTinv_16
+ t crFFTinv_2
+ t crFFTinv_32
+ t crFFTinv_4
+ t crFFTinv_8
  t crFftFwd_BlkStep
  t crFftInv_BlkStep
  t crFft_Blk_R2
+ t cvector_add
+ t cvector_conjsub
  t deinterlace_c
  t delete_plan
  t deregister_tm_clones
  t detach
  t dont_prefetech
  t dump_descriptor_iface
+ t even_real_copy
+ t even_real_fwd
+ t even_real_fwd_twd
+ t even_real_inv
+ t even_real_inv_twd
+ t even_real_twd
  t execute_bi
  t execute_bo
  t execute_fi
  t execute_fo
+ t f01
+ t f02
+ t f03
+ t f04
+ t f05
+ t f06
+ t f07
+ t f08
+ t f09
+ t f10
+ t f11
+ t f12
+ t f13
+ t f14
+ t f15
+ t f16
+ t f32
  t fft_fwd_16
  t fft_fwd_32
  t fft_fwd_64
@@ -14193,8 +14558,24 @@
  t getScale
  t getSizeTwd_Step
  t getThreadLimit
+ t i01
+ t i02
+ t i03
+ t i04
+ t i05
+ t i06
+ t i07
+ t i08
+ t i09
+ t i10
+ t i11
+ t i12
+ t i13
+ t i14
+ t i15
+ t i16
+ t i32
  t imatcopy_square_s
- t inconsistent_ri_cce
  t initTabTwd_Step
  t interlace_c
  t ipl::sh::(anonymous namespace)::ComputeBandRotation(int, std::vector<ipl::DynamicMatrix<double>, std::allocator<ipl::DynamicMatrix<double> > >*)
@@ -14203,6 +14584,60 @@
  t isSequentialMKL
  t ker_batch_bwd_v_96
  t ker_batch_fwd_v_96
+ t ker_col_batch_bwd_v_10
+ t ker_col_batch_bwd_v_11
+ t ker_col_batch_bwd_v_12
+ t ker_col_batch_bwd_v_14
+ t ker_col_batch_bwd_v_15
+ t ker_col_batch_bwd_v_16
+ t ker_col_batch_bwd_v_18
+ t ker_col_batch_bwd_v_25
+ t ker_col_batch_bwd_v_32
+ t ker_col_batch_bwd_v_6
+ t ker_col_batch_bwd_v_64
+ t ker_col_batch_bwd_v_7
+ t ker_col_batch_bwd_v_8
+ t ker_col_batch_fwd_v_10
+ t ker_col_batch_fwd_v_11
+ t ker_col_batch_fwd_v_12
+ t ker_col_batch_fwd_v_14
+ t ker_col_batch_fwd_v_15
+ t ker_col_batch_fwd_v_16
+ t ker_col_batch_fwd_v_18
+ t ker_col_batch_fwd_v_25
+ t ker_col_batch_fwd_v_32
+ t ker_col_batch_fwd_v_6
+ t ker_col_batch_fwd_v_64
+ t ker_col_batch_fwd_v_7
+ t ker_col_batch_fwd_v_8
+ t ker_twid_compact_op_bwd_v_10
+ t ker_twid_compact_op_bwd_v_11
+ t ker_twid_compact_op_bwd_v_12
+ t ker_twid_compact_op_bwd_v_14
+ t ker_twid_compact_op_bwd_v_15
+ t ker_twid_compact_op_bwd_v_16
+ t ker_twid_compact_op_bwd_v_18
+ t ker_twid_compact_op_bwd_v_25
+ t ker_twid_compact_op_bwd_v_32
+ t ker_twid_compact_op_bwd_v_5
+ t ker_twid_compact_op_bwd_v_6
+ t ker_twid_compact_op_bwd_v_7
+ t ker_twid_compact_op_bwd_v_8
+ t ker_twid_compact_op_bwd_v_9
+ t ker_twid_compact_op_fwd_v_10
+ t ker_twid_compact_op_fwd_v_11
+ t ker_twid_compact_op_fwd_v_12
+ t ker_twid_compact_op_fwd_v_14
+ t ker_twid_compact_op_fwd_v_15
+ t ker_twid_compact_op_fwd_v_16
+ t ker_twid_compact_op_fwd_v_18
+ t ker_twid_compact_op_fwd_v_25
+ t ker_twid_compact_op_fwd_v_32
+ t ker_twid_compact_op_fwd_v_5
+ t ker_twid_compact_op_fwd_v_6
+ t ker_twid_compact_op_fwd_v_7
+ t ker_twid_compact_op_fwd_v_8
+ t ker_twid_compact_op_fwd_v_9
  t kernel10
  t kernel11
  t kernel12
@@ -14219,6 +14654,8 @@
  t kernel9
  t lambda_free_buffers
  t lambda_unuse_ptr
+ t large_batch_bwd
+ t large_batch_fwd
  t legacy_api_fwd_1d
  t legacy_api_inv_1d
  t load_twd10
@@ -14236,6 +14673,7 @@
  t load_twd8
  t load_twd9
  t mk_twiddle2_row
+ t mk_twiddle2_row..0
  t mkl_ao_fft_client
  t mkl_ao_fft_commit
  t mkl_ao_fft_compute_fwd
@@ -14243,8 +14681,8 @@
  t mkl_ao_fft_detach
  t mkl_ao_fft_host
  t mkl_ao_fft_task
- t mkl_dft_mc3_mklgEnvList_get
  t mkl_read_threads_env
+ t mkl_tls_destroy
  t mkl_xomatcopy2_rec_c
  t mkl_xomatcopy2_rec_c_1
  t mkl_xomatcopy2_rec_t
@@ -14275,10 +14713,8 @@
  t owngDFTFwdBatch_32fcw7_env10___del__
  t owngDFTFwdBatch_32fcw7_env10_plan
  t owngDFTFwdBatch_32fcw7_env11___del__
- t owngDFTFwdBatch_32fcw7_env11_compute
  t owngDFTFwdBatch_32fcw7_env11_plan
  t owngDFTFwdBatch_32fcw7_env12___del__
- t owngDFTFwdBatch_32fcw7_env12_compute_1
  t owngDFTFwdBatch_32fcw7_env12_plan
  t owngDFTFwdBatch_32fcw7_env13___del__
  t owngDFTFwdBatch_32fcw7_env13_plan
@@ -14313,41 +14749,10 @@
  t owngDFTFwdBatch_32fcw7_env1___del__
  t owngDFTFwdBatch_32fcw7_env1_plan
  t owngDFTFwdBatch_32fcw7_env20___del__
- t owngDFTFwdBatch_32fcw7_env20_compute
- t owngDFTFwdBatch_32fcw7_env20_compute_10
- t owngDFTFwdBatch_32fcw7_env20_compute_11
- t owngDFTFwdBatch_32fcw7_env20_compute_12
- t owngDFTFwdBatch_32fcw7_env20_compute_13
- t owngDFTFwdBatch_32fcw7_env20_compute_14
- t owngDFTFwdBatch_32fcw7_env20_compute_15
- t owngDFTFwdBatch_32fcw7_env20_compute_16
- t owngDFTFwdBatch_32fcw7_env20_compute_17
- t owngDFTFwdBatch_32fcw7_env20_compute_18
- t owngDFTFwdBatch_32fcw7_env20_compute_19
- t owngDFTFwdBatch_32fcw7_env20_compute_20
- t owngDFTFwdBatch_32fcw7_env20_compute_6
- t owngDFTFwdBatch_32fcw7_env20_compute_7
- t owngDFTFwdBatch_32fcw7_env20_compute_8
- t owngDFTFwdBatch_32fcw7_env20_compute_9
  t owngDFTFwdBatch_32fcw7_env20_compute_mem
  t owngDFTFwdBatch_32fcw7_env20_mem
  t owngDFTFwdBatch_32fcw7_env20_plan
  t owngDFTFwdBatch_32fcw7_env21___del__
- t owngDFTFwdBatch_32fcw7_env21_compute
- t owngDFTFwdBatch_32fcw7_env21_compute_10
- t owngDFTFwdBatch_32fcw7_env21_compute_11
- t owngDFTFwdBatch_32fcw7_env21_compute_12
- t owngDFTFwdBatch_32fcw7_env21_compute_13
- t owngDFTFwdBatch_32fcw7_env21_compute_14
- t owngDFTFwdBatch_32fcw7_env21_compute_15
- t owngDFTFwdBatch_32fcw7_env21_compute_16
- t owngDFTFwdBatch_32fcw7_env21_compute_17
- t owngDFTFwdBatch_32fcw7_env21_compute_18
- t owngDFTFwdBatch_32fcw7_env21_compute_19
- t owngDFTFwdBatch_32fcw7_env21_compute_20
- t owngDFTFwdBatch_32fcw7_env21_compute_7
- t owngDFTFwdBatch_32fcw7_env21_compute_8
- t owngDFTFwdBatch_32fcw7_env21_compute_9
  t owngDFTFwdBatch_32fcw7_env21_compute_mem
  t owngDFTFwdBatch_32fcw7_env21_mem
  t owngDFTFwdBatch_32fcw7_env21_plan
@@ -14370,41 +14775,10 @@
  t owngDFTFwdBatch_32fcw7_env22_compute_9
  t owngDFTFwdBatch_32fcw7_env22_plan
  t owngDFTFwdBatch_32fcw7_env23___del__
- t owngDFTFwdBatch_32fcw7_env23_compute
- t owngDFTFwdBatch_32fcw7_env23_compute_10
- t owngDFTFwdBatch_32fcw7_env23_compute_11
- t owngDFTFwdBatch_32fcw7_env23_compute_12
- t owngDFTFwdBatch_32fcw7_env23_compute_13
- t owngDFTFwdBatch_32fcw7_env23_compute_14
- t owngDFTFwdBatch_32fcw7_env23_compute_15
- t owngDFTFwdBatch_32fcw7_env23_compute_16
- t owngDFTFwdBatch_32fcw7_env23_compute_17
- t owngDFTFwdBatch_32fcw7_env23_compute_18
- t owngDFTFwdBatch_32fcw7_env23_compute_19
- t owngDFTFwdBatch_32fcw7_env23_compute_20
- t owngDFTFwdBatch_32fcw7_env23_compute_6
- t owngDFTFwdBatch_32fcw7_env23_compute_7
- t owngDFTFwdBatch_32fcw7_env23_compute_8
- t owngDFTFwdBatch_32fcw7_env23_compute_9
  t owngDFTFwdBatch_32fcw7_env23_compute_mem
  t owngDFTFwdBatch_32fcw7_env23_mem
  t owngDFTFwdBatch_32fcw7_env23_plan
  t owngDFTFwdBatch_32fcw7_env24___del__
- t owngDFTFwdBatch_32fcw7_env24_compute
- t owngDFTFwdBatch_32fcw7_env24_compute_10
- t owngDFTFwdBatch_32fcw7_env24_compute_11
- t owngDFTFwdBatch_32fcw7_env24_compute_12
- t owngDFTFwdBatch_32fcw7_env24_compute_13
- t owngDFTFwdBatch_32fcw7_env24_compute_14
- t owngDFTFwdBatch_32fcw7_env24_compute_15
- t owngDFTFwdBatch_32fcw7_env24_compute_16
- t owngDFTFwdBatch_32fcw7_env24_compute_17
- t owngDFTFwdBatch_32fcw7_env24_compute_18
- t owngDFTFwdBatch_32fcw7_env24_compute_19
- t owngDFTFwdBatch_32fcw7_env24_compute_20
- t owngDFTFwdBatch_32fcw7_env24_compute_7
- t owngDFTFwdBatch_32fcw7_env24_compute_8
- t owngDFTFwdBatch_32fcw7_env24_compute_9
  t owngDFTFwdBatch_32fcw7_env24_compute_mem
  t owngDFTFwdBatch_32fcw7_env24_mem
  t owngDFTFwdBatch_32fcw7_env24_plan
@@ -14420,100 +14794,19 @@
  t owngDFTFwdBatch_32fcw7_env30_plan
  t owngDFTFwdBatch_32fcw7_env31___del__
  t owngDFTFwdBatch_32fcw7_env31__chooseRule
- t owngDFTFwdBatch_32fcw7_env31_compute
- t owngDFTFwdBatch_32fcw7_env31_compute_10
- t owngDFTFwdBatch_32fcw7_env31_compute_11
- t owngDFTFwdBatch_32fcw7_env31_compute_12
- t owngDFTFwdBatch_32fcw7_env31_compute_13
- t owngDFTFwdBatch_32fcw7_env31_compute_14
- t owngDFTFwdBatch_32fcw7_env31_compute_15
- t owngDFTFwdBatch_32fcw7_env31_compute_16
- t owngDFTFwdBatch_32fcw7_env31_compute_17
- t owngDFTFwdBatch_32fcw7_env31_compute_18
- t owngDFTFwdBatch_32fcw7_env31_compute_19
- t owngDFTFwdBatch_32fcw7_env31_compute_20
- t owngDFTFwdBatch_32fcw7_env31_compute_6
- t owngDFTFwdBatch_32fcw7_env31_compute_7
- t owngDFTFwdBatch_32fcw7_env31_compute_8
- t owngDFTFwdBatch_32fcw7_env31_compute_9
+ t owngDFTFwdBatch_32fcw7_env31_compute_mem
  t owngDFTFwdBatch_32fcw7_env31_mem
  t owngDFTFwdBatch_32fcw7_env31_plan
  t owngDFTFwdBatch_32fcw7_env32___del__
  t owngDFTFwdBatch_32fcw7_env32__chooseRule
- t owngDFTFwdBatch_32fcw7_env32_compute
- t owngDFTFwdBatch_32fcw7_env32_compute_10
- t owngDFTFwdBatch_32fcw7_env32_compute_11
- t owngDFTFwdBatch_32fcw7_env32_compute_12
- t owngDFTFwdBatch_32fcw7_env32_compute_13
- t owngDFTFwdBatch_32fcw7_env32_compute_14
- t owngDFTFwdBatch_32fcw7_env32_compute_15
- t owngDFTFwdBatch_32fcw7_env32_compute_16
- t owngDFTFwdBatch_32fcw7_env32_compute_17
- t owngDFTFwdBatch_32fcw7_env32_compute_18
- t owngDFTFwdBatch_32fcw7_env32_compute_19
- t owngDFTFwdBatch_32fcw7_env32_compute_20
- t owngDFTFwdBatch_32fcw7_env32_compute_5
- t owngDFTFwdBatch_32fcw7_env32_compute_6
- t owngDFTFwdBatch_32fcw7_env32_compute_7
- t owngDFTFwdBatch_32fcw7_env32_compute_8
- t owngDFTFwdBatch_32fcw7_env32_compute_9
  t owngDFTFwdBatch_32fcw7_env32_plan
  t owngDFTFwdBatch_32fcw7_env33___del__
  t owngDFTFwdBatch_32fcw7_env33__chooseRule
- t owngDFTFwdBatch_32fcw7_env33_compute
- t owngDFTFwdBatch_32fcw7_env33_compute_10
- t owngDFTFwdBatch_32fcw7_env33_compute_11
- t owngDFTFwdBatch_32fcw7_env33_compute_12
- t owngDFTFwdBatch_32fcw7_env33_compute_13
- t owngDFTFwdBatch_32fcw7_env33_compute_14
- t owngDFTFwdBatch_32fcw7_env33_compute_15
- t owngDFTFwdBatch_32fcw7_env33_compute_16
- t owngDFTFwdBatch_32fcw7_env33_compute_17
- t owngDFTFwdBatch_32fcw7_env33_compute_18
- t owngDFTFwdBatch_32fcw7_env33_compute_19
- t owngDFTFwdBatch_32fcw7_env33_compute_20
- t owngDFTFwdBatch_32fcw7_env33_compute_6
- t owngDFTFwdBatch_32fcw7_env33_compute_7
- t owngDFTFwdBatch_32fcw7_env33_compute_8
- t owngDFTFwdBatch_32fcw7_env33_compute_9
  t owngDFTFwdBatch_32fcw7_env33_plan
  t owngDFTFwdBatch_32fcw7_env34___del__
  t owngDFTFwdBatch_32fcw7_env34__chooseRule
- t owngDFTFwdBatch_32fcw7_env34_compute
- t owngDFTFwdBatch_32fcw7_env34_compute_10
- t owngDFTFwdBatch_32fcw7_env34_compute_11
- t owngDFTFwdBatch_32fcw7_env34_compute_12
- t owngDFTFwdBatch_32fcw7_env34_compute_13
- t owngDFTFwdBatch_32fcw7_env34_compute_14
- t owngDFTFwdBatch_32fcw7_env34_compute_15
- t owngDFTFwdBatch_32fcw7_env34_compute_16
- t owngDFTFwdBatch_32fcw7_env34_compute_17
- t owngDFTFwdBatch_32fcw7_env34_compute_18
- t owngDFTFwdBatch_32fcw7_env34_compute_19
- t owngDFTFwdBatch_32fcw7_env34_compute_20
- t owngDFTFwdBatch_32fcw7_env34_compute_5
- t owngDFTFwdBatch_32fcw7_env34_compute_6
- t owngDFTFwdBatch_32fcw7_env34_compute_7
- t owngDFTFwdBatch_32fcw7_env34_compute_8
- t owngDFTFwdBatch_32fcw7_env34_compute_9
  t owngDFTFwdBatch_32fcw7_env34_plan
  t owngDFTFwdBatch_32fcw7_env35___del__
- t owngDFTFwdBatch_32fcw7_env35_compute
- t owngDFTFwdBatch_32fcw7_env35_compute_10
- t owngDFTFwdBatch_32fcw7_env35_compute_11
- t owngDFTFwdBatch_32fcw7_env35_compute_12
- t owngDFTFwdBatch_32fcw7_env35_compute_13
- t owngDFTFwdBatch_32fcw7_env35_compute_14
- t owngDFTFwdBatch_32fcw7_env35_compute_15
- t owngDFTFwdBatch_32fcw7_env35_compute_16
- t owngDFTFwdBatch_32fcw7_env35_compute_17
- t owngDFTFwdBatch_32fcw7_env35_compute_18
- t owngDFTFwdBatch_32fcw7_env35_compute_19
- t owngDFTFwdBatch_32fcw7_env35_compute_20
- t owngDFTFwdBatch_32fcw7_env35_compute_5
- t owngDFTFwdBatch_32fcw7_env35_compute_7
- t owngDFTFwdBatch_32fcw7_env35_compute_8
- t owngDFTFwdBatch_32fcw7_env35_compute_9
  t owngDFTFwdBatch_32fcw7_env35_compute_mem
  t owngDFTFwdBatch_32fcw7_env35_mem
  t owngDFTFwdBatch_32fcw7_env35_plan
@@ -14544,10 +14837,8 @@
  t owngDFTFwdBatch_32fcw7_env6___del__
  t owngDFTFwdBatch_32fcw7_env6_plan
  t owngDFTFwdBatch_32fcw7_env7___del__
- t owngDFTFwdBatch_32fcw7_env7_compute
  t owngDFTFwdBatch_32fcw7_env7_plan
  t owngDFTFwdBatch_32fcw7_env8___del__
- t owngDFTFwdBatch_32fcw7_env8_compute_1
  t owngDFTFwdBatch_32fcw7_env8_plan
  t owngDFTFwdBatch_32fcw7_env9___del__
  t owngDFTFwdBatch_32fcw7_env9_compute
@@ -14612,10 +14903,8 @@
  t owngDFTInvBatch_32fcw7_env10___del__
  t owngDFTInvBatch_32fcw7_env10_plan
  t owngDFTInvBatch_32fcw7_env11___del__
- t owngDFTInvBatch_32fcw7_env11_compute
  t owngDFTInvBatch_32fcw7_env11_plan
  t owngDFTInvBatch_32fcw7_env12___del__
- t owngDFTInvBatch_32fcw7_env12_compute_1
  t owngDFTInvBatch_32fcw7_env12_plan
  t owngDFTInvBatch_32fcw7_env13___del__
  t owngDFTInvBatch_32fcw7_env13_plan
@@ -14650,41 +14939,10 @@
  t owngDFTInvBatch_32fcw7_env1___del__
  t owngDFTInvBatch_32fcw7_env1_plan
  t owngDFTInvBatch_32fcw7_env20___del__
- t owngDFTInvBatch_32fcw7_env20_compute
- t owngDFTInvBatch_32fcw7_env20_compute_10
- t owngDFTInvBatch_32fcw7_env20_compute_11
- t owngDFTInvBatch_32fcw7_env20_compute_12
- t owngDFTInvBatch_32fcw7_env20_compute_13
- t owngDFTInvBatch_32fcw7_env20_compute_14
- t owngDFTInvBatch_32fcw7_env20_compute_15
- t owngDFTInvBatch_32fcw7_env20_compute_16
- t owngDFTInvBatch_32fcw7_env20_compute_17
- t owngDFTInvBatch_32fcw7_env20_compute_18
- t owngDFTInvBatch_32fcw7_env20_compute_19
- t owngDFTInvBatch_32fcw7_env20_compute_20
- t owngDFTInvBatch_32fcw7_env20_compute_6
- t owngDFTInvBatch_32fcw7_env20_compute_7
- t owngDFTInvBatch_32fcw7_env20_compute_8
- t owngDFTInvBatch_32fcw7_env20_compute_9
  t owngDFTInvBatch_32fcw7_env20_compute_mem
  t owngDFTInvBatch_32fcw7_env20_mem
  t owngDFTInvBatch_32fcw7_env20_plan
  t owngDFTInvBatch_32fcw7_env21___del__
- t owngDFTInvBatch_32fcw7_env21_compute
- t owngDFTInvBatch_32fcw7_env21_compute_10
- t owngDFTInvBatch_32fcw7_env21_compute_11
- t owngDFTInvBatch_32fcw7_env21_compute_12
- t owngDFTInvBatch_32fcw7_env21_compute_13
- t owngDFTInvBatch_32fcw7_env21_compute_14
- t owngDFTInvBatch_32fcw7_env21_compute_15
- t owngDFTInvBatch_32fcw7_env21_compute_16
- t owngDFTInvBatch_32fcw7_env21_compute_17
- t owngDFTInvBatch_32fcw7_env21_compute_18
- t owngDFTInvBatch_32fcw7_env21_compute_19
- t owngDFTInvBatch_32fcw7_env21_compute_20
- t owngDFTInvBatch_32fcw7_env21_compute_7
- t owngDFTInvBatch_32fcw7_env21_compute_8
- t owngDFTInvBatch_32fcw7_env21_compute_9
  t owngDFTInvBatch_32fcw7_env21_compute_mem
  t owngDFTInvBatch_32fcw7_env21_mem
  t owngDFTInvBatch_32fcw7_env21_plan
@@ -14707,41 +14965,10 @@
  t owngDFTInvBatch_32fcw7_env22_compute_9
  t owngDFTInvBatch_32fcw7_env22_plan
  t owngDFTInvBatch_32fcw7_env23___del__
- t owngDFTInvBatch_32fcw7_env23_compute
- t owngDFTInvBatch_32fcw7_env23_compute_10
- t owngDFTInvBatch_32fcw7_env23_compute_11
- t owngDFTInvBatch_32fcw7_env23_compute_12
- t owngDFTInvBatch_32fcw7_env23_compute_13
- t owngDFTInvBatch_32fcw7_env23_compute_14
- t owngDFTInvBatch_32fcw7_env23_compute_15
- t owngDFTInvBatch_32fcw7_env23_compute_16
- t owngDFTInvBatch_32fcw7_env23_compute_17
- t owngDFTInvBatch_32fcw7_env23_compute_18
- t owngDFTInvBatch_32fcw7_env23_compute_19
- t owngDFTInvBatch_32fcw7_env23_compute_20
- t owngDFTInvBatch_32fcw7_env23_compute_6
- t owngDFTInvBatch_32fcw7_env23_compute_7
- t owngDFTInvBatch_32fcw7_env23_compute_8
- t owngDFTInvBatch_32fcw7_env23_compute_9
  t owngDFTInvBatch_32fcw7_env23_compute_mem
  t owngDFTInvBatch_32fcw7_env23_mem
  t owngDFTInvBatch_32fcw7_env23_plan
  t owngDFTInvBatch_32fcw7_env24___del__
- t owngDFTInvBatch_32fcw7_env24_compute
- t owngDFTInvBatch_32fcw7_env24_compute_10
- t owngDFTInvBatch_32fcw7_env24_compute_11
- t owngDFTInvBatch_32fcw7_env24_compute_12
- t owngDFTInvBatch_32fcw7_env24_compute_13
- t owngDFTInvBatch_32fcw7_env24_compute_14
- t owngDFTInvBatch_32fcw7_env24_compute_15
- t owngDFTInvBatch_32fcw7_env24_compute_16
- t owngDFTInvBatch_32fcw7_env24_compute_17
- t owngDFTInvBatch_32fcw7_env24_compute_18
- t owngDFTInvBatch_32fcw7_env24_compute_19
- t owngDFTInvBatch_32fcw7_env24_compute_20
- t owngDFTInvBatch_32fcw7_env24_compute_7
- t owngDFTInvBatch_32fcw7_env24_compute_8
- t owngDFTInvBatch_32fcw7_env24_compute_9
  t owngDFTInvBatch_32fcw7_env24_compute_mem
  t owngDFTInvBatch_32fcw7_env24_mem
  t owngDFTInvBatch_32fcw7_env24_plan
@@ -14757,100 +14984,19 @@
  t owngDFTInvBatch_32fcw7_env30_plan
  t owngDFTInvBatch_32fcw7_env31___del__
  t owngDFTInvBatch_32fcw7_env31__chooseRule
- t owngDFTInvBatch_32fcw7_env31_compute
- t owngDFTInvBatch_32fcw7_env31_compute_10
- t owngDFTInvBatch_32fcw7_env31_compute_11
- t owngDFTInvBatch_32fcw7_env31_compute_12
- t owngDFTInvBatch_32fcw7_env31_compute_13
- t owngDFTInvBatch_32fcw7_env31_compute_14
- t owngDFTInvBatch_32fcw7_env31_compute_15
- t owngDFTInvBatch_32fcw7_env31_compute_16
- t owngDFTInvBatch_32fcw7_env31_compute_17
- t owngDFTInvBatch_32fcw7_env31_compute_18
- t owngDFTInvBatch_32fcw7_env31_compute_19
- t owngDFTInvBatch_32fcw7_env31_compute_20
- t owngDFTInvBatch_32fcw7_env31_compute_6
- t owngDFTInvBatch_32fcw7_env31_compute_7
- t owngDFTInvBatch_32fcw7_env31_compute_8
- t owngDFTInvBatch_32fcw7_env31_compute_9
+ t owngDFTInvBatch_32fcw7_env31_compute_mem
  t owngDFTInvBatch_32fcw7_env31_mem
  t owngDFTInvBatch_32fcw7_env31_plan
  t owngDFTInvBatch_32fcw7_env32___del__
  t owngDFTInvBatch_32fcw7_env32__chooseRule
- t owngDFTInvBatch_32fcw7_env32_compute
- t owngDFTInvBatch_32fcw7_env32_compute_10
- t owngDFTInvBatch_32fcw7_env32_compute_11
- t owngDFTInvBatch_32fcw7_env32_compute_12
- t owngDFTInvBatch_32fcw7_env32_compute_13
- t owngDFTInvBatch_32fcw7_env32_compute_14
- t owngDFTInvBatch_32fcw7_env32_compute_15
- t owngDFTInvBatch_32fcw7_env32_compute_16
- t owngDFTInvBatch_32fcw7_env32_compute_17
- t owngDFTInvBatch_32fcw7_env32_compute_18
- t owngDFTInvBatch_32fcw7_env32_compute_19
- t owngDFTInvBatch_32fcw7_env32_compute_20
- t owngDFTInvBatch_32fcw7_env32_compute_5
- t owngDFTInvBatch_32fcw7_env32_compute_6
- t owngDFTInvBatch_32fcw7_env32_compute_7
- t owngDFTInvBatch_32fcw7_env32_compute_8
- t owngDFTInvBatch_32fcw7_env32_compute_9
  t owngDFTInvBatch_32fcw7_env32_plan
  t owngDFTInvBatch_32fcw7_env33___del__
  t owngDFTInvBatch_32fcw7_env33__chooseRule
- t owngDFTInvBatch_32fcw7_env33_compute
- t owngDFTInvBatch_32fcw7_env33_compute_10
- t owngDFTInvBatch_32fcw7_env33_compute_11
- t owngDFTInvBatch_32fcw7_env33_compute_12
- t owngDFTInvBatch_32fcw7_env33_compute_13
- t owngDFTInvBatch_32fcw7_env33_compute_14
- t owngDFTInvBatch_32fcw7_env33_compute_15
- t owngDFTInvBatch_32fcw7_env33_compute_16
- t owngDFTInvBatch_32fcw7_env33_compute_17
- t owngDFTInvBatch_32fcw7_env33_compute_18
- t owngDFTInvBatch_32fcw7_env33_compute_19
- t owngDFTInvBatch_32fcw7_env33_compute_20
- t owngDFTInvBatch_32fcw7_env33_compute_6
- t owngDFTInvBatch_32fcw7_env33_compute_7
- t owngDFTInvBatch_32fcw7_env33_compute_8
- t owngDFTInvBatch_32fcw7_env33_compute_9
  t owngDFTInvBatch_32fcw7_env33_plan
  t owngDFTInvBatch_32fcw7_env34___del__
  t owngDFTInvBatch_32fcw7_env34__chooseRule
- t owngDFTInvBatch_32fcw7_env34_compute
- t owngDFTInvBatch_32fcw7_env34_compute_10
- t owngDFTInvBatch_32fcw7_env34_compute_11
- t owngDFTInvBatch_32fcw7_env34_compute_12
- t owngDFTInvBatch_32fcw7_env34_compute_13
- t owngDFTInvBatch_32fcw7_env34_compute_14
- t owngDFTInvBatch_32fcw7_env34_compute_15
- t owngDFTInvBatch_32fcw7_env34_compute_16
- t owngDFTInvBatch_32fcw7_env34_compute_17
- t owngDFTInvBatch_32fcw7_env34_compute_18
- t owngDFTInvBatch_32fcw7_env34_compute_19
- t owngDFTInvBatch_32fcw7_env34_compute_20
- t owngDFTInvBatch_32fcw7_env34_compute_5
- t owngDFTInvBatch_32fcw7_env34_compute_6
- t owngDFTInvBatch_32fcw7_env34_compute_7
- t owngDFTInvBatch_32fcw7_env34_compute_8
- t owngDFTInvBatch_32fcw7_env34_compute_9
  t owngDFTInvBatch_32fcw7_env34_plan
  t owngDFTInvBatch_32fcw7_env35___del__
- t owngDFTInvBatch_32fcw7_env35_compute
- t owngDFTInvBatch_32fcw7_env35_compute_10
- t owngDFTInvBatch_32fcw7_env35_compute_11
- t owngDFTInvBatch_32fcw7_env35_compute_12
- t owngDFTInvBatch_32fcw7_env35_compute_13
- t owngDFTInvBatch_32fcw7_env35_compute_14
- t owngDFTInvBatch_32fcw7_env35_compute_15
- t owngDFTInvBatch_32fcw7_env35_compute_16
- t owngDFTInvBatch_32fcw7_env35_compute_17
- t owngDFTInvBatch_32fcw7_env35_compute_18
- t owngDFTInvBatch_32fcw7_env35_compute_19
- t owngDFTInvBatch_32fcw7_env35_compute_20
- t owngDFTInvBatch_32fcw7_env35_compute_5
- t owngDFTInvBatch_32fcw7_env35_compute_7
- t owngDFTInvBatch_32fcw7_env35_compute_8
- t owngDFTInvBatch_32fcw7_env35_compute_9
  t owngDFTInvBatch_32fcw7_env35_compute_mem
  t owngDFTInvBatch_32fcw7_env35_mem
  t owngDFTInvBatch_32fcw7_env35_plan
@@ -14881,10 +15027,8 @@
  t owngDFTInvBatch_32fcw7_env6___del__
  t owngDFTInvBatch_32fcw7_env6_plan
  t owngDFTInvBatch_32fcw7_env7___del__
- t owngDFTInvBatch_32fcw7_env7_compute
  t owngDFTInvBatch_32fcw7_env7_plan
  t owngDFTInvBatch_32fcw7_env8___del__
- t owngDFTInvBatch_32fcw7_env8_compute_1
  t owngDFTInvBatch_32fcw7_env8_plan
  t owngDFTInvBatch_32fcw7_env9___del__
  t owngDFTInvBatch_32fcw7_env9_compute
@@ -14982,20 +15126,26 @@
  t prefetch_step_radix8_last_fwd_c
  t prefetch_step_radix8_last_inv_c
  t ptQxQ
+ t r2c
+ t rDftFwdRecombine
  t rDftFwd_StepPrimeFact
+ t rDftInvRecombine
  t rDftInv_StepPrimeFact
  t rect_task
  t ref_gather_c_c_m16_mdist1
  t ref_gather_c_c_m4_mdist1
  t ref_gather_c_c_m8_mdist1
+ t ref_gather_ss_ss
  t ref_gather_ss_ss..0
+ t ref_gather_ss_ss..1
  t ref_scatter_c_c_m16_mdist1
  t ref_scatter_c_c_m4_mdist1
  t ref_scatter_c_c_m8_mdist1
+ t ref_scatter_ss_ss
  t ref_scatter_ss_ss..0
+ t ref_scatter_ss_ss..1
  t register_tm_clones
- t search_x_lib_path..0
- t search_x_lib_path..1
+ t search_x_lib_path
  t setDescriptorName
  t setDynamic
  t setInputDistance
@@ -15026,10 +15176,6 @@
  t step345_inv
  t step_fft16_norm_fwd_cr
  t step_fft16_norm_inv_cr
- t step_fft8_fwd_c
- t step_fft8_fwd_cr
- t step_fft8_inv_c
- t step_fft8_inv_cr
  t step_fft8_norm_fwd_cr
  t step_fft8_norm_inv_cr
  t step_radix4_first_fwd
@@ -15038,6 +15184,8 @@
  t step_radix4_last_inv_cr
  t step_radix8_last_fwd_cr
  t step_radix8_last_inv_cr
+ t t_64x64n
+ t testDftSpecialCase
  t thread_noprefetch_step_fft8_norm_fwd_c
  t thread_noprefetch_step_fft8_norm_inv_c
  t thread_noprefetch_step_radix4_fwd
@@ -15058,22 +15206,27 @@
  t thread_prefetch_step_radix8_inv
  t thread_prefetch_step_radix8_last_fwd_c
  t thread_prefetch_step_radix8_last_inv_c
+ t trw4x4
  t ttl_barrier
+ t ttl_parallel_dynamic_team
  t ttl_parallel_syncable_dynamic_team
+ t ttl_parallel_syncable_nested_team
  t ttl_parallel_syncable_team
  t ttl_parallel_team
+ t tw4x4
  t ubo64
  t ufo64
  t unaligned_square_task
  t unaligned_tQxQN
  t urect_task
  t utQxQ
+ t ut_64x64n
+ t vector_tile
  t vmulXXX
  t workaround_for_DFTInv_RPack_32f
  t workaround_for_DFTInv_RPack_64f
  t worker_i
  t worker_o
- t zomatcopy_4x4
  time@@GLIBC_2.2.5
  typeinfo for std::bad_alloc@@GLIBCXX_3.4
  typeinfo for std::exception@@GLIBCXX_3.4
