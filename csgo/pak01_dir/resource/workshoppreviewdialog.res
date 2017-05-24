@@ -531,6 +531,21 @@
 		"Command"		"refresh"
 		"Default"		"1"
 	}
+	"PaintKitComboBox"
+	{
+		"ControlName"	"ComboBox"
+		"fieldName"		"PaintKitComboBox"
+		"xpos"			"372"
+		"ypos"			"612"
+		"wide"			"200"
+		"tall"			"20"
+		"autoResize"	"0"
+		"pinCorner"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"1"
+		"font"			"DefaultSmall"
+	}
 	"Save"
 	{
 		"ControlName"	"Button"

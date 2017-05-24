@@ -28,6 +28,7 @@
  B mkl_aa_offload_factors_initialized
  B mkl_aa_offload_factors_save
  B mkl_aa_offload_factors_sum
+ B mkl_serv_itt_suppress_range
  B mkl_ueaa_card_invoke
  B mkl_ueaa_device
  B mkl_ueaa_device_is_busy
@@ -328,6 +329,7 @@
  T ipl::ComplexSignal::getData() const
  T ipl::ComplexSignal::getNumSamples() const
  T ipl::ComplexSignal::multiply(ipl::ComplexSignal const&, ipl::ComplexSignal const&, ipl::ComplexSignal&)
+ T ipl::ComplexSignal::scale(float)
  T ipl::ComplexSignal::zero()
  T ipl::ComplexSignal::~ComplexSignal()
  T ipl::Context::create(void (*)(char*), void* (*)(unsigned long, unsigned long), void (*)(void*))
@@ -362,6 +364,7 @@
  T ipl::HRTFDatabase::bilinearInterpolateHrtfs(std::vector<std::unique_ptr<ipl::RealSignal, std::default_delete<ipl::RealSignal> >, ipl::StlAllocator<std::unique_ptr<ipl::RealSignal, std::default_delete<ipl::RealSignal> > > > const&, std::vector<std::unique_ptr<ipl::RealSignal, std::default_delete<ipl::RealSignal> >, ipl::StlAllocator<std::unique_ptr<ipl::RealSignal, std::default_delete<ipl::RealSignal> > > > const&, int, int, int, int, float, float, float, float, float, float, float, float, float, float, ipl::ComplexSignal&) const
  T ipl::HRTFDatabase::calculateLinearInterpolationWeights(float, float, float, int, int, float&, float&) const
  T ipl::HRTFDatabase::decomposeHrtfsIntoMagnitudeAndPhase()
+ T ipl::HRTFDatabase::decoupleDelayFromHrtfs(int)
  T ipl::HRTFDatabase::getAmbisonicsLeftHrirs() const
  T ipl::HRTFDatabase::getAmbisonicsLeftHrtfs() const
  T ipl::HRTFDatabase::getAmbisonicsRightHrirs() const
@@ -369,6 +372,7 @@
  T ipl::HRTFDatabase::getHrtfByIndex(long, ipl::ComplexSignal&, ipl::ComplexSignal&) const
  T ipl::HRTFDatabase::getHrtfForDirection(ipl::SphericalVector3<float> const&, ipl::ComplexSignal&, ipl::ComplexSignal&, ipl::HRTFDatabase::Interpolation) const
  T ipl::HRTFDatabase::getHrtfForDirection(ipl::Vector3<float> const&, ipl::ComplexSignal&, ipl::ComplexSignal&, ipl::HRTFDatabase::Interpolation) const
+ T ipl::HRTFDatabase::getHrtfForDirection(ipl::Vector3<float> const&, ipl::ComplexSignal&, ipl::ComplexSignal&, ipl::HRTFDatabase::Interpolation, float, float, int&, int&) const
  T ipl::HRTFDatabase::getHrtfForDirectionBilinear(ipl::SphericalVector3<float> const&, ipl::ComplexSignal&, ipl::ComplexSignal&) const
  T ipl::HRTFDatabase::getHrtfForDirectionNearestNeighbor(ipl::SphericalVector3<float> const&, ipl::ComplexSignal&, ipl::ComplexSignal&) const
  T ipl::HRTFDatabase::getHrtfForDirectionNearestNeighbor(ipl::SphericalVector3<float> const&, ipl::ComplexSignal*&, ipl::ComplexSignal*&) const
@@ -410,7 +414,7 @@
  T ipl::Memory::alignedAllocate(unsigned long, unsigned long)
  T ipl::Memory::alignedFree(void*)
  T ipl::ObjectBasedBinauralEffect::ObjectBasedBinauralEffect(std::shared_ptr<ipl::BinauralContext>, ipl::AudioFormat const&, ipl::AudioFormat const&)
- T ipl::ObjectBasedBinauralEffect::apply(ipl::AudioBuffer const&, ipl::Vector3<float> const&, ipl::HRTFDatabase::Interpolation, ipl::AudioBuffer&)
+ T ipl::ObjectBasedBinauralEffect::apply(ipl::AudioBuffer const&, ipl::Vector3<float> const&, ipl::HRTFDatabase::Interpolation, ipl::AudioBuffer&, float, float, float*, float*)
  T ipl::ObjectBasedBinauralEffect::~ObjectBasedBinauralEffect()
  T ipl::OutputAudioBufferAdaptor::OutputAudioBufferAdaptor(ipl::AudioFormat const&, ipl::AudioFormat const&, ipl::DSPParams const&)
  T ipl::OutputAudioBufferAdaptor::adapt(ipl::AudioBuffer&)
@@ -465,6 +469,7 @@
  T ipl::sh::ToVector(double, double)
  T iplApplyAmbisonicsBinauralEffect
  T iplApplyBinauralEffect
+ T iplApplyBinauralEffectWithParameters
  T iplApplyPanningEffect
  T iplApplyVirtualSurroundEffect
  T iplConvertAudioBufferFormat
@@ -873,8 +878,10 @@
  T mkl_blas_avx512_dgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx512_dgemm_mscale
  T mkl_blas_avx512_dgemm_mscale_wrapper
+ T mkl_blas_avx512_dgemm_n_smalln
  T mkl_blas_avx512_dgemm_pst
  T mkl_blas_avx512_dgemm_set_bufs_pack
+ T mkl_blas_avx512_dgemm_t_smalln
  T mkl_blas_avx512_dgemmt_nobufs
  T mkl_blas_avx512_dgemv_n_intrinsics
  T mkl_blas_avx512_dgemv_t_intrinsics
@@ -957,8 +964,10 @@
  T mkl_blas_avx512_mic_dgemm_kernel_nocopy_TT_bn
  T mkl_blas_avx512_mic_dgemm_mscale
  T mkl_blas_avx512_mic_dgemm_mscale_wrapper
+ T mkl_blas_avx512_mic_dgemm_n_smalln
  T mkl_blas_avx512_mic_dgemm_pst
  T mkl_blas_avx512_mic_dgemm_set_bufs_pack
+ T mkl_blas_avx512_mic_dgemm_t_smalln
  T mkl_blas_avx512_mic_dgemmt_nobufs
  T mkl_blas_avx512_mic_dgemv_n_intrinsics
  T mkl_blas_avx512_mic_dgemv_t_intrinsics
@@ -11963,7 +11972,6 @@
  T mkl_lapack_dlasr1
  T mkl_lapack_dlasr3
  T mkl_lapack_dlasrt
- T mkl_lapack_dlassq
  T mkl_lapack_dlasv2
  T mkl_lapack_dlatsp
  T mkl_lapack_dorg2r
@@ -12086,6 +12094,7 @@
  T mkl_serv_disable_fast_mm
  T mkl_serv_divbythreads
  T mkl_serv_divbythreadsnb
+ T mkl_serv_divbythreadstr
  T mkl_serv_domain_get_max_threads
  T mkl_serv_domain_set_num_threads
  T mkl_serv_dsecnd
@@ -12114,6 +12123,7 @@
  T mkl_serv_get_ncorespercpu
  T mkl_serv_get_ncpus
  T mkl_serv_get_nlogicalcores
+ T mkl_serv_get_num_stripes
  T mkl_serv_get_thread_layer
  T mkl_serv_get_version
  T mkl_serv_get_version_string
@@ -12145,6 +12155,7 @@
  T mkl_serv_libm_sincos_reduce
  T mkl_serv_libm_sincosf
  T mkl_serv_libm_sincosf_reduce
+ T mkl_serv_load_inspector
  T mkl_serv_lock
  T mkl_serv_lsame
  T mkl_serv_malloc
@@ -12183,6 +12194,7 @@
  T mkl_serv_set_exit_handler
  T mkl_serv_set_mem_constraint_handler_s
  T mkl_serv_set_memory_limit
+ T mkl_serv_set_num_stripes
  T mkl_serv_set_num_threads
  T mkl_serv_set_num_threads_local
  T mkl_serv_set_progress
@@ -12590,6 +12602,7 @@
  W std::vector<double, std::allocator<double> >::_M_fill_assign(unsigned long, double const&)
  W std::vector<double, std::allocator<double> >::~vector()
  W std::vector<float, ipl::StlAllocator<float> >::_M_default_append(unsigned long)
+ W std::vector<int, ipl::StlAllocator<int> >::_M_default_append(unsigned long)
  W std::vector<ipl::DynamicMatrix<double>, std::allocator<ipl::DynamicMatrix<double> > >::~vector()
  W std::vector<std::unique_ptr<ipl::ComplexSignal, std::default_delete<ipl::ComplexSignal> >, ipl::StlAllocator<std::unique_ptr<ipl::ComplexSignal, std::default_delete<ipl::ComplexSignal> > > >::_M_default_append(unsigned long)
  W std::vector<std::unique_ptr<ipl::ComplexSignal, std::default_delete<ipl::ComplexSignal> >, ipl::StlAllocator<std::unique_ptr<ipl::ComplexSignal, std::default_delete<ipl::ComplexSignal> > > >::~vector()
@@ -12631,32 +12644,33 @@
  asinf@@GLIBC_2.2.5
  atan2@@GLIBC_2.2.5
  atan2f@@GLIBC_2.2.5
- b COILoader.973.0.57
- b COILoaderLoaded.973.0.57
+ b COILoader.962.0.2
+ b COILoader.976.0.57
+ b COILoaderLoaded.962.0.2
+ b COILoaderLoaded.976.0.57
  b DispLibCWD
  b DispLibPath
  b EXEPath
  b FunctionAddress.189.0.1
  b FunctionAddress.203.0.1
- b FunctionAddress.283.0.1
- b _ENABLED_AVX512
+ b FunctionAddress.286.0.1
  b __intel_mkl_feature_indicator
  b __intel_mkl_feature_indicator_x
  b __sngl_was_called
- b c_zero.3283.0.1
+ b c_zero.3373.0.1
  b cacheSize
  b card_buff_addr
  b cleanup_list
  b cleanup_list_items
  b completed.7002
- b current_device_type.540.0.1
+ b current_device_type.543.0.1
  b current_stat
  b custom_core_exit
- b detect_data_caches_lock.239.0.5
- b done.718.0.10
- b env_processed.548.0.17
- b env_read.652.0.4
- b env_read_lock.742.0.12
+ b detect_data_caches_lock.242.0.5
+ b done.717.0.10
+ b env_processed.551.0.17
+ b env_read.655.0.4
+ b env_read_lock.747.0.14
  b g_device_data
  b g_offload_report_level
  b g_timers_enabled
@@ -12665,18 +12679,18 @@
  b global_threading_params
  b head_alloc_node
  b head_buff_node
- b info.443.0.5
+ b info.446.0.5
  b ipl::sh::(anonymous namespace)::cosine_lobe
- b lib_status.667.0.7
- b lib_status.812.0.23
- b lock.271.0.1
- b lock.274.0.2
+ b lib_status.670.0.7
+ b lib_status.815.0.23
+ b lock.274.0.1
+ b lock.277.0.2
  b mask_prev
  b max_stat
  b mem_handler
  b mem_stat_lock
  b message_catalog
- b mic_enable_env.544.0.16
+ b mic_enable_env.547.0.16
  b mkl_aa_flags
  b mkl_aa_fw_mutex
  b mkl_cache_sizes
@@ -12687,7 +12701,7 @@
  b mkl_hbw_free
  b mkl_hbw_malloc
  b mkl_hbw_malloc_psize
- b mkl_init_lock.1138.0.11
+ b mkl_init_lock.1141.0.11
  b mkl_progress_address
  b mkl_set_memory_limit_lock
  b mkl_xerbla_address
@@ -12696,15 +12710,15 @@
  b mm_fast_memory_update_limit_lock
  b mm_tid
  b mm_vector_lock
- b mpi_ppn.838.0.15
+ b mpi_ppn.847.0.17
  b print_buf
- b print_lock.306.0.4
- b printed.306.0.4
- b r_zero.3283.0.1
- b registration_state_lock.1373.0.69
+ b print_lock.309.0.4
+ b printed.309.0.4
+ b r_zero.3373.0.1
+ b registration_state_lock.1376.0.69
  b registrations
  b static_mklapi_entries
- b stats_gc_lock.1525.0.32
+ b stats_gc_lock.1528.0.32
  b std::__ioinit
  b str_handler
  b sys_alloc
@@ -12713,10 +12727,10 @@
  b sys_free
  b sys_realloc
  b tls_key_status
- b unknown.297.0.1
- b unknown.300.0.2
- b verbose_val_lock.309.0.3
- b want_dump_env_read_lock.2555.0.1
+ b unknown.300.0.1
+ b unknown.303.0.2
+ b verbose_val_lock.312.0.3
+ b want_dump_env_read_lock.2558.0.1
  cabsf@@GLIBC_2.2.5
  calloc@@GLIBC_2.2.5
  catgets@@GLIBC_2.2.5
@@ -12733,10 +12747,11 @@
  d DW.ref.__gxx_personality_v0
  d MKL_UEAA_TIMER_ZERO
  d RDFT
- d SEPARATOR.860.0.5
+ d SEPARATOR.863.0.5
  d _DYNAMIC
  d _ENABLED_AVX
  d _ENABLED_AVX2
+ d _ENABLED_AVX512
  d _ENABLED_AVX512_MIC
  d _ENABLED_SSE4_2
  d _GLOBAL_OFFSET_TABLE_
@@ -12755,42 +12770,43 @@
  d __mkl_fft_num_threads
  d __mkl_mpi_ppn
  d __mkl_mpi_thread_level
+ d __mkl_num_stripes
  d __mkl_num_threads
  d __mkl_pardiso_num_threads
  d __mkl_vml_num_threads
  d __omp_num_threads
  d __threads_env_NOT_readed
  d api_probe_is_called
- d base_b.3283.0.1
- d batchfft.4164.0.7
- d c_one.3283.0.1
- d cached.362.0.5
- d cached.365.0.4
- d cached_mei.718.0.10
- d cin.3283.0.1
- d device_count.509.0.1
+ d base_b.3373.0.1
+ d batchfft.4167.0.7
+ d c_one.3373.0.1
+ d cached.365.0.5
+ d cached.368.0.4
+ d cached_mei.717.0.10
+ d cin.3373.0.1
+ d device_count.512.0.1
  d disable_fast_mm
  d dll_cfg_names
- d dll_memkind_name.1117.0.9
- d emax_b.3283.0.1
- d emin_b.3283.0.1
+ d dll_memkind_name.1120.0.9
+ d emax_b.3373.0.1
+ d emin_b.3373.0.1
  d enable_global_stat
  d env_has_been_cached
  d env_read
- d eps_b.3283.0.1
+ d eps_b.3373.0.1
  d factorization_db
  d first_msg
  d ftrans
- d func_b0.431.0.0.1
- d func_b1.431.0.0.1
- d func_bn.431.0.0.1
+ d func_b0.434.0.0.1
+ d func_b1.434.0.0.1
+ d func_bn.434.0.0.1
  d g_offload_report_enabled
  d g_timers_need_reset
- d in_one.3283.0.1
- d itisAtomSSE4_2.396.0.11
- d itisAtomSSSE3.403.0.12
- d itisBarcelona.410.0.13
- d itisBulldozer.391.0.10
+ d in_one.3373.0.1
+ d itisAtomSSE4_2.399.0.11
+ d itisAtomSSSE3.406.0.12
+ d itisBarcelona.413.0.13
+ d itisBulldozer.394.0.10
  d ker_notw_db
  d ker_twid_db
  d legacy
@@ -12801,7 +12817,7 @@
  d mkl_verbose_val
  d mm_book
  d mm_fast_memory_limit
- d mm_init_done.1138.0.11
+ d mm_init_done.1141.0.11
  d ownStatus
  d owngDFTFwdBatch_32fcw7_env10_vtable
  d owngDFTFwdBatch_32fcw7_env11_vtable
@@ -12885,21 +12901,22 @@
  d owngDFTInvBatch_32fcw7_envlambda3_vtable
  d owngDFTInvBatch_32fcw7_envlambda6_vtable
  d owngDFTInvBatch_32fcw7_envlambda9_vtable
- d prec_b.3283.0.1
- d r_one.3283.0.1
- d registration_state.1373.0.69
- d rmax_b.3283.0.1
- d rmin_b.3283.0.1
- d rnd_b.3283.0.1
- d sfmax2_b.3283.0.1
- d sfmin2_b.3283.0.1
- d sfmin_b.3283.0.1
- d small1_b.3283.0.1
- d sminv1_b.3283.0.1
+ d prec_b.3373.0.1
+ d r_one.3373.0.1
+ d registration_state.1376.0.69
+ d rmax_b.3373.0.1
+ d rmin_b.3373.0.1
+ d rnd_b.3373.0.1
+ d search_done.1017.0.7
+ d sfmax2_b.3373.0.1
+ d sfmin2_b.3373.0.1
+ d sfmin_b.3373.0.1
+ d small1_b.3373.0.1
+ d sminv1_b.3373.0.1
  d static_bkdown_list
  d static_methods
  d suggest_optimal_nt
- d t_b.3283.0.1
+ d t_b.3373.0.1
  d tableCache
  d tbl
  d tbl_cDFTfwd_small
@@ -12926,10 +12943,10 @@
  d tbl_rFFTfwd_small_scale
  d tbl_rFFTinv_small
  d tbl_rFFTinv_small_scale
- d tol_b.3283.0.1
+ d tol_b.3373.0.1
  d use_internal_msg
- d verbose_ptr.283.0.1
- d want_dump.2553.0.1
+ d verbose_ptr.286.0.1
+ d want_dump.2556.0.1
  difftime@@GLIBC_2.2.5
  dladdr@@GLIBC_2.2.5
  dlerror@@GLIBC_2.2.5
@@ -12977,7 +12994,7 @@
  pthread_setspecific@@GLIBC_2.2.5
  r ._106
  r .eh_frame_seg
- r A0.1544.0.0.35
+ r A0.1547.0.0.35
  r CC_12_9
  r CC_15_32
  r CC_1_11
@@ -13020,8 +13037,8 @@
  r IM_1_8
  r IM_2_16
  r IM_3_16
- r KEY_N_SOCKETS_ar.1011.0.0.25
- r N_physical_id_ar.1011.0.0.25
+ r KEY_N_SOCKETS_ar.1020.0.0.27
+ r N_physical_id_ar.1020.0.0.27
  r P
  r PI04
  r PONE
@@ -13282,11 +13299,9 @@
  r __STRLITPACK_223
  r __STRLITPACK_224
  r __STRLITPACK_225
- r __STRLITPACK_226
- r __STRLITPACK_227
- r __STRLITPACK_228
  r __STRLITPACK_229
  r __STRLITPACK_23
+ r __STRLITPACK_230
  r __STRLITPACK_231
  r __STRLITPACK_232
  r __STRLITPACK_233
@@ -13294,12 +13309,9 @@
  r __STRLITPACK_235
  r __STRLITPACK_236
  r __STRLITPACK_237
- r __STRLITPACK_238
  r __STRLITPACK_239
  r __STRLITPACK_24
  r __STRLITPACK_240
- r __STRLITPACK_241
- r __STRLITPACK_242
  r __STRLITPACK_243
  r __STRLITPACK_244
  r __STRLITPACK_245
@@ -13310,18 +13322,19 @@
  r __STRLITPACK_25
  r __STRLITPACK_250
  r __STRLITPACK_251
+ r __STRLITPACK_252
+ r __STRLITPACK_253
+ r __STRLITPACK_254
+ r __STRLITPACK_255
+ r __STRLITPACK_256
  r __STRLITPACK_257
+ r __STRLITPACK_258
+ r __STRLITPACK_259
  r __STRLITPACK_26
- r __STRLITPACK_260
- r __STRLITPACK_263
- r __STRLITPACK_264
  r __STRLITPACK_265
- r __STRLITPACK_266
- r __STRLITPACK_267
  r __STRLITPACK_268
- r __STRLITPACK_269
  r __STRLITPACK_27
- r __STRLITPACK_270
+ r __STRLITPACK_271
  r __STRLITPACK_272
  r __STRLITPACK_273
  r __STRLITPACK_274
@@ -13329,67 +13342,75 @@
  r __STRLITPACK_276
  r __STRLITPACK_277
  r __STRLITPACK_278
- r __STRLITPACK_279
  r __STRLITPACK_28
+ r __STRLITPACK_280
+ r __STRLITPACK_281
  r __STRLITPACK_282
+ r __STRLITPACK_283
+ r __STRLITPACK_284
  r __STRLITPACK_285
- r __STRLITPACK_288
+ r __STRLITPACK_286
+ r __STRLITPACK_287
  r __STRLITPACK_29
- r __STRLITPACK_291
- r __STRLITPACK_292
+ r __STRLITPACK_290
  r __STRLITPACK_293
- r __STRLITPACK_294
- r __STRLITPACK_295
  r __STRLITPACK_296
- r __STRLITPACK_297
- r __STRLITPACK_298
+ r __STRLITPACK_299
  r __STRLITPACK_3
  r __STRLITPACK_30
  r __STRLITPACK_300
+ r __STRLITPACK_301
  r __STRLITPACK_302
  r __STRLITPACK_303
  r __STRLITPACK_304
+ r __STRLITPACK_305
  r __STRLITPACK_306
- r __STRLITPACK_307
- r __STRLITPACK_309
+ r __STRLITPACK_308
  r __STRLITPACK_31
+ r __STRLITPACK_310
+ r __STRLITPACK_311
+ r __STRLITPACK_312
+ r __STRLITPACK_314
+ r __STRLITPACK_315
  r __STRLITPACK_317
  r __STRLITPACK_32
- r __STRLITPACK_324
  r __STRLITPACK_325
- r __STRLITPACK_326
- r __STRLITPACK_329
  r __STRLITPACK_33
- r __STRLITPACK_330
- r __STRLITPACK_331
+ r __STRLITPACK_332
  r __STRLITPACK_333
  r __STRLITPACK_334
- r __STRLITPACK_336
+ r __STRLITPACK_337
+ r __STRLITPACK_338
+ r __STRLITPACK_339
  r __STRLITPACK_34
+ r __STRLITPACK_341
+ r __STRLITPACK_342
  r __STRLITPACK_344
- r __STRLITPACK_349
  r __STRLITPACK_35
- r __STRLITPACK_350
- r __STRLITPACK_351
  r __STRLITPACK_352
- r __STRLITPACK_353
- r __STRLITPACK_355
+ r __STRLITPACK_357
+ r __STRLITPACK_358
+ r __STRLITPACK_359
  r __STRLITPACK_36
- r __STRLITPACK_362
+ r __STRLITPACK_360
+ r __STRLITPACK_361
  r __STRLITPACK_363
- r __STRLITPACK_364
- r __STRLITPACK_365
- r __STRLITPACK_366
- r __STRLITPACK_367
  r __STRLITPACK_37
  r __STRLITPACK_370
+ r __STRLITPACK_371
+ r __STRLITPACK_372
+ r __STRLITPACK_375
+ r __STRLITPACK_376
+ r __STRLITPACK_377
+ r __STRLITPACK_378
  r __STRLITPACK_38
- r __STRLITPACK_386
- r __STRLITPACK_387
+ r __STRLITPACK_381
  r __STRLITPACK_39
- r __STRLITPACK_392
+ r __STRLITPACK_397
+ r __STRLITPACK_398
  r __STRLITPACK_4
  r __STRLITPACK_40
+ r __STRLITPACK_403
  r __STRLITPACK_41
  r __STRLITPACK_42
  r __STRLITPACK_43
@@ -13454,12 +13475,12 @@
  r __STRLITPACK_97
  r __STRLITPACK_98
  r __STRLITPACK_99
- r __mkl_tmp_one.4373.0.0.24
- r __mkl_tmp_one.4389.0.0.25
- r __mkl_tmp_one.4553.0.0.24
- r __mkl_tmp_one.4569.0.0.25
- r __mkl_tmp_one.4635.0.0.24
- r __mkl_tmp_one.4651.0.0.25
+ r __mkl_tmp_one.4376.0.0.24
+ r __mkl_tmp_one.4392.0.0.25
+ r __mkl_tmp_one.4556.0.0.24
+ r __mkl_tmp_one.4572.0.0.25
+ r __mkl_tmp_one.4638.0.0.24
+ r __mkl_tmp_one.4654.0.0.25
  r _infs
  r _ones
  r _pi04_2d
@@ -13468,8 +13489,8 @@
  r _small_value_32
  r _small_value_64
  r _zeros
- r c.4207.0.0.23
- r c.4208.0.0.24
+ r c.4390.0.0.23
+ r c.4391.0.0.24
  r c2_p1m1
  r c3_p1m1
  r c4_p1m1
@@ -13670,50 +13691,44 @@
  r iTmp.4342.0.0.61
  r iTmp.4660.0.0.79
  r iTmp.4780.0.0.85
- r info.516.0.0.3
- r key_cpu_cores.1011.0.0.25
- r key_physical_id.1011.0.0.25
- r key_processor.1011.0.0.25
- r key_processor.1012.0.0.25
- r key_siblings.1011.0.0.25
- r lock_buf.699.0.0.4
+ r info.519.0.0.3
+ r lock_buf.702.0.0.4
  r mkl_ao_fft_ctr_worker
  r mkl_ao_fft_dtr_worker
  r mkl_ao_fft_fwd_worker
  r mkl_ao_fft_inv_worker
- r ntz1.3902.0.0.1
- r ntz1.4082.0.0.1
- r one.4371.0.0.24
- r one.4385.0.0.25
- r one.4551.0.0.24
- r one.4565.0.0.25
- r one.4633.0.0.24
- r one.4647.0.0.25
+ r ntz1.3905.0.0.1
+ r ntz1.4085.0.0.1
+ r one.4374.0.0.24
+ r one.4388.0.0.25
+ r one.4554.0.0.24
+ r one.4568.0.0.25
+ r one.4636.0.0.24
+ r one.4650.0.0.25
  r ones
- r scale.4188.0.0.4
- r scale.4194.0.0.4
- r scale.4456.0.0.4
- r scale.4462.0.0.4
- r stat.1299.0.0.67
- r strd.4076.0.0.15
- r strd.4256.0.0.15
- r strd.4338.0.0.15
+ r scale.4191.0.0.4
+ r scale.4197.0.0.4
+ r scale.4371.0.0.4
+ r scale.4377.0.0.4
+ r scale.4459.0.0.4
+ r scale.4465.0.0.4
+ r stat.1302.0.0.67
  r tbl_blk_order
  r tbl_buf_order
  r tbl_len_conv
- r thread.3900.0.0.2
- r unlock_buf.658.0.0.2
- r unlock_buf.658.0.0.3
- r verbose_unknown.283.0.1
- r zero.4183.0.0.26
- r zero.4188.0.0.27
- r zero.4253.0.0.33
- r zero.4363.0.0.26
- r zero.4368.0.0.27
- r zero.4433.0.0.33
- r zero.4451.0.0.26
- r zero.4456.0.0.27
- r zero.4515.0.0.33
+ r thread.3903.0.0.2
+ r unlock_buf.661.0.0.2
+ r unlock_buf.661.0.0.3
+ r verbose_unknown.286.0.1
+ r zero.4186.0.0.26
+ r zero.4191.0.0.27
+ r zero.4256.0.0.33
+ r zero.4366.0.0.26
+ r zero.4371.0.0.27
+ r zero.4436.0.0.33
+ r zero.4454.0.0.26
+ r zero.4459.0.0.27
+ r zero.4518.0.0.33
  r zero_none
  r zerone
  realloc@@GLIBC_2.2.5
@@ -14488,6 +14503,10 @@
  t delete_plan
  t deregister_tm_clones
  t detach
+ t dgemm_n_n2
+ t dgemm_n_n2_b0
+ t dgemm_t_n23
+ t dgemm_t_n23_b0
  t dont_prefetech
  t dump_descriptor_iface
  t even_real_copy
@@ -15171,7 +15190,7 @@
  t std::default_delete<ipl::AudioBuffer>::operator()(ipl::AudioBuffer*) const [clone .isra.1]
  t std::default_delete<ipl::RealSignal>::operator()(ipl::RealSignal*) const [clone .isra.1]
  t std::function<void (void*)>::operator()(void*) const [clone .constprop.157]
- t std::function<void (void*)>::operator()(void*) const [clone .constprop.158]
+ t std::function<void (void*)>::operator()(void*) const [clone .constprop.167]
  t step345
  t step345_inv
  t step_fft16_norm_fwd_cr
