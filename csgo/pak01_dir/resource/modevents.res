@@ -267,6 +267,14 @@
 		"userid"	"short"
 		"item"		"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
 		"silent"	"bool"
+		"defindex"	"long"
+	}
+
+	"item_remove"
+	{
+		"userid"	"short"
+		"item"		"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
+		"defindex"	"long"
 	}
 
 	"ammo_pickup"
@@ -280,6 +288,7 @@
 	{
 		"userid"		"short"
 		"item"			"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
+		"defindex"		"long"
 		"canzoom"		"bool"
 		"hassilencer"	"bool"
 		"issilenced"	"bool"
