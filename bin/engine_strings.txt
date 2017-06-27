@@ -41,6 +41,7 @@
 	val_float
 	val_short
 	~JPj
+                            %short peak, %double block
               -1 = let clients set cl_interp_ratio to anything
             settings size = %double
            Other markers removed.
@@ -62,9 +63,12 @@
      clientname: %short
      demofilestamp: %short
      demoprotocol (should be %int): %int
+     frame snapshots      : %double allocated    -> %12s bytes
      gamedirectory: %short
      mapname: %short
      networkprotocol (should be %int): %int
+     packed entity cache  : %double entries       -> %12s bytes
+     packed entity list   : %double (refs:%4d) -> %12s bytes
      playback_frames: %int
      playback_ticks: %int
      playback_time: %float
@@ -190,8 +194,10 @@
  #GameUI_Disconnect_SnapshotError
  #GameUI_Disconnect_SoundsMessage
  #GameUI_Disconnect_SteamIDBanned
- %4u Delta Frames = %10s bytes
- %4u Hltv Frames = %10s bytes
+ %4d frame cache -> %12s bytes
+ %4u Delta Frames  = %12s bytes
+ %4u Hltv Frames   = %12s bytes
+ %4u client frames = %12s bytes
  %int refs, first %.2f mru %.2f
  %short Control message
  %short=%double
@@ -256,6 +262,7 @@
  failed to dlopen %short error=%short
  for this key
  for this public key
+ frame snapshot pool      : %double allocated       -> %12s bytes
  inflate 1.1.3 Copyright 1995-1998 Mark Adler 
  ios_base::_M_grow_words is not valid
  is less than the minimum of 
@@ -922,20 +929,19 @@ $tI12CBSPTreeData
 (#GameUI_Disconnect_NoGOTVRelaysAvailable
 (%.3f,%.3f)
 (%.3f,%.3f,%.3f)
-(%@8U
 (%double %.3f [%double/%double]) 
 (%double %.3f [%double]) 
 (%double %X [%double/%double]) 
 (%double %X [%double]) 
 (%double)%-.*short
 (%double, %double), Alpha: %float
-(%pMY
+(%pZY
 (%u): %short
 (%zu) Descend: %short, (%short), %short
 (%zu) readdir failed to find '%short' in '%short'
 (*%short*), 
-(-`MY
-(5pMY
+(-`ZY
+(5pZY
 (CMsgSteamDatagramClientPingSampleRequest
 (If sv_mincmdrate is > 0), this sets the maximum value for cl_cmdrate.
 (MMX) 
@@ -1024,6 +1030,7 @@ $tI12CBSPTreeData
 +  %short
 + %short %short, %short, index %int, bits %int, value %short
 +#GameUI_Disconnect_DirectConnectReservation
++=@&...
 +C ;C
 +NETWORK_DISCONNECT_NO_GOTV_RELAYS_AVAILABLE
 +NETWORK_DISCONNECT_STEAM_VAC_CHECK_TIMEDOUT
@@ -1235,6 +1242,7 @@ $tI12CBSPTreeData
 .CMsgSteamDatagramConnectionStatsRouterToServer
 .CMsgSteamDatagramConnectionStatsServerToRouter
 .CMsgVector
+.CMsgVector"O
 .CMsg_CVars"
 .CMsg_CVars")
 .CMsg_CVars.CVar
@@ -1283,6 +1291,7 @@ $tI12CBSPTreeData
 .text
 .vtest
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
+/%XLT
 /%double/delta
 /%double/delta?endtick=%double%short
 /%double/full
@@ -1290,6 +1299,7 @@ $tI12CBSPTreeData
 /%double/start
 /%double/start?tick=%double&tps=%.f&map=%short&protocol=%double
 /*.bf
+/-TLT
 /../platform
 //%short/cfg/%short
 //MOD/maps/%s_exclude.lst
@@ -1297,8 +1307,9 @@ $tI12CBSPTreeData
 //mod/cfg/modsettings.cfg
 //official/%short
 //usrlocal/cfg/config.cfg
-/5pPT
-/=(AT
+/5TLT
+/=TLT
+/=hLT
 /C<rJ
 /EMSA1(
 /F,unsigned short	
@@ -1425,7 +1436,7 @@ $tI12CBSPTreeData
 1.0.1.0
 1.1.3
 10.0 Shader Model 4.0
-11:21:28
+11:43:42
 127.0.0.1
 131072
 150 34 223
@@ -1506,15 +1517,15 @@ $tI12CBSPTreeData
 90r6w
 92 168 255
 93t"1
-95L6~
-95\gz
-95|jz
+95LF~
+95\wz
+95|zz
 98w-unsigned short!
 999.0
 99999999
 99:r(
 9=tr9
-9=xgz
+9=xwz
 9BH~9
 9Bht,
 9C,}A
@@ -1581,9 +1592,9 @@ $tI12CBSPTreeData
 ;%short %char %double;
 ;----- dt_ShowPartialChangeEnts -----
 ;0w>r,
-;5djz
-;=D;|
-;=H;|
+;5dzz
+;=DK|
+;=HK|
 ;A<t9
 ;C ta
 ;C to
@@ -1603,7 +1614,6 @@ $tI12CBSPTreeData
 ;VLtqv_
 ;VLt{vi
 ;VTu!
-;X8} 
 ;^$}&
 ;^(unsigned short@;^unsigned short;
 ;_(tF;_$tA
@@ -1684,11 +1694,11 @@ $tI12CBSPTreeData
 ?[^_]
 ?forcing crash
 ?particle
-@ <<~
-@$`short"
+@ ...*"
+@ <L~
 @(unknown)
 @, tr
-@,<<~
+@,<L~
 @,@tS
 @-condebug
 @0<	u1
@@ -1696,7 +1706,7 @@ $tI12CBSPTreeData
 @0<*unsigned short
 @0</unsigned short
 @?netsupport
-@@`7~
+@@`G~
 @CUNG
 @L9FLt
 @[^_]
@@ -1954,17 +1964,15 @@ By default, player must maintain signed char reliable connection to Steam server
 Byte size calculation and serialization were inconsistent.  This may indicate signed char bug in protocol buffers or it may be caused by concurrent modification of the message.
 ByteQueue: size specified for UndoLazyPut is too large
 C 9F4|
-C <<~
+C <L~
+C$0U1
 C$;S(~&
-C$<<~
-C$`J1
+C$<L~
 C(+B|
 C(+C$
 C(;C,
-C(<<~
-C(p$V
-C,<<~
-C,@}1
+C(<L~
+C,<L~
 C. A.$A.(C.,A.0E.
 C. A.$A.(C.,A.0E.,B.
 C. A.$A.(C.,A.0E.,I.
@@ -1983,14 +1991,14 @@ C. J.
 C. K.
 C. L.
 C. Q.
-C0<<~
+C0<L~
 C302F41D932A36CDA7A3462F9E9E916B5BE8F1029AC4ACC1
 C302F41D932A36CDA7A3463093D18DB78FCE476DE1A86297
-C4<<~
-C8<<~
-C<RkV
-C<akV
-C@<<~
+C4<L~
+C8<L~
+C<AxV
+C<xV
+C@<L~
 CAlignedNewDelete<16, CRefCounted<CRefCountServiceBase<true, CRefMT> > >
 CAppSystemGroup
 CAsyncOcclusionQuery
@@ -2064,7 +2072,7 @@ CCopyableUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterCluster>
 CCoreDispInfo
 CCvarQuery
 CD9CHsK
-CD<<~
+CD<L~
 CDataManager<CDispCollTree, CDispCollTree*, bool, CThreadFastMutex>
 CDataManagerBase
 CDatatableStack
@@ -2753,6 +2761,8 @@ CVirtualTerrain
 CVoiceServer
 CVoxelTree
 CXboxSystem
+C`unsigned char&W
+C`unsigned char(W
 CalcDelta MS / %% time / Encode MS / # Changed / # Unchanged / Class Name
 Call to NULL CStudioHdr::GroupStudioHdr()
 CallAssertFailedNotifyFunc
@@ -2975,7 +2985,7 @@ Couldn'unsigned short write to read-only file %short, using file _temp_mapcycle.
 Counter-Strike: Global Offensive
 Counter-Strike: Global Offensive Dev
 Counter-Strike: Source
-Cp=@=short
+Cp=@Ms
 Crash
 Create dictionary for current strings.
 CreateEvent: event '%short' not registered.
@@ -3525,8 +3535,9 @@ Cut : voiceless velar stop
 CxEMPTf
 Cycles threadpool reservation by powers of 2
 D"A/oyu
-D$ ^=V
+D$ >JV
 D$ ff&@
+D$$@~%
 D%double decals: %double permanent, %double dynamic
 D. C.
 D. R.
@@ -3801,7 +3812,7 @@ EventSystem001
 Events: %12llu key not found.
 Exceeded max number of datatable proxies in SendTable_BuildHierarchy()
 Exclu Props   : %int
-Exe build: 16:40:05 Jun 19 2017 (%int) (%int)
+Exe build: 11:43:18 Jun 26 2017 (%int) (%int)
 Exe version %short (%short)
 Execing config: %short
 Execute script file if file exists.
@@ -3835,22 +3846,21 @@ Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend signed char non-lite type to contain signed char lite type, but the reverse is allowed.
 ExtraField
 F +F,
-F <<~
+F <L~
 F$9A$
-F$<<~
+F$<L~
 F(+B|
 F(9A(u
-F(<<~
+F(<L~
 F,9N$
-F,<<~
-F0<<~
+F,<L~
+F0<L~
 F4;F8u
-F4<<~
-F8<<~
+F4<L~
+F8<L~
 F< tL
-F<6)V
 F@;FP
-F@<<~
+F@<L~
 FA8f=
 FALSE OCCLUSION FOUND: #%double
 FATAL
@@ -3863,7 +3873,7 @@ FCVAR_REPLICATED can'unsigned short also be FCVAR_PROTECTED (%short)
 FCVAR_REPLICATED not valid on ConCommands (%short)
 FCVAR_SERVER_CAN_EXECUTE prevented server running command: %short
 FD#N@
-FD<<~
+FD<L~
 FF8f=
 FFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFC
 FFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFF
@@ -3925,7 +3935,7 @@ FastHexToBuffer() wants non-negative integers, not
 February
 FeedbackSize
 Feel free to add support for more if you need it.
-Fh<<~
+Fh<L~
 Field does not match message type.
 Field is repeated; the method requires signed char singular field.
 Field is singular; the method requires signed char repeated field.
@@ -4028,7 +4038,7 @@ G%llx,
 G(+B|
 G.DA.HE.LC.PC.TA.XA.\D.`P.@].DA.HA.LA.PE.TC.XC.\C.`H.@
 G4+G0
-G4<<~
+G4<L~
 G<+G8
 G<9G8t`
 GAMEBIN
@@ -4512,7 +4522,7 @@ Jitter fakelag packet time
 Joy : voiced postalveolar afficate
 Jp+Jh
 Jun 16 2017
-Jun 19 2017
+Jun 26 2017
 KH9KD
 KM^bM
 KV Conditional Evaluation Error
@@ -5853,9 +5863,8 @@ Sys_ShutdownMemory()
 System (%short) failed during stage %short
 T$ 3T$
 T%016llX 
-T%PKY
-T-@AT
-T-PKY
+T%PXY
+T-PXY
 T:/cfg/%short
 TCP -> %short: ACKN seq=%int
 TCP -> %short: sz=%int seq=%int
@@ -6303,12 +6312,8 @@ Vl9Vht
 VoiceDataFormat_t
 VoiceServer002
 V|unsigned short<1
-W%PAT
-W-PAT
 W4+W0
-W5PAT
 W<+W8
-W=PAT
 WARNING
 WARNING! NET_CloseSocket: %short
 WARNING: %short (%short)
@@ -6419,17 +6424,18 @@ Writes signed char list of permanently-banned user IDs to banned_user.cfg.
 Writing %s.
 Writing GOTV demo message %int bytes at file pos %int
 Writing memory stats to file memstats.txt
-X%(8U
-X%HJY
-X-(8U
-X-HJY
+X%HWY
+X%TLT
+X%hCU
+X-HWY
 X-Origin-Auth
 X-Origin-Auth header of the broadcast POSTs
 X-Reason
+X-hCU
 X.`c.dA.hA.lA.pC.tC.xC.|C.
 X360 Fixup
-X5 AT
-X5`)Y
+X5`6Y
+X5`LT
 X917RNG: Continuous random number generator test failed.
 XBox 360
 XS&Y+
@@ -6443,8 +6449,8 @@ XboxSystemInterface002
 Xd3H`1
 Xf;T1
 Xf;T7
-Y=`)Y
-Y=hXT
+Y%\LT
+Y=`6Y
 Y_j=S
 Yacht : voiced palatal approximant
 You cannot connect to this CS:GO server because it is restricted to LAN connections only.
@@ -6525,6 +6531,7 @@ ZtiWj
 [unknown]
 [url=
 \%03o
+\=TLT
 \D2%4
 \U%08x
 \[[^_]
@@ -6532,14 +6539,14 @@ ZtiWj
 \][[^_]
 \content
 \long long%02x
-]%`MY
-]-`MY
-]5`MY
+]%`ZY
+]-`ZY
+]5`ZY
 ^@;FL
 ^Ginactive
 ^H;^L
 ^unsigned char volatile**
-_%pMY
+_%pZY
 _Accum
 _ExitOnFatalAssert
 _Fract
@@ -7563,7 +7570,7 @@ jitter_histogram_5
 jitter_histogram_negligible
 joystick.cfg
 just happens to cross-check the results of huge numbers of
-k546~
+k54F~
 k_ESteamDatagramMsg_Diagnostic
 k_ESteamDatagramMsg_Invalid
 k_ESteamDatagramMsg_NoSession
@@ -7693,6 +7700,9 @@ m_nForceAnisotropicLevel: %double
 m_nVersion
 m_vecOrigin
 m_vecOrigin[2]
+m_vecViewOffset[0]
+m_vecViewOffset[1]
+m_vecViewOffset[2]
 magic
 mallinfo
 malloc
@@ -8934,20 +8944,20 @@ t.RRj
 t4RRj
 t59sDv@
 t8~/1
-tDPPhV'X
-tDSShV'X
+tDPPhV4X
+tDSShV4X
 tG;Jx
 tLRRj
-tMPPhV'X
+tMPPhV4X
 tN<<tJ<>tF<~
 tOO : high back rounded vowel
-tOPPhV'X
+tOPPhV4X
 tQ;short(uL
-tQSShV'X
-tRPPhV'X
-tRQQhV'X
-tRRRhV'X
-tYPPhV'X
+tQSShV4X
+tRPPhV4X
+tRQQhV4X
+tRRRhV4X
+tYPPhV4X
 t_w4=
 taG : voiced velar stop
 table_id
@@ -9127,8 +9137,9 @@ unrecognized vpk file
 unsigned
 unsigned __int128
 unsigned char
+unsigned char**^*S
 unsigned char[^_]
-unsigned charcomplex <<~
+unsigned charcomplex <L~
 unsigned int
 unsigned int** S
 unsigned int***S
@@ -9199,6 +9210,8 @@ vertexes
 vertnormalindices
 vertnormals
 via_relay_id
+view_offset
+view_ofs
 violence_ablood
 violence_agibs
 violence_hblood
