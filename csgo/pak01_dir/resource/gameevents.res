@@ -272,7 +272,6 @@
 	"dm_bonus_weapon_start"
 	{
 		"time"		"short"		// The length of time that this bonus lasts
-		"wepID"		"short"		// The weapon ID of the bonus weapon
 		"Pos"		"short"		// Loadout position of the bonus weapon
 	}
 
@@ -441,10 +440,6 @@
 	"reset_game_titledata"						// reset user titledata; do not automatically write profile
 	{
 		"controllerId"				"short"		// Controller id of user
-	}
-
-	"weapon_reload_database"					// development feature
-	{
 	}
 
 	

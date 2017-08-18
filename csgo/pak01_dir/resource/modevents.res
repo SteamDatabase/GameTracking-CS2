@@ -69,6 +69,7 @@
 
 		"userid"	"short"
 		"team"		"short"
+		"loadout"	"short"
 		"weapon"	"string"
 	}	
 
