@@ -324,6 +324,7 @@
 	if ( "self" in this )
 	if ( name.len() == 0 ) 
 	if ( scope == null )
+	init_time
 	instances
 	inventory
 	ip_public
@@ -334,6 +335,7 @@
 	languages
 	last acknowledged tick %double
 	league_id
+	line_item
 	local caller = null;
 	local indent=function( count )
 	local temp = { runscript = script };
@@ -351,6 +353,7 @@
 	paintseed
 	paintwear
 	party_ids
+	price_usd
 	proximity
 	public_ip
 	region_id
@@ -878,6 +881,7 @@
 "NETWORK_DISCONNECT_STEAM_OWNERSHIP
 "host_computationtime_std_deviation
 "id" "elementid" 
+"k_EGCMsgDPPartnerMicroTxnsResponse
 "k_EGCMsgMasterSetDirectoryResponse
 "k_EMsgGCAddItemToSocket_DEPRECATED
 "k_EMsgGCAddSocketToItem_DEPRECATED
@@ -2139,6 +2143,7 @@ $tIResponseGroup
 &CGCSystemMsg_GetPurchaseTrust_Response
 &CGameServers_AggregationQuery_Response
 &CMsgGCCStrike15_v2_ClientCommendPlayer
+&CMsgGCCStrike15_v2_ClientRequestOffers*
 &CMsgGCCStrike15_v2_Party_SearchResults
 &CMsgGCUserTrackTimePlayedConsecutively
 &CWorkshop_SetItemPaymentRules_Response"M
@@ -2324,6 +2329,7 @@ $tIResponseGroup
 (cannot determine missing fields for lite message)
 (default)
 (k_EMsgGCCStrike15_v2_ClientCommendPlayer
+(k_EMsgGCCStrike15_v2_ClientRequestOffers
 (k_EMsgGCUserTrackTimePlayedConsecutively
 (no conditions)
 (null)
@@ -2403,7 +2409,6 @@ $tIResponseGroup
 *DISABLED*
 *FX_FireBullets(int, CWeaponCSBase*, CEconItemView const*, Vector const&, QAngle const&, int, int, float, float, float, float, WeaponSound_t, float)::CFireBulletTakeDamageListener
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
-*O(= 6K
 *SPEC*
 *k_EMsgGCAddItemToSocketResponse_DEPRECATED
 *k_EMsgGCAddSocketToItemResponse_DEPRECATED
@@ -2927,6 +2932,7 @@ $tIResponseGroup
 2".CMsgGCMsgMasterSetDirectory.SubGC
 2".CMsgSetItemPositions.ItemPosition
 2#.CDataGCCStrike15_v2_TournamentInfo"
+2#.CMsgDPPartnerMicroTxns.PartnerInfo
 2#.CMsgSOMultipleObjects.SingleObject
 2#.CSVCMsg_GameEventList.descriptor_t
 2$.CDataGCCStrike15_v2_TournamentGroup"
@@ -2937,6 +2943,7 @@ $tIResponseGroup
 2&.CCSUsrMsg_ServerRankUpdate.RankUpdate
 2&.CDataGCCStrike15_v2_TournamentSection
 2&.CMsgGCMsgMasterSetWebAPIRouting.Entry
+2'.CMsgDPPartnerMicroTxns.PartnerMicroTxn
 2'.CMsgGCCStrike15_v2_Fantasy.FantasySlot""
 2'.CMsgGCCStrike15_v2_Fantasy.FantasyTeam
 2(.CDataGCCStrike15_v2_TournamentGroupTeam
@@ -2946,6 +2953,7 @@ $tIResponseGroup
 2).CDataGCCStrike15_v2_TournamentMatchDraft
 2).CMsgGCMsgMasterSetClientMsgRouting.Entry
 2*.CDataGCCStrike15_v2_TournamentGroup.Picks
+2*.CMsgDPPartnerMicroTxnsResponse.EErrorCode"
 2+.CMsgGCGetPersonaNames_Response.PersonaName
 2,.CMsgAMSendEmail.PersonaNameReplacementToken
 2-.CGameServers_AggregationQuery_Response.Group
@@ -3061,16 +3069,30 @@ $tIResponseGroup
 8Tu0@
 8bvcd
 9*tu9
-95 \8
-95,NB
-95t B
+95 ZB
+95(RB
+95,n8
+950&B
+9500B
+954[K
+958vB
+95\cB
+95hfB
+95lDB
+95x3B
 98w-unsigned short!
 999999.0
 99:r(
 9<0t0
-9=0N=
+9=$RB
+9=,&B
+9=4[K
+9=D.8
+9=D;=
+9=XcB
+9=`DB
+9=t3B
 9=tr9
-9=unsigned short B
 9BP~W
 9C$t!
 9C8t+
@@ -3177,24 +3199,46 @@ $tIResponseGroup
 :k_EMsgGCCStrike15_v2_Client2GCEconPreviewDataBlockResponse
 :k_EMsgGCCStrike15_v2_MatchListRequestTournamentPredictions
 ;...(~9
-;5 ~B
-;58~B
-;5@nB
-;5H}B
-;5`}B
-;5t B
-;5x}B
-;= :A
-;=09A
-;=8:A
-;=8|B
-;=H9A
-;=P:A
-;=P|B
-;=`9A
-;=unsigned char:A
-;=unsigned short B
-;=x9A
+;5(,C
+;5,n8
+;50	C
+;58)K
+;5H C
+;5P)K
+;5X	C
+;5XHC
+;5`!8
+;5h)K
+;5p	C
+;5p(B
+;= #K
+;= &K
+;= )K
+;=($K
+;=('K
+;=,0B
+;=0%K
+;=0(K
+;=8#K
+;=8&K
+;=@$K
+;=@'K
+;=H%K
+;=H(K
+;=P#K
+;=P&K
+;=X$K
+;=X'K
+;=`%K
+;=`(K
+;=h4K
+;=long long%K
+;=long long(K
+;=long(B
+;=p$K
+;=p'K
+;=unsigned char#K
+;=unsigned char&K
 ;B |unsigned __int128
 ;BHt(
 ;Bht#
@@ -3300,6 +3344,7 @@ $tIResponseGroup
 <%short%.3f
 <%short:%llu>
 <%short:%short>
+<%short:u%u:lb%double>
 <.t.<\urf
 </h1>
 </pre>
@@ -3419,43 +3464,20 @@ $tIResponseGroup
 ?unsigned short;~1=
 ?weapon_cs_base
 @  output: %short
-@ =x6N
-@ `__int128>
-@ x6N
-@$=x6N
-@$x6N
+@$0Ni
+@$Pyo
+@$p,long long
 @%short doesn'unsigned short like %short
-@(=x6N
+@(P"unsigned short
 @([^]
-@(peo
-@(p|C
-@(p|Q
-@(p~Q
-@(x6N
-@,0JA
-@,=x6N
-@,x6N
 @0<	u1
 @0<*u
 @0<*unsigned short
 @0</unsigned short
-@0=x6N
-@0x6N
 @333333
-@4=x6N
-@4x6N
-@8=x6N
-@8x6N
-@<x6N
-@@ 7N
-@@@]u
-@@x6N
 @CUNG
 @Can'unsigned short find soundscape: %short
-@Dx6N
 @Fear
-@Hx6N
-@Lx6N
 @OCBaseEntityList::AddNonNetworkableEntity: no free slots!
 @T<Puh
 @[^_]
@@ -5197,7 +5219,6 @@ Bx+B|
 Byte size calculation and serialization were inconsistent.  This may indicate signed char bug in protocol buffers or it may be caused by concurrent modification of the message.
 ByteQueue: size specified for UndoLazyPut is too large
 C 333
-C =x6N
 C @u?
 C @uB
 C @uK
@@ -5207,22 +5228,20 @@ C @uX
 C long long	;long long
 C long long	;p
 C u $
-C$ lo
+C$ +long long
+C$ 2x
+C$ unsigned int*
 C$;0u
 C$;8u
 C$;S(~&
-C$=x6N
-C$`&long long
-C$`lo
-C( [P
-C( xQ
-C(0\P
-C(0~Q
-C(=x6N
-C(@}Q
-C(PyM
-C(pxM
-C,=x6N
+C$Pzo
+C$`(long long
+C$`*long long
+C$p)long long
+C$pPj
+C( shortimaginary 
+C(0Fo
+C(PIj
 C. A.$A.(C.,A.0E.
 C. A.$A.(C.,A.0E.,B.
 C. A.$A.(C.,A.0E.,I.
@@ -5241,15 +5260,11 @@ C. J.
 C. K.
 C. L.
 C. Q.
-C0=x6N
 C302F41D932A36CDA7A3462F9E9E916B5BE8F1029AC4ACC1
 C302F41D932A36CDA7A3463093D18DB78FCE476DE1A86297
 C4.PlantSound
-C4=x6N
 C4IdleTime
 C89C4
-C8=x6N
-C8pLu
 C< unsigned short,
 C@T	I_Agressive
 CAISound
@@ -6656,7 +6671,6 @@ CGlobalEntityList::CleanupDeleteList
 CGlobalEventLog
 CGlobalState
 CGunTarget
-CH=x6N
 CHANGE LEVEL: %short
 CHANGE LEVEL: %short %short
 CHANGE MODE: %short
@@ -6895,7 +6909,6 @@ CKeyValuesTokenReader::SeekBackOneToken: It is only possible to seek back one to
 CKickIssue
 CKnife
 CKnifeGG
-CL=x6N
 CL@uH
 CLASS_NONE
 CLASS_PLAYER
@@ -6990,6 +7003,10 @@ CMsgClientWelcome_Location
 CMsgConVarValue
 CMsgConnectionStatus
 CMsgConsumableExhausted
+CMsgDPPartnerMicroTxns
+CMsgDPPartnerMicroTxnsResponse
+CMsgDPPartnerMicroTxns_PartnerInfo
+CMsgDPPartnerMicroTxns_PartnerMicroTxn
 CMsgDevNewItemRequest
 CMsgGCBannedWord
 CMsgGCBannedWordListRequest
@@ -7016,6 +7033,7 @@ CMsgGCCStrike15_v2_ClientReportResponse
 CMsgGCCStrike15_v2_ClientReportServer
 CMsgGCCStrike15_v2_ClientRequestJoinFriendData
 CMsgGCCStrike15_v2_ClientRequestJoinServerData
+CMsgGCCStrike15_v2_ClientRequestOffers
 CMsgGCCStrike15_v2_ClientRequestPlayersProfile
 CMsgGCCStrike15_v2_ClientRequestWatchInfoFriends
 CMsgGCCStrike15_v2_ClientSubmitSurveyVote
@@ -8998,6 +9016,7 @@ D6031998D1B3BBFEBF59CC9BBFF9AEE1
 D7C134AA264366862A18302575D0FB98D116BC4B6DDEBCA3A5A7939F
 D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FF
 D7q/;M
+D=`n6
 DAMAGE APPLIED:  
 DAMAGE FILTER:%short
 DAMAGING 
@@ -9605,6 +9624,7 @@ EDIT_SPLIT.MarkedArea
 EDIT_SPLIT.NoMarkedArea
 EDIT_TOGGLE_PLACE_MODE
 EDIT_WARP_TO_MARK
+EErrorCode
 EGCBaseClientMsg
 EGCBaseMsg
 EGCBaseProtoObjectTypes
@@ -9962,7 +9982,6 @@ Extensions to non-lite types can only be declared in non-lite files.  Note that 
 ExtraField
 ExtraParticleFilesTable
 F +F,
-F =x6N
 F$;C(
 F,9N$
 F4;F8u
@@ -10077,6 +10096,7 @@ Fetch bomb pathfind failed
 FetchBomb
 FetchBombState
 Fetched %double bytes via HTTP:
+Fh=,M
 Field does not match message type.
 Field is repeated; the method requires signed char singular field.
 Field is singular; the method requires signed char repeated field.
@@ -10678,6 +10698,7 @@ Heavy Phoenix
 Heavy.Step
 HeavyWakeTaunt
 Hex and octal numbers must be integers.
+Hh[^_]
 Hide from area is NULL.
 HideState
 Hiding spot off nav mesh
@@ -11721,7 +11742,6 @@ Interpenetration may result!
 Interrupts
 IntervalTimer
 Intr: %short (%short)
-Invalid STEAM UserID Ticket
 Invalid State for SelectSchedule!
 Invalid Steam Logon Delayed: Kicking client [U:1:%double] %short
 Invalid aggressiveness value %double
@@ -11760,6 +11780,7 @@ Invalid strings::Substitute() format string: "
 Invalid symbol name: 
 Invalid terrorist spawnpoint at (%.f,%.f,%.f)
 Invalid time value
+Invalid user ticket
 Invalid value for boolean field "
 Invalid weak dependency index.
 Invalid wire type for CPPTYPE_INT32: 
@@ -11823,9 +11844,7 @@ J 9N |
 J 9N }%
 J<[_]
 JArray
-JD =x6N
 JH+J@
-JP@=x6N
 J\+JL
 J\;BT
 January
@@ -11842,20 +11861,11 @@ Job of type %short held lock for %.2f seconds while job of type %short was waiti
 Job passed lock it wasn'unsigned short waiting for. Job: %short, Lock: %short %short(%double), Paused for %short, Waiting on %short
 Jobs/Coroutines
 Jp+Jh
-Jt =x6N
-Jt@=x6N
 Jump Override
 Jump landed
 Jump start
 Jump stop
 Jump stuck
-K$ =x6N
-K( =x6N
-K(@=x6N
-K,@=x6N
-K0 =x6N
-K0@=x6N
-K8 =x6N
 K@;J@}
 KGot signed char NaN velocity on %short
 KM^bM
@@ -11946,6 +11956,7 @@ LastManStanding
 Late precache of %short
 Late precache of %short (file missing?)
 Late precache of %short, need to rebuild modelsounds.cache
+LbsUpdate
 Lead behavior - bad transition?
 Lead goal entity activated for an NPC that doesn'unsigned short have the lead behavior
 LeadTarget
@@ -12282,21 +12293,10 @@ MutableMessage
 MutableRawRepeatedField
 MutableRepeatedMessage
 Muzzle
-N$ =x6N
-N$@=x6N
-N( =x6N
-N(@=x6N
-N, =x6N
-N,@=x6N
-N0 =x6N
-N0@=x6N
-N8 =x6N
-N@ =x6N
 N@+ND
 NAV IGNORE
 NAV_CONTROLLER
 NCHEM
-ND =x6N
 NDebugOverlay::Box
 NDebugOverlay::Line
 NERVEGAS
@@ -12344,7 +12344,6 @@ NO_HOSTAGES
 NO_JUMP
 NO_JUMP 
 NO_MERGE
-NP@=x6N
 NPC %short failed to stop properly, slamming activity
 NPC %short stuck in wall--level design error at (%.2f %.2f %.2f)
 NPC Line-float&&-Sight debug mode. If 1, solid entities that block NPC LOC will be highlighted with white bounding boxes. If 2, it'll show non-solid entities that would do it if they were solid.
@@ -12524,8 +12523,7 @@ Notification about user penalty: %u/%u (%u sec)
 Notifying GC we don'unsigned short need signed char session.
 November
 Nplayer_radio
-Nt =x6N
-Nt@=x6N
+NqmmRating
 NullRNG
 NullRNG: NullRNG should only be passed to functions that don'unsigned short need to generate random bytes
 Num ticks simulated : %double
@@ -12550,7 +12548,6 @@ Number of shots before weapon uses full recoil
 Number of timeouts each team gets per match.
 Numbers starting with leading zero must be in octal.
 O$;H$t\
-O, =x6N
 OAEP-
 OBSTACLE 
 OBSTACLE_TOP
@@ -12729,6 +12726,8 @@ PM  Got signed char velocity too high on %short
 PM  Got signed char velocity too low on %short
 POISON
 POSIX
+PPh$H
+PPhdE
 PPj0W
 PPjXW
 PRECIPITATION
@@ -12769,7 +12768,9 @@ ParticleTrailStartSize
 Particlelib: Missing precache for particle system type "%short"!
 Particles
 Particles: Missing '%short'
+PartnerInfo
 PartnerItemPaymentRule
+PartnerMicroTxn
 Party
 Party!!
 Passenger Roles Parsed:	%double
@@ -13052,6 +13053,10 @@ Q,;short |
 Q8>BaseCombatWeapon.WeaponDrop
 QAngle: %.2f %.2f %.2f
 QQWR1
+QQh$H
+QQh,F
+QQh\G
+QQhdE
 QRSVP
 QRSWP
 Qkkbal
@@ -15204,7 +15209,6 @@ VGUI_Surface031
 VGUI_System010
 VGUI_ivgui008
 VH;VLt
-VH= ...=
 VIP_ESCAPE
 VL;QL~?
 VM Did not start!
@@ -15583,6 +15587,11 @@ XAxis
 XBowBolt
 XS&Y+
 XZ[^_]
+XZh0@P
+XZhHAP
+XZhHBP
+XZhXCP
+XZh[<
 XZj-W
 XZj=S
 X[^_]
@@ -15595,8 +15604,16 @@ Y@DoorSound.Null
 YAxis
 YCPum
 YMDHMS
+YXhHAP
+YXhXCP
+YXh[<
+YXhpAP
 YYYY-MM-DD
 YYYY-MM-DD hh:mm:ss
+Y[h$H
+Y[hdE
+Y[unsigned char,F
+Y[unsigned char\G
 Y_j=S
 Yaw speed:%.1f,Health: %3d
 YellowBlood
@@ -15612,6 +15629,7 @@ ZD9YDu
 ZP9YPu
 ZPPWh
 ZY^_]
+ZYh[<
 Z[^_]
 ZapContext
 ZeroMemory
@@ -15714,10 +15732,26 @@ ZtiWj
 \[^_]
 \][[^_]
 \long long%02x
+]5 FE
+]5 IE
+]5 LE
+]5 jE
+]5@GE
+]5@JE
+]5@ME
+]5@SK
+]5@zE
+]5`EE
+]5`HE
+]5`KE
+]5`NE
 ]G%8.3f[%double] %short:  %short
 ]GCOND_IN_PVS
 ]Gue1
-^H= ...=
+^Xh$H
+^Xh,F
+^Xh\G
+^XhdE
 ^unsigned char volatile**
 _Accum
 _DisableUpdateTarget
@@ -17087,6 +17121,7 @@ cost_in_local_currency
 count
 counter-terrorists
 country
+country_code
 country_deprecated
 coupon
 courier
@@ -17254,7 +17289,9 @@ cur_val
 curr_connections
 curr_items
 currency
+currency_code
 currency_deprecated
+currency_name
 current speed (goal): %__float128 (%__float128)
 current value: %float
 current_level
@@ -17596,6 +17633,7 @@ econ/stickers/%short
 econ_gcmessages.proto
 edict: %double
 edictindex
+eerrorcode
 effect
 effect_name
 effect_type
@@ -18494,6 +18532,7 @@ gc_generation_settings/wear_max
 gc_generation_settings/wear_min
 gc_generation_settings/xp_reward
 gc_msg_src
+gc_name
 gc_reservation_sent
 gc_type
 gconly
@@ -19239,6 +19278,7 @@ k_EGCMsgCheckFriendship
 k_EGCMsgCheckFriendshipResponse
 k_EGCMsgCommitUnfinalized
 k_EGCMsgConCommand
+k_EGCMsgDPPartnerMicroTxns
 k_EGCMsgFailedToCreate
 k_EGCMsgFindAccounts
 k_EGCMsgGenericReply
@@ -19448,6 +19488,15 @@ k_ESOMsg_Destroy
 k_ESOMsg_Update
 k_ESOMsg_UpdateMultiple
 k_Faf
+k_MsgAlreadyRunning
+k_MsgInvalidAppID
+k_MsgInvalidPartnerInfo
+k_MsgInvalidTransactionData
+k_MsgNoTransactions
+k_MsgPartnerInfoDiscrepancy
+k_MsgSQLFailure
+k_MsgTransactionInsertFailed
+k_MsgValid
 k_UnlockStyle_Failed_CantAfford
 k_UnlockStyle_Failed_CantCommit
 k_UnlockStyle_Failed_PreReq
@@ -19478,7 +19527,7 @@ kickid_ex %double %double For killing signed char teammate at round start
 kickid_ex %double %double For killing too many hostages
 kickid_ex %double %double For killing too many teammates
 kickid_ex %double %double For suiciding too many times
-kickid_ex %double %double No Steam logon
+kickid_ex %double %double No user logon
 kickid_ex %double %double You have been voted off;
 kill award
 kill award alt
@@ -19530,6 +19579,7 @@ last_match_rounds
 last_match_t_wins
 last_match_wins
 last_time_played
+last_update_time
 last_valid_class
 last_valid_item_slot
 last_valid_item_slot not set!
@@ -19708,7 +19758,8 @@ long long signed char::* score one team can reach before server changes maps
 long long signed char::* view roll angle
 long long volatile+V|
 long long%;Q\} 
-long long,;= 
+long long,;=0 C
+long long,;=` C
 long long?;C$}:
 long[^_]
 longjmp
@@ -24905,11 +24956,16 @@ owned
 owner_id
 owner_soid
 owninginstance
-p$PPh
-p$QQh
+p$PPht
+p$QQht
 p(?!@V>
-p,;5h
-p,PPh$
+p,;5(
+p,;5(,C
+p,;58
+p,;5@
+p,;5X
+p,;5d
+p,PPhDm
 p49st
 pGears
 pTouf
@@ -24968,9 +25024,12 @@ particle_test_file
 particle_test_start
 particle_test_stop
 particles/particles_manifest.txt
+partner
 partner_accountflags
 partner_accountid
 partner_accounts
+partner_id
+partner_name
 partner_srcid
 party_id
 passes_granted
@@ -25265,6 +25324,7 @@ preventNameBasedLookup
 prevent_movement
 preview_item
 preview_item_purchased
+price
 price_sheet
 price_sheet_version
 pricesheet_version
@@ -25513,6 +25573,7 @@ recovery transition start bullet
 recovery transition start bullet alt
 recycle_list
 recycling
+ref_trans_id
 reference temporary for 
 referencename
 refillRate
@@ -25520,6 +25581,7 @@ refire interval: %.2f sec
 refrigerator
 refunded
 regex_error
+region_code
 region_r
 registered: 
 regroup
@@ -26404,6 +26466,7 @@ steam://openurl_external/
 steam_controller_haptics
 steam_id
 steam_level
+steam_txn_type
 steam_universe
 steamdatagram_port
 steamid
@@ -26865,30 +26928,29 @@ t7f;r
 t8f;X
 tB+J`
 tC+P`
-tDPPh
-tDSSh
+tDPPh[u
+tDSSh[u
 tF;C|u
 tG;Jx
 tLRRj
 tM9s8th
-tMPPh
+tMPPh[u
 tN<@tJ<(tF<<
-tO;5d
-tOPPh
+tOPPh[u
 tOvef
 tQ;short(uL
-tQSSh
+tQSSh[u
 tR+P`
-tRPPh
-tRQQh
-tRRRh
+tRPPh[u
+tRQQh[u
+tRRRh[u
 tS+P`
 tShof
 tT+J`
 tThif
 tUf;H
 tWf9r
-tYPPh
+tYPPh[u
 t_+P`
 t_~C1
 ta;CXt\
@@ -26917,8 +26979,10 @@ targetentityname
 targetpoint
 taskFailureCode
 tau_levitate
+tax_usd
 tc+P`
 tc<?t_
+td=Sn
 teMof
 te_tester
 teamToBlock
@@ -27059,7 +27123,6 @@ tm_pirate
 tm_professional
 tm_professional_var4
 tm_separatist
-to=ys
 toggles whether the server allows spectator mode or not
 token
 token_name
@@ -27348,6 +27411,7 @@ traded
 trail_length_random
 trailing_comments
 train
+transactions
 transfer_id
 transid
 trigger_auto
@@ -27501,9 +27565,11 @@ unsigned __int128 restrict*-player entry '%short' has signed char duplicate code
 unsigned __int128 restrict*-player entry '%short' maps to signed char duplicate AccountID
 unsigned char
 unsigned char volatile;~lt
-unsigned char**:,
+unsigned char**">
+unsigned char**,F
+unsigned char**[<
+unsigned char**\G
 unsigned char[^_]
-unsigned charcomplex =ds
 unsigned int
 unsigned int** S
 unsigned int***S
@@ -27547,7 +27613,7 @@ unsigned short>+P`
 unsigned short><>unsigned short:<~t6<^
 unsigned short@;s8t[
 unsigned short\~Z1
-unsigned short^=(T
+unsigned short{=[0
 unsigned short|~z1
 unspecified
 unused
@@ -27598,6 +27664,7 @@ usp_silencer
 utime
 utime@@GLIBC_2.0
 utimes@@GLIBC_2.0
+vF= mE
 vLastKnownLocation
 vLastSeenLocation
 vLocationWhenUnreachable
@@ -28090,7 +28157,6 @@ zt?ERROR: too many nodes in map, deleting last node.
 }!float;short&wchar_t
 }"float;^
 }'float;}
-}4= ...=
 }A;G,
 }D;B 
 }Lf;H
