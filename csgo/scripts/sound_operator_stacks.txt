@@ -170,6 +170,18 @@
 		}
 	}
 	
+	"CS_limit_physics_start" //replaces null.wav
+	{
+		"limit_entry"
+		{
+			"operator" "sys_stop_entries"
+			"input_max_entries" "1.000000" //A sound will not stop itself from playing.
+			"match_entity" "true"	
+			"match_substring" "false"
+			"match_this_entry" "true"
+		}
+	}
+	
 	"CS_limit_bullet_impact" //replaces null.wav
 	{
 		"limit_entry"
@@ -1533,8 +1545,204 @@
 			"input_speakers" "@speakers_limit.output"
 			"output" "speakers"
 		}
-	}	
+	}
 
+	"CS_update_physics"
+	{
+		//////////////////////
+		// POSITION
+		"source_info"
+		{
+			"operator" "get_source_info"
+			"source"   "entity"
+			//"source"   "emitter"
+		}
+
+        // NOTE: uses player data, ie: SS, returns minimum distance
+		"source_distance"
+		{
+			"operator" "calc_source_distance"
+			"input_position"   "@source_info.output_position"
+		}
+
+		////////////////////
+		// calc
+		"mixer"
+		{
+			"operator" "get_soundmixer"
+			"mixgroup" "Physics"
+		}
+
+		// NOTE: uses player data, ie: SS, return least occluded value
+		"occlusion"
+		{
+			"operator" "calc_occlusion"
+			"input_position" "@source_info.output_position"	
+		}
+
+		"snd_gain_convar"
+		{
+			"operator" "get_convar"
+			"convar" "snd_gain"
+		}
+		"snd_op_test_convar"
+		{
+			"operator" "get_convar"
+			"convar" "snd_op_test_convar"
+		}
+
+		//////////////////////
+		// LEVEL
+		"level_apply_mixer"
+		{
+			"operator" "math_float"
+			"apply" "mult"	
+			"input1" "@mixer.output_level"
+			"input2" "@source_info.output_level"
+		}
+
+		/////////////////////
+		// VOLUME
+			
+		// NOTE: distance has precalculated minimum distance of the ss players			
+		"volume_falloff"
+		{
+			"operator" "calc_falloff_curve"
+			"input_distance"  "@source_distance.output"
+			"input_min" "120.0"	
+			"input_max" "600.0"
+			"input_atten" "1.0"
+			"input_curve_amount" "0.1"
+		}
+
+		"distance_shutdown"
+		{
+			"operator" "math_float"
+			"apply" "less_than"	
+			"input1" "@source_distance.output"
+			"input2" "600.0"
+		}
+
+
+
+		// multiply all volume adjustments together
+		"volume_accumulate"
+		{
+			"operator" "math_float_accumulate12"
+			"apply"	"mult"
+			"input1" "@source_info.output_volume"
+			"input2" "@volume_falloff.output"
+			"input3" "@mixer.output_volume"
+			"input4" "@snd_gain_convar.output"
+			"input5" "@occlusion.output"
+			"input6" "@distance_shutdown.output"
+			"input7" "1.0"
+			"input8" "1.0"
+			"input9" "1.0"
+			"input10" "1.0"
+			"input11" "1.0"
+			"input12" "1.0"
+		}
+
+		// output mix layer trigger
+		"output_mixlayer_trigger"
+		{
+			"execute_once" "1"
+			"operator" "sys_output"
+			"input_float" "1"
+			"output" "mixlayer_trigger"
+		}
+		///////////////////
+		// PITCH
+		"pitch_output"
+		{
+			"operator" "sys_output"
+			"output"   "pitch"
+			"input_float" "@source_info.output_pitch"	
+		}
+
+		///////////////////
+		// DSP
+		"dsp_emitter"
+		{
+			"operator" "math_float"
+			"apply"	      "set"
+			"input1" "1.0"	
+		}
+		"dsp_apply_mixer"
+		{
+			"operator" "math_float"
+			"apply" "mult"	
+			"input1" "@mixer.output_dsp"
+			"input2" "@dsp_emitter.output"	
+		}
+		"dsp_distantDSP"
+		{
+			"operator" "calc_distant_dsp"
+			"input_distance"  "@source_distance.output"
+			"input_level"	  "@level_apply_mixer.output"
+		}
+		"dsp_apply_distant"
+		{
+			"operator" "math_float"
+			"apply"	      "mult"
+			"input1" "@dsp_distantDSP.output"
+			"input2" "@dsp_apply_mixer.output"			
+		}
+		"dsp_output"
+		{
+			"operator" "sys_output"
+			"input_float" "@dsp_apply_distant.output"
+			"output" "dsp"
+		}
+
+		/////////////////////
+		// SPEAKERS
+
+		// NOTE: uses player data, ie: SS, calculates all players and merges them
+		"speakers_spatialize"
+		{
+			"operator" "calc_spatialize_speakers"
+			"input_radius_min"  "23"
+			"input_radius_max"  "24"
+			"input_distance"  "@source_distance.output"
+			"input_position"  "@source_info.output_position"
+			"input_rear_stereo_scale" "1.0"
+
+		}
+	
+		"speakers_apply_volume"
+		{
+			"operator"     "math_speakers"
+			"apply"	       "mult"
+			"input1"       "@speakers_spatialize.output"
+			"input2[*]"	   "@volume_accumulate.output"
+		}
+
+		"speakers_limit"
+		{
+			"operator"      "math_speakers"
+			"apply"	       "mult"
+
+			"left_front"   "1.0"	
+			"right_front"  "1.0"	
+			"center"       "1.0"	
+			"lfe"          "1.0"	
+			"left_rear"    "1.0"
+			"right_rear"   "1.0"	
+			
+			"input2"	   "@speakers_apply_volume.output"
+		}
+
+		"speakers_output"
+		{
+			"operator" "sys_output"
+			"input_speakers" "@speakers_limit.output"
+			"output" "speakers"
+		}
+	}	
+	
+	
 	"CS_update_rics"
 	{
 		//////////////////////
