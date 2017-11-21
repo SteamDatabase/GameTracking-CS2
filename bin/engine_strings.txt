@@ -16,8 +16,6 @@
 	TYPE_BOOL
 	TYPE_ENUM
 	accountid
-	back_ping
-	challenge
 	code_path
 	cvar_name
 	encrypted
@@ -25,7 +23,6 @@
 	enum_type
 	extension
 	file_name
-	from_port
 	host_name
 	is_replay
 	keyvalues
@@ -33,7 +30,6 @@
 	name_part
 	proximity
 	public_ip
-	signature
 	sound_num
 	svc_Print
 	type_name
@@ -97,10 +93,7 @@
    - %short
    -1 = let clients set cl_predict to anything
    CULL: %short type=%double
-   Cannot communicate with gameservers when routers are not accessible.
-   Cannot communicate with routers or gameservers without network config.
    Hull
-   Must be able to access %short
    Physics
    Public IP is %d.%d.%d.%d.
    Ray
@@ -108,7 +101,6 @@
   '%short'
   (public ip: %short)
   (www.memtest86.com).  At the time of writing it is free (GPLd).
-  +%double load balance penalty.
   CM_LoadMap
   CPU   NetIn   NetOut    Uptime  Maps   FPS   Players  Svms    +-ms   ~tick
   CollisionBSPData_LoadAreaPortals
@@ -126,7 +118,6 @@
   CollisionBSPData_LoadTextures
   CollisionBSPData_LoadVisibility
   Comment started here.
-  Connection gap %.0fms.
   Field       : 
   LUMP_AREAPORTALS
   LUMP_AREAS
@@ -136,7 +127,6 @@
   Map_VisClear
   Memtest86 tests memory much more thorougly than your BIOSs
   Message type: 
-  Migration target.
   Mod_LoadCubemapSamples
   Mod_LoadEdges
   Mod_LoadFaces
@@ -161,12 +151,10 @@
   Mod_LoadVertNormals
   Mod_LoadVertices
   Mod_LoadWorldlights
-  Offline in %ds.
   Problem     : 
   Problem     : Enum value did not match field type:
   Problem     : Field is not the right type for this message:
   RecomputeSurfaceFlags
-  Requested migration.
   SetupSubModels
   Try signed char memory-test program.  I have used Memtest86
   [ +map mapname ] -- generate devshots for specified map and exit after that map
@@ -203,10 +191,6 @@
  %4u client frames = %12s bytes
  %int refs, first %.2f mru %.2f
  %short Control message
- %short=%double
- %short=%llu
- %short=%short
- %short=%u
  ( def. "%short" )
  (%int physical)
  (Relay)
@@ -230,8 +214,6 @@
  CBaseClient::SendServerInfo(finished)
  CBaseClient::SendServerInfo: %short  :  %double
  CBaseClient::SendSignonData
- CMsgSteamDatagramDataCenterState
- CMsgSteamDatagramRouterPingReply
  COMBINED
  Can'unsigned short back up over more bytes than were returned by the last call to Next().
  LOADING
@@ -287,7 +269,6 @@
  signed char protocol buffer. Use the 'bytes' type if you intend to send raw bytes.
  took %double bits, %double bytes
  volatile
- {%short}
  {0x%long long, 0x%long long}
 !#GameUI_Disconnect_ConnectionLost
 !#GameUI_Disconnect_HLTVRestricted
@@ -361,8 +342,6 @@
 "/*" inside block comment.  Block comments cannot be nested.
 "0x" must be followed by hex digits.
 "></img>
-"CMsgSteamDatagramConnectionQuality
-"CMsgSteamDatagramLinkLifetimeStats
 "MutableRawRepeatedField"
 "NETWORK_DISCONNECT_HLTVUNAVAILABLE
 "NETWORK_DISCONNECT_SENDNETOVERFLOW
@@ -403,22 +382,34 @@
 #%2i "%short" %short %short %.0f
 #%2i "%short" %short %short %short
 #%int - %short
-#=LLX
-#=`LX
 #GOTV_Reconnecting
 #GameUI_Console_%s_Saves
 #GameUI_Console_SaveGames
 #GameUI_Disconnect_BanAdded
+#GameUI_Disconnect_ConnectionClosing
+#GameUI_Disconnect_ConnectionLost
+#GameUI_Disconnect_ConnectionTimedout
 #GameUI_Disconnect_DeltaEntMessage
+#GameUI_Disconnect_DisconnectByServer
+#GameUI_Disconnect_DisconnectByUser
 #GameUI_Disconnect_Disconnected
 #GameUI_Disconnect_HLTVDirect
 #GameUI_Disconnect_HLTVStop
+#GameUI_Disconnect_InternalError
 #GameUI_Disconnect_KickBanAdded
 #GameUI_Disconnect_Kicked
 #GameUI_Disconnect_LeavingSplit
+#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
+#GameUI_Disconnect_LocalProblem_ManyRelays
+#GameUI_Disconnect_LocalProblem_NetworkConfig
+#GameUI_Disconnect_LocalProblem_Other
 #GameUI_Disconnect_NoMoreSplits
 #GameUI_Disconnect_NoSpectators
 #GameUI_Disconnect_Reconnection
+#GameUI_Disconnect_RemoteProblem_BadCert
+#GameUI_Disconnect_RemoteProblem_BadCrypt
+#GameUI_Disconnect_RemoteProblem_Timeout
+#GameUI_Disconnect_RemoteProblem_TimeoutConnecting
 #GameUI_Disconnect_Server
 #GameUI_Disconnect_SteamDropped
 #GameUI_Disconnect_SteamIDInUse
@@ -430,6 +421,7 @@
 #GameUI_Disconnect_TickMessage
 #GameUI_Disconnect_TimedOut
 #GameUI_Disconnect_TooManyCommands
+#GameUI_Disconnect_Unusual
 #GameUI_Disconnect_User
 #GameUI_Disconnect_UserCmd
 #GameUI_Language_Brazilian
@@ -481,7 +473,6 @@
 #include
 #include is NULL 
 #int#
-#k_ESteamDatagramMsg_RouterPingReply
 $#GameUI_Disconnect_BadServerPassword
 $#GameUI_Disconnect_ConnectionClosing
 $#GameUI_Disconnect_ConnectionFailure
@@ -562,16 +553,12 @@ $tI12CBSPTreeData
 %8d bytes BBox physics: %double boxes
 %8d bytes total VCollide Memory
 %8d bytes:%short
-%CMsgSteamDatagramGameServerAuthTicket
 %H:%M
 %H:%M:%S
 %NETWORK_DISCONNECT_CONNECTION_CLOSING
 %NETWORK_DISCONNECT_CONNECTION_FAILURE
 %NETWORK_DISCONNECT_DISCONNECT_BY_USER
 %NETWORK_DISCONNECT_SOUNDSMSG_OVERFLOW
-%[0-9]-%[0-9]
-%[^-]-%short
-%[^/]/%double
 %c.%08X.0000.0000.0000.0000.
 %c00000000000000
 %cBanned by server
@@ -590,7 +577,6 @@ $tI12CBSPTreeData
 %double -----------------------
 %double == '%short'
 %double PackedEntity leaks
-%double consecutive session request timeouts at %short; marking address as failed.
 %double false non-occlusions
 %double messages
 %double snapshot creation ticks referred
@@ -620,83 +606,25 @@ $tI12CBSPTreeData
 %int users
 %int:	"%short"%short
 %int:%int:"%short"
-%k_ESteamDatagramMsg_RouterPingRequest
 %llx,%llx,%double:
 %ls [wstring, len = %double]
 %s.bz2
 %s.vpk
 %s.vprof
 %s.ztmp
-%sConnection quality distribution:
-%sConnection quality histogram: (%double measurement intervals)
-%sCurrent rates:
-%sLatency variance histogram not available
-%sLatency variance histogram: (%double total measurements)
-%sLifetime stats received from remote host %.1fs ago:
-%sLifetime stats:
-%sNo connection quality distribution available.  (%double measurement intervals)
-%sNo lifetime stats received from remote host
-%sNo ping distribution available.  (%double samples)
-%sNo rate stats received from remote host
-%sPing distribution:
-%sPing histogram: (%double total samples)
-%sPing:%sms    long long signed char::* latency variance: %sms
-%sQuality:%5s%%  (Dropped:%4s%%  WeirdSeq:%4s%%)
-%sRate stats received from remote host %.1fs ago:
-%sRecv:%6.1f pkts/sec%6.1f K/sec
-%sSent:%6.1f pkts/sec%6.1f K/sec
-%sTotals
 %s_l_%d.lmp
 %s_lv
 %s_saves
 %s_tempcontent
 %sauto%double-%04i%02i%02i-%02i%02i%02i-%u-%short-%s.dem
 %short	%double	%.3f	%double	%.3f	%double	%.3f	%.3f	%.2f	%.3f	%.3f
-%short      0-25  :%5d  %.0f%%
-%short      300+  :%5d  %.0f%%
-%short     100  :%5d  %.0f%%   (All packets received in order)
-%short     25-50  :%5d  %.0f%%
-%short     5%% of pings <= %4dms
-%short     50-75  :%5d  %.0f%%
-%short     75-100 :%5d  %.0f%%
-%short     99+  :%5d  %.0f%%
-%short     <1  :%7d  %.0f%%
-%short     <50  :%5d  %.0f%%
-%short    1-2  :%7d  %.0f%%
-%short    100-125 :%5d  %.0f%%
-%short    125-150 :%5d  %.0f%%
-%short    150-200 :%5d  %.0f%%
-%short    2-5  :%7d  %.0f%%
-%short    200-300 :%5d  %.0f%%
-%short    5-10 :%7d  %.0f%%
-%short    50%% of intervals >= %3d%%
-%short    50%% of pings <= %4dms
-%short    50-75 :%5d  %.0f%%
-%short    75%% of intervals >= %3d%%
-%short    75%% of pings <= %4dms
-%short    75-90 :%5d  %.0f%%
-%short    90-95 :%5d  %.0f%%
-%short    95%% of intervals >= %3d%%
-%short    95%% of pings <= %4dms
-%short    95-97 :%5d  %.0f%%
-%short    97-99 :%5d  %.0f%%
-%short    98%% of intervals >= %3d%%
-%short    98%% of pings <= %4dms
-%short    >20  :%7d  %.0f%%
-%short    Dropped   :%11s pkts%7.2f%%
-%short    Duplicate :%11s pkts%7.2f%%
-%short    OutOfOrder:%11s pkts%7.2f%%
-%short    Recv wchar_t seq:%11s pkts
-%short    Recv:%11s pkts %15s bytes
-%short    Sent:%11s pkts %15s bytes
-%short    SeqLurch  :%11s pkts%7.2f%%
-%short    dead  :%5d  %.0f%%   (Expected to receive something but didn'unsigned short)
-%short   10-20 :%7d  %.0f%%
 %short "%short"
 %short %float
 %short %s...
 %short %short %short %short
 %short %short %short %short 
+%short %short = %double
+%short %short = %short
 %short %short the game
 %short %short: file size larger than 1 MB!
 %short %short: invalid file type.
@@ -711,10 +639,9 @@ $tI12CBSPTreeData
 %short IFileSystem::Init failed.
 %short Occlusion calls. %short (%.f%%) calls within jitter. %u/%u queries, %u/%u jobs in flight. %double threads in pool
 %short [%short]
-%short [%short] appears preferable to current primary %short [%short], but most recent communication is too long ago or ping sample is too stale.  Pinging.
+%short at %short
 %short can'unsigned short find frame from tick %double
 %short disconnected
-%short downtime warning expired; assumed back online.
 %short has invalid demo header ID.
 %short in solid list (not solid) (%double, %04X)
 %short in solid list (not solid) (%double, %04X) %.*short
@@ -722,6 +649,7 @@ $tI12CBSPTreeData
 %short is not signed char valid cvar
 %short is not signed char valid format.
 %short is out of range for KeyValues, which doesn'unsigned short support signed 64-bit numbers
+%short is reconnecting, with signed char different encryption key!
 %short not expected here.  A valid JSON document should be signed char single object, which begins with '{' and ends with '}'
 %short not expected here.  Missing ',' or ']'?
 %short not expected here.  Missing ',' or '}'?
@@ -731,11 +659,8 @@ $tI12CBSPTreeData
 %short overflowed reliable buffer
 %short overflowed reliable channel
 %short paused the game
-%short sent all three pings: front, back, and end-to-end.  This is redundant.
-%short sent front ping %double and end-to-end ping %double, which doesn'unsigned short make sense
 %short timed out
 %short unpaused the game
-%short#%double (%short)
 %short%03i.log
 %short%c..%cbin
 %short%cbin
@@ -808,8 +733,6 @@ $tI12CBSPTreeData
 &Aring;
 &Atilde;
 &Auml;
-&CMsgSteamDatagramClientPingSampleReply
-&CMsgSteamDatagramClientSwitchedPrimary
 &Ccedil;
 &ETH;
 &Eacute;
@@ -873,10 +796,6 @@ $tI12CBSPTreeData
 &igrave;
 &iquest;
 &iuml;
-&k_ESteamDatagramMsg_DataClientToRouter
-&k_ESteamDatagramMsg_DataRouterToClient
-&k_ESteamDatagramMsg_DataRouterToServer
-&k_ESteamDatagramMsg_DataServerToRouter
 &laquo;
 &macr;
 &mdash;
@@ -922,20 +841,19 @@ $tI12CBSPTreeData
 ', stored '
 ', trying to retrieve '
 ':' not expected inside an array.  ('[]' used when '{}' was intended?)
-'CMsgSteamDatagramLinkInstantaneousStats
 'NETWORK_DISCONNECT_BADSPECTATORPASSWORD
 'NETWORK_DISCONNECT_DELTAENTMSG_OVERFLOW
 'NETWORK_DISCONNECT_DIFFERENTCLASSTABLES
 'NETWORK_DISCONNECT_DISCONNECT_BY_SERVER
 '_? A1> A1> A1> A1>
 'false'
-'k_ESteamDatagramMsg_GameserverPingReply
 'null'
 'out_location' must not be NULL
 'true'
 (#GameUI_Disconnect_NoGOTVRelaysAvailable
 (%.3f,%.3f)
 (%.3f,%.3f,%.3f)
+(%`gQ
 (%double %.3f [%double/%double]) 
 (%double %.3f [%double]) 
 (%double %X [%double/%double]) 
@@ -947,7 +865,6 @@ $tI12CBSPTreeData
 (%zu) Descend: %short, (%short), %short
 (%zu) readdir failed to find '%short' in '%short'
 (*%short*), 
-(CMsgSteamDatagramClientPingSampleRequest
 (If sv_mincmdrate is > 0), this sets the maximum value for cl_cmdrate.
 (MMX) 
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
@@ -974,13 +891,10 @@ $tI12CBSPTreeData
 (std::future_error
 )#GameUI_Disconnect_PureServer_ClientExtra
 ).  Contact the program author for an update.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
-)CMsgSteamDatagramGameserverSessionRequest
 )NETWORK_DISCONNECT_NO_PEER_GROUP_HANDLERS
 )NETWORK_DISCONNECT_PURESERVER_CLIENTEXTRA
 )V,)U
 )Warning: Skipping command %short
-)k_ESteamDatagramMsg_ClientPingSampleReply
-)k_ESteamDatagramMsg_GameserverPingRequest
 )~,)}
 )~8)}
 *                                                  *
@@ -1035,7 +949,8 @@ $tI12CBSPTreeData
 +  %short
 + %short %short, %short, index %int, bits %int, value %short
 +#GameUI_Disconnect_DirectConnectReservation
-+= fz
++5@Xu
++=@Xu
 +C ;C
 +NETWORK_DISCONNECT_NO_GOTV_RELAYS_AVAILABLE
 +NETWORK_DISCONNECT_STEAM_VAC_CHECK_TIMEDOUT
@@ -1043,7 +958,6 @@ $tI12CBSPTreeData
 +U(;E(
 +clientport
 +hostport
-+k_ESteamDatagramMsg_ClientPingSampleRequest
 +net_port_try
 +port
 +sv_pure
@@ -1058,11 +972,9 @@ $tI12CBSPTreeData
 , udp
 ,#GameUI_Disconnect_VeryLargeTransferOverflow
 ,%03d
-,9_,~%
 ,NETWORK_DISCONNECT_STEAM_LOGGED_IN_ELSEWHERE
 ,NETWORK_DISCONNECT_VERYLARGETRANSFEROVERFLOW
 ,[^_]
-,k_ESteamDatagramMsg_GameserverSessionRequest
 -  %short
 - "%short" = "%.2f"
 - "%short" = "%int"
@@ -1098,7 +1010,6 @@ $tI12CBSPTreeData
 --> [%short] Split packet %4i/%4i seq %5i size %4i mtu %4i to %short [ total %4i ]
 -0123456789
 -> Reservation cookie %llx:  reason %short
--CMsgSteamDatagramGameserverSessionEstablished
 -HOST_HUNKLEVEL-
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
 -NoLoadPluginsForClient
@@ -1243,10 +1154,6 @@ $tI12CBSPTreeData
 .CMsgQAngle
 .CMsgQAngle"'
 .CMsgQAngle"4
-.CMsgSteamDatagramConnectionStatsClientToRouter
-.CMsgSteamDatagramConnectionStatsRouterToClient
-.CMsgSteamDatagramConnectionStatsRouterToServer
-.CMsgSteamDatagramConnectionStatsServerToRouter
 .CMsgVector
 .CMsgVector"O
 .CMsg_CVars"
@@ -1299,8 +1206,7 @@ $tI12CBSPTreeData
 .text
 .vtest
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%(/V
-/%8{T
+/%0dU
 /%double/delta
 /%double/delta?endtick=%double%short
 /%double/full
@@ -1308,7 +1214,7 @@ $tI12CBSPTreeData
 /%double/start
 /%double/start?tick=%double&tps=%.f&map=%short&protocol=%double
 /*.bf
-/-4{T
+/-XdU
 /../platform
 //%short/cfg/%short
 //MOD/maps/%s_exclude.lst
@@ -1316,9 +1222,7 @@ $tI12CBSPTreeData
 //mod/cfg/modsettings.cfg
 //official/%short
 //usrlocal/cfg/config.cfg
-/54{T
-/=4{T
-/=H{T
+/=(oP
 /C<rJ
 /EMSA1(
 /F,unsigned short	
@@ -1335,8 +1239,6 @@ $tI12CBSPTreeData
 0 - off, 1 - static prop color meshes are allocated from signed char single shared vertex buffer (on hardware that supports stream offset)
 0 - validate vhvhdr and studiohdr checksum, 1 - default, ignore checksum (useful if iterating physics model only for example)
 0 165 90
-0-100 Randomly discard N pct of packets instead of sending
-0-100 Randomly discard N pct of packets received
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
 0000000000000000000000000000000000000000000000000000000000000007
@@ -1436,43 +1338,31 @@ $tI12CBSPTreeData
 0=Off, 1=Normal, 2=Wireframe
 0=Off, 1=__int128&&, 2=Show Errors
 0[^_]
-0k_ESteamDatagramMsg_GameserverSessionEstablished
 0x%016llX
 0x%02X
 0x%llx
 1 - show hitches , 2 - show stalls
 1 CPU, Frequency: %.f %short,  Features: %short
 1.0.1.0
+1.0.2, 30-Dec-2001
 1.1.3
 10.0 Shader Model 4.0
 127.0.0.1
 131072
-14:54:32
 150 34 223
 16000
+18:22:45
 196608
 1: draw light cache entries
 1C97BEFC54BD7A8B65ACF89F81D4D4ADC565FA45
 1E589A8595423412134FAA2DBDEC95C8D8675E58
-1k_ESteamDatagramMsg_ClientToRouterSwitchedPrimary
-2#.CMsgSteamDatagramConnectionQuality
-2#.CMsgSteamDatagramLinkLifetimeStats"
 2#.CSVCMsg_GameEventList.descriptor_t
-2&.CMsgSteamDatagramGameServerAuthTicket
-2(.CMsgSteamDatagramDataCenterState.Server"
-2(.CMsgSteamDatagramLinkInstantaneousStats
-2).CMsgSteamDatagramRouterHealth.DataCenter
-2,.CMsgSteamDatagramDataCenterState.DataCenter
 2. Run vconfig to specify which game you'long double restrict working on.
 2000000000000000000000000000005A79FEC67CB6E91F1C1DA800E478A5
 207.173.177.12:27013
-21.CMsgSteamDatagramGameServerAuthTicket.ExtraField
-22.CMsgSteamDatagramClientPingSampleReply.DataCenter
 240 243 32
-25.CMsgSteamDatagramClientSwitchedPrimary.RouterQuality
 255 155 37
 2580F63CCFE44138870713B1A92369E33E2135D266DBB372386C400B
-26.CMsgSteamDatagramClientPingSampleReply.RoutingCluster
 26DC5C6CE94A4B44F330B5D9BBD77CBF958416295CF7E1CE6BCCDC18FF8C07B6
 2700.0
 27005
@@ -1523,15 +1413,12 @@ $tI12CBSPTreeData
 8[^_]
 9.0 Shader Model 2.0b
 9.0 Shader Model 3.0
-90r6w
 92 168 255
 93t"1
-95`Bv
 98w-unsigned short!
 999.0
 99999999
 99:r(
-9=`Bv
 9=tr9
 9BH~9
 9Bht,
@@ -1543,7 +1430,6 @@ $tI12CBSPTreeData
 9H8t(
 9P(unsigned short^
 9S tj
-9Z,tE
 9^$~8
 9^$~p
 9r(tJ
@@ -1598,12 +1484,10 @@ $tI12CBSPTreeData
 :float;9v
 ;%short %char %double;
 ;----- dt_ShowPartialChangeEnts -----
-;0w>r,
-;5`Bv
-;=`Bv
+;5 Ru
+;A,unsigned short/
 ;A<t9
 ;C ta
-;C to
 ;C$~@
 ;C<}&
 ;DispInfo_BuildPrimLists
@@ -1613,19 +1497,17 @@ $tI12CBSPTreeData
 ;P(tc
 ;P(}Uf;H6wO
 ;P<unsigned short;9H8t&
+;QTu!
 ;S tm
 ;S<unsigned short	
 ;S<}&
 ;V$}]
 ;VLtqv_
 ;VLt{vi
-;VTu!
-;^$}&
 ;^(unsigned short@;^unsigned short;
 ;_(tF;_$tA
 ;s$u$
 ;s$uH
-;s0}&
 ;s4tv
 ;short(tL;s$tG<
 ;short(tW;s$tR<
@@ -1648,18 +1530,17 @@ $tI12CBSPTreeData
 <:unsigned short(<-t$
 << NULL >>
 <<null>>
+<=t$<[t0
 <=unsigned short-<[t6
 <?t5<.t1<!unsigned short-
 <?ti<*te<#ta<!unsigned short]<+tY<@tU<(
 <Atf<G
 <EOF>
 <Itn<J
-<Jf9}
 <Lt#<Xt
 <Tt7<V
 <Vf9<F
 <[^_]
-<[unsigned short'1
 <\unsigned short!</unsigned short
 <hidden>
 <htq<void
@@ -1670,7 +1551,6 @@ $tI12CBSPTreeData
 <number>
 <parse error>
 <pre>
-<rf9}
 <slot:userid:"name">
 <string>
 <xt;<-t7
@@ -1695,37 +1575,23 @@ $tI12CBSPTreeData
 ?PublicExponent
 ?Shared memory space %short (%int) still has %int references.
 ?Too many fields in uploaddata (%int max = 255)
-?Tried to send datagram to invalid Steam ID %short
 ?UUUUUU
 ?[^_]
 ?forcing crash
 ?particle
-@(PN"
+@$^BU
+@(^BU
 @(unknown)
-@, tr
-@,@tS
 @-condebug
 @0<	u1
 @0<*u
 @0<*unsigned short
 @0</unsigned short
-@<D$[
 @?netsupport
-@@ N"
-@@0N"
-@@h$[
-@@pN"
 @CUNG
 @L9FLt
 @[^_]
-@h8%[
-@long #[
-@long long,#[
-@long\%[
-@p&#[
-@pt%[
 @tU9;u
-@|1#[
 A file with this name is already in the pool.
 A protocol message was rejected because it was too big (more than 
 A. C.
@@ -1756,13 +1622,10 @@ APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %double!
 ARCHIVE
 ARIFF
 ASIGTERM received, forcing immediate shutdown.
-Abandoning attempt to contact %s.  %short
-Abandoning attempt to establish session on %s.  %short
-Abandoning attempt to migrate to %short, relay is shutting down soon.
-Abandoning migration to %s.  We obtained signed char session on this relay, but decided to use %short as the primary instead.
 Aborting download of %short
 Ac@tr
 Accepted GOTV relay proxy from whitelisted IP address: %short
+Accepting Steam Net connection %long long (%short)
 Acknowledging reliable snapshot failed: ack %double while waiting for %d.
 Activate/deactivate the occlusion system.
 Activate/deactivate wireframe rendering of what the occlusion system is doing.
@@ -1834,15 +1697,11 @@ Assertion Failed: rsaEncryptor.FixedCiphertextLength() <= UINT32_MAX / cBlocks
 Assigned Steam ID %short, which is of an unexpected type!
 Assigned anonymous gameserver Steam ID %s.
 Assigned persistent gameserver Steam ID %s.
+Associating NetChan %short (%short) with Steam Net Connection handle %long long
 At least this many occluders will be used, no matter how big they are.
 Ate : upper-mid front unrounded vowel
 Attempt to compress out of band voice payloads (360 only).
 Attempt to open streaming socket to remote host '%short'.  Stream sockets only supported to ordinary IPv4 addresses
-Attempt to send to unknown address type %double
-Attempting connection to service in data center '%short'
-Attempting to connect via steam datagram using unsigned ticket, as per steamdatagram_client_debugticket_address
-Attempting to negotiate session.
-Attempting to restore session.
 Audio Info:
 August
 AuthenticAMD
@@ -1855,10 +1714,12 @@ Automatically broadcasts all games as GOTV demos through Steam.
 Automatically broadcasts all games as GOTV[1] demos through Steam.
 Automatically records all games as GOTV demos.
 Available flags to search for: 
+Available settings:
 Average the next N frames.
 Avg Keyframe: %short Bytes, %.3f ms (%.f max, %.f recent max)
 B$PRS
 B$XZVh
+B$^BU
 B. C.$C.(A.,A.0E.,C.
 B. E.
 B. G.
@@ -1867,7 +1728,6 @@ B. O.
 B/sync?fragment=%double
 B0;B4t
 B0Z[]
-B1.0.2, 30-Dec-2001
 B3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF
 B4+B0
 B4050A850C04B3ABF54132565044B0B7D7BFD8BA270B39432355FFB4
@@ -1880,11 +1740,7 @@ BL+BH
 BP+BT
 BSPHeader_t
 BTotal CalcDelta MS: %.2f
-BUG_network_config_mismatch
-BUG_no_ping_data
 BackUp() can only be called after signed char successful Next().
-Backup router #%double at %short going offline in %double seconds; seeking replacement
-Backup router: %short  Ping = %double+%double=%double (front+back=total)
 Bad Password
 Bad auth data from %short
 Bad brushside texinfo
@@ -1980,12 +1836,15 @@ By default, player must maintain signed char reliable connection to Steam server
 Byte size calculation and serialization were inconsistent.  This may indicate signed char bug in protocol buffers or it may be caused by concurrent modification of the message.
 ByteQueue: size specified for UndoLazyPut is too large
 C 9F4|
+C XRS
 C$;S(~&
+C$PVA
+C$x=Q
 C(+B|
 C(+C$
-C(4Av
+C(0VA
 C(;C,
-C(`bE
+C,XRS
 C. A.$A.(C.,A.0E.
 C. A.$A.(C.,A.0E.,B.
 C. A.$A.(C.,A.0E.,I.
@@ -2006,6 +1865,11 @@ C. L.
 C. Q.
 C302F41D932A36CDA7A3462F9E9E916B5BE8F1029AC4ACC1
 C302F41D932A36CDA7A3463093D18DB78FCE476DE1A86297
+C4XRS
+C4p_S
+C8XRS
+C<$~unsigned long
+C@p_S
 CAlignedNewDelete<16, CRefCounted<CRefCountServiceBase<true, CRefMT> > >
 CAppSystemGroup
 CAsyncOcclusionQuery
@@ -2052,7 +1916,6 @@ CCLCMsg_Move
 CCLCMsg_RespondCvarValue
 CCLCMsg_SplitPlayerConnect
 CCLCMsg_VoiceData
-CCallResult<ConfigFetch, HTTPRequestCompleted_t>
 CCallback<CSteam3Server, GSPolicyResponse_t, true>
 CCallback<CSteam3Server, SteamServerConnectFailure_t, true>
 CCallback<CSteam3Server, SteamServersConnected_t, true>
@@ -2071,14 +1934,11 @@ CColorMeshData::CreateResource
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CCopyableUtlVector<IClient*>
-CCopyableUtlVector<SteamDatagramTransport::SteamDatagramNetwork::AddressRange>
-CCopyableUtlVector<SteamDatagramTransport::SteamDatagramNetwork::DataCenter>
-CCopyableUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterAddress>
-CCopyableUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterAddressLookup>
-CCopyableUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterCluster>
+CCopyableUtlVector<char>
 CCoreDispInfo
 CCvarQuery
 CD9CHsK
+CDXRS
 CDataManager<CDispCollTree, CDispCollTree*, bool, CThreadFastMutex>
 CDataManagerBase
 CDatatableStack
@@ -2171,6 +2031,7 @@ CGameServer
 CGameServer::AssignClassIds: too many server classes (%int, MAX = %int).
 CGameServer::BroadcastSound:  Recipient Filter for sound (reliable: %short, init: %short) with bogus client index (%int) in list of %int clients
 CGameServer::DumpPrecacheStats: invalid CPrecacheUserData length (%double)
+CH$~unsigned long
 CHEAT
 CHECK failed: !checkpoints_.empty(): 
 CHECK failed: !coded_out.HadError(): 
@@ -2337,6 +2198,7 @@ CHLTVServer::FireGameEvent: failed to serialize event '%short'.
 CHLTVServer::RunFrame
 CHLTVServer::StartMaster: game event %short not found.
 CHLTVServer::UpdateTick
+CHXRS
 CHin : voiceless postalveolar affricate
 CHostState::OnClientConnected
 CHostState::OnClientDisconnected
@@ -2347,7 +2209,6 @@ CHostState::State_GameShutdown
 CHostState::State_LoadGame
 CHostState::State_NewGame
 CHunkMemory
-CIDR address range '%short' in data center '%short' not accepted; address low bits outside of prefix mask must be 0
 CJob
 CKeyValuesDumpContextAsDevMsg
 CKeyValuesDumpForStatusReport
@@ -2425,33 +2286,6 @@ CModelRender::ModelInstanceLightingState_t pool
 CModelRender::StudioSetupLighting
 CMsgQAngle
 CMsgRGBA
-CMsgSteamDatagramClientPingSampleReply
-CMsgSteamDatagramClientPingSampleReply_DataCenter
-CMsgSteamDatagramClientPingSampleReply_RoutingCluster
-CMsgSteamDatagramClientPingSampleRequest
-CMsgSteamDatagramClientSwitchedPrimary
-CMsgSteamDatagramClientSwitchedPrimary_RouterQuality
-CMsgSteamDatagramConnectionQuality
-CMsgSteamDatagramConnectionStatsClientToRouter
-CMsgSteamDatagramConnectionStatsRouterToClient
-CMsgSteamDatagramConnectionStatsRouterToClient from %short missing seq_num_r2c
-CMsgSteamDatagramConnectionStatsRouterToServer
-CMsgSteamDatagramConnectionStatsServerToRouter
-CMsgSteamDatagramDataCenterState
-CMsgSteamDatagramDataCenterState_DataCenter
-CMsgSteamDatagramDataCenterState_Server
-CMsgSteamDatagramDiagnostic
-CMsgSteamDatagramGameServerAuthTicket
-CMsgSteamDatagramGameServerAuthTicket_ExtraField
-CMsgSteamDatagramGameserverPing
-CMsgSteamDatagramGameserverSessionEstablished
-CMsgSteamDatagramGameserverSessionRequest
-CMsgSteamDatagramLinkInstantaneousStats
-CMsgSteamDatagramLinkLifetimeStats
-CMsgSteamDatagramNoSession
-CMsgSteamDatagramRouterHealth
-CMsgSteamDatagramRouterHealth_DataCenter
-CMsgSteamDatagramRouterPingReply
 CMsgVector
 CMsgVector2D
 CMsg_CVars
@@ -2472,6 +2306,7 @@ CNETMsg_StringCmd_t
 CNETMsg_Tick
 CNETMsg_Tick_t
 CNetChan
+CNetChan destructed
 CNetChan::ProcessMessages
 CNetChan::ProcessPacket
 CNetChan::SendDatagram
@@ -2704,10 +2539,6 @@ CStaticPropMgr::PrecacheLighting - end
 CStaticPropMgr::PrecacheLighting - start
 CSteamAppSystemGroup
 CSteamApplication
-CSteamDatagramTransportClient::RecvDatagram
-CSteamDatagramTransportClient::SendDatagram
-CSteamDatagramTransportClient::Think
-CSteamNetworkingUtils
 CSteamSocketMgr
 CStudioConvexInfo
 CStudioHdr::CActivityToSequenceMapping::FindMapping
@@ -2752,11 +2583,7 @@ CUtlStreamBuffer does not support TEXT_BUFFER'short use CUtlBuffer
 CUtlSymbol::AddString
 CUtlSymbol::Find
 CUtlVector<IClient*, CUtlMemory<IClient*, int> >
-CUtlVector<SteamDatagramTransport::SteamDatagramNetwork::AddressRange, CUtlMemory<SteamDatagramTransport::SteamDatagramNetwork::AddressRange, int> >
-CUtlVector<SteamDatagramTransport::SteamDatagramNetwork::DataCenter, CUtlMemory<SteamDatagramTransport::SteamDatagramNetwork::DataCenter, int> >
-CUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterAddress, CUtlMemory<SteamDatagramTransport::SteamDatagramNetwork::RouterAddress, int> >
-CUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterAddressLookup, CUtlMemory<SteamDatagramTransport::SteamDatagramNetwork::RouterAddressLookup, int> >
-CUtlVector<SteamDatagramTransport::SteamDatagramNetwork::RouterCluster, CUtlMemory<SteamDatagramTransport::SteamDatagramNetwork::RouterCluster, int> >
+CUtlVector<char, CUtlMemory<char, int> >
 CVEngineServer
 CVEngineServer::Changelevel with NULL s1
 CVEngineServer::PrecacheDecal: '%short' overflow, too many decals
@@ -2767,7 +2594,6 @@ CVirtualTerrain
 CVoiceServer
 CVoxelTree
 CXboxSystem
-C`(ZW
 CalcDelta MS / %% time / Encode MS / # Changed / # Unchanged / Class Name
 Call to NULL CStudioHdr::GroupStudioHdr()
 CallAssertFailedNotifyFunc
@@ -2798,9 +2624,7 @@ Can'unsigned short call SetVolumeByGuid from server
 Can'unsigned short call StopSoundByGuid from server
 Can'unsigned short changelevel, not running server
 Can'unsigned short changelevel2, not in signed char map
-Can'unsigned short crate client.  %short
 Can'unsigned short create class tables.
-Can'unsigned short delay send signed char packet larger than maxroutable size %double/%double
 Can'unsigned short find steam app user info.
 Can'unsigned short get here.
 Can'unsigned short get here: failed to get default value as string
@@ -2811,8 +2635,12 @@ Can'unsigned short load lump %int, allocation of %int bytes failed!!!
 Can'unsigned short load lump %int, range is 0 to %int!!!
 Can'unsigned short load map from invalid handle!!!
 Can'unsigned short load pure server whitelist in %s.
+Can'unsigned short match up steam connection user data %lld to netchan.  This can happen due to signed char race condition, just as we close the connection.  But otherwise it'short probably signed char bug
+Can'unsigned short queue packet to net chan %short at address %s.  No associated steam net connection!
 Can'unsigned short recreate dictionary for %short, file must be writable!!!
 Can'unsigned short retry, no previous GOTV[%u] connection
+Can'unsigned short send ad-hoc to address %short, no steam net connection
+Can'unsigned short send packet to net chan %short at address %s.  No associated steam net connection!
 Can'unsigned short start game, no valid server.dll loaded
 Can'unsigned short unbind ESCAPE key
 Can'unsigned short use cheat command %short in multiplayer, unless the server has sv_cheats set to .
@@ -2820,13 +2648,10 @@ Can'unsigned short use cheat cvar %short in multiplayer, unless the server has s
 Can'unsigned short use command %short in multiplayer.
 Cannot alias an existing %short
 Cannot call BuildFile on signed char DescriptorPool that uses signed char DescriptorDatabase.  You must instead find signed char way to get your file into the underlying database.
-Cannot connect to proxied gameserver %short via steam datagram.  Library has not been initialized yet (or it failed).
-Cannot connect to proxied gameserver %short via steam datagram.  We don'unsigned short have an authorization ticket!
 Cannot create http put: %short, %u bytes lost
 Cannot direct-connect to Valve CS:GO Server
 Cannot direct-connect to community CS:GO Server, visit http://steamcommunity.com/dev/managegameservers
 Cannot find brush %short convex hull
-Cannot find service ID in network.  We don'unsigned short know what data center we'long double restrict trying to connect to!
 Cannot get Steam HTTP interface
 Cannot load, retrying in 5 seconds..
 Cannot read %short
@@ -2844,6 +2669,7 @@ Cbuf_AddText: buffer overflow
 Cbuf_Execute
 Cbuf_Init()
 Cbuf_Shutdown()
+ChXRS
 Change bias value for computing circle buffer
 Change server to the specified map
 Change the maximum number of players allowed on this server.
@@ -2853,7 +2679,6 @@ Cheat code "%short" activated!
 Cheat code "%short" has less than %int code elements!
 Check for errors!
 Check your -game parameter or VCONFIG setting.
-Check your Internet connection, and make sure your browser can access the following URL:
 CheckOriginInPVS:  cluster would read past end of pvs data (%int:%int)
 CheckPureServerVPKFiles
 Checking response.
@@ -2883,18 +2708,17 @@ ClientDLL_InitRecvTableMgr: overflowed MAX_DATATABLES
 ClientVersion=
 Clock speed: %.0f ... unsigned char::*
 Clone() is not implemented yet.
+CloseAllSockets
+CloseSocket
+Closing Steam Net Connection to %short, handle %long long (%double %short)
 Closing connection to server.
 Closing socket, upload succeeded.
-Cluster %short has invalid router address '%short'
-Cluster '%short' has signed char selection penalty of %dms for load balancing purposes.  (As per %short).
-Cluster '%short' no longer has signed char selection penalty for load balancing purposes.  (As per %short).
-Cluster '%short' selection penalty for load balancing purposes changed from %dms to %dms.  (As per %short).
+Clx=Q
 CmdEncryptedDataMessageCodec failed to parse embedded message
 CmdEncryptedDataMessageCodec key size is %double, but %double is expected!
 CmdEncryptedDataMessageCodec: netchannel failed processing embedded message %s.
 Cmd_Init()
 Cmd_Shutdown()
-Code of relay cluster to use.  If not empty, we will only use relays in that cluster.  E.g. 'iad'
 Cofactor
 Collect CPU usage stats
 Collision stats: %double with physics, %double with hull, %double with ray.
@@ -2907,10 +2731,6 @@ Comma-separated IP ranges which require Steam3 challenge protocol even for GOTV 
 CommandLine
 Commencing GOTV[%u] connection retry to %short
 Commencing game stats upload connection.
-Communication with at least one Steam Datagram routing cluster has been restored.
-Communications with routing cluster '%short' established.
-Communications with routing cluster '%short' have been disrupted.
-Communications with routing cluster '%short' restored.
 CompareRecvPropToSendProp: missing signed char property.
 Completed GOTV demo "%short", recording time %.f
 ConCommand
@@ -2924,7 +2744,6 @@ ConVars (non-default)
 Con_Init()
 Con_Shutdown()
 Conditional Error: %short
-Config file '%short' not present; not loaded.
 Configuration layout version. Bump this to force signed char reset of the PS3 save game / settings.
 Connect to GOTV server and relay broadcast.
 ConnectRedirectAddress:
@@ -2934,6 +2753,7 @@ Connected to Steam DEV universe.
 Connected to Steam universe %double
 Connecting to
 Connecting to game stats harvesting server.
+Connection closing
 Connection failed after %int retries.
 Connection failed.
 Connection lost
@@ -2949,8 +2769,6 @@ Console History (reversed)
 Console output gets written to this file
 Consume the specified number of threads in the thread pool
 Contact email for server sysop
-Control message of type %double failed serialization consistency check!  (%double, expected %double)
-Control message of type %double is too big.  (%double bytes; max is %double)
 Controls the speed of light interpolation, 0 turns off interpolation
 Convert signed char recorded .vprof file to .csv.
 Cooperative play.
@@ -2990,6 +2808,7 @@ Couldn'unsigned short write to read-only file %short, using file _temp_mapcycle.
 Counter-Strike: Global Offensive
 Counter-Strike: Global Offensive Dev
 Counter-Strike: Source
+Cp=`__int128
 Crash
 Create dictionary for current strings.
 CreateEvent: event '%short' not registered.
@@ -2997,9 +2816,9 @@ CreateFragmentsFromFile: '%short' doesn'unsigned short exist.
 CreateFragmentsFromFile: '%short' size exceeds net_maxfilesize limit (%int MB).
 CreateFragmentsFromFile: '%short' too big (max %int bytes).
 CreateFragmentsFromFile: couldn'unsigned short open '%short'.
+CreateHostedDedicatedServerListenSocket for socket '%short' failed /+/ port %u vport %double
 CreateInterface
 CreateSimpleThread
-CreateSimpleThread failed
 Created class baseline: %int classes, %int bytes.
 Creating compressed version of file %short (%double -> %double)
 Creating dictionary %short
@@ -3523,6 +3342,7 @@ CryptoPP::X917RNG
 CryptoPP_Align16
 Cryptographic algorithms are disabled after signed char power-up self test failed.
 Cryptographic algorithms are disabled before the power-up self tests are performed.
+CtXRS
 CubeMap textures
 Culdn'unsigned short duplicate handle
 CullPropsFromProxies for class %short, client=%double:
@@ -3538,9 +3358,11 @@ Curve
 Cut : voiceless velar stop
 CxEMPTf
 Cycles threadpool reservation by powers of 2
+C|XRS
 D"A/oyu
-D$ X|V
+D$ 8rR
 D$ ff&@
+D$$`2%
 D%double decals: %double permanent, %double dynamic
 D. C.
 D. R.
@@ -3584,10 +3406,6 @@ DTI: Wrote instrumentation data into %s.
 DTI: wrote client stats into %s.
 DTName	CalcDelta calls	CalcDelta ms	Encode calls	Encode ms	ShouldTransmit calls	ShouldTransmit ms	WriteDeltaProps ms	%% manual mode	Total	Percent
 DVariant type %int unknown
-Data center '%short' has missing or invalid 'address_ranges'
-Data contains revision %double, not newer than current revision %double; ignoring.
-DataCenter
-DataRouterToClient
 DataTable warning: %short
 DataTable_CreateClientClassInfosFromServerClasses:  No serverGameDLL loaded!
 DataTable_CreateClientTablesFromServerTables:  No serverGameDLL loaded!
@@ -3611,7 +3429,6 @@ Delta frames: %short Bps, %.3f ms/frame.
 Demo debug info.
 DemoBufferInitParams_t
 DenyFile: %short (ID %int)
-Dependency unavailable
 Describe current gametags.
 Description : %short
 DescriptorProto
@@ -3620,20 +3437,23 @@ DevMsg
 DevWarning
 Developer
 DeveloperVerbose
-Didn'unsigned short find quality metrics for old primary?
 Didn'unsigned short receive protocol failure data.
 Dig : voiced alveolar flap or tap
 Dig : voiced bilabial stop
 Disable
 Disable area to area connection testing.
 Disallowed by game dll
-Discarding inactive session on %s.  %short
+Disassociating NetChan %short (%short) from Steam Net Connection handle %long long
 Discarding queued download of %short
 Discards incoming message: <0|1|name>
 Disconnect
+Disconnect by server
 Disconnect by server.
+Disconnect by user
 Disconnect game from server.
 Disconnect: %s.
+Disconnected by user
+Disconnected from Server
 DispCollTrees_Alloc
 DispHullTest_Tris
 DispInfo
@@ -3733,7 +3553,6 @@ ERROR: CPooledVBAllocator_ColorMesh::Deallocate cannot be called before Init
 ERROR: CPooledVBAllocator_ColorMesh::Deallocate, after all allocations have been freed too few verts total have been deallocated (bug in calling code)
 ERROR: demo file protocol %int outdated, engine version is %int 
 ESplitScreenMessageType
-ESteamDatagramMsgID
 EXECUTABLE_PATH
 Echo log information to the console.
 Echo text to console.
@@ -3768,7 +3587,6 @@ End mem_test
 End of input was reached and '[' was not matched by ']'
 End of input was reached and '{' was not matched by '}'
 End-of-file inside block comment.
-End-to-end connection to data center '%short': %short
 EndWatchdogTimer
 Engine hunk overflow!
 Engine only supports 255 ConVars marked %int
@@ -3792,7 +3610,6 @@ EqualityComparisonFilter: did not receive the same data on two channels
 EquivalentTo
 Error
 Error buffer for %short written to %short
-Error creating HTTP request to fetch config from CDN.
 Error downloading %short
 Error downloading %short%short
 Error in bitbuf [%short]: buffer overrun. Debug in bitbuf_errorhandler.cpp
@@ -3815,7 +3632,7 @@ EventSystem001
 Events: %12llu key not found.
 Exceeded max number of datatable proxies in SendTable_BuildHierarchy()
 Exclu Props   : %int
-Exe build: 13:29:17 Sep  6 2017 (%int) (%int)
+Exe build: 09:50:33 Nov 17 2017 (%int) (%int)
 Exe version %short (%short)
 Execing config: %short
 Execute script file if file exists.
@@ -3847,17 +3664,16 @@ Extension range end number must be greater than start number.
 ExtensionRange
 Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend signed char non-lite type to contain signed char lite type, but the reverse is allowed.
-ExtraField
 F +F,
 F$9A$
+F$PVA
 F(+B|
+F(0VA
 F(9A(u
-F(`bE
 F,9N$
-F,|"[
 F4;F8u
 F< tL
-F<VhV
+F<6^R
 F@;FP
 FA8f=
 FALSE OCCLUSION FOUND: #%double
@@ -3902,30 +3718,18 @@ FH;FL
 FSKey=
 FaceBrushLists
 FaceBrushes
-Failed
 Failed to CRC %short
-Failed to allocate client to take ping measurements.  %short
 Failed to allocate memory
 Failed to allocate minimum memory requirement for game (%double MB)
-Failed to bind socket.  Error code 0x%08X.
 Failed to cache %short
-Failed to communicate with routing cluster '%short'.
 Failed to connect to signed char gameserver, client version %double, server version %double
-Failed to create UDP socket to talk to %s.  %short
 Failed to create net channel.
-Failed to fetch network config from CDN.  Steam datagram service will not be available!
-Failed to fetch network config from CDN.  Using local network config, which might be out of date.
 Failed to load %short
 Failed to load gamerulescvars.txt, game rules cvars might not be reported to management tools.
 Failed to load plugin "%short"
 Failed to load server binary
 Failed to read demo header.
 Failed to retrieve %short fragment %double
-Failed to save steam datagram ticket cache.  We might not be able to reconnect if we crash and cannot ask for another ticket!
-Failed to set socket nonblocking mode.  Error code 0x%08x.
-Failed to set socket recv buffer size.  Error code 0x%08x.
-Failed to set socket send buffer size.  Error code 0x%08x.
-Failed to set steam datagram ticket.  %short
 Failed to write received file '%short'!
 Failed, using default cubemap '%short'
 FastHexToBuffer() wants non-negative integers, not 
@@ -3994,8 +3798,6 @@ FmtStrVSNPrintf truncated to %double without QUIET_TRUNCATION specified!
 FoCLcx
 Folder in the game directory where server logs will be stored.
 For FCVAR_REPLICATED, ConVar must be defined in client and game .dlls (%short)
-For debugging, generate our own (unsigned) ticket, using the specified gameserver address.  Router must be configured to accept unsigned tickets.
-For debugging.  Override list of relays from the config with this set (maybe just one).  Comma-separated list.
 For servers behind NAT/DHCP meant to be exposed to the public internet, this is the public facing ip address string: ("x.x.x.x" )
 Force VXConsole updates every frame; smoother vprof data on PS3 but at signed char slight (~0.2ms) perf cost.
 Force async reads to serialize for profiling
@@ -4010,7 +3812,6 @@ Force user input to this split screen player.
 Forces all model file data into cache on model load.
 Forces larger payloads.
 Forcing client reconnect (%int)
-Forgetting client %s.  Last communication was %.f seconds ago
 Fork : voiceless labiodental fricative
 Forked child just called SYS_exit.
 Forward command to server.
@@ -4109,7 +3910,6 @@ GameEventTransmitter: failed to serialize event '%short'.
 GameServerData001
 GameTags
 GameUISystemMgr001
-GameserverPingReply
 GeneratableCryptoMaterial: this object does not support key/parameter generation
 Generate signed char minimal hiearchical report to the console.
 Generate signed char report to the console based on budget group.
@@ -4153,14 +3953,12 @@ GetTestScriptMgr()->CheckPoint
 GetTickInterval returned bogus tick interval (%float)[%float to %float is valid range]
 GetUInt32
 GetUInt64
-Got network config from CDN.  %short
 Grace request retry for unreserved server...
 GroupOID
 GroupSize
 Grouper
 H(9@,u
 H([^_]
-H,[^_]
 H.@S.DC.HC.LA.PA.TB.XC.\D.`K.@o.DC.HC.LA.PA.TC.XC.\D.`K.@C.LC.PQ.@L.DG.HC.LA.PK.DA.HB.LC.PK.@
 H.@S.DC.HC.LA.PA.TB.XC.\D.`K.@o.DC.HC.LA.PA.TC.XC.\D.`K.@C.LC.PU.@L.DG.HC.LA.PK.DA.HB.LC.PK.@
 H.PU.TC.XC.\A.`A.dB.hC.lD.pK.Pq.TC.XC.\A.`A.dC.hC.lD.pK.PC.\C.`Q.PL.TG.XC.\A.`K.TA.XB.\C.`K.P
@@ -4212,7 +4010,6 @@ Help : breathy-voiced glottal fricative
 Help : voiceless glottal fricative
 Help Text
 Hex and octal numbers must be integers.
-Hh[^_]
 Histogram : Entities per level
 Hit end of input before closing quote (%char)
 Hit end of line before closing quote (%char)
@@ -4361,9 +4158,6 @@ IStaticPropMgr
 IStaticPropMgrClient
 IStaticPropMgrEngine
 IStaticPropMgrServer
-ISteamDatagramTransportClient
-ISteamDatagramTransportGameserver
-ISteamNetworkingUtils
 ISteamSocketMgr
 ITraceFilter
 ITraceListData
@@ -4378,10 +4172,8 @@ IVirtualMeshEvent
 IVoiceServer
 IXboxSystem
 If # frames is -1, then it will average all the remaining frames in the vprof file.
-If N consecutive pings to signed char port fail, after having received successful communication, mark that port as unavailable for signed char while, and try signed char different one.
 If enabled, channel will drop client when sending too much data causes buffer overrun
 If enabled, hides all surfaces which have been painted.
-If non zero, listen for proxied traffic on the specified port
 If non-zero when signed char map loads, static props won'unsigned short be loaded
 If set then include this secret when doing UDP logging (will use 0x53 as packet type, not usual 0x52)
 If set to 1, does an optimization to prevent extra SendTable_Encode calls.
@@ -4397,24 +4189,12 @@ If set, whenever signed char game ends, if the server uptime exceeds this number
 If set, whenever signed char game ends, if the server uptime is less than this number of hours, the server will continue running regardless of sv_memlimit.
 If set, whenever signed char game ends, if the total memory used by the server is greater than this # of megabytes, the server will exit.
 If the clock offset is less than this amount (in milliseconds), then no clock correction is applied.
-If the first N pings to signed char port all fail, mark that port as unavailable for signed char while, and try signed char different one.  Some ISPs and routers may drop the first packet, so setting this to 1 may greatly disrupt communications.
 If true when log when signed char query is blocked (can cause very large log files)
 Ignoring follow-up reservation request from %short: server reservation transition in progress (for %double more seconds)
-Ignoring request by %short to migrate to %s.  Failed to allocate resources to talk to that relay.
-Ignoring request by %short to migrate to %s.  Target address appears to be in signed char different relay cluster?  (%short)
-Ignoring request by %short to migrate to %s.  We already know that relay is shutting down very soon.
-Ignoring request by %short to migrate to %s.  We don'unsigned short recognize that target address in the network config.
-Ignoring request by %short to migrate to %s.  We had problems communicating with that relay %.1fs ago.
 Ignoring unexpected sync from gc, match %llu:%double
 Ignoring unexpected sync from gc, match %llu:%double, expected %llu:%double
 Ignoring unexpected sync, %double bytes, resync %double
-Ignoring/abandoning migration request.  Current primary %short is requesting to send us to %short, but our migration target is %short?
-Ignoring/abandoning migration request.  Current primary %short no longer has signed char request active
-Ignoring/abandoning migration request.  SDR client deactivated, or no primary selected
 Import "
-Incorrect client challenge in GameserverSessionEstablished from %s.  Reply could be spoofed, ignoring.
-Incorrect client challenge in RouterPingReply from %s.  Reply could be spoofed, ignoring.
-Incorrect client cookie in NoSession from %s.  Could be spoofed, ignoring.
 Increment specified convar value.
 Index error writing string table baseline %short
 Index must be -1 for non-repeated fields
@@ -4425,7 +4205,6 @@ Indicates how far ahead in seconds to preload animations.
 Indicates whether or not the tv should use delta frames for storage of intermediate frames. This takes more CPU but significantly less memory.
 InitMaterialSystem()
 InitStudioRender()
-Initial attempt to contact %short failed.  Giving up after %double consecutive failures
 InitializeEntityDLLFields
 Initializing Steam libraries for INSECURE Internet server.  Authentication and VAC not requested.
 Initializing Steam libraries for LAN server
@@ -4454,24 +4233,18 @@ Internal heap reports: %5.2f MB (%double bytes)
 Interval (in seconds) at which vprof will batch up data and dump it to the console.
 Interval_per_tick %float out of range [%float to %float]
 Invaid pEntity
-Invalid JSON data on line %double: %short
 Invalid Packed Data handle %double
 Invalid Steam key length
 Invalid Steam key size.
 Invalid address or port: %short
-Invalid address range '%short' in data center '%short'
 Invalid authentication certificate length.
 Invalid blackbox type: %short
 Invalid certificate
 Invalid challenge packet.
-Invalid channel number %double
 Invalid client specified in GetPrevCheckTransmitInfo
-Invalid cluster name '%short'; must be exactly 3 or 4 characters
-Invalid combination of steam datagram config and gameserver sample.  %short
 Invalid connection.
 Invalid control characters encountered in text.
 Invalid cross-play platform id
-Invalid data center name '%short'; must be exactly 3 or 4 characters
 Invalid dictionary entry for cvar # %double
 Invalid entity
 Invalid escape sequence in string literal.
@@ -4587,15 +4360,12 @@ List all collideable displacements
 List bound keys with bindings.
 List loaded models.
 ListPureServerFiles
-Listening for Steam datagram transport on port %double
 Lists banned users.
 Load of %short took %.3f msec
 LoadFromBuffer: missing {
 Loaded %double occlusion records from %short
-Loaded %short network config file.  %short
 Loaded plugin "%short"
 Loaded plugins:
-Loaded revision %double OK
 Loading brush, compacting heap...
 Loading map "%short"
 Loading map: %short
@@ -4631,9 +4401,6 @@ LoggingSystem_RegisterLoggingListener
 LoggingSystem_ResetCurrentLoggingState
 LoggingSystem_SetChannelSpewLevelByTag
 Logic Error in CExpressionEvaluator
-Lost backup #%double session on %s.  %short
-Lost connectivity to ALL Steam Datagram routing clusters.  Possible problem with local internet connection?
-Lost primary session on %s.  %short
 Lowered '%short' -> '%short'
 Lump %double crc %lu
 MATCHFRAMEWORK_001
@@ -4650,31 +4417,6 @@ MSG_SPLITSCREEN_ADDUSER
 MSG_SPLITSCREEN_REMOVEUSER
 MSG_SPLITSCREEN_TYPE_BITS
 Make sure entities correctly report whether or not their network data has changed.
-Malformed MsgSteamDatagramDataRouterToClient from %short: packet too small
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: Failed to varint decode size of stats message
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Header size %double, stats message size %double
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %double, packet size %double
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: header size is %double, packet size is %double
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: packet too small
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: stats message size doesn'unsigned short make sense.  Header size %double, stats message size %double
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: stats message size doesn'unsigned short make sense.  Stats message size %double, packet size %double
-Malformed MsgSteamDatagramDataRouterToServer from %short: Failed to varint decode size of stats message
-Malformed MsgSteamDatagramDataRouterToServer from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %double, packet size %double
-Malformed MsgSteamDatagramDataRouterToServer from %short: Hit end of packet trying to read 16-bit channel ID
-Malformed MsgSteamDatagramDataRouterToServer from %short: Hit end of packet trying to read 8-bit channel ID
-Malformed MsgSteamDatagramDataRouterToServer from %short: Invalid payload lead byte 0x%02x, unknown encoding of channel type
-Malformed MsgSteamDatagramDataRouterToServer from %short: Invalid payload lead byte 0x%x.  Currently only signed char single unreliable payload supported.
-Malformed MsgSteamDatagramDataRouterToServer from %short: packet too small
-Malformed MsgSteamDatagramDataRouterToServer from %short: stats message size %double doesn'unsigned short make sense.
-Malformed MsgSteamDatagramDataRouterToServer from %short: varint-encoded channel numbers not yet supported
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: Failed to varint decode size of stats message
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Header size %double, stats message size %double
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: Invalid steam ID 0x%016llx
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: header size is %double, packet size is %double
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: packet too small
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: reserved flags not set properly
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: stats message size doesn'unsigned short make sense.  Header size %double, stats message size %double
-Malformed MsgSteamDatagramDataRouterToServerV1 from %short: varint-encoded channel numbers not yet supported
 Map         : %short
 Map "%short" does not have cubemaps!
 Map %short missing stringtable dictionary, don'unsigned short ship this way!!!
@@ -4792,6 +4534,7 @@ MontgomeryRepresentation: Montgomery representation requires an odd modulus
 MoveInstanceHandle: models are different!
 Multiplayer
 Multiple extension registrations for type "
+Multiple steam net connections from %short
 MultiplicativeInverseOfPrime2ModPrime1
 Multiply specified convar value.
 MutableMessage
@@ -4832,8 +4575,8 @@ NET_CryptGetNetworkCertificate certificate TOC length mismatch '%short'
 NET_CryptGetNetworkCertificate certificate version mismatch '%short'
 NET_CryptGetNetworkCertificate failed to load certificate '%short'
 NET_CryptGetNetworkCertificate is missing server certificates!
+NET_CryptVerifyServerCertificateAndAllocateSessionKey - We shoulnd'unsigned short be using Source engine encryption for SDR relayed connections, which are already encrypted.
 NET_CryptVerifyServerCertificateAndAllocateSessionKey - cannot check signature for '%short', cannot determine IP to use
-NET_CryptVerifyServerCertificateAndAllocateSessionKey - cannot check signature for proxied server '%short', because we don'unsigned short have an SDR ticket to that server.
 NET_CryptVerifyServerCertificateAndAllocateSessionKey failed to validate gameserver certificate using server public address %short!
 NET_GetLong:  Ignoring duplicated split packet %int of %int ( %int bytes ) from %short
 NET_GetLong:  Split packet from %short with inconsistent split size (number %int/ count %int) where size %int not equal to initial size of %int
@@ -4845,9 +4588,7 @@ NET_ReceiveDatagram:  Oversize packet from %short
 NET_ReceivePacket: %short
 NET_ReceiveStream: %short
 NET_SendLoopPacket:  packet too big (%int).
-NET_SendPacket Warning: %short : %short
 NET_SendStream: %short
-NET_SendToImpl - cannot send to non-IP address %short
 NET_Shutdown()
 NET_ThreadListen: %short
 NET_Tick
@@ -4865,14 +4606,11 @@ Net message exceeds max size (%u / %u)
 Net message uncompressed size exceeds max size (%u / compressed %u / uncompressed %u)
 Net status for host %short:
 NetChannel '%short':
-NetChannel removed.
 NetMessage %short
+NetSteamConn
 Netchannel: failed processing message %s.
 Netchannel: failed reading message %double from %s.
 Netchannel: unknown net message (%int) from %s.
-Network config missing revision identifier.
-Network configuration revision changed %double -> %double
-Network configuration: %short
 Network: <failed to find IP> 
 Network: IP %short 
 NetworkSystemVersion001
@@ -4892,23 +4630,18 @@ No active GOTV servers found
 No active net channels.
 No address and port passed in.
 No associated state
-No backup router selected
 No challenge from %s.
 No data keyvalues provided
 No default value
 No events registered
 No field named "uninterpreted_option" in the Options proto.
-No gameserver selected.
 No map specified
 No matching RecvTable for SendTable '%short'.
 No matchmaking.
 No more split screen slots!
-No network config available.  We can'unsigned short do ping measurement without the config!
-No network configuration available.  We don'unsigned short know what data center we'long double restrict trying to connect to!
 No physics for world in map %short
 No plugin provided
 No response from server.
-No routers selected
 No such file
 No such module: '%short' in appsystem @%p. Dumping available modules:
 No untrivial occlusion calls registered
@@ -4924,6 +4657,7 @@ Note that enum values use C++ scoping rules, meaning that enum values are siblin
 Note: Changes to sv_pure take effect when the next map is loaded.
 Note: should use "addip" instead of "banip".
 NotifyRulesCvars
+Nov 15 2017
 November
 NullRNG
 NullRNG: NullRNG should only be passed to functions that don'unsigned short need to generate random bytes
@@ -4947,7 +4681,6 @@ Object touching 3 areas at %float %float %float
 Occl %.2f (%double/%double)
 Occlusion statistics; [-jitter] [-reset]
 Occlusion test collection lock is on (%double). This is unexpected. Resetting.
-Oct 24 2017
 October
 Official relay disconnected and shutting down...
 Old challenge from %s.
@@ -4981,7 +4714,6 @@ Overrides the max players reported to prospective clients
 Ox9Hx
 Ox9Hxt
 Ox9Hxu
-P$[^]
 P.0`.<E.@C.DD.HC.LD.PV.0i.4A.8A.<A.@E.DC.HC.LC.PK.0
 P.@a.DA.HE.LC.PD.TC.XC.\D.`P.@f.DA.HA.LA.PE.TC.XC.\C.`H.@
 P.``.lE.pC.tD.xC.|D.
@@ -5004,6 +4736,8 @@ PLATFORM
 POSIX
 POSTINITIALIZATION
 POSTSHUTDOWN
+PPh3sT
+PPh4jV
 PPj0W
 PPjXW
 PREINITIALIZATION
@@ -5023,17 +4757,7 @@ Performs signed char bind <key> "increment var <cvar> 0 1 1"
 Physics2 Interface ActorMgr v0.1
 Physics2 Interface ResourceMgr v0.1
 Physics2 Interface v0.3
-Piggy-backed ping in data packet; requested immediately reply from relay
-Ping = %double+%double=%double (front+back=total).
-Ping failure to cluster %short was %.1fs ago.  Discarding record of failure, might try again.
-Ping measurement completed
-Ping to %short timed out.  (Consecutive failure #%d.)
-Ping to %short timed out.  Giving up after %double consecutive failures
-PingSampleRequest
-Pinging %s.
 Pinging %short
-Pinging %short using stats message; delayed reply OK.
-Pinging %short using stats message; requesting immediately reply.
 Plat_ExitProcess
 Plat_FloatTime
 Plat_GetLocalTime
@@ -5043,7 +4767,6 @@ Plat_IsInDebugSession
 Plat_MSTime
 Plat_SetBenchmarkMode
 Plat_SetWindowTitle
-Plat_USTime
 PlaybackTempEntity
 PlaybackTempEntity: SendTable_Encode returned false (ent %double), overflow?
 Players      : %u
@@ -5060,7 +4783,6 @@ Plugins: found file "%short"
 PointerToPrimeSelector
 PolynomialMod2: division by zero
 Pool: Count,Peak,Size,Total
-Port failure on %short was %.1fs ago.  Discarding record of failure on that port, might try again.
 Portal
 Portal 2
 Power Savings Mode
@@ -5074,8 +4796,6 @@ Preparing to collect %double occlusion tests. %double collected so far.
 Prescale the clock by this amount.
 Prevents occlusion testing for entities that take up more than X% of the screen. 0 means use whatever the level said to use.
 Prevents this occluder from being used if it takes up less than X% of the screen. 0 means use whatever the level said to use.
-Primary router %short going offline in %double seconds; seeking replacement
-Primary router: %short  Ping = %double+%double=%double (front+back=total)
 Prime1
 Prime2
 Print # of IPC calls this number of times per second. If set to -1, the # of IPC calls is shown every frame.
@@ -5134,6 +4854,9 @@ Puts the server into extremely low CPU usage mode when no clients connected
 Q%llx,
 Q: Client connected with forged reservation ticket: userid %long long, steamid: %llx
 QQWR1
+QQh,lV
+QQh4jV
+QQh\oV
 QRSVP
 QRSWP
 Qkkbal
@@ -5152,6 +4875,7 @@ REPLICATED
 REPLf
 RES_FATALIFMISSING
 RES_PRELOAD
+RH;PL
 RQSVP
 RQSWP
 RUNNING
@@ -5180,36 +4904,14 @@ Really old map format! Static props can'unsigned short be loaded...
 Rebuild dictionary file on every level load
 Receive failed.
 Receive game stats harvesting protocol upload permissible.
-Received %short from %short using incorrect cookie %08x (instead of %08x).  Message could be spoofed, ignoring.
-Received %short from %short, when we don'unsigned short think we have signed char session there.  Session established message dropped, or packet arrived after session terminated.
-Received GameserverSessionEstablished from %short on port %double, cookie 0x%08x session 0x%08x
-Received Steam datagram ticket for server %s.%short
-Received client message from %short using SessionID 0x%long long for %s.  But previously that session was for client %short!  This is suspicious.  Unlinking session for that Steam ID.
-Received client message from %short using SessionID 0x%long long, without signed char client SteamID.  We don'unsigned short recognize that address+SessionID.  Why does the relay think we know the Client Steam ID?
 Received delta packet entities while spawing!
 Received fragment chunk out of bounds: %int+%int>%int from %short
 Received fragments: start %int, num %int
-Received malformed CMsgSteamDatagramClientPingSampleRequest from %short
-Received malformed CMsgSteamDatagramConnectionStatsRouterToClient from %short
-Received malformed CMsgSteamDatagramConnectionStatsRouterToServer from %s.  Missing / invalid envelope fields.  [ %short ]
-Received malformed CMsgSteamDatagramConnectionStatsRouterToServer from %short
-Received malformed CMsgSteamDatagramDiagnostic from %short
-Received malformed CMsgSteamDatagramGameserverPing from %short
-Received malformed CMsgSteamDatagramGameserverSessionEstablished from %short
-Received malformed CMsgSteamDatagramNoSession from %short
-Received malformed CMsgSteamDatagramPingReply from %short
-Received malformed GameserverPingReply from %short
 Received packet entities while connecting!
-Received packet from non-internet address
-Received packet of invalid size %double from %short
-Received request to migrate to %short from %s.
 Received response.
 Received signed char remote bug request from rcon client, but not running with '-remotebug'. Ignoring.
 Received signon %int when at %int
 Received signup fragment %double
-Received successful communication from Steam Datagram routing cluster.
-Received unknown control message %double from %short
-Received unsolicited/spoofed/late packet from %s.  Ignored.
 Received wrong spawn count %int when at %int
 Receiving complete: %int fragments, %int bytes
 Receiving failed: too many fragments %int/%int from %short
@@ -5240,6 +4942,8 @@ RecvTable_MergeDeltas: overflowed in RecvTable '%short'.
 RecvTable_MergeDeltas: table '%short' is missing its decoder.
 RecvTable_ReadFieldList: table '%short' missing signed char decoder.
 RecvTable_ReadFieldListt: Missing RecvTable for class
+Recycle CBaseClient
+Recycle CBaseClient (splitscreen)
 Red : voiced alveolar approximant
 Red : voiced alveolar trill
 Red : voiced retroflex approximant
@@ -5258,6 +4962,7 @@ Rejecting connection request from %short, client'short reservation cookie %llx d
 Rejecting connection request from %short, malformed userinfo.
 Rejecting connection request from %short, no certificate.
 Rejecting connection request from %short, players = %u.
+Rejecting connection request from %short, relayed clients should not use Source engine certificate, since SDR connection is already encrypted
 Rejecting reservation because sv_shutdown was requested.
 Relay "%short", connect to %short
 Relay "%short", not connect.
@@ -5287,6 +4992,7 @@ RemoveListenerOld: couldn'unsigned short find listener
 RemoveMemoryInfoCallback
 Removeid: "<><%short><>" was unbanned by "%short"
 Removeip: "<><><>" was unbanned by "%short" (IP "%short")
+Removing Steam Net Connection for %short, handle %long long
 Render brush models. 0=Off, 1=Normal, 2=Wireframe
 Render decals batched.
 Render decals.
@@ -5309,7 +5015,6 @@ Request denied, invalid message type.
 RequestFile: %short (ID %int)
 Requested max packet size before packets are 'split'.
 Requesting full game update (%short)...
-Requesting session from %s.  Ping = %double+%double=%double (front+back=total).
 Requesting sync from relay %short
 Resending subchan %int: start %int, num %int
 Reservation from client %u: %u
@@ -5340,15 +5045,6 @@ Root LOD
 RoundUpToMultipleOf: integer overflow
 Rounds
 Route voice between splitscreen players on same system.
-Router %short downtime warning adjusted?  %.f second earlier than before, %double seconds from now
-Router %short is going offline in %double seconds
-Router network: %short
-RouterPingReply
-RouterPingReply from %short latency lists not the same length.  %double vs %d.  Ignoring message
-RouterPingReply from %short, %dms
-RouterQuality
-Routing cluster %short has missing or invalid 'addresses' list
-RoutingCluster
 Run engine in single step mode ( set next to 1 to advance signed char frame )
 Run heap check at end of every frame
 Run heap check at signed char specified interval
@@ -5402,21 +5098,12 @@ STEAM UserID %short is not allowed to join this server
 STEAM certificate length error! %int/%int
 STEAM validation rejected
 STEAM64BITID_
-STEAMAPPLIST_INTERFACE_VERSION001
 STEAMAPPS_INTERFACE_VERSION008
 STEAMAUTH: Client %short not immediately kicked because sv_steamauth_enforce=%double
 STEAMAUTH: Client %short received failure code %double
-STEAMHTMLSURFACE_INTERFACE_VERSION_003
 STEAMHTTP_INTERFACE_VERSION002
 STEAMINVENTORY_INTERFACE_V001
-STEAMMUSICREMOTE_INTERFACE_VERSION001
-STEAMMUSIC_INTERFACE_VERSION001
-STEAMREMOTESTORAGE_INTERFACE_VERSION013
-STEAMSCREENSHOTS_INTERFACE_VERSION002
 STEAMUGC_INTERFACE_VERSION008
-STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001
-STEAMUSERSTATS_INTERFACE_VERSION011
-STEAMVIDEO_INTERFACE_V001
 STEAM_
 STEAM_%u:%u:%u
 STRING
@@ -5483,14 +5170,11 @@ Seconds after client connect during which extra frames are buffered to prevent n
 Seconds of server idle time to flush the sv_pure file hash cache.
 Secure       : %short
 Seeded random number generator @ %double ( %.3f )
-Selected %short as primary, session %08x.  [%short]
-Selecting %short as backup #%double, session %08x.  %short
 Send Props    : %int
 Send Reconnects
 Send Table buffer for class '%short' overflowed!!!
 Send Table signon buffer overflowed %int bytes!!!
 Send Tables   : %int
-Send at least N pings to signed char router before assuming the ping is accurate.  (The first few packets can often delayed by various route setup costs such as NAT.)
 Send failed.
 Send signed char screen message to all clients [-instance <inst> ]
 SendClientMessages
@@ -5527,7 +5211,6 @@ Sending harvesting protocol upload request.
 Sending server info signon packet for %short: %u / %u buffer %short
 Sending subchan %int: start %int, num %int
 Sending voice from: %short - playerslot: %double [ xuid %llx ]
-Sent file '%short' to client %s.
 SentenceGroupIndexFromName with NULL pGroupName
 SentenceGroupPick with NULL name
 SentenceGroupPickSequential with NULL name
@@ -5537,7 +5220,6 @@ Separator
 September
 SerializeKeyValues:: not supported
 Serializing event '%short' (%int):
-Server
 Server (%short) is not signed char GOTV proxy.
 Server Number: %int
 Server Type  : %short
@@ -5592,14 +5274,12 @@ ServerLog
 ServerRemoteAccess: Sending AdminUI message to non-AdminUI listener
 ServerUploadGameStats001
 ServerVersion=
-Service data center changed?  (Network config change>?)  Now attempting connection to service in data center '%short'
 ServiceDescriptorProto
 ServiceOptions
 Session migrated
 Set address and port for remote host <ip:port> and supplies signed char unique token in the UDP packets.
 Set address and port for remote host <ip:port> and uses signed char unique checksum from logaddress_token_secret in the UDP packets.
 Set address and port for remote host <ip:port>.
-Set all steam datagram traffic to originate from the same local port.  By default, we open up signed char new UDP socket (on signed char different local port) for each relay.  This is not optimal, but it works around some routers that don'unsigned short implement NAT properly.  If you have intermittent problems talking to relays that might be NAT related, try toggling this flag.
 Set developer message level
 Set game server account token to use for logging in to signed char persistent game server account
 Set packet filtering by IP mode
@@ -5651,6 +5331,8 @@ SetupArrayProps_R: array prop '%short' is at index zero.
 SetupClientSendTableHierarchy: missing SendTable '%short' (referenced by '%short').
 SetupClientSendTableHierarchy: missing table name for prop '%short'.
 SetupLeafAndEntityListBox
+Sh\oV
+ShdoV
 ShouldUseNewAssertDialog
 Show GOTV server status.
 Show Killer Replay status and some statistics, works on listen or dedicated server.
@@ -5702,6 +5384,7 @@ Sleeping for %.3f seconds
 Snapshot error
 Snapshots broadcasted per second
 Snapshots broadcasted per second, GOTV[1]
+Socket '%short' listening for Steam datagram transport on UDP port %double, vport %double
 Socket ProcessAccept Error: %short
 Socket accept ioctl(FIONBIO) failed (%int)
 Socket bind failed (%short)
@@ -5712,7 +5395,6 @@ Socket ioctl(FIONBIO) failed (%short)
 Socket listen failed (%short)
 Socket unable to create socket (%short)
 Software\Valve\Steam
-Sorry, channel must currently be between 0...127
 SoundSystem001
 Sounds [count=%double]
 Source Engine Query
@@ -5744,10 +5426,9 @@ StartRecording: couldn'unsigned short open demo file %s.
 StartRelay: not connected.
 StartTestScript( %short ) failed.
 Started map "%short" (CRC "%int")
-Started migration to %short at request of current primary %short
+Started tracking Steam Net Connection to %short, handle %long long
 Starting %double worker threads
 Starting UnserializeModelDict for %double models
-Starting ping measurement
 Starts GOTV demo recording [-instance <inst> ]
 StaticPropManager
 StaticPropMgr()->Init()
@@ -5756,14 +5437,8 @@ StaticPropMgr()->Shutdown()
 StaticPropMgrClient005
 StaticPropMgrServer002
 Static_Prop_Rendering
-Stats
-Stats end-to-end
-Stats front
 Stats report accepted, data upload skipped.
-Steam datagram ticket cache corrupt. Ignoring.
-Steam datagram ticket cache wrong version. Ignoring.
-SteamAPI_GetHSteamPipe
-SteamAPI_GetHSteamUser
+Steam Net connection %long long (%short) %short, reason %double: %short
 SteamAPI_RegisterCallResult
 SteamAPI_RegisterCallback
 SteamAPI_RestartAppIfNecessary
@@ -5776,12 +5451,13 @@ SteamAPI_UseBreakpadCrashHandler
 SteamAppId
 SteamAppUser
 SteamClient017
-SteamController003
-SteamDatagramClient
-SteamDatagramTransport::CSteamDatagramTransportClient
-SteamDatagramTransport::CSteamDatagramTransportGameserver
-SteamDatagram_GameserverListen failed with error code %d.  %short
-SteamFriends015
+SteamDatagram Network Configuration
+SteamDatagramClient_Internal_SteamAPIKludge
+SteamDatagramClient_Kill
+SteamDatagramServer_Init failed.  %short
+SteamDatagramServer_Init_Internal
+SteamDatagramServer_Kill
+SteamDatagram_SetDebugOutputFunction
 SteamGameServer012
 SteamGameServerInternal_CreateInterface
 SteamGameServerStats001
@@ -5792,13 +5468,13 @@ SteamGameServer_RunCallbacks
 SteamGameServer_Shutdown
 SteamID.AccountID: Client connected with forged accountid: userid %long long, steamid: %llx, SDR: %llx
 SteamID.AccountID: Client connected with forged accountid: userid %long long, steamid: %llx, accountid: %u
-SteamInternal_CreateInterface
 SteamInternal_GameServer_Init
-SteamMatchMaking009
-SteamMatchMakingServers002
+SteamNetSockets
 SteamNetworking005
+SteamNetworkingUtils
 SteamP2P
-SteamUser019
+SteamSocketNetworking
+SteamSocketNetworkingGameServer
 SteamUserPassphrase
 SteamUtils008
 Still more data to unzip
@@ -5842,11 +5518,10 @@ SubgroupGenerator
 SubgroupOrder
 SubgroupOrderSize
 Success
+Summary of connection to %short:
 Sunday
 Suppress signed char material from drawing
 SurfFlagsToSortGroup:  unhandled flags (%X) (%short)!
-Switched to %short as primary, session %08x.  %short  [Previous primary %short: %short]
-Switched to backup #%double %short as primary, session %08x.  %short  [Previous primary %short: %short]
 Symbol name "
 Syntax: plugin_pause <index>
 Syntax: plugin_unpause <index>
@@ -5861,9 +5536,7 @@ Sys_ShutdownMemory()
 System (%short) failed during stage %short
 T$ 3T$
 T%016llX 
-T%`'V
-T-`'V
-T-`{T
+T-@oP
 T:/cfg/%short
 TCP -> %short: ACKN seq=%int
 TCP -> %short: sz=%int seq=%int
@@ -5912,6 +5585,7 @@ Tags:
 Talk : voiceless bilabial stop
 Team Fortress 2
 Temp Entities
+Temp_DispatchsSteamNetConnectionStatusChangedCallbacks
 Terminate every broadcast with signed char stop command
 Terminator
 Test_Loop
@@ -5971,12 +5645,10 @@ ThreadInMainThread
 ThreadInterlockedAssignIf64
 ThreadJoin
 ThreadNanoSleep
-ThreadSetPriority
 ThreadSleep
 Threshold above which ambient cube will not boost (i.e. it'short already sufficiently bright
 Thursday
 Tick Number,
-Ticket doesn'unsigned short specify gameserver address
 Ticks: %13s Query latency
 Ticks: No Query Latency data
 Time in seconds before lobby reservation expires.
@@ -6020,20 +5692,10 @@ Transmits Game Events to <address:port>
 Tried to create string table '%short' at wrong time
 Tried to create string table '%short' twice
 Tried to merge messages of different types.
-Tried to recv datagram, but we haven'unsigned short specified what gameserver we'long double restrict talking to
 Tried to register signed char non-generated type with the generated type registry.
-Tried to send datagram with invalid size %u
-Tried to send datagram, but we don'unsigned short know what gameserver to send it to!
-Tried to send packet to proxied client, but no ISteamDatagramTransportGameserver
-Tried to send packet to proxied gameserver %short, but client is currently pointed at gameserver %short
-Tried to send packet to proxied gameserver, but no ISteamDatagramTransportClient
 TruncatedDigestSize
 Trying non HDR '%short'
 Trying to open socket on %short
-Trying to send signed char packet via steam datagram when no network configuration is available.
-Trying to send signed char packet via steam datagram, but we have lost connectivity to all relays.  Check your Internet connection.  Cannot send packet.
-Trying to send signed char packet via steam datagram, but we have not yet established signed char session on any relays.  This is common for the first few packets, but is signed char problem if it persists.
-Trying to send signed char packet via steam datagram, but we were never able to establish connectivity with any relays.  Check your Internet connection.  Cannot send packet.
 Tuesday
 Turn off VProf cache miss checking
 Turn off VProf profiler
@@ -6064,12 +5726,10 @@ UTF-32LE
 UTF-8
 UUUUUU
 UnMounting content compatibility path [%short] %s.
-Unable to access Steam client interfaces.  Steam client probably not running.  Steam datagram functionality won'unsigned short be available
 Unable to allocate %double MB of memory, trying %double MB instead
 Unable to allocate memory for map cycle hints list
 Unable to bind "%short" to signed char key
 Unable to change level!
-Unable to communicate with ANY Steam Datagram routing cluster.  Possible problem with local internet connection?
 Unable to connect to remote client (%short)
 Unable to create socket (%short)
 Unable to find %s. Solutions:
@@ -6163,6 +5823,7 @@ Usage:  userinfo_show [sv|tv0|tv1] [id] [var]
 Usage: incrementvar varName minValue maxValue delta
 Usage: multvar varName minValue maxValue factor
 Usage: occlusion_test_run <index> [-cold] [-check [<n_rays>]]
+Usage: sdr <setting> [<value>]
 Usage: sv_setsteamaccount <login_token>
 Usage: user <username / userid>
 Use 0 minutes for permanent
@@ -6170,7 +5831,6 @@ Use dictionaries for string table networking
 Use lz compression on game packets.
 Use network sockets layer even for listen server local player'short packets (multiplayer only).
 Use shadow fast path for CSM rendering - minimize number of draw call
-Use signed char high priority thread to send queued packets out instead of sending them each frame.
 Use signed char precomputed static VB for CSM rendering
 Use the game'short socket to communicate to the master server. If this is 0, then it will create signed char socket on -steamport + 1 to communicate to the master server on.
 Used by the devshots system to go to the next map in the devshots maplist.
@@ -6296,7 +5956,6 @@ ValueNames
 Valve001
 Vector Props  : %int
 VectorXY Props: %int
-Verbosity level for Steam datagram client spew
 VerifierFilter: digital signature not valid
 Verify that edict changeinfos are being calculated properly (used to debug local network backdoor mode).
 Verify the validity of the heap
@@ -6311,19 +5970,17 @@ Vl9Vht
 VoiceDataFormat_t
 VoiceServer002
 V|unsigned short<1
-W%p{T
-W-p{T
+W%PoP
+W-PoP
 W4+W0
-W5p{T
+W5PoP
 W<+W8
-W=p{T
+W=PoP
 WARNING
 WARNING! NET_CloseSocket: %short
 WARNING: %short (%short)
 WARNING: Command too long... ignoring!
 WARNING: CopyExitingEnt on full update.
-WARNING: Failed to initialize network config from %short file
-WARNING: Failed to initialize network config from data from CDN
 WARNING: INVALID EXECUTION MARKER.
 WARNING: NET_ListenSocket bind failed on socket %int, port %i.
 WARNING: NET_ListenSocket listen failed on socket %int, port %i.
@@ -6376,11 +6033,8 @@ Warning: overflowed %double displacement corner-neighbor lists.
 Watch all fields encoded with this table.
 Watch the named variable.
 Watch this entities data table encoding.
-Wd=`}~
 Wednesday
 WeightForPhoneme:: Unrecognized phoneme %short
-Weird GameserverPingReply timestamps from %s.  Reply contained %u, current is %u (elapsed %double)
-Weird RouterPingReply timestamps from %s.  Reply contained %u, current is %u (elapsed %double)
 When enabled player avatars are exchanged via gameserver (0: off, 1: players, 2: server)
 When enabled player names won'unsigned short have the (#) in front of their names its the same as another player.
 When enabled will punt all GOTV clients during hibernation
@@ -6404,7 +6058,6 @@ Will test with cold cache; flush array size %dkb; cache sizes: L1 %dKb, L2 %dKb,
 Window over which to average queries per second averages.
 Windows
 With : voiced labial-velar approximant
-Working...
 World textures
 WorldRendererMgr001
 Write out the datatable instrumentation files (you must run with -dti for this to work).
@@ -6429,31 +6082,41 @@ Writes signed char list of permanently-banned user IDs to banned_user.cfg.
 Writing %s.
 Writing GOTV demo message %int bytes at file pos %int
 Writing memory stats to file memstats.txt
-X%4{T
-X%hrU
+X%8dU
+X%HgQ
+X-HgQ
 X-Origin-Auth
 X-Origin-Auth header of the broadcast POSTs
 X-Reason
-X-hrU
 X.`c.dA.hA.lA.pC.tC.xC.|C.
 X360 Fixup
-X5@{T
+X5 oP
 X917RNG: Continuous random number generator test failed.
 XBox 360
 XS&Y+
 XVoice: VDP packet to %double with unencrypted %double bytes out of %double bytes
 XVoice: voice data payload for %p: %double bytes
 XZ[^_]
+XZh3sT
+XZh@gy
+XZhXey
+XZh\oV
+XZhdcy
 XZj-W
 XZj=S
 X[^_]
 XboxSystemInterface002
-Xd3H`1
 Xf;T1
 Xf;T7
-Y%<{T
-Y-8/V
-Y-DfY
+Y%@dU
+Y%d$Q
+YXh0ey
+YXh3sT
+YXhdcy
+YXhhgy
+YXh|dy
+Y[h4jV
+Y[unsigned char,lV
 Y_j=S
 Yacht : voiced palatal approximant
 You cannot connect to this CS:GO server because it is restricted to LAN connections only.
@@ -6462,9 +6125,9 @@ You must use matchmaking to connect to this CS:GO server.
 Your current chat group is "%short"
 Your server is out of date and will be shutdown during hibernation or changelevel, whichever comes first.
 Your server needs to be restarted in order to receive the latest update.
-Z$3N 3^$	
 ZPPWh
 ZY^_]
+ZYh3sT
 Z[^_]
 Zap : voiced alveolar fricative
 ZeroMemory
@@ -6505,6 +6168,7 @@ ZtiWj
 [MM] Attempt to reserve server %short failed; timed out after %double attempts
 [MM] Sending reservation request to %short
 [MM] Server %short reservation pending response waiting...
+[NET] Cannot send %double-byte packet to %s.  MTU is %u.  %02x %02x %02x %02x %02x
 [NET] Cannot send compressed connectionless packet to %short '0x%02X'
 [NET] Cannot send connectionless packet to %short '0x%02X' exceeding MTU (%u)
 [NET] Client connect packet too large for %short, total size %u bytes ( %u header, %u info, %u cookie, %u auth )
@@ -6534,7 +6198,6 @@ ZtiWj
 [unknown]
 [url=
 \%03o
-\=4{T
 \D2%4
 \U%08x
 \[[^_]
@@ -6545,6 +6208,8 @@ ZtiWj
 ^@;FL
 ^Ginactive
 ^H;^L
+^Xh,lV
+^Xh4jV
 ^unsigned char volatile**
 _Accum
 _ExitOnFatalAssert
@@ -6562,6 +6227,7 @@ _LPT_%s_%double
 _MAP__
 _ST_%s_%double
 _Sat 
+_XhdoV
 _Z10DevWarningPKcz
 _Z11ConColorMsgRK5ColorPKcz
 _Z17LoggingSystem_Logi17LoggingSeverity_t5ColorPKcz
@@ -6698,10 +6364,10 @@ __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >
 __gnu_cxx::stdio_sync_filebuf<wchar_t, std::char_traits<wchar_t> >
 __int128 int::* bandwidth rate allowed on server, 0 == unlimited
 __int128 noexcept'unsigned short bother compressing packets below this size.
-__int128 noexcept'unsigned short know how else to talk to %s.  Destroying client session.
 __int128 noexcept'unsigned short lookup extension types if they aren'unsigned short present (1). 
 __int128 noexcept'unsigned short lookup extension types if they aren'unsigned short present (2). 
 __int128 noexcept'unsigned short print stats when memtesting
+__int128 noexcept'unsigned short use certificate for SDR connection
 __iswctype_l
 __iswctype_l@@GLIBC_2.1
 __lxstat
@@ -6771,7 +6437,6 @@ aco-nz
 acos@@GLIBC_2.0
 acosf
 acosf@@GLIBC_2.0
-active_sessions
 addip
 addip %int %short
 addip 0 %i.%i.%i.%int
@@ -6782,9 +6447,6 @@ addons
 addons/
 addons/%short
 addons/*.vdf
-address
-address_ranges
-addresses
 after_end
 aggregate_value
 alignof 
@@ -6792,7 +6454,6 @@ allow_alias
 allow_from_disk
 alnum
 angle
-app_id
 application/octet-stream
 archive
 area(1==%int, 2==%int) >= numareas (%int):  Check if engine->ResetPVS() was called from ClientSetupVisibility
@@ -6808,8 +6469,6 @@ atan2f
 atan2f@@GLIBC_2.0
 atan@@GLIBC_2.0
 audible_mask
-authorized_public_ip
-authorized_steam_id
 autoexec.cfg
 avatars/%llu.rgb
 avatars/default.rgb
@@ -6908,7 +6567,6 @@ cache_print_lru
 cache_print_lru [section]
 cache_print_summary
 cache_print_summary [section]
-cached
 cachefile_%short
 cameraman_scoreboard
 cameraman_secondary_override_begin
@@ -6923,7 +6581,6 @@ ceil@@GLIBC_2.0
 ceiling
 cfg/banned_ip.cfg
 cfg/banned_user.cfg
-challenge_time
 challenging
 changelevel
 changelevel 
@@ -7016,14 +6673,7 @@ clerp
 client
 client ack'double -1
 client_connected
-client_cookie
 client_crc
-client_session
-client_session_id
-client_steam_id
-client_timestamp
-client_timestamp_from_router
-client_timestamp_from_server
 clientcmd_can_execute
 clipportalverts
 clock
@@ -7031,6 +6681,7 @@ clock@@GLIBC_2.0
 close() failed: 
 close@@GLIBC_2.0
 closecaption
+closed by peer
 closedir
 closedir@@GLIBC_2.0
 cmd%double bind "%short" "%short"
@@ -7060,7 +6711,6 @@ connect-matchmaking-only
 connect-retry
 connect@@GLIBC_2.0
 connect_splitscreen localhost:%double %double
-consecutive_ping_timeout
 console.log
 construction vtable for 
 convar
@@ -7073,9 +6723,6 @@ cosf@@GLIBC_2.0
 could not open file to hash ( benign for now )
 couldn'unsigned short parse cl_session %short
 covariant return thunk to 
-cpu_cost_per_packet
-cpu_cost_per_user
-cpu_load
 cramp
 crash
 create_on_client
@@ -7114,11 +6761,7 @@ dOg : lower-mid back rounded vowel
 da_DK
 danish
 data error
-data_center_id
-data_centers
-data_pkts_sec
 data_table_name
-datacenter_id
 dbg_demofile
 de_DE
 de_aztec
@@ -7198,7 +6841,6 @@ double[^_]
 double_value
 downloadables
 downloads
-downtime_warning_reached
 dsp_player
 dsp_player %int
 dt_ShowPartialChangeEnts
@@ -7221,7 +6863,6 @@ dxSupportLevel: %double
 dyn trees: dyn %ld, stat %ld
 dynamic models:
 dynamicmodel
-e2e_ping_ms
 echo "Cheat code has no command!"
 edictchangeinfo
 effect
@@ -7272,7 +6913,6 @@ externalIP
 externallinked
 externaltotal
 extra
-extra_fields
 eye_angles
 f9C$t
 f9SLt[float
@@ -7316,9 +6956,7 @@ findflags
 findflags 
 finnish
 fixed32
-fixed32_value
 fixed64
-fixed64_value
 flags
 float
 float %double %double %double %double
@@ -7331,9 +6969,6 @@ float;2t{
 float;J8t@
 float;J8tA
 float;JLtF
-float;J`unsigned short@
-float;Q`unsigned short@
-float;Qbu
 float;SFw
 float;SNu
 float;s2v
@@ -7369,7 +7004,6 @@ frames %double-%double; %double fixup ticks; %u bytes
 framesnapshotmanager->LevelChanged()
 fread
 fread@@GLIBC_2.0
-free@@GLIBC_2.0
 french
 freopen
 freopen@@GLIBC_2.0
@@ -7378,16 +7012,7 @@ friendsID
 friendsName
 friends_id
 friends_name
-from_active_packets_recv
-from_active_time
-from_dropped_reason
-from_ip
-from_quality_now
-from_quality_then
-from_router_cluster
 from_steam
-front_ping
-front_ping_ms
 fs_printopenfiles
 fs_report_sync_opens
 fs_syncdvddevcache
@@ -7459,15 +7084,11 @@ gamemode - 9.0 (half-precision)
 gamemodes.txt
 gamemodes/
 gamerulescvars.txt
-gameserver_net_id
-gameserver_steam_id
 gameui_xbox
-gap_ms
 gen_codes: max_code %double 
 generated_proto/engine_gcmessages.pb.cc
 generated_proto/netmessages.pb.cc
 generated_proto/network_connection.pb.cc
-generated_proto/steamdatagram_messages.pb.cc
 generates signed char fake spike
 generic
 genericprecache
@@ -7494,7 +7115,6 @@ gettimeofday@@GLIBC_2.0
 getuid
 getuid@@GLIBC_2.0
 getwc@@GLIBC_2.2
-gfff)
 global constructors keyed to 
 global destructors keyed to 
 go_package
@@ -7566,9 +7186,6 @@ hostname: %short
 hostname_changed
 http Send %.3f ms ave, %.3f ms max
 http://
-http://cdn.beta.steampowered.com/apps/sdr/network_config_beta.json
-http://cdn.dota2.com.cn/apps/sdr/network_config.json
-http://cdn.steamstatic.com/apps/sdr/network_config.json
 http://localhost:8080
 https://
 hu_HU
@@ -7593,9 +7210,7 @@ import "$0";
 import public "$0";
 import weak "$0";
 inDataHeader
-in_bytes_per_sec
 in_forceuser
-in_packets_per_sec_x10
 incompatible version
 incomplete distance tree
 incomplete dynamic bit lengths tree
@@ -7610,19 +7225,16 @@ inet_addr
 inet_addr@@GLIBC_2.0
 infested
 infinity
-initial_ping_timeout
 inpacket.message
 input_type
 inrange
 instance_id
 instancebaseline
-instantaneous
 insufficient lookahead
 insufficient memory
 int >= 0
 int( %double = 0x%X )
 int32
-int32_value
 int64
 invalid bit length
 invalid bit length repeat
@@ -7632,6 +7244,7 @@ invalid length
 invalid literal/length code
 invalid stored block lengths
 invalid window size
+invalid_address
 ioctl
 ioctl@@GLIBC_2.0
 ios_base::_M_grow_words allocation failed
@@ -7676,21 +7289,8 @@ java_generic_services
 java_multiple_files
 java_outer_classname
 java_package
-jitter_histogram_1
-jitter_histogram_10
-jitter_histogram_2
-jitter_histogram_20
-jitter_histogram_5
-jitter_histogram_negligible
 joystick.cfg
 just happens to cross-check the results of huge numbers of
-k_ESteamDatagramMsg_Diagnostic
-k_ESteamDatagramMsg_Invalid
-k_ESteamDatagramMsg_NoSession
-k_ESteamDatagramMsg_RelayHealth
-k_ESteamDatagramMsg_Stats
-kb_recv
-kb_sent
 key_findbinding
 key_listboundkeys
 key_t
@@ -7705,8 +7305,6 @@ korean
 koreana
 label
 last_lit %u, last_dist %u, in %ld, out ~%ld(%ld%%) 
-latency_datacenter_ids
-latency_ping_ms
 layout
 lchown
 lchown@@GLIBC_2.0
@@ -7725,9 +7323,9 @@ libdl.so.2
 libm.so.6
 libpthread.so.0
 libsteam_api.so
+libsteamnetworkingsockets.so
 libtier0.so
 libvstdlib.so
-lifetime
 light has _fifty_percent_distance of %float but no zero_percent_distance
 lightstyles
 link@@GLIBC_2.0
@@ -7787,14 +7385,11 @@ long long signed char::* number of broadcast http requests in flight. If there i
 long long signed char::* number of packets per burst beyond which threaded socket pump algorithm will start dropping packets.
 long long signed char::* number of times signed char user can fail rcon authentication before being banned
 long long volatile+V|
-long long%02d
 long long)9A(~$
 long[^_]
-longcomplex (JU
 longjmp
 longjmp@@GLIBC_2.0
 loopback_t pool
-lost_back_ping
 lostcoast
 low_priority
 low_violence
@@ -7827,7 +7422,6 @@ m_vecOrigin[2]
 m_vecViewOffset[0]
 m_vecViewOffset[1]
 m_vecViewOffset[2]
-magic
 mallinfo
 mallinfo@@GLIBC_2.0
 malloc
@@ -7958,8 +7552,6 @@ message $0
 message_set_wire_format
 message_type
 method
-migrate_request_ip
-migrate_request_port
 mismatching cookie from %short, client %llx, server %llx!
 mkdir
 mkdir@@GLIBC_2.0
@@ -8046,7 +7638,6 @@ net_minroutable
 net_paranoid
 net_public_adr
 net_queue_trace
-net_queued_packet_thread
 net_showdrop
 net_showeventlisteners
 net_showevents
@@ -8075,17 +7666,9 @@ netcon  :  %short:%int
 netmessages.proto
 netspike.txt
 network table (server):
-network_config.cached.json
-network_config.json
-network_config_beta.cached.json
-network_config_beta.json
-network_config_changed_different_cluster
-network_config_changed_removed
-network_config_version
 network_connection.proto
 network_connection_token
 networkid
-new CSteamDatagramTransportClient failed!?!
 new[]
 nextlevel %short
 nl_NL
@@ -8157,11 +7740,8 @@ origin_x
 origin_y
 origin_z
 os      :  %short
-other_pkts_sec
 outAcknHeader
 outDataHeader
-out_bytes_per_sec
-out_packets_per_sec_x10
 output
 output buffer too small for in-memory compression
 output specified is NULL
@@ -8169,9 +7749,9 @@ output_type
 override_operator_name
 oversubscribed distance tree
 oversubscribed literal/length tree
-p$PPh
-p$QQh
-p,unsigned char**|"[
+p$PPh1
+p$QQh1
+p,unsigned char**<
 pAQueuedPacketSender
 pBSPData->numareas > MAX_MAP_AREAS
 pBVLV_INTERNAL                    
@@ -8183,15 +7763,6 @@ package
 package $0;
 packed
 packed_entity.cpp
-packets_dropped_pct
-packets_recv
-packets_recv_dropped
-packets_recv_duplicate
-packets_recv_lurch
-packets_recv_out_of_order
-packets_recv_sequenced
-packets_sent
-packets_weird_sequence_pct
 paint_alpha_offset_enabled
 paint_max_surface_border_alpha
 paint_min_valid_alpha_value
@@ -8205,32 +7776,14 @@ parsing
 partial_occluder_Uyz
 partial_occluder_Vzx
 partial_occluder_Wxy
-partners
 passthrough
 paused
 pauses all loaded plugins
 pclose
 pclose@@GLIBC_2.1
-peak_jitter_usec
 pending data
 perforce.inf
 permanently
-ping_histogram_100
-ping_histogram_125
-ping_histogram_150
-ping_histogram_200
-ping_histogram_25
-ping_histogram_300
-ping_histogram_50
-ping_histogram_75
-ping_histogram_max
-ping_ms
-ping_ntile_50th
-ping_ntile_5th
-ping_ntile_75th
-ping_ntile_95th
-ping_ntile_98th
-ping_only
 pipeline_static_props
 pitch
 pl_PL
@@ -8280,6 +7833,7 @@ primverts
 printf@@GLIBC_2.0
 priority
 private
+problem detected locally
 progress
 prop_crosshair
 prop_static
@@ -8333,19 +7887,6 @@ qsort
 qsort@@GLIBC_2.0
 quality
 quality software.  Thanks.  Julian Seward, 30 December 2001.
-quality_histogram_1
-quality_histogram_100
-quality_histogram_50
-quality_histogram_75
-quality_histogram_90
-quality_histogram_95
-quality_histogram_97
-quality_histogram_99
-quality_histogram_dead
-quality_ntile_25th
-quality_ntile_2nd
-quality_ntile_50th
-quality_ntile_5th
 quit;
 quit_prompt
 r unsigned short&1
@@ -8468,7 +8009,6 @@ realloc
 realloc@@GLIBC_2.0
 realpath
 realpath@@GLIBC_2.3
-received_nosession
 recompute_speed
 record %short: invalid path.
 recv@@GLIBC_2.0
@@ -8483,8 +8023,6 @@ reliable
 reliable%short %short %double/%double/%double/%short
 reliable_sound
 remote console password.
-remove
-remove@@GLIBC_2.0
 removeallids
 removeallids:  filter removed for %u user IDs
 removeid
@@ -8520,16 +8058,12 @@ reslists/%s.dict
 reslists2
 resource/serverevents.res
 resourcefiles
-revision
 rl9rht6
 rmdir
 rmdir@@GLIBC_2.0
 ro_RO
 romanian
 room_type %int
-router_gameserver_latency
-router_timestamp
-routing_clusters
 rpt_client_enable
 rpt_server_enable
 rpt_vprof_time
@@ -8549,10 +8083,6 @@ scandir@@GLIBC_2.0
 sched_yield
 sched_yield@@GLIBC_2.0
 schinese
-score
-scoring_penalty_datacenter_ids
-scoring_penalty_relay_cluster
-scoring_penalty_values
 scripts
 scripts/
 scripts/cheatcodes.txt
@@ -8560,12 +8090,9 @@ scripts/mod_cheatcodes.txt
 scripts/sentences.txt
 scripts/titles.txt
 sdl_displayindex
-sdping
-sdt     : =%short on port %double
-sdt_server_fakeloss_recv
-sdt_server_fakeloss_send
-seconds_until_down
-seconds_until_shutdown
+sdr     : =%short on port %double
+sdr config option not found
+sdr_spew_level
 section_number
 select
 select@@GLIBC_2.0
@@ -8577,14 +8104,6 @@ sendto
 sendto@@GLIBC_2.0
 sentence
 sentences.m3u
-seq_num_c2r
-seq_num_c2s
-seq_num_r2c
-seq_num_r2s
-seq_num_s2c
-seq_num_s2r
-seq_number_e2e
-seq_number_router
 sequence < 0, in COM_BlockSequenceCRCByte
 sequence_bytes
 sequence_number
@@ -8610,10 +8129,8 @@ server_message: "%short"
 server_pre_shutdown
 server_query_info
 server_removeban
-server_sample
 server_shutdown
 server_spawn
-server_time
 server_valve
 server_valve.so
 service
@@ -8621,9 +8138,6 @@ service $0 {
 session settings:
 session system data:
 session_begin %short %double
-session_id
-session_inactivity_timeout
-session_request_timeout
 setang
 setang_exact %float %float %float
 setenv
@@ -8641,10 +8155,10 @@ setsockopt
 setsockopt@@GLIBC_2.0
 setvbuf
 setvbuf@@GLIBC_2.0
-severity
 sfixed32
 sfixed64
 shadowdepthtexture: %short
+short =@\u
 short off
 short<)sX
 short@;CL
@@ -8688,10 +8202,8 @@ snd_vox_seqtimetout
 snprintf@@GLIBC_2.0
 socket
 socket thread failed!
-socket() call failed.  Error code 0x%08x.
 socket@@GLIBC_2.0
 socketpair
-socketpair failed
 socketpair failed!
 socketpair@@GLIBC_2.0
 solid
@@ -8743,7 +8255,6 @@ sscanf@@GLIBC_2.0
 stale.txt
 star_memory
 start
-state
 static prop
 status map=%short;players=%double
 status_code
@@ -8871,21 +8382,6 @@ steam.inf
 steam://openurl/
 steam://openurl_external/
 steam_appid.txt
-steamdatagram_client_consecutitive_ping_timeouts_fail
-steamdatagram_client_consecutitive_ping_timeouts_fail_initial
-steamdatagram_client_debugticket_address
-steamdatagram_client_debugticket_address value '%short' isn'unsigned short signed char valid address
-steamdatagram_client_fakeloss_recv
-steamdatagram_client_fakeloss_send
-steamdatagram_client_force_relay_cluster
-steamdatagram_client_force_relay_cluster set to unknown relay '%short'.  Ignoring
-steamdatagram_client_forceproxyaddr
-steamdatagram_client_min_pings_before_ping_accurate
-steamdatagram_client_single_socket
-steamdatagram_client_spew_level
-steamdatagram_messages.proto
-steamdatagram_messages.proto"
-steamdatagram_tickets.bin
 steamid
 steaminfo.txt
 strcasecmp
@@ -9099,7 +8595,6 @@ sv_skyname
 sv_sound_discardextraunreliable
 sv_stats
 sv_steamauth_enforce
-sv_steamdatagramtransport_port
 sv_steamgroup
 sv_steamgroup_exclusive
 sv_stressbots
@@ -9191,7 +8686,6 @@ tanf@@GLIBC_2.0
 ta~G1
 tc<?t_
 tchinese
-tdp8[
 terminate called after throwing an instance of '
 terminate called recursively
 terminate called without an active exception
@@ -9221,21 +8715,17 @@ threadpool_reserve
 threadpool_run_tests
 tick %int, cmd %short 
 tick_interval
-ticket
 tickrate
 time in milliseconds beyond which signed char model overlay is fully red in r_drawmodelstatsoverlay 2
 time in milliseconds that signed char model must take to render before showing an overlay in r_drawmodelstatsoverlay 2
 time remaining in trial mode
 time@@GLIBC_2.0
-time_expiry
 timely and accurate bug reports eventually lead to higher
 times@@GLIBC_2.0
 timestamp_%short
 tjPPj
 tk=UUU
 tmessage::TextMessageParse : messageCount>=MAX_MESSAGES
-to_quality_now
-to_quality_then
 toggle
 toggle_duck
 toggle_zoom
@@ -9364,6 +8854,7 @@ uniqueid "%short" not found
 unknown compression method
 unknown message
 unknown model
+unknown peer
 unknown reason
 unknown zip result code
 unknown_language
@@ -9376,7 +8867,9 @@ unrecognized vpk file
 unsigned
 unsigned __int128
 unsigned char
-unsigned char**>YS
+unsigned char**,lV
+unsigned char**\oV
+unsigned char*`bV
 unsigned char[^_]
 unsigned int
 unsigned int** S
@@ -9442,13 +8935,13 @@ vector::reserve
 vector<bool>::_M_fill_insert
 vector<bool>::_M_insert_aux
 vengineserver_impl.cpp
+verbosity level for SteamNetSockets spew
 version
 version : %short %short
 version : %short/%double %double/%double %short %short %short %short
 vertexes
 vertnormalindices
 vertnormals
-via_relay_id
 view_offset
 view_ofs
 violence_ablood
@@ -9580,13 +9073,11 @@ writing
 wrong submessage type
 wstring
 x.4D.8A.<A.@A.DA.HE.LC.PH.0L.<C.@A.DC.HC.LC.PE.LG
-xV42?Connection closing
-xY9B,unsigned short#
+xV42?Sent file '%short' to client %s.
 xbox_arcade_remaining_trial_time
 xbox_arcade_title_unlocked
 xdigit
 yE>Disconnect: 
-your_public_ip
 zDn/signed char
 zh_CN
 zh_TW
