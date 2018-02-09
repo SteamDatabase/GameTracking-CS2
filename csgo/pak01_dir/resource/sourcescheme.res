@@ -898,7 +898,31 @@ Scheme
 				"antialias"		"1"
 			}			
 		}
-	
+
+		"MissionSelect"
+		{
+			"1"
+			{
+				"name"			"Stratum2-Bold" [!$RUSSIAN]
+				"name"			"Arial"			[$RUSSIAN]
+				"tall"			"100"
+				"weight"		"1000"
+				"antialias"		"1"
+				"outline"		"1"
+			}
+		}
+		"MissionSelectLarge"
+		{
+			"1"
+			{
+				"name"			"Stratum2-Bold" [!$RUSSIAN]
+				"name"			"Arial"			[$RUSSIAN]
+				"tall"			"130" 
+				"weight"		"1000"
+				"antialias"		"1"
+				"outline"		"1"
+			}
+		}	
 	}
 
 	//
