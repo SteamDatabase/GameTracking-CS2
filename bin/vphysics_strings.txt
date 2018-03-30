@@ -3,7 +3,6 @@
 		MATRIX_END
 		MATRIX_START
 	%g %g %g
-	(%zu) comparing %s with %s
 	Constraint %d) %s
 	Included Point
 	TriEdge:
@@ -186,8 +185,8 @@
  %6.4g
  %8.4g
  %d->%d
- %i:%X:%X  
- %i:%X:%X:%X  
+ %i:%p:%X  
+ %i:%p:%p:%X  
  ( def. "%s" )
  (%.1fx)
  *0 cnt*
@@ -241,7 +240,7 @@
  upperDelaunay
  visible
  volatile
-!ragdoll
+!stiff_spring
 "%s" 
 "%s" = "%s"
 "></img>
@@ -251,9 +250,9 @@
 # intersect f%d f%d
 # r%d between f%d f%d
 # ridge between f%d f%d
+#=static_object
 $MATERIAL_INDEX_SHADOW
 $[^_]
-$stiff_spring
 % 1.3e 
 %%.%if%s
 %-80s
@@ -263,7 +262,6 @@ $stiff_spring
 %.6f 
 %2.2g 
 %2.6g  
-%2i: 
 %3.3f, 
 %6.16g 
 %6.16g %6.16g
@@ -291,8 +289,6 @@ $stiff_spring
 %8.4g %8.4g %8.4g 1.0
 %8.4g %8.4g %8.4g 1.0 }
 %8.4g 0 0 0 # v%d
-%9F4t.
-%;N4t.
 %d %d %d
 %d %d %d 
 %d %d %d %6.16g 
@@ -352,6 +348,7 @@ $stiff_spring
 &Otilde;
 &Ouml;
 &THORN;
+&UUU?
 &Uacute;
 &Ucirc;
 &Ugrave;
@@ -434,8 +431,6 @@ $stiff_spring
 '_? A1> A1> A1> A1>
 (%.2f, %.2f, %.2f)
 (%.2f, %.2f, %.2f), 
-(%zu) Descend: %s, (%s), %s
-(%zu) readdir failed to find '%s' in '%s'
 ([^_]
 (anonymous namespace)
 (syn) 
@@ -453,9 +448,6 @@ $stiff_spring
 , line %d is the first long line
 , line %d is the first short
 ,%03d
-,0<	v
-,0<	vL
-,A<5vU
 ,[^_]
 - f%d
 - p%d (v%d):
@@ -472,9 +464,19 @@ $stiff_spring
 -valveinternal
 -xlsp
 .  Continue with %d points.
+../ivp_collision/ivp_compact_ledge_solver.cxx
 ../ivp_collision/ivp_mindist.cxx
 ../ivp_collision/ivp_mindist_minimize.cxx
+../ivp_controller/ivp_actuator.cxx
+../ivp_controller/ivp_actuator_spring.cxx
 ../ivp_intern/ivp_ball.cxx
+../ivp_intern/ivp_friction.cxx
+../ivp_intern/ivp_friction_gaps.cxx
+../ivp_intern/ivp_mindist_friction.cxx
+../ivp_intern/ivp_object.cxx
+../ivp_intern/ivp_physic_private.cxx
+../ivp_utility/ivu_linear.cxx
+../ivp_utility/ivu_vhash.cxx
 ./rbox D4
 .comment
 .ctors
@@ -502,20 +504,14 @@ $stiff_spring
 .symtab
 .tbss
 .text
+/@Tv`
+/@Xs-
 /C$v:
 /C\v)
 /F$uN
 /H u.
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_collision/ivp_compact_ledge_solver.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_controller/ivp_actuator.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_controller/ivp_actuator_spring.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_intern/ivp_friction.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_intern/ivp_friction_gaps.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_intern/ivp_mindist_friction.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_intern/ivp_object.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_utility/ivu_linear.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_utility/ivu_vhash.cxx
-/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_utility/ivu_linear.hxx
+/N0tk
+/home/buildbot/buildslave/csgo_pcbeta_linux/build/src/ivp/ivp_utility/ivu_linear.hxx
 0 -0.707107 -0.707107
 0 -0.707107 0.707107
 0 -1 0
@@ -532,12 +528,14 @@ $stiff_spring
 0.707107 0.707107 0
 0123456789ABCDEF
 0123456789abcdef
+0<	vY
 0<	w(
 0<	w8
 0@sys:buoyancy
 0[^_]
 1 0 0
 1 }}}
+1.0ef
 10CTraceAABB
 10CTraceCone
 10ConCommand
@@ -564,6 +562,7 @@ $stiff_spring
 13CSleepObjects
 13CVoidPairHash
 13IVP_3D_Solver
+13IVP_CFEP_Hash
 13IVP_Collision
 13aligned_tmp_t
 13hk_Constraint
@@ -670,7 +669,7 @@ $stiff_spring
 20IVP_3D_Solver_PF_NPF
 20IVP_3D_Solver_S_VALS
 20IVP_Actuator_Rot_Mot
-20IVP_Collision_Filter
+20IVP_Constraint_Local
 20IVP_Controller_Golem
 20IVP_Controller_VHash
 20IVP_Listener_Phantom
@@ -693,7 +692,6 @@ $stiff_spring
 21IVP_Mindist_Recursive
 21IVPhysicsDebugOverlay
 21hk_Ragdoll_Constraint
-22CPolyhedron_AllocByNew
 22CPolyhedron_TempMemory
 22IPhysicsCollisionEvent
 22IPhysicsObjectPairHash
@@ -822,6 +820,7 @@ $stiff_spring
 36IVP_Collision_Delegator_Root_Mindist
 36IVP_Liquid_Surface_Descriptor_Simple
 40CPredictable_Controller_Independant_Stub
+4@core_status %lx  trans %f %f %f  rot %f %f %f
 4OFF %d %d 1
 4VECT %d %d 1
 4[^_]
@@ -829,8 +828,8 @@ $stiff_spring
 4vf;T
 6ConVar
 7 %d %d %d %d %d %d %d
-7/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/../ivp_intern/ivp_physic_private.cxx
 7IConVar
+89S0u
 8CFmtStrNILi256ELb0EE
 8CSurface
 8IPhysics
@@ -838,42 +837,38 @@ $stiff_spring
 8System of %d constraints
 8Tu0@
 8[^_]
-9A t&
+9A t.
 9C ~\
 9C0~;
+9CDtY
 9CDt]9
 9CTraceIVP
-9H4t"
+9HL~"
 9IVP_U_SetI15IVP_Real_ObjectE
 9IVP_U_SetI16IVP_Mindist_BaseE
+9IVP_U_SetI22IVP_Compact_Poly_PointE
 9IVP_U_SetI8IVP_CoreE
 9IVP_VHash
-9N tL
-9P<~Y
+9N0t!9N4u
+9S4t#
 9SDtJf
-9p0t09p4t+
-9r4t&
-9y4tF
+9sD~L
 9~$~N
 :Eu	B
 :EuWB
-;<Ht-
-;B$tA
-;B<}Y
-;B<}{
 ;C<}&
-;F`t1
-;H`~g
 ;JX}3
-;M t5
-;P<}Y
+;N t=
+;Object points:
+;Q4|,
 ;S0|.
 ;S<}&
+;SD}Q
 ;V$}]
-;V4|a
-;VD}Y
+;^<}%
 ;s<|)
 ;s<}&
+;sL}S
 ;~D}(
 <.t.<\urf
 </h1>
@@ -881,47 +876,42 @@ $stiff_spring
 </script>
 </ul>
 <?t5<.t1<!t-
-<B^_]
-<Ft;<G
+<Bt?<b
 <Itn<J
 <Lt#<Xt
 <Tt7<V
 <[^_]
-<ht;<i
 <htq<v
 <img src="
-<ot=<pf
 <pre>
-<tt;<v
 =%s	Tetra_Edge: Bits %X %X %X
-=;W$t
 =CSP1
 =CSP1t{
 =IVPSt
 =SPVIuC
->%d %d %d
 >21IVP_Controller_Motion
 >VPHY
+?%2i: 
 ?%f %f %f %f
 ?*** IVP_SurfaceBuilder_Halfspacesoup::convert_halfspacesoup_to_compact_surface - skipping ledge due to invalid topology
 ?../ivp_collision/ivp_mindist_recursive.cxx
+?/home/buildbot/buildslave/csgo_pcbeta_linux/build/src/ivp/ivp_physics/ivp_time_event.hxx
+?22CPolyhedron_AllocByNew
 ?23CPhysicsFluidController
 ?333333
 ?PERFORMANCE (%s): Collision model will not support the fastest tracing code
 ?Virtual mesh!
 ?[^_]
-?do_constraint_system: Couldn't invert rot matrix!
 ?es-8R
 ?qh_basevertices: found %d vertices
-?qhull internal error (qh_projectpoints): newdim %d should be %d after projection
+?qhull error: insufficient memory to copy %d points
 ?sys:vehicle
 ?vphysics:player
 @ tP0
 @"f;C sC
-@&  %s
 @,IVPS
-@13IVP_CFEP_Hash
-@A20IVP_Constraint_Local
+@20IVP_Collision_Filter
+@[^_]
 @fff?
 @vphysics_save_cphysicsspring_t
 A Qhull error has occurred.  Qhull should have corrected the above
@@ -929,7 +919,6 @@ A coplanar point may lead to a wide facet.  Options 'Qs' (search for best
 A flipped facet occurs when its distance to the interior point is
 A. F.
 A. I.
-A/home/buildbot/buildslave_hpath/csgo_pcbeta_linux/build/src/ivp/ivp_physics/ivp_time_event.hxx
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 Ac@tr
 Ang Velocity: %.2f, %.2f, %.2f 
@@ -939,14 +928,13 @@ Angle-premerge-
 Angle-premerge-with-random
 Angular Drag: %.2f, %.2f, %.2f (factor %.2f)
 Approximate
+Aqhull error (qh_memalloc): insufficient memory
 At %02d:%02d:%02d & %2.5g CPU secs, qhull has created %d facets and merged %d.
 At %d:%d:%d & %2.5g CPU secs, qhull has merged %d facets.  The hull
 At a premature exit due to 'TVn', 'TCn', or precision error.
 At error exit:
 Attached core twice!!!
 Awake
-B&f;B$s0
-B([_]
 B,9B(
 B. E.
 B. G.
@@ -954,24 +942,33 @@ B. K.
 B. O.
 B18IVP_SurfaceManager
 BEGIN
-BH[_]
 BN uJ
 Bad packed vcollide!
 Because of the high dimension, the min x-coordinate and max-coordinate
 Both Anchors of a Torque_Actuator must be attached to just one object.
-Breaking '%s' in '%s'
 BuiltDebug
 Buoyancy-Solver's results:
+C"f;C sA
 C$;S(~&
+C&f;C$r
+C((knN
+C(tD1
 C*f;C(s,
 C,;C(
+C.f;C,r
 C333@
 C33s?
+C6f;C4r
+C<9CL~
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
+CL;C<
 COLORCORRECTION_VERSION_1
+CO`u-
+CPhysCollideCompactSurface::DuplicateAndScale FAILED to generate surface.
 CPhysicsCollision::ConvexFromConvexPolyhedron() conversion failure of polyhedron with AABB mins( %.2f, %.2f, %.2f ), maxs( %.2f, %.2f, %.2f )
 CPhysics_Airboat::do_simulation_controller projected_axis_direction_ws.normize failed
+CRf;CPr
 CUtlBuffer::VaPrintf: String overflowed buffer [%d]
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
@@ -981,6 +978,7 @@ CUtlRBTree overflow!
 CUtlSymbol::AddString
 CUtlSymbol::Find
 Cannot convert
+Cdo_constraint_system: Couldn't invert rot matrix!
 Centrum-postmerge
 Centrum-postmerge-with-random
 Centrum-premerge-
@@ -995,10 +993,11 @@ Convex hull of %d points in %d-d:
 Couldn't find a matching point to baseline!
 CreateInterface
 Current summary is:
-DBG_PATHMATCH
+DHavokConsole
 DISTANT
 DLOPEN Error:%s
 DUPLICATED/MATCH
+D[^_]
 Damping %.2f linear, %.2f angular
 Debug! 
 DebugTextureInfo001
@@ -1011,7 +1010,6 @@ Distance [%d] - [%d] : %f
 Distance-roundoff
 Do not use double quotes.  Option 'FO' ignored.
 DoubleVal
-Dtrue
 E. H.
 EMPTY - ok for slot zero only!
 ERRONEOUS
@@ -1023,26 +1021,19 @@ Error-roundoff
 EventSystem001
 F$;F tX
 F$~%1
-F&f;F$sb
-F((knN
 F,=MOPP
-F.f;F,sV
-F6f;F4r
-F<9FL~
 F@9F$
 FArea-total
 FCVAR_NEVER_AS_STRING
 FCentrums
 FD-cdd-out
-FD;N<
+FE u?
+FE ug
 FFacets-xridge
-FL;F<
 FNeighbors-vertex
-FO`u-
 FOptions
 FPoint-nearest
 FQhull
-FRf;FPr
 FSize
 FVertex-average
 Failed to restore spring enpoints
@@ -1050,6 +1041,7 @@ Farea
 Fcoplanars
 Fd-cdd-in
 Fd9FL
+Ffixed
 Finner
 First post-merge
 Fmerges
@@ -1061,18 +1053,15 @@ Fouter
 Fpoint-intersect
 Fsummary
 Ftriangles
-Funknown
 Furthest-site Delaunay triangulation by the convex hull of %d points in %d-d:
 Furthest-site Voronoi vertices by the convex hull of %d points in %d-d:
 Fvertices
 Fvoronoi
 Fxtremes
-G6f;G4r
-GCC: (crosstool-NG 1.12.2) 4.4.6
 GCC: (crosstool-NG 1.12.2) 4.6.1
+GD;G<
 GData manager 'used' memory incorrect
 GDrop-dim
-GE u`
 GLIBC_2.0
 GLIBC_2.1
 GLIBC_2.1.3
@@ -1091,15 +1080,13 @@ Gpoints
 Gridges
 Gtransparent
 Gvertices
-H8[^_]
-H[^_]
+HD;HL}A
+H^f9J^~
 Halfspace
 Halfspace intersection by the convex hull of %d points in %d-d:
 Halfspace-about
-HavokConsole
 Hinged on %s axis
 INST geom {define vsphere OFF
-IObject points:
 IVP Failed at %s %d
 If the input is lower dimensional:
 If the input should be full dimensional, you have several options that
@@ -1112,10 +1099,10 @@ InputSystemVersion001
 InstallChangeCallback called with NULL callback, ignoring!!!
 InstallChangeCallback ignoring duplicate change callback!!!
 IntVal
+J&f;J$s/
 J<[_]
 JArray
-J^f;H^~
-L?prismatic
+K*f;K(r
 L?pulley
 LIST # %s | %s
 LOG_GENERAL
@@ -1130,7 +1117,6 @@ LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_LogDirect
 LoggingSystem_RegisterLoggingChannel
-Lowered '%s' -> '%s'
 MATCHFRAMEWORK_001
 MATRIX_END
 MATRIX_POS
@@ -1143,7 +1129,6 @@ MERGING
 MERGING CYCLE
 Mass: %.1f (inv %.3f)
 MatSystemSurface006
-Matched '%s' -> '%s'
 Material: %s : density(%.1f), thickness(%.2f), friction(%.2f), elasticity(%.2f)
 MaterialSystemHardwareConfig013
 Matrix:
@@ -1151,15 +1136,11 @@ Matrix: %s
 MbP?q=
 MeshSystem001
 Module %s is a debug build
-N*f;N(r
 N10__cxxabiv115__forced_unwindE
 N10__cxxabiv119__foreign_exceptionE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
-N:f;N8
-ND;NL}>
-NL;N<}>
 NULL edge in check_concavity.
 NetworkSystemVersion001
 No 2d representation
@@ -1179,12 +1160,13 @@ Options selected for qhull %s:
 Output completed.  Verifying that all points are below %2.2g of
 Output completed.  Verifying that all points are below outer planes of
 P([^]
-P(^_]
+P(ti9
 PArea-keep
 PDrop-facets-dim-more
 PFacet-area-keep
 PGood-facet-neighbors
 PMerge-keep
+P[^_]
 Pairing Intersection:
 Pdrop-facets-dim-less
 Pgood
@@ -1252,6 +1234,7 @@ Qxact-merge
 Qz-infinity-point
 R,9_ 
 R,9s 
+R0[^_]
 R@9{ ~.
 RD9sD
 RandomFloat
@@ -1330,11 +1313,8 @@ UCS-4LE
 UTF-32LE
 UTF-8
 Unaccounted
-Unmatched %s
 Use 'QJ' to joggle the input or 'Q0' to turn off merging.
 Use 'TO', one space, file name, and space or end-of-line.
-V"f;V s5
-V:f;V8
 VAvi001
 VBAllocTracker001
 VBik001
@@ -1367,8 +1347,8 @@ VResourceAccessControl001
 VSoundEmitter003
 VStudioRender026
 VTT for 
+VUUUS
 VUUUf
-V^f;V\
 V_AppendSlash: ran out of space on %s.
 V_MakeAbsolutePath: _getcwd failed.
 Value: 
@@ -1377,7 +1357,6 @@ VehicleWheel
 Velocity: %.2f, %.2f, %.2f 
 Verify may report that a point is outside of a facet.
 Vertices and facets:
-Vff;Vd
 Visible
 Visible-distance
 Voronoi diagram by the convex hull of %d points in %d-d:
@@ -1393,8 +1372,10 @@ While executing: %s | %s
 Width-outside
 WorldRendererMgr001
 WriteMiniDump
-X([^_]
-X8[^_]
+X0[^_]
+X[^_]
+X^f9Y^
+Y^f9X^}
 You are changing a maxforce define of a constraint which does not exist.
 You are changing a maxtorque define of a constraint which does not exist.
 You are changing the fixing point of a constraint which does not exist.
@@ -1419,9 +1400,9 @@ ZtiWj
 [img]
 [list]
 [url=
-\;V$t
 \[^_]
 ]XIN[
+^d~j9
 _Accum
 _Fract
 _GLOBAL_
@@ -1467,26 +1448,10 @@ __cxa_atexit
 __cxa_atexit@@GLIBC_2.1.3
 __cxa_finalize
 __cxa_finalize@@GLIBC_2.1.3
-__errno_location
-__errno_location@@GLIBC_2.0
 __float128
 __gmon_start__
 __gnu_cxx::__concurrence_lock_error
 __gnu_cxx::__concurrence_unlock_error
-__lxstat
-__lxstat64
-__lxstat64@@GLIBC_2.2
-__lxstat@@GLIBC_2.0
-__strtod_internal
-__strtod_internal@@GLIBC_2.0
-__strtol_internal
-__strtol_internal@@GLIBC_2.0
-__xmknod
-__xmknod@@GLIBC_2.0
-__xstat
-__xstat64
-__xstat64@@GLIBC_2.2
-__xstat@@GLIBC_2.0
 _cX17IVP_Range_Manager
 _edata
 _fini
@@ -1506,6 +1471,7 @@ _xlsp
 _zero-centrum
 ` [^_]
 `< t"
+`[^_]
 `vphysics:drag
 a lens-shaped component, these points were not verified.  Use
 a ridge with more than two neighbors
@@ -1513,8 +1479,6 @@ aXE/[
 abort
 abort@@GLIBC_2.0
 accel1 
-access
-access@@GLIBC_2.0
 acos@@GLIBC_2.0
 acosf
 acosf@@GLIBC_2.0
@@ -1628,15 +1592,10 @@ chdir
 chdir@@GLIBC_2.0
 cheat
 child
-chmod
-chmod@@GLIBC_2.0
-chown@@GLIBC_2.1
 clearly convex
 client
 clientcmd_can_execute
 climbable
-closedir
-closedir@@GLIBC_2.0
 collideType
 collisionEnabled
 collisionpair
@@ -1672,7 +1631,6 @@ coplanar ridge
 coplanar ridges, concave ridges, and flipped facets.  In 4-d and higher,
 coplanar/concave merges due to avoiding old merge
 coplanarset for f
-core_status %lx  trans %f %f %f  rot %f %f %f
 cos@@GLIBC_2.0
 cosf@@GLIBC_2.0
 counterTorqueFactor
@@ -1769,7 +1727,6 @@ f;Q"w
 facets before post merge
 facets created altogether
 false
-false 
 fast_poly_convert
 fastcarspeed
 faststeeringrate
@@ -1779,15 +1736,10 @@ feasible point:
 fgets
 fgets@@GLIBC_2.0
 final_convexify_check: ERRORS: %i triangles, %i extrapoints.
-fixed
 flipped facet
 flipped facets
 float
 fluid
-fopen
-fopen64
-fopen64@@GLIBC_2.1
-fopen@@GLIBC_2.1
 for facets and their normals, neighbor and vertex sets
 for input points and outside and coplanar sets
 for ridges and their vertex sets
@@ -1800,8 +1752,8 @@ fputc@@GLIBC_2.0
 fputs
 fputs@@GLIBC_2.0
 free@@GLIBC_2.0
-freopen
-freopen@@GLIBC_2.0
+freopen64
+freopen64@@GLIBC_2.1
 frictionScale
 frictionscale
 from p%d to f%d
@@ -1816,8 +1768,7 @@ gearCount
 gearRatio
 getcwd
 getcwd@@GLIBC_2.0
-getenv
-getenv@@GLIBC_2.0
+gfffV
 global constructors keyed to 
 global destructors keyed to 
 good 
@@ -1895,8 +1846,6 @@ jumpfactor
 keepUprightTorque
 keepuprighttorque
 l[^_]
-lchown
-lchown@@GLIBC_2.0
 ld-linux.so.2
 libc.so.6
 libdl.so.2
@@ -1906,7 +1855,6 @@ libtier0.so
 libvstdlib.so
 limitMax
 limitMin
-link@@GLIBC_2.0
 localtime
 localtime@@GLIBC_2.0
 log@@GLIBC_2.0
@@ -1998,15 +1946,9 @@ minErrorTicks
 minLength
 minRotation
 minimum outside W%.2g.  Flipped facets are likely.
-mkdir
-mkdir@@GLIBC_2.0
-mkfifo
-mkfifo@@GLIBC_2.0
 mm	%g %g %g
 modelType
 motionEnabled
-mount
-mount@@GLIBC_2.0
 naturalLength
 nearly incident point
 nearly incident point (narrow hull)
@@ -2036,10 +1978,6 @@ of the input.  If possible, recompile Qhull with higher-precision reals.
 offFile
 onlyAngularLimits
 onlyStretch
-open64@@GLIBC_2.2
-open@@GLIBC_2.0
-opendir
-opendir@@GLIBC_2.0
 operator
 operator 
 options 'Qci Tv' to verify all points.
@@ -2053,7 +1991,6 @@ pObjAttached
 pObjEnd
 pObjReference
 pObjStart
-p^f;q^}Q9O 
 pair.  The convexity constraints may be too strong.  Reduce the
 partitioning statistics
 partitions of a point
@@ -2095,6 +2032,7 @@ precision error.  Please send the input and all of the output to
 precision problems
 precision statistics
 printf@@GLIBC_2.0
+prismatic
 projected p%d
 pthread_cancel
 pthread_cancel@@GLIBC_2.0
@@ -2118,7 +2056,6 @@ putchar@@GLIBC_2.0
 puts@@GLIBC_2.0
 pysic_test: tri->calc_areasize() < 1E-6f in triangle: %g
 q ;q$}
-q^f;p^
 qd2 = %f
 qh_addpoint: NULL facet.  Use qh_findbestfacet
 qh_addpoint: add p%d (v%d) to hull of %d facets (%2.2g above f%d) and %d outside at %4.4g CPU secs.  Previous was p%d.
@@ -2365,12 +2302,10 @@ qh_voronoi_center: at infinity for
 qh_voronoi_center: det %2.2g factor %2.2g 
 qhulf
 qhull 
-qhull Qs Pp C-0 W1e-14 E1.0e-6
 qhull Qs QJ%G C-0 Pp W1e-14 E1.0e-18
 qhull configuration error (qh_RANDOMmax in user.h):
 qhull configuration warning (qh_RANDOMmax in user.h):
 qhull error (qh_initstatistics): increase size of qhstat.id[].
-qhull error (qh_memalloc): insufficient memory
 qhull error (qh_meminit): insufficient memory
 qhull error (qh_memsetup): insufficient memory
 qhull error (qh_memsetup): largest mem size %d is >= buffer size %d or initial buffer size %d
@@ -2384,7 +2319,6 @@ qhull error: filename for 'TO' too long.
 qhull error: insufficient memory for 'Hn,n,n'
 qhull error: insufficient memory for feasible point
 qhull error: insufficient memory to compute dual of %d halfspaces
-qhull error: insufficient memory to copy %d points
 qhull error: insufficient memory to joggle %d points
 qhull error: insufficient memory to project %d points
 qhull error: insufficient memory to read %d points
@@ -2502,6 +2436,7 @@ qhull internal error (qh_printbegin): can not use this format for dimension %d
 qhull internal error (qh_printend): number of ridges %d != number printed %d and at end %d
 qhull internal error (qh_produce_output): temporary sets not empty (%d)
 qhull internal error (qh_projectinput): dimension after projection %d != hull_dim %d
+qhull internal error (qh_projectpoints): newdim %d should be %d after projection
 qhull internal error (qh_qhull): temporary sets not empty (%d)
 qhull internal error (qh_rename_sharedvertex): v%d's neighbors not in f%d
 qhull internal error (qh_setaddnth): nth %d is out-of-bounds for set:
@@ -2595,23 +2530,18 @@ qsort@@GLIBC_2.0
 r""\\
 r_actives %d  ignored_nr %d
 radius
+ragdoll
 ragdollconstraint
 rand@@GLIBC_2.0
 raytraceCenterOffset
 raytraceOffset
-readdir64
-readdir64@@GLIBC_2.2
 realloc
 realloc@@GLIBC_2.0
-realpath
-realpath@@GLIBC_2.3
 reason
 recompile qhull with 'make new'.  If errors still occur, there is
 reference temporary for 
 relativeDamping
-rename
 rename failures due to duplicated ridges
-rename@@GLIBC_2.0
 renamed vertex statistics
 renamed vertices in a pinched facet
 renamed vertices shared by multiple facets
@@ -2622,8 +2552,6 @@ ridge with multiple neighbors
 ridges created altogether
 ridges for f
 ridges with multiple neighbors
-rmdir
-rmdir@@GLIBC_2.0
 rolling
 rollingdrag
 rotInertia
@@ -2632,6 +2560,8 @@ rotSpeedDamping
 rotdamping
 runLeft
 runRight
+sD;sL}/
+sL;s<},
 sM[^]
 s_pInterfaceRegs
 saveRot.k
@@ -2639,8 +2569,6 @@ savedFlags
 savedMass
 savedMaterial
 savedRI.k
-scandir
-scandir@@GLIBC_2.0
 scrapeRoughThreshold
 scraperough
 scrapesmooth
@@ -2683,16 +2611,12 @@ springconstant
 springdamping
 springdampingcompression
 sprintf@@GLIBC_2.0
-sqrt@@GLIBC_2.0
-sqrtf
-sqrtf@@GLIBC_2.0
 ss_added
 sscanf
 sscanf@@GLIBC_2.0
 stabilizerConstant
 stabilizerconstant
 startPosition
-static_object
 staticsolid
 statistics for determining merges
 statistics for matching ridges
@@ -2727,8 +2651,6 @@ stepright
 strain
 strcasecmp
 strcasecmp@@GLIBC_2.0
-strcasestr
-strcasestr@@GLIBC_2.1
 strcat
 strcat@@GLIBC_2.0
 strchr
@@ -2737,8 +2659,6 @@ strcmp
 strcmp@@GLIBC_2.0
 strcpy
 strcpy@@GLIBC_2.0
-strdup
-strdup@@GLIBC_2.0
 strength
 string literal
 strlen
@@ -2751,8 +2671,6 @@ strncpy
 strncpy@@GLIBC_2.0
 strnlen
 strnlen@@GLIBC_2.0
-strpbrk
-strpbrk@@GLIBC_2.0
 strrchr
 strrchr@@GLIBC_2.0
 strstr
@@ -2773,8 +2691,6 @@ summary information
 surfaceSize
 surfaceplane
 surfaceprop
-symlink
-symlink@@GLIBC_2.0
 syn0: 
 syn1: 
 sys:actuator
@@ -2791,11 +2707,12 @@ sys:torque_actuator
 syscall
 syscall@@GLIBC_2.0
 t!RRPV
+t!f9U
 t)<.u
 t,QQVW
 t.RRj
-t3+Ft
 t4RRj
+t5+Bt
 tLRRj
 tP9PDu
 tan@@GLIBC_2.0
@@ -2850,8 +2767,7 @@ typeinfo for
 typeinfo name for 
 u4PPW
 uA[^]
-unlink
-unlink@@GLIBC_2.0
+unknown
 unsigned
 unsigned __int128
 unsigned char
@@ -2861,11 +2777,6 @@ unsigned long long
 unsigned short
 useClockwiseRotations
 useLocalPositions
-utime
-utime@@GLIBC_2.0
-utimes
-utimes@@GLIBC_2.0
-vH9wPt
 v[%d]=%1.3e 
 variable %d is independent
 variable_is_found  
@@ -2888,7 +2799,6 @@ vertices for r
 vertices removed from facets due to no ridges
 vertices.  Qhull reports these events when they occur.  It stops when a
 very strange: no alpha vec in get_angles!
-vo<bt
 volume
 vphys_sleep_timeout
 vphysics
@@ -2912,7 +2822,6 @@ vphysics_save_cshadowcontroller_t
 vphysics_save_cvehiclecontroller_t
 vphysics_save_motioncontroller_t
 vphysics_save_shadowcontrolparams_t
-vr9wPt
 vsnprintf
 vsnprintf@@GLIBC_2.0
 vsprintf
@@ -2947,10 +2856,8 @@ works_only_with_active
 worldAxisDirection
 worldPosition
 x-vals 
-x^f;y^}
 xfriction
 yE>{}()'
-y^f;x^
 yfriction
 zero diagonal on back substitution
 zero divisors during back substitute
