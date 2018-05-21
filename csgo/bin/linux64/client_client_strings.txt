@@ -445,10 +445,8 @@
  GCConnectionStatus_GC_GOING_DOWN
  Game {  type %s mode %s map %s } 
  H9w8tiH
- H;=%
- H;=&E
- H;=/
- H;=L
+ H;= 
+ H;=v
  HANDLING = %f
  IcD$
  IsInstanceActive: %s. IsInstructing: %s. IsLearned: %s
@@ -715,6 +713,7 @@
 #CMsgGCCStrike15_v2_Client2GCTextMsg
 #CMsgGCCStrike15_v2_GC2ClientTextMsg
 #CMsgGCCStrike15_v2_MatchmakingStart
+#CMsgGCItemCustomizationNotification
 #CMsgGCStorePurchaseFinalizeResponse
 #CSGOEcon_Default
 #CSGOEcon_SelectAllClass
@@ -2076,6 +2075,10 @@
 #SFUI_QMM_ERROR_TournamentTeamSize
 #SFUI_QMM_ERROR_UnavailMapSelect
 #SFUI_QMM_ERROR_VacBanned
+#SFUI_QMM_ERROR_X_AccountWarningNonPrime
+#SFUI_QMM_ERROR_X_AccountWarningTrustMajor
+#SFUI_QMM_ERROR_X_AccountWarningTrustMajor_Summary
+#SFUI_QMM_ERROR_X_AccountWarningTrustMinor
 #SFUI_QMM_ERROR_X_FailPingServer
 #SFUI_QMM_ERROR_X_FailReadyUp
 #SFUI_QMM_ERROR_X_FailVerifyClan
@@ -2940,6 +2943,7 @@ $~*E1
 %CGameServers_AggregationQuery_Request
 %CMsgGCCStrike15_v2_AcknowledgePenalty
 %CMsgGCCStrike15_v2_ClientGCRankUpdate
+%CMsgGCCStrike15_v2_ClientPartyWarning
 %CMsgGCCStrike15_v2_ClientReportPlayer
 %CMsgGCCStrike15_v2_ClientReportServer
 %CWorkshop_SetItemPaymentRules_Request
@@ -3008,6 +3012,7 @@ $~*E1
 %k_EMsgGCCStrike15_v2_GC2ClientTextMsg
 %k_EMsgGCCStrike15_v2_MatchmakingStart
 %k_EMsgGCCStrike15_v2_Party_Unregister
+%k_EMsgGCItemCustomizationNotification
 %k_EMsgGCItemPreviewExpireNotification
 %k_EMsgGCServerBrowser_BlacklistServer
 %k_EMsgGCStorePurchaseFinalizeResponse
@@ -3349,6 +3354,7 @@ $~*E1
 'k_EGCMsgWebAPIJobRequestForwardResponse
 'k_EMsgGCCStrike15_v2_AcknowledgePenalty
 'k_EMsgGCCStrike15_v2_ClientGCRankUpdate
+'k_EMsgGCCStrike15_v2_ClientPartyWarning
 'k_EMsgGCCStrike15_v2_ClientReportPlayer
 'k_EMsgGCCStrike15_v2_ClientReportServer
 'out_location' must not be NULL
@@ -3357,15 +3363,29 @@ $~*E1
 ( function() {
 (#GameUI_Disconnect_NoGOTVRelaysAvailable
 (%.4g,%.4g)
+(%2iS
 (%7.4f : %30s : %5.3f : %4.2f : %1d)
+(%PhS
 (%d)  EffectName "%s"  Dormant? %s  Emission Stopped? %s 
 (%d): Cycle latch used to correct %.2f in to %.2f instead of %.2f.
 (%d/%d)%s %s
+(%ohS
+(%ziS
 (%zu) Descend: %s, (%s), %s
 (%zu) readdir failed to find '%s' in '%s'
 (*%s*), 
+(-&iS
+(-JiS
 (0 - off) (1 - Draws the bounding box of entities) (2 - Draws the axis aligned bounding box used for culling) (3 - draws both bounding boxes)
+(5&iS
+(5NiS
+(5RiS
+(5khS
+(5~iS
 (;GLs7H
+(=1}L
+(=<tL
+(=CjS
 (@333333
 (A9] ~3I
 (B UH
@@ -3389,12 +3409,13 @@ $~*E1
 (G@UH
 (GOTV) %s
 (H9\$
-(H;=%M
-(H;=-V
+(H;=O.
+(H;=o
+(H;=}y
 (H;p t
 (Histogram luminance is in linear space)
 (L;l$8
-(Mt7H
+(MtOH
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
 (NETWORK_DISCONNECT_STEAM_AUTHALREADYUSED
 (Original algorithm) Target Scalar = %4.2f  Min/Max( %4.2f, %4.2f )  Current Scalar: %4.2f
@@ -3501,6 +3522,7 @@ $~*E1
 *.tga,*.jpg,*.bmp,*.vtf
 *.txt
 *.zip
+*8Pt+H
 *BxUH
 *CMsgGCCStrike15_v2_ClientToGCRequestTicket
 *CMsgGCCStrike15_v2_GC2ClientTournamentInfo
@@ -3959,8 +3981,10 @@ $~*E1
 .symtab
 .text
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%)`@
 /%E^%
+/%I`@
+/%o	@
+/%x o
 /-.b<
 /../platform
 //   BOOL   (a yes/no toggle)
@@ -4005,6 +4029,7 @@ $~*E1
 //MOD/%d_%s_%s.tga
 //MOD/%s
 //platform/materials/vgui/vtfnotloaded
+/5-.@
 /@$stH
 /@Lu]H
 /B$s H
@@ -4249,7 +4274,9 @@ $~*E1
 0D;KP
 0D;sLr
 0E;nPD
-0H;=U
+0H;=%7
+0H;=@
+0H;=m/X
 0[A\A]A^A_]
 0[A\A]A^]
 0[A\]
@@ -4781,7 +4808,6 @@ $~*E1
 14TournamentTeam
 14XpProgressData
 150dc0d04499860fc68a84423987163f9d42b1f4
-15:33:16
 15AccountActivity
 15AshDebrisEffect
 15CAboveWaterView
@@ -4911,6 +4937,7 @@ $~*E1
 16000
 16384
 165f5089f2e04ce5647b74c1937a8d5e24b21c36
+16:10:05
 16CActivityDataOps
 16CBaseAchievement
 16CBaseHudChatLine
@@ -5487,6 +5514,7 @@ $~*E1
 2*.CMsgDPPartnerMicroTxnsResponse.EErrorCode"
 2+.CMsgGCGetPersonaNames_Response.PersonaName
 2,.CMsgAMSendEmail.PersonaNameReplacementToken
+2,.CMsgGCCStrike15_v2_ClientPartyWarning.Entry
 2-.CGameServers_AggregationQuery_Response.Group
 2-.CMsgGCCStrike15_v2_MatchmakingGC2ClientHello"
 2-.CMsgGCCStrike15_v2_Party_SearchResults.Entry
@@ -6682,6 +6710,7 @@ $~*E1
 35CMsgGCCStrike15_v2_Client2GCTextMsg
 35CMsgGCCStrike15_v2_GC2ClientTextMsg
 35CMsgGCCStrike15_v2_MatchmakingStart
+35CMsgGCItemCustomizationNotification
 35CMsgGCStorePurchaseFinalizeResponse
 35CUiComponentMatchListContainer_Live
 35CUiComponent_CompetitiveMatch_Table
@@ -6712,6 +6741,7 @@ $~*E1
 37CGameServers_AggregationQuery_Request
 37CMsgGCCStrike15_v2_AcknowledgePenalty
 37CMsgGCCStrike15_v2_ClientGCRankUpdate
+37CMsgGCCStrike15_v2_ClientPartyWarning
 37CMsgGCCStrike15_v2_ClientReportPlayer
 37CMsgGCCStrike15_v2_ClientReportServer
 37CMsgGCMsgMasterSetWebAPIRouting_Entry
@@ -6750,14 +6780,20 @@ $~*E1
 39ClientJob_EMsgGCCStrike15_v2_GlobalChat
 39ClientJob_EMsgGC_GlobalGame_Unsubscribe
 3: mouse_acceleration = pow(raw_mouse_delta, m_customaccel_exponent - 1) * sensitivity
-3="pQ
-3=>,Z
-3=?8T
-3=FoS
-3=^LR
-3=^Og
-3=^iQ
-3=fDT
+3=&4Q
+3=&c\
+3=>0q
+3=>oh
+3=FuW
+3=N%x
+3=^!T
+3=^:T
+3=^]\
+3=f%f
+3=g7x
+3=n"q
+3=~*q
+3=~:[
 3@333333
 3CCommunity_TerminateGamePersonalDataEntries_Request
 3CMsgGCCStrike15_v2_MatchListRequestCurrentLiveGames"G
@@ -6782,7 +6818,6 @@ $~*E1
 3k_EMsgGCCStrike15_v2_ClientVarValueNotificationInfo
 3k_EMsgGCCStrike15_v2_MatchmakingGC2ServerRankUpdate
 3k_EMsgGCCStrike15_v2_ServerVarValueNotificationInfo
-3l7GtvH
 3m_iPing[0]
 4 - no pin
 4 by 3
@@ -6847,6 +6882,7 @@ $~*E1
 43CCompetitiveMinspecConvarviewmodel_offset_z
 43CGameIntegrationDataRenderer_AllGrenades_v1
 43CMsgAMSendEmail_PersonaNameReplacementToken
+43CMsgGCCStrike15_v2_ClientPartyWarning_Entry
 43CMsgGCCStrike15_v2_ClientToGCRequestElevate
 43CMsgGCCStrike15_v2_GiftsLeaderboardResponse
 43CMsgGCCStrike15_v2_MatchmakingServer2GCKick
@@ -6876,6 +6912,7 @@ $~*E1
 45CMsgGCCStrike15_v2_MatchmakingGC2ClientUpdate
 45CStatTrakDigitProxyForModelWeaponPreviewPanel
 45ClientJob_EMsgGCCStrike15_v2_GC2ClientTextMsg
+45ClientJob_EMsgGCItemCustomizationNotification
 469A28EF7C28CCA3DC721D044F4496BCCA7EF4146FBF25C9
 46CCommunity_GetGamePersonalDataEntries_Response
 46CDataGCCStrike15_v2_TournamentMatchDraft_Entry
@@ -6900,6 +6937,7 @@ $~*E1
 47CMsgGCCStrike15_v2_MatchListRequestFullGameInfo
 47CMsgGCCStrike15_v2_MatchmakingClient2ServerPing
 47CWeaponLabelTextProxyForModelWeaponPreviewPanel
+47ClientJob_EMsgGCCStrike15_v2_ClientPartyWarning
 47H;E
 48000
 485e97d65cbcd64357842ea658af5928fd040a4b
@@ -7167,8 +7205,6 @@ $~*E1
 99d321a000b1edf8424771ad644a3bcadfae933d
 99e6e738e0521ce7a36c980315b2723854bbbd9e
 99w8}
-9=rJ&
-9=rM&
 9@InitChromeHTMLRenderTarget
 9C@t	
 9CAbsProxy
@@ -7583,6 +7619,7 @@ $~*E1
 ?AUE1
 ?AVAUATSH
 ?Blending mip%d %dx%d to
+?C@qe
 ?CBaseAchievement
 ?CBaseStorePreviewIcon
 ?CCSItemSelectionPanel
@@ -7663,7 +7700,6 @@ $~*E1
 @333333
 @82t!@
 @89uC@8y
-@8=%J&
 @8A\]
 @8H;E
 @8w2t
@@ -7692,8 +7728,8 @@ $~*E1
 @CHudBaseTimer
 @CScaleformComponent_Teammates
 @D t(
-@D9-Q
 @E9|$
+@H;=U2
 @HA\]
 @HHc<
 @HcAPH
@@ -7901,7 +7937,6 @@ A;\$@}
 A;\$P|
 A;] |
 A;] }&I
-A;] }'I
 A;] }/I
 A;](r
 A;](|
@@ -9183,6 +9218,7 @@ A\A]A^A_
 A\A]A^A_]
 A\A]A^A_]A
 A\A]A^]
+A\A]A^]Hc
 A\A]]
 A\HcB
 A]A^A_
@@ -9520,12 +9556,14 @@ B([A\]
 B)D9u
 B-Spline
 B0E3B
+B0IcT$8H
 B0r"H
 B3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF
 B4050A850C04B3ABF54132565044B0B7D7BFD8BA270B39432355FFB4
 B4E134D3FB59EB8BAB57274904664D5AF50388BA
 B4E3B
 B<E3B
+B@IcT$HI
 BADFUNCTIONPOINTER
 BASE_SCAMPER
 BCClientScoreBoardDialog
@@ -11764,7 +11802,7 @@ ChunkMd5Second
 ChunkMd5SecondText
 CipherModeBase: feedback size cannot be specified for this cipher mode
 CkeyValuesTokenReader::SeekBackOneToken: No tokens read yet
-Cl@u?H
+Cl@uGH
 Clamp Maximum Light Value to Initial Color
 Clamp Minimum Light Value to Initial Color
 Clamp Scalar
@@ -11820,6 +11858,7 @@ ClientJob_EMsgGCCStrike15_v2_ClientAccountBalance
 ClientJob_EMsgGCCStrike15_v2_ClientAuthKeyCode
 ClientJob_EMsgGCCStrike15_v2_ClientCommendPlayerQueryResponse
 ClientJob_EMsgGCCStrike15_v2_ClientLogonFatalError
+ClientJob_EMsgGCCStrike15_v2_ClientPartyWarning
 ClientJob_EMsgGCCStrike15_v2_ClientPlayerDecalSign
 ClientJob_EMsgGCCStrike15_v2_ClientPollState
 ClientJob_EMsgGCCStrike15_v2_ClientReportResponse
@@ -11845,6 +11884,7 @@ ClientJob_EMsgGCCStrike15_v2_Party_Search
 ClientJob_EMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
 ClientJob_EMsgGCCStrike15_v2_PlayersProfile
 ClientJob_EMsgGCCStrike15_v2_WatchInfoUsers
+ClientJob_EMsgGCItemCustomizationNotification
 ClientJob_EMsgGCStoreGetUserDataResponse
 ClientJob_EMsgGCUserTrackTimePlayedConsecutively
 ClientJob_EMsgGC_GlobalGame_Play
@@ -11941,6 +11981,7 @@ Command::Game::ChatReportError
 Command::Game::ChatReportGreen
 Command::Game::ChatReportMatchmakingStatus
 Command::Game::ChatReportMatchmakingStatusW
+Command::Game::ChatReportYellow
 Command::RequestHostUpdate
 Command::UpdateHostPrefs
 CommandComboBox::OnMessage: cvar %s not found.
@@ -12421,13 +12462,17 @@ D24FS8
 D24X4S4
 D24X8
 D24X8_SHADOW
-D3%tJ
-D3-}{
+D3%$ 
+D3%+e
+D3%,({
+D3%-#
+D3%e/
+D3%m0
+D3%}I
+D3-][
+D35%V
 D35E472036BC4FB7E13C785ED201E065F98FCFA5B68F12A32D482EC7EE8658E98691555B44C59311
 D35E472036BC4FB7E13C785ED201E065F98FCFA6F6F40DEF4F92B9EC7893EC28FCD412B1F1B32E27
-D35}v
-D3=[&
-D3=y+
 D40D9
 D6031998D1B3BBFEBF59CC9BBFF9AEE1
 D7C134AA264366862A18302575D0FB98D116BC4B6DDEBCA3A5A7939F
@@ -12437,15 +12482,15 @@ D8	,H
 D8c*u
 D8g+t
 D9 tjH
-D9%}LD
+D9%%)
+D9%8iE
 D9(r#t
 D9(t5H
 D9(tWH
 D9)t9H
-D9-:wn
+D9-Q"
 D90th
 D94$w
-D95[x
 D9:t2
 D9:tLA
 D9F<~
@@ -12481,15 +12526,10 @@ D; t=H
 D;!ti
 D;!t{Hc
 D;"t{Hc
-D;%3o
-D;%:cz
-D;%Oq
-D;%Yn
-D;%[A
-D;%ep
-D;%hkv
-D;%wHt
-D;%yr
+D;%-~
+D;%AN
+D;%d{
+D;%xmu
 D;&tU
 D;'t&
 D;'t[f.
@@ -12497,36 +12537,27 @@ D;(t	H
 D;*t-H
 D;*t5H
 D;*tD
-D;- bz
-D;-&vn
-D;-(	s
-D;-2vr
-D;-@h
-D;-Bxr
-D;-L 
-D;-^wn
-D;-eQ
-D;5	ju
-D;5#<u
-D;5#Cu
-D;51Ru
-D;59iu
-D;5A:u
-D;5Mju
-D;5Qbu
-D;5S>u
-D;5SEu
-D;5aTu
-D;5m[
-D;5q<u
-D;5qCu
+D;-"s
+D;-?'t
+D;-R[s
+D;-Vs
+D;-d]s
+D;-mK~
+D;-wN
+D;51cv
+D;51jv
+D;5^4
+D;5aev
+D;5bq
+D;5sD
+D;5svv
+D;5wV
 D;6u 
-D;=#1}
-D;=:Os
-D;=L#
-D;=Os
-D;=d[
-D;=x"
+D;="]
+D;=0B
+D;==ju
+D;=Ont
+D;=yA
 D;`(}bH
 D;`<t^
 D;a$u
@@ -12556,7 +12587,6 @@ D;c@}"H
 D;c@}&H
 D;c@}'H
 D;c@}*H
-D;c@}.H
 D;c@}/H
 D;cH|
 D;cH}'H
@@ -13362,7 +13392,6 @@ E3d$TfA
 E3mTfA
 E3vTfA
 E4A9F`
-E56(b
 E87579C11079F43DD824993C2CEE5ED3
 E9/~^
 E95E4A5F737059DC60DF5991D45029409E60FC09
@@ -14372,6 +14401,7 @@ Game::ChatReportError
 Game::ChatReportGreen
 Game::ChatReportMatchmakingStatus
 Game::ChatReportMatchmakingStatusW
+Game::ChatReportYellow
 Game::SetPlayerRanking
 GameBackground.swf
 GameClientExports001
@@ -15126,6 +15156,7 @@ H+V`Hi
 H+V`I+@`H
 H+VpI+@pH
 H+W`H
+H5r`P
 H9*u!H
 H9,$t
 H9,$u
@@ -15165,170 +15196,161 @@ H9|$8H
 H9|$`H
 H;,$r
 H;1t8
-H;5$9
-H;5-e
-H;5.|
-H;52,
-H;5:n
-H;5@4
-H;5@R
-H;5X#
-H;5X8
-H;5Xh
-H;5`S
-H;5`j
-H;5m8
-H;5u;
-H;5xN
-H;5xn
-H;5yq
+H;5 ~W
+H;5( 
+H;5(<W
+H;5)^
+H;55"
+H;5Ec
+H;5MjW
+H;5WVW
+H;5\+
+H;5dEV
+H;5eg
+H;5pqW
 H;7t$
-H;=	?
-H;= 7
-H;=!8
-H;=!Y
-H;="b
-H;="c
-H;=&>
-H;=&N
-H;='!
-H;='#
-H;='B
-H;='G
-H;='P
-H;='PU
-H;='b
-H;='c
-H;='}
-H;=)	^
-H;=*[
-H;=+k
-H;=,,V
-H;=-7
-H;=/W
-H;=/Y
-H;=/i
-H;=0P
-H;=0R
-H;=1o
-H;=2Q
-H;=2T
-H;=2Z
-H;=3r
-H;=4a
-H;=4{U
-H;=59
-H;=5B
-H;=5PV
-H;=6A
-H;=6e
-H;=7!
-H;=7qU
-H;=8g
-H;=9F
-H;=9PE
-H;=;7
-H;=?;
-H;=@b
-H;=A_
-H;=BC
-H;=Bg
-H;=C?
-H;=F7
+H;=	q
+H;=	q^
+H;=	|
+H;=	}
+H;= b
+H;=#P
+H;=$tV
+H;=%o
+H;=&K
+H;=&M
+H;=',
+H;=';
+H;='E
+H;='QV
+H;='|
+H;=(@X
+H;=(KV
+H;=(QV
+H;=(j
+H;=+G
+H;=,W
+H;=,c
+H;=,v
+H;=-0X
+H;=->
+H;=-E
+H;=-m
+H;=/F
+H;=/G
+H;=0F
+H;=2O
+H;=3Op
+H;=5;
+H;=5G
+H;=6.
+H;=6:X
+H;=6gV
+H;=7I
+H;=7N
+H;=7p
+H;=7z
+H;=8|
+H;=9H
+H;=:J
+H;=;=X
+H;=<K
+H;=<k
+H;=>P
+H;=?>
+H;=?@
+H;=?X
+H;=?y
+H;=?{
+H;=@X
+H;=@l
+H;=Ax
+H;=DBV
+H;=DF
+H;=E$
+H;=EZ
+H;=F\V
 H;=Fb
-H;=Fc
-H;=G!
-H;=G9
-H;=GH
-H;=GQ
-H;=Gc
-H;=Gd
-H;=Gs
-H;=I1
-H;=K;
-H;=L>
-H;=LN
-H;=P[
-H;=V)
-H;=VA
-H;=VD
-H;=VP
-H;=Vk
-H;=W(
-H;=W:
-H;=WB
-H;=WG
-H;=WJ
-H;=W`
-H;=Wr
-H;=WvU
-H;=X5V
-H;=Y+
-H;=ZQ
-H;=\a
-H;=]8
-H;=]=
-H;=]No
-H;=]PV
-H;=^<
-H;=^G
-H;=^W
-H;=^~
-H;=_ 
-H;=_V
-H;=_f
-H;=`)
-H;=`0
-H;=cV
-H;=d<
-H;=e"
-H;=eK
-H;=eZ
-H;=e`
-H;=fb
-H;=ff
-H;=g.
-H;=gFU
-H;=gR
-H;=ge
-H;=gt
-H;=g{U
-H;=h?
-H;=hd
-H;=i)
-H;=i5
-H;=kO
-H;=k^
-H;=l:V
-H;=mR
-H;=nj
-H;=oX
-H;=pE
-H;=pJ
-H;=qC
-H;=qX
+H;=G)
+H;=G2
+H;=Gb
+H;=H<X
+H;=I)V
+H;=I|
+H;=JS
+H;=KZ
+H;=K|
+H;=M^
+H;=O5X
+H;=PL
+H;=Ph
+H;=P|
+H;=QA
+H;=QwU
+H;=RI
+H;=TE
+H;=TKV
+H;=V6
+H;=Vv
+H;=W"
+H;=WW
+H;=X?X
+H;=Y1
+H;=Yt
+H;=[=
+H;=\EU
+H;=\F
+H;=\u
+H;=]A
+H;=]K
+H;=_u
+H;=`7
+H;=`I
+H;=b+
+H;=d`
+H;=eEX
+H;=fAX
+H;=fG
+H;=fK
+H;=fX
+H;=fq
+H;=g$
+H;=g*
+H;=g|U
+H;=iO
+H;=jP
+H;=l>
+H;=oz
+H;=o|
+H;=qx
 H;=q|
-H;=s_
-H;=stU
-H;=u8
-H;=v>
-H;=vN
-H;=v[
-H;=vm
-H;=w#
-H;=wL
-H;=wp
-H;=ws
-H;=y{
-H;={6
-H;={J
-H;={`
-H;={e
-H;=|(U
-H;=|)
-H;=}J
+H;=rw
+H;=r}
+H;=t\V
+H;=u9X
+H;=u^
+H;=v7X
+H;=v=
+H;=vh
+H;=v|
+H;=w9
+H;=wT
+H;=w\
+H;=wa
+H;=y.
+H;=y;V
+H;=yi
+H;=yy^
+H;=z~
+H;={zV
+H;=|6
+H;=|6V
+H;=|;
+H;=|S
+H;=|X
+H;=|b
 H;=}Z
-H;=~K
+H;=~J
 H;C s	H
 H;Cpt)H
 H;CxH
@@ -15803,8 +15825,8 @@ Ict$8H
 Ict$d
 Icx01
 Ic|$ I
+Ic|$(I
 Ic|$(M
-Ic|$0I
 Ic|$0M
 Ic|$8M
 Ic|$@I
@@ -16142,6 +16164,7 @@ Item Set %s: Bundle definition "%s" was not found
 Item Set %s: Duplicate name specified
 Item Set %s: Invalid to set a collection to be hidden
 Item Set %s: Set contains no items
+Item customization notification: %u (%s) # %llu (%u items)
 Item definition "%s" not found
 Item definition %i "%s" used in both wearable and not wearable slots!
 Item definition %s: "max_ilevel" must be greater than or equal to 0
@@ -16213,7 +16236,6 @@ J89O8}&I
 J8E3J
 J8tkH
 J;t" I
-J@IcT$HH
 JA9OL
 JFIF APP0 marker: version %d.%02d, density %dx%d  %d
 JFIF extension marker: JPEG-compressed thumbnail image, length %u
@@ -16254,11 +16276,10 @@ K [A\]
 K tVL
 K to1
 K(D;!t
-K4 H;=
-K8 H;=Z(
+K4 H;=5a
+K8 H;=
 K< H;=
-K<@H;=_
-K<@H;=x<
+K<@H;=
 K@fD;!t
 K@t7I
 K@~)A
@@ -16266,7 +16287,6 @@ KCDummyMaterialProxy::OnBind( %p )
 KD H;=
 KD L9
 KD@H;=
-KD@H;=o
 KD_ONLINE_CASUAL
 KD_ONLINE_COMPETITIVE
 KD_ONLINE_GG_BOMB
@@ -16542,7 +16562,7 @@ L$0 I
 L$0@A
 L$0@H
 L$0@H;5
-L$0@H;=iTU
+L$0@H;=9
 L$0H)
 L$0Hc
 L$0t[
@@ -16554,7 +16574,7 @@ L$4 H;5
 L$4@A
 L$4@H
 L$4@H;5
-L$4@H;=
+L$4@H;=j
 L$4@I
 L$8 A
 L$8 H
@@ -16571,14 +16591,13 @@ L$8Hc
 L$8t#I
 L$< A
 L$< H
-L$< H;5
+L$< H;5x/U
 L$< H;=
 L$< L9
 L$< M
 L$<@A
 L$<@H
 L$<@H;5
-L$<@H;5@o
 L$@ A
 L$@ H
 L$@@A
@@ -16608,7 +16627,7 @@ L$L@A
 L$L@H
 L$P A
 L$P H;5
-L$P H;=}
+L$P H;=
 L$P@A
 L$PA;D$\
 L$PE1
@@ -16623,7 +16642,7 @@ L$XD91t
 L$XE1
 L$Xu	
 L$` H;5
-L$` H;=7u
+L$` H;=
 L$`@A
 L$`@H
 L$`H)
@@ -16653,7 +16672,7 @@ L$| H
 L$| I
 L$|@A
 L$|@H
-L$|@H;5
+L$|@H;58
 L)e0L)
 L)eXL)
 L)epL)
@@ -16676,14 +16695,12 @@ L;!t0
 L;!t3
 L;!tP
 L;"tsH
-L;%\a
+L;%<<F
 L;,$t9L
 L;,$u
-L;-L9u
-L;-b-u
+L;-|^v
 L;.t;A
 L;/u 
-L;5A{
 L;8t!A
 L;L$ H
 L;T$ 
@@ -18969,6 +18986,7 @@ Party required 3
 Party required 4
 Party required 5
 Party too large
+Party warning: %u (%u)
 Party!!
 PartyBrowser: refresh finished (%u results, %.2f sec)
 PartyBrowser: refreshing list... (0x%08X @ %d)
@@ -20071,6 +20089,7 @@ ScaleformComponent_ImageCache_PurgePassStart
 ScaleformComponent_Inventory_CrateOpenError
 ScaleformComponent_Inventory_CrateOpened
 ScaleformComponent_Inventory_InventoryReceivedFromGC
+ScaleformComponent_Inventory_ItemCustomizationNotification
 ScaleformComponent_Inventory_ModelPanelReady
 ScaleformComponent_Inventory_OnHasNewItems
 ScaleformComponent_Inventory_PlayerEquipSlotChanged
@@ -20449,6 +20468,7 @@ ShouldCloseOnBuy
 ShouldShow
 ShouldShowSpecStats
 ShouldUseNewAssertDialog
+Show IPCs on netgraph panel
 Show activities in the (client) animation state display.
 Show alien gib entities
 Show all EmitSound calls including their symbolic name and the actual wave file they resolved to. (-1 = for nobody, 0 = for everybody, n = for one entity)
@@ -21417,7 +21437,6 @@ UCS-4LE
 UGCOperation
 UGCRead failed? (UGC=%08X%08X).
 UGCUnzipThreadPool
-UHc5Xa!
 UHc7H
 UHcG@H
 UHcO H
@@ -22170,7 +22189,6 @@ Writing unknown lump #%d (%d bytes)
 Wrong JPEG library version: library is %d, caller expects %d
 Wrong alignment %d
 Wx[]A\A]A^A_
-X%p1C
 X%p87
 X,IcE
 X0~tA
@@ -22190,7 +22208,6 @@ XD$,I
 XD$<A
 XD$pH
 XD;d$l
-XGtmH
 XH0u)
 XH`t=
 XIcL$
@@ -22215,9 +22232,13 @@ XpNeededForStar
 XpProgressData
 Xx81uBl)
 X}twH
+Y%51@
+Y-?hS
 Y-Rp@
+Y5ihS
 Y<#tw<
 Y=bq2
+Y=phS
 Y@TE_WorldDecal
 YD$$H
 YD$`H
@@ -22410,7 +22431,7 @@ Zipfile is corrupt or not a zipfile
 \$xHc
 \$xMcT$dJ
 \%03o
-\08Pt
+\08Pt"H
 \D $I
 \D$0f
 \D$dH
@@ -22452,7 +22473,6 @@ _DateOnly
 _ExitOnFatalAssert
 _Jv_RegisterClasses
 _LPT_%s_%d
-_QH*4
 _ST_%s_%d
 _Z10DevWarningPKcz
 _Z11ConColorMsgRK5ColorPKcz
@@ -22904,22 +22924,18 @@ _xlsp
 `$tDL
 `,IcE
 `<D;%
-`<D;%	
-`<D;%!
-`<D;%&
-`<D;%'
-`<D;%>
-`<D;%E
-`<D;%V
-`<D;%Y
-`<D;%\
-`<D;%a
-`<D;%e
-`<D;%f
-`<D;%nbz
-`<D;%nm
-`<D;%scz
-`<D;%u
+`<D;%%!
+`<D;%.
+`<D;%5
+`<D;%6
+`<D;%N
+`<D;%U
+`<D;%YU
+`<D;%[
+`<D;%c"
+`<D;%q
+`<D;%v
+`<D;%wN
 `<D;a
 `<D;c
 `<E;e
@@ -24623,6 +24639,7 @@ cpu_level_restart
 crafted
 crafting
 cramp
+crate_unlock
 crc32
 create from parent particles
 createBombPack
@@ -25915,7 +25932,7 @@ fx_drawmetalspark
 fx_glass_velocity_cap
 fx_time
 g L;%
-g L;%oM
+g L;%?x
 g15_dumpplayer
 g15_reload
 g15_update_msec
@@ -26177,6 +26194,7 @@ gpu_level_restart
 gpu_mem_level_optionsui
 gpu_mem_level_restart
 graffiti_tints
+graffity_unseal
 graphs
 greaterVar
 greek
@@ -26212,38 +26230,45 @@ gunsmith
 h(tpI
 h<D9m
 h<D;-
-h<D;-!8
-h<D;-&
-h<D;-(
-h<D;-)
-h<D;-*
-h<D;-,
-h<D;-.
-h<D;-/
-h<D;-1
-h<D;-2
+h<D;-!$
+h<D;-"
+h<D;-$0
+h<D;-)	
+h<D;-/1
+h<D;-2#
+h<D;-5
+h<D;-58
 h<D;-7
-h<D;-9
-h<D;-:
-h<D;-;
-h<D;-<
-h<D;-?%}
-h<D;-F
-h<D;-G
-h<D;-N
-h<D;-Q
-h<D;-R
-h<D;-V
-h<D;-\	
-h<D;-]
-h<D;-_
-h<D;-a
-h<D;-i
+h<D;-8;
+h<D;-:2
+h<D;-@9
+h<D;-@:
+h<D;-B0
+h<D;-C<
+h<D;-D*
+h<D;-E3
+h<D;-O)
+h<D;-O+
+h<D;-O,
+h<D;-P4
+h<D;-W7
+h<D;-Z-
+h<D;-[5
+h<D;-[6
+h<D;-_%
+h<D;-_(
+h<D;-c
+h<D;-e.
+h<D;-f&
+h<D;-j'
+h<D;-m
 h<D;-q
-h<D;-qh
-h<D;-s
-h<D;-t
-h<D;-}
+h<D;-qr
+h<D;-r/
+h<D;-v
+h<D;-x
+h<D;-z	
+h<D;-}0
 h<D;k
 h<E;l$
 hA;T$
@@ -26737,6 +26762,7 @@ invnextgrenade
 invnextitem
 invnextnongrenade
 invprev
+ipc: %-4d max %-4d avgps %-4.1f avgpf %-4.1f (%.1f s)
 is buymenu open
 is casual or training
 is commodity
@@ -30559,6 +30585,8 @@ namekeys
 namelabel
 names
 nametag
+nametag_add
+nametag_remove
 navDown
 navLeft
 navRight
@@ -30586,6 +30614,7 @@ net_client_steamdatagram_enable_override
 net_client_steamdatagram_ping_measurement_direct_only
 net_graphheight
 net_graphholdsvframerate
+net_graphipc
 net_graphmsecs
 net_graphpos
 net_graphproportionalfont
@@ -30981,7 +31010,11 @@ p&f9r&
 p(?!@V>
 p<D9u
 p<D;5
-p<D;5:
+p<D;5#
+p<D;5,
+p<D;53
+p<D;5K
+p<D;5\
 p<D;s
 p<D;u
 p<E;t$
@@ -31928,7 +31961,6 @@ reload_store_config
 remap_scalar
 remapactivity
 rematch
-remove
 remove%d
 removeBombPack
 removeIconPack
@@ -33100,6 +33132,7 @@ sticker slot 0 id
 sticker_%s_%s_%i_1st
 sticker_%s_%s_%i_3rd
 sticker_a
+sticker_apply
 sticker_b
 sticker_c
 sticker_d
@@ -33484,7 +33517,7 @@ t$(x'H
 t$,H)
 t$0A\]
 t$0E1
-t$0Hcz8L
+t$0Hcz8H
 t$0Ic
 t$8H9
 t$8Ic|$@HcS@H
@@ -33492,7 +33525,7 @@ t$</t 1
 t$<E1
 t$@H)
 t$@H9
-t$@HczHH
+t$@HczHL
 t$@IcD$HM
 t$@L)
 t$H3K
@@ -34322,7 +34355,6 @@ unlink
 unlink@@GLIBC_2.2.5
 unlitgeneric
 unlocalized_name
-unlock
 unlockTime
 unlock_time
 unlocked styles
@@ -34699,6 +34731,7 @@ wallhack:
 wallhack:convict
 wallhack:dismiss
 warning: Vis decompression overrun
+warntype
 warp max
 warp min
 warp transition start time
@@ -34980,7 +35013,10 @@ x6Hcw
 x;Hcw
 x;Lcu
 x<D;=
-x<D;=@
+x<D;=,D
+x<D;=3
+x<D;=?
+x<D;=[
 x<E;}
 x<E;~
 x>A;E0}8I
@@ -35044,7 +35080,6 @@ yxxxD
 yxxxL
 yxxxU
 z axis
-z0IcT$8I
 zXdS3
 z_infected_decals
 z_mob_simple_shadows
@@ -35077,50 +35112,49 @@ zt????
 {	zuxH
 { H+u
 { H;=
-{ H;=3
-{ H;=3`
-{ H;=:<
-{ H;=:W
-{ H;==?
-{ H;=Dd
-{ H;=E
-{ H;=u
-{ H;=~N
+{ H;='
+{ H;=>
+{ H;=F
+{ H;=G
+{ H;=d4X
+{ H;=d8X
+{ H;=e3
+{ H;=eY
+{ H;=m$
 { JcL dH
 { JcL dM
 {%.*ls=
 {(H;=
-{(H;=%
-{(H;=_8
-{(H;=ia
-{(H;=|
+{(H;=5
+{(H;=_
+{(H;=o
 {,D;{0
 {0H;=
-{0H;=88
-{0H;==
-{0H;=X
-{0H;=[
+{0H;=+7X
+{0H;=C#
+{0H;=U
+{0H;=}"
 {8H;=
-{8H;=4
-{8H;==
-{8H;=E
-{8H;=_
+{8H;=5D
+{8H;=m0X
 {@H;=
-{@H;=8l
+{@H;=EB
+{@H;=M
+{@H;=m2X
 {GOTVRELAYSTART}
 {H+S$Hc
-{HH;=`
+{HH;=03X
 {PH;=
-{PH;=9
+{PH;=	3X
 {XH;=
-{XH;=-6
+{XH;=t
 {XI9xh
 {Xt7H
 {`H;=
+{`H;=}
 {hH;=
-{hH;=MY
-{hH;=U6
-{pH;=
+{hH;=M 
+{pH;=-{
 {uint32}
 {xE;}
 {}()':
@@ -35208,7 +35242,7 @@ zt????
 }1A9\$l|*
 }2fD;
 }3fA;
-}4fD;%*
+}4fD;%z
 }6fA;\$
 }6fA;\$Fw.M
 }8	~+A
@@ -35239,7 +35273,7 @@ zt????
 }hH;}pt
 }lf;w
 }nfA9
-}ofD;5T_r
+}ofD;5
 }pIcT$xI
 }t@:w
 }|Hc3L
