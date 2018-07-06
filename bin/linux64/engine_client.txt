@@ -125,6 +125,7 @@
  Plat_SetBenchmarkMode
  Plat_SetWindowTitle
  Plat_USTime
+ Plat_WindowToScreenCoords
  Plat_timegm
  PublishAllMiniProfilers
  RandomFloat
@@ -168,7 +169,7 @@
  SteamAPI_UnregisterCallback
  SteamAPI_UseBreakpadCrashHandler
  SteamAPI_WriteMiniDump
- SteamDatagramClient_Init_Internal
+ SteamDatagramClient_Init_InternalV4
  SteamDatagramClient_Internal_SteamAPIKludge
  SteamDatagramClient_Kill
  SteamDatagramServer_Init_Internal
@@ -182,14 +183,13 @@
  SteamGameServer_Shutdown
  SteamInternal_CreateInterface
  SteamInternal_GameServer_Init
+ SteamNetworkingSockets
+ SteamNetworkingSocketsGameServer
  SteamNetworkingUtils
- SteamSocketNetworking
- SteamSocketNetworkingGameServer
  T CreateInterface
  T _fini
  T _init
  T jpeg_UtlBuffer_dest
- Temp_DispatchsSteamNetConnectionStatusChangedCallbacks
  ThreadGetCurrentId
  ThreadInMainThread
  ThreadInterlockedCompareExchangePointer
@@ -209,6 +209,8 @@
  WriteMiniDump
  ZeroMemory
  _ExitOnFatalAssert
+ _ITM_deregisterTMCloneTable
+ _ITM_registerTMCloneTable
  _Jv_RegisterClasses
  __acos_finite@@GLIBC_2.15
  __acosf_finite@@GLIBC_2.15
@@ -238,6 +240,8 @@
  __errno_location@@GLIBC_2.2.5
  __exp_finite@@GLIBC_2.15
  __expf_finite@@GLIBC_2.15
+ __fdelt_chk@@GLIBC_2.15
+ __fprintf_chk@@GLIBC_2.3.4
  __fxstat64@@GLIBC_2.2.5
  __getdelim@@GLIBC_2.2.5
  __gmon_start__
@@ -246,11 +250,26 @@
  __log10f_finite@@GLIBC_2.15
  __log_finite@@GLIBC_2.15
  __logf_finite@@GLIBC_2.15
+ __longjmp_chk@@GLIBC_2.11
  __lxstat64@@GLIBC_2.2.5
  __lxstat@@GLIBC_2.2.5
+ __memcpy_chk@@GLIBC_2.3.4
+ __memset_chk@@GLIBC_2.3.4
  __pow_finite@@GLIBC_2.15
  __powf_finite@@GLIBC_2.15
+ __printf_chk@@GLIBC_2.3.4
+ __pthread_key_create@@GLIBC_2.2.5
+ __recv_chk@@GLIBC_2.4
  __sinhf_finite@@GLIBC_2.15
+ __snprintf_chk@@GLIBC_2.3.4
+ __sprintf_chk@@GLIBC_2.3.4
+ __stack_chk_fail@@GLIBC_2.4
+ __stpcpy_chk@@GLIBC_2.3.4
+ __strcat_chk@@GLIBC_2.3.4
+ __strcpy_chk@@GLIBC_2.3.4
+ __swprintf_chk@@GLIBC_2.4
+ __vsnprintf_chk@@GLIBC_2.3.4
+ __vswprintf_chk@@GLIBC_2.4
  __xmknod@@GLIBC_2.2.5
  __xstat64@@GLIBC_2.2.5
  __xstat@@GLIBC_2.2.5
@@ -361,7 +380,6 @@
  listen@@GLIBC_2.2.5
  localtime@@GLIBC_2.2.5
  log@@GLIBC_2.2.5
- longjmp@@GLIBC_2.2.5
  lseek64@@GLIBC_2.2.5
  lseek@@GLIBC_2.2.5
  mallinfo@@GLIBC_2.2.5
@@ -461,6 +479,7 @@
  std::string::_M_mutate(unsigned long, unsigned long, unsigned long)@@GLIBCXX_3.4
  std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long)@@GLIBCXX_3.4
  std::string::_Rep::_M_destroy(std::allocator<char> const&)@@GLIBCXX_3.4
+ std::string::_Rep::_M_dispose(std::allocator<char> const&)@@GLIBCXX_3.4
  std::string::_Rep::_M_refdata()@@GLIBCXX_3.4
  std::string::_Rep::_M_set_length_and_sharable(unsigned long)@@GLIBCXX_3.4.5
  std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&)@@GLIBCXX_3.4
@@ -515,9 +534,9 @@
  stderr@@GLIBC_2.2.5
  stdin@@GLIBC_2.2.5
  stdout@@GLIBC_2.2.5
+ stpcpy@@GLIBC_2.2.5
  strcasecmp@@GLIBC_2.2.5
  strcasestr@@GLIBC_2.2.5
- strcat@@GLIBC_2.2.5
  strchr@@GLIBC_2.2.5
  strcmp@@GLIBC_2.2.5
  strcpy@@GLIBC_2.2.5
@@ -537,7 +556,6 @@
  strtoll@@GLIBC_2.2.5
  strtoul@@GLIBC_2.2.5
  strtoull@@GLIBC_2.2.5
- swprintf@@GLIBC_2.2.5
  swscanf@@GLIBC_2.2.5
  symlink@@GLIBC_2.2.5
  syscall@@GLIBC_2.2.5
@@ -567,7 +585,6 @@
  utime@@GLIBC_2.2.5
  utimes@@GLIBC_2.2.5
  vsnprintf@@GLIBC_2.2.5
- vswprintf@@GLIBC_2.2.5
  vtable for __cxxabiv1::__class_type_info@@CXXABI_1.3
  vtable for __cxxabiv1::__enum_type_info@@CXXABI_1.3
  vtable for __cxxabiv1::__pointer_type_info@@CXXABI_1.3

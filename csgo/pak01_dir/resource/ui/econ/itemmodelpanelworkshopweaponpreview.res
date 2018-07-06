@@ -1,4 +1,4 @@
-"Resource/UI/ItemModelPanelWorkshopWeaponPreview.res"
+"Resource/UI/Econ/ItemModelPanelWorkshopWeaponPreview.res"
 {
 	// The rules are processed in the order specified and
 	// will build up the configuration if "rule" section matches.

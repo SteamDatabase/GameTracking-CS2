@@ -1,4 +1,4 @@
-"Resource/UI/ItemModelPanelWeaponPreviewManifest.res"
+"Resource/UI/Econ/ItemModelPanelWeaponPreviewManifest.res"
 {
 	"MainWindowLayout"
 	{

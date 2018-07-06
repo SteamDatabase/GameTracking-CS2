@@ -442,6 +442,15 @@
 		"controllerId"				"short"		// Controller id of user
 	}
 
+	/////////////////////////////////////////////
+	// Client side events for talking to WeaponSelection HUD
+	/////////////////////////////////////////////
+	"weaponhud_selection"
+	{
+		"userid"		"short"		// Player who this event applies to
+		"mode"			"byte"		// EWeaponHudSelectionMode (switch / pickup / drop)
+		"entindex"		"long"		// Weapon entity index
+	}
 	
 	/////////////////////////////////////////////
 	// Client side VoteController talking to HUD

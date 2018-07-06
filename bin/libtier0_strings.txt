@@ -15,10 +15,10 @@
  const
  restrict
  volatile
-"VVhz
 %-40s: %4.1f MB allocated (%4.1f MB peak), %4.1f MB committed, %4.1f MB reserved
 %.0f pct of time accounted for
 %8.4f / %8.4f:  %s
+%8x-%4x-%4x-%2x%2x-%2x%2x%2x%2x%2x%2x
 %d frames sampled for %.2f seconds
 %s (%d) : Assertion callstack...(NOT IMPLEMENTED IN NEW LOGGING SYSTEM.)
 %s test: multithread interleaved push/pop, %s
@@ -84,7 +84,7 @@
 .symtab
 .tbss
 .text
-/home/buildbot/buildslave/csgo_pcbeta_linux/build/src/public/tier0/tslist.h
+/home/buildbot/buildslave/csgo_pcbeta_server_linux/build/src/public/tier0/tslist.h
 /proc/%d/cmdline
 /proc/cpuinfo
 /proc/self/exe
@@ -100,6 +100,7 @@
 16ILoggingListener
 22CSimpleLoggingListener
 22ILoggingResponsePolicy
+24BasicStatStructFieldDesc
 28CallStackStatStructDescFuncs
 29CDefaultLoggingResponsePolicy
 2ZY^_]
@@ -116,12 +117,11 @@
 <Tt7<V
 <[^_]
 <htq<v
->MainThreadNoWait
 @4CUNG
+A%8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x
 A. F.
 A. G.
 A. H.
-A24BasicStatStructFieldDesc
 Ac@tr
 AddMemoryInfoCallback
 AllocateThreadID
@@ -155,7 +155,6 @@ CallAssertFailedNotifyFunc
 Called Resume() on a thread that is not suspended!
 CatchAndWriteMiniDump
 Client_Animation
-CommandLine
 ConDMsg
 Corefile
 CrackSmokingCompiler
@@ -216,7 +215,6 @@ GetSymbolNameFromAddress
 GetThreadedLoadLibraryFunc
 GetUnitTest
 GetVAtom
-Gtrue
 Ignore All Asserts
 Ignore This File
 Illegal termination of worker thread! Threads must negotiate an end to the thread before the CThread object is destroyed.
@@ -260,6 +258,7 @@ LoggingSystem_SetLoggingResponsePolicy
 LoggingSystem_UnregisterLoggingListener
 Lowered '%s' -> '%s'
 MainThread
+MainThreadNoWait
 Matched '%s' -> '%s'
 MemAllocScratch
 MemFreeScratch
@@ -298,6 +297,7 @@ Peak %.2f ms frame
 Physics
 Plat_Alloc
 Plat_ConvertToLocalTime
+Plat_CreateUUIDImpl
 Plat_CreateWindow
 Plat_DefaultAllocErrorFn
 Plat_ExitProcess
@@ -330,6 +330,8 @@ Plat_SetWindowPos
 Plat_SetWindowTitle
 Plat_SimpleLog
 Plat_USTime
+Plat_UUIDFromString
+Plat_UUIDToString
 Plat_VerifyHardwareKey
 Plat_VerifyHardwareKeyDriver
 Plat_VerifyHardwareKeyPrompt
@@ -443,10 +445,8 @@ V_tier0_vsnprintf
 VoidFnPtrLookup_Tier0
 WQRVS
 WVSRP
-Warning
 Warning_SpewCallStack
 World Rendering
-WriteMiniDump
 XZ[^_]
 Z[^_]
 ZeroMemory
@@ -879,8 +879,6 @@ complex
 construction vtable for 
 core id
 covariant return thunk to 
-ctime_r@@GLIBC_2.0
-daylight@@GLIBC_2.0
 decimal128
 decimal32
 decimal64
@@ -968,7 +966,6 @@ libdl.so.2
 libm.so.6
 libpthread.so.0
 libtier0.so.dbg
-link@@GLIBC_2.0
 localtime@@GLIBC_2.0
 localtime_r
 localtime_r@@GLIBC_2.0
@@ -1000,7 +997,6 @@ new[]
 no affinity...
 non-virtual thunk to 
 open64@@GLIBC_2.2
-open@@GLIBC_2.0
 opendir
 opendir@@GLIBC_2.0
 operator
@@ -1010,7 +1006,6 @@ pclose@@GLIBC_2.1
 physical id
 popen
 popen@@GLIBC_2.1
-printf@@GLIBC_2.0
 processor
 pthread_attr_init
 pthread_attr_init@@GLIBC_2.1
@@ -1061,9 +1056,7 @@ pthread_self@@GLIBC_2.0
 pthread_yield
 pthread_yield@@GLIBC_2.2
 pure virtual method called
-puts@@GLIBC_2.0
 q ;q$}
-rand@@GLIBC_2.0
 readdir64
 readdir64@@GLIBC_2.2
 readlink
@@ -1083,7 +1076,6 @@ scandir@@GLIBC_2.0
 signal@@GLIBC_2.0
 simple.log
 sizeof 
-snprintf@@GLIBC_2.0
 sprintf
 sprintf@@GLIBC_2.0
 srand
@@ -1154,16 +1146,13 @@ t.RRj
 t4RRj
 tLRRj
 tV;{ptQ9
-t_=`n
 ta<!tM<"
 terminate called after throwing an instance of '
 terminate called recursively
 terminate called without an active exception
 tier0
-time@@GLIBC_2.0
 timegm@@GLIBC_2.0
 timestamped.log
-timezone@@GLIBC_2.0
 tolower
 tolower@@GLIBC_2.0
 tu<Etq
