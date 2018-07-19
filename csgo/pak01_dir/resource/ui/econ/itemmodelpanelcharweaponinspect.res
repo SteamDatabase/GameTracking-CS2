@@ -3242,18 +3242,18 @@
 			"weapon_anim"				    ""						                // Which activity to play on the weapon
 			"weapon_anim_loop"			    ""										// Which pedestal model to load, weapon model is merged to the pedestal
 			"root_camera"				"cam_inspect"								// Which attachment specifies camera location
-			"camera_offset"   "2.13 -0.17 82.47"
-			"camera_orient"   "90.00 179.91 0.00"
-			"orbit_pivot"     "2.13 -0.17 -7.94"
+			"camera_offset"   "0.29 -0.07 82.47"
+			"camera_orient"   "89.77 179.91 0.00"
+			"orbit_pivot"     "-0.07 -0.07 -7.94"
 			"root_camera_fov"     "29.3"
 			"item_rotate" "y[-20 60]" //- x horizontal, z vertical
 
 			"light_directional_clearall" "1"
-			"light_directional_add"      "rgb{0.5 0.5 0.5} dir[-0.34 -0.90 -0.29] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.50 0.50 0.50} dir[-0.34 -0.90 -0.29] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
 			"shadow_light_offset"        "-60.33 52.04 108.05"
 			"shadow_light_orient"        "54.94 -39.89 0.00"
-			"shadow_light_brightness"    "1.5"
-			"shadow_light_color"         "[0.97 0.97 0.97]"
+			"shadow_light_brightness"    "1.46"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
 			"shadow_light_rotation"      "[0.00 0.00 0.00]"
 			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
 			"shadow_light_hfov"       "70.0"
