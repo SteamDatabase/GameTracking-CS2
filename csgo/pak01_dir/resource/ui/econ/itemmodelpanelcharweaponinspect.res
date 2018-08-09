@@ -1237,61 +1237,6 @@
 		}
 	}
 
-	"StatTrak"
-	{
-		"rule"
-		{
-			"stattrak" "1"
-		}
-		"config"
-		{
-			"weaponmergemdl_add"		"models/weapons/stattrack_weaponpreview.mdl"		// Merge the actual indicator to the gun
-		}
-	}
-
-		"StatTrak_knives"
-	{
-		"rule"
-		{
-			"stattrak" "1"
-			"type" "Knife"
-		}
-		"config"
-		{
-			"mergemdls_clearall"			"1"
-			"weaponmergemdl_clear"	"models/weapons/stattrack_weaponpreview.mdl"
-			"weaponmergemdl_add"	"models/weapons/stattrack_cut_inspect_xsmall.mdl"
-		}
-	}
-	
-	"StatTrak_butterfly"
-	{
-		"rule"
-		{
-			"stattrak" "1"
-			"model" "v_knife_butterfly"
-		}
-		"config"
-		{
-			"weaponmergemdls_clear" "models/weapons/stattrack_cut_inspect_xsmall.mdl"
-			"weaponmergemdls_add" "models/weapons/stattrack_cut_inspect_small.mdl"
-		}
-	}
-	
-	"StatTrak_falchion"
-	{
-		"rule"
-		{
-			"stattrak" "1"
-			"model" "v_knife_falchion_advanced"
-		}
-		"config"
-		{
-			"weaponmergemdls_clear" "models/weapons/stattrack_cut_inspect_xsmall.mdl"
-			"weaponmergemdls_add" "models/weapons/stattrack_cut_inspect_small.mdl"
-		}
-	}	
-
 	"taser"
 	{
 		"rule"
@@ -2944,6 +2889,61 @@
 
 		}
 	}
+
+	"StatTrak"
+	{
+		"rule"
+		{
+			"stattrak" "1"
+		}
+		"config"
+		{
+			"weaponmergemdl_add"		"models/weapons/stattrack_weaponpreview.mdl"		// Merge the actual indicator to the gun
+		}
+	}
+
+		"StatTrak_knives"
+	{
+		"rule"
+		{
+			"stattrak" "1"
+			"type" "Knife"
+		}
+		"config"
+		{
+			"mergemdls_clearall"			"1"
+			"weaponmergemdl_clear"	"models/weapons/stattrack_weaponpreview.mdl"
+			"weaponmergemdl_add"	"models/weapons/stattrack_cut_inspect_xsmall.mdl"
+		}
+	}
+	
+	"StatTrak_butterfly"
+	{
+		"rule"
+		{
+			"stattrak" "1"
+			"model" "v_knife_butterfly"
+		}
+		"config"
+		{
+			"weaponmergemdls_clear" "models/weapons/stattrack_cut_inspect_xsmall.mdl"
+			"weaponmergemdls_add" "models/weapons/stattrack_cut_inspect_small.mdl"
+		}
+	}
+	
+	"StatTrak_falchion"
+	{
+		"rule"
+		{
+			"stattrak" "1"
+			"model" "v_knife_falchion_advanced"
+		}
+		"config"
+		{
+			"weaponmergemdls_clear" "models/weapons/stattrack_cut_inspect_xsmall.mdl"
+			"weaponmergemdls_add" "models/weapons/stattrack_cut_inspect_small.mdl"
+		}
+	}	
 
 	
 	"uid"
