@@ -700,6 +700,26 @@
 		}
 	}
 
+	"mp5"
+	{
+		"rule"
+		{
+			"model" "v_smg_mp5sd"
+		}
+		"config"
+		{
+			"camera_offset"   "49.12 40.79 -12.73"
+			"camera_orient"   "-6.65 -118.63 0.00"
+			"orbit_pivot"     "23.95 -5.34 -6.61"
+			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
+
+			"camera_preset_add"   "pos[25.28 30.75 -4.87] pivot[26.73 -5.19 -6.31] orient[2.29 -87.69 0.00] fov[54.3]" //1 sideview for update panel
+			"camera_preset_add"   "pos[40.49 27.39 -7.87] pivot[26.73 -5.19 -6.31] orient[-2.52 -112.90 0.00] fov[54.3]"
+
+
+		}
+	}
+
 	"famas"
 	{
 		"rule"
