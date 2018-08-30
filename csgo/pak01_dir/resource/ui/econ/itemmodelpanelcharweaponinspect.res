@@ -1566,7 +1566,7 @@
 			"camera_orient"   "-23.21 162.72 0.00"
 			"orbit_pivot"     "-0.40 0.09 3.67"
 			"root_camera_fov"     "70.0"
-			"item_rotate"		"y[-20 20]"
+			"item_rotate"		"y[-20 40]"
 			"light_directional_clearall" "1"
 			"light_directional_add"      "rgb{0.23 0.23 0.23} dir[-0.01 0.02 1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
 			"light_directional_add"      "rgb{0.70 0.79 0.85} dir[0.48 -0.52 -0.71] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
