@@ -16,6 +16,14 @@ enum GCConnectionStatus {
 	GCConnectionStatus_NO_STEAM = 4;
 }
 
+enum ESteamPaymentRuleType {
+	k_EPaymentRuleTypeComposite = 0;
+	k_EPaymentRuleTypeWorkshop = 1;
+	k_EPaymentRuleTypeServiceProvider = 2;
+	k_EPaymentRuleTypePartner = 3;
+	k_EPaymentRuleTypeSpecialPayment = 4;
+}
+
 message CMsgSOIDOwner {
 	optional uint32 type = 1;
 	optional uint64 id = 2;
@@ -223,6 +231,7 @@ message CWorkshop_SetItemPaymentRules_Request {
 		optional uint64 workshop_file_id = 1;
 		optional float revenue_percentage = 2;
 		optional string rule_description = 3;
+		optional uint32 rule_type = 4 [default = 1];
 	}
 
 	message PartnerItemPaymentRule {
@@ -257,5 +266,16 @@ message CGameServers_AggregationQuery_Response {
 	}
 
 	repeated .CGameServers_AggregationQuery_Response.Group groups = 1;
+}
+
+message CWorkshop_AddSpecialPayment_Request {
+	optional uint32 appid = 1;
+	optional uint32 gameitemid = 2;
+	optional string date = 3;
+	optional uint64 payment_us_usdx100 = 4;
+	optional uint64 payment_row_usdx100 = 5;
+}
+
+message CWorkshop_AddSpecialPayment_Response {
 }
 
