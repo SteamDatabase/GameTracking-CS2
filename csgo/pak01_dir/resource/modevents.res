@@ -823,6 +823,11 @@
 		"userid"	"short"	 	// user ID who received the c4
 	}
 
+	"player_become_ghost"
+	{
+		"userid"	"short"	 	// user ID who received the c4
+	}
+
 	"gg_reset_round_start_sounds"
 	{
 		"userid"	"short"	 	// user ID who should have round start sounds reset
