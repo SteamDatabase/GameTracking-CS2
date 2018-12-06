@@ -560,6 +560,23 @@
 		}
 	}
 	
+	"workshop_greenscreen_knives"
+	{
+		"rule"
+		{
+			"workshop_greenscreen"	"1"
+			"type"		"Knife"
+		}
+		"config"
+		{
+			"shadow_light"	"cam_inspect_light_knife"
+			"shadow_light_brightness" "2.0"
+			"shadow_light_brightness" "0.0"
+			"light_directional_clearall" 	"1"
+			"light_directional_add" 		"rgb[255 255 255] dir[0 -.2 -0.5]"
+			"light_directional_add" 		"rgb[255 255 255] dir[.5 .2 0.75]"
+		}	
+	}
 
 	"workshop_arms"
 	{

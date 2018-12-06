@@ -1320,22 +1320,43 @@
 
 	"CS_update_weapon"
 	{
+		//////////////////////
+		//convar which controls weapon falloff.
+		"volume_sound_falloff_multiplier"
+		{
+			"operator" "get_convar"
+			"convar" "weapon_sound_falloff_multiplier"
+		}
 
 		//////////////////////
 		// "variables"
 		"volume_xfade_start_dist"
 		{
 			"operator" "math_float"
-			"apply" "add"
-			"input1" "0.0"
+			"apply" "mult"
+			"input1" "@volume_sound_falloff_multiplier.output"
 			"input2" "800"
 		}	
 		"volume_xfade_end_dist"
 		{
 			"operator" "math_float"
-			"apply" "add"
-			"input1" "0.0"
+			"apply" "mult"
+			"input1" "@volume_sound_falloff_multiplier.output"
 			"input2" "2800"
+		}	
+		"volume_falloff_min"
+		{
+			"operator" "math_float"
+			"apply" "mult"
+			"input1" "@volume_sound_falloff_multiplier.output"
+			"input2" "400.0"
+		}	
+		"volume_falloff_max"
+		{
+			"operator" "math_float"
+			"apply" "mult"
+			"input1" "@volume_sound_falloff_multiplier.output"
+			"input2" "3937.0"
 		}	
 
 		//////////////////////
@@ -1399,10 +1420,13 @@
 			"operator" "calc_falloff_curve"
 			"input_distance"  "@source_distance.output"
 			//"input_level"	  "@level_apply_mixer.output"
-			"input_min" "400.0"	
-			"input_max" "3937.0"
+			"input_min" "@volume_falloff_min.output"	
+			"input_max" "@volume_falloff_max.output"
 			"input_atten" "0.98"
 			"input_curve_amount" "0.7"
+
+			//make gunfire always play at low volume all across the map.
+			"input_volume_min"	"0.05"
 		}
 		"volume_distance_xfade"
 		{
@@ -1411,7 +1435,7 @@
 			"input_min" "@volume_xfade_start_dist.output"
 			"input_max" "@volume_xfade_end_dist.output"
 			"input_map_min" "1.0"
-			"input_map_max" "0.0"
+			"input_map_max" "0.0" //old: 0.0
 			"default_to_max" "false"	
 		}
 		"volume_xfade_exponent"
@@ -2041,7 +2065,7 @@
 			"input4" "@snd_gain_convar.output"
 			"input5" "@occlusion.output"
 			"input6" "@volume_fade_out.output"
-			"input7" "1.0"
+			"input7" "@source_info.output_volume"
 			"input8" "1.0"
 			"input9" "1.0"
 			"input10" "1.0"

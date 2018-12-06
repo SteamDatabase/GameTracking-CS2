@@ -5,7 +5,6 @@
    VS dyn  var %s = %d (%s)
    VS stat var %s = %d (%s)
  ( def. "%s" )
- Ic@D
  IcD$
  IcD$,
  IcD$X
@@ -96,9 +95,11 @@ $BASETEXTURESCALE
 $BASETEXTURETRANSFORM2
 $BBMAX
 $BBMIN
+$BEACHFOAM
 $BLENDFRAMES
 $BLENDMODULATETEXTURE
 $BLENDMODULATETRANSFORM
+$BLENDOPMIN
 $BLENDSOFTNESS
 $BLENDSTATE
 $BLENDTINTBYBASEALPHA
@@ -152,6 +153,10 @@ $C4_W
 $C4_X
 $C4_Y
 $C4_Z
+$C5_W
+$C5_X
+$C5_Y
+$C5_Z
 $CAMOCOLOR0
 $CAMOCOLOR1
 $CAMOCOLOR2
@@ -410,6 +415,10 @@ $GLOWEND
 $GLOWSTART
 $GLOWX
 $GLOWY
+$GRADIENTCOLORSTOP0
+$GRADIENTCOLORSTOP1
+$GRADIENTCOLORSTOP2
+$GRADIENTMODULATION
 $GRAIN
 $GRAIN_TEXTURE
 $GRIME
@@ -449,6 +458,7 @@ $INTERIORREFRACTSTRENGTH
 $INTERNAL_VIGNETTETEXTURE
 $INVERSEDEPTHBLEND
 $INVERTPHONGMASK
+$INVVIEWPROJMAT
 $IRIS
 $IRISFRAME
 $IRISU
@@ -458,6 +468,7 @@ $LAYERBORDEROFFSET
 $LAYERBORDERSOFTNESS
 $LAYERBORDERSTRENGTH
 $LAYERBORDERTINT
+$LAYEREDDAMAGEBLEND
 $LAYEREDGENORMAL
 $LAYEREDGEOFFSET
 $LAYEREDGEPUNCHIN
@@ -507,6 +518,7 @@ $MAGNIFYENABLE
 $MAGNIFYSCALE
 $MASKED
 $MASKMAP
+$MASKS
 $MASKS1
 $MASKS2
 $MASKSTEXTURE
@@ -518,6 +530,7 @@ $MAXLUMFRAMEBLEND1
 $MAXLUMFRAMEBLEND2
 $MAXSIZE
 $METALNESS
+$MINIMUMSPRITESIZE
 $MINLIGHT
 $MINSIZE
 $MIRRORABOUTVIEWPORTEDGES
@@ -816,8 +829,10 @@ $VERTEXCOLORLERP
 $VERTEXCOLORMODULATE
 $VERTEXCOLORPOWER
 $VERTEXFOGAMOUNT
+$VERTEXNORMAL
 $VERTEXSHADER
 $VERTEXTRANSFORM
+$VIEWPROJMAT
 $VIGNETTEENABLE
 $VIGNETTE_MIN_BRIGHT
 $VIGNETTE_POWER
@@ -849,6 +864,11 @@ $WEIGHT3
 $WEIGHTS
 $WEIGHT_DEFAULT
 $WOODCUT
+$WORLDSPACEBURN
+$WORLDSPACESCALE
+$WORLDSPACETINT
+$WORLDSPACETYPE
+$WORLDSPACEZONE
 $WRITEALPHA
 $WRITEDEPTH
 $WRITEZ
@@ -1003,7 +1023,6 @@ $texture2 texcoord transform
 ( g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight && !bDisableCSMLookup ) ? nCSMQualityComboValue : 0
 ( g_pHardwareConfig->SupportsCascadedShadowMapping() && !bSFM && !bHasFlashlight && g_pConfig->nFullbright != 1 ) ? nCSMQualityComboValue : 0
 ( int )vertexCompression
-( nDecalStyle == 4 ) || ( nDecalStyle == 5 )
 ( numBones > 0 )
 ( numBones > 0 ) && ( nTessellationMode == TESSELLATION_MODE_DISABLED )
 ( numBones > 0)
@@ -1012,6 +1031,7 @@ $texture2 texcoord transform
 ( params[info.m_nLocalRefract]->GetIntValue() != 0 )
 ( shaderFlags & SHADER_USE_CONSTANT_COLOR ) ? true : false
 ( shaderFlags & SHADER_USE_VERTEX_COLOR ) ? true : false
+(Ic@D
 ([A\A]A^A_]
 ([A\A]]
 ([]A\A]A^A_
@@ -1126,8 +1146,8 @@ $texture2 texcoord transform
 333333
 34CFlashlightShadowDecal_DX9_Context
 34CLightmapped_4WayBlend_DX9_Context
-3=N{+
-3=f1.
+3=>V.
+3=~g/
 3@T]f
 4$A\]
 400.0
@@ -1329,10 +1349,10 @@ CONSTANTCOLOR
 CONTACT_SHADOW
 CONVERT_FROM_LINEAR
 CONVERT_TO_LINEAR
-CROSSHAIR_MODE
 CSM_BLENDING
 CSM_MODE
 CSM_VIEWMODELQUALITY
+CUSTOM_MODE
 CUtlBuffer::VaPrintf: String overflowed buffer [%d]
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
@@ -1523,6 +1543,7 @@ Film dust texture
 Film grain texture
 FilmDust
 FilmGrain
+First gradient stop and position
 Flags this material as possibly being run through single pass flashlight code
 Flashlight pass sets N.L=1.0
 Flesh Debug full flesh
@@ -1594,7 +1615,7 @@ HIGH_PRECISION_DEPTH
 H[A\A]A^A_]
 H[A\A]]
 H[]A\A]A^A_
-Hc5n!(
+Hc5~:(
 Hc@DI
 Hc@LI
 Hc@\I
@@ -1665,7 +1686,6 @@ HcCx1
 HcC|1
 HcC|I
 HcK8H9
-HcK|H
 HcM te
 HcOhI
 HcQDI
@@ -1673,6 +1693,7 @@ HcS$f
 HcSHHcKTI
 HcSPH
 HcSXH
+HcS|H
 HcWPH
 HcW`I
 HcWdI
@@ -1840,6 +1861,7 @@ IntroScreenSpaceEffect
 IntroScreenSpaceEffect_ps20
 IntroScreenSpaceEffect_ps20b
 Invalid DetailBlendMode in %s, %d not supported!
+Invalid blend mode (%d) using pan_dx 0
 Invalid mat_dof_quality value. Resetting to 0.
 Invert normals on layer edge
 IsBoolSet( info.m_nSeparateDetailUVs, params )
@@ -1977,6 +1999,7 @@ N16VolumeClouds_dx97CShaderE
 N16WriteStencil_DX97CShaderE
 N16accumbuff4sample7CShaderE
 N16accumbuff5sample7CShaderE
+N16screenspace_zone7CShaderE
 N17DecalModulate_dx97CShaderE
 N17HDRCombineTo16Bit7CShaderE
 N17MonitorScreen_DX97CShaderE
@@ -1993,6 +2016,7 @@ N19hsl_filmgrain_pass27CShaderE
 N19screenspace_general7CShaderE
 N20DebugTextureView_dx97CShaderE
 N20WorldTwoTextureBlend7CShaderE
+N20screenspace_zone_dx97CShaderE
 N21LightmappedReflective7CShaderE
 N21Lightmapped_4WayBlend7CShaderE
 N21WorldVertexTransition7CShaderE
@@ -2043,6 +2067,7 @@ N9Sample4x47CShaderE
 N9Teeth_DX97CShaderE
 N9Wireframe7CShaderE
 N9paintblob7CShaderE
+NEARBYPLAYERS
 NOISE_ENABLE
 NORMALMAPALPHAENVMAPMASK
 NUM_LIGHTS
@@ -2221,6 +2246,7 @@ Scale the size of the soft edges based upon resolution. 1024x768 = nominal.
 Scale the size of the soft part of the outline based upon resolution. 1024x768 = nominal.
 SceneSystem_001
 Scroll the highlight effect
+Second gradient stop and position
 Select which color channel to use
 Self illum fresnel
 Self illum fresnel min, max, exp
@@ -2276,6 +2302,7 @@ Texture 3
 The alternate view matrix to use when $usealternateviewmatrix is enabled
 The dark end of a tint gradient if not using a color texture
 The light end of a tint gradient if not using a color texture
+Third gradient stop and position
 Third-person mode
 This is the directional light color.
 This is the directional light position.
@@ -2288,6 +2315,7 @@ TreeLeaf
 TreeLeaf_ps20
 TreeLeaf_ps20b
 TreeLeaf_vs20
+Turn on gradient color modulation
 U projection vector for the glint
 U projection vector for the iris
 UBERLIGHT
@@ -2361,6 +2389,10 @@ VortWarp
 VortWarp_DX9
 WARPINGIN
 WATER_DX90
+WORLDSPACEBURNTEXTURE
+WORLDSPACETINTTEXTURE
+WORLDSPACETYPETEXTURE
+WORLDSPACEZONETEXTURE
 WORLDVERTEXTRANSITION
 WORLD_NORMAL
 WRINKLEMAP
@@ -2384,6 +2416,7 @@ WeaponDecal_dx9
 Wear/worn progress amount
 Weight for Samples
 When adding static, this is the texture that gets blended in
+When enabled, blend mode 4 turns into a special blend mode for layering damage, with the detail texture being the lower strata with no spec or env, and the base texture being the upper strata which casts a drop shadow.  The blend is a thresholded value based on the detail alpha, allowing for what looks like chipped off paint or cracks.
 When using the anodizing mode, some specular values already affected by phongalbedo in the source need to be reduced to compensate for increase in phongalbedoboost
 WindowImposter
 Wireframe
@@ -2430,6 +2463,9 @@ ZOOM_ANIMATE_SEQ2
 [0.8 1.0 1.0]
 [1 0 0]
 [1 0.9 0 0.6]
+[1 1 1 0.5]
+[1 1 1 0]
+[1 1 1 1]
 [1 1 1]
 [1 1]
 [1.0 0.0 1.0]
@@ -2582,7 +2618,6 @@ bContactShadows
 bConvertFromLinear
 bConvertToLinear
 bCrop
-bCrosshairMode
 bCullGrassOusideDangerRadius
 bDeferredShadows
 bDepthBlend
@@ -2678,6 +2713,7 @@ bModel
 bMulOutputByAlpha
 bNeedsSRGBAdapter
 bNoiseEnable
+bNormalMap
 bNvidiaStereoActiveThisFrame
 bOpacityTexture
 bOutLine
@@ -2753,6 +2789,10 @@ bWorldNormal ? 0 : lightState.m_nNumLights
 bWorldNormal ? 0 : phongInfo.m_bHasDetailTexture
 bWorldNormal ? 2 : ( phongInfo.m_bHasDecalTexture ? nDecalBlendMode : 2 )
 bWorldNormal ? false : ( lightState.m_bAmbientLight && !bStaticLight3 )
+bWorldSpaceBurnTexture
+bWorldSpaceTintTexture
+bWorldSpaceTypeTexture
+bWorldSpaceZoneTexture
 bWriteDepthToAlpha
 bWriteWaterFogToAlpha
 bWriteZ && bFullyOpaque && pShaderAPI->ShouldWriteDepthToDestAlpha()
@@ -2815,7 +2855,8 @@ character_vs20
 chdir
 chdir@@GLIBC_2.2.5
 cheat
-cl_detail_scale
+cl_grass_mip_bias
+cl_proximity_grass
 cl_teamid_max
 cl_teamid_min
 clamp( params[ FLOW_DEBUG ]->GetIntValue(), 0, 2 )
@@ -2857,7 +2898,7 @@ cos@@GLIBC_2.2.5
 cs_grass_ps20
 cs_grass_ps20b
 cs_grass_ps30
-cs_grass_vs20
+cs_grass_vs30
 customcharacter_ps30
 customcharacter_vs30
 customclothing_ps20b
@@ -3214,6 +3255,7 @@ monitorscreen_ps20b
 nBumpMapVariant
 nCSMQualityComboValue
 nColorDepth
+nCustomMode
 nDecalStyle
 nDetail1BlendMode
 nDetail2BlendMode
@@ -3230,6 +3272,7 @@ nLightingPreviewMode ? 0 : lightState.m_nNumLights
 nLightingPreviewMode ? false : bFlashlightShadows
 nLightingPreviewMode ? false : bWriteWaterFogToAlpha
 nNumBlurSamples
+nNumNearbyPlayers
 nOrientation
 nPS20NumLights
 nPaintStyle
@@ -3386,7 +3429,11 @@ screen fractional size to finish fading particle out
 screen fractional size to start fading particle out
 screenspace_general
 screenspace_general_dx9
+screenspace_zone
+screenspace_zone_dx9
 screenspaceeffect_vs20
+screenspaceeffect_vs30
+screenspacezone_ps30
 script
 second texture
 self-illumination map
@@ -3439,6 +3486,7 @@ solidenergy_vs20
 solidenergy_vs30
 special shader to reload Zcull memory on ps3
 specify that this is the back surface of the ice
+specify vertex normal (compressed) in material format
 specular boost
 specular exponent
 specular reflection mask
@@ -3492,11 +3540,6 @@ strtoul
 strtoul@@GLIBC_2.2.5
 strtoull
 strtoull@@GLIBC_2.2.5
-sv_dangerzone_enabled
-sv_dangerzone_radius
-sv_dangerzone_x
-sv_dangerzone_y
-sv_dangerzone_z
 t	D; u
 t$@A\]
 t$H9h
@@ -3519,6 +3562,7 @@ t>HcC<
 t>IcD$
 t>IcD$4I
 t?HcC
+t?HcE
 t@IcD$L
 tAHcC(
 tBIcA<
@@ -3603,9 +3647,9 @@ txIcD$(
 tyHcC
 t{HcC$
 u!HcC<
-u#HcC|
 u'HcC<
 u:[A\]
+u<[A\]
 uAHcC
 uCHcC$
 uEHcC@

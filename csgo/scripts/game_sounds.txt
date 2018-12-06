@@ -206,9 +206,8 @@
 
 "BaseCombatCharacter.AmmoPickup"
 {
-	"channel"	"CHAN_ITEM"
-	"volume"	"1.0"
-	//"CompatibilityAttenuation"	"1.0"
+	"channel"	"CHAN_STATIC"
+	"volume"	"0.2"
 
 	"wave"	"~items/pickup_ammo_02.wav"
 	"soundentry_version" "2"
@@ -238,11 +237,6 @@
 			"mixer"
 			{
 				"mixgroup" "FoleyWeapons"
-			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "100" //ammopickup
 			}
 		
 		}
@@ -345,9 +339,8 @@
 
 "Player.PickupWeapon"
 {
-	"channel"		"CHAN_ITEM"
+	"channel"		"CHAN_STATIC"
 	"volume"		"0.5"
-	"CompatibilityAttenuation"	"1.0"
 
 	"wave"	"~items/pickup_weapon_02.wav"
 	
@@ -377,11 +370,6 @@
 			"mixer"
 			{
 				"mixgroup" "FoleyWeapons"
-			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "1100" //weaponpickup
 			}
 		
 		}
@@ -460,11 +448,6 @@
 			{
 				"mixgroup" "FoleyWeapons"
 			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "100" //weaponpickup
-			}
 		}
 	}
 }
@@ -517,11 +500,6 @@
 			"mixer"
 			{
 				"mixgroup" "FoleyWeapons"
-			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "250" //weapondraw
 			}
 		
 		}
@@ -579,11 +557,6 @@
 			{
 				"mixgroup" "FoleyWeapons"
 			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "250" //weapondraw
-			}
 		
 		}
 	}
@@ -638,11 +611,6 @@
 			"mixer"
 			{
 				"mixgroup" "FoleyWeapons"
-			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "250" //weapondraw
 			}
 		
 		}
@@ -699,11 +667,6 @@
 			"mixer"
 			{
 				"mixgroup" "FoleyWeapons"
-			}
-			"volume_falloff"
-			{
-				"input_min" "32"
-				"input_max" "250" //weapondraw
 			}
 		
 		}
@@ -919,6 +882,19 @@
 	}
 }
 
+"Player.HitByThrownWeapon"
+{
+	"channel"	"CHAN_VOICE"
+	"volume"	"1"
+	"CompatibilityAttenuation"	"1.0"
+	"pitch"		"PITCH_NORM"
+
+	"rndwave"
+	{
+		"wave"		"~hostage/hpain/hpain1.wav"
+	}
+}
+
 "Player.DamageHelmet"
 {
 	"channel"	"CHAN_STATIC"
@@ -1016,11 +992,6 @@
 			{
 				"mixgroup" "FoleyWeapons"
 			}
-			"volume_falloff"
-			{
-				"input_min" "100"
-				"input_max" "900" //playerdamage
-			}
 		}
 	}
 }
@@ -1066,11 +1037,6 @@
 			"mixer"
 			{
 				"mixgroup" "FoleyWeapons"
-			}
-			"volume_falloff"
-			{
-				"input_min" "100"
-				"input_max" "900" //playerdamage
 			}
 		}
 	}
@@ -1118,11 +1084,6 @@
 			{
 				"mixgroup" "FoleyWeapons"
 			}
-			"volume_falloff"
-			{
-				"input_min" "100"
-				"input_max" "900" //playerdamage
-			}
 		}
 	}
 }
@@ -1155,6 +1116,104 @@
 				"input_duration" "1.0"
 				"match_substring" "false"
 				"match_entry" "Player.FallDamage"
+				"match_channel" "false"
+				"match_entity" "false"
+			}
+		}
+		
+		"update_stack"
+		{
+			"import_stack" "CS_update_foley"
+			"mixer"
+			{
+				"mixgroup" "FoleyWeapons"
+			}
+			"volume_falloff"
+			{
+				"input_min" "100"
+				"input_max" "900" //playerdamage
+			}
+		}
+	}
+}
+
+"Player.PunchDamage"
+{
+	"channel"	"CHAN_BODY"
+	"volume"	"0.3"
+	"pitch"		"PITCH_NORM"
+
+	"rndwave"
+	{
+		"wave"		"~player/damage1.wav"
+		"wave"		"~player/damage2.wav"
+		"wave"		"~player/damage3.wav"
+	}
+	
+	"soundentry_version" "2"
+	"operator_stacks"
+	{
+		"start_stack" //replaces null.wav
+		{
+		
+			"import_stack" "CS_limit_start"
+		
+			"block_entries"
+			{
+				"operator" "sys_block_entries"
+				"input_active" "1.0"
+				"input_duration" "1.0"
+				"match_substring" "false"
+				"match_entry" "Player.PunchDamage"
+				"match_channel" "false"
+				"match_entity" "false"
+			}
+		}
+		
+		"update_stack"
+		{
+			"import_stack" "CS_update_foley"
+			"mixer"
+			{
+				"mixgroup" "FoleyWeapons"
+			}
+			"volume_falloff"
+			{
+				"input_min" "100"
+				"input_max" "900" //playerdamage
+			}
+		}
+	}
+}
+
+"Player.PunchDisarm"
+{
+	"channel"	"CHAN_BODY"
+	"volume"	"0.3"
+	"pitch"		"PITCH_NORM"
+
+	"rndwave"
+	{
+		"wave"		"~player/damage1.wav"
+		"wave"		"~player/damage2.wav"
+		"wave"		"~player/damage3.wav"
+	}
+	
+	"soundentry_version" "2"
+	"operator_stacks"
+	{
+		"start_stack" //replaces null.wav
+		{
+		
+			"import_stack" "CS_limit_start"
+		
+			"block_entries"
+			{
+				"operator" "sys_block_entries"
+				"input_active" "1.0"
+				"input_duration" "1.0"
+				"match_substring" "false"
+				"match_entry" "Player.PunchDamage"
 				"match_channel" "false"
 				"match_entity" "false"
 			}

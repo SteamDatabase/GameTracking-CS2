@@ -99,6 +99,7 @@ enum ECsgoGCMsg {
 	k_EMsgGCCStrike15_v2_ClientAccountBalance = 9196;
 	k_EMsgGCCStrike15_v2_ClientPartyJoinRelay = 9197;
 	k_EMsgGCCStrike15_v2_ClientPartyWarning = 9198;
+	k_EMsgGCCStrike15_v2_MatchmakingServerMatchEndPartial = 9199;
 }
 
 message GameServerPing {
@@ -234,6 +235,7 @@ message ServerHltvInfo {
 	optional uint32 tv_relay_address = 18;
 	optional uint32 tv_relay_port = 19;
 	optional uint64 tv_relay_steamid = 20;
+	optional uint32 flags = 21;
 }
 
 message IpAddressMask {
@@ -396,6 +398,7 @@ message CMsgGCCStrike15_v2_MatchmakingGC2ServerReserve {
 	optional uint32 game_type = 2;
 	optional uint64 match_id = 3;
 	optional uint32 server_version = 4;
+	optional uint32 flags = 18;
 	repeated .PlayerRankingInfo rankings = 5;
 	optional uint64 encryption_key = 6;
 	optional uint64 encryption_key_pub = 7;
@@ -408,6 +411,7 @@ message CMsgGCCStrike15_v2_MatchmakingGC2ServerReserve {
 	optional uint64 tv_relay_steamid = 14;
 	optional .CPreMatchInfoData pre_match_data = 15;
 	optional uint32 rtime32_event_start = 16;
+	optional uint32 tv_control = 17;
 }
 
 message CMsgGCCStrike15_v2_MatchmakingServerReservationResponse {
@@ -426,6 +430,7 @@ message CMsgGCCStrike15_v2_MatchmakingServerReservationResponse {
 	optional string tournament_tag = 13;
 	optional uint32 steamdatagram_port = 14;
 	optional fixed32 test_token = 15;
+	optional uint32 flags = 16;
 }
 
 message CMsgGCCStrike15_v2_MatchmakingGC2ClientReserve {
@@ -480,6 +485,14 @@ message CMsgGCCStrike15_v2_MatchmakingServerMatchEnd {
 	optional bool aborted_match = 7;
 	optional .CMsgGC_ServerQuestUpdateData match_end_quest_data = 8;
 	optional uint32 server_version = 9;
+}
+
+message CMsgGCCStrike15_v2_MatchmakingServerMatchEndPartial {
+	optional uint64 reservationid = 1;
+	optional .CMsgGCCStrike15_v2_MatchmakingGC2ServerReserve reservation = 2;
+	optional .CMsgGCCStrike15_v2_MatchmakingGC2ServerConfirm confirm = 3;
+	optional .CMsgGC_ServerQuestUpdateData completed_player_quest_data = 4;
+	optional uint32 server_version = 5;
 }
 
 message CMsgGCCStrike15_v2_MatchmakingClient2GCHello {

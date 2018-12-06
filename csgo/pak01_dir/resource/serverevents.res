@@ -121,4 +121,8 @@
 	{
 
 	}
+	"hltv_replay"
+	{
+		"delay"		"long"
+	}
 }

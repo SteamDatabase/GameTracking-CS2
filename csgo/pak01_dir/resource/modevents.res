@@ -271,6 +271,14 @@
 		"defindex"	"long"
 	}
 
+	"item_pickup_failed"
+	{
+		"userid"	"short"
+		"item"		"string"
+		"reason"	"short"
+		"limit"		"short"
+	}
+
 	"item_remove"
 	{
 		"userid"	"short"
@@ -392,6 +400,7 @@
 		"message"	"string"	// end round message 
 		"legacy"	"byte"		// server-generated legacy value
 		"player_count"	"short"		// total number of players alive at the end of round, used for statistics gathering, computed on the server in the event client is in replay when receiving this message
+		"nomusic"	"byte"		// if set, don't play round end music, because action is still on-going
 	}
 
 	"grenade_bounce"
@@ -691,6 +700,7 @@
 		"userid"		"short"
 		"reason"		"short"
 		"musickitmvps"	"long"
+		"nomusic"	"byte"
 	}
 	
 	"player_decal"
@@ -908,7 +918,9 @@
 
 	"nextlevel_changed"				// a game event, name may be 32 characters long
 	{
-		"nextlevel"	"string" 	// weapon name killer used 
+		"nextlevel"		"string"
+		"mapgroup"		"string"
+		"skirmishmode"	"string"
 	}
 
 	"seasoncoin_levelup"
@@ -927,4 +939,83 @@
 	"start_halftime"
 	{
 	}
+
+	"ammo_refill"
+	{
+		"userid"	"short"
+		"success"	"bool"
+	}
+
+	"parachute_pickup"
+	{
+		"userid"		"short"
+	}
+
+	"parachute_deploy"
+	{
+		"userid"		"short"
+	}
+
+	"dronegun_attack"
+	{
+		"userid"		"short"
+	}
+
+	"drone_dispatched"
+	{
+		"userid"		"short"
+		"priority"		"short"
+		"drone_dispatched"	"bool"
+	}
+
+	"loot_crate_visible"
+	{
+		"userid"		"short"		// player entindex
+		"subject"		"short"		// crate entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+
+	"loot_crate_opened"
+	{
+		"userid"		"short"		// player entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+
+	"open_crate_instr"
+	{
+		"userid"		"short"		// player entindex
+		"subject"		"short"		// crate entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+
+	"smoke_beacon_paradrop"
+	{
+		"userid"		"short"
+		"paradrop"		"short"
+	}
+
+	"drone_cargo_detached"
+	{
+		"userid"		"short"
+		"cargo"			"short"
+		"delivered"		"bool"
+	}
+	
+	"choppers_incoming_warning"
+	{
+		"global" "bool"
+	}
+
+	"firstbombs_incoming_warning"
+	{
+		"global" "bool"
+	}
+
+	"dz_item_interaction"
+	{
+		"userid"		"short"		// player entindex
+		"subject"		"short"		// crate entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+	
 }

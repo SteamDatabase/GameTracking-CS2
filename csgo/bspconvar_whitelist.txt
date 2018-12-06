@@ -6,6 +6,7 @@
 {
 	ammo_grenade_limit_default							1	// How many of each grenade (except flashbangs) are we allowed to carry?
 	ammo_grenade_limit_flashbang						1	// How many flashbangs are we allowed to carry?
+	ammo_item_limit_healthshot							1	// How many health shots are we allowed to carry?
 	ammo_grenade_limit_total							1	// How many total grenades can we carry?
 	bot_allow_grenades									1	// If nonzero, bots may use grenades.
 	bot_allow_machine_guns								1	// If nonzero, bots may use the machine gun.
@@ -49,13 +50,32 @@
 	cash_team_win_by_hostage_rescue						1
 	cash_team_win_by_time_running_out_bomb				1
 	cash_team_win_by_time_running_out_hostage			1
+	contributionscore_assist							1
+	contributionscore_bomb_defuse_minor					1
+	contributionscore_bomb_defuse_major					1
+	contributionscore_bomb_planted						1
+	contributionscore_bomb_exploded						1
+	contributionscore_cash_bundle						1
+	contributionscore_crate_break						1
+	contributionscore_hostage_kill						1
+	contributionscore_hostage_rescue_minor				1
+	contributionscore_hostage_rescue_major				1
+	contributionscore_kill								1
+	contributionscore_kill_factor						1
+	contributionscore_objective_kill					1
+	contributionscore_suicide							1
+	contributionscore_team_kill							1
 	ff_damage_reduction_bullets							1	// How much to reduce damage done to teammates when shot.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
-	ff_damage_reduction_grenade							1
-	ff_damage_reduction_grenade_self					1
-	ff_damage_reduction_other							1
+	ff_damage_reduction_grenade							1	// How much to reduce damage done to teammates by a thrown grenade.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
+	ff_damage_reduction_grenade_self					1	// How much to damage a player does to himself with his own grenade.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
+	ff_damage_reduction_other							1	// How much to reduce damage done to teammates by things other than bullets and grenades.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
 	global_chatter_info								    1
+	healthshot_healthboost_time							1
+	healthshot_healthboost_damage_multiplier			1
+	healthshot_healthboost_speed_multiplier				1
 	mp_afterroundmoney									1	// Amount of money awared to every player after each round
 	mp_anyone_can_pickup_c4								1
+	mp_autokick											1
 	mp_autoteambalance									1
 	mp_buy_allow_grenades								1	// Whether or not grenades can be purchased from the buy menu
 	mp_buy_allow_guns									1	// Bitfield: which weapons can be purchased. pistols (1), SMGs (2), rifles (4), shotguns (8), sniper rifles (16), heavy MGs (32)
@@ -98,6 +118,8 @@
 	mp_dogtag_despawn_on_killer_death					1	// If set, dogtags will despawn when the person who killer the owner dies
 	mp_dogtag_despawn_time								1	// Dogtags automatically despawn after this many seconds (0=infinite)
 	mp_dogtag_pickup_rule								1	// Who is allowed to pick up dogtags (0=killer, 1=killer's team, 2=victim's team, 3=killer OR victim's team, 4=everyone)
+	mp_drop_grenade_enable								1	// Allows players to drop grenades.
+	mp_drop_knife_enable								1	// Allow players to drop knives.
 	mp_economy_reset_rounds								1	// how many rounds before economy is reset to default
 	mp_equipment_reset_rounds							1	// how many rounds before equipment is reset to default
 	mp_force_assign_teams								1
@@ -105,7 +127,7 @@
 	mp_forcecamera										1	// Restricts spectator modes for dead players. 0 = Any team. 1 = Only own team. 2 = No one; fade to black on death (previously mp_fadetoblack).
 	mp_free_armor										1	// Determines whether armor (1) and/or helmet (2) are given automatically.
 	mp_freezetime										1	// how many seconds to keep players frozen when the round starts
-	mp_friendlyfire										1
+	mp_friendlyfire										1	// Allows team members to injure other members of their team
 	mp_ggprogressive_round_restart_delay				1
 	mp_ggtr_always_upgrade								1
 	mp_ggtr_bomb_defuse_bonus							1
@@ -142,10 +164,13 @@
 	mp_items_prohibited								    1
 	mp_limitteams										1	// Max # of players 1 team can have over another (0 disables check)
 	mp_match_can_clinch									1	// 0=No mercy rule, 1=team can clinch match win early if they win > 1/2 total rounds
+	mp_match_end_changelevel							1	// 0=No mercy rule, 1=team can clinch match win early if they win > 1/2 total rounds
 	mp_max_armor										1	// Determines whether armor (1) and/or helmet (2) are available for purchase.
 	mp_maxmoney											1	// maximum amount of money allowed in a player's account
 	mp_maxrounds										1	// max number of rounds to play before server changes maps
 	mp_molotovusedelay									1	// Number of seconds to delay before the molotov can be used after acquiring it
+	mp_only_cts_rescue_hostages							1	// Only CTs can rescue hostages
+	mp_plant_c4_anywhere								1	// Don't have to be inside a site to plant bomb
 	mp_playercashawards									1	// Players can earn money by performing in-game actions
 	mp_radar_showall									1   // Determines who should see all in the radar.	0 = default. 1 = both teams. 2 = Terrorists. 3 = CTs.
 	mp_randomspawn										1	// Determines whether players are to spawn.		0 = default; 1 = both teams; 2 = Terrorists; 3 = CTs.
@@ -163,6 +188,7 @@
 	mp_solid_teammates									1	// Determines whether teammates are solid or not.
 	mp_starting_losses									1	// Loss streak to start each team with (default 0).  Results in the first round being worth additional cash for the losing team
 	mp_startmoney										1	// Amount of money each player starts with on match start, half start or reset
+	mp_tagging_scale									1	// Scalar for player tagging modifier when hit. Lower values for greater tagging.
 	mp_t_default_grenades								1	// The default grenades that the CTs will spawn with.  To give multiple grenades, separate each weapon class with a space like this: 'weapon_molotov weapon_hegrenade'
 	mp_t_default_melee									1	// The default melee weapon that the Ts will spawn with.  Even if this is blank, a knife will be given.  To give a taser, it should look like this: 'weapon_knife weapon_taser'.  Remember to set mp_weapons_allow_zeus to 1 if you want to give a taser!
 	mp_t_default_primary								1	// The default primary (rifle) weapon that the Ts will spawn with
@@ -173,8 +199,8 @@
 	mp_timelimit										1	// Allow the match to end when mp_timelimit hits instead of waiting for the end of the current round.
 	mp_use_respawn_waves								1	// When set to 1, and that player's team is set to respawn, they will respawn in waves.
 	mp_warmup_pausetimer								1	// Set to 1 to stay in warmup indefinitely. Set to 0 to resume the timer.
-	mp_warmuptime										1
-	mp_warmuptime_all_players_connected					1
+	mp_warmuptime										1	// How long the warmup period lasts. Changing this value resets warmup.
+	mp_warmuptime_all_players_connected					1	// How long the warmup period lasts after all humans have connected.
 	mp_weapon_self_inflict_amount						1	// Attacking damages you if you miss (can't die from this damage)
 	mp_weapons_allow_heavy								1	// Determines which teams can purchase heavy weapons (-1 = any; 0 = none; 2 = Ts; 3 = CTs)
 	mp_weapons_allow_heavyassaultsuit					1	// Determines whether the Heavy Assault Suit is purchaseable or not (T only)
@@ -191,12 +217,19 @@
 	mp_heavyassaultsuit_aimpunch							1	// How much EXTRA aim punch will happen when a player wearing the assault suit gets when shot
 	mp_heavybot_damage_reduction_scale						1	
 	mp_win_panel_display_time							1
+	inferno_child_spawn_max_depth						1	// Molotov spread variable
+	inferno_max_flames									1	// Molotov spread variable
+	inferno_max_range									1   // Molotov spread variable
+	molotov_throw_detonate_time							1	// Molotov allowed throw duration
 	occlusion_test_async								1
 	spec_freeze_panel_extended_time						1	// Time spent with the freeze panel still up after observer freeze cam is done.
 	spec_freeze_time									1	// Time spend frozen in observer freeze cam.
 	spec_replay_enable									1 // the default is "0". the "1" here is not used
+	spec_replay_leadup_time								1 // how long the spec replay delay is
+	spec_replay_bot										1 // whether bot kills show a replay
 	sv_accelerate										1
 	sv_airaccelerate									1	
+	sv_air_pushaway_dist								1
 	sv_allow_votes										1	// Voting allowed in this mode
 	sv_alltalk											1	// DEPRECATED. Players can hear all enemy communication (voice, chat).  Use sv_talk_enemy_dead and sv_talk_enemy_living instead.
 	sv_arms_race_vote_to_restart_disallowed_after		1
@@ -217,37 +250,54 @@
 	sv_buy_status_override								1	// Override for buy status map info. 0 = everyone can buy, 1 = ct only, 2 = t only 3 = nobody
 	sv_deadtalk											1	// When set, dead players can speak (voice, text) to living players on their team
 	sv_disable_show_team_select_menu					1
+	sv_disable_radar									1
+	sv_disable_immunity_alpha							1
 	sv_duplicate_playernames_ok							1
 	sv_enablebunnyhopping								1	// Disables in-air movement speed cap
+	sv_env_entity_makers_enabled						1
+	sv_extract_ammo_from_dropped_weapons				1
+	sv_falldamage_scale									1
+	sv_falldamage_to_below_player_multiplier			1	// Scale damage when distributed across two players
+	sv_falldamage_to_below_player_ratio					1	// Landing on a another player's head gives them this ratio of the damage.
+	sv_force_reflections								1
 	sv_friction											1	//"World friction."
+	sv_grassburn										1
 	sv_gravity											1	// World gravity. (default is 800)
 	sv_guardian_heavy_all								1
 	sv_guardian_heavy_count								1
 	sv_guardian_max_wave_for_heavy						1
 	sv_guardian_min_wave_for_heavy						1
+	sv_health_approach_enabled							1
+	sv_hegrenade_damage_multiplier						1
+	sv_hegrenade_radius_multiplier						1
 	sv_ignoregrenaderadio								1	// Turn off Fire in the hole messages
 	sv_infinite_ammo									1
+	sv_knife_attack_extend_from_player_aabb				1
 	sv_maxspeed											1
 	sv_maxvelocity										1	//Maximum speed any ballistically moving object is allowed to attain per axis.
 	sv_occlude_players									1
+	sv_outofammo_indicator								1
+	sv_show_ragdoll_playernames							1
+	sv_show_team_equipment_force_on						1
 	sv_staminajumpcost									1	// Modifies jumping stamina (default .08)
 	sv_staminalandcost									1	// Modifies landing stamina (default .18)
 	sv_stopspeed										1	//"Minimum stopping speed when on ground.
 	sv_talk_enemy_dead									1	// Dead players can hear dead enemy communication (voice, chat)
 	sv_talk_enemy_living								1	// Live players can hear living enemy communication (voice, chat)
+	sv_teamid_overhead_maxdist_spec						1
+	sv_teamid_overhead_maxdist							1
 	sv_vote_to_changelevel_before_match_point			1
 	sv_wateraccelerate									1	   
 	sv_waterfriction									1	   
+	sv_water_movespeed_multiplier						1	// Water movespeed    
+	sv_water_swim_mode									1	// Prevent going under water
+	sv_weapon_encumbrance_per_item						1	// Encumbrance fixed cost
+	sv_weapon_encumbrance_scale							1	// Encumbrance ratio to active weapon
 	tv_delay											1
 	weapon_accuracy_nospread							1
 	weapon_air_spread_scale								1
 	weapon_max_before_cleanup							1
 	weapon_recoil_scale									1
 	weapon_reticle_knife_show							1
- 	ff_damage_reduction_grenade							1	// How much to reduce damage done to teammates by a thrown grenade.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
- 	ff_damage_reduction_grenade_self					1	// How much to damage a player does to himself with his own grenade.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
- 	ff_damage_reduction_other							1	// How much to reduce damage done to teammates by things other than bullets and grenades.  Range is from 0 - 1 (with 1 being damage equal to what is done to an enemy)
- 	mp_friendlyfire										1	// Allows team members to injure other members of their team
- 	mp_warmuptime										1	// How long the warmup period lasts. Changing this value resets warmup.
- 	mp_warmuptime_all_players_connected					1	// How long the warmup period lasts after all humans have connected.
+	weapon_sound_falloff_multiplier						1
 }
