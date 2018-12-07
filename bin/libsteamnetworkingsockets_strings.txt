@@ -29,21 +29,6 @@
     Field type: 
     Remote host is in data center '%s'
    Cannot communicate with relays without network config.
-  %s decode pkt %lld ack last block ack begin %lld
-  %s decode pkt %lld latest recv %lld
-  %s decode pkt %lld nack [%lld,%lld) ack [%lld,%lld)
-  %s decode pkt %lld peer reliable pos = %lld
-  %s decode pkt %lld reliable range [%lld,%lld)
-  %s decode pkt %lld stop waiting: %lld (was %lld)
-  %s decode pkt %lld valid reliable bytes = %d [%lld,%lld)
-  %s encode pkt %lld last recv %lld (%d blocks, actual last recv=%lld)
-  %s encode pkt %lld last recv %lld (no blocks, actual last recv=%lld)
-  %s encode pkt %lld last recv %lld (no loss)
-  %s encode pkt %lld nack [%lld,%lld) ack [%lld,%lld) 
-  %s encode pkt %lld reliable msg %lld offset %d+%d=%d range [%lld,%lld)
-  %s encode pkt %lld stop_waiting offset %lld = %lld
-  %s encode pkt %lld unreliable msg %lld offset %d+%d=%d
-  %s updating min_waiting_on_ack %lld -> %lld
   +%d load balance penalty.
   +%d route penalty.
   Comment started here.
@@ -63,7 +48,6 @@
  %s=%lld
  %s=%llu
  %s=%s
- '%s'
  *O y
  ;O(|
  = { <proto text format> }". To set fields within it, use syntax like "
@@ -84,7 +68,6 @@
  [default = $0
  __vector(
  a protocol 
- ack_e2e
  ack_relay
  ack_relay_fwd_target
  ack_routes
@@ -209,6 +192,8 @@
 "k_ESteamDatagramMsg_P2PStatsClient
 "k_ESteamNetworkingUDPMsg_ConnectOK
 "legacy_gameserver_relay_session_id
+#%u %s
+#%u %s '%s'
 #CMsgSteamSockets_UDP_ChallengeReply
 #CMsgSteamSockets_UDP_ConnectRequest
 #D$D3T$`
@@ -253,7 +238,6 @@ $k_ESteamDatagramMsg_ConnectionClosed
 $r,9D$
 %.*Lf
 %.18g
-%12llu %s: RATELIM QueueTime is %.1fms, SendRate=%.1fk, BytesQueued=%d
 %16[^/]/%u%n
 %5lu file=%s, line=%d, 
 %CMsgSteamDatagramNoSessionRelayToPeer
@@ -333,38 +317,15 @@ $r,9D$
 %s  256 - 512 KB/s:%5d  %3.0f%%
 %s (%d) : 
 %s 512 - 1024 KB/s:%5d  %3.0f%%
-%s RX msg %lld offset %d+%d=%d %02x ... %02x
 %s [%s] appears preferable to current primary %s [%s], but most recent communication is too long ago or ping sample is too stale.  Pinging.
 %s ack was pended for %lld usec, cannot pack delay properly!  usecNow=%llx, timestamp=%llx, usecThen=%llx
 %s acked our routes for connection %u at revision %u, but our latest revision is %u!
 %s appears to be SDR public address.
-%s decode pkt %lld
-%s decode pkt %lld abort.  %lld bytes reliable data buffered [%lld-%lld), new size would be %lld to %lld
-%s decode pkt %lld abort.  Reliable stream already has %d fragments, first is [%lld,%lld), last is [%lld,%lld), new segment is [%lld,%lld)
-%s decode pkt %lld abort.  Reliable stream already has %d fragments, first is [%lld,%lld), last is [%lld,%lld).  We don't want to fragment [%lld,%lld) with new segment [%lld,%lld)
-%s decode pkt %lld empty reliable segment?
-%s decode pkt %lld latest recv %lld delay %.1fms ping %.1fms
-%s decode pkt %lld latest recv %lld delay %lluusec INVALID ping %lldusec
-%s decode pkt %lld, first packet in gap, reduced to [%lld,%lld)
-%s decode pkt %lld, gap split [%lld,%lld) and [%lld,%lld)
-%s decode pkt %lld, last packet in gap, reduced to [%lld,%lld)
-%s decode pkt %lld, single pkt gap filled
-%s discarding pkt %lld
 %s downtime warning expired; assumed back online.
-%s drop %d pkts [%lld-%lld)
-%s encode pkt %lld
-%s exceeding rate limit just sending acks / stats!  Not sending any data!
-%s flush didn't fit; rescheduling
-%s flushed %d acks (%d bytes)
-%s isn't a public address that a relay can forward traffic to.
 %s isn't a valid authorized sender SteamID
 %s isn't a valid gameserver SteamID
-%s packet data chunk failed to decrypt!  Could be tampering/spoofing or a bug.
-%s pkt %lld %s, queueing retry of reliable range [%lld,%lld)
 %s#%d (%s)
 %s(%d): OpenSSL internal error, assertion failed: %s
-%s: RecvMessage MsgNum=%lld sz=%d
-%s: SendMessage %s: MsgNum=%lld sz=%d
 %sBytes buffered: %s
 %sConnection quality distribution:
 %sConnection quality histogram: (%d measurement intervals)
@@ -512,7 +473,6 @@ $r,9D$
 -RVQW
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 ../../common/crypto.cpp
-../../common/steamdatagram_messages_auth.pb.cc
 ../../common/steamdatagram_messages_sdr.pb.cc
 ../../common/steamid.cpp
 ../../common/steamnetworkingsockets_messages.pb.cc
@@ -570,6 +530,7 @@ $r,9D$
 /":lnv 
 /%td%
 /)IMT
+/9D$4
 /Q/[0
 /QQRP
 /WWQP
@@ -678,10 +639,11 @@ $r,9D$
 39CMsgSteamDatagramNoSessionRelayToClient
 39CMsgSteamDatagramP2PRoutes_RelayCluster
 39CMsgSteamDatagramSessionCryptInfoSigned
+3D$$	
 3D$(1
-3D$@3T$D	
 3HLhx 
 3Mp3}t
+3P<3h8	
 3T$$1
 3T$83t$<#T$h
 3T$<1
@@ -698,7 +660,6 @@ $r,9D$
 3YH_!
 3uh3Mp3}t
 3x&>Z
-3x<3h8	
 4$;T$
 4$j	W
 40CMsgSteamDatagramCachedCredentialsForApp
@@ -729,11 +690,11 @@ $r,9D$
 5arod9
 5bdet
 5ceTk
-5g_VLV
 5t:j>
 6*Fc7
 6-9'6-9'
-6666666666666666\\\\\\\\\\\\\\\\4
+6666666666666666\\\\\\\\\\\\\\\\../../common/steamdatagram_messages_auth.pb.cc
+69D$ w0
 6;t$(
 6PNi&
 7+T$(
@@ -760,32 +721,38 @@ $r,9D$
 8WLt	8WM
 98rnw\f;h
 99r\wV
-9D$ f
 9D$ v
 9D$ v'
 9D$ v6
+9D$ vJ
 9D$ w
+9D$$f
 9D$$t?
 9D$$v
-9D$$wC
+9D$$w
 9D$$|
+9D$(f
 9D$(u
 9D$(v
+9D$(v>
 9D$(~
 9D$,t0
+9D$0f
 9D$0t
+9D$0t0
 9D$0v
+9D$0v$
+9D$0v.
+9D$0w
+9D$0wF
 9D$0~
 9D$4r
 9D$4t
+9D$8w
 9D$8~a
-9D$<|
-9D$@w
 9D$D|F
 9D$D|a
 9D$PtJ
-9D$Pv
-9D$Pw
 9D$\s2
 9D$dt'
 9D$pt0
@@ -802,7 +769,8 @@ $r,9D$
 9L$ ~2
 9L$$s
 9L$$tN
-9L$$|
+9L$$|:
+9L$,|
 9L$4w
 9L$8~
 9L$@t8
@@ -815,24 +783,29 @@ $r,9D$
 9P(tUhn
 9P(uP
 9PE,$
-9PPtI
-9T$ v
+9T$ r2
 9T$$|
+9T$$|"~
 9T$$|/
 9T$$|>
-9T$$|P~H
+9T$$|F
+9T$$|R
+9T$$}l
 9T$(t
+9T$(v
+9T$(|$
 9T$,|
+9T$,|<
+9T$4|
 9T$4|$
-9T$4|(
+9T$4|,
+9T$4|6
+9T$<|
+9T$<|(
+9T$<|.
 9T$<}#
-9T$D|
-9T$D|(
 9T$Lu
-9T$T|
 9T$T|"
-9T$T|(~a
-9T$T|C~8
 9c,Y0x
 9l$ r/9
 9l$ t
@@ -852,30 +825,28 @@ $r,9D$
 9rLt3
 9t$ tL
 9t$ u
-9t$ v
+9t$ wk
 9t$$u
-9t$(ta
+9t$(t_
 9t$(u
+9t$(v
 9t$,t
 9t$,w
 9t$8t
 9w$tb
 9w<t.
 9x(u8
-9x,~{
 9xLt4
 9|$ r*9
 9|$ u
 9|$ |Y
 9|$$f
 9|$$t
-9|$$w^
-9|$$|
 9|$(t
-9|$0u
-9|$0|y
-9|$8rG
-9|$8rj
+9|$(u
+9|$,|
+9|$8rO
+9|$8rn
 9|$8t+
 9|$8vD9
 9|$8w
@@ -889,7 +860,6 @@ $r,9D$
 : Tried to merge from a message with a different type.  to: 
 :.JlN
 :5ptI.T(
-:;w$u:
 :Et	1
 :F	rU
 :FPPV
@@ -905,7 +875,8 @@ $r,9D$
 ;D$(|d
 ;D$,u
 ;D$,v
-;D$8v9
+;D$8vA
+;D$@s
 ;D$tt
 ;D$tur
 ;E$}$
@@ -919,7 +890,7 @@ $r,9D$
 ;L$ }2
 ;L$$t
 ;L$$|
-;L$(t
+;L$(tA
 ;L$(tT
 ;L$0u
 ;L$8u!
@@ -932,8 +903,7 @@ $r,9D$
 ;QPt3
 ;T$$u
 ;T$,t
-;T$,|6
-;T$0|6
+;T$4|6
 ;U s6
 ;d22Vd22Vt::Nt::N
 ;h t&
@@ -951,6 +921,7 @@ $r,9D$
 ;o$}D
 ;o,}@
 ;oDtq
+;p$u$
 ;p$u,
 ;p$uX
 ;p$u\
@@ -971,14 +942,15 @@ $r,9D$
 ;t$T~
 ;w }M
 ;w$t.
-;w@}.
 ;wDt4
+;wD}.
 ;wP|.
 ;wP|0
 ;|$ st
 ;|$ tE
 ;|$ tW
 ;|$ u
+;|$$~~1
 ;|$8s
 ;~ tS
 ;~ }U
@@ -1032,6 +1004,7 @@ $r,9D$
 @ 9t$
 @$RWPj
 @0RVPj
+@9D$ w:
 @PVQW
 @RRPW
 @tRWPj
@@ -1129,6 +1102,7 @@ Application didn't accept or close incoming connection in a reasonable amount of
 April
 Assertion Failed: !( msgStatsIn.flags() & msgStatsIn.ACK_REQUEST_E2E )
 Assertion Failed: !(pQueue->m_pLast->*pMbrLinks).m_pNext
+Assertion Failed: !BNeedToSendEndToEndStatsOrAcks( usecNow )
 Assertion Failed: !HasOverlappingRange( range, m_senderState.m_listInFlightReliableRange )
 Assertion Failed: !HasOverlappingRange( range, m_senderState.m_listReadyRetryReliableRange )
 Assertion Failed: !IsExternallyAllocated()
@@ -1138,6 +1112,7 @@ Assertion Failed: !g_bWantThreadRunning
 Assertion Failed: !g_listConnections.IsValidIndex( idx )
 Assertion Failed: !g_listListenSockets.IsValidIndex( idx )
 Assertion Failed: !g_mapSharedClusterData[ hCluster ]->m_pConfig
+Assertion Failed: !g_sLauncherPartner.empty()
 Assertion Failed: !m_bCryptKeysValid
 Assertion Failed: !m_bDisconnected
 Assertion Failed: !m_pInt
@@ -1148,7 +1123,6 @@ Assertion Failed: !m_pPhsyicalSocket
 Assertion Failed: !m_senderState.m_mapInFlightPacketsByPktNum.empty()
 Assertion Failed: !m_stats.m_expectedAcks.m_listAcks.IsEmpty() && m_stats.m_expectedAcks.m_listAcks[ m_stats.m_expectedAcks.m_listAcks.Tail() ].Timestamp( usecNow ) == usecNow
 Assertion Failed: !m_statsEndToEnd.BNeedToSendPingImmediate( usecNow )
-Assertion Failed: !m_statsEndToEnd.BNeedToSendStatsOrAcks( usecNow )
 Assertion Failed: !msg.has_connection_closed()
 Assertion Failed: !msg.has_to_connection_id()
 Assertion Failed: !msgStatsIn.has_quality_e2e()
@@ -1196,7 +1170,6 @@ Assertion Failed: Count() >= num
 Assertion Failed: GetInts()
 Assertion Failed: GetState() == k_ESteamNetworkingConnectionState_Connecting
 Assertion Failed: GetState() == k_ESteamNetworkingConnectionState_ProblemDetectedLocally
-Assertion Failed: IsInList(after)
 Assertion Failed: IsInList(before)
 Assertion Failed: IsValid()
 Assertion Failed: IsValidIndex( elem )
@@ -1206,6 +1179,7 @@ Assertion Failed: ListenSocket()
 Assertion Failed: PendingBytesTotal() == 0
 Assertion Failed: Size() == operand.Size()
 Assertion Failed: SteamDatagramTransportLock::s_nLocked == 1
+Assertion Failed: TLinkStatsTracker::m_pktNumInFlight == 0
 Assertion Failed: V_strlen( pchEncodeTable ) == 16 && m_uRadixBits == 4
 Assertion Failed: V_strlen( pchEncodeTable ) == 32 && m_uRadixBits == 5
 Assertion Failed: _IsValidIndex( elem, unNodeSize, pMemBase )
@@ -1228,6 +1202,7 @@ Assertion Failed: cBytes < 1024*1024*10
 Assertion Failed: cbAckBytesWritten == cbReserveForAcks
 Assertion Failed: cbBytesRemainingForSegments >= -1
 Assertion Failed: cbBytesRemainingForSegments >= 0 || ( cbBytesRemainingForSegments == -1 && vecSegments.size() > 0 )
+Assertion Failed: cbDecrypted >= k_cbSteamNetworkingSocketsMaxPlaintextPayloadRecv
 Assertion Failed: cbNewSize > len( m_receiverState.m_bufReliableStream )
 Assertion Failed: cbPkt == int( sizeof(*hdr) + nMsgLength )
 Assertion Failed: cbPkt == pEnd - pkt
@@ -1379,7 +1354,6 @@ Assertion Failed: m_senderState.m_itNextInFlightPacketToTimeout->first > 0
 Assertion Failed: m_senderState.m_listReadyRetryReliableRange.count( relRange ) == 0
 Assertion Failed: m_senderState.m_mapInFlightPacketsByPktNum.begin()->first < 0
 Assertion Failed: m_senderState.m_mapInFlightPacketsByPktNum.lower_bound( m_statsEndToEnd.m_nNextSendSequenceNumber ) == m_senderState.m_mapInFlightPacketsByPktNum.end()
-Assertion Failed: m_seqNumInFlight == 0
 Assertion Failed: m_socket != INVALID_SOCKET
 Assertion Failed: m_statsEndToEnd.BNeedToSendKeepalive( usecNow )
 Assertion Failed: m_statsEndToEnd.BNeedToSendPingImmediate( usecNow )
@@ -1433,11 +1407,10 @@ Assertion Failed: msg.your_public_ip() != 0
 Assertion Failed: msgConnectionClosed.relay_mode() == CMsgSteamDatagramConnectionClosed_ERelayMode_None
 Assertion Failed: msgSessionEstablished.connection_id() == m_unConnectionIDLocal
 Assertion Failed: msgSignedCert.has_cert()
-Assertion Failed: msgStatsIn.ack_e2e_size() == 0
 Assertion Failed: msgStatsIn.has_seq_num_r2c()
 Assertion Failed: msgStatsIn.has_seq_num_r2s()
+Assertion Failed: msgStatsIn.legacy_ack_e2e_size() == 0
 Assertion Failed: msgStatsOut.ack_peer_routes_revision() == m_msgPeerRoutes.revision()
-Assertion Failed: msgStatsOut.has_seq_num_e2e()
 Assertion Failed: n == 0 || s1 != NULL
 Assertion Failed: n == 0 || s2 != NULL
 Assertion Failed: n >= 0
@@ -1569,6 +1542,7 @@ Assertion Failed: route.m_idxClusterLocal == pClusterData->m_idxInConfig
 Assertion Failed: route.m_nBackPing >= 0
 Assertion Failed: route.m_nScoreLocal == nCheckScore
 Assertion Failed: s.has_string_value()
+Assertion Failed: s_HostedDedicatedServerRouting.GetPopID() == nSDR_POPID
 Assertion Failed: s_hSockWakeThreadRead != INVALID_SOCKET
 Assertion Failed: s_hSockWakeThreadRead == INVALID_SOCKET
 Assertion Failed: s_hSockWakeThreadWrite == INVALID_SOCKET
@@ -1613,7 +1587,6 @@ Assertion Failed: usecNextWakeTime >= pNextThinker->GetEarliestThinkTime()
 Assertion Failed: usecNow > 0x20000*k_usecAckDelayPrecision
 Assertion Failed: usecTargetThinkTime < k_nThinkTime_Never
 Assertion Failed: usecTargetThinkTime > 0
-Attempting connection to service in data center '%s'
 Attempting to connect via steam datagram using unsigned ticket, as per steamdatagram_client_debugticket_address
 Attemt to send packet, but socket has been closed!
 August
@@ -1881,8 +1854,6 @@ CSPName
 CSharedSocket client table corruption!
 CSteamNetworkConnectionP2PSDR inbound connection received stats while in state 'connecting'.
 CSteamNetworkConnectionP2PSDR received ProcessMessage_P2PSessionEstablished while in state %d.  Rejecting packet with ConnectionClosed message.
-CSteamNetworkConnectionP2PSDR received Stats while in state %d.  Rejecting packet with ConnectionClosed message.
-CSteamNetworkConnectionP2PSDR received e2e stats while in Connecting state.  Resending ConnectRequest.
 CSteamNetworkConnectionPipe connections shouldn't try to send 'packets'!
 CSteamNetworkConnectionSDRClientBase received data packet while in state %d.  Rejecting packet with ConnectionClosed message.
 CSteamNetworkConnectionSDRClientBase received data packet while in the 'connecting' state.  Dropping packet; resending ConnctRequest
@@ -1903,6 +1874,7 @@ CUtlBuffer::GetStringFast: no string termination
 CUtlLinkedList overflow!
 Callback doesn't fit!
 Callbacks backing up and not being checked.  Need to check them more frequently!
+Called SteamDatagramClient_SetPartner too late!
 Can't 
 Can't BackUp() after failed Next().
 Can't get Steam interface '%s'
@@ -1926,9 +1898,8 @@ Cannot create SDR connection to hosted dedicated server.  %s
 Cannot create hosted dedicated server listen socket.  %s
 Cannot create listen socket.  %s
 Cannot create shared steam datagram socket.  %s
-Cannot deduce public IP.
+Cannot deduce public IP.  Datacenter environment variables misconfigured!
 Cannot find ISteamNetworkingSocketsSerialized.  Client needs newer client binaries
-Cannot find service ID in network.  We don't know what data center we're trying to connect to!
 Cannot initialize SDR clientfunctionality to create P2P listen socket.  %s
 Cannot request a cert; we don't know our SteamID (yet?).
 Cannot talk to any relays. Check Internet connection
@@ -1990,7 +1961,6 @@ Connection already open.
 Connection dropped
 Connection list bookeeping corruption
 Connection not destroyed properly
-Connection to %s appears to be timing out.  Sending keepalive.
 ConnectionClosed
 ConnectionShutdown
 ConnectionTimedOut didn't do what it is supposed to!
@@ -2026,16 +1996,13 @@ D$ f9D$Tt8
 D$ f=
 D$ r	u
 D$ t(
-D$ uL
 D$ |1
 D$ |2
-D$#ui
 D$$	B
 D$$+D$,
 D$$+D$\
 D$$, <
 D$$,%<S
-D$$9D$
 D$$9D$(ta
 D$$9D$8
 D$$9D$T
@@ -2064,18 +2031,19 @@ D$(3V,3F(
 D$(9D$ 
 D$(9D$$w
 D$(9D$$w@
-D$(9D$,t~
+D$(9D$,
 D$(;B
 D$(;D$x
 D$(;p$
+D$(f9
 D$(wf
+D$(xZ
 D$+tS1
+D$,9D$$
 D$,;D$ptK
 D$,e3
 D$,t/
 D$,t0
-D$,vA
-D$,xY
 D$0+D$t
 D$09D$(u
 D$09D$4
@@ -2088,20 +2056,22 @@ D$49D$
 D$49D$(}-
 D$49D$4
 D$49F
-D$49t$(
-D$4;B8s}
 D$4;D$
 D$4;D$8
 D$4f;x
+D$4s4
 D$8!D$$
 D$89D$
+D$89D$@
 D$89t$$
+D$89t$(
+D$8;B8s}
 D$8;D$
 D$8f;x
+D$8tm
 D$<9D$(~&
 D$<9D$,t
 D$<9p
-D$<;B8s
 D$<;E
 D$<;T$$
 D$<;t$4
@@ -2111,19 +2081,23 @@ D$@!D$$
 D$@!D$$9t$$
 D$@98
 D$@9T$ 
+D$@;B8s
 D$@@KL
 D$@f9G
 D$@s0
 D$@tNf
+D$@uC
 D$D+D$@
 D$D9D$$
 D$Dt<
 D$DuC
+D$D~O
 D$H9D$L
 D$H9FLta
 D$H;D$L
 D$H;G
 D$H;t$D
+D$HvA
 D$Le3
 D$P	G
 D$P#t$T
@@ -2134,7 +2108,6 @@ D$P9.
 D$P9D$L
 D$P9D$lt4
 D$P;x
-D$Pf9
 D$Pf;x
 D$Pth
 D$T9D$P
@@ -2244,7 +2217,6 @@ EVP lib
 Ec@u 
 EcxmV4
 Ed25519 key public doesn't match private!
-Ehx.9
 Enable multithreading to use std::thread
 End-of-file inside block comment.
 End-to-end connection: BUG: invalid state %d!
@@ -2365,6 +2337,7 @@ FdPPWkE
 February
 Feel free to add support for more if you need it.
 FhPPWkE
+Fhx.9
 Field "
 Field does not match message type.
 Field is repeated; the method requires a singular field.
@@ -2462,7 +2435,8 @@ GetBool
 GetDouble
 GetEnum
 GetFloat
-GetHostedDedicatedServerInfo should be called thorugh a gameserver's ISteamSocketNetworking
+GetHostedDedicatedServerAddress should be called thorugh a gameserver's ISteamSocketNetworking
+GetHostedDedicatedServerAddress should not be called before calling SteamDatagramServer_Init.
 GetInt32
 GetInt64
 GetMessage
@@ -2589,6 +2563,7 @@ Invalid proto descriptor for file "
 Invalid public dependency index.
 Invalid public key
 Invalid reliable message header byte 0x%02x
+Invalid routing blob (%d bytes)
 Invalid server_steam_id.
 Invalid strings::Substitute() format string: "
 Invalid symbol name: 
@@ -2625,7 +2600,6 @@ L$$;M
 L$$f9
 L$$t9
 L$$tX
-L$$|f
 L$'tR
 L$(3H
 L$(9q$
@@ -2644,32 +2618,34 @@ L$,8AJ
 L$,f;H
 L$,xq
 L$03H
-L$09H
-L$09L$
 L$0;A
 L$2f9
 L$4;H
+L$4f1
 L$4f;A
-L$4tU
 L$8+D$,
+L$89L$ 
 L$8;Q
 L$8;T$
 L$8f;A
 L$8f;q
 L$8t>
 L$<9A
+L$<tU
 L$<u	
+L$<uh
 L$@;)
 L$B;D$@t8
 L$D)T$X
 L$H;H
 L$H;y
+L$Pf1
 L$Pu-
 L$T;T$ 
 L$\e3
 L$`9y
 L$le3
-L$xt4
+L$| ;
 L$|e3
 L&&jL&&jl66Zl66Z~??A~??A
 L/d;O 
@@ -2770,8 +2746,10 @@ N25SteamNetworkingSocketsLib10CSDRClientE
 N25SteamNetworkingSocketsLib13CPacketLaggerE
 N25SteamNetworkingSocketsLib13CSharedSocket10RemoteHostE
 N25SteamNetworkingSocketsLib15IBoundUDPSocketE
-N25SteamNetworkingSocketsLib16LinkStatsTrackerE
+N25SteamNetworkingSocketsLib16LinkStatsTrackerINS_21LinkStatsTrackerRelayEEE
+N25SteamNetworkingSocketsLib16LinkStatsTrackerINS_24LinkStatsTrackerEndToEndEEE
 N25SteamNetworkingSocketsLib19CSteamNetworkingP2PE
+N25SteamNetworkingSocketsLib20LinkStatsTrackerBaseE
 N25SteamNetworkingSocketsLib21CDedicatedBoundSocketE
 N25SteamNetworkingSocketsLib21LinkStatsTrackerRelayE
 N25SteamNetworkingSocketsLib23CSteamNetworkingSocketsE
@@ -2859,7 +2837,6 @@ No P2P rights for this app
 No default value
 No field named "uninterpreted_option" in the Options proto.
 No network config; only relays in hardcoded whitelist will get through
-No network configuration available.  We don't know what data center we're trying to connect to!
 No partner pipe?
 No ping data available.
 NoSession
@@ -2910,17 +2887,9 @@ P0YZPW
 P0YZVP
 P0ZYVP
 P0ZYWP
+P2P %s
 P2P connection got a connection state changed callback after detatching from session?
 P2P connection received a message after detatching from session?
-P2P cxn %u to %s received data packet from relay %s while in the 'FindingRoute' state, but it's not the session we have selected as primary.  Ignoring
-P2P cxn %u to %s received data packet from relay %s while in the 'FindingRoute' state.  Marking connection as connected
-P2P cxn %u to %s received end-to-end P2PStats from primary while in the 'FindingRoute' state.  Marking connection as connected
-P2P local routes to %s cxn %u now at revision %d.
-P2P local routes to %s cxn %u recalculated.  No change, current revision is %d.
-P2P route to %s cxn %u through '%s' is '%s'
-P2P route to %s cxn %u through '%s' is now '%s' (was '%s')
-P2P route to %s cxn %u through '%s' now forwarding to '%s', revision %d
-P2P routes to %s cxn %u through '%s' to '%s'  lost.  No P2P route available through that cluster
 P2P session %s: Can't create connection.  %s
 P2P session %s: Creating connection %u
 P2P session %s: Implicitly accepted connection %u via SendMessageToUser
@@ -2931,7 +2900,6 @@ P2P session %s: connection %u is idle timing out.  But we still have unacked sen
 P2P session %s: created
 P2P session %s: idle timed out.  Destroying
 P2P session %s: idle timing out.  Closing connection %u and destroying session
-P2P to %s cxn %u, deselecting active session #%d.  We no longer have a route through that cluster.  Previous route went through remote relay in '%s'
 P2PBadRoute
 P2PFailure via Steam from %s, connection %u.  Reason: %d %d %s
 P2PSession destroyed
@@ -3075,14 +3043,10 @@ Received NoSession from %s, RelaySessionID=%u.  Discarded relay session for clie
 Received NoSession from %s, RelaySessionID=%u.  Ignoring, since client connection ID %u is incorrect, correct connection ID is %u
 Received P2P routes ack from %s connection %u for revision %u (latest revision is %u).
 Received P2P routes from %s, revision %u.  Contains %u clusters and %u routes
-Received P2PBadRoute from %s regarding peer's %s (cxn %u) session on cluster %s.  Clearing session in our copy of peer's routing candidates.
-Received P2PBadRoute from %s regarding peer's %s (cxn %u).  Ignored, since we aren't using the bad remote session token.  (Maybe already cleared it.)
-Received P2PSessionEstablished from %s for connection ID %u to %s
 Received Steam datagram ticket for server %s vport %d.%s
 Received SteamNetworkingSocketsRecvP2PRendezvous_t, but no ISteamNetworkingSocketsSerialized?
 Received client message from %s using RelaySessionID %u for %s connection %u.  But previously that session was for client %s connection %u!  This is suspicious.  Unlinking that session from this connection.
 Received client message from %s using SessionID 0x%x, without a client SteamID or connection ID.  We don't recognize that address+SessionID.  Why does the relay think we know the connection info?
-Received invalid routes in P2P stats message from %s connection %u
 Received malformed %s from %s
 Received malformed CMsgSteamDatagramConnectRequest from %s.  Missing / invalid envelope fields.  [ %s ]
 Received malformed CMsgSteamDatagramConnectionClosed from %s.  Missing / invalid envelope fields.  [ %s ]
@@ -3099,12 +3063,8 @@ Received unreliable msg %lld offset %d twice.  Sizes %d,%d
 ReceiverState
 Recv %s stats from %s for %s:%s
 Recv P2PRendezvous via Steam from %s cxn %u
-Recvd %s stats cxn %u from %s:%s
-Recvd %s stats from %s @ %s:%s
 Rejecting connection request from %s at %s, connection ID %u.  That steamID/ConnectionID pair already has a connection from %s
 Rejecting connection request from %s for unknown virtual port %d
-Relay %s acked routing forwarding revision %u for cxn %u.
-Relay %s acking wrong routing forwarding revision (%u instead of %u) for cxn %u; forcing re-ack.
 Relay %s downtime warning adjusted?  %.1f second earlier than before, %d seconds from now
 Relay %s is going offline in %d seconds
 Relay %s sent CMsgSteamDatagramRouterPingReply with extra route info about data center %x, but no ping for that data center?.
@@ -3117,7 +3077,6 @@ ReleaseMessage
 Reliable message number lurch.  Last reliable %lld, offset %llu, highest seen %lld
 Reliable message size %d too large.
 Reliable message size too large.  (%llu<<5 + %d)
-Remote host is using an unsigned cert.  Allowing connection, but it's not secure!
 RemoveLast
 Repeated fields can't have default values.
 Reply from %s timed out.  (Consecutive failure #%d.)
@@ -3138,6 +3097,8 @@ Rs$c~B
 S/MIME
 S/MIME Capabilities
 SDQn]
+SDR client %s
+SDR server %s:%d
 SDR service thread gave up on lock after waiting %dms.  This directly adds to delay of processing of network packets!
 SDR_CERT
 SDR_IP
@@ -3149,11 +3110,13 @@ SDR_LISTEN_PORT not set, should not call CreateHostedDedicatedServerListenSocket
 SDR_NETWORK_CONFIG
 SDR_POPID
 SDR_POPID = '%s'
-SDR_POPID is set, but not SDR_CERT & SDR_PRIVATE_KEY!  Clients will not be able to trust this server.  This is OK for dev, but should not happen in production!
 SDR_POPID is set, but not SDR_PRIVATE_KEY/SDR_CERT!  Certs are required in production data centers.
 SDR_POPID=%s, but our cert is not valid for that PoP ID!
+SDR_PORT is set, but not SDR_CERT & SDR_PRIVATE_KEY!  Clients will not be able to trust this server.  This is OK for dev, but should not happen in production!
 SDR_PRIVATE_KEY
 SDR_PRIVATE_KEY/SDR_CERT are set, but not SDR_POPID!  We don't know what data center we are in.
+SDR_ROUTING
+SDR_ROUTING is invalid or too long
 SEED-CBC
 SEED-CFB
 SEED-ECB
@@ -3196,21 +3159,14 @@ Sender sent abs unreliable message number using %llx mod %llx, highest seen %llx
 Sender sent reliable stream pos using %llx mod %llx, expected next %llx
 SenderState
 Sending ConnectRequest for ConnectionID %u to %s via primary relay %s.
-Sending P2P ConnectOK via Steam to %s cxn %u, local cxn %u
 Sending P2P ConnectRequest via Steam to %s, connection ID %u
 Sending P2P ConnectionFailure via Steam to %s cxn %u (reason %d %s)
 Sending P2PRendezvous via Steam to %s from cxn %u (%s)
-Sending graceful P2P ConnectionClosed via Steam to %s cxn %u, local cxn %u
-Sent %s stats to %s @ %s:%s
-Sent %s stats via %s cxn %u to %s:%s
-Sent %s stats via %s for %s:%s
-Sent P2P %s to %s for cxn %u to %s, but we have reason to believe that it might not get through end-to-end.  Also sending via steam
 September
 Serialized CMsgSteamSockets_UDP_Stats is %d bytes!
 Serialized inline stats message still won't fit, ever after clearing connection quality stats?
 Serialized stats message still won't fit, ever after clearing everything?
 Server
-Service data center changed?  (Network config change>?)  Now attempting connection to service in data center '%s'
 ServiceDescriptorProto
 ServiceOptions
 Session Idle Timeout
@@ -3339,7 +3295,9 @@ SteamAPI_ISteamNetworkingSockets_GetConnectionInfo
 SteamAPI_ISteamNetworkingSockets_GetConnectionName
 SteamAPI_ISteamNetworkingSockets_GetConnectionUserData
 SteamAPI_ISteamNetworkingSockets_GetDetailedConnectionStatus
-SteamAPI_ISteamNetworkingSockets_GetHostedDedicatedServerInfo
+SteamAPI_ISteamNetworkingSockets_GetHostedDedicatedServerAddress
+SteamAPI_ISteamNetworkingSockets_GetHostedDedicatedServerPOPID
+SteamAPI_ISteamNetworkingSockets_GetHostedDedicatedServerPort
 SteamAPI_ISteamNetworkingSockets_GetListenSocketInfo
 SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus
 SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection
@@ -3353,9 +3311,10 @@ SteamAPI_ISteamNetworkingSockets_SetConnectionConfigurationValue
 SteamAPI_ISteamNetworkingSockets_SetConnectionName
 SteamAPI_ISteamNetworkingSockets_SetConnectionUserData
 SteamClient017
-SteamDatagramClient_Init_InternalV5
+SteamDatagramClient_Init_InternalV6
 SteamDatagramClient_Internal_SteamAPIKludge
 SteamDatagramClient_Kill
+SteamDatagramClient_SetPartner
 SteamDatagramKillCommon() called, but sockets left open!
 SteamDatagramServer_Init_Internal
 SteamDatagramServer_Kill
@@ -3371,6 +3330,7 @@ SteamNetworkingSockets
 SteamNetworkingSocketsGameServer
 SteamNetworkingSocketsRecvP2PFailure_t with unknown failure code
 SteamNetworkingSocketsSerialized002
+SteamNetworkingSocketsSerialized003
 SteamNetworkingSockets_GetLocalTimestamp
 SteamNetworkingSockets_SetDebugOutputFunction
 SteamNetworkingUtils
@@ -3402,7 +3362,6 @@ T$(x
 T$,9T$$t;
 T$,9h
 T$0+|$8
-T$0|0
 T$4+D$H
 T$49T$$
 T$49U
@@ -3410,8 +3369,8 @@ T$4t.
 T$4t9
 T$8#D$$#t$8#T$ 
 T$<+D$0
-T$<;V
 T$<u@
+T$>t@
 T$@f1
 T$Hf1
 T$Kt	
@@ -3421,7 +3380,6 @@ T$P#D$d#t$P#T$`
 T$P#D$t#t$P#T$p
 T$Pf;B
 T$T;B 
-T$Xf1
 T$\e3
 T$\u_
 T$`	L$@
@@ -3430,7 +3388,6 @@ T$hf1
 T$lf1
 T$p~{
 T$x+D$t
-T$xf1
 T$|e3
 T$|f1
 T*|?i|~
@@ -3466,12 +3423,9 @@ This program was compiled against version
 This shouldn't be called if all the sizes are equal.
 Thursday
 Ticket blob of %d bytes is too small to be valid
-Ticket doesn't specify gameserver address
 Ticket has %d extra fields.  Only retaining the first %d
+Ticket has no routing information
 Ticket is missing AppID
-Ticket tells us we are connecting to service in data center '%s', but routing address is in the config at '%s'.  Trusting ticket.
-Ticket tells us we are connecting to service in data center '%s', but routing address isn't in the config.  Trusting ticket.
-Ticket tells us we are connecting to service in data center '%s', but we don't recognize that data center.  We'll try deducing data center from routing.
 Ticket we're about to send to request session fails to parse back.  %s
 Ticket:%u(%s) ; cert:%s
 Timed out attempting to connect
@@ -3509,6 +3463,7 @@ Trying to send a packet via steam datagram when no network configuration is avai
 Trying to send a packet via steam datagram, but we have lost connectivity to all relays.  Check your Internet connection.  Cannot send packet.
 Trying to send a packet via steam datagram, but we have not yet established a session on any relays.  This is common for the first few packets, but is a problem if it persists.
 Trying to send a packet via steam datagram, but we were never able to establish connectivity with any relays.  Check your Internet connection.  Cannot send packet.
+Trying to send a very large (%d bytes) unreliable message.  Sending as reliable instead.
 Tuesday
 Type appears to be in generated pool but wasn't 
 Type is already registered: 
@@ -3516,6 +3471,7 @@ T~FbT~Fb
 U 9T$
 U,;U0
 U1(\Q
+UDP %s@%s
 UNDEF
 UNRELIABLE
 USVW1
@@ -3523,7 +3479,6 @@ UTF-8 data when
 Unable to accept connection from %s.  %s
 Unable to communicate with ANY Steam Datagram routing cluster.  Possible problem with local internet connection?
 Unable to create a bound socket on the shared socket.
-Unable to deduce server's public IP.  If you are running the server behind a firewall, you'll need to supply the public IP:port that will be forwarded to this server in the SDR ticket.
 Unable to determine local SteamID.  Not logged into Steam?
 Unexpected NoConnection
 Unexpected end of string.
@@ -3599,6 +3554,7 @@ Wednesday
 Weird RouterPingReply timestamps from %s.  Reply contained %u, current is %u (elapsed %d)
 Why are making API calls on this connection?
 Working...
+X	zwr
 X,,tX,,t4
 X500algorithms
 X509 V3 routines
@@ -3656,7 +3612,72 @@ ZYj P
 Zu<QQ
 ZwKiZwKi
 [%02d:%02d:%02d] 
+[%s]   decode pkt %lld ack last block ack begin %lld
+[%s]   decode pkt %lld latest recv %lld
+[%s]   decode pkt %lld nack [%lld,%lld) ack [%lld,%lld)
+[%s]   decode pkt %lld peer reliable pos = %lld
+[%s]   decode pkt %lld reliable range [%lld,%lld)
+[%s]   decode pkt %lld stop waiting: %lld (was %lld)
+[%s]   decode pkt %lld valid reliable bytes = %d [%lld,%lld)
+[%s]   encode pkt %lld last recv %lld (%d blocks, actual last recv=%lld)
+[%s]   encode pkt %lld last recv %lld (no blocks, actual last recv=%lld)
+[%s]   encode pkt %lld last recv %lld (no loss)
+[%s]   encode pkt %lld nack [%lld,%lld) ack [%lld,%lld) 
+[%s]   encode pkt %lld reliable msg %lld offset %d+%d=%d range [%lld,%lld)
+[%s]   encode pkt %lld stop_waiting offset %lld = %lld
+[%s]   encode pkt %lld unreliable msg %lld offset %d+%d=%d
+[%s]   updating min_waiting_on_ack %lld -> %lld
+[%s] %d reply timeouts, last recv %.1fms ago.  Sending keepalive.
 [%s] %s
+[%s] Deselecting active session #%d.  We no longer have a route through that cluster.  Previous route went through remote relay in '%s'
+[%s] Exceeding rate limit just sending acks / stats!  Not sending any data!
+[%s] Local routes now at revision %d.
+[%s] Local routes recalculated.  No change, current revision is %d.
+[%s] P2P route through '%s' now forwarding to '%s', revision %d
+[%s] Packet data chunk failed to decrypt!  Could be tampering/spoofing or a bug.
+[%s] RATELIM QueueTime is %.1fms, SendRate=%.1fk, BytesQueued=%d
+[%s] RX msg %lld offset %d+%d=%d %02x ... %02x
+[%s] Received P2PBadRoute from %s regarding peer's session on cluster %s.  Clearing session in our copy of peer's routing candidates.
+[%s] Received P2PBadRoute from %s.  Ignored, since we aren't using the bad remote session token.  (Maybe already cleared it.)
+[%s] Received P2PSessionEstablished from %s
+[%s] Received Stats while in state %d.  Rejecting packet with ConnectionClosed message.
+[%s] Received end-to-end P2PStats while in the 'FindingRoute' state.  Marking connection as connected
+[%s] Received invalid routes in P2P stats message from %s
+[%s] Recv %s stats:%s
+[%s] RecvMessage MsgNum=%lld sz=%d
+[%s] Recvd %s stats from %s:%s
+[%s] Relay %s acked routing forwarding revision %u.
+[%s] Relay %s acking wrong routing forwarding revision (%u instead of %u); forcing re-ack.
+[%s] Remote host is using an unsigned cert.  Allowing connection, but it's not secure!
+[%s] Reply timeout, last recv %.1fms ago.  Sending keepalive.
+[%s] Route through '%s' is '%s'
+[%s] Route through '%s' is now '%s' (was '%s')
+[%s] Routes through '%s' to '%s'  lost.  No P2P route available through that cluster
+[%s] SendMessage %s: MsgNum=%lld sz=%d
+[%s] Sending P2P ConnectOK via Steam, remote cxn %u
+[%s] Sending graceful P2P ConnectionClosed via Steam, remote cxn %u
+[%s] Sent %s stats via %s:%s
+[%s] Sent %s stats:%s
+[%s] Sent P2P %s to %s, but we have reason to believe that it might not get through end-to-end.  Also sending via steam
+[%s] decode pkt %lld
+[%s] decode pkt %lld abort.  %lld bytes reliable data buffered [%lld-%lld), new size would be %lld to %lld
+[%s] decode pkt %lld abort.  Reliable stream already has %d fragments, first is [%lld,%lld), last is [%lld,%lld), new segment is [%lld,%lld)
+[%s] decode pkt %lld abort.  Reliable stream already has %d fragments, first is [%lld,%lld), last is [%lld,%lld).  We don't want to fragment [%lld,%lld) with new segment [%lld,%lld)
+[%s] decode pkt %lld empty reliable segment?
+[%s] decode pkt %lld latest recv %lld delay %.1fms ping %.1fms
+[%s] decode pkt %lld latest recv %lld delay %lluusec INVALID ping %lldusec
+[%s] decode pkt %lld, first packet in gap, reduced to [%lld,%lld)
+[%s] decode pkt %lld, gap split [%lld,%lld) and [%lld,%lld)
+[%s] decode pkt %lld, last packet in gap, reduced to [%lld,%lld)
+[%s] decode pkt %lld, single pkt gap filled
+[%s] discarding pkt %lld
+[%s] drop %d pkts [%lld-%lld)
+[%s] encode pkt %lld
+[%s] flush didn't fit; rescheduling
+[%s] flushed %d acks (%d bytes)
+[%s] pkt %lld %s, queueing retry of reliable range [%lld,%lld)
+[%s] received data packet from relay %s while in the 'FindingRoute' state.  Marking connection as connected
+[%s] received e2e stats while in Connecting state.  Resending ConnectRequest.
 [A:%u:%u:%u]
 [C:%u:%u]
 [G:%u:%u]
@@ -3837,7 +3858,6 @@ ack block header
 ack delay
 ack latest pktnum
 ack num blocks
-ack_e2e
 ack_forward_target_revision
 ack_peer_routes_revision
 active_sessions
@@ -4247,7 +4267,6 @@ f33Uf33U
 f9L$ 
 f9L$$r
 f9t$"
-f9t$$t8
 f;D$ 
 f;t$&
 fG;P^
@@ -4325,9 +4344,8 @@ fwrite@@GLIBC_2.0
 f|YL#~
 g,=y@
 gZFySTa(
+gameserver_address
 gameserver_datacenter_ids
-gameserver_net_id
-gameserver_pop_id
 gameserver_relay_session_id
 gameserver_steam_id
 gap_ms
@@ -4756,7 +4774,6 @@ l$$;h
 l$$v,
 l$(+l$,
 l$(;i
-l$(~5
 l$,;i
 l$,;j
 l$0t-
@@ -4767,7 +4784,6 @@ l$@1t$@
 l$@9D$L
 l$@;L$H
 l$B9D$@t@
-l$D;~ 
 l$P+|$
 l$`;D$8
 l$p9D$
@@ -4785,6 +4801,9 @@ latency_datacenter_ids
 latency_ping_ms
 ld-linux.so.2
 leading_comments
+legacy_ack_e2e
+legacy_gameserver_net_id
+legacy_gameserver_pop_id
 legacy_relay_session_id
 legacy_signature
 lhash.c
@@ -4878,7 +4897,6 @@ my_timestamp
 m|$ f
 m|$@f
 m|$`f
-n(;l$hu
 n<!TH+9
 nBytesItem is %d in UtlMemory_CalcNewAllocationCount
 nD$,f
@@ -5184,7 +5202,6 @@ quality_ntile_50th
 quality_ntile_5th
 quality_relay
 r ;L$
-r ws9|$$r
 r$PPW
 r(9p(
 r+I;M
@@ -5686,17 +5703,16 @@ t$,;T$
 t$,;w
 t$0+t$8
 t$09t$(
-t$09|$
 t$0;F
 t$0;w
-t$0|~
 t$2f92u
 t$49t$0
 t$49w
 t$4;N
 t$4;r
-t$4;t$0
 t$4~U
+t$89|$$
+t$8;t$0
 t$8f;F
 t$8~l
 t$<#D$D
@@ -5710,7 +5726,7 @@ t$D3T$h3t$l#T$X
 t$D;t$H
 t$D;w 
 t$D;w }Y
-t$H;V
+t$D;w }a
 t$L9T$
 t$Le35
 t$PWRV
@@ -5719,7 +5735,8 @@ t$T~w
 t$\#T$`3t$D3T$@
 t$\t^
 t$`9t$d
-t$d97uh
+t$d97ug
+t$df+
 t$l#D$\3T$h1
 t$p9D$x
 t$|e35
@@ -5873,6 +5890,7 @@ v5>}#
 v;;Mv;;M
 vE9D$4sg
 value
+valve
 vector::_M_default_append
 vector::_M_fill_insert
 vector::_M_insert_aux
@@ -5929,6 +5947,7 @@ write@@GLIBC_2.0
 writev
 writev@@GLIBC_2.0
 wrong submessage type
+w{9t$ r
 x	;T$L
 x(9~(~
 x(;}(
@@ -5950,7 +5969,6 @@ xTQPV
 xdigit
 y 9~ }
 y(9~(
-y)zwr
 y49~4|T
 your_pop_id
 your_public_ip
@@ -5988,13 +6006,11 @@ zlib compression
 |$(9w$
 |$(9w(
 |$(;W
-|$(;z
 |$(f;G
 |$(f;P
 |$(f;w
 |$(f;~
 |$(t3
-|$(xq
 |$,)T$,
 |$,+D$ 
 |$,+D$p
@@ -6003,16 +6019,15 @@ zlib compression
 |$,;x
 |$,e3=
 |$,~J
-|$09|$ v
 |$0;y
 |$0f;~
 |$498
-|$49|$$|
 |$49|$0
 |$49~
 |$4;O
 |$4;x
 |$8+D$@9D$<
+|$89|$(v
 |$89|$@
 |$8;T$
 |$8;W
@@ -6020,15 +6035,14 @@ zlib compression
 |$8;x
 |$<9Gx
 |$<9|$ 
-|$<e3=
+|$<9|$,|
 |$@9D$L
 |$@9|$8
 |$@;D$8t
 |$D)t$(
 |$D+D$@)
-|$D+t$8
+|$Df1
 |$Du=9l$(t;
-|$H;G
 |$Le3=
 |$P;D$L
 |$P;T$ 
@@ -6056,16 +6070,16 @@ zlib compression
 |Ef;h
 |OPPRV
 |OWWRV
-|[9D$
+|[9D$ vU
 |[^_]
-|_9D$
+|_9D$ vY
+|b;t$,|I
 }#QWP
 }(9x(
 },Q$"'.4
 }/9|$
 }5bIqLk
 }USVW
-}h;D$
 }o]9s
 ~ ;} 
 ~"}+)8
@@ -6075,3 +6089,4 @@ zlib compression
 ~0/ur
 ~49}4|
 ~D$Xf
+~h;D$
