@@ -1017,5 +1017,9 @@
 		"subject"		"short"		// crate entindex
 		"type"			"string"	// type of crate (metal, wood, or paradrop)
 	}
-	
+
+	"snowball_hit_player_face"
+	{
+		"userid"		"short"		// player userid
+	}	
 }
