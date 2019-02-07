@@ -129,6 +129,33 @@ enum EGCToGCMsg {
 	k_EGCToGCMsgMasterStartupComplete = 157;
 }
 
+enum ECommunityItemClass {
+	k_ECommunityItemClass_Invalid = 0;
+	k_ECommunityItemClass_Badge = 1;
+	k_ECommunityItemClass_GameCard = 2;
+	k_ECommunityItemClass_ProfileBackground = 3;
+	k_ECommunityItemClass_Emoticon = 4;
+	k_ECommunityItemClass_BoosterPack = 5;
+	k_ECommunityItemClass_Consumable = 6;
+	k_ECommunityItemClass_GameGoo = 7;
+	k_ECommunityItemClass_ProfileModifier = 8;
+	k_ECommunityItemClass_Scene = 9;
+	k_ECommunityItemClass_SalienItem = 10;
+}
+
+enum ECommunityItemAttribute {
+	k_ECommunityItemAttribute_Invalid = 0;
+	k_ECommunityItemAttribute_CardBorder = 1;
+	k_ECommunityItemAttribute_Level = 2;
+	k_ECommunityItemAttribute_IssueNumber = 3;
+	k_ECommunityItemAttribute_TradableTime = 4;
+	k_ECommunityItemAttribute_StorePackageID = 5;
+	k_ECommunityItemAttribute_CommunityItemAppID = 6;
+	k_ECommunityItemAttribute_CommunityItemType = 7;
+	k_ECommunityItemAttribute_ProfileModiferEnabled = 8;
+	k_ECommunityItemAttribute_ExpiryTime = 9;
+}
+
 message CMsgGCHVacVerificationChange {
 	optional fixed64 steamid = 1;
 	optional uint32 appid = 2;
@@ -148,6 +175,26 @@ message CMsgGCHInviteUserToLobby {
 	optional uint32 appid = 2;
 	optional fixed64 steamid_invited = 3;
 	optional fixed64 steamid_lobby = 4;
+}
+
+message CQuest_PublisherAddCommunityItemsToPlayer_Request {
+	message Attribute {
+		optional uint32 attribute = 1;
+		optional uint64 value = 2;
+	}
+
+	optional uint64 steamid = 1;
+	optional uint32 appid = 2;
+	optional uint32 match_item_type = 3;
+	optional uint32 match_item_class = 4;
+	optional string prefix_item_name = 5;
+	repeated .CQuest_PublisherAddCommunityItemsToPlayer_Request.Attribute attributes = 6;
+	optional string note = 7;
+}
+
+message CQuest_PublisherAddCommunityItemsToPlayer_Response {
+	optional uint32 items_matched = 1;
+	optional uint32 items_granted = 2;
 }
 
 message CCommunity_GamePersonalDataCategoryInfo {
