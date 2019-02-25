@@ -994,6 +994,16 @@
 		"paradrop"		"short"
 	}
 
+	"survival_paradrop_spawn"
+	{
+		"entityid"		"short"
+	}
+
+	"survival_paradrop_break"
+	{
+		"entityid"		"short"
+	}
+
 	"drone_cargo_detached"
 	{
 		"userid"		"short"
