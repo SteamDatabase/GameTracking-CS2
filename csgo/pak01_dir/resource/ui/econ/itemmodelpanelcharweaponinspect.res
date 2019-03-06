@@ -1794,7 +1794,7 @@
 			"camera_orient"   "0.62 179.45 0.00"
 			"orbit_pivot"     "-0.85 -0.23 9.62"
 			"root_camera_fov"     "70.0"
-			"item_rotate"		"y[-30 30]"
+			"item_rotate"		"y[-360 360]"
 			"light_directional_clearall" "1"
 			"light_directional_add"      "rgb{0.49 0.49 0.49} dir[-0.01 0.02 1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
 			"light_directional_add"      "rgb{1.75 1.97 2.13} dir[0.70 -0.48 -0.53] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
@@ -1813,6 +1813,10 @@
 			"shadow_light_atten_farz"       "119.4"
 			"light_ambient"              "[0.03 0.03 0.03]"
 			"root_mdl"					 ""
+			
+			// used in tournament journal
+			"camera_preset_add"   "pos[-24.55 0.72 16.55] pivot[-0.30 -0.06 15.22] orient[3.14 -1.83 0.00] fov[20.0]"
+
 		}
 	}
 
