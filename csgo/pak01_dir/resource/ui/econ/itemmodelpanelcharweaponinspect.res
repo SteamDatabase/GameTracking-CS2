@@ -1790,10 +1790,10 @@
 		}
 		"config"
 		{
-			"camera_offset"   "36.54 -0.59 10.02"
-			"camera_orient"   "0.62 179.45 0.00"
-			"orbit_pivot"     "-0.85 -0.23 9.62"
-			"root_camera_fov"     "70.0"
+			"camera_offset"   "81.82 0.64 7.55"
+			"camera_orient"   "-0.75 -179.36 0.00"
+			"orbit_pivot"     "0.14 -0.27 8.62"
+			"root_camera_fov"     "34.0"
 			"item_rotate"		"y[-360 360]"
 			"light_directional_clearall" "1"
 			"light_directional_add"      "rgb{0.49 0.49 0.49} dir[-0.01 0.02 1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
