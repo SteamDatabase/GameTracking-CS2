@@ -28,6 +28,7 @@
 		"userid"		"short"   	// user ID who died			
 		"attacker"		"short"	 	// user ID who killed
 		"assister"		"short"	 	// user ID who assisted in the kill
+		"assistedflash"		"bool"		// assister helped with a flash
 		"weapon"		"string" 	// weapon name killer used 
 		"weapon_itemid"	"string"	// inventory item id of weapon killer used
 		"weapon_fauxitemid"	"string"	// faux item id of weapon killer used

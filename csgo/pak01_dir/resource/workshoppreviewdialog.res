@@ -297,7 +297,7 @@
 		"enabled"		"1"
 		"tabPosition"	"10"
 		"subtabposition" "2"
-		"labelText"		"#Workshop_Preview_GreenScreen"
+		"labelText"		"#Workshop_Preview_SideView"
 	}
 
 	"PausePlay"

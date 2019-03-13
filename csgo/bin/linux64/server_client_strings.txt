@@ -296,6 +296,7 @@
 	code_path
 	code_type
 	const nCharsToStrip = 6;
+	ct_equips
 	cvar_name
 	def_index
 	delegate tempParent : temp;
@@ -641,6 +642,7 @@
  At"I
  BackUp() can only be called after Next().
  CCSUsrMsg_EntityOutlineHighlight
+ CMsgAdjustItemEquippedStateMulti
  CMsgGCIncrementKillCountResponse
  CMsgItemAcknowledged__DEPRECATED
  CS_UM_ProcessSpottedEntityUpdate
@@ -653,15 +655,14 @@
  Entity %s encountered an error in RunScript()
  GCConnectionStatus_GC_GOING_DOWN
  H97t
- H;=-
- H;=E"
- H;=]
- H;=m
- H;=u
+ H;=5M
+ H;==
+ H;=M
+ H;=UO
+ H;=}C
  HcC 
  I;T$
  IcT$
- L;-k
  Moving 
  NETWORK_DISCONNECT_SNAPSHOTERROR
  NETWORK_DISCONNECT_STEAM_DROPPED
@@ -896,6 +897,7 @@
 "%s<%i>" [%.0f %.0f %.0f] attacked "%s<%i><%s><%s>" [%.0f %.0f %.0f] with "%s" (damage "%d") (damage_armor "%d") (health "%d") (armor "%d") (hitgroup "%s")
 "%s<%i><%s>" switched from team <%s> to <%s>
 "%s<%i><%s>" take <%sammo> from entindex[%d][%d %d %d][%d-%d=%d] to weapon[%s][<%d>/<%d+%d=%d>]
+"%s<%i><%s><%s>" %sassisted killing "%s<%i><%s><%s>"
 "%s<%i><%s><%s>" [%.0f %.0f %.0f] attacked "%s<%i><%s><%s>" [%.0f %.0f %.0f] with "%s" (damage "%d") (damage_armor "%d") (health "%d") (armor "%d") (hitgroup "%s")
 "%s<%i><%s><%s>" [%.0f %.0f %.0f] attacked other "%s<%i>" [%.0f %.0f %.0f] with "%s" (damage "%.1f")
 "%s<%i><%s><%s>" [%.0f %.0f %.0f] committed suicide with "%s"
@@ -910,7 +912,6 @@
 "%s<%i><%s><%s>" [%.0f %.0f %.0f] relocated from [%.0f %.0f %.0f] in %0.1f sec (v2d = %.0f u/s)
 "%s<%i><%s><%s>" [%.0f %.0f %.0f] started deployment
 "%s<%i><%s><%s>" [%.0f %.0f %.0f] was killed by the bomb.
-"%s<%i><%s><%s>" assisted killing "%s<%i><%s><%s>"
 "%s<%i><%s><%s>" blinded for %.2f by "%s<%i><%s><%s>" from flashbang entindex %d 
 "%s<%i><%s><%s>" changed name to "%s"
 "%s<%i><%s><%s>" committed suicide with "%s"
@@ -1064,6 +1065,7 @@
 #Cstrike_TitlesTXT_Team_fall_back
 #Cstrike_TitlesTXT_Thanks
 #Cstrike_TitlesTXT_You_take_the_point
+#ENTNAME[%d]
 #ENTNAME[%d]%s
 #EntFire:Generate and entity i/o event
 #GAMEUI_Contribution_Score
@@ -1907,6 +1909,7 @@ $k_ECommunityItemAttribute_CardBorder
 $k_ECommunityItemAttribute_ExpiryTime
 $k_EGCMsgGetAccountDetails_DEPRECATED
 $k_EGCMsgWebAPIJobRequestHttpResponse
+$k_EMsgGCAdjustItemEquippedStateMulti
 $k_EMsgGCCStrike15_v2_ClientPollState
 $k_EMsgGCCStrike15_v2_MatchmakingStop
 $k_EMsgGCCustomizeItemTextureResponse
@@ -2574,8 +2577,8 @@ $x	;A
 (H9D$
 (H9l$
 (H9p(t
-(H;=U
-(H;=]
+(H;=%
+(H;=%N
 (H;p@t
 (IcD$8H
 (If set) icon to override for guardian mission
@@ -3034,13 +3037,12 @@ $x	;A
 .text
 .us]f
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%=#+
-/%s<|
-/-$pH
-/-Pl}
-/-Y$9
-/-]oH
-/-elu
+/%%+7
+/%&<V
+/%M#+
+/%s`|
+/-H29
+/-v*V
 // An spawner on the server is getting ready to
 // Choreo version 1
 // Choreo version 1:  <%i> Exported Events
@@ -3052,11 +3054,7 @@ $x	;A
 //========== Copyright 
 //=========================================================
 //=============================================================================
-/51&_
-/512u
-/5q8:
-/=*jR
-/=o2Y
+/51Vu
 /?O_o
 /@XrQ
 /ATSE
@@ -3250,7 +3248,7 @@ $x	;A
 0CMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
 0D;.t@H
 0D;c(
-0H;=N
+0H;=}
 0LckP
 0[A\A]A^A_]
 0[A\A]A^]
@@ -5533,6 +5531,7 @@ $x	;A
 32CCSUsrMsg_PlayerStatsUpdate_Stat
 32CDirtySpatialPartitionEntityList
 32CMsgAMSendEmail_ReplacementToken
+32CMsgAdjustItemEquippedStateMulti
 32CMsgGCIncrementKillCountResponse
 32CMsgGCMsgSetOptions_MessageRange
 32CMsgItemAcknowledged__DEPRECATED
@@ -5635,18 +5634,13 @@ $x	;A
 39CMsgGCCStrike15_v2_ClientReportResponse
 39CMsgGCItemPreviewItemBoughtNotification
 39CTraceFilterSkipTwoEntitiesAndTeammates
-3=&<3
-3=.UA
-3=.W7
-3=.a.
-3=5m,
-3=5q.
-3=>h(
-3=>t,
-3=N3.
-3=^<2
-3=nwE
-3=~PE
+3=Nf%
+3=[|E
+3=h6,
+3=nCC
+3=vBC
+3=y,=
+3=zH,
 3@T]f
 3B 3B
 3B 3B43B,
@@ -6107,6 +6101,9 @@ $x	;A
 ;2t9H
 ;9t/H
 ;9t2H
+;=(	+
+;=Pv%
+;=X	+
 ;CT}A
 ;D;g 
 ;Entity exists: %u
@@ -6183,6 +6180,7 @@ $x	;A
 <<null entity>>
 <@f9t
 <Ath<G
+<Ct7<T
 <DT_SnowballPile
 <Eu.H
 <INVALID>
@@ -6324,6 +6322,7 @@ $x	;A
 @8H;E
 @8wpUH
 @8wyt=H
+@:=u?
 @:p't
 @<A;G
 @@H;E
@@ -6331,6 +6330,7 @@ $x	;A
 @CGrassBurn
 @DT_PredictedViewModel
 @Fear
+@H;=U
 @HA^]
 @HHc<
 @Hc6H
@@ -7875,6 +7875,7 @@ AWAVLc
 AWAVM
 AWAVSH
 AWAVfA
+AY[A\A]]
 AZA[[A\A]A^]
 A[A\]
 A\A]A^A
@@ -10760,33 +10761,28 @@ D24FS8
 D24X4S4
 D24X8
 D24X8_SHADOW
-D3%H	,
-D3%]b
-D3%ul
-D3%}S
-D3--J
+D3%-w
+D3%=EC
+D359t
 D35E472036BC4FB7E13C785ED201E065F98FCFA5B68F12A32D482EC7EE8658E98691555B44C59311
 D35E472036BC4FB7E13C785ED201E065F98FCFA6F6F40DEF4F92B9EC7893EC28FCD412B1F1B32E27
-D3=!s
-D3=b!
+D3=]O,
+D3=|D
 D6031998D1B3BBFEBF59CC9BBFF9AEE1
 D7C134AA264366862A18302575D0FB98D116BC4B6DDEBCA3A5A7939F
 D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FF
 D7q/;M
-D9% >
-D9%92
-D9%h8
-D9%qu
-D9%{/
-D9-52
-D9-o/
-D9-t8
-D9-y>
+D9%`j
+D9%y^
+D9-Ni
+D9-qcF
+D9-u^
+D9-~d/
 D91t%H
 D92t:H
-D95c/
-D95g2
-D9=tm(
+D95'a
+D9=3a
+D9=Xl*
 D9F<~
 D9`4u
 D9`4~-
@@ -10808,31 +10804,26 @@ D9xTu
 D9{`t
 D: u*A
 D:!ts
+D:%;?
 D:g+u2E
 D; t:
 D; |)A
 D;!t{Hc
 D;"tPH
 D;$%`
-D;%	w
-D;%I-
-D;%M7
-D;%Yu
-D;%\[
-D;%fs
+D;%IE
 D;(|)A
 D;+toH
 D;,%`
-D;-,'
-D;--C
+D;-,?
+D;-m[
 D;0t!I
+D;5Zi
 D;8t<H
-D;=%Z
-D;=*A
-D;=AB
-D;=J@
-D;=eC
-D;=s2
+D;=*Y
+D;=AZ
+D;=JX
+D;=e[
 D;F8t
 D;`<t
 D;c }
@@ -11610,8 +11601,7 @@ Dynamic Light
 Dynamic Link Error: (%s) unable to form between nodes %d and %d
 Dynamic prop %s: no sequence named:%s
 DynamicLH
-E ;5*9
-E ;5J<
+E ;5je
 E A+E
 E A]A^]
 E#<$E
@@ -11648,10 +11638,10 @@ E+|$XE
 E+} E
 E+}$Mc
 E+}(E
+E+}8E
 E+~$Mc
 E3d$TfA
 E3d$X
-E3mTfA
 E3vTfA
 E87579C11079F43DD824993C2CEE5ED3
 E8IcU@H
@@ -12968,6 +12958,12 @@ H97t/E1
 H99t 
 H9:t#HcR
 H9;t@D
+H9=%G
+H9=+r
+H9=:G
+H9=OG
+H9=QB2
+H9=['+
 H9C t,H
 H9C t`L
 H9C u
@@ -13001,27 +12997,19 @@ H;2t$H
 H;2t&1
 H;2t.H
 H;2tGH
-H;5&z
-H;5)A
-H;58Y=
-H;58]
-H;5<}
-H;5>f
-H;5Bu
-H;5Ja
-H;5QV
-H;5Vc
-H;5X6
-H;5_t
-H;5h0
-H;5i{=
-H;5pu=
-H;5qC
-H;5r[
-H;5u,
-H;5uA
-H;5v~<
-H;5~Y
+H;58!
+H;58T
+H;5>8
+H;5GK
+H;5N7<
+H;5Xo
+H;5Z:
+H;5h"
+H;5nj
+H;5rF
+H;5yI
+H;5~6
+H;5~~
 H;7tnH
 H;8t+
 H;8t8H
@@ -13029,143 +13017,135 @@ H;:t:H
 H;:t>H
 H;:tBH
 H;:tFH
-H;=	 
-H;= Q
-H;=!#
-H;=!/
-H;=!D
-H;=!N
-H;=!`
-H;=#O
-H;=#d
-H;=#x
+H;=	6
+H;=	U
+H;=!Z
+H;="'
+H;="9
+H;="F
+H;=#f
+H;=#p
+H;=$Q
 H;=$c
-H;=%.
+H;=$v
+H;=%C
+H;=%G
 H;=%[
-H;=%b
-H;=%n
-H;=')
-H;=)f
-H;=)w
-H;=*<
-H;=*j;
-H;=+O
-H;=+q	
-H;=,<
-H;=,_<
-H;=,u
-H;=- 
-H;=-!
-H;=-Y
-H;=//
-H;=/[
-H;=/c
-H;=3=
-H;=3`
-H;=40
-H;=4:
-H;=4H
-H;=5'
-H;=5F
-H;=5J
-H;=5t
-H;=7}
-H;=9#H
-H;=:m
-H;=<;
-H;=<J
-H;=?4
-H;=?:
-H;=?G
-H;=?x
-H;=C>
-H;=Cc
-H;=DG
-H;=DY<
-H;=EM
-H;=EZ
-H;=E^
-H;=E^<
-H;=G(
-H;=Jq
-H;=KH
-H;=Kb
-H;=LQ
-H;=MH
-H;=MV
-H;=OE
-H;=Oa
-H;=Q]
-H;=Q_<
-H;=SE
-H;=S_
-H;=TO
-H;=Tu
-H;=W$
-H;=W1
-H;=Wp
-H;=W|
-H;=Yp
-H;=Z1<
-H;=[<
-H;=[D
-H;=[F
-H;=[N;
-H;=[]
-H;=\V
-H;=]B
-H;=^/
-H;=_F
-H;=__
-H;=_k<
-H;=_o
-H;=`:
-H;=a$
-H;=b!<
-H;=b$
-H;=bm<
-H;=cb
-H;=dw
-H;=e'
-H;=e4
-H;=eG
-H;=eN
-H;=eX
-H;=ex
-H;=h;
-H;=iP
-H;=im
-H;=jj
-H;=k`
-H;=k}
-H;=l\
-H;=o,
-H;=o.
-H;=o/<
-H;=o1
-H;=oW<
-H;=o\
-H;=o_
-H;=oh;
-H;=r+
-H;=r.
-H;=r3
-H;=rE
-H;=s^
-H;=tP
-H;=ub
-H;=w#
-H;=w{
-H;=y[
-H;=y~
-H;={8
-H;={S
-H;={c
-H;={|
-H;=|Q
-H;=}&
-H;=}G
-H;=~h
+H;=+`
+H;=+w
+H;=,C<
+H;=-F
+H;=-H
+H;=-b
+H;=/	
+H;=/%
+H;=/)<
+H;=/2
+H;=/7
+H;=/D
+H;=/o
+H;=2>
+H;=2F
+H;=3s
+H;=5B
+H;=5|
+H;=6J
+H;=7,
+H;=79
+H;=7r
+H;=99
+H;=;5
+H;=<F
+H;=?9
+H;=?;<
+H;=?M
+H;=?j
+H;=?u
+H;=Ax
+H;=BO
+H;=Br
+H;=Cv
+H;=DF
+H;=DM
+H;=De
+H;=Df
+H;=Ds
+H;=E=
+H;=Es
+H;=GT
+H;=Hb
+H;=LD
+H;=L}
+H;=Mk
+H;=O-
+H;=O6
+H;=OB<
+H;=Om
+H;=Pq
+H;=Pv
+H;=Q3
+H;=QC<
+H;=Re
+H;=SF
+H;=Sr
+H;=T =
+H;=T7
+H;=TL
+H;=Tb
+H;=Tt
+H;=U2
+H;=UE
+H;=UI
+H;=U~
+H;=VF
+H;=Y(
+H;=Y8
+H;=[H
+H;=[R
+H;=[T
+H;=[r
+H;=[|
+H;=]*<
+H;=]<<
+H;=]r
+H;=_h
+H;=_q
+H;=aTH
+H;=cs
+H;=cu
+H;=dO
+H;=dm
+H;=e5
+H;=g~
+H;=hF
+H;=hy
+H;=i-
+H;=jX<
+H;=k=
+H;=lt
+H;=o-
+H;=oI
+H;=oL
+H;=o~<
+H;=si
+H;=sq
+H;=sr
+H;=tb
+H;=u6
+H;=uB<
+H;=uD
+H;=uv
+H;=vH
+H;=w1
+H;=yA
+H;=yn
+H;=zD
+H;=ze
+H;={P
+H;=|D
+H;=|F
+H;=|v
+H;=|}
 H;ChH
 H;FPu
 H;G(t+H
@@ -13366,6 +13346,7 @@ History/ExtraAccountCT
 History/ExtraAccountTerrorist
 History/HostageSpawnIndices
 History/LoserBonus
+History/LoserMostRecentTeam
 History/NumConsecutiveCTLoses
 History/NumConsecutiveTerroristLoses
 Hit %s
@@ -13416,6 +13397,7 @@ How long should a kick ban from the server should last (in minutes)
 How long should a kick vote ban someone from the server? (in minutes)
 How long the warmup period lasts. Changing this value resets warmup.
 How long to allow voting on an issue
+How loss streak is affected with round win: 0 = win fully resets loss bonus, 1 = first win steps down loss bonus, 2 = first win holds loss bonus and step down starting with second win
 How many degrees per second that hostages can turn their feet or upper body.
 How many degrees per second that we can turn our feet or upper body.
 How many maps to win the series (bo3 max=2; bo5 max=3; bo7 max=4)
@@ -13438,7 +13420,6 @@ How much to slow down backwards motion
 How often someone can individually call a vote.
 How solid are teammates: 0 = transparent; 1 = fully solid; 2 = can stand on top of heads
 How to allocate defusers to CTs at start or round: 0=none, 1=random, 2=everyone
-Hpt!H
 Hpt"H
 Hpt'H
 Hud.Hint
@@ -13576,6 +13557,8 @@ IcE,A
 IcE,H
 IcE0A
 IcE0A;E4tjI
+IcE8A
+IcE8A;E<
 IcEDL
 IcF(f
 IcF8f
@@ -14689,28 +14672,27 @@ K to1
 K(D91t0H
 K([A\]
 K(~'A
-K0@H;=T
-K4 H;=
+K0@H;=
+K4 H;=t7
 K4@H;5
-K4@H;=
-K8 H;=lG
+K4@H;=\
+K8 H;=
 K8;CP
-K< H;5?c;
-K< H;=Tc
-K< H;=tf;
+K< H;5
+K< H;=
 K<@H;=
-K<@H;=4/
+K@ H;=
 KD H;=
 KD@H;=
-KD@H;=D0
+KD@H;=,>
 KGot a NaN velocity on %s
-KH H;=
-KL H;55S=
-KL H;=
+KH H;=%
+KL H;5
+KL H;=d
 KM^bM
 KP@H;=
-KT H;5
-KT H;=4
+KT H;5_]
+KT H;=
 KT;H0s
 KT;H@s
 KV Conditional Evaluation Error
@@ -14748,7 +14730,7 @@ Kochanek-Bartels Late
 KpD#c4
 Kpu(H
 K| H;=
-K|@H;=
+K|@H;=$
 L$	E1
 L$ 8K 
 L$ 9L$
@@ -14767,24 +14749,24 @@ L$, A
 L$,E1
 L$0 A
 L$0@H
-L$0@H;5~j=
+L$0@H;5
 L$0A\]
 L$0D9
 L$0E1
 L$0Hc
 L$4 A
-L$4 H;5Q
+L$4 H;5
 L$4@A
 L$8 L9
 L$8H9
 L$8dH3
 L$< A
-L$< L9
 L$< M
 L$<@A
-L$<@H;5Q~
-L$<@I
+L$<@H;5
 L$@ H
+L$@ L9
+L$@@I
 L$D A
 L$D H
 L$D L9
@@ -14794,12 +14776,12 @@ L$D@I
 L$D@L9
 L$D@M
 L$H H
-L$H H;5-
+L$H H;5m/
 L$H+L$L
 L$H@H
 L$P A
 L$P@A
-L$P@H;5&
+L$P@H;5f
 L$PD9
 L$T H
 L$X M
@@ -14817,7 +14799,7 @@ L$xH9
 L$xdH3
 L$| H;5
 L$|@H
-L$|@H;5N
+L$|@H;5
 L)$$L
 L)c0M
 L)cXM
@@ -14852,9 +14834,11 @@ L; tFI
 L;"tJH
 L;#tPH
 L;$$u
-L;%Y	
-L;%cO
-L;-b0
+L;%	m
+L;%!j
+L;%Cg
+L;%dE
+L;-BH
 L;4$t0L
 L;7t"E1
 L;8t"A
@@ -14862,7 +14846,7 @@ L;:tNH
 L;<$}?I
 L;<$}CI
 L;<$}EI
-L;=	t%
+L;=j`
 L;_(D
 L;` tw
 L;c8H
@@ -14937,10 +14921,12 @@ Late precache of %s
 Late precache of %s (file missing?)
 Late precache of %s, need to rebuild modelsounds.cache
 LbsUpdate
-Lc%	F
-Lc%)E
-Lc%IH
-Lc%iG
+Lc%!GA
+Lc%3;@
+Lc%9W
+Lc%Cf
+Lc%HXF
+Lc%YV
 Lc'H9
 Lc/H9
 Lc/H;
@@ -15074,7 +15060,7 @@ M94$tC
 M;,$f
 M;.t_H
 M;mPu
-M<@H;5>U
+M<@H;5
 MATCHFRAMEWORK_001
 MAX_ALLOC_CHUNK is wrong, please fix
 MDLCache004
@@ -16246,7 +16232,7 @@ OFFGROUND!
 OPPORTUNITY_FIRE
 OS_Rng: 
 OTHER
-O` H;5:b
+O` H;5
 O`D+w@D)
 Object %d (of %d) =========================
 ObjectivH
@@ -19272,7 +19258,7 @@ VGUI_Surface031
 VGUI_System010
 VGUI_ivgui008
 VH8WHt
-VHH;=~
+VHH;=
 VIP_ESCAPE
 VM Did not start!
 VMDLLIB001
@@ -19409,20 +19395,22 @@ VoxelTreeSphere - (%f %f %f), %f
 VoxelTreeView
 W H;W(
 W H;W(tR
-W%&\H
-W%b8U
+W%6aH
 W%f;w
-W%vdH
+W%fkH
+W%nlH
 W(H92
 W(H92t'H
 W(H;2tDH
 W(Nc,
 W(ufH
+W-&eH
+W-,k+
+W-v`H
 W0Hc_8A
-W5Qu(
+W5au(
 W8[]A\A]A^A_
-W=Xu(
-W=zr(
+W=hu(
 WALK 
 WARNING
 WARNING! Field %s is using the wrong FIELD_ type!
@@ -19670,7 +19658,8 @@ Writes the selected set to disk for merging into another mesh via nav_merge_mesh
 Wrong JPEG library version: library is %d, caller expects %d
 Wx[]A\A]A^A_
 X$ D9
-X%\Vw
+X%\zw
+X%h|G
 X-Server-Addr
 X-Server-Instance-Token
 X-Server-Unique-Token
@@ -19702,14 +19691,17 @@ X\$$L
 Xbox 360
 XboxSystemInterface002
 XpProgressData
-Y%KRw
-Y-	Kw
-Y-8a5
-Y-KN0
-Y-dOI
-Y5:H0
-Y5l*N
-Y=ypI
+Y%"yC
+Y%*H0
+Y%0dA
+Y%Kvw
+Y-	ow
+Y-Ha5
+Y-[N0
+Y5%$Q
+Y5,3N
+Y5JH0
+Y=	wI
 Y@CAI_AddOn
 YAxis
 YB,H9
@@ -19734,7 +19726,6 @@ ZA9^
 ZD9{ ~:L
 ZE9u ~
 ZE;t$ 
-Z[A\A]]
 ZapContext
 ZapThinkH
 Zero length tRNS chunk
@@ -19862,9 +19853,10 @@ Zrange
 \$XtqH
 \$hdH3
 \$x[A\]
-\%/rG
+\%+%t
 \%03o
-\=_a(
+\-G&t
+\=oa(
 \D$0A
 \D$DA
 \D2%4
@@ -19872,7 +19864,7 @@ Zrange
 \sDfA
 \x%02x
 ]0[fA
-]5;`<
+]5;f<
 ]@H~7
 ]A\A]
 ]A\A]A^
@@ -19889,7 +19881,7 @@ Zrange
 ^ t+H
 ^L$xf
 ^[A\A]]
-_=,`<
+_=,f<
 _Agressive
 _DisableUpdateTarget
 _EnableUpdateTarget
@@ -20316,9 +20308,10 @@ _xlsp
 `<D9e
 `<D;%
 `<D;%!
-`<D;%',
-`<D;%)
+`<D;%%
+`<D;%'D
 `<D;%O
+`<D;%y
 `<D;c
 `<E;f
 `>CBaseFlex::ProcessSceneEvents
@@ -20330,7 +20323,7 @@ _xlsp
 `D;{8
 `DD;%
 `L;,$
-`XD3%Q
+`XD3%
 `[A\A]A^]
 `[A\A^A_]
 `[A\]
@@ -20777,6 +20770,7 @@ assaulttolerance
 asset_class_bucket
 asset_class_export
 asset_modifier
+assistedflash
 assister
 assists
 associated_item
@@ -22190,6 +22184,7 @@ enter_bombzone
 enter_buyzone
 enter_rescue_zone
 entidx
+entidx_target
 entindex
 entindex_attacker
 entindex_inflictor
@@ -22644,6 +22639,7 @@ flag_non_economy
 flags
 flair0
 flammable
+flash-
 flashbang_detonate
 flashed
 flesh
@@ -22887,7 +22883,6 @@ fx_new_sparks
 fx_time
 fxtime
 g L;%
-g L;%OB
 g tuA
 g$(fD
 g$D;m
@@ -22897,7 +22892,7 @@ g(fA9
 g(~5I
 g:csgo,gt:%u,gm:%u,sk:%u,f1:%u,%s
 g;H>o
-g@L;%?&
+g@L;%
 gXUSH
 g_CCNameMap:  Event type at %i has wrong value (%i)!
 g_ClockSpeed
@@ -23182,16 +23177,16 @@ gustduration
 h0u$H
 h<D;-
 h<D;-	
-h<D;-'
-h<D;-'d
-h<D;-'l
-h<D;-2h
-h<D;-=m
-h<D;-Pe
-h<D;-Sn
-h<D;-j&
-h<D;-ni
-h<D;-vf
+h<D;-"
+h<D;-'2
+h<D;--
+h<D;-5
+h<D;-8
+h<D;-N
+h<D;-S
+h<D;-j>
+h<D;-o
+h<D;-|
 h<D;k
 h<E;l$
 hBmaps\%s.bsp
@@ -29036,6 +29031,7 @@ mp_capstyle
 mp_clan_ready_signal
 mp_clan_readyrestart
 mp_competitive_endofmatch_extra_time
+mp_consecutive_loss_aversion
 mp_consecutive_loss_max
 mp_coop_force_join_ct
 mp_coopmission_bot_difficulty_offset
@@ -29611,6 +29607,7 @@ notarget OFF
 notarget ON
 notconnected
 noteam
+noteam_equips
 notes
 nothing
 notify
@@ -29843,23 +29840,22 @@ p(?!@V>
 p([A\A]A^]
 p(t H
 p<D;5
-p<D;5)
-p<D;5,
-p<D;5/
-p<D;59
-p<D;5:
-p<D;5=
-p<D;5C
-p<D;5K
-p<D;5Q
-p<D;5Y
-p<D;5_
-p<D;5b
-p<D;5g
-p<D;5l
-p<D;5u
-p<D;5{
-p<D;5~
+p<D;5"
+p<D;5(
+p<D;5+
+p<D;53
+p<D;5>
+p<D;5A
+p<D;5F
+p<D;5G
+p<D;5O
+p<D;5S
+p<D;5U
+p<D;5^
+p<D;5c
+p<D;5n
+p<D;5y
+p<D;5|
 p<D;s
 p<E;t$
 p<E;u
@@ -32292,7 +32288,6 @@ tCf;w
 tCf;y
 tCf;z
 tCfD;A
-tCfD;B
 tCfD;F
 tCfD;G
 tCfD;^
@@ -32321,6 +32316,7 @@ tGUHc
 tHH+AxH
 tHH+JxH
 tH[A\]
+tHfD;q
 tIfD;w
 tJ[A\]
 tJfD;q
@@ -32365,12 +32361,12 @@ tYfD;N
 tZf;q
 t\G9l
 t\Lc%
-t\Lc%jA*
 t]D9u
 t_;GP
 t_H;ChtYH
 t_IcN`Icu
 t_M;f
+t_equips
 t`Mc}
 table_id
 tablet_c4_dist_max
@@ -32962,7 +32958,7 @@ tzset
 tzset@@GLIBC_2.2.5
 t{HcM
 t{HcO
-t{Lc%if
+t{Lc%
 t|;w t
 t|Ic]
 t}HcO
@@ -33121,8 +33117,8 @@ v"</u0
 v)IcE
 v.Hc@
 v/Icw
-v6Hc@
 v9D9{ rKH
+v>Hc@
 v?flashbang_projectile
 v@Lead
 vDtgH
@@ -33571,10 +33567,9 @@ x	HcKpH9
 x ;s|~
 x D9H$ty
 x!Lco(
+x";=O
 x";C8}
 x$E;l$
-x&;=z
-x(;=:
 x(u	]
 x*IcL$
 x.;w(})Hc
@@ -33582,13 +33577,12 @@ x2Hcw
 x6;w(}1Hc
 x7Hcw
 x8t{H9
-x:;=<
 x:Hcw
 x<D;=
 x<D;=Q
 x<D;=Y
-x<D;=_E
-x<D;={F
+x<D;=_]
+x<D;={^
 x<D;g(H
 x<D;{
 x<E;|$
@@ -33677,45 +33671,52 @@ zoom_in_sound
 zoom_out_sound
 zt?ERROR: too many nodes in map, deleting last node.
 { H;=
-{ H;=-!
-{ H;==
-{ H;=E
-{ H;=Zh
-{ H;=w
-{ H;=}#
+{ H;=%
+{ H;=)
+{ H;=7
+{ H;=]P
+{ H;=e
+{ H;=m
+{ H;=}
+{ H;=}J
 {(H;=
-{(H;=-
-{(H;=e
+{(H;=E
 {(H;=}
 {(tIL
 {0H;=
-{0H;=U
+{0H;=-
+{0H;=S
 {0H;=]
-{0H;=v
 {8H;=
-{8H;==
-{8H;=O
-{8H;=uz
+{8H;=5
+{8H;=M
+{8H;=_
+{8H;=m
 {@H;=
-{@H;=U
+{@H;=E
+{@H;=oA
 {@L;'u
 {@L;/u
 {H+S$Hc
-{HH;=p
+{HH;=
 {PH;=
-{PH;==
-{PH;=I
+{PH;=*
 {P[A\]
 {XH;=
-{XH;="
+{XH;==
+{XH;=]{
 {XVCCDt
 {`H;=
+{`H;==
 {`t"I
 {hH;=
+{hH;=M|
+{hH;=]
 {hH;{pt
 {pH97tpH
 {pH;=
-{pH;=MO
+{pH;=-
+{pH;=Eq
 {}()'
 {}()':
 {}[]()=&, 	
@@ -33760,7 +33761,7 @@ zt?ERROR: too many nodes in map, deleting last node.
 |}A;t$0
 } == %s
 } A;D$$
-} H;=
+} H;=e
 } HcC
 } f;r
 }!f;Q

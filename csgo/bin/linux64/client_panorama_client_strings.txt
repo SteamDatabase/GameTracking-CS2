@@ -208,6 +208,7 @@
 	cmd_flush
 	code_path
 	code_type
+	ct_equips
 	cvar_name
 	def_index
 	depot_ids
@@ -498,6 +499,7 @@
  A]A^]
  BackUp() can only be called after Next().
  CCSUsrMsg_EntityOutlineHighlight
+ CMsgAdjustItemEquippedStateMulti
  CMsgGCIncrementKillCountResponse
  CMsgItemAcknowledged__DEPRECATED
  CS_UM_ProcessSpottedEntityUpdate
@@ -509,11 +511,10 @@
  E9l$\
  GCConnectionStatus_GC_GOING_DOWN
  H97t
- H;=!
- H;=M.
- H;=U2
- H;=UOF
- H;=])V
+ H;=%
+ H;=-(
+ H;=M
+ H;=]
  I;T$
  IsInstanceActive: %s. IsInstructing: %s. IsLearned: %s
  M;L$pu
@@ -2979,6 +2980,7 @@ $k_ECommunityItemAttribute_CardBorder
 $k_ECommunityItemAttribute_ExpiryTime
 $k_EGCMsgGetAccountDetails_DEPRECATED
 $k_EGCMsgWebAPIJobRequestHttpResponse
+$k_EMsgGCAdjustItemEquippedStateMulti
 $k_EMsgGCCStrike15_v2_ClientPollState
 $k_EMsgGCCStrike15_v2_MatchmakingStop
 $k_EMsgGCCustomizeItemTextureResponse
@@ -3634,6 +3636,7 @@ $world_mins
 (%d)  EffectName "%s"  Dormant? %s  Emission Stopped? %s 
 (%d): Cycle latch used to correct %.2f in to %.2f instead of %.2f.
 (%d/%d)%s %s
+(%leb
 (%s,%s)
 (%zu) Descend: %s, (%s), %s
 (%zu) readdir failed to find '%s' in '%s'
@@ -3644,7 +3647,6 @@ $world_mins
 (*VERB) not recognized or malformed
 (0 - off) (1 - Draws the bounding box of entities) (2 - Draws the axis aligned bounding box used for culling) (3 - draws both bounding boxes)
 (1 + n) * 3 <= vecsize
-(5?![
 (8HXhx
 (;C8|tL
 (?R or (?[+-]digits must be followed by )
@@ -3673,7 +3675,9 @@ $world_mins
 (H9D$
 (H9l$
 (H;0t
-(H;=uNG
+(H;=U
+(H;=m
+(H;=}%
 (Histogram luminance is in linear space)
 (IImageSource)
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
@@ -3841,6 +3845,8 @@ $world_mins
 *ZN20CEconItemDescription34Generate_ScorecardDesc_PostPhoenixEP21CLocalizationProviderPK18IEconItemInterfaceE28CScorecardAttributeDisplayer
 *ZN20CEconItemDescription35Generate_ScorecardDesc_BravoPhoenixEP21CLocalizationProviderPK18IEconItemInterfaceE28CScorecardAttributeDisplayer
 *ZN23CCSGO_InventoryItemListC1EPN8panorama8CPanel2DEPKcEUlS2_iS2_E_
+*ZN24CLoadoutShuffleItemLists16BAddAllToShuffleEPK14C_EconItemViewiEUlS2_E_
+*ZN24CLoadoutShuffleItemLists35CountItemsInInventoryForShuffleSlotEPK14C_EconItemViewiEUlS2_E_
 *ZN25CCSGO_SurvivalSpawnSelect16CreateSpawnTilesEvEUlPN8panorama7CButtonEE_
 *ZN25CCSGO_WeaponSelectionView22RemoveAnimationDisableEvEUlPN8panorama8CPanel2DEE_
 *ZN8panorama15CDelayLoadPanelC1EPNS_8CPanel2DEPKcEUlPS0_E_
@@ -3985,6 +3991,7 @@ $world_mins
 ,NETWORK_DISCONNECT_STEAM_LOGGED_IN_ELSEWHERE
 ,NETWORK_DISCONNECT_VERYLARGETRANSFEROVERFLOW
 ,ar_monastery
+,item_definition:%s,only_econ_items
 ,k_ECSUsrMsg_DisconnectToLobby_Action_Default
 ,k_ECSUsrMsg_DisconnectToLobby_Action_GoQueue
 ,k_ECommunityItemAttribute_CommunityItemAppID
@@ -4340,11 +4347,12 @@ $world_mins
 .valve.net/730/
 .valvesoH
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%`#P
-/%kcO
-/-Y&r
-/-qX9
-/-so9
+/%}LK
+/-!X9
+/-#s9
+/-9\r
+/-sg9
+/-~\{
 /../platform
 //   BOOL   (a yes/no toggle)
 //   LIST
@@ -4395,11 +4403,13 @@ $world_mins
 //MOD/%s
 //platform/materials/vgui/vtfnotloaded
 /4$u3H
-/56KP
-/5yeS
-/=AA.
-/=]$y
-/=ueT
+/5)eS
+/=4hT
+/=A5.
+/=ThT
+/=WFz
+/=],y
+/=fYr
 /?O_o
 /@ s)f
 /@LuXH
@@ -4676,8 +4686,7 @@ $world_mins
 0CMsgGCCStrike15_v2_MatchmakingGCOperationalStats
 0CMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
 0D;.t@H
-0H;=M
-0H;=m
+0H;=MHV
 0[A\A]A^A_]
 0[A\A]A^]
 0[A\A]]
@@ -4761,6 +4770,7 @@ $world_mins
 10CUtlVectorIP32IModelCombinerRequesterInterface10CUtlMemoryIS1_iEE
 10CUtlVectorIPc10CUtlMemoryIS0_iEE
 10CUtlVectorIj10CUtlMemoryIjiEE
+10CUtlVectorIy10CUtlMemoryIyiEE
 10CViewSetup
 10C_BaseDoor
 10C_BaseFlex
@@ -4807,6 +4817,7 @@ $world_mins
 11CCallResultI22CExternalWebApiService22HTTPRequestCompleted_tE
 11CCallResultI22CUiComponent_MatchInfo22HTTPRequestCompleted_tE
 11CCallResultI22CUiComponent_Overwatch22HTTPRequestCompleted_tE
+11CCallResultI24CLoadoutShuffleItemLists37RemoteStorageFileWriteAsyncComplete_tE
 11CCallResultI24CWorkshopFileInfoManager44RemoteStorageGetPublishedFileDetailsResult_tE
 11CCallResultI24CWorkshopFileInfoManager48RemoteStorageGetPublishedItemVoteDetailsResult_tE
 11CCallResultI25CUiComponent_Leaderboards23LeaderboardFindResult_tE
@@ -5657,7 +5668,6 @@ $world_mins
 17WaterDebrisEffect
 17fogplayerparams_t
 18446744073709551615
-18:46:42
 18CBloodSprayEmitter
 18CBuildModeNavCombo
 18CCLCMsg_ClientInfo
@@ -5698,6 +5708,7 @@ $world_mins
 18CCopyableUtlVectorIP32IModelCombinerRequesterInterfaceE
 18CCopyableUtlVectorIPcE
 18CCopyableUtlVectorIjE
+18CCopyableUtlVectorIyE
 18CDebugOverlayPanel
 18CDefSaveRestoreOps
 18CEconItemAttribute
@@ -6130,6 +6141,7 @@ $world_mins
 20TabCatchingTextEntry
 20TournamentMatchSetup
 21.CMsgGCCStrike15_v2_Account_RequestCoPlays.Player
+21:15:18
 21CAchievement_StatGoal
 21CAnimatedTextureProxy
 21CBackgroundMenuButton
@@ -7051,6 +7063,7 @@ $world_mins
 32CDOTA_UI_Popup_Generic_TextEntry
 32CDirtySpatialPartitionEntityList
 32CMsgAMSendEmail_ReplacementToken
+32CMsgAdjustItemEquippedStateMulti
 32CMsgGCIncrementKillCountResponse
 32CMsgGCMsgSetOptions_MessageRange
 32CMsgItemAcknowledged__DEPRECATED
@@ -7220,13 +7233,8 @@ $world_mins
 39C_OP_RemapControlPointDirectionToVector
 39ClientJob_EMsgGC_GlobalGame_Unsubscribe
 3: mouse_acceleration = pow(raw_mouse_delta, m_customaccel_exponent - 1) * sensitivity
-3=.4z
-3=.A	
-3=76z
-3=>)	
-3=nO	
-3=~}	
-3=~~	
+3=>_z
+3=Gaz
 3@T]f
 3CCommunity_TerminateGamePersonalDataEntries_Request
 3CMsgGCCStrike15_v2_MatchListRequestCurrentLiveGames"G
@@ -7597,8 +7605,8 @@ $world_mins
 8C_TEDust
 8C_TEFizz
 8C_Tablet
+8D9%!K
 8GCConVar
-8H;=U}I
 8IEffects
 8IHudChat
 8IRagdoll
@@ -7645,6 +7653,7 @@ $world_mins
 98t<H
 9999999
 99w8|&H
+9=jp%
 9@8>u
 9A ~*Hc
 9A`t,H
@@ -8314,7 +8323,6 @@ $world_mins
 @4A\A]A^]
 @82t'
 @82t+1
-@8=e$`
 @8D)`
 @8H;E
 @8wTUH
@@ -8337,8 +8345,7 @@ $world_mins
 @D@t(H
 @E9l$
 @E9t$
-@H;=% V
-@H;=Q
+@H;=%
 @H;H8|
 @HA\]
 @HA^]
@@ -8536,6 +8543,7 @@ A9F0u7H
 A9F@~F
 A9FB57DBA1EEA9BC3E660A909D838D718C397AA3B561A6F7901E0E82974856A7
 A9FB57DBA1EEA9BC3E660A909D838D726E3BF623D52620282013481D1F6E5377
+A9FP~ZI
 A9G0A
 A9G0I
 A9G0~+I
@@ -8551,7 +8559,7 @@ A9U8I
 A9W8L
 A9[ t
 A9\$(
-A9\$(~C
+A9\$(~d
 A9\$,
 A9\$8
 A9\$@
@@ -10053,6 +10061,8 @@ Actual UI Scale Z
 ActualValue
 Add a CSS class to a panel.
 Add a CSS class to all children of this panel.
+Add all items in the inventory to a shuffle
+Add item to a shuffle list for the associated loadout position. Returns true if item was sucessfully added to any shuffle.
 AddBlurPanel
 AddBool
 AddClass
@@ -10066,6 +10076,7 @@ AddFile
 AddFloat
 AddInt32
 AddInt64
+AddItemToShuffle
 AddMemoryInfoCallback
 AddMessage
 AddMultiDamage:  g_MultiDamage.GetDamageForce() == vec3_origin
@@ -13001,6 +13012,7 @@ ClearKeyButton
 ClearPanelEvent
 ClearPropertyFromCode
 ClearSelection
+ClearShuffle
 ClickPanel
 Client 
 Client SelectWeightedSequence
@@ -13398,6 +13410,7 @@ Couldn't scan 2d coordinate values from %s
 Couldn't scan four color values from %s
 Couldn't scan rectangle values from %s
 Couldn't write bitmap data snapshot.
+CountItemsInInventoryForShuffleSlot
 CountdownActive
 CountdownAfterEnd
 CountdownBeforeStart
@@ -13669,14 +13682,12 @@ D24X4S4
 D24X8
 D24X8_SHADOW
 D3	 H
-D3%0C
-D3-Ml
-D3-ea
-D35)Z
-D35?F
+D3%mp
+D35=o
 D35E472036BC4FB7E13C785ED201E065F98FCFA5B68F12A32D482EC7EE8658E98691555B44C59311
 D35E472036BC4FB7E13C785ED201E065F98FCFA6F6F40DEF4F92B9EC7893EC28FCD412B1F1B32E27
-D35mH
+D3=%s
+D3=6v
 D40D9
 D6031998D1B3BBFEBF59CC9BBFF9AEE1
 D7	,H
@@ -13688,15 +13699,13 @@ D8k0u
 D9 t+H
 D9 t5H
 D9 t=H
-D9%Is
-D9%NY
-D9%gS
+D9%A	
+D9%TE
 D9't$H
-D9-!j
+D9-!g
+D9-6D_
 D91t%H
 D92t:H
-D9=>X
-D9=x$
 D9D$4B
 D9D$4H
 D9F<~
@@ -13736,36 +13745,45 @@ D;!t{Hc
 D;"t,H
 D;"t3
 D;"t4H
-D;%,`
-D;%..
-D;%0{
-D;%>,
-D;%AN
-D;%F-
-D;%ZB
-D;%Z[
-D;%yP
+D;%)X
+D;%6V
+D;%:W
+D;%\s
+D;%yV
+D;%zc
+D;%||
 D;'t{
 D;'t{Hc
 D;*t 
 D;,% 
-D;-)F
-D;-,@
-D;-Oa
-D;-rl
-D;5	C
-D;5+H
-D;5AB
-D;5KJ
-D;5YF
-D;5`k
-D;5iF
-D;5kL
-D;5vj
-D;5yH
-D;5{C
-D;5{N
-D;=t2
+D;-!`
+D;-3y
+D;-Q:
+D;-R'
+D;-R/
+D;-W*
+D;-Y[
+D;-x.
+D;5 4
+D;5)m
+D;5+z
+D;59u
+D;5;p
+D;5?N
+D;5I!
+D;5KP
+D;5Yw
+D;5al
+D;5bn
+D;5in
+D;5iy
+D;5kR
+D;=%r
+D;=9|
+D;=?f
+D;=bf
+D;=r~
+D;=}b
 D;B(|	
 D;F8u
 D;G8u
@@ -14289,6 +14307,7 @@ DeathNoticeCTColor
 DeathNoticeDomination
 DeathNoticeFadeOutTime
 DeathNoticeFadedColor
+DeathNoticeFlashbang
 DeathNoticeHeadShot
 DeathNoticeLifetime
 DeathNoticeLocalPlayerLifetimeMod
@@ -14843,6 +14862,7 @@ E+|$XE
 E+} E
 E+}$Mc
 E+}(E
+E+}8E
 E+~$Mc
 E0tQA
 E2>;;834.F8A45A0<4
@@ -16375,12 +16395,14 @@ GetInventoryItemIDByIndex
 GetInventoryStructureJSON
 GetInviteXuidByIndex
 GetInvitesCount
+GetItem
 GetItemAttributeValue
 GetItemBaseName
 GetItemCapabilitiesCount
 GetItemCapabilityByIndex
 GetItemCapabilityDisabledMessageByIndex
 GetItemCertificateInfo
+GetItemCountInShuffle
 GetItemDefinitionIndex
 GetItemDefinitionName
 GetItemDescription
@@ -16942,7 +16964,8 @@ H97tuH
 H99t 
 H9:t#HcR
 H9;t@D
-H9=<w	
+H9=	0
+H9=T_
 H9B t7A
 H9Cxt
 H9D$ 
@@ -16973,179 +16996,158 @@ H;1t.H
 H;2t$H
 H;2t-1
 H;2t.H
-H;50 
-H;50'
-H;5H:
-H;5HHR
-H;5Ho
-H;5I	
-H;5J:
-H;5N.
-H;5iI
-H;5x;
+H;58w
+H;5E_
+H;5N{T
+H;5PqI
+H;5X?O
+H;5^qL
+H;5`?T
+H;5wc
+H;5x]
 H;7t+H
 H;7tnH
 H;8tnH
 H;:tvH
-H;=	+
-H;=!#
-H;=!2
-H;=#`$
-H;=$#K
-H;=$`Q
-H;=$eC
-H;=$f
-H;=%"M
-H;=%(V
-H;=%<P
-H;=&.
-H;='	
-H;='<
-H;='r
-H;='~
-H;=*H
-H;=*nQ
-H;=*qP
-H;=+.V
-H;=,z
-H;=.G
-H;=/)
-H;=/,
-H;=/5
-H;=/6
-H;=/e
-H;=/}H
-H;=1!
-H;=1)&
-H;=3\$
-H;=4~C
-H;=5_J
-H;=5oR
-H;=5yQ
-H;=78
-H;=7F
-H;=8l
-H;=:HH
-H;=:^
-H;=<G
-H;=<OD
-H;=<OO
-H;=<}
-H;==-
-H;==IF
-H;=?H
-H;=?X
-H;=?`D
-H;=?e
-H;=AK
-H;=A{
-H;=C_$
-H;=Cc
-H;=D;
-H;=DPD
-H;=E!M
-H;=EHF
-H;=EMF
-H;=Ed
-H;=G;
-H;=H\&
-H;=In
-H;=K 
-H;=Kb
-H;=Kr
-H;=K{
-H;=LeC
-H;=M+
-H;=M/
-H;=N"D
-H;=O!
-H;=O$D
-H;=O%V
-H;=OZ&
-H;=Og
-H;=Ot1
-H;=RIK
-H;=S[$
-H;=TO
-H;=TT
-H;=U)
-H;=U+
-H;=WPG
-H;=X!
-H;=Y:Q
-H;=ZC+
-H;=ZUP
-H;=ZfP
-H;=[ :
-H;=[2
-H;=[yQ
-H;=\?
-H;=\xJ
-H;=]JF
-H;=]Y$
-H;=_'V
-H;=_3
-H;=_WP
-H;=_[
-H;=_zJ
-H;=_|K
-H;=a#
-H;=a'
-H;=bJ
-H;=bk
-H;=c^$
-H;=cpc
-H;=e%
-H;=e'M
-H;=e-
-H;=eNF
-H;=eT
-H;=e`D
-H;=ev
-H;=f4
-H;=g:
-H;=gH
-H;=hLF
-H;=hOD
-H;=hf
-H;=i#
-H;=i-
-H;=jD
-H;=kd
-H;=kq
-H;=krc
-H;=lyD
-H;=l}
-H;=m.
-H;=m1
-H;=o.H
-H;=o/K
-H;=o7
-H;=oFQ
-H;=oh
-H;=olJ
-H;=oq
-H;=oqJ
-H;=pc
-H;=q}
-H;=r,
-H;=r\
-H;=s9
-H;=sZ$
-H;=s{
-H;=tOO
-H;=tnQ
-H;=tt
-H;=u&M
-H;=u*V
-H;=u[I
-H;=xeC
-H;={,
-H;={/
-H;=|B
-H;=}&V
-H;=};R
-H;=}<
+H;= .D
+H;="R
+H;=$JR
+H;=$S
+H;=%6J
+H;=%8J
+H;=%a
+H;='4
+H;='UC
+H;=(q
+H;=*'R
+H;=**Q
+H;=+EP
+H;=+bS
+H;=,sS
+H;=,xD
+H;=-7J
+H;=-V
+H;=/)+
+H;=/7K
+H;=/LE
+H;=/U
+H;=/d
+H;=/n
+H;=/s
+H;=0Q
+H;=1#
+H;=1.
+H;=1J
+H;=2VK
+H;=2[E
+H;=3&
+H;=4%D
+H;=4;
+H;=4T
+H;=5	
+H;=5(S
+H;=52R
+H;=5jS
+H;=7c
+H;=7q
+H;=8VC
+H;=9r
+H;=9rS
+H;=;&
+H;=;2
+H;=;aZ
+H;=<,E
+H;=<fH
+H;=?*
+H;=?1
+H;=B/
+H;=B^
+H;=BlL
+H;=D:
+H;=DSL
+H;=Di
+H;=EE
+H;=F!
+H;=G^
+H;=Gf
+H;=I(L
+H;=I/
+H;=Ib
+H;=KG
+H;=Ka
+H;=L.D
+H;=L.H
+H;=M"
+H;=Mt
+H;=N%
+H;=O'+
+H;=O*
+H;=O<K
+H;=OAE
+H;=OY
+H;=OtG
+H;=QF
+H;=Qd
+H;=T~+
+H;=UbS
+H;=U~
+H;=V$
+H;=V'
+H;=VX
+H;=Wp
+H;=XsS
+H;=YJR
+H;=YN
+H;=YUC
+H;=ZR
+H;=[	
+H;=[2R
+H;=[jS
+H;=[m
+H;=]:J
+H;=]JV
+H;=_/
+H;=_6
+H;=_E
+H;=_SD
+H;=_ZS
+H;=_b
+H;=_zH
+H;=a4
+H;=d,E
+H;=d`E
+H;=e0
+H;=e2
+H;=eI
+H;=ge
+H;=gs
+H;=iG
+H;=iP
+H;=j/
+H;=j^
+H;=jlL
+H;=k4
+H;=mW
+H;=nVC
+H;=o%+
+H;=o*+
+H;=o1
+H;=o\
+H;=o`K
+H;=oe
+H;=t'R
+H;=t[I
+H;=u2J
+H;=ua
+H;=utG
+H;=y%?
+H;=y4J
+H;=zNI
+H;=zx
+H;={P
+H;=|.D
+H;=}&
+H;=}IV
 H;B(t)A
 H;C I
 H;C t
@@ -17736,6 +17738,7 @@ IcE0A
 IcE0A;E4tjI
 IcE0H9
 IcE8A
+IcE8A;E<
 IcE8I
 IcF(f
 IcF8f
@@ -18205,8 +18208,10 @@ IpAddressMask
 IronSightAmount
 Is Panorama in ECO (perf) mode
 Is gamestate data currently latched and not updating (e.g. end-of-match)
+Is item slot allowed to shuffle items
 Is local user the host of the currently active session. False if no session active.
 Is set, the clan name will show next to player names in the death notices.
+Is this weapon slot/team currently shuffling items
 IsBannerEntryMarketLink
 IsBundle
 IsCaptioned
@@ -18234,6 +18239,7 @@ IsInventoryFull
 IsInventoryImageCachable
 IsInventoryValid
 IsItemDefault
+IsItemInShuffleForTeam
 IsItemInfoValid
 IsItemNew
 IsItemStickerAtExtremeWear
@@ -18262,6 +18268,8 @@ IsSequenceFinished
 IsServerQuestEligible
 IsServerWhitelistedValveOfficial
 IsSessionActive
+IsShuffleAllowed
+IsShuffleEnabled
 IsSkirmishMapGroup
 IsSplitScreen
 IsTool
@@ -18427,18 +18435,17 @@ K H;K
 K to1
 K(D;1t0H
 K([A\]
-K0@H;=4{
+K0@H;=t4
 K0~XH
-K4 H;=D
-K4@H;5
-K4@H;=L
-K8 H;=
+K4 H;=D|O
+K4@H;5h
+K4@H;=
+K8 H;=<z
 K8;CP
-K< H;5
-K< H;=$
-K< H;=T
+K< H;5_
+K< H;=
 K<@H;=
-K<@H;=T
+K@ H;=
 KAD_MoneySpent
 KAD_NumA
 KAD_NumD
@@ -18583,7 +18590,7 @@ KEY_XSTICK2_RIGHT
 KEY_XSTICK2_UP
 KEY_Y
 KEY_Z
-KH H;=u
+KH H;=
 KILLED_DEFUSER_WITH_GRENADE
 KILLER_AND_ENEMY_IN_AIR
 KILLING_SPREE
@@ -18645,12 +18652,12 @@ KILL_WHEN_AT_LOW_HEALTH
 KILL_WHILE_IN_AIR
 KILL_WITH_EVERY_WEAPON
 KILL_WITH_OWN_GUN
-KL H;5
+KL H;5U
 KL H;=
 KM^bM
-KP@H;=]
-KT H;5O]
-KT H;=t
+KP@H;=
+KT H;5
+KT H;=
 KT;H0s
 KT;H@s
 KV Conditional Evaluation Error
@@ -18726,7 +18733,7 @@ Known
 Kochanek-Bartels
 Kochanek-Bartels Early
 Kochanek-Bartels Late
-K| H;=$
+K| H;=
 K|@H;=
 L$ 9L$
 L$ H9
@@ -18745,7 +18752,7 @@ L$, A
 L$,E1
 L$0 A
 L$0@H
-L$0@H;5^
+L$0@H;5
 L$0E1
 L$0Hc
 L$4 A
@@ -18757,12 +18764,12 @@ L$8 L9
 L$8H9
 L$8dH3
 L$< A
-L$< L9
 L$< M
 L$<@A
 L$<@H;5
-L$<@I
 L$@ H
+L$@ L9
+L$@@I
 L$@D)
 L$D A
 L$D H
@@ -18773,13 +18780,13 @@ L$D@I
 L$D@L9
 L$D@M
 L$H H
-L$H H;5
+L$H H;5=
 L$H+L$L
 L$H@H
 L$Ht7
 L$P A
 L$P@A
-L$P@H;5
+L$P@H;56
 L$PA9
 L$PD9y
 L$PE1
@@ -18824,8 +18831,10 @@ L+l$@H
 L,\L)
 L0@D!
 L9(t2L
+L95BE
 L9<$t
 L9<$u
+L9=s@
 L9?t=A
 L9c`H
 L9kHu
@@ -18838,17 +18847,19 @@ L; ta
 L;"t"H
 L;"t'H
 L;$$u
-L;%I'
-L;%S?:
-L;%yt
+L;%)Y
+L;%D^:
+L;%QD
 L;(tHL
 L;(tTH
+L;-"a:
 L;4$t0L
 L;8t"A
 L;<$}?I
 L;<$}CI
 L;<$}EI
-L;=*v>
+L;=IB
+L;=nA
 L;_(D
 L;`(t
 L;`(u
@@ -19014,12 +19025,11 @@ Layout File
 LblGamerTag
 LblGamerTagStatus
 LbsUpdate
-Lc%#o
-Lc%/D
-Lc%f}
-Lc%mT
-Lc-	r
-Lc-6T
+Lc%/2
+Lc%6*
+Lc%9=w
+Lc5AE
+Lc5OD
 Lc6E9
 Lc6Lc	LcQ
 LcG`I
@@ -19233,6 +19243,7 @@ LoadoutItemPopupBorder
 LoadoutSlot:%s
 LoadoutSlot_%s
 LoadoutSortDropdown
+LoadoutWedgePressed
 Loadout_FilterForPosition
 Lobby default permissions (0: private, 1: public, 2: clan, 4: nearby, 6: clan and nearby)
 Lobby voip stream audio volume
@@ -19312,7 +19323,7 @@ M9|$ s
 M;,$f
 M;H to
 M;t$ t"H
-M<@H;5^
+M<@H;5
 MAC-10
 MAG-7
 MATCHFRAMEWORK_001
@@ -22276,7 +22287,7 @@ RGBA1010102
 RGBA16161616F
 RGBA32323232F
 RGBX8888
-RHD9-
+RHD9-Hg
 RHJcT"
 RHcP$H
 RHcPPH
@@ -22487,8 +22498,11 @@ Remap Scalar to Vector
 Remap Speed to Scalar
 Remap Velocity to Vector
 RemapValClamp
+Remote Storage unavailable, failing to save shuffle file to cloud.
 Remove a CSS class from a panel.
 Remove a CSS class from all children of this panel.
+Remove all shuffled items from the loadout position associted with the item ID. Returns true if an existing shuffle was cleared.
+Remove item from the shuffle list for the associated loadout position. Returns true if item was sucessfully removed from any shuffle 
 Remove the decals from the entity under the crosshair.
 Remove then immediately add back a CSS class from a panel. Useful to re-trigger events like animations or sound effects.
 RemoveAll
@@ -22498,6 +22512,7 @@ RemoveBlurPanel
 RemoveButton
 RemoveClass
 RemoveCraftIngredient
+RemoveItemFromShuffle
 RemoveLast
 RemoveMemoryInfoCallback
 RemoveOption
@@ -22664,6 +22679,7 @@ Retrieving file information...
 Return a comma delimited list of short mapnames (eg 'de_dust2, de_inferno, 123123/de_workshopmap') in the currently playing map group (returns null if not in game).
 Return a comma delimited list of short mapnames (eg 'de_dust2, de_inferno, 123123/de_workshopmap') in the given map group.
 Return a loc token for the given short map name (eg 'de_dust2').
+Return count of items selected for shuffle given slot
 Return true if this match was entered 
 ReturnToMainMenu
 Returns "none", "friend", "friend_request_received", "friend_request_sent", "suggested"
@@ -22982,6 +22998,7 @@ SaveRestoreBlockHeader_t
 SaveSuccess
 Saved VTF %s
 Saved: %s
+SavedItemShuffles
 SavedLabel
 Saves the last viewed spectator mode for use next time we start to spectate
 Saving %s to cloud....
@@ -23369,6 +23386,7 @@ SetSelected
 SetSelectedChild
 SetSettingString
 SetShowDefaultValue
+SetShuffleEnabled
 SetSnippet
 SetSortColumn
 SetSound
@@ -23619,6 +23637,10 @@ Shows rain tracelines for this many seconds (0 disables)
 Shows teamID over player's heads.  0 = off, 1 = on
 Shows the base attachment location of the vgui widget
 Shows the incoming user messages for this client and dumps them out the type and size of the messages to the console. Setting this to 2 will display message contents as well
+Shuffle equipment in the given slot (if enough valid items are equipped)
+ShuffleAllForTeam
+ShuffleEquipmentInSlot
+Shuffles failed to write to remote storage (%d)
 Shut down existing lobby session.
 Shutdown %i predictable entities and %i client-created entities
 ShutdownMachine
@@ -24572,6 +24594,7 @@ TitleTextTooltip
 Toggle deferred shadow rendering
 Toggle low-res deferred shadow rendering
 Toggle set the player names and team names to the opposite side in which they are are on the spectator panel.
+Toggle shuffle enabled for slot
 Toggle the 3-way animation blending code.
 Toggle the visibility of scoreboard players.
 Toggle the visibility of the spectator bindings.
@@ -24744,7 +24767,7 @@ UCS-4LE
 UGCOperation
 UGCRead failed? (UGC=%08X%08X).
 UGCUnzipThreadPool
-UHc5XJ[
+UHc5X
 UHc7H
 UHcG@H
 UHcO H
@@ -25428,6 +25451,7 @@ W(Nc,
 W,:V,u
 W0HcB
 W0Hc_8A
+W5DiE
 W8HcP
 W8[]A\A]A^A_
 W@;V@u
@@ -25494,6 +25518,7 @@ Waiting for %s...
 WaitingForAuthorization
 WakeAfterCompletedWorkItem
 WakeDependentJobFinished
+Walk inventory and return count of any econ item that goes in this shuffle slot.
 War Games
 Warmup man name contains invalid character %c at position %d!
 Warmup map name too long!
@@ -25700,15 +25725,14 @@ Wrong JPEG library version: library is %d, caller expects %d
 Wrong alignment %d
 Wx[]A\A]A^A_
 X HcC 
-X%2QT
 X,IcD$
-X-p'H
+X- 'H
 X0~tA
-X5('H
-X5y'H
+X5)'H
 X8bU2qll
 X917RNG: Continuous random number generator test failed.
 X<A;]
+X=y%P
 X@linux64
 XA\A]A^A_]
 XC L9
@@ -25742,13 +25766,18 @@ XpNeededForStar
 XpProgressData
 Xt&[A\]
 Xx81uBl)
-Y% 	I
-Y%.&U
-Y%@gU
-Y-_,U
-Y5#g'
-Y5N&U
-Y5k	~
+Y%@hU
+Y%]/1
+Y%e%U
+Y%x$U
+Y-?;M
+Y-B'H
+Y53P~
+Y5K'H
+Y5\]}
+Y5~6C
+Y=ML~
+Y=Y-U
 Y@ A]A^]
 Y@ A^]
 Y@TE_WorldDecal
@@ -25963,8 +25992,8 @@ Z}	8%]
 \$p9C
 \$p9s
 \%03o
-\%23O
 \0(uu1
+\=;2O
 \C not allowed in lookbehind assertion
 \D$(f
 \D$0f
@@ -26007,7 +26036,6 @@ Z}	8%]
 ^D[A\A]A^]
 ^[A\A]]
 _%s.tmp
-_-B}~
 _CGCUpdateConVar
 _DateOnly
 _ExitOnFatalAssert
@@ -26652,10 +26680,12 @@ _xlsp
 ` [A\]
 `4D;m
 `<D;%
-`<D;%"
-`<D;%4
-`<D;%AT
-`<D;%`
+`<D;%,8
+`<D;%:D
+`<D;%H
+`<D;%R
+`<D;%\
+`<D;%_
 `<D;c
 `?DT_WeaponSG552
 `@debug/debugparticlewireframe
@@ -26665,6 +26695,7 @@ _xlsp
 `D;t$
 `D;{8
 `DD;%
+`DD;%5
 `L;,$
 `[A\A]A^]
 `[A\A^A_]
@@ -27030,6 +27061,7 @@ assertion expected after (?(
 asset_class_bucket
 asset_class_export
 asset_modifier
+assistedflash
 assister
 assists
 associate
@@ -27640,6 +27672,7 @@ centralDirectorySize
 cfg/%s
 cfg/chapter*.cfg
 cfg/config_default.cfg
+cfg/csgo_saved_item_shuffles.txt
 cfg/gamestate_integration_*.cfg
 cfg/qmmconnect.dt
 cfg/settings.scr
@@ -29468,6 +29501,7 @@ ent_idx
 ent_snowball_pile
 entdata
 entidx
+entidx_target
 entindex
 entity # %i: %s%s%s
 entity1
@@ -30521,18 +30555,21 @@ gunshotsplash
 gunsmith
 g~L;}
 h<D;-
-h<D;-#
-h<D;-'
-h<D;-)U
-h<D;-2
-h<D;-=
-h<D;-P
-h<D;-S
-h<D;-dE
-h<D;-g?
-h<D;-j
-h<D;-n
-h<D;-v
+h<D;-&
+h<D;-&B
+h<D;-,H
+h<D;-4f
+h<D;-6
+h<D;-A
+h<D;-GE
+h<D;-GM
+h<D;-H
+h<D;-RI
+h<D;-]N
+h<D;-cO
+h<D;-i
+h<D;-pF
+h<D;-sO
 h<D;k
 h<E;l$
 hDD;k
@@ -31365,6 +31402,8 @@ itemheight
 itemid
 itemid, count
 itemid, index
+itemid, team
+itemid, team, enable
 itemindex
 itemindexhigh
 itemindexlow
@@ -32023,6 +32062,7 @@ loading-screen-blur
 loadingtippanel
 loadondemand
 loadout--no-item
+loadout--shuffle-enabled
 loadout--visible
 loadout_pos
 loadouttext
@@ -35506,6 +35546,7 @@ not_synced_with_server
 not_tradeable
 notches
 notconnected
+noteam_equips
 notes
 nothing to repeat
 notify
@@ -35686,6 +35727,7 @@ only active within specified input range
 onlyAnimateOnTexture
 only_campaigns
 only_coupons
+only_econ_items
 only_first_material
 only_gamepad
 only_gifts
@@ -35881,27 +35923,29 @@ p([A\A]A^]
 p(ueA
 p,9S 
 p<D;5
-p<D;5+
-p<D;5+X
-p<D;51\
-p<D;53N
-p<D;58@
-p<D;59R
-p<D;5:c
-p<D;5AV
-p<D;5Fg
-p<D;5Li
-p<D;5V
-p<D;5WT
-p<D;5_
-p<D;5`k
-p<D;5ba
-p<D;5dH
-p<D;5hm
-p<D;5iO
-p<D;5jJ
-p<D;5wW
-p<D;5}[
+p<D;5!
+p<D;5#
+p<D;5(
+p<D;5)
+p<D;5*
+p<D;51
+p<D;56
+p<D;5<
+p<D;5D
+p<D;5G
+p<D;5P
+p<D;5R
+p<D;5T
+p<D;5W
+p<D;5X
+p<D;5Y
+p<D;5Z
+p<D;5g
+p<D;5m
+p<D;5o
+p<D;5s
+p<D;5t
+p<D;5u
 p<D;s
 p<E;t$
 p<E;u
@@ -38899,7 +38943,7 @@ t7Hc[
 t8HcS
 t9HcE
 t;<%u
-t;D85f
+t;D85
 t<A;^8r6I
 t<Lc{@
 t<fD9
@@ -38953,12 +38997,14 @@ tXEtu
 tXTiu
 tXTzu
 t\G9l
-t\Lc%
+t\Lc%Z
 t]D9e
 t]D9u
 t^<,u:
 t^H9C(H
+t^H9E
 t_H9p
+t_equips
 t`;p0
 t`Mc}
 taG : voiced velar stop
@@ -39029,7 +39075,7 @@ target_team
 targetid--hidden
 taunt
 tax_usd
-tbH;=
+tbH;=4
 tcA:]
 tchinese
 tdHcH
@@ -39287,7 +39333,6 @@ titlepage
 titletextinsetX
 titletextinsetY
 tjH=h
-tkH9E
 tlpdu
 tm_anarchist
 tm_balkan
@@ -39935,7 +39980,7 @@ unzoom after shot
 unzoom after shot alt
 up-wrap
 up:%5.1f/s
-upD3%4
+upD3%
 update
 update-interval
 update/game/mode
@@ -40640,18 +40685,16 @@ x6Hcw
 x7Hcw
 x8;wp}3UHc
 x<D;=
-x<D;=	
-x<D;=!
-x<D;=)
-x<D;=6
-x<D;=<
-x<D;=H
-x<D;=Q
-x<D;=W
-x<D;=`
-x<D;=d(
-x<D;=i
-x<D;=k
+x<D;=.~
+x<D;=Ie
+x<D;=Ub
+x<D;=X
+x<D;=Y
+x<D;=a|
+x<D;=i{
+x<D;=q 
+x<D;=vc
+x<D;=|}
 x<E;|$
 x<E;}
 x<E;~
@@ -40788,58 +40831,59 @@ zoomed_sniper_moving
 zp14Hi(]
 zt????
 { H;=
-{ H;=%5
+{ H;=*
+{ H;=-
+{ H;=2
 { H;=5
-{ H;==HU
-{ H;=T
-{ H;=eKF
-{ H;=m$M
-{ H;=m9
+{ H;==
+{ H;=G
+{ H;=M
+{ H;=e
+{ H;=m
 { H;=}
-{ H;=}#M
 { Nc| dH
 { f;C(
 {%.*ls=
 {(A9G0
 {(H;=
-{(H;=-
-{(H;=5
-{(H;=m
-{(H;=mGF
-{(H;=}8
+{(H;=}
 {0H;=
-{0H;=#NU
-{0H;=%$M
-{0H;=-LU
+{0H;=#
+{0H;=-
+{0H;==
+{0H;=V
 {8H;=
-{8H;=%
-{8H;=7CF
-{8H;=m-V
+{8H;=/
+{8H;=g
+{8H;=m
 {8[A\A]A^]
 {@H;=
-{@H;=]
+{@H;=5
+{@H;=?
 {GOTVRELAYSTART}
 {H+S$Hc
-{HH;=P7
+{HH;=
 {PH;=
-{PH;=)7
-{PH;=m
+{PH;=i
+{PH;=mHV
 {P[A\]
 {XH;=
-{XH;=-
+{XH;=-3J
+{XH;=B
 {XVCCDt
 {`H;=
 {`t"I
 {count=
 {hH;=
-{hH;=-OU
+{hH;=-
+{hH;=]
 {hH;{pt
 {hMc|
 {height}
 {l[A9
 {pH97tpH
 {pH;=
-{pH;=5q
+{pH;=]3J
 {pt0D
 {uint32}
 {v:csgo_bind:e:bind_%s}
@@ -40901,7 +40945,7 @@ zt????
 } )( %d );
 } )();
 } A;D$$
-} H;=5!V
+} H;=5
 } HcC
 } f;r
 }!f;Q
@@ -40928,7 +40972,7 @@ zt????
 }9fA;\$&w1H
 }:fA;L$n
 }>fA;\$
-}@H;=%OG
+}@H;=
 }AA;FD
 }BD;sD
 }Ef;C&w?f
