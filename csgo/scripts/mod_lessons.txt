@@ -2178,9 +2178,7 @@
 		"priority"				"500"
 		"instance_type"			"1"
 
-		"caption"				"#csgo_instr_drone_delivery"
-
-		"display_limit"			"1"
+		// "display_limit"		"1"
 		"timeout"				"5"
 		"usable_in_midair"		"1"
 
@@ -2194,8 +2192,18 @@
 			{
 				"local_player is"	"player userid"
 				"icon_target set"	"player userid"
-				"integer1 set"		"bool drone_dispatched"
-				"integer1 is"		"int 1"
+				"integer1 set"		"int drone_dispatched"
+				"integer1 !less than"		"int 1" // not instant upgrade
+
+				// set caption base on how the item is delivered
+				"void scope in"					"void"
+					"integer1 is"					"int 2"
+					"caption set"					"string #csgo_instr_airdropbeacon_delivery"
+				"void scope out"				"void"
+				"void scope in"					"void"
+					"integer1 is"					"int 1"
+					"caption set"					"string #csgo_instr_drone_delivery"
+				"void scope out"				"void"
 			}
 		}
 
@@ -2514,6 +2522,83 @@
 				"void scope out"				"void"
 			}
 		}
+		"close"
+		{
+			"round_end"
+			{
+			}
+
+			"player_death"
+			{
+				"local_player is"		"player userid"
+			}
+		}
+	}
+	
+	"csgo_instr_drone_above_roof"
+	{
+		"priority"				"0"
+		"instance_type"			"0"
+
+		"onscreen_icon"			"icon_tip"
+		"offscreen_icon"		"icon_tip"
+
+		"show_when_occluded"	"1"
+		"force_caption"			"1" // this will ignore the max distance away from player
+		"timeout"				"5"
+
+		"start_sound"			"Survival.InfoTips"
+		
+		"caption"				"#csgo_instr_drone_above_roof"
+
+		"open"
+		{
+			"drone_above_roof"
+			{
+				"local_player is"		"player userid"
+				"icon_target set"		"entity cargo"
+			}
+		}
+		"close"
+		{
+			"round_end"
+			{
+			}
+
+			"player_death"
+			{
+				"local_player is"		"player userid"
+			}
+		}
+	}
+	
+	"csgo_instr_teammate_respawn"
+	{
+		"priority"				"500"
+		"instance_type"			"1"
+
+		"caption"				"#csgo_instr_teammate_respawn"
+
+		"onscreen_icon"			"icon_tip"
+		"offscreen_icon"		"icon_tip"
+
+		"success_limit"			"2"
+		"timeout"				"12"
+		"usable_in_midair"		"1"
+
+		"no_icon_target"		"1"
+
+		"start_sound"			"Survival.InfoTips"
+
+		"open"
+		{
+			"survival_teammate_respawn"
+			{
+				"local_player is"	"player userid"
+				"icon_target set"	"player userid"
+			}
+		}
+
 		"close"
 		{
 			"round_end"

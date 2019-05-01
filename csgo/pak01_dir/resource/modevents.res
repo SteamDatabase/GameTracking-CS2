@@ -36,6 +36,7 @@
 		"headshot"		"bool"		// singals a headshot
 		"dominated"		"short"		// did killer dominate victim with this kill
 		"revenge"		"short"		// did killer get revenge on victim with this kill
+		"wipe"			"short"		// is the kill resulting in squad wipe
 		"penetrated"	"short"	// number of objects shot penetrated before killing target
 		"noreplay"		"bool"  // if replay data is unavailable, this will be present and set to false
 	}
@@ -714,6 +715,13 @@
 		"full_reset"	"bool"		// is this a full reset of the map
 	}
 
+	"show_survival_respawn_status"
+	{
+		"loc_token" 	"string"
+		"duration"		"long"
+		"userid"		"short"
+	}
+
 	"client_disconnect"
 	{
 	}
@@ -966,7 +974,7 @@
 	{
 		"userid"		"short"
 		"priority"		"short"
-		"drone_dispatched"	"bool"
+		"drone_dispatched"	"short"
 	}
 
 	"loot_crate_visible"
@@ -1012,6 +1020,12 @@
 		"delivered"		"bool"
 	}
 	
+	"drone_above_roof"
+	{
+		"userid"		"short"
+		"cargo"			"short"
+	}
+	
 	"choppers_incoming_warning"
 	{
 		"global" "bool"
@@ -1032,5 +1046,34 @@
 	"snowball_hit_player_face"
 	{
 		"userid"		"short"		// player userid
+	}	
+	
+	"survival_teammate_respawn"
+	{
+		"userid"		"short"
+	}
+	
+	"survival_no_respawns_warning"
+	{
+		"userid"		"short"
+	}
+	
+	"survival_no_respawns_final"
+	{
+		"userid"		"short"
+	}
+
+	"player_ping"
+	{
+		"userid"	"short"
+		"entityid"	"short"
+		"x"		"float"
+		"y"		"float"
+		"z"		"float"
+	}
+	
+	"player_ping_stop"
+	{
+		"entityid"	"short"
 	}	
 }
