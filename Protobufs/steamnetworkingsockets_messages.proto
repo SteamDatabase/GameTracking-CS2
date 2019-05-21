@@ -1,55 +1,5 @@
+option optimize_for = SPEED;
 option cc_generic_services = false;
-
-enum ESteamDatagramMsgID {
-	k_ESteamDatagramMsg_Invalid = 0;
-	k_ESteamDatagramMsg_RouterPingRequest = 1;
-	k_ESteamDatagramMsg_RouterPingReply = 2;
-	k_ESteamDatagramMsg_GameserverPingRequest = 3;
-	k_ESteamDatagramMsg_GameserverPingReply = 4;
-	k_ESteamDatagramMsg_GameserverSessionRequest = 5;
-	k_ESteamDatagramMsg_GameserverSessionEstablished = 6;
-	k_ESteamDatagramMsg_NoSession = 7;
-	k_ESteamDatagramMsg_Diagnostic = 8;
-	k_ESteamDatagramMsg_DataClientToRouter = 9;
-	k_ESteamDatagramMsg_DataRouterToServer = 10;
-	k_ESteamDatagramMsg_DataServerToRouter = 11;
-	k_ESteamDatagramMsg_DataRouterToClient = 12;
-	k_ESteamDatagramMsg_Stats = 13;
-	k_ESteamDatagramMsg_ClientPingSampleRequest = 14;
-	k_ESteamDatagramMsg_ClientPingSampleReply = 15;
-	k_ESteamDatagramMsg_ClientToRouterSwitchedPrimary = 16;
-	k_ESteamDatagramMsg_RelayHealth = 17;
-	k_ESteamDatagramMsg_ConnectRequest = 18;
-	k_ESteamDatagramMsg_ConnectOK = 19;
-	k_ESteamDatagramMsg_ConnectionClosed = 20;
-	k_ESteamDatagramMsg_NoConnection = 21;
-	k_ESteamDatagramMsg_RelayToRelayPingRequest = 22;
-	k_ESteamDatagramMsg_RelayToRelayPingReply = 23;
-	k_ESteamDatagramMsg_P2PSessionRequest = 24;
-	k_ESteamDatagramMsg_P2PSessionEstablished = 25;
-	k_ESteamDatagramMsg_P2PStatsClient = 26;
-	k_ESteamDatagramMsg_P2PStatsRelay = 27;
-	k_ESteamDatagramMsg_P2PBadRoute = 28;
-}
-
-message CMsgSteamDatagramRouterPingReply {
-	message RouteException {
-		optional fixed32 data_center_id = 1;
-		optional uint32 flags = 2;
-		optional uint32 penalty = 3;
-	}
-
-	optional fixed32 client_timestamp = 1;
-	repeated fixed32 latency_datacenter_ids = 2 [packed = true];
-	repeated uint32 latency_ping_ms = 3 [packed = true];
-	optional fixed32 your_public_ip = 4;
-	optional fixed32 server_time = 5;
-	optional fixed64 challenge = 6;
-	optional uint32 seconds_until_shutdown = 7;
-	optional fixed32 client_cookie = 8;
-	optional uint32 scoring_penalty_relay_cluster = 9;
-	repeated .CMsgSteamDatagramRouterPingReply.RouteException route_exceptions = 10;
-}
 
 message CMsgSteamDatagramSessionCryptInfo {
 	enum EKeyType {
@@ -60,7 +10,7 @@ message CMsgSteamDatagramSessionCryptInfo {
 	optional .CMsgSteamDatagramSessionCryptInfo.EKeyType key_type = 1 [default = INVALID];
 	optional bytes key_data = 2;
 	optional fixed64 nonce = 3;
-	optional bool is_snp = 4;
+	optional uint32 protocol_version = 4;
 }
 
 message CMsgSteamDatagramSessionCryptInfoSigned {
