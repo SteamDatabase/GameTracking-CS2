@@ -89,15 +89,25 @@
     final combined CRC = 0x%x
     too repetitive; using fallback sorting algorithm
    %s
+   %u:%u  ---  %u msgs, %llu usec, %llu usec/msg, %u bytes, %.3f bytes/msg
+   %u:%u  ---  %u msgs, %llu usec, %llu usec/msg, %u bytes, %.3f bytes/msg  =  %.3f msg/sec, %.3f usec/sec, %.3f bytes/sec
    (c)%i : %s
    - %s
    -1 = let clients set cl_predict to anything
+   Avg CPU:  %.3f usec/sec
+   Avg rate: %.3f bytes/sec
+   CPU cost: %llu usec
    CULL: %s type=%d
    Hull
+   Lifetime: %.3f
+   Messages: %u msgs
+   Packets:  %u pkts
    Physics
    Public IP is %d.%d.%d.%d.
    Ray
+   Traffic:  %u bytes
   %i/%i items
+  %s top %u:
   '%s'
   (public ip: %s)
   (www.memtest86.com).  At the time of writing it is free (GPLd).
@@ -189,6 +199,7 @@
  %4u client frames = %12s bytes
  %i refs, first %.2f mru %.2f
  %s Control message
+ %u message types recorded%s
  ( def. "%s" )
  (%i physical)
  (Relay)
@@ -344,6 +355,7 @@
 "NETWORK_DISCONNECT_HLTVUNAVAILABLE
 "NETWORK_DISCONNECT_SENDNETOVERFLOW
 "NETWORK_DISCONNECT_STEAM_OWNERSHIP
+"VVhK
 "cheat"
 "clientcmd_can_execute"
 "demo"
@@ -379,6 +391,8 @@
 #%2i "%s" %s %s %.0f
 #%2i "%s" %s %s %s
 #%i - %s
+#5@vU
+#=@vU
 #GOTV_Reconnecting
 #GameUI_Console_%s_Saves
 #GameUI_Console_SaveGames
@@ -891,6 +905,7 @@ $tI12CBSPTreeData
 (%zu) Descend: %s, (%s), %s
 (%zu) readdir failed to find '%s' in '%s'
 (*%s*), 
+(-pZS
 (If sv_mincmdrate is > 0), this sets the maximum value for cl_cmdrate.
 (MMX) 
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
@@ -965,6 +980,7 @@ $tI12CBSPTreeData
 *.vpk
 *?Recording GOTV demo to %s...
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
+*ZN8CNetChan13ProcessPacketEP11netpacket_sbE51CNetChannelPacketProcessingCallbackFinishProcessing
 *grp:
 +  %s
 + %s %s, %s, index %i, bits %i, value %s
@@ -983,6 +999,7 @@ $tI12CBSPTreeData
 +tv_port
 +tv_port1
 , console
+, detailed dump disabled
 , force-waiting for tick %d - server tick %d, current frame %d
 , from:
 , in replay NOW
@@ -1221,15 +1238,14 @@ $tI12CBSPTreeData
 .text
 .vtest
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%X@Q
 /%d/delta
 /%d/delta?endtick=%d%s
 /%d/full
 /%d/full?tick=%d
 /%d/start
 /%d/start?tick=%d&tps=%.1f&map=%s&protocol=%d
+/%xcS
 /*.bf
-/-T@Q
 /../platform
 //%s/cfg/%s
 //MOD/maps/%s_exclude.lst
@@ -1237,10 +1253,7 @@ $tI12CBSPTreeData
 //mod/cfg/modsettings.cfg
 //official/%s
 //usrlocal/cfg/config.cfg
-/5(TQ
-/5T@Q
-/=T@Q
-/=h@Q
+/5L\R
 /C<rJ
 /EMSA1(
 /F,t	
@@ -1563,7 +1576,6 @@ $tI12CBSPTreeData
 15ISteamSocketMgr
 16000
 161 25 240
-16:43:00
 16CBaseClientState
 16CBrushConvexInfo
 16CDataManagerBase
@@ -1661,6 +1673,7 @@ $tI12CBSPTreeData
 2. Run vconfig to specify which game you're working on.
 2000000000000000000000000000005A79FEC67CB6E91F1C1DA800E478A5
 207.173.177.12:27013
+20:27:37
 20CAsyncOcclusionQuery
 20CCLCMsg_CmdKeyValues
 20CCLCMsg_FileCRCCheck
@@ -1757,6 +1770,7 @@ $tI12CBSPTreeData
 32ISteamNetworkingSocketsCallbacks
 340E7BE2A280EB74E2BE61BADA745D97E8F7C300
 34CSVCMsg_GameEventList_descriptor_t
+35INetChannelPacketProcessingCallback
 36CNetworkStringTableDictionaryManager
 36DF0AAFD8B8D7597CA10520D04B
 37INetworkStringTableDictionaryMananger
@@ -1820,14 +1834,16 @@ $tI12CBSPTreeData
 9.0 Shader Model 3.0
 92 168 255
 93t"1
-95@Tv
-95d+v
+95,(t
+95@(t
+95@Ku
 98w-t!
 999.0
 99999999
 99:r(
-9=TTv
+9=hQv
 9=tr9
+9A@|<
 9BH~9
 9Bht,
 9C,}A
@@ -1908,6 +1924,9 @@ $tI12CBSPTreeData
 :f;9v
 ;%s %c %d;
 ;----- dt_ShowPartialChangeEnts -----
+;5$rv
+;=d)u
+;=l)u
 ;A,t/
 ;A<t9
 ;Bl|(
@@ -2011,18 +2030,19 @@ $tI12CBSPTreeData
 ?[^_]
 ?forcing crash
 ?particle
-@ `l"
-@$pl"
-@(0m"
+@(p~"
 @(unknown)
+@,P[v
 @0<	u1
 @0<*t
 @0<*u
 @0</t
 @4CUNG
-@<x	S
 @?netsupport
-@@Pm"
+@@ ~"
+@@0~"
+@@@~"
+@@P~"
 @L9FLt
 @[^_]
 @console.log
@@ -2256,15 +2276,15 @@ Bx+B|
 By default, player must maintain a reliable connection to Steam servers. When player Steam session drops, enforce it: 2 = instantly kick, 1 = kick at next spawn, 0 = do not kick.
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of the message.
 ByteQueue: size specified for UndoLazyPut is too large
+Bytes/msg
 C 9F4|
-C xAT
-C$0'B
-C$0k2
 C$;S(~&
+C$`tR
+C$xtR
 C(+B|
 C(+C$
 C(;C,
-C,xAT
+C,Thr
 C. A.$A.(C.,A.0E.
 C. A.$A.(C.,A.0E.,B.
 C. A.$A.(C.,A.0E.,I.
@@ -2285,8 +2305,6 @@ C. L.
 C. Q.
 C302F41D932A36CDA7A3462F9E9E916B5BE8F1029AC4ACC1
 C302F41D932A36CDA7A3463093D18DB78FCE476DE1A86297
-C4xAT
-C8xAT
 CBC/CTS
 CBC_Encryption: message is too short for ciphertext stealing
 CBaseClient::ActivatePlayer
@@ -2336,7 +2354,6 @@ CDemoFile::WriteNetworkDataTables: Haven't opened file yet!
 CDemoFile::WriteStringTables: Haven't opened file yet!
 CDispCollTree::Cache
 CDownloadLists
-CDxAT
 CEngine::Frame
 CEngineGotvSyncPacket
 CEngineSoundServer::EmitSound
@@ -2536,7 +2553,6 @@ CHostState::State_ChangeLevelSP
 CHostState::State_GameShutdown
 CHostState::State_LoadGame
 CHostState::State_NewGame
-CHxAT
 CKeyValuesTokenReader::SeekBackOneToken: It is only possible to seek back one token at a time
 CLCMsg_ClientInfo: SourceTV can not connect to game directly.
 CLC_Messages
@@ -2644,6 +2660,8 @@ CPPTYPE_MESSAGE
 CPPTYPE_STRING
 CPPTYPE_UINT32
 CPPTYPE_UINT64
+CPU cost
+CPU/msg
 CPooledVBAllocator_ColorMesh::Init
 CQueuedPacketSender: num queued packets >= nMaxQueuedPackets. Not queueing anymore.
 CREATION
@@ -2714,8 +2732,6 @@ CVEngineServer::Changelevel with NULL s1
 CVEngineServer::PrecacheDecal: '%s' overflow, too many decals
 CVEngineServer::PrecacheGeneric: '%s' overflow
 CVEngineServer::PrecacheModel: '%s' overflow, too many models
-C`(CT
-C`(ET
 CalcDelta MS / %% time / Encode MS / # Changed / # Unchanged / Class Name
 Call to NULL CStudioHdr::GroupStudioHdr()
 CallAssertFailedNotifyFunc
@@ -2798,6 +2814,7 @@ Change server to the specified map
 Change the maximum number of players allowed on this server.
 Change(%s):End
 Change(%s):Start
+Channel %d processing stats for %s (%s)
 Cheat code "%s" activated!
 Check for errors!
 Check your -game parameter or VCONFIG setting.
@@ -2805,9 +2822,9 @@ CheckOriginInPVS:  cluster would read past end of pvs data (%i:%i)
 CheckPureServerVPKFiles
 Checking response.
 Child finished successfully!
-ChxAT
 CipherModeBase: feedback size cannot be specified for this cipher mode
 CkeyValuesTokenReader::SeekBackOneToken: No tokens read yet
+Cl`tR
 Clamping split screen users to 1 due to -tools mode
 Class,Prop,Decode Count,Total Bits,Avg Bits,Total Index Bits,Avg Index Bits,Flat prop index,=SUM(D:D)
 ClassName
@@ -2950,7 +2967,6 @@ CryptoPP: invalid group element
 CryptoPP_Align16
 Cryptographic algorithms are disabled after a power-up self test failed.
 Cryptographic algorithms are disabled before the power-up self tests are performed.
-CtxAT
 CubeMap textures
 Culdn't duplicate handle
 CullPropsFromProxies for class %s, client=%d:
@@ -2965,12 +2981,9 @@ Curve
 Cut : voiceless velar stop
 CxEMPTf
 Cycles threadpool reservation by powers of 2
-C|xAT
 D"A/oyu
 D$ ff&@
-D$ jES
-D$ uES
-D$$@S
+D$$pS
 D%d decals: %d permanent, %d dynamic
 D. C.
 D. R.
@@ -3248,7 +3261,7 @@ EventSystem001
 Events: %12llu key not found.
 Exceeded max number of datatable proxies in SendTable_BuildHierarchy()
 Exclu Props   : %i
-Exe build: 16:42:10 May 29 2019 (%i) (%i)
+Exe build: 20:26:59 Jul 25 2019 (%i) (%i)
 Exe version %s (%s)
 Execing config: %s
 Execute script file if file exists.
@@ -3281,7 +3294,6 @@ ExtensionRange
 Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend a non-lite type to contain a lite type, but the reverse is allowed.
 F +F,
-F$0'B
 F$9A$
 F(+B|
 F(9A(u
@@ -3563,7 +3575,6 @@ GetTestScriptMgr()->CheckPoint
 GetTickInterval returned bogus tick interval (%f)[%f to %f is valid range]
 GetUInt32
 GetUInt64
-Gl5@Oo
 Grace request retry for unreserved server...
 GroupOID
 GroupSize
@@ -3812,6 +3823,8 @@ January
 Jitter fakelag packet time
 Joy : voiced postalveolar afficate
 Jp+Jh
+Jul 25 2019
+K,= ^v
 KH9KD
 KM^bM
 KV Conditional Evaluation Error
@@ -4016,6 +4029,7 @@ MessageOptions
 MessageSets cannot have fields, only extensions.
 Messages can't have default values!
 Messages can't have default values.
+Messages from %s after processing time exceeded (%d bytes left), aborting connection after %llu usec tick
 MethodDescriptorProto
 MethodOptions
 MicroProfilerAddTS
@@ -4066,6 +4080,7 @@ Monday
 MontgomeryRepresentation: Montgomery representation requires an odd modulus
 MoveInstanceHandle: models are different!
 Msg from %s: %s
+Msg from %s: %s after processing time exceeded (%d bytes), aborting connection after %llu usec tick
 Msg from %s: %s rejected by msg bind (%d bytes)
 Multiplayer
 Multiple extension registrations for type "
@@ -4629,6 +4644,7 @@ N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
 N@+ND
+ND#=@vU
 ND#V@
 ND#^@
 ND#~@
@@ -4699,6 +4715,10 @@ Net status for host %s:
 NetChannel '%s':
 NetMessage %s
 NetSteamConn
+Netchannel processing is limited to so many milliseconds, abort connection if exceeding budget
+Netchannel statistics LRU accumulation buffer size
+Netchannel statistics will dump in the logs upon request
+Netchannel statistics will dump so many top messages in each category
 Netchannel: failed processing message %s.
 Netchannel: failed reading message %d from %s.
 Netchannel: unknown net message (%i) from %s.
@@ -4857,9 +4877,7 @@ PN8CryptoPP35DL_GroupParameters_IntegerBasedImplINS_20ModExpPrecomputationENS_30
 POSIX
 POSTINITIALIZATION
 POSTSHUTDOWN
-PPh,nW
-PPh4lW
-PPh\qW
+PPhrvP
 PPj S
 PPj*S
 PPj+W
@@ -4872,6 +4890,7 @@ PRINTABLEONLY
 PROTECTED
 P[^_]
 Pack and send snapshots in parallel for smoother server tick rate at the expense of spending more CPU.
+Packet from %s after processing time exceeded (%d bytes pkt), aborting connection after %llu usec tick
 PaddingByte
 Parent cvar in client.dll not allowed (%s)
 Parent cvar in server.dll not allowed (%s)
@@ -4880,8 +4899,8 @@ Parsed %d text messages
 Parses and stuffs command line + commands to command buffer.
 Password     : %s
 PatchVersion=
+PeakFrame-%u (-%.3f sec / -%llu usec ago):
 Performs a bind <key> "increment var <cvar> 0 1 1"
-Ph`dW
 Physics2 Interface ActorMgr v0.1
 Physics2 Interface ResourceMgr v0.1
 Physics2 Interface v0.3
@@ -4955,6 +4974,7 @@ ProcessTick
 ProcessUpdateStringTable
 ProcessUsercmds:  Overflowed reading usercmd data (check sending and receiving code for mismatches)!
 Processing Split Screen connection packet.
+Processing time exceeded
 ProductName=
 Promise already satisfied
 Prop %s/%s has an invalid element count for a non-array.
@@ -4983,9 +5003,6 @@ Puts the server into extremely low CPU usage mode when no clients connected
 Q%llx,
 Q: Client connected with forged reservation ticket: userid %x, steamid: %llx
 QQWR1
-QQh,nW
-QQh4lW
-QQh\qW
 QRSVP
 QRSWP
 Qkkbal
@@ -5287,7 +5304,6 @@ SV_StartSound: %s not precached (%d)
 SV_StartSound: invalid sentence number: %s
 SV_WriteEnterPVS: missing instance baseline for '%s'.
 SV_WriteEnterPVS: missing pFromData for '%s'.
-S`=@Oo
 Saturday
 Save the ban list to banned_ip.cfg.
 SceneSystem_001
@@ -5458,8 +5474,6 @@ SetupArrayProps_R: array prop '%s' is at index zero.
 SetupClientSendTableHierarchy: missing SendTable '%s' (referenced by '%s').
 SetupClientSendTableHierarchy: missing table name for prop '%s'.
 SetupLeafAndEntityListBox
-Sh\qW
-ShdqW
 ShouldUseNewAssertDialog
 Show GOTV server status.
 Show Killer Replay status and some statistics, works on listen or dedicated server.
@@ -5762,6 +5776,8 @@ Sys_ShutdownMemory()
 System (%s) failed during stage %s
 T$ 3T$
 T%016llX 
+T%0ZS
+T-0ZS
 T:/cfg/%s
 TCP -> %s: ACKN seq=%i
 TCP -> %s: sz=%i seq=%i
@@ -5901,6 +5917,7 @@ TraceRay
 TraceRayAgainstLeafAndEntityList
 Tracking deletions (%u files in deletion list in '%s', %u previous warnings loaded from '%s'
 Traditional_Chinese
+Traffic
 Traffic from %s was blocked for exceeding rate limits
 Transition to the specified map in single player
 Transmit all entities (not only director view)
@@ -6292,38 +6309,26 @@ Writes a list of permanently-banned user IDs to banned_user.cfg.
 Writing %s.
 Writing GOTV demo message %i bytes at file pos %i
 Writing memory stats to file memstats.txt
-X%T@Q
 X-Origin-Auth
 X-Origin-Auth header of the broadcast POSTs
 X-Origin-Auth header of the broadcast1 POSTs
 X-Reason
 X.`c.dA.hA.lA.pC.tC.xC.|C.
 X360 Fixup
-X54cV
-X5`@Q
 X917RNG: Continuous random number generator test failed.
 XBox 360
 XS&Y+
 XVoice: VDP packet to %d with unencrypted %d bytes out of %d bytes
 XVoice: voice data payload for %p: %d bytes
 XZ[^_]
-XZh\qW
 XZj-W
 XZj=S
 X[^_]
 XboxSystemInterface002
 Xf;T1
 Xf;T7
-Y%\@Q
-Y%t\W
-Y-<aV
-Y=4cV
-Y=h\W
-Y=l\Q
-Y=x\W
+Y%hcS
 Y@IP filter list: empty
-Y[h,nW
-Y[h4lW
 Y_j=S
 Yacht : voiced palatal approximant
 You cannot connect to this CS:GO server because it is restricted to LAN connections only.
@@ -6403,7 +6408,6 @@ ZtiWj
 [unknown]
 [url=
 \%03o
-\=T@Q
 \D2%4
 \U%08x
 \[[^_]
@@ -6416,8 +6420,6 @@ ZtiWj
 ^Ginactive
 ^H;^L
 ^PPVh
-^Xh,nW
-^Xh4lW
 _Accum
 _ExitOnFatalAssert
 _Fract
@@ -6434,7 +6436,6 @@ _LPT_%s_%d
 _MAP__
 _ST_%s_%d
 _Sat 
-_XhdqW
 _Z10DevWarningPKcz
 _Z11ConColorMsgRK5ColorPKcz
 _Z17LoggingSystem_Logi17LoggingSeverity_t5ColorPKcz
@@ -7000,6 +7001,7 @@ deque::_M_new_elements_at_front
 descriptor
 descriptor_t
 descriptors
+destroying netchan
 developer
 devshots_nextmap
 dialog_type
@@ -7792,6 +7794,10 @@ net_SplitScreenUser
 net_StringCmd
 net_Tick
 net_blockmsg
+net_chan_limit_msec
+net_chan_stats_dump
+net_chan_stats_dump_top_msgs
+net_chan_stats_lru
 net_channels
 net_chokeloop
 net_compresspackets
@@ -7920,7 +7926,7 @@ oversubscribed distance tree
 oversubscribed literal/length tree
 p$PPh
 p$QQh
-p,PPh<
+p,PPh
 pAQueuedPacketSender
 pBVLV_INTERNAL                    
 pClass->m_ClassID(%i) >= %i
@@ -8334,6 +8340,7 @@ sfixed64
 shadowdepthtexture: %s
 show stats of running parallel send
 show the current video control panel config for the material system
+shutdown netchan
 siNG : voiced velar nasal
 signal@@GLIBC_2.0
 signon_state
@@ -8762,21 +8769,21 @@ t59sDv@
 t8~/1
 t:;P r
 t><&t:<`t6<}
-tDPPhEaU
-tDSShEaU
+tDPPh
+tDSSh
 tG;Jx
 tLRRj
-tMPPhEaU
+tMPPh
 tN<>tJ<~tF<^
 tOO : high back rounded vowel
-tOPPhEaU
+tOPPh
 tQ;s(uL
-tQSShEaU
-tRPPhEaU
-tRQQhEaU
-tRRRhEaU
+tQSSh
+tRPPh
+tRQQh
+tRRRh
 tY;^l|
-tYPPhEaU
+tYPPh
 t^<@tZ<(tV<<
 t_w4=
 taG : voiced velar stop
@@ -9153,7 +9160,7 @@ writev@@GLIBC_2.0
 writing
 wrong submessage type
 wstring
-x';5$
+x';5DAr
 x)9A(~$
 x.4D.8A.<A.@A.DA.HE.LC.PH.0L.<C.@A.DC.HC.LC.PE.LG
 xV42?Sent file '%s' to client %s.
