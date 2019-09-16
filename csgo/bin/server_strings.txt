@@ -625,6 +625,8 @@
  < %s (%d)
  <b></b> 
  <i></i> 
+ = %i
+ = -i
  = { <proto text format> }". To set fields within it, use syntax like "
  @CAI_Pathfinder
  AddOn: %s couldn't find Host %s
@@ -652,6 +654,8 @@
  Usage: test_dispatcheffect <effect name> <distance away> <flags> <magnitude> <scale>
  [$0]
  [%.3f server clamped to %.3f]
+ [AI BT]: Element %d is not a waypoint.
+ [AI BT]: Entity '%s' is not a combat weapon.
  [^_]
  [default = $0
  __vector(
@@ -2395,6 +2399,7 @@ $tIResponseGroup
 &Ucirc;
 &Ugrave;
 &Uuml;
+&YA11
 &Yacute;
 &aacute;
 &acirc;
@@ -2515,7 +2520,6 @@ $tIResponseGroup
 (%0.2f) input <NULL>: %s.%s(%s)
 (%0.2f) output: (%s,%s) -> (%s,%s)(%s)
 (%0.2f) output: (%s,%s) -> (%s,%s,%.1f)(%s)
-(%@s	
 (%d %d %d %d)
 (%d) Name: %s (%s)
 (%d), (%d)
@@ -2974,6 +2978,8 @@ $tIResponseGroup
 .tbss
 .text
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
+/% Ev
+/- Ev
 // An spawner on the server is getting ready to
 // Choreo version 1
 // Choreo version 1:  <%i> Exported Events
@@ -2985,6 +2991,7 @@ $tIResponseGroup
 //========== Copyright 
 //=========================================================
 //=============================================================================
+/= Ev
 /?O_o
 /@ r"
 /@(s$
@@ -3368,6 +3375,9 @@ $tIResponseGroup
 12CBaseGrenade
 12CBaseTrigger
 12CBreakParser
+12CBtActionAim
+12CBtActionBuy
+12CBtActionSay
 12CCLCMsg_Move
 12CCSGameRules
 12CCSGameStats
@@ -3471,6 +3481,9 @@ $tIResponseGroup
 13CBasePropDoor
 13CBoneFollower
 13CBreachCharge
+13CBtActionHide
+13CBtActionTurn
+13CBtActionWait
 13CCSBotManager
 13CCSFunFactMgr
 13CCSHidingSpot
@@ -3563,6 +3576,7 @@ $tIResponseGroup
 14CBaseViewModel
 14CBeamSpotlight
 14CBreakableProp
+14CBtSensorShape
 14CCSUsrMsg_Fade
 14CCSUsrMsg_SSUI
 14CCoopBonusCoin
@@ -4242,6 +4256,10 @@ $tIResponseGroup
 15CBaseTempEntity
 15CBlendingCycler
 15CBombTargetShim
+15CBtActionAttack
+15CBtActionMoveTo
+15CBtNodeParallel
+15CBtNodeSelector
 15CCSGameMovement
 15CCSHLTVDirector
 15CCSUsrMsg_Shake
@@ -4360,6 +4378,10 @@ $tIResponseGroup
 16CActivityDataOps
 16CBaseAchievement
 16CBaseRopePhysics
+16CBtNodeComposite
+16CBtNodeCondition
+16CBtNodeDecorator
+16CBtNodeSequencer
 16CCSMLightManager
 16CCSUsrMsg_Damage
 16CCSUsrMsg_Geiger
@@ -4467,6 +4489,7 @@ $tIResponseGroup
 17CBaseCombatWeapon
 17CBaseMoveBehavior
 17CBreakableSurface
+17CBtSensorShapeFov
 17CCLCMsg_VoiceData
 17CCSEntitySpotting
 17CCSGCServerSystem
@@ -4601,6 +4624,12 @@ $tIResponseGroup
 18CAI_RappelBehavior
 18CBaseServerVehicle
 18CBotDoorEnumerator
+18CBtActionEquipItem
+18CBtDecoratorMemory
+18CBtDecoratorPicker
+18CBtDecoratorRanker
+18CBtDecoratorRepeat
+18CBtDecoratorSensor
 18CCLCMsg_ClientInfo
 18CCLCMsg_HltvReplay
 18CCSPlayerAnimState
@@ -4719,6 +4748,7 @@ $tIResponseGroup
 19CAI_LeadGoal_Weapon
 19CAttributeContainer
 19CBaseParticleEntity
+19CBtDecoratorSucceed
 19CBulletsTraceFilter
 19CBumpMineProjectile
 19CCLCMsg_BaselineAck
@@ -4885,6 +4915,10 @@ $tIResponseGroup
 20CBasePlayerAnimState
 20CBaseVPhysicsTrigger
 20CBombShieldTraceEnum
+20CBtActionEquipWeapon
+20CBtActionPullTrigger
+20CBtDecoratorThrottle
+20CBtSensorShapeSphere
 20CCLCMsg_CmdKeyValues
 20CCLCMsg_FileCRCCheck
 20CCLCMsg_ListenEvents
@@ -4982,6 +5016,9 @@ $tIResponseGroup
 21CBaseGameStats_Driver
 21CBaseWeaponWorldModel
 21CBreakModelsPrecached
+21CBtDecoratorRandomInt
+21CBtDecoratorRemoveKey
+21CBtDecoratorTagEntity
 21CCSUsrMsg_AdjustMoney
 21CCSUsrMsg_KeyHintText
 21CCSUsrMsg_WeaponSound
@@ -5045,6 +5082,9 @@ $tIResponseGroup
 22CAI_FightFromCoverGoal
 22CBaseMultiplayerPlayer
 22CBaseResourcePrecacher
+22CBtDecoratorBotService
+22CBtDecoratorBuyService
+22CBtDecoratorRankerDist
 22CCSPhysicsPushEntities
 22CCSPropExplodingBarrel
 22CCSUsrMsg_CloseCaption
@@ -5105,6 +5145,9 @@ $tIResponseGroup
 23CBaseGameSystemPerFrame
 23CBotBreakableEnumerator
 23CBreachChargeProjectile
+23CBtDecoratorNeedHealing
+23CBtDecoratorPickerDeDup
+23CBtNodeConditionIsEmpty
 23CCLCMsg_LoadingProgress
 23CCSUsrMsg_QuestProgress
 23CCSUsrMsg_SurvivalStats
@@ -5165,6 +5208,10 @@ $tIResponseGroup
 24CAI_SensedObjectsManager
 24CBaseCSGrenadeProjectile
 24CBaseWorkshopHTTPRequest
+24CBtDecoratorPickerNearby
+24CBtDecoratorRouteService
+24CBtDecoratorTagThreshold
+24CBtNodeConditionOwnsItem
 24CCLCMsg_RespondCvarValue
 24CCSUsrMsg_CallVoteFailed
 24CCSUsrMsg_WarmupHasEnded
@@ -5214,6 +5261,7 @@ $tIResponseGroup
 25CAI_ExpresserWithFollowup
 25CAttributeContainerPlayer
 25CBroadcastRecipientFilter
+25CBtDecoratorPickerVisible
 25CCSUsrMsg_GlowPropTurnOff
 25CCSUsrMsg_MarkAchievement
 25CCSUsrMsg_VGUIMenu_Subkey
@@ -5244,6 +5292,8 @@ $tIResponseGroup
 26CAI_FightFromCoverBehavior
 26CAchievement_AchievedCount
 26CBaseTeamObjectiveResource
+26CBtActionCombatPositioning
+26CBtDecoratorPickerMaxScore
 26CCLCMsg_SplitPlayerConnect
 26CCSUsrMsg_AchievementEvent
 26CCSUsrMsg_CurrentTimescale
@@ -5282,6 +5332,7 @@ $tIResponseGroup
 26IServerDLLSharedAppSystems
 26ScoreLeaderboardData_Entry
 27CAI_SaveRestoreBlockHandler
+27CBtActionChooseBombSiteArea
 27CCSUsrMsg_DisconnectToLobby
 27CCSUsrMsg_PlayerStatsUpdate
 27CCSUsrMsg_StopSpectatorMode
@@ -5318,6 +5369,9 @@ $tIResponseGroup
 27PlayerDecalDigitalSignature
 28.CMsgGCCStrike15_v2_MatchmakingServerReservationResponse
 28.CMsgGCCStrike15_v2_MatchmakingServerRoundStats.DropInfo
+28CBtActionChooseTeamSpawnArea
+28CBtDectoratorSetReactionTime
+28CBtNodeConditionDistanceLess
 28CCSUsrMsg_CloseCaptionDirect
 28CCSUsrMsg_MatchEndConditions
 28CCSUsrMsg_SurvivalStats_Fact
@@ -5352,6 +5406,7 @@ $tIResponseGroup
 29.CCSUsrMsg_ProcessSpottedEntityUpdate.SpottedEntityUpdate
 29CAI_EnemiesListSaveRestoreOps
 29CBasePlayerSendTableExtension
+29CBtActionChooseRandomWaypoint
 29CCLCMsg_HltvFixupOperatorTick
 29CCSUsrMsg_SendPlayerItemDrops
 29CCSUsrMsg_SendPlayerItemFound
@@ -5379,7 +5434,6 @@ $tIResponseGroup
 29PlayerQuestData_QuestItemData
 2;.CMsgNotificationOfSuspiciousActivity.MultipleGameInstances
 2<.CQuest_PublisherAddCommunityItemsToPlayer_Request.Attribute
-2= E^
 2=.CWorkshop_SetItemPaymentRules_Request.PartnerItemPaymentRule
 2>.CWorkshop_SetItemPaymentRules_Request.WorkshopItemPaymentRule
 2A.CMsgGCCStrike15_v2_GiftsLeaderboardResponse.GiftLeaderboardEntry
@@ -5396,6 +5450,7 @@ $tIResponseGroup
 2k_EMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
 30000
 301.993377
+30CBtDecoratorPickerReactionTime
 30CCSUsrMsg_RoundBackupFilenames
 30CCSUsrMsg_ScoreLeaderboardData
 30CCSUsrMsg_SurvivalStats_Damage
@@ -5443,6 +5498,7 @@ $tIResponseGroup
 31CTraceFilterSimpleClassnameList
 31CVScriptSaveRestoreBlockHandler
 31OperationalStatisticDescription
+32CBtNodeConditionIsWeaponSuitable
 32CCSUsrMsg_EntityOutlineHighlight
 32CCSUsrMsg_PlayerStatsUpdate_Stat
 32CDirtySpatialPartitionEntityList
@@ -5476,6 +5532,8 @@ $tIResponseGroup
 33CWorkshop_GetContributors_Request
 33IEconItemUntypedAttributeIterator
 340E7BE2A280EB74E2BE61BADA745D97E8F7C300
+34CBtDecoratorPickerRandomByDistance
+34CBtDecoratorPickerWeightAsDistance
 34CDataGCCStrike15_v2_TournamentInfo
 34CMsgDPPartnerMicroTxns_PartnerInfo
 34CMsgGCCStrike15_v2_ClientPollState
@@ -5591,6 +5649,7 @@ $tIResponseGroup
 3w43w
 3|$ !
 4$%0@
+4$<	t:
 4$f+M
 4$f+U
 40CDataGCCStrike15_v2_TournamentMatchDraft
@@ -5763,6 +5822,7 @@ $tIResponseGroup
 7BC382C63D8C150C3C72080ACE05AFA0C2BEA28E4FB22787139165EFBA91F90F8AA5814A503AD4EB04A8C7DD22CE2826
 7BotMeme
 7CBotCmd
+7CBtNode
 7CCSTeam
 7CCycler
 7CDEagle
@@ -5841,14 +5901,18 @@ $tIResponseGroup
 8b  16-May-2010
 8bvcd
 9*tu9
-95,"l
-95,?c
+954-j
+95@,s
+95T^s
+95Ths
+95l^s
+95ln_
 98w-t!
 999999.0
 99:r(
 9<0t0
-9=$)^
-9=,"l
+9=D=e
+9=dVd
 9=tr9
 9AH|"
 9BP~W
@@ -5945,6 +6009,7 @@ $tIResponseGroup
 9PTtd
 9S tj
 9S$t!
+9SH~(
 9SH~n
 9V(t+
 9VTtq
@@ -6022,27 +6087,17 @@ $tIResponseGroup
 :f;9v
 :k_EMsgGCCStrike15_v2_Client2GCEconPreviewDataBlockResponse
 :k_EMsgGCCStrike15_v2_MatchListRequestTournamentPredictions
-;5(pc
-;58)]
-;5@pc
-;5H_c
-;5La^
-;5Xpc
-;5`^k
-;5hoc
-;5ppc
-;5xnc
-;=(&b
-;=(]k
-;=0'b
-;=@&b
-;=H'b
-;=X&b
-;=`'b
-;=hul
-;=p&b
-;=x'b
-;=x}k
+;5ln_
+;=(@i
+;=0Ai
+;=@@i
+;=HAi
+;=X@i
+;=`Ai
+;=hsu
+;=lsu
+;=p@i
+;=xAi
 ;B |o
 ;B(|c
 ;BHt(
@@ -6287,10 +6342,17 @@ $tIResponseGroup
 ?u='@
 ?weapon_cs_base
 @  output: %s
+@$0-[
+@$@)[
+@$p([
 @%s doesn't like %s
-@(@3V
-@(P3V
+@(04[
+@(P#[
 @([^]
+@(`4[
+@(p"[
+@(p&[
+@,pUi
 @0<	u1
 @0<*t
 @0<*u
@@ -6298,7 +6360,7 @@ $tIResponseGroup
 @333333
 @4CUNG
 @<HuM
-@=  k
+@=@Gr
 @CGrassBurn
 @Can't find soundscape: %s
 @Fear
@@ -7792,6 +7854,7 @@ Attribute definition %s: Invalid asset class export rule '%s'
 Attribute definition %s: Missing required field "name"
 Attribute definition %s: Unable to find attribute data type '%s'
 Attribute definition index %d must be greater than or equal to zero
+AudibleEvents
 AuditData
 August
 Auth key file %s not valid
@@ -7864,6 +7927,14 @@ BTI1
 BTI1BTI1
 BTI1BTI1BTI1
 BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1BTI1
+BT_ACTION_MOVETO_FASTEST_ROUTE
+BT_ACTION_MOVETO_RUN
+BT_ACTION_MOVETO_SAFEST_ROUTE
+BT_ACTION_MOVETO_WALK
+BT_DECORATOR_TAG_ENTITY_CLEAR
+BT_DECORATOR_TAG_ENTITY_SET
+BT_DECORATOR_TAG_THRESHOLD_AT_LEAST
+BT_DECORATOR_TAG_THRESHOLD_AT_MOST
 BUG: CCSGameMovement::CheckParameters - too many stacking levels.
 BULLET_PLAYER_338MAG
 BULLET_PLAYER_357SIG
@@ -8019,6 +8090,7 @@ BotManager001
 BotPackList.db
 BotProfile.db
 BotProfileCoop.db
+BotService
 Bots will not see non-bot players.
 Bounce multiplier for when physically simulated objects collide with other objects.
 Bounce.Concrete
@@ -8098,6 +8170,7 @@ Buttons.snd19
 Buy random primary and secondary. Primarily for deathmatch where cost is not an issue.
 BuyPreset.AlreadyBought
 BuyPreset.CantBuy
+BuyService
 Bx+B|
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of the message.
 ByteQueue: size specified for UndoLazyPut is too large
@@ -8113,12 +8186,19 @@ C u $
 C x	;p
 C x	;x
 C$)s,
+C$0vc
 C$9CH
 C$;0u
 C$;8u
 C$;S(~&
-C$`/|
-C(@/V
+C$P*[
+C$`+[
+C$`,[
+C$`Dz
+C$pvc
+C( r{
+C(P5W
+C(P[Z
 C. A.$A.(C.,A.0E.
 C. A.$A.(C.,A.0E.,B.
 C. A.$A.(C.,A.0E.,I.
@@ -8143,7 +8223,7 @@ C4.PlantSound
 C4IdleTime
 C89C4
 C< t,
-C@T	I
+C@T	I_
 CAISound
 CAI_AccelDecay
 CAI_AddOn
@@ -9895,6 +9975,7 @@ Can't find target of train %s
 Can't find the world
 Can't find top track for track change! %s
 Can't find train for track change! %s
+Can't find waypoint entity '%s'. Waypoint won't be published. 
 Can't get here.
 Can't get here: failed to get default value as string
 Can't get key value	'%s' from file '%s'.
@@ -9943,6 +10024,7 @@ Catmull-Rom (Tangent)
 Caution: quantization tables are too coarse for baseline JPEG
 Cd;C$|
 Centers the nav mesh in the world
+Ch=dm
 Chance bots will buy a grenade with leftover money (after prim, sec and armor). Input as percent (0-100.0)
 ChangeTeam
 Changed attribute in %d areas
@@ -9964,7 +10046,10 @@ Chicken.Fly
 Chicken.Idle
 Chicken.Panic
 Chicken.ZombieRez
+ChooseBombSiteArea
 ChooseEnemy() {
+ChooseRandomWaypoint
+ChooseTeamSpawnArea
 Chops all selected areas into their component 1x1 areas
 Chops all selected areas into their component 1x1 areas and re-merges them together into larger areas
 Chops the marked area into disconnected sub-areas suitable for sniper spots.
@@ -10030,6 +10115,7 @@ ColorCorrectionFadeInThink
 ColorCorrectionFadeOutThink
 ColorCorrectionName
 ColorCorrectionSystem
+CombatPositioning
 ComingBackConceptModifier
 Comma separated list of zero based indices to force spawn positions, e.g. '0,2' or '1,6'
 CommandLine
@@ -10051,6 +10137,10 @@ ConVarRef %s doesn't point to an existing ConVar
 ConceptHistory_t
 ConcreteChunks
 Cond: %s
+ConditionDistanceLess
+ConditionIsEmpty
+ConditionIsWeaponSuitable
+ConditionOwnsItem
 Conditional Error: %s
 Cone %.1f, Bias %.2f
 Connect the vscript VM to the script debugger
@@ -10199,6 +10289,8 @@ Current backup file prefix is not set, use mp_backup_round_file to set it.
 Current name of the skybox texture
 Current place set to '%s'
 Current sound patches: %d
+CurrentPunchAnglePitch
+CurrentPunchAngleYaw
 CurrentSpeed: %.3f  
 Curve
 Custom game-specific analysis...
@@ -10217,8 +10309,8 @@ Cycles through the various hull sizes.  Currently selected hull size is written 
 Cycling waypoints
 D"A/oyu
 D#SFUI_vote_passed_restart_game
-D$$ 5
-D$8 A
+D$ @:^
+D$<`&
 D$L)T$\
 D$L9h
 D$T+D$X
@@ -10240,7 +10332,6 @@ D6031998D1B3BBFEBF59CC9BBFF9AEE1
 D7C134AA264366862A18302575D0FB98D116BC4B6DDEBCA3A5A7939F
 D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FF
 D7q/;M
-D=@@V
 DAMAGE APPLIED:  
 DAMAGE FILTER:%s
 DAMAGING 
@@ -10616,6 +10707,7 @@ Damage per second
 Damage: %.2f
 DamageDelay
 DamageDoneWithPunches
+DamageEvents
 DamageRate
 DamageTaken
 DamageTarget
@@ -10658,6 +10750,7 @@ DecodingLookupArray
 Decompression Error
 Decompression error
 Decompression failure
+DecoratorRouteServiceStrategyArray
 Dedicated server skirmish id to run
 DefName
 Default is 1.0, slow down hostages by setting this to < 1.0.
@@ -10842,6 +10935,7 @@ Draw a grid on the floor where looking.
 Draw alien blood
 Draw human blood
 Draw paths tried during search for bodysnatcher pathing
+Draw the behavior tree of the given bot.
 Draw's a while box around the NPC(s) nearest node
 Draws a cross at the given location
 Draws line between two 3D Points.
@@ -10976,6 +11070,7 @@ ENGAGE_AND_INVESTIGATE
 ENTITY IS NOT A PLAYER: %d
 ENetworkDisconnectionReason
 EOpenDoor
+EQUIPMENT
 ERROR
 ERROR phys_convert %s ! Already MOVETYPE_VPHYSICS
 ERROR! %s missing ACT_DIESIMPLE
@@ -11199,6 +11294,8 @@ EnvMicrophone %s specifies a non-existent speaker name: %s
 Epsilon now %f
 EqualityComparisonFilter
 EqualityComparisonFilter: did not receive the same data on two channels
+EquipItem
+EquipWeapon
 EquivalentTo
 Erase any previously placed walkable positions.
 Erases current game stats and writes out a blank stats file
@@ -11390,6 +11487,7 @@ FH+F@
 FIND_TICKING_BOMB
 FIRE token in response needs exactly three parameters.
 FIRST
+FISTS
 FLINCHED
 FLuOf
 FMod values for pose controller %s
@@ -11668,6 +11766,7 @@ G ;G$
 G.DA.HE.LC.PC.TA.XA.\D.`P.@].DA.HA.LA.PE.TC.XC.\C.`H.@
 G10CCSAmmoDef
 G4+G0
+G5El@|	
 G<+G8
 G<9G8t`
 GAMECONSOLE
@@ -11960,6 +12059,12 @@ Glow RGB
 GoDof
 Goal: %s %s
 Goal: None
+GoalLookAtLerpBias
+GoalLookAtLerpDuration
+GoalLookAtLerpStart
+GoalLookAtPitch
+GoalLookAtRoll
+GoalLookAtYaw
 Going to intermission...
 GoingToDefendBombsite
 GoingToGuardHostageEscapeZone
@@ -12042,6 +12147,7 @@ HMAC: can only be used with a block-based hash function
 HOLD_POSITION
 HOSTAGE RESCUE
 HP[^_]
+HUMAN_PLAYERS
 HX[^_]
 H\[^_]
 H`[^_]
@@ -13210,7 +13316,6 @@ ItemSoda.Bounce
 IteratedHashBase: input data exceeds maximum allowed by hash function 
 J 9N |
 J 9N }%
-J4@=0
 J<[_]
 JArray
 JFIF APP0 marker: version %d.%02d, density %dx%d  %d
@@ -13219,8 +13324,6 @@ JFIF extension marker: RGB thumbnail image, length %u
 JFIF extension marker: palette thumbnail image, length %u
 JFIF extension marker: type 0x%02x, length %u
 JH+J@
-JP =0
-JP@=0
 JPEG datastream contains no image
 JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
 JPEGMEM
@@ -13240,27 +13343,17 @@ Job of type %s held lock for %.2f seconds while job of type %s was waiting
 Job passed lock it wasn't waiting for. Job: %s, Lock: %s %s(%d), Paused for %s, Waiting on %s
 Jobs/Coroutines
 Jp+Jh
-Jt =0
-Jt@=0
 Jump Override
 Jump landed
 Jump start
 Jump stop
 Jump stuck
-K$ =0
 K$;C8
 K$;S8
-K( =0
-K(@=0
-K, =0
-K,@=0
-K0 =0
-K0@=0
-K4@=0
-K8 =0
 K@;J@}
 KGot a NaN velocity on %s
 KM^bM
+KNIFE
 KV Conditional Evaluation Error
 KeyDerivationParameters
 KeyPair
@@ -13795,15 +13888,7 @@ MutableMessage
 MutableRawRepeatedField
 MutableRepeatedMessage
 Muzzle
-N$ =0
-N$@=0
-N( =0
 N(3N<3N
-N(@=0
-N, =0
-N,@=0
-N0 =0
-N0@=0
 N0uS1
 N10__cxxabiv115__forced_unwindE
 N10__cxxabiv116__enum_type_infoE
@@ -13910,7 +13995,6 @@ N30hostage_carriable_propPrecache18CResourcePrecacherE
 N31smokegrenade_projectilePrecache18CResourcePrecacherE
 N35PrecachePointCommentaryNodePrecache18CResourcePrecacherE
 N4)F0
-N4@=0
 N5GCSDK10CMsgBase_tINS_12GCMsgHdrEx_tEEE
 N5GCSDK11CWorkThreadE
 N5GCSDK12CGCClientJobE
@@ -13939,8 +14023,6 @@ N5GCSDK6CGCMsgI30MsgGCVerifyCacheSubscription_tEE
 N5GCSDK9CGCClientE
 N5GCSDK9CRefCountE
 N5GCSDK9CWorkItemE
-N8 =0
-N8@=0
 N8CryptoPP10ASN1ObjectE
 N8CryptoPP10BufferlessINS_22BufferedTransformationEEE
 N8CryptoPP10BufferlessINS_4SinkEEE
@@ -14434,7 +14516,6 @@ N@+ND
 NAV IGNORE
 NAV_CONTROLLER
 NCHEM
-ND =0
 NDebugOverlay::Box
 NDebugOverlay::Line
 NERVEGAS
@@ -14473,6 +14554,7 @@ NEXTLEVELVOTE: player#%d (%s) voted %d which is ignored
 NJ2"v
 NO HOSTAGES 
 NO PATH
+NOISE
 NONE (Not Set)
 NOT Eligible for selection
 NOTIFY_ACHIEVEMENTS
@@ -14483,8 +14565,6 @@ NO_HOSTAGES
 NO_JUMP
 NO_JUMP 
 NO_MERGE
-NP =0
-NP@=0
 NPC %s failed to stop properly, slamming activity
 NPC %s stuck in wall--level design error at (%.2f %.2f %.2f)
 NPC Line-Of-Sight debug mode. If 1, solid entities that block NPC LOC will be highlighted with white bounding boxes. If 2, it'll show non-solid entities that would do it if they were solid.
@@ -14536,6 +14616,7 @@ Nearby enemy gunfire
 Nearby friends = %d
 Need space between identifier and decimal point.
 Need space between number and identifier.
+NeedHealing
 Needs a radius
 Negative or zero gamma ignored
 NetMsg: %s
@@ -14679,8 +14760,6 @@ Notification about user penalty: %u/%u (%u sec)
 Notifying GC we don't need a session.
 November
 NqmmRating
-Nt =0
-Nt@=0
 NullRNG
 NullRNG: NullRNG should only be passed to functions that don't need to generate random bytes
 Num ticks simulated : %d
@@ -14712,13 +14791,13 @@ Numbers starting with leading zero must be in octal.
 O$3O83O
 O$;H$t\
 O*9y]
-O, =0
 OAEP-
 OBSTACLE 
 OBSTACLE_TOP
 OBSTRUCTED 
 OFFGROUND!
 OPPORTUNITY_FIRE
+OPPOSITE
 OS_Rng: 
 OTHER
 OZw3(?
@@ -14939,11 +15018,9 @@ PNG file corrupted by ASCII conversion
 PNG unsigned integer out of range
 POISON
 POSIX
-PPh,k
-PPh4i
-PPhRb
-PPhTl
-PPh\j
+PPhLP
+PPhTN
+PPh|S
 PPj S
 PPj*S
 PPj+W
@@ -14967,6 +15044,7 @@ PaintSplatBlue
 PaintSplatGreen
 PaintSplatPink
 Panic yaw angle = %3.2f
+Parallel
 Parameter Remapping
 Parent: %s
 ParseParticleEffects
@@ -15027,6 +15105,13 @@ PhysicsTryMove: !trace.u.ent
 Physics_RunThinkFunctions
 Physics_SimulateEntity
 Picker %i/%s - ent %s model %s
+PickerDeDup
+PickerMaxScore
+PickerNearby
+PickerRandomByDistance
+PickerReactionTime
+PickerVisible
+PickerWeightAsDistance
 Picks
 PickupHostage
 PinnedDown
@@ -15275,6 +15360,7 @@ Protocol Buffer reflection usage error:
 Protocol message serialized itself in invalid fashion.
 Protocol message was modified concurrently during serialization.
 PublicElement
+PullTrigger
 PurchaseCount
 Push computed lag compensation amount by this many ticks.
 PushPostureContext() overflow error!
@@ -15296,11 +15382,9 @@ Q2XXR
 Q8>BaseCombatWeapon.WeaponDrop
 QAngle: %.2f %.2f %.2f
 QQWR1
-QQh$b
-QQh,k
-QQh4i
-QQhTl
-QQh\j
+QQhLP
+QQhTN
+QQh|S
 QRSVP
 QRSWP
 Qkkbal
@@ -15390,7 +15474,6 @@ ROTATION_SPEED
 RQSVP
 RQSWP
 RR: could not apply operator %s to prior value %s
-RRh>b
 RST%d
 RWSQP
 Radial using: %s
@@ -15457,6 +15540,7 @@ RandomNumberType
 RandomSeed
 Randomly Flip Yaw
 RankUpdate
+RankerDist
 Rarity "%s" not found
 Rarity definition %s: Missing required field "loc_key"
 Rarity definition %s: Missing required field "value"
@@ -15472,7 +15556,6 @@ Reached Round Limit
 Reached Time Limit
 Reached Win Limit
 Reached an unintended state: CPPTYPE_MESSAGE
-ReactionTime
 Read Error
 Read failed on temporary file
 Read from EMS failed
@@ -15526,6 +15609,7 @@ Remove all http listeners from the dispatch list.
 Remove current area from the selected set.
 Remove given nav attribute from all areas in the selected set.
 RemoveBroadcastTeamTarget
+RemoveKey
 RemoveLast
 RemoveMemoryInfoCallback
 Removed %d %s's
@@ -15642,6 +15726,7 @@ RoundNumber
 RoundResults/round%d
 RoundUpToMultipleOf: integer overflow
 Route Destination No Longer Valid
+RouteService
 RoutingMethod
 Row has too many bytes to allocate in memory
 Rule is disabled.
@@ -15815,6 +15900,7 @@ SERVER
 SHA-1
 SHA-224
 SHA-256
+SHIELD
 SHOCK
 SH[^_]
 SH~@1
@@ -15889,6 +15975,7 @@ SS_SLOWDOWN_HIGHSPEED
 SS_START_IDLE
 SS_START_WATER
 SS_TURBO
+STACKABLEITEM
 STAIRS
 STAIRS 
 STAND 
@@ -15919,6 +16006,7 @@ STOP
 STOPPED!
 STRING
 STRING_PIECE
+SUBMACHINEGUN
 SUB_Remove called on entity with health > 0
 SURVIVAL game start teams
 SURVIVAL: PrecomputeDangerZones took %f
@@ -16108,6 +16196,7 @@ Sequence Random
 Sequence Two Random
 Sequence has started: %s
 Sequence: (%3d) %s
+Sequencer
 SerializeDMX: Unable to open file "%s"
 Server 
 Server Animation
@@ -16212,6 +16301,7 @@ SetNearZDistance
 SetNorthOffset
 SetParent on static object, all constraints attached to %s (%s)will now be broken!
 SetParentAttachmentMaintainOffset
+SetReactionTime
 SetRemoteDestination
 SetRepeatedBool
 SetRepeatedDouble
@@ -16696,6 +16786,7 @@ Subkey
 Submachine Gun
 SubscribedType
 Subtracts half of the target's ammo
+Succeed
 Sunday
 Suppressing %s
 Surface Shatter
@@ -16768,6 +16859,8 @@ T$X9D$T
 T$d9L$T
 T$d9L$Tt
 T$l+T$\
+TABLET
+TASER
 TASERTHINK
 TASK_
 TASK_ADDON_WAIT
@@ -17168,6 +17261,8 @@ Tactical: Cover Medium
 Tactical: Enemy Disadvantage
 Tactical: High Ground
 Tactical: Pinch
+TagEntity
+TagThreshold
 Take control of the next bot regardless of team (development only).
 Target Pos:   %3.3f
 Target Pos: %3.3f
@@ -17713,6 +17808,7 @@ Use IK on in-place turns.
 Use a particular weapon	
 Use entity
 Use new style sparks.
+Use the specified behavior tree file to drive the bot behavior.
 UseWind
 User: %s
 User: -LOOKING-
@@ -18146,17 +18242,12 @@ X-Tick-End
 X-Tick-Start
 X-Timestamp
 X.`c.dA.hA.lA.pC.tC.xC.|C.
-X50{	
 X917RNG: Continuous random number generator test failed.
 XAxis
 XBowBolt
 XS&Y+
 XZ[^_]
-XZh(vq
-XZh(wq
-XZh8xq
-XZh`xq
-XZhxvq
+XZh|S
 XZj-W
 XZj=S
 X[^_]
@@ -18168,15 +18259,10 @@ XpProgressData
 YAxis
 YCPum
 YMDHMS
-YXh(vq
-YXh8xq
-YXhPvq
 YYYY-MM-DD
 YYYY-MM-DD hh:mm:ss
-Y[h,k
-Y[h4i
-Y[hTl
-Y[h\j
+Y[hLP
+Y[hTN
 Y_j=S
 Yaw speed:%3.1f,Health: %3d
 YellowBlood
@@ -18207,6 +18293,15 @@ Zipfile is corrupt or not a zipfile
 Zpm"U
 Zrange
 ZtiWj
+[ AI BT ]: Bot does not seem to own requested weapon: '%s'.
+[ AI BT ]: Bot was unable to equip requested weapon: '%s'.
+[ AI BT ]: Element '%d' is not a waypoint.
+[ AI BT ]: Element '%d' is not an array.
+[ AI BT ]: Element '%d' is not an integer.
+[ AI BT ]: Route array '%s' missing from KV3 file.
+[ AI BT ]: Strategy array '%s' missing from KV3 file.
+[ AI BT ]: key '%s' is not a table.
+[ AI BT ]: key '%s' is not an array.
 [%03d] Found: %s, firing
 [%03d] Found: %s, firing (%s)
 [%8.3f] hitch on %s:%s:%d:%d
@@ -18224,9 +18319,62 @@ ZtiWj
 [/img]
 [/list]
 [/url]
+[5@2m
 [9B(]
 [@;Z(s	
 [A:%u:%u:%u]
+[AI BT] Error parsing node (type=%s).
+[AI BT]: Attacking without a target.
+[AI BT]: Bot does not have a profile.
+[AI BT]: Bot does not have a target.
+[AI BT]: Bot does not have a weapon.
+[AI BT]: Bot has an invalid target.
+[AI BT]: Config key 'attack' is missing, requires fallback to default value, but default config is not present.
+[AI BT]: Config node 'attack' entry '%d' is not an array.
+[AI BT]: Config node 'attack' entry '%d' must contain %d entries.
+[AI BT]: Config node 'attack' is not an array.
+[AI BT]: Config node 'attack' must contain %d entries.
+[AI BT]: Empty or invalid bomb site key.
+[AI BT]: Empty/invalid key 'children' for 'CBtNodeComposite'
+[AI BT]: Entity type filter is weapon but the weapon name is empty.
+[AI BT]: Error loading behavior tree config file '%s': %s
+[AI BT]: Error loading behavior tree file '%s': %s
+[AI BT]: Error parsing '%s' node from KV3 file.
+[AI BT]: Error parsing 'config' node from KV3 file.
+[AI BT]: Error parsing 'default' node from KV3 file.
+[AI BT]: Error parsing 'root' node from KV3 file.
+[AI BT]: Input key '%s' has no waypoints.
+[AI BT]: Input key '%s' is not an array.
+[AI BT]: Invalid check type '%s'.
+[AI BT]: Invalid entity type filter '%s'.
+[AI BT]: Invalid movement type '%s'.
+[AI BT]: Invalid operation type '%s'.
+[AI BT]: Invalid route type '%s'.
+[AI BT]: Invalid team filter '%s'.
+[AI BT]: Invalid team type '%s'.
+[AI BT]: Invalid weapon type '%s'.
+[AI BT]: Loaded behavior tree '%s', bot skill = '%g'
+[AI BT]: No route was set and no routes found! Failing.
+[AI BT]: No route was set! Assuming route 0.
+[AI BT]: Output key '%s' already exists and it's not an array.
+[AI BT]: Required key '%s' missing from KV3 file.
+[AI BT]: Required key 'config' is not a string.
+[AI BT]: Required key 'config' missing from KV3 file.
+[AI BT]: Required key 'root' missing from KV3 file.
+[AI BT]: Required node 'default' not present in KV3 file.
+[AI BT]: Trying to buy items outside of buy zone!
+[AI BT]: Trying to dedup records against '%s' which is not an array.
+[AI BT]: Unable to assign route!
+[AI BT]: Unable to buy after multiple attempts.
+[AI BT]: Unable to find key '%s'.
+[AI BT]: Unable to find team spawn (target team = %d).
+[AI BT]: Unable to load behavior tree '%s', bot skill = '%g'
+[AI BT]: Unable to obtain location at bomb site %d.
+[AI BT]: Unable to sense entities of type '%d'.
+[AI BT]: Unknown node type: %s
+[AI BT]: Unknown weapon type is not supported.
+[AI BT]: key '%s' invalid or missing from KV3 file.
+[AI]: Using regular AI code, bot skill = '%g'
 [BaseModPanel] Added file information for %llu
 [BaseModPanel] Added query for published file %llu
 [BaseModPanel] Added voting info query for %llu
@@ -18307,6 +18455,7 @@ ZtiWj
 \tD)\$
 \tDu#
 \x%02x
+]5`'s
 ]@H~K
 ]G%8.3f[%d] %s:  %s
 ]GCOND_IN_PVS
@@ -18314,10 +18463,8 @@ ZtiWj
 ^$9Z$
 ^@;Z s	
 ^PPVh
-^Xh,k
-^Xh4i
-^XhTl
-^Xh\j
+^XhLP
+^XhTN
 ^oEZ_
 _ 3_43_
 _Accum
@@ -18602,6 +18749,21 @@ act_win_match
 act_win_round
 actanim
 action
+action_aim
+action_attack
+action_buy
+action_choose_bomb_site_area
+action_choose_random_waypoint
+action_choose_team_spawn_area
+action_combat_positioning
+action_equip_item
+action_equip_weapon
+action_hide
+action_move_to
+action_pull_trigger
+action_say
+action_turn
+action_wait
 active "0"
 active 0
 active_behavior
@@ -18634,6 +18796,7 @@ adler32_combine64
 admin
 adult male human
 advanced_map_complete
+against
 ageUf
 aggregate_value
 aggregation radius
@@ -18769,7 +18932,24 @@ aim_blend_crouch_walk
 aim_blend_stand_idle
 aim_blend_stand_run
 aim_blend_stand_walk
+aim_max_duration
+aim_max_duration_deviation
+aim_new_target_angle_tolerance
 aim_pitch
+aim_punch_angle_reaction_chance
+aim_ready_angle_tolerance
+aim_target_acquisition_angle_lerp_bias
+aim_target_acquisition_angle_penalty
+aim_target_acquisition_angle_penalty_deviation
+aim_target_acquisition_angle_penalty_reduction_ratio
+aim_target_acquisition_angle_tolerance
+aim_target_acquisition_lerp_time
+aim_target_acquisition_lerp_time_deviation
+aim_target_tracking_angle_lerp_bias
+aim_target_tracking_focus_interval
+aim_target_tracking_focus_interval_deviation
+aim_target_tracking_lerp_time
+aim_target_tracking_lerp_time_deviation
 aim_yaw
 aimsight capable
 aimsight eye pos
@@ -19022,6 +19202,7 @@ audioparams_t
 authorized_public_ip
 authorized_steam_id
 auto_in_combat
+auto_look_adjust
 autoaim_max_deflect
 autoaim_max_dist
 autoaim_viewing_client
@@ -19473,6 +19654,7 @@ chdir@@GLIBC_2.0
 cheapwaterenddistance
 cheapwaterstartdistance
 cheat
+check_Type
 cheer
 cheetah
 chest_rightleft
@@ -19614,6 +19796,9 @@ color_random
 colormax
 colormin
 colortransitiontime
+combat_crouch_chance
+combat_dodge_command_duration
+combat_dodge_command_duration_deviation
 combo
 combo 
 command
@@ -19680,7 +19865,12 @@ cond_victim_rescuing
 cond_victim_seconds_since_fire
 cond_victim_terrorist
 cond_victim_zoomed
+condition_distance_less
+condition_is_empty
+condition_is_weapon_suitable
+condition_owns_item
 conditions
+config
 confirm
 confirmation_id
 connections
@@ -19931,6 +20121,8 @@ customize_texture_item
 customkill
 customname
 customorigin_follow
+cutoff_distance
+cv_bot_ai_bt_debug_target
 cvars
 cyber_cafe
 cycle
@@ -20064,6 +20256,28 @@ decltype (
 decltype(nullptr)
 decodable
 decoder_ring
+decorator_bot_service
+decorator_buy_service
+decorator_memory
+decorator_need_healing
+decorator_picker_dedup
+decorator_picker_max_score
+decorator_picker_nearby
+decorator_picker_random_by_distance
+decorator_picker_reaction_time
+decorator_picker_visible
+decorator_picker_weight_as_distance
+decorator_random_int
+decorator_ranker_dist
+decorator_remove_key
+decorator_repeat
+decorator_route_service
+decorator_sensor
+decorator_set_reaction_time
+decorator_succeed
+decorator_tag_entity
+decorator_tag_threshold
+decorator_throttle
 decoy_detonate
 decoy_firing
 decoy_projectile
@@ -20189,6 +20403,9 @@ dist data: dyn %ld, stat %ld
 dist tree: sent %ld
 distance
 distance_check_subtitle
+distance_threshold
+distance_threshold_max
+distance_threshold_min
 distancetoenemy
 distancetoplayer
 distancetotarget
@@ -20429,11 +20646,13 @@ entity_data
 entity_delete %s %g %g %g
 entity_idx
 entity_index
+entity_input
 entity_killed
 entity_model
 entity_rotate_incremental %s %f %f %f %f %f %f
 entity_scale
 entity_set_keyvalue %s %f %f %f "%s" "%s"
+entity_type_filter
 entity_updates
 entity_visible
 entityflame
@@ -20654,6 +20873,7 @@ expecting scalesettings data
 expecting valid tag type!!!
 expecting {
 experimental_map_key
+expert
 expf@@GLIBC_2.0
 expiration date
 expiration_date
@@ -21372,6 +21592,7 @@ guard variable for
 guardian
 guardian_%s
 guardian_defaultmap
+guardian_wave_restart
 gun_barrel_attach
 gun_base_attach
 gun_pitch_pose_center
@@ -21428,6 +21649,7 @@ header crc mismatch
 headers
 health
 health=%d, armor=%d, helmet=%d
+health_threshold
 healthratio_new
 healthratio_old
 healthshot_allow_use_at_full
@@ -21472,6 +21694,7 @@ hide_radius
 hide_rope
 hide_silencer
 hide_vest
+high_priority
 high_value
 highboundary
 highlight_color
@@ -21854,6 +22077,7 @@ is_account_locked_down
 is_agressive
 is_ambient
 is_an_event
+is_attacking
 is_autoaim_target
 is_banned_future
 is_banned_now
@@ -22385,6 +22609,7 @@ last_valid_class
 last_valid_item_slot
 last_valid_item_slot not set!
 lastinv reset
+lastknownpos
 latitude
 launcher
 launcher_mismatch_sessions
@@ -22554,6 +22779,13 @@ logon_jobs
 logon_queue
 long double
 longjmp@@GLIBC_2.0
+look_around_awareness_pitch_range
+look_around_awareness_yaw_range
+look_around_focus_interval
+look_around_focus_interval_deviation
+look_around_lerp_bias
+look_around_lerp_time
+look_around_lerp_time_deviation
 lookat01
 lookatname
 loop_break_trigger
@@ -26819,6 +27051,9 @@ memcpy@@GLIBC_2.0
 memcpy_s: buffer overflow
 memmove@@GLIBC_2.0
 memmove_s: buffer overflow
+memory_expiration_distance
+memory_expiration_time
+memory_to_expire
 mempool.cpp
 memset@@GLIBC_2.0
 menu_key_values
@@ -27212,6 +27447,7 @@ move_y
 move_yaw
 movecollide
 movedir
+movement_type
 movementsound
 moveparent
 movetype
@@ -27233,6 +27469,7 @@ mp_backup_round_file_last
 mp_backup_round_file_pattern
 mp_blockstyle
 mp_bonusroundtime
+mp_bot_ai_bt
 mp_buy_allow_grenades
 mp_buy_allow_guns
 mp_buy_anywhere
@@ -27727,6 +27964,7 @@ needbackup
 needrop
 needs_decoder
 needs_weapon
+negated
 negative_int_value
 nested_type
 net_Disconnect
@@ -27962,6 +28200,7 @@ operation xp awarded %d
 operation_coin
 operation_points_awarded
 operation_points_eligible
+operation_type
 operational_points
 operations_submitted
 operations_timed_out_in_queue
@@ -28014,12 +28253,12 @@ owned
 owner_id
 owner_soid
 owninginstance
-p$PPh
-p$QQh
+p$PPht
+p$QQht
 p(?!@V>
-p,;5 
+p,;5(
 p,;5h
-p,PPht
+p,PPh4v
 p49st
 pGears
 pTouf
@@ -28051,6 +28290,7 @@ parachute_deploy
 parachute_pickup
 paradrop_chopper
 paradrop_random_crate_event
+parallel
 param "%s"
 param2
 param2 "%s"
@@ -28145,6 +28385,7 @@ phonemes_weak
 phongalbedoboost
 phongexponent
 phongintensity
+phrase
 phys_ballsocket
 phys_bone_follower
 phys_constraint
@@ -29125,6 +29366,8 @@ round_time_warning
 roundsWon
 roundstats_legacy
 roundstatsall
+route_type
+routes
 routing
 routing_app_id
 rpg_missile
@@ -29346,12 +29589,16 @@ send_round_backup_file_list
 send_table_crc
 sender_name
 sendprop_t
+sensor_shape_fov
+sensor_shape_sphere
+sensorpriority
 sequence: %d, frame %.0f
 sequence_bytes
 sequence_number
 sequence_number 1
 sequenceduration
 sequenceduration %f
+sequencer
 sequential
 sequential position along path
 serialize
@@ -29423,6 +29670,7 @@ sfixed64
 shadowcastdist
 shadowdepthnocache
 shadowquality
+shape
 shards
 shared
 sharedobj
@@ -29592,6 +29840,7 @@ soundunlockedoverride
 source
 source_app_id
 source_code_info
+source_entity_index
 space shuttle
 spark_shower
 spawnAutomatically
@@ -29832,6 +30081,7 @@ strafe_yaw
 strange part new counter ID
 strange_part_item_id
 strange_parts
+strategies
 strcasecmp
 strcasecmp@@GLIBC_2.0
 strcasestr
@@ -29908,6 +30158,7 @@ subscribed_collection_ids.txt
 subscribed_file_ids.txt
 subtype
 subtype mismatch
+succeed_when_throttled
 succeeded_lookups
 success
 suitvolume
@@ -30451,9 +30702,9 @@ tRPPh
 tRQQh
 tRRRh
 tS+P`
-tShB~
 tShof
 tT+J`
+tTf;y
 tThif
 tUf;H
 tWf9r
@@ -30471,6 +30722,10 @@ tabletbuy_
 tabletbuy_buy_
 tabletbuy_close
 tabletbuy_open
+tag_expiration
+tagged_by
+tagged_entities_input
+tagged_entities_to_expire
 tagrenade_detonate
 tagrenade_projectile
 takepoint
@@ -30503,6 +30758,7 @@ teMof
 te_tester
 teamToBlock
 team_
+team_filter
 team_id
 team_id_ct
 team_id_pickn
@@ -30580,7 +30836,10 @@ thinktime %f, %i entities
 threads
 threads_active
 threads_connected
+throttle_eval_only
 throttle_expensive_ai
+throttle_time_max
+throttle_time_min
 throttleseconds
 throw velocity
 throw velocity alt
@@ -30650,6 +30909,7 @@ tm_pirate
 tm_professional
 tm_professional_var4
 tm_separatist
+to=ym
 to_hits
 toggles whether the server allows spectator mode or not
 token
@@ -30896,6 +31156,7 @@ total_wins_map_de_train
 total_wins_map_de_vertigo
 total_wins_pistolround
 touchStamp
+tough
 toupper
 toupper@@GLIBC_2.0
 tournament_casters_account_ids
@@ -30984,6 +31245,7 @@ trunc@@GLIBC_2.1
 trusted
 ts+P`
 tu<Etq
+turn_rate
 tv_advertise_watchable
 tv_allow_autorecording_index
 tv_allow_camera_man_steamid
@@ -31023,7 +31285,6 @@ tweak_ammo_impulses
 twitch_streams_version
 two_factor_enabled_time
 tx+B`
-txhB~
 txn_country_code
 txn_id
 type_ == TYPE_FIXED32
@@ -31047,6 +31308,7 @@ u2f#U
 u4PPW
 u64( %lld = 0x%llX )
 u;+C 
+u<[AI BT]: Config key '%s' is missing, requires fallback to default value, but default config is not present.
 u=start %f %f %f
 u>+C 
 u?molotov_groundfire
@@ -31258,6 +31520,7 @@ velocity_relative
 velocitytype
 verdict
 version
+very_hard
 vgui/white
 vgui/white.vmt
 vgui/white.vtf
@@ -31294,6 +31557,7 @@ vip_escaped
 vip_killed
 virtualterrain
 vis_force
+visibleparts
 vismon_poll_frequency
 vismon_trace_limit
 visuals
@@ -31337,6 +31601,8 @@ wL;wP
 w\+wX
 w][[^_]
 wait_seconds
+wait_time_max
+wait_time_min
 waiting for lock
 waiting_account_id_sessions
 waitingtorappel
@@ -31466,6 +31732,7 @@ weapon_mp5sd
 weapon_mp7
 weapon_mp9
 weapon_muzzle
+weapon_name
 weapon_near_empty_sound
 weapon_negev
 weapon_none
@@ -31549,6 +31816,7 @@ wheel_fr
 wheel_rl
 wheel_rr
 wheels
+whentoreact
 whitelistcmd %.*s
 wild scan
 will_produce_stattrak
@@ -31604,7 +31872,6 @@ x +z
 x +z`
 x$9z$tr
 x%;Q\} 
-x,;=Hnc
 x,;=p
 x-;SX}(;Sl
 x.4D.8A.<A.@A.DA.HE.LC.PH.0L.<C.@A.DC.HC.LC.PE.LG
