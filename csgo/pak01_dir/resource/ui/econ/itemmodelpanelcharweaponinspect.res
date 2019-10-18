@@ -3348,6 +3348,50 @@
 		}
 	}
 
+		"weapon_case"
+	{
+		"rule"
+		{
+			//csgo/trunk/game/csgo/models/props/crates/csgo_drop_crate_armsdeal1.mdl
+			"model_partial" "_crate_community_24"
+		}
+		"config"
+		{
+
+			"root_mdl"					    ""		                                // Which pedestal model to load, weapon model is merged to the pedestal, null => weapon model is the scene
+			"root_anim"					    ""                          			// Which activity to play on the pedestal
+			"root_anim_loop"			    ""				                        // Which activity to play on the pedestal after the initial pedestal animation finishes
+			"weapon_anim"				    ""						                // Which activity to play on the weapon
+			"weapon_anim_loop"			    ""										// Which pedestal model to load, weapon model is merged to the pedestal
+			"root_camera"				"cam_inspect"								// Which attachment specifies camera location
+			"root_camera_fov"			"54.0"									// Camera will use the specified FOV
+			"camera_offset"   "-51.44 99.98 42.06"
+			"camera_orient"   "16.04 -62.80 0.00"
+			"orbit_pivot"     "0.67 -1.39 9.29"
+			"item_rotate" "y[-20 60]" //- x horizontal, z vertical
+
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.47 0.46 0.49} dir[-0.10 -0.95 -0.30] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.53 0.53 0.53} dir[0.69 -0.66 -0.28] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "-73.32 75.74 69.69"
+			"shadow_light_orient"        "38.30 -44.47 0.00"
+			"shadow_light_brightness"    "4.19"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "70.0"
+			"shadow_light_vfov"       "70.0"
+			"shadow_light_znear"       "42.3"
+			"shadow_light_zfar"       "115.7"
+			"shadow_light_atten_farz"       "231.4"
+			"light_ambient"              "[3.93 3.93 3.93]"
+
+			"camera_preset_add"   "pos[-79.35 181.14 49.98] pivot[-0.71 4.45 -10.68] orient[17.42 -66.01 0.00] fov[54.0]" // zoomed out.
+			"camera_preset_add"   "pos[-85.12 165.55 63.25] pivot[0.67 -1.39 9.29] orient[16.04 -62.80 0.00] fov[54.0]" // opening scroll
+			"camera_preset_add"   "pos[-53.09 121.06 39.72] pivot[2.30 -4.75 22.04] orient[7.33 -66.24 0.00] fov[54.0]" // open anim
+		}
+	}
+
 	"team_coins"
 	{
 		"rule"
