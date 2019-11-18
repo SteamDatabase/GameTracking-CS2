@@ -272,6 +272,13 @@
 		"silent"	"bool"
 		"defindex"	"long"
 	}
+	
+	"item_pickup_slerp"
+	{
+		"userid" "short"
+		"index" "short"
+		"behavior" "short"
+	}
 
 	"item_pickup_failed"
 	{
@@ -1076,4 +1083,8 @@
 	{
 		"entityid"	"short"
 	}	
+
+	"guardian_wave_restart"
+	{
+	}
 }

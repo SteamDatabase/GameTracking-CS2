@@ -1,0 +1,184 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "sequencer"
+	children =
+	[
+		{
+			type = "decorator_succeed"
+			child =
+			{
+				type = "condition_is_empty"
+				input = "ThrowUtility"
+				negated = 1
+				child =
+				{
+					type = "action_set_global_counter"
+					input_name = "StratCounter"
+					input_value = 0
+				}
+			}
+		},
+		{
+			type = "selector"
+			children =
+			[
+				{
+					type = "sequencer"
+					children =
+					[
+						{
+							type = "decorator_succeed"
+							child =
+							{
+								type = "decorator_run_once"
+								child =
+								{
+									type = "condition_is_empty"
+									input = "IntermediateWaypoint"
+									negated = 1
+									child =
+									{
+										type = "parallel"
+										succeed_after_first = 1
+										children =
+										[
+											{
+												type = "action_move_to"
+												destination = "IntermediateWaypoint"
+												movement_type = "BT_ACTION_MOVETO_RUN"
+												route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+												auto_look_adjust = 0
+											},
+											{
+												type = "decorator_repeat"
+												child =
+												{
+													type = "action_look_at"
+													input_location = "HoldApproachPoint"
+												}
+											}
+										]
+									}
+								}
+							}
+						},
+						{
+							type = "parallel"
+							succeed_after_first = 1
+							children =
+							[
+								{
+									type = "action_move_to"
+									destination = "HoldDestination"
+									movement_type = "BT_ACTION_MOVETO_RUN"
+									route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+									auto_look_adjust = 0
+								},
+								{
+									type = "decorator_repeat"
+									child =
+									{
+										type = "action_look_at"
+										input_location = "HoldApproachPoint"
+									}
+								}
+							]
+						},
+						{
+							type = "action_look_at"
+							input_angles = "HoldAngles"
+						},
+						{
+							type = "decorator_succeed"
+							child =
+							{
+								type = "condition_is_empty"
+								input = "ThrowUtility"
+								negated = 1
+								child =
+								{
+									type = "sequencer"
+									children =
+									[
+										{
+											type = "action_equip_weapon"
+											weapon = "weapon_smokegrenade"
+										},
+										{
+											type = "action_wait"
+											wait_time_min = 5
+											wait_time_max = 5
+										},
+										{
+											type = "action_pull_trigger"
+										},
+										{
+											type = "action_wait"
+											wait_time_min = 1
+											wait_time_max = 2
+										},
+										{
+											type = "action_equip_weapon"
+											weapon = "weapon_flashbang"
+										},
+										{
+											type = "action_wait"
+											wait_time_min = 1
+											wait_time_max = 1
+										},
+										{
+											type = "action_pull_trigger"
+										},
+										{
+											type = "action_wait"
+											wait_time_min = 0.5
+											wait_time_max = 0.5
+										},
+										{
+											type = "action_set_global_counter"
+											input_name = "StratCounter"
+											input_value = 1
+										}
+									]
+								}
+							}
+						},
+						{
+							type = "decorator_random_int"
+							min = 0
+							max = 1
+							output = "ShouldCrouch"
+						},
+						{
+							type = "decorator_succeed"
+							child =
+							{
+								type = "condition_is_equal"
+								source = "ShouldCrouch"
+								destination = 1
+								child =
+								{
+									type = "action_crouch"
+								}
+							}
+						},
+						{
+							type = "decorator_succeed"
+							child =
+							{
+								type = "decorator_wait_success"
+								timeout = 15
+								child =
+								{
+									type = "action_compare_global_counter"
+									input_name = "StratCounter"
+									input_value = 1
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

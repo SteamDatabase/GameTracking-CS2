@@ -37,10 +37,10 @@
 			"item_rotate"				"y[-360 360]"
 
 			// Presets start here when called from JS thier index starts at 1
-			"camera_preset_add"   "pos[117.27 5.90 50.58] pivot[-0.00 4.50 54.80] orient[-2.06 -179.32 0.00]" // rifles, t elites
-			"camera_preset_add"   "pos[72.32 -79.92 50] pivot[-0.00 4.50 54.80] orient[-2.06 133.93 0.00]" // t pistols
-			"camera_preset_add"   "pos[117.27 5.9 40.58] pivot[-0.00 4.50 54.80] orient[-2.06 -181.32 0.00]"  // ct heavy
-			"camera_preset_add"   "pos[109.10 -38.08 47.29] pivot[0.00 4.50 54.80] orient[-3.67 158.68 0.00]" // mp7
+			"camera_preset_add"   "pos[117.27 3.3 50.58] pivot[-0.00 4.50 54.80] orient[-2.06 -179.32 0.00]" // 1 rifles, t elites 
+			"camera_preset_add"   "pos[72.32 -70 50] pivot[-0.00 4.50 54.80] orient[-2.06 133.93 0.00]" // 2 t pistols
+			"camera_preset_add"   "pos[117.27 5.9 40.58] pivot[-0.00 4.50 54.80] orient[-2.06 -181.32 0.00]"  // 3 ct heavy
+			"camera_preset_add"   "pos[109.10 -38.08 47.29] pivot[0.00 4.50 54.80] orient[-3.67 158.68 0.00]" // 4 mp7
 
 
 			//"light_directional_clearall" "1"

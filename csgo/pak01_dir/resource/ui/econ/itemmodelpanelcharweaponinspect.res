@@ -474,9 +474,9 @@
 		}
 		"config"
 		{
-			"camera_offset"   "44.08 28.98 -5.92"
-			"camera_orient"   "-0.69 -126.19 0.00"
-			"orbit_pivot"     "19.04 -5.25 -5.41"
+			"camera_offset"   "39.98 32.14 -7.62"
+			"camera_orient"   "-2.98 -117.94 0.00"
+			"orbit_pivot"     "20.13 -5.28 -5.41"
 			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
 		}
 	}
@@ -568,9 +568,9 @@
 		}
 		"config"
 		{
-			"camera_offset"   "33.37 21.02 -5.82"
+			"camera_offset"   "33.69 20.78 -5.72"
 			"camera_orient"   "-1.91 -126.81 0.00"
-			"orbit_pivot"     "14.06 -4.78 -4.75"
+			"orbit_pivot"     "14.38 -5.02 -4.65"
 			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
 		}
 	}
@@ -707,15 +707,13 @@
 		}
 		"config"
 		{
-			"camera_offset"   "49.12 40.79 -12.73"
-			"camera_orient"   "-6.65 -118.63 0.00"
-			"orbit_pivot"     "23.95 -5.34 -6.61"
+			"camera_offset"   "43.16 43.59 -14.25"
+			"camera_orient"   "-8.64 -109.46 0.00"
+			"orbit_pivot"     "25.97 -5.07 -6.40"
 			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
 
 			"camera_preset_add"   "pos[25.28 30.75 -4.87] pivot[26.73 -5.19 -6.31] orient[2.29 -87.69 0.00] fov[54.3]" //1 sideview for update panel
 			"camera_preset_add"   "pos[40.49 27.39 -7.87] pivot[26.73 -5.19 -6.31] orient[-2.52 -112.90 0.00] fov[54.3]"
-
-
 		}
 	}
 
@@ -727,9 +725,9 @@
 		}
 		"config"
 		{
-			"camera_offset"   "50.31 33.54 -6.51"
-			"camera_orient"   "0.38 -128.87 0.00"
-			"orbit_pivot"     "18.22 -6.28 -6.85"
+			"camera_offset"   "49.43 35.84 -7.12"
+			"camera_orient"   "-0.08 -124.97 0.00"
+			"orbit_pivot"     "20.12 -6.07 -7.05"
 			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
 		}
 	}
@@ -790,9 +788,9 @@
 		}
 		"config"
 		{
-			"camera_offset"   "48.24 36.02 -10.60"
-			"camera_orient"   "-4.43 -126.81 0.00"
-			"orbit_pivot"     "17.75 -4.73 -6.65"
+			"camera_offset"   "50.05 35.62 -10.30"
+			"camera_orient"   "-4.20 -126.81 0.00"
+			"orbit_pivot"     "19.55 -5.14 -6.56"
 			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
 		}
 	}
@@ -962,9 +960,9 @@
 		}
 		"config"
 		{
-			"camera_offset"   "59.13 36.53 -5.70"
-			"camera_orient"   "-0.77 -131.62 0.00"
-			"orbit_pivot"     "21.85 -5.44 -4.95"
+			"camera_offset"   "44.85 46.66 -5.82"
+			"camera_orient"   "-1.00 -112.60 0.00"
+			"orbit_pivot"     "23.28 -5.16 -4.85"
 			"item_rotate"	  "y[-360 360] x[ 0 0 ]"
 		}
 	}
@@ -2960,6 +2958,41 @@
 		}
 	}
 
+	"op09"
+	{
+		"rule"
+		{
+			"model_partial" "inventory_items/operation_9"
+		}
+		"config"
+		{
+			"camera_offset"   "24.61 -0.83 11.24"
+			"camera_orient"   "15.06 178.08 0.00"
+			"orbit_pivot"     "1.15 -0.04 4.92"
+			"root_camera_fov"     "60"
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.62 0.64 0.83} dir[-0.44 -0.56 -0.70] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{4.35 0.00 0.43} dir[0.21 0.95 -0.22] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.54 0.57 0.60} dir[-0.10 -0.20 -1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.16 0.16 0.16} dir[0.00 0.00 -1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "13.82 10.32 20.07"
+			"shadow_light_orient"        "42.79 -140.72 0.00"
+			"shadow_light_brightness"    "3.86"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "53.9"
+			"shadow_light_vfov"       "53.9"
+			"shadow_light_znear"       "12.6"
+			"shadow_light_zfar"       "31.6"
+			"shadow_light_atten_farz"       "63.2"
+			"light_ambient"              "[0.03 0.03 0.03]"
+			"item_orient"		"-10.0 0.0 0.0"
+			"item_rotate"		"y[-20 20]"
+			"root_mdl"					 ""
+		}
+	}
+
 	/////////////////////////////
 	//spray
 	/////////////////////////////
@@ -3002,7 +3035,7 @@
 	{
 		"rule"
 		{
-			"model_partial" "custom_player/legacy/"
+			"model_path_partial" "custom_player/legacy/"
 		}
 		"config"
 		{
@@ -3025,31 +3058,45 @@
 			"root_camera_fov"			"20.0"									// Camera will use the specified FOV
 			"camera_offset"   "142.72 141.81 53.25"
 			"camera_orient"   "4.13 -136.92 0.00"
-			"orbit_pivot"     "-1.56 6.88 39.00"
+			"orbit_pivot_bone"     "camera_target"
+			//"orbit_pivot"     "-1.56 6.88 39.00"
 			//"shadow_light_rotation"		"0 0 0"
 			//"shadow_light_flicker"		"2 0 1 1"
 			"item_rotate"				"y[-360 360]"
 
 			// Presets start here when called from JS thier index starts at 1
-			"camera_preset_add"   "pos[195.44 -1.38 55.52] pivot[-1.87 2.58 38.90] orient[4.81 178.85 0.00]" // rifles, t elites
-			"camera_preset_add"   "pos[157.68 -114.95 45.03] pivot[-3.57 4.14 38.60] orient[1.84 143.55 0.00]" // t pistols
-			"camera_preset_add"   "pos[192.35 -19.29 13.63] pivot[-1.81 10.47 38.90] orient[-7.33 171.28 0.00]"  // ct heavy
-			"camera_preset_add"   "pos[167.30 -95.09 51.78] pivot[-3.82 3.83 39.10] orient[3.67 149.97 0.00]" // mp7
+			"camera_preset_add"   "pos[305.97 -6.14 64.35] pivot<camera_target> orient[4.81 178.85 0.00]" // inspect weapons -> character preview
 
-			// End of matches ( start at 5 )
-			"camera_preset_add"   "pos[271.96 344.12 73.07] pivot[-42.36 50.19 41.99] orient[4.13 -136.92 0.00] fov[20.0]"
-// 1
-			"camera_preset_add"   "pos[256.66 284.90 72.85] pivot[-20.14 26.06 45.48] orient[4.13 -136.92 0.00] fov[20.0]"
- //2
+			"camera_preset_add"   "" // 2 UNUSED - AVAILABLE
+			"camera_preset_add"   "" // 3 UNUSED - AVAILABLE
+			"camera_preset_add"   "" // 4 UNUSED - AVAILABLE
+	
+			"camera_preset_add"   "pos[238.40 -33.78 36.46] pivot<camera_target> orient[-0.91 171.74 0.00] fov[20.0]" // 	5 character loadout		 	
+			"camera_preset_add"   "pos[102.04 -11.88 54.78] pivot<camera_target> orient[-3.66 172.43 0.00] fov[20.0]" // 	6 character loadout zoom
 
-			"camera_preset_add"   "pos[228.97 222.87 71.94] pivot[-2.30 6.60 49.07] orient[4.13 -136.92 0.00] fov[20.0]" //3
+			"camera_preset_add"   "" // 7 UNUSED - AVAILABLE
 
+			"camera_preset_add"   "pos[152.35 -18.31 73.99] pivot<camera_target> orient[2.53 172.66 0.00] fov[20.0]" // 	8 item acknowledge
 
-			"camera_preset_add"   "pos[293.89 245.10 72.85] pivot[17.09 -13.74 45.48] orient[4.13 -136.92 0.00] fov[20.0]"
- //4
-			"camera_preset_add"   "pos[354.68 255.67 72.97] pivot[40.36 -38.26 41.89] orient[4.13 -136.92 0.00] fov[20.0]"
- //5
+			// UNUSED - AVAILABLE
+			"camera_preset_add"   "" // 9 UNUSED - AVAILABLE
 
+			//10 
+			// default characterlineup.js camera preset
+			//
+			"camera_preset_add"   "pos[270 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" / 10
+
+			// 11-15 are receding camera positions. e.g. A 'V' formation would be 15-14-13-12-11-10-11-12-13-14-15
+
+			"camera_preset_add"   "pos[290 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 11
+			"camera_preset_add"   "pos[310 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 12
+			"camera_preset_add"   "pos[330 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 13
+			"camera_preset_add"   "pos[350 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 14
+			"camera_preset_add"   "pos[370 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 15
+
+			//16
+			"camera_preset_add"   "pos[382.11 -54.77 28.43] pivot[-0.74 0.81 42.31] orient[-2.06 171.74 0.00] fov[20.0]" // 16 inspect unzoomed
+			"camera_preset_add"   "pos[124.97 -16.83 62.49] pivot[0.13 1.29 64.50]  orient[-0.91 171.74 0.00] fov[20.0]" // 17 inspect zoomed
 		}
 	}
 

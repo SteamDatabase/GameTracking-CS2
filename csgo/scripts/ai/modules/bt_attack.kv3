@@ -1,0 +1,113 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "decorator_picker_reaction_time"
+	input = "ShortTermAttackMemory"
+	output = "Enemy"
+	child =
+	{
+		type = "decorator_ranker_dist"
+		input = "Enemy"
+		child =
+		{
+			type = "decorator_picker_max_score"
+			input = "Enemy"
+			child =
+			{
+				type = "condition_is_empty"
+				input = "Enemy"
+				negated = 1
+				child =
+				{
+					type = "decorator_tag_entity"
+					input = "Enemy"
+					output = "EngagedEntities"
+					operation_type = "BT_DECORATOR_TAG_ENTITY_SET"
+					expiration_time = 1
+					child =
+					{
+						type = "parallel"
+						children =
+						[
+							{
+								type = "sequencer"
+								children =
+								[
+									{
+										type = "action_equip_weapon"
+										weapon = "BEST"
+									},
+									{
+										type = "decorator_repeat"
+										child =
+										{
+											type = "decorator_succeed"
+											child =
+											{
+												type = "condition_out_of_ammo"
+												child =
+												{
+													type = "action_equip_weapon"
+													weapon = "BEST"
+												}
+											}
+										}
+									}
+								]
+							},
+							{
+								type = "selector"
+								children =
+								[
+									{
+										type = "subtree"
+										file = "scripts/ai/modules/bt_flee_area_damage_threats.kv3"
+										name = "FleeAreaDamageThreats"
+									},
+									{
+										type = "condition_is_weapon_equipped"
+										weapon = "weapon_knife"
+										child =
+										{
+											type = "decorator_repeat"
+											child =
+											{
+												type = "action_move_to"
+												destination = "Enemy"
+												movement_type = "BT_ACTION_MOVETO_RUN"
+												route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+											}
+										}
+									},
+									{
+										type = "action_combat_positioning"
+										input = "Enemy"
+										is_attacking = "Attacking"
+									}
+								]
+							},
+							{
+								type = "decorator_repeat"
+								child =
+								{
+									type = "action_aim"
+									input = "Enemy"
+									ready = "AimReady"
+								}
+							},
+							{
+								type = "decorator_repeat"
+								child =
+								{
+									type = "action_attack"
+									input = "Enemy"
+									output = "Attacking"
+									ready = "AimReady"
+								}
+							}
+						]
+					}
+				}
+			}
+		}
+	}
+}

@@ -197,6 +197,7 @@
 		scope = getroottable();
 		scope = this;
 		value = "";
+	 %s: %d/%d
 	"%s"	
 	%d	bytes used by %s table
 	(%zu) comparing %s with %s
@@ -304,6 +305,7 @@
 	dir_index
 	dormant
 	drop_info
+	eaccolade
 	else
 	encrypted
 	enemy_3ks
@@ -658,11 +660,12 @@
  Entity %s encountered an error in RunScript()
  GCConnectionStatus_GC_GOING_DOWN
  H97t
- H;=%w
- H;=-@
- H;=MB
+ H;=-6
+ H;=4
+ H;=M8
+ H;=[
  H;=u
- H;=u6
+ H;=u,
  HcC 
  I;T$
  IcT$
@@ -681,7 +684,6 @@
  [$0]
  [%.3f server clamped to %.3f]
  [AI BT]: Element %d is not a waypoint.
- [AI BT]: Entity '%s' is not a combat weapon.
  [A\A]A^A_]
  [A\A]A^]
  [A\A]]
@@ -842,6 +844,7 @@
 !self
 !speechtarget
 !string==
+!string_one_of
 !t#<(t'
 !target1
 !target2
@@ -966,6 +969,7 @@
 "0x" must be followed by hex digits.
 "2BRbr
 "></img>
+"CCSUsrMsg_EndOfMatchAllPlayersData
 "CDataGCCStrike15_v2_TournamentInfo
 "CMsgGCCStrike15_v2_ClientPollState
 "CMsgGCCStrike15_v2_MatchmakingStop
@@ -1422,6 +1426,7 @@
 #LoadoutSlot_SMG
 #LoadoutSlot_Secondary
 #LoadoutSlot_Spray
+#LoadoutSlot_customplayer
 #NETWORK_DISCONNECT_BADRELAYPASSWORD
 #NETWORK_DISCONNECT_REJECTED_BY_GAME
 #NETWORK_DISCONNECT_RELIABLEOVERFLOW
@@ -1496,9 +1501,11 @@
 #SFUIHUD_InfoPanel_DisarmingBumpMine_Other
 #SFUIHUD_InfoPanel_EquippingContract_Other
 #SFUIHUD_InfoPanel_EquippingExoJump_Other
+#SFUIHUD_InfoPanel_EquippingHeavyArmor_Other
 #SFUIHUD_InfoPanel_EquippingParachute_Other
 #SFUIHUD_InfoPanel_EquippingTabletUpgrade_Other
 #SFUIHUD_InfoPanel_HostageCannotDrop_Survival
+#SFUIHUD_InfoPanel_MapLongUseEntity_Pickup_Other
 #SFUIHUD_InfoPanel_OpeningSafe_Other
 #SFUIHUD_InfoPanel_OpeningSecurityDoor_Other
 #SFUIHUD_InfoPanel_TooCloseToSafe
@@ -1528,6 +1535,7 @@
 #SFUI_ExoJumpEquipped
 #SFUI_FullArmor
 #SFUI_Healthshot_AlreadyAtMax
+#SFUI_HeavyArmorEquipped
 #SFUI_HelmetEquipped
 #SFUI_HostageApproachPayout
 #SFUI_HostageRescuedFullPayout
@@ -1556,8 +1564,6 @@
 #SFUI_Notice_Game_will_restart_in
 #SFUI_Notice_Got_Bomb
 #SFUI_Notice_GuardianModeLowerDifficultyNextRound
-#SFUI_Notice_GuardianModeSurviveRound
-#SFUI_Notice_GuardianModeSurviveRoundHostage
 #SFUI_Notice_Guardian_PlayerHasDied
 #SFUI_Notice_Gun_Game_Leader
 #SFUI_Notice_Gun_Game_Team_Leader
@@ -1970,6 +1976,9 @@ $x	;A
 %#GameUI_Disconnect_StringTableMessage
 %%%s%%
 %%.%if%s
+%%player_location_%s%%
+%%victim_classname_%s%%
+%%victim_location_%s%%
 %%weapon_%s%%
 %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
 %-30s
@@ -2107,9 +2116,11 @@ $x	;A
 %map_ar_baggage%
 %map_ar_baloney%
 %map_ar_dizzy%
+%map_ar_lunacy%
 %map_ar_monastery%
 %map_ar_shoots%
 %map_coop_cementplant%
+%map_coop_kasbah%
 %map_cs_agency%
 %map_cs_assault%
 %map_cs_backalley%
@@ -2173,6 +2184,7 @@ $x	;A
 %map_de_shortnuke%
 %map_de_shorttrain%
 %map_de_stmarc%
+%map_de_studio%
 %map_de_subzero%
 %map_de_sugarcane%
 %map_de_thrill%
@@ -2181,11 +2193,14 @@ $x	;A
 %map_de_vertigo%
 %map_de_zoo%
 %map_dz_blacksite%
+%map_dz_junglety%
 %map_dz_sirocco%
 %map_gd_bank%
 %map_gd_cbble%
 %map_gd_crashsite%
+%map_gd_dizzy%
 %map_gd_lake%
+%map_gd_lunacy%
 %map_gd_rialto%
 %map_gd_sugarcane%
 %prefix%
@@ -2412,6 +2427,7 @@ $x	;A
 %u:%d:%d:%d:%s
 %u:%u:%u
 %weapon_
+%weapon_breachcharge%
 %weapon_flashbang%
 %weapon_grenade%
 %weapon_hegrenade%
@@ -2567,6 +2583,7 @@ $x	;A
 '#GameUI_Disconnect_BadSpectatorPassword
 '#GameUI_Disconnect_DifferentClassTables
 '%20s' vs. '%20s' = 
+'%s' (%d) -> '%s' (%d)
 ', stored '
 ', trying to retrieve '
 '7GWgw
@@ -2628,7 +2645,7 @@ $x	;A
 (H9D$
 (H9l$
 (H9p(t
-(H;==j
+(H;=7
 (H;p@t
 (IcD$8H
 (L;x@tK
@@ -2651,6 +2668,7 @@ $x	;A
 ([]A\A]A^A_
 (cannot determine missing fields for lite message)
 (default)
+(end of track)
 (k_ECommunityItemAttribute_StorePackageID
 (k_EMsgGCCStrike15_v2_ClientCommendPlayer
 (k_EMsgGCCStrike15_v2_ClientRequestOffers
@@ -2750,7 +2768,11 @@ $x	;A
 *ZN18CIncendiaryGrenade11EmitGrenadeE6Vector6QAngleS0_S0_P11CBasePlayerEUlvE_
 *ZN24CTeamplayRoundBasedRules10CleanUpMapEvE24CTeamplayMapEntityFilter
 *ZN8CHostage22HostageRescueZoneTouchER11inputdata_tE23CSimpleHostageRescueMVP
+*ZN9CCSPlayer15StockPlayerAmmoEP17CBaseCombatWeaponEUlPKcE_
+*ZN9CCSPlayer16GiveDefaultItemsEvEUlPKcE_
+*ZN9CCSPlayer30ResupplyHumanInCooperativeModeENS_39EResupplyHumanInCooperativeModeReason_tEEUlPKcE_
 *ZNK13CEconItemView17IterateAttributesEP26IEconItemAttributeIteratorE46CEconItemAttributeIterator_EconItemViewWrapper
+*ZNK9CCSPlayer29GetDisplayedCharacterDefIndexEvEUlRKN20CCStrike15ItemSchema15CharacterDefn_tEE_
 *k_EGCMsgGetGamePersonalDataEntriesResponse
 *k_EMsgGCAddItemToSocketResponse_DEPRECATED
 *k_EMsgGCAddSocketToItemResponse_DEPRECATED
@@ -3095,13 +3117,11 @@ $x	;A
 .text
 .us]f
 /#GameUI_Disconnect_PlayerRemovedFromHostSession
-/%M 9
-/%he}
-/%{e}
-/-8d3
-/-FaY
-/-Rr5
-/-V!/
+/%!S,
+/%6<[
+/%]&+
+/-Br5
+/-},)
 // An spawner on the server is getting ready to
 // Choreo version 1
 // Choreo version 1:  <%i> Exported Events
@@ -3113,12 +3133,12 @@ $x	;A
 //========== Copyright 
 //=========================================================
 //=============================================================================
-/5O0A
-/5c[6
-/5}@+
-/=]?8
+/59BB
+/5Cq7
+/=?A+
+/=O0_
 /?O_o
-/@XrQ
+/@Xrp
 /ATSE
 /C t&
 /C0t~D;{
@@ -3136,6 +3156,8 @@ $x	;A
 /CptLE
 /Cpu*H
 /Cxv+E
+/CxwUI
+/C|vF
 /D$,H
 /D$,u([A\]
 /D$,w
@@ -3163,11 +3185,13 @@ $x	;A
 /GXs	
 /GdUH
 /Gdu(H
+/GxUH
 /K$ut
 /L$,w
 /M,wkA
 /OxUH
 /S4v=H
+/W\u$D
 /c,uqL
 /d$(s#I
 /d$,t
@@ -3308,14 +3332,15 @@ $x	;A
 0A\A]A^]
 0A]A^]
 0BFUNFACT: %s,	%s<%i><%s>,	VALUE: %d,	IQ: %f
-0CBTI1
 0CCommunity_GetGamePersonalDataCategories_Request
 0CMsgGCCStrike15_v2_ClientRequestWatchInfoFriends
 0CMsgGCCStrike15_v2_MatchmakingGCOperationalStats
 0CMsgGCCStrike15_v2_PlayerOverwatchCaseAssignment
-0D;.t@H
 0D;c(
-0Lc-{'1
+0H;=%
+0H;=U
+0H;=f
+0Lc-+05
 0LckP
 0[A\A]A^A_]
 0[A\A]A^]
@@ -3518,6 +3543,7 @@ $x	;A
 11IRefCounted
 11MLGameState
 11MoveToState
+11PatrolState
 11RocketTrail
 11fogparams_t
 11locksound_t
@@ -3640,6 +3666,7 @@ $x	;A
 13CBoneFollower
 13CBreachCharge
 13CBtActionHide
+13CBtActionJump
 13CBtActionTurn
 13CBtActionWait
 13CCSBotManager
@@ -3736,6 +3763,7 @@ $x	;A
 14CBaseViewModel
 14CBeamSpotlight
 14CBreakableProp
+14CBtNodeSubtree
 14CBtSensorShape
 14CCSUsrMsg_Fade
 14CCSUsrMsg_SSUI
@@ -4034,6 +4062,7 @@ $x	;A
 14CEntityFactoryI16CAI_ChangeTargetE
 14CEntityFactoryI16CAI_SpeechFilterE
 14CEntityFactoryI16CAI_StandoffGoalE
+14CEntityFactoryI16CCSBotPatrolAreaE
 14CEntityFactoryI16CColorCorrectionE
 14CEntityFactoryI16CDecoyProjectileE
 14CEntityFactoryI16CEnvAmbientLightE
@@ -4077,6 +4106,7 @@ $x	;A
 14CEntityFactoryI17CPhysicsCannisterE
 14CEntityFactoryI17CPhysicsNPCSolverE
 14CEntityFactoryI17CPointAngleSensorE
+14CEntityFactoryI17CPointDZItemSpawnE
 14CEntityFactoryI17CRotorWashShooterE
 14CEntityFactoryI17CSceneListManagerE
 14CEntityFactoryI17CSlideshowDisplayE
@@ -4168,6 +4198,7 @@ $x	;A
 14CEntityFactoryI20ParticleSmokeGrenadeE
 14CEntityFactoryI21CAI_AllySpeechManagerE
 14CEntityFactoryI21CBaseWeaponWorldModelE
+14CEntityFactoryI21CCSBotPatrolAreaGroupE
 14CEntityFactoryI21CDangerZoneControllerE
 14CEntityFactoryI21CEnvTonemapControllerE
 14CEntityFactoryI21CFuncAreaPortalWindowE
@@ -4177,6 +4208,7 @@ $x	;A
 14CEntityFactoryI21CItemHeavyAssaultSuitE
 14CEntityFactoryI21CLogicMeasureMovementE
 14CEntityFactoryI21CPhysConstraintSystemE
+14CEntityFactoryI21CPointDZCoopItemSpawnE
 14CEntityFactoryI21CPointDZDroneGunSpawnE
 14CEntityFactoryI21CPointProximitySensorE
 14CEntityFactoryI21CPrecipitationBlockerE
@@ -4189,6 +4221,7 @@ $x	;A
 14CEntityFactoryI22CColorCorrectionVolumeE
 14CEntityFactoryI22CMaterialModifyControlE
 14CEntityFactoryI22CPhysPropParadropCrateE
+14CEntityFactoryI22CPointDZItemSpawnGroupE
 14CEntityFactoryI22CPointDZParachuteSpawnE
 14CEntityFactoryI22CPointGamestatsCounterE
 14CEntityFactoryI22CPostProcessControllerE
@@ -4197,6 +4230,7 @@ $x	;A
 14CEntityFactoryI22CTriggerPlayerMovementE
 14CEntityFactoryI22CTriggerVPhysicsMotionE
 14CEntityFactoryI23CBreachChargeProjectileE
+14CEntityFactoryI23CCSBotPatrolAreaRespawnE
 14CEntityFactoryI23CCommentaryViewPositionE
 14CEntityFactoryI23CGameCoopMissionManagerE
 14CEntityFactoryI23CLogicRegisterActivatorE
@@ -4215,6 +4249,7 @@ $x	;A
 14CEntityFactoryI25CEnvSoundscapeTriggerableE
 14CEntityFactoryI25CInfoInstructorHintTargetE
 14CEntityFactoryI25CTriggerCameraMultiplayerE
+14CEntityFactoryI26CPointDZCoopItemSpawnGroupE
 14CEntityFactoryI26CPointPlayerMoveConstraintE
 14CEntityFactoryI26CPropDoorRotatingBreakableE
 14CEntityFactoryI27CParticlePerformanceMonitorE
@@ -4228,6 +4263,8 @@ $x	;A
 14CEntityFactoryI29CTest_ProxyToggle_NetworkableE
 14CEntityFactoryI30CInfoInstructorHintBombTargetAE
 14CEntityFactoryI30CInfoInstructorHintBombTargetBE
+14CEntityFactoryI31CPhysPropMapPlacedLongUseEntityE
+14CEntityFactoryI31CPhysPropWeaponRefillHeavyArmorE
 14CEntityFactoryI31CPhysPropWeaponUpgradeParachuteE
 14CEntityFactoryI33CPhysPropWeaponUpgradeArmorHelmetE
 14CEntityFactoryI34CPhysPropWeaponUpgradeContractKillE
@@ -4417,6 +4454,8 @@ $x	;A
 15CBlendingCycler
 15CBombTargetShim
 15CBtActionAttack
+15CBtActionCrouch
+15CBtActionLookAt
 15CBtActionMoveTo
 15CBtNodeParallel
 15CBtNodeSelector
@@ -4542,6 +4581,7 @@ $x	;A
 16CBtNodeCondition
 16CBtNodeDecorator
 16CBtNodeSequencer
+16CCSBotPatrolArea
 16CCSMLightManager
 16CCSUsrMsg_Damage
 16CCSUsrMsg_Geiger
@@ -4649,6 +4689,8 @@ $x	;A
 17CBaseCombatWeapon
 17CBaseMoveBehavior
 17CBreakableSurface
+17CBtActionTeleport
+17CBtDecoratorMaybe
 17CBtSensorShapeFov
 17CCLCMsg_VoiceData
 17CCSEntitySpotting
@@ -4669,6 +4711,7 @@ $x	;A
 17CEconTool_DescTag
 17CEconTool_NameTag
 17CEconTool_Sticker
+17CEconTool_XpGrant
 17CEntityListSystem
 17CEnvDOFController
 17CEnvEffectsScript
@@ -4703,6 +4746,7 @@ $x	;A
 17CPhysicsNPCSolver
 17CPluginBotManager
 17CPointAngleSensor
+17CPointDZItemSpawn
 17CPreMatchInfoData
 17CPrecacheRegister
 17CPropDoorRotating
@@ -4786,9 +4830,11 @@ $x	;A
 18CBaseTransmitProxy
 18CBotDoorEnumerator
 18CBtActionEquipItem
+18CBtDecoratorInvert
 18CBtDecoratorMemory
 18CBtDecoratorPicker
 18CBtDecoratorRanker
+18CBtDecoratorRemove
 18CBtDecoratorRepeat
 18CBtDecoratorSensor
 18CCLCMsg_ClientInfo
@@ -4910,6 +4956,7 @@ $x	;A
 19CAI_LeadGoal_Weapon
 19CAttributeContainer
 19CBaseParticleEntity
+19CBtDecoratorRunOnce
 19CBtDecoratorSucceed
 19CBulletsTraceFilter
 19CBumpMineProjectile
@@ -5048,12 +5095,14 @@ $x	;A
 2*.CDataGCCStrike15_v2_TournamentGroup.Picks
 2*.CMsgDPPartnerMicroTxnsResponse.EErrorCode"
 2+.CMsgGCGetPersonaNames_Response.PersonaName
+2,.CCSUsrMsg_EndOfMatchAllPlayersData.Accolade
 2,.CMsgAMSendEmail.PersonaNameReplacementToken
 2,.CMsgGCCStrike15_v2_ClientPartyWarning.Entry
 2-.CGameServers_AggregationQuery_Response.Group
 2-.CMsgGCCStrike15_v2_MatchmakingGC2ClientHello"
 2-.CMsgGCCStrike15_v2_Party_SearchResults.Entry
 2-.CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded"$
+2..CCSUsrMsg_EndOfMatchAllPlayersData.PlayerData
 2/.CDataGCCStrike15_v2_TournamentMatchDraft.Entry
 2/.CMsgGCCStrike15_v2_MatchmakingGC2ClientReserve
 2/.CMsgGCCStrike15_v2_MatchmakingGC2ServerConfirm
@@ -5184,10 +5233,12 @@ $x	;A
 21CBtDecoratorRandomInt
 21CBtDecoratorRemoveKey
 21CBtDecoratorTagEntity
+21CCSBotPatrolAreaGroup
 21CCSUsrMsg_AdjustMoney
 21CCSUsrMsg_KeyHintText
 21CCSUsrMsg_WeaponSound
 21CDangerZoneController
+21CEconTool_SeasonTiers
 21CEconTool_StrangePart
 21CEconTool_WeddingRing
 21CEconTool_WrappedGift
@@ -5216,6 +5267,7 @@ $x	;A
 21CPASAttenuationFilter
 21CPhysConstraintEvents
 21CPhysConstraintSystem
+21CPointDZCoopItemSpawn
 21CPointDZDroneGunSpawn
 21CPointProximitySensor
 21CPrecipitationBlocker
@@ -5235,6 +5287,7 @@ $x	;A
 21IKeyValuesDumpContext
 21INavAvoidanceObstacle
 21IPlayerPickupVPhysics
+21IPointDZCoopItemSpawn
 21IPointDZDroneGunSpawn
 21IPositionInterpolator
 21IScriptInstanceHelper
@@ -5247,9 +5300,11 @@ $x	;A
 22CAI_FightFromCoverGoal
 22CBaseMultiplayerPlayer
 22CBaseResourcePrecacher
+22CBtActionCommitSuicide
 22CBtDecoratorBotService
 22CBtDecoratorBuyService
 22CBtDecoratorRankerDist
+22CBtDecoratorSetBarrier
 22CCSPhysicsPushEntities
 22CCSPropExplodingBarrel
 22CCSUsrMsg_CloseCaption
@@ -5282,6 +5337,7 @@ $x	;A
 22CPhysPropWeaponUpgrade
 22CPhysicsPlayerCallback
 22CPhysicsPushedEntities
+22CPointDZItemSpawnGroup
 22CPointDZParachuteSpawn
 22CPointGamestatsCounter
 22CPostProcessController
@@ -5310,10 +5366,16 @@ $x	;A
 23CBaseGameSystemPerFrame
 23CBotBreakableEnumerator
 23CBreachChargeProjectile
+23CBtActionCoordinatedBuy
+23CBtActionFleeAreaDamage
 23CBtDecoratorNeedHealing
 23CBtDecoratorPickerDeDup
+23CBtDecoratorWaitSuccess
+23CBtNodeConditionBarrier
 23CBtNodeConditionIsEmpty
+23CBtNodeConditionIsEqual
 23CCLCMsg_LoadingProgress
+23CCSBotPatrolAreaRespawn
 23CCSUsrMsg_QuestProgress
 23CCSUsrMsg_SurvivalStats
 23CClassPtrSaveRestoreOps
@@ -5376,6 +5438,8 @@ $x	;A
 24CBtDecoratorPickerNearby
 24CBtDecoratorRouteService
 24CBtDecoratorTagThreshold
+24CBtDecoratorTokenService
+24CBtNodeConditionInactive
 24CBtNodeConditionOwnsItem
 24CCLCMsg_RespondCvarValue
 24CCSUsrMsg_CallVoteFailed
@@ -5411,6 +5475,7 @@ $x	;A
 24CTraceFilterEntitiesOnly
 24CTriggerSurvivalPlayArea
 24CVarBitVecSaveRestoreOpsI7CBitVecILi32EEE
+24ICCSBotPatrolAreaRespawn
 24IEntityFactoryDictionary
 24IInventoryUpdateListener
 24IPointDZWeaponSpawnGroup
@@ -5426,7 +5491,9 @@ $x	;A
 25CAI_ExpresserWithFollowup
 25CAttributeContainerPlayer
 25CBroadcastRecipientFilter
+25CBtActionSetGlobalCounter
 25CBtDecoratorPickerVisible
+25CBtNodeConditionOutOfAmmo
 25CCSUsrMsg_GlowPropTurnOff
 25CCSUsrMsg_MarkAchievement
 25CCSUsrMsg_VGUIMenu_Subkey
@@ -5452,6 +5519,7 @@ $x	;A
 25CTriggerCameraMultiplayer
 25CVGUILocalizationProvider
 25EntityParticleTrailInfo_t
+25EscapeFromDangerZoneState
 25ICSPlayerAnimStateHelpers
 260.0
 26CAI_FightFromCoverBehavior
@@ -5480,6 +5548,7 @@ $x	;A
 26CMsgGCServerVersionUpdated
 26CMsgHttpRequest_QueryParam
 26CPathfindNearestNodeFilter
+26CPointDZCoopItemSpawnGroup
 26CPointPlayerMoveConstraint
 26CPositionInterpolator_Rope
 26CPropDoorRotatingBreakable
@@ -5494,10 +5563,12 @@ $x	;A
 26DC5C6CE94A4B44F330B5D9BBD77CBF958416295CF7E1CE6BCCDC18FF8C07B6
 26ICommandCompletionCallback
 26IEconItemAttributeIterator
+26IPointDZCoopItemSpawnGroup
 26IServerDLLSharedAppSystems
 26ScoreLeaderboardData_Entry
 27CAI_SaveRestoreBlockHandler
 27CBtActionChooseBombSiteArea
+27CBtDecoratorSetReactionTime
 27CCSUsrMsg_DisconnectToLobby
 27CCSUsrMsg_PlayerStatsUpdate
 27CCSUsrMsg_StopSpectatorMode
@@ -5520,6 +5591,7 @@ $x	;A
 27CPhysPropWeaponUpgradeArmor
 27CPointAngularVelocitySensor
 27CPreMatchInfoData_TeamStats
+27CSOAccountSeasonalOperation
 27CSVCMsg_GameEventList_key_t
 27CSceneFindNearestMarkFilter
 27CSchemaAttributeType_String
@@ -5535,7 +5607,8 @@ $x	;A
 28.CMsgGCCStrike15_v2_MatchmakingServerReservationResponse
 28.CMsgGCCStrike15_v2_MatchmakingServerRoundStats.DropInfo
 28CBtActionChooseTeamSpawnArea
-28CBtDectoratorSetReactionTime
+28CBtDecoratorDecGlobalCounter
+28CBtDecoratorFindUtilityStrat
 28CBtNodeConditionDistanceLess
 28CCSUsrMsg_CloseCaptionDirect
 28CCSUsrMsg_MatchEndConditions
@@ -5572,6 +5645,9 @@ $x	;A
 29CAI_EnemiesListSaveRestoreOps
 29CBasePlayerSendTableExtension
 29CBtActionChooseRandomWaypoint
+29CBtActionCompareGlobalCounter
+29CBtDecoratorHidingSpotService
+29CBtDecoratorPickerGrenadeType
 29CCLCMsg_HltvFixupOperatorTick
 29CCSUsrMsg_SendPlayerItemDrops
 29CCSUsrMsg_SendPlayerItemFound
@@ -5640,8 +5716,10 @@ $x	;A
 30ISearchSurroundingAreasFunctor
 31CAttributeIterator_HasAttribute
 31CBaseEntityScriptInstanceHelper
+31CBtDecoratorRandomApproachPoint
 31CCSUsrMsg_UpdateScreenHealthBar
 31CDedicatedServerWorkshopManager
+31CEconAccountSeasonalOperationGS
 31CGCClientJobServerUpdateVersion
 31CGCToGCMsgMasterStartupComplete
 31CMsgAMGrantGuestPasses2Response
@@ -5657,12 +5735,16 @@ $x	;A
 31CMsgGCToGCDirtyMultipleSDOCache
 31CMsgHttpResponse_ResponseHeader
 31CMsgIncrementKillCountAttribute
+31CPhysPropMapPlacedLongUseEntity
+31CPhysPropWeaponRefillHeavyArmor
 31CPhysPropWeaponUpgradeParachute
 31CResponseRulesToEngineInterface
 31CSVCMsg_HltvFixupOperatorStatus
 31CTraceFilterSimpleClassnameList
 31CVScriptSaveRestoreBlockHandler
 31OperationalStatisticDescription
+32CBtDecoratorPickerBlockedBySmoke
+32CBtNodeConditionIsWeaponEquipped
 32CBtNodeConditionIsWeaponSuitable
 32CCSUsrMsg_EntityOutlineHighlight
 32CCSUsrMsg_PlayerStatsUpdate_Stat
@@ -5702,6 +5784,7 @@ $x	;A
 340E7BE2A280EB74E2BE61BADA745D97E8F7C300
 34CBtDecoratorPickerRandomByDistance
 34CBtDecoratorPickerWeightAsDistance
+34CCSUsrMsg_EndOfMatchAllPlayersData
 34CDataGCCStrike15_v2_TournamentInfo
 34CMsgDPPartnerMicroTxns_PartnerInfo
 34CMsgGCCStrike15_v2_ClientPollState
@@ -5774,17 +5857,20 @@ $x	;A
 39CMsgGCCStrike15_v2_ClientReportResponse
 39CMsgGCItemPreviewItemBoughtNotification
 39CTraceFilterSkipTwoEntitiesAndTeammates
-3=.+ 
-3=., 
-3=.RG
-3=.x$
-3=K~K
-3=^L8
-3=^[=
-3=fG9
-3=kJK
-3=re4
-3=ur1
+3=%{5
+3=*?6
+3=.#2
+3=.}(
+3=;cO
+3=Ng%
+3=^+M
+3=^[%
+3=nc%
+3=ni%
+3=ry8
+3=vk%
+3=~e%
+3=~sA
 3@T]f
 3B 3B
 3B 3B43B,
@@ -5849,6 +5935,7 @@ $x	;A
 42CMsgGCCstrike15_v2_ClientRequestNewMission
 42CMsgGCGetPersonaNames_Response_PersonaName
 42CWorkshop_PopulateItemDescriptions_Request
+43CCSUsrMsg_EndOfMatchAllPlayersData_Accolade
 43CMsgAMSendEmail_PersonaNameReplacementToken
 43CMsgGCCStrike15_v2_ClientPartyWarning_Entry
 43CMsgGCCStrike15_v2_ClientToGCRequestElevate
@@ -5866,6 +5953,7 @@ $x	;A
 44CMsgGCCStrike15_v2_PlayerOverwatchCaseStatus
 44CMsgGCCStrike15_v2_PlayerOverwatchCaseUpdate
 44CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded
+45CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData
 45CCommunity_GetGamePersonalDataEntries_Request
 45CDefaultResponseSystemSaveRestoreBlockHandler
 45CMsgGCCStrike15_v2_GC2ServerReservationUpdate
@@ -6011,6 +6099,7 @@ $x	;A
 7BotMeme
 7CBotCmd
 7CBtNode
+7CBtTree
 7CCSTeam
 7CCycler
 7CDEagle
@@ -6043,7 +6132,6 @@ $x	;A
 8-tLH
 8-t_H
 8000000000000000000000000000069D5BB915BCD46EFB1AD5F173ABDF
-81t'H
 89w t"H
 8;BP|
 8AUATM
@@ -6103,12 +6191,14 @@ $x	;A
 8[]A\A]
 8[]A\A]A^A_
 8b  16-May-2010
+8k_EGCItemCustomizationNotification_ActivateOperationCoin
 8t0f.
 8|)fC
 8~2Mc
 90t#H
 90t#I
 90t&H
+90t.H
 90tNH
 91t(HcA
 92t)H
@@ -6120,12 +6210,12 @@ $x	;A
 999999.0
 99w8|&H
 9C$u1
-9C$uSD9k u5A
 9C0~ Lc
 9C0~!E1
 9C8te
 9C8~%D
 9C8~kH
+9C<}YH
 9CAI_AddOn
 9CAI_Agent
 9CAI_Motor
@@ -6253,11 +6343,13 @@ $x	;A
 ;2t9H
 ;9t/H
 ;9t2H
+;= p/
 ;CT}A
 ;D;g 
 ;Entity exists: %u
 ;F`}$I
 ;H9y@u
+;H<t$
 ;HD|(H
 ;IEffects001
 ;O|tGL
@@ -6278,6 +6370,7 @@ $x	;A
 <	McO
 <	t&H
 <	t(H
+<	tEH
 <	ucL
 <	wBD
 < D9o(u
@@ -6397,9 +6490,9 @@ $x	;A
 >CPhysicsHook
 >CPlayerResource
 >DT_SmokeGrenade
->Help
 >Ic7H
 >KtPL
+>SniperWarning
 >competitive
 >molotov_groundfire
 >w!A;
@@ -6430,7 +6523,6 @@ $x	;A
 ?L+OxI
 ?L+wxI
 ?Obstructing nav
-?OnMyWay
 ?PublicExponent
 ?SMALL_CENTERED_HULL
 ?StartOpen
@@ -6468,7 +6560,7 @@ $x	;A
 @8H;E
 @8wpUH
 @8wyt=H
-@:=eu
+@:=5n
 @:p't
 @<A;G
 @@H;E
@@ -6477,7 +6569,6 @@ $x	;A
 @CGrassBurn
 @DT_PredictedViewModel
 @Fear
-@H;=]}
 @HA^]
 @HHc<
 @Hc6H
@@ -6517,6 +6608,7 @@ $x	;A
 @ptkH
 @ptpH
 @ptsH
+@pttH
 @pt}H
 @rendercolor32
 @t'Hc
@@ -6591,6 +6683,7 @@ A9D$
 A9D$ t3I
 A9D$ u
 A9D$ ~
+A9D$$u\E9l$ u5
 A9D$(
 A9D$0
 A9D$0~:I
@@ -6600,6 +6693,7 @@ A9D$8~
 A9D$@t#I
 A9D$L
 A9D$P
+A9D$P~
 A9D$X
 A9D$`~"I
 A9D$d
@@ -6630,6 +6724,7 @@ A9^\~*A
 A9t$<|
 A9u<|
 A9w@}
+A9}<| 
 A;	t)I
 A;	t+I
 A;1tHA
@@ -6697,6 +6792,8 @@ A;}$|
 A@nav_merge_mesh
 AADD9DB8DBE9C48B3FD4E6AE33C9FC07CB308DB3B3C9D20ED6639CCA70330870553E5C414CA92619418661197FAC10471DB1D381085DDADDB58796829CA90069
 AADD9DB8DBE9C48B3FD4E6AE33C9FC07CB308DB3B3C9D20ED6639CCA703308717D4D9B009BC66842AECDA12AE6A380E62881FF2F2D82C68528AA6056583A48F3
+ACCOLADE, FINAL: {%s},	%s<%i>,	VALUE: %f,	POS: %i,	SCORE: %f
+ACCSBotPatrolArea
 ACPlayerMove::StartCommand
 ACTOR
 ACT_180_LEFT
@@ -6790,6 +6887,10 @@ ACT_CSGO_SILENCER_ATTACH
 ACT_CSGO_SILENCER_DETACH
 ACT_CSGO_TWITCH
 ACT_CSGO_TWITCH_BUYZONE
+ACT_CSGO_UIPLAYER_CELEBRATE
+ACT_CSGO_UIPLAYER_CONFIRM
+ACT_CSGO_UIPLAYER_IDLE
+ACT_CSGO_UIPLAYER_WALKUP
 ACT_DEPLOY
 ACT_DEPLOY_IDLE
 ACT_DIEBACKWARD
@@ -7865,8 +7966,10 @@ ANIMTAG_AIMLIMIT_YAWMIN_CROUCHWALK
 ANIMTAG_AIMLIMIT_YAWMIN_IDLE
 ANIMTAG_AIMLIMIT_YAWMIN_RUN
 ANIMTAG_AIMLIMIT_YAWMIN_WALK
+ANIMTAG_ENDCYCLE_EARLY
 ANIMTAG_FLASHBANG_PASSABLE
 ANIMTAG_STARTCYCLE_E
+ANIMTAG_STARTCYCLE_LATE
 ANIMTAG_STARTCYCLE_N
 ANIMTAG_STARTCYCLE_NE
 ANIMTAG_STARTCYCLE_NW
@@ -7882,11 +7985,12 @@ APPROACH_DESCENDING_LADDER (face out)
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 AR2AltFire
 AR2Tracer
+AREA_DAMAGE
 ASCEND_LADDER
 ASCII conversion buffer too small
 ATI1N
 ATI2N
-ATLc%
+ATLc%}b4
 ATSA9
 ATSH9
 ATSHc
@@ -8020,6 +8124,7 @@ AWAVM
 AWAVSH
 AWAVfA
 AZA[[A\A]A^]
+AZ[A\A]]
 A[A\]
 A\A]A^A
 A\A]A^A_]
@@ -8039,6 +8144,7 @@ AbsTagType(unknown)
 Accel (time*time)
 Accel/Deaccel (cosine)
 Access of EHANDLE/CHandle for class %s:%p in destructor!
+Accolade
 Account is Convicted
 Account is Untrusted
 AccountActivity
@@ -8232,7 +8338,6 @@ Assault Cleared due to Contact or Input!
 Assault Point: %s %s
 Assault goal disabled
 Assertion Failed: !m_bNeedsSort
-Assertion Failed: IPointDZWeaponSpawn::AutoList().Count()
 Assertion Failed: g_StudioHdrToActivityMaps[i].nRefs == 0
 Assertion Failed: m_hTheFinalZone.Get()
 Assertion Failed: m_pBrConfig
@@ -8241,8 +8346,6 @@ At marker 0x%02x, recovery action %d
 At the end of the match, perform a changelevel even if next map is the same
 At the end of the match, perform a restart instead of loading a new map
 At,E1
-At;E1
-AtHE1
 AtOE1
 Attached %s (mod_studio) to %s (%d)
 Attachment index for attachment mode
@@ -8250,7 +8353,6 @@ Attack2Axis
 AttackAxis
 AttackDelay
 AttackState:OnExit()
-Attacker 
 Attacker: %s
 AttackerMovement
 AttackerSessionID
@@ -8371,6 +8473,7 @@ BULLET_PLAYER_762MM
 BULLET_PLAYER_9MM
 BULLET_PLAYER_BUCKSHOT
 BXAVL
+B[A\A]A^]
 BackUp() can only be called after a successful Next().
 BackgroundBModel
 Backing store not supported
@@ -8518,6 +8621,7 @@ BotProfile.db
 BotProfileCoop.db
 BotService
 Bots will not see non-bot players.
+Bots will see players through smoke clouds up to this length.
 Bounce multiplier for when physically simulated objects collide with other objects.
 Bounce.Concrete
 Bounce.Flesh
@@ -8584,6 +8688,7 @@ BufferedTransformation: this object doesn't allow input
 BufferedTransformation: this object is not attachable
 BuildArea - NULL node.
 BuildArea: Out of memory.
+BuildCacheSubscribed(CEconAccountSeasonalOperationGS)
 BuildCacheSubscribed(CEconDefaultEquippedDefinitionInstanceClient)
 BuildCacheSubscribed(CEconItem)
 BuildCacheSubscribed(CEconPersonaDataPublic)
@@ -8620,7 +8725,6 @@ C Lcc0H
 C Mce
 C [A\]
 C []A\
-C t$H
 C t/H
 C tIHcS(L
 C tKI
@@ -8636,7 +8740,6 @@ C(@u?
 C(H9E
 C([A\A]A^]
 C([A\]
-C(t^H
 C(u9H
 C(vnM
 C(x1Hc
@@ -8650,7 +8753,6 @@ C0H;0
 C0HcS8
 C0[A\A]A^]
 C0[A\]
-C0t.H
 C0tdH
 C302F41D932A36CDA7A3462F9E9E916B5BE8F1029AC4ACC1
 C302F41D932A36CDA7A3463093D18DB78FCE476DE1A86297
@@ -8665,7 +8767,6 @@ C89C\
 C8[A\]
 C8t	H
 C8t	L
-C8tvH
 C8},1
 C8}J1
 C8}R1
@@ -8902,6 +9003,7 @@ CBombTarget
 CBoneFollower
 CBoneFollowerManager
 CBotManager::IsLineBlockedBySmoke
+CBotManager::IsVisibleThroughSmoke
 CBotManager::StartFrame
 CBreachCharge
 CBreachChargeProjectile
@@ -9092,6 +9194,7 @@ CDrone
 CDronegun
 CDynamicLight
 CDynamicProp
+CEconAccountSeasonalOperationGS
 CEconDefaultEquippedDefinitionInstanceClient
 CEconEntity
 CEconItem
@@ -9488,6 +9591,7 @@ CKeyValues3Cluster allocated with bad alignment! (%p) (If this is inside of a he
 CKeyValuesTokenReader::SeekBackOneToken: It is only possible to seek back one token at a time
 CKnife
 CKnifeGG
+CLASSNAME
 CLASS_NONE
 CLASS_PLAYER
 CLC_Messages
@@ -9524,6 +9628,7 @@ CMaterialModifyControl
 CMathColorBlend
 CMathCounter
 CMathRemap
+CMax distance bots can hear targets.
 CMelee::ThrowThink
 CMemorySH
 CMemoryStack %s
@@ -9863,6 +9968,7 @@ CPhysMagnet %s:%d blocking magnet
 CPhysMotor
 CPhysPropAmmoBox
 CPhysPropLootCrate
+CPhysPropMapPlacedLongUseEntity
 CPhysPropParadropCrate
 CPhysPropRadarJammer
 CPhysPropWeaponUpgrade
@@ -9914,10 +10020,10 @@ CPointCamera
 CPointClientCommand
 CPointCommentaryNode
 CPointDZDroneGunSpawn
+CPointDZItemSpawnGroup
 CPointDZParachuteSpawn
 CPointDZParadropDenialRegion
 CPointDZWeaponSpawn
-CPointDZWeaponSpawnGroup
 CPointDevShotCamera
 CPointEntityFinder
 CPointGamestatsCounter
@@ -9986,6 +10092,7 @@ CSCAR17
 CSForceTeamThink
 CSGOMarketPurchase2
 CSOAContainer::SetAttributeType - ERROR, trying to change type of previously-defined attribute %d!
+CSOAccountSeasonalOperation
 CSOEconClaimCode
 CSOEconCoupon
 CSOEconGameAccountClient
@@ -10050,6 +10157,7 @@ CS_UM_DesiredTimescale
 CS_UM_DisconnectToLobby
 CS_UM_DisconnectToLobby2
 CS_UM_DisplayInventory
+CS_UM_EndOfMatchAllPlayersData
 CS_UM_EntityOutlineHighlight
 CS_UM_Fade
 CS_UM_GameTitle
@@ -10391,6 +10499,7 @@ CX[A\]
 CX[]A\A]A^
 CXt;H
 CXtZL
+C[A\]
 C\A9F
 C\A9G
 C\[A\A]A^]
@@ -10625,6 +10734,8 @@ Commentary: Could not find commentary data file '%s'.
 Commentary: Failed to spawn commentary entity, type: '%s'
 Commentary: Loading commentary data from %s. 
 CommentaryUpdateViewThink
+CommitSuicide
+CompareGlobalCounter
 CompiledCaptionHeader_t
 Complex achievement %s must have an Items key or a DefIndex field
 Component %d for achievement %s found
@@ -10638,9 +10749,14 @@ ConVarRef %s doesn't point to an existing ConVar
 ConceptHistory_t
 ConcreteChunks
 Cond: %s
+ConditionBarrier
 ConditionDistanceLess
+ConditionInactive
 ConditionIsEmpty
+ConditionIsEqual
+ConditionIsWeaponEquipped
 ConditionIsWeaponSuitable
+ConditionOutOfAmmo
 ConditionOwnsItem
 Conditional Error: %s
 Cone %.1f, Bias %.2f
@@ -10672,11 +10788,11 @@ Convert obsolete jump areas into 2-way connections
 Coop mission map is missing a game_coopmission_manager entity. You can't fire MissionCompleted outputs without it!
 Coop mission map is missing a game_coopmission_manager entity. You can't fire round ended outputs without it!
 Coop mission map is missing a game_coopmission_manager entity. You can't keep track of completed waves without it!
-Coop mission number = %d (parsed from %s)
 Coop.EnemiesAlive
 Coop.EnemyHeavies
 Coop.PercentComplete
 Coop.PlayersAlive
+CoordinatedBuy
 Copyright (C) 2010, Thomas G. Lane, Guido Vollbeding
 Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
 Copyright (c) 1996-1997 Andreas Dilger
@@ -10724,6 +10840,7 @@ Couldn't walk to target
 Count = %d
 Counter-Strike: Global Offensive
 CoveringFriend
+CpD;h
 Cp[A\]
 Crashed!: speed %.2f, lastSpeed %.2f
 CrateThiH
@@ -10736,6 +10853,7 @@ Create an entity at a specified location and orientaton, orientation is Euler an
 Create an entity at the location of a named entity
 Create an entity at the location of a specified entity instance
 Create an entity at the location of the maker
+Create(CEconAccountSeasonalOperationGS)
 Create(CEconDefaultEquippedDefinitionInstanceClient)
 Create(CEconPersonaDataPublic)
 CreateByClassname
@@ -10755,6 +10873,7 @@ Creates an NPC aimed away from the player of the given type where the player is 
 Creates an NPC of the given type where the player is looking (if the given NPC can actually stand at that location).  
 Creates an entity by classname
 Creates an entity of the given type where the player is looking.
+Creates and detonates a danger zone at the given location moving towards target location.
 Creating navigation areas from sampled data...
 Creation Time
 Crecrouch_generic
@@ -10913,6 +11032,7 @@ D$XdH3
 D$Xu-A
 D$\M9
 D$`[A\]
+D$dA\A]A^]
 D$hA\
 D$hA\]
 D$hE1
@@ -10944,25 +11064,28 @@ D24FS8
 D24X4S4
 D24X8
 D24X8_SHADOW
-D3%5n
+D3%);
+D3%9j
+D3%M$2
+D3%Tj
 D3%}r
-D3-E]
-D3-M("
+D3-Y8
 D35E472036BC4FB7E13C785ED201E065F98FCFA5B68F12A32D482EC7EE8658E98691555B44C59311
 D35E472036BC4FB7E13C785ED201E065F98FCFA6F6F40DEF4F92B9EC7893EC28FCD412B1F1B32E27
-D3="D
-D3=/M
-D3=m/2
-D3=~}
+D3=-86
+D3=.Y
+D3=\w
 D6031998D1B3BBFEBF59CC9BBFF9AEE1
 D7C134AA264366862A18302575D0FB98D116BC4B6DDEBCA3A5A7939F
 D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FF
 D7q/;M
-D9%:s
-D9-11L
+D9-en
+D9.t-H
 D91t%H
 D92t:H
-D9=}u
+D95Yn
+D9=H`4
+D9=Mn
 D9F<~
 D9`4u
 D9`4~-
@@ -10975,7 +11098,6 @@ D9c8t
 D9cH~
 D9cLI
 D9cL~
-D9c|[
 D9k8~1H
 D9kP~rA
 D9pTu
@@ -10984,24 +11106,28 @@ D9xTu
 D9{`t
 D: u*A
 D:!ts
-D:%+u
 D:g+u2E
 D; t:
 D; |)A
 D;!t{Hc
 D;"tPH
 D;$%`
-D;%*@
-D;%13
-D;%=/
-D;%i5
-D;%m@
+D;%-1
+D;%-Z
+D;%<1
+D;%?o
+D;%Pb:
+D;%]%
+D;%j,
 D;(|)A
+D;)t"H
 D;+toH
 D;,%`
-D;-<{
 D;0t!I
+D;8t0
 D;8t<H
+D;:t>
+D;=j~
 D;F8t
 D;`<t
 D;c }
@@ -11016,6 +11142,7 @@ D;c(}/H
 D;c0|
 D;c0}"H
 D;c0}'H
+D;c0}*H
 D;c0}+H
 D;c0}/H
 D;c8|
@@ -11040,7 +11167,6 @@ D;cX}"H
 D;cX}'H
 D;c`|
 D;c`}
-D;c`}"H
 D;c`}'H
 D;c`}*H
 D;c`}>H
@@ -11079,6 +11205,7 @@ D;k`|
 D;kdw
 D;kp|
 D;kx|
+D;p<t
 D;pDt
 D;s0|
 D;sP|QH
@@ -11501,6 +11628,7 @@ DebugDrawBox
 DebugDrawLine
 DebugTextureInfo001
 Debugging %s (0x%p)
+DecGlobalCounter
 Decay factor (linear term) for weapon recoil
 Decay factor exponent for view punch
 Decay factor exponent for weapon recoil
@@ -11511,6 +11639,7 @@ DecodingLookupArray
 Decompression Error
 Decompression error
 Decompression failure
+DecoratorPickerBlockedBySmoke
 DecoratorRouteServiceStrategyArray
 Dedicated server skirmish id to run
 DefName
@@ -11535,6 +11664,7 @@ DefuserTH
 DefusingBomb
 Degenerate Navigation Area #%d at setpos %g %g %g
 Degenerate area %d
+Delay between end of warmup and start of match.
 Delay between the end match scoreboard being shown and the beginning of item drops.
 Delay: %d
 DelayThiH
@@ -11574,6 +11704,7 @@ Determines whether kevlar (1+) and/or helmet (2+) are given automatically.
 Determines whether non-headshot hits do any damage.
 Determines whether players are to spawn. 0 = default; 1 = both teams; 2 = Terrorists; 3 = CTs.
 Determines whether the match switches sides in a halftime event.
+Determines which scene is used for the versus screen.
 Determines which team, if any, can purchase Heavy guns. -1 = any; 0 = non; 2 = Ts; 3 = CTs.
 Determines which team, if any, can purchase Pistols. -1 = any; 0 = non; 2 = Ts; 3 = CTs.
 Determines which team, if any, can purchase Rifles. -1 = any; 0 = non; 2 = Ts; 3 = CTs.
@@ -11717,9 +11848,11 @@ Download finished for %llu:'%s'. Moving %s to %s.
 Draw a debug overlay box
 Draw a grid on the floor where looking.
 Draw alien blood
+Draw hiding spots.
 Draw human blood
 Draw paths tried during search for bodysnatcher pathing
 Draw the behavior tree of the given bot.
+Draw the hiding spot the bot will check next.
 Draw's a while box around the NPC(s) nearest node
 Draws a cross at the given location
 Draws line between two 3D Points.
@@ -11746,6 +11879,7 @@ Duplicate 'default' item definition.
 Duplicate Campaign definition id %d
 Duplicate PLTE chunk
 Duplicate Quest definition id %d
+Duplicate Seasonal Operation definition id %d
 Duplicate Skirmish mode definition id %d
 Duplicate Skirmish mode name %s (%d and %d)
 Duplicate alternate icon definition '%s' (%llu)
@@ -11788,8 +11922,8 @@ Dynamic Light
 Dynamic Link Error: (%s) unable to form between nodes %d and %d
 Dynamic prop %s: no sequence named:%s
 DynamicLH
-E ;5Z
-E ;5z
+E ;5*
+E ;5J
 E A+E
 E A]A^]
 E#<$E
@@ -11828,7 +11962,6 @@ E+}8E
 E+~$Mc
 E3d$TfA
 E3d$X
-E3mTfA
 E3vTfA
 E87579C11079F43DD824993C2CEE5ED3
 E8IcU@H
@@ -11841,6 +11974,7 @@ E9e8~wI
 E9eP~oH
 E9g(~jI
 E9gP~BI
+E9l$ 
 E9l$(|
 E9l$0
 E9l$0t
@@ -11881,6 +12015,7 @@ E;f(|
 E;f(}
 E;f(}$HcC(
 E;f(}.I
+E;f(}6I
 E;f0|
 E;f0}
 E;f8|
@@ -11907,6 +12042,7 @@ E;l$x}
 E;n\|
 E;o8|
 E;t$8
+E;w$t%
 E;wT|
 E;|$4
 E;}<L
@@ -11979,7 +12115,6 @@ EOpenDoor
 EP@t&I
 EPI9EHt_H
 EPIcUXH
-EQUIPMENT
 ERROR
 ERROR phys_convert %s ! Already MOVETYPE_VPHYSICS
 ERROR! %s missing ACT_DIESIMPLE
@@ -12055,6 +12190,7 @@ ERROR: file contains a schedule (%s) that has already been defined!
 ERROR: path_track (%s) refers to itself as a target!
 ERROf
 ESCAPE_FROM_BOMB
+ESCAPE_FROM_DANGER_ZONEMOVE_TO_PLAY_AREA
 ESCAPE_FROM_FLAMES
 ESOMsg
 ESplitScreenMessageType
@@ -12111,6 +12247,7 @@ EWT_Unknown
 EWeaponType
 EXCELLENT
 EXPERT
+EXPLOSIVE
 EXtPL
 Ease In
 Ease In/Out
@@ -12264,12 +12401,14 @@ Error: CreateBot() failed.
 Error: U
 Error: bot_place needs at least one bot already in the map.
 EscapeFromBomb
+EscapeFromDangerZone
 EscapeFromFlames
 EscortingHostages
 EstimateLength
 Estimated wait time remaining is %02d:%02d.
 EvaluatiH
 Event %s was missing tag %s for wav %s
+Event index %d seems way too big
 Event.HostageRescued
 EventQueuePrioritizedEvent_t
 EventQueuePrioritizedEvent_t pool
@@ -12353,6 +12492,7 @@ ExplodeTH
 Exponential Decay
 Extend current Map
 ExtendedServerInfo
+Extends the round time after checkpoint during the mission.
 Extension "
 Extension conflicts with extension already in database: extend 
 Extension factory's GetPrototype() returned NULL for extension: 
@@ -12367,6 +12507,9 @@ Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend a non-lite type to contain a lite type, but the reverse is allowed.
 Extra compressed data
 Extra compression data
+Extra starting equipment for CT players in guardian modes
+Extra starting equipment for Terrorist players in guardian modes
+Extra starting equipment for human players in guardian modes
 ExtraField
 ExtraParticleFilesTable
 E|$@H
@@ -12423,7 +12566,6 @@ FHL;E
 FIND_TICKING_BOMB
 FIRE token in response needs exactly three parameters.
 FIRST
-FISTS
 FLINCHED
 FMod values for pose controller %s
 FORCE_NOT_USED
@@ -12463,6 +12605,7 @@ Failed to get count of items in zip file '%s'. Reason: %s
 Failed to get count of items. Reason: %s 
 Failed to get file info information from steam, HTTP status: %d
 Failed to get lock %s at %s(%d) after waiting in %s
+Failed to give item %s
 Failed to include script "%s"
 Failed to initialize sticker kit ID %d '%s'
 Failed to initialize sticker list '%s'
@@ -12491,6 +12634,7 @@ FallingSpeedThreshold
 FantasySlot
 FantasyTeam
 FastHexToBuffer() wants non-negative integers, not 
+FbRKN20CCStrike15ItemSchema15CharacterDefn_tEE
 Fear: Couldn't find hint node
 FeedbackSize
 Feel free to add support for more if you need it.
@@ -12563,6 +12707,7 @@ FindByTarget
 FindCover() - %s has no nearest node! (Check near %f %f %f)
 FindInSphere
 FindThinH
+FindUtilityStrat
 Finding earliest occupy times...
 Finding earliest occupy times...DONE
 Finding encounter spots...
@@ -12612,6 +12757,7 @@ Flashbang strength
 Flashbang.Bounce
 Flashbang.Explode
 Flee path shorter than task parameter
+FleeAreaDamage
 Flesh.BulletImpact
 Flesh.ImpactGloves
 Flesh.ImpactHard
@@ -12661,6 +12807,7 @@ ForEachPlayer
 Force all clients to disable their game instructors.
 Force all players to respawn.
 Force all shots to have maximum inaccuracy
+Force bots to collect hostages after this amount of time if no enemy has been seen.
 Force cts to spawn on a bombsite
 Force on if not prohibited
 Force spread to the specified value.
@@ -13068,6 +13215,7 @@ Grant healthshots in team deathmatch after n kills
 Graph not ready for FindBackAwayNode!
 GravityTH
 GreenBlood
+GrenadeEvents
 GrenadeThrowBend
 Groundent: NULL
 Groundent:%s
@@ -13168,7 +13316,6 @@ H97t/E1
 H99t 
 H9:t#HcR
 H9;t@D
-H9=a!8
 H9C t,H
 H9C t`L
 H9C u
@@ -13202,20 +13349,24 @@ H;2t$H
 H;2t&1
 H;2t.H
 H;2tGH
-H;5 .
-H;50$
-H;50*C
-H;53LC
-H;5=L
-H;5@<
-H;5F[
-H;5F]
-H;5M=
-H;5P/
-H;5PSC
-H;5Vo
-H;5bM
-H;5j9
+H;5 @
+H;5 c
+H;5".
+H;5#tG
+H;5&rG
+H;56k
+H;58|
+H;5>v
+H;5@I
+H;5A=
+H;5PA
+H;5Ty
+H;5`;
+H;5cR
+H;5iR
+H;5j/
+H;5sfG
+H;5vi
 H;7tnH
 H;8t+
 H;8t8H
@@ -13223,122 +13374,141 @@ H;:t:H
 H;:t>H
 H;:tBH
 H;:tFH
-H;= #
-H;= U
-H;=!*
-H;=!Z
-H;=%,
-H;=%;
-H;=%t
-H;=%u
-H;=&j
-H;='/
-H;='q
-H;=*9
-H;=*V
-H;=+ 
-H;=,=
-H;=,f
-H;=-5
-H;=.=
-H;=13
-H;=5r
-H;=5x
-H;=5{
-H;=8Z
-H;=97
-H;=:^
-H;=:`
-H;=;#
-H;=;Z
-H;=<|
-H;==XB
-H;==b
-H;=@j
-H;=A+N
-H;=Ac
-H;=BdA
-H;=DYB
-H;=Ei
-H;=El
-H;=Em
-H;=G;
-H;=G@
-H;=GS
-H;=Gk
-H;=Hi
-H;=K&
-H;=L#
-H;=L,
-H;=LU
-H;=M8
-H;=M<
-H;=N9
-H;=Np
-H;=P2
-H;=Qj
-H;=Qx
-H;=RV
-H;=Rr
-H;=SHA
-H;=T#
-H;=U3
-H;=Uk
-H;=Ur
-H;=WeB
-H;=W{
-H;=Yv
-H;=["
-H;=\7
-H;=\SB
-H;=\`
-H;=]S
-H;=]j
-H;=^z
-H;=b`
-H;=bs
-H;=dX
-H;=dZ
-H;=dg
-H;=g)B
-H;=g0
+H;= 8
+H;= K
+H;=!0
+H;=!}
+H;=#NE
+H;=#f
+H;=$:F
+H;=$v
+H;=%1
+H;=&X
+H;='C
+H;='kF
+H;=).
+H;=*/
+H;=*R
+H;=+4
+H;=,C
+H;=,S
+H;=-+
+H;=-\
+H;=.3
+H;=/4
+H;=0q
+H;=1,
+H;=3&	
+H;=5+
+H;=7/F
+H;=7V
+H;=7WF
+H;=7[
+H;=7hE
+H;=7n
+H;=8Q
+H;=:r
+H;=;7
+H;=<0
+H;=<T
+H;=<aF
+H;==5
+H;==Q
+H;==W
+H;==j
+H;==m
+H;=>r
+H;=?c
+H;=?q
+H;=@b
+H;=Ar
+H;=B	
+H;=B8
+H;=C2
+H;=CY
+H;=D7
+H;=Dq
+H;=E_
+H;=Eb
+H;=Ec
+H;=Eq
+H;=GA
+H;=GH
+H;=GI
+H;=GLF
+H;=H_
+H;=I7R
+H;=Iy
+H;=K3
+H;=L8
+H;=LK
+H;=L\
+H;=Li
+H;=M.
+H;=M2
+H;=MV
+H;=N/
+H;=O^
+H;=Of
+H;=RZ
+H;=S"	
+H;=S\
+H;=T*F
+H;=T@
+H;=Ua
+H;=W!
+H;=W/
+H;=Wh
+H;=Xe
+H;=Y}
+H;=[6
+H;=[P
+H;=\C
+H;=\V
+H;=]`
+H;=_p
+H;=aN
+H;=d]
+H;=g2
+H;=g5
 H;=g?
-H;=gQB
-H;=g^
-H;=gbA
-H;=gd
-H;=hs
-H;=iYB
-H;=jB
-H;=jm
-H;=k%
-H;=k:
-H;=l[
-H;=lj
-H;=m7
-H;=mi
-H;=n;
-H;=o{
-H;=r+B
-H;=sz
-H;=tT
-H;=ti
-H;=uY
+H;=gD
+H;=g\
+H;=gp
+H;=k2
+H;=l0
+H;=lb
+H;=lq
+H;=m-
+H;=m2
+H;=mH
+H;=mU
+H;=mY
+H;=mm
+H;=n1
+H;=oe
+H;=os
+H;=p7
+H;=q*
+H;=tR
+H;=t_
+H;=tgF
+H;=u2
+H;=u\
+H;=uc
+H;=uo
 H;=uq
-H;=wFB
-H;=wN
-H;=wT
-H;=wX
-H;=wx
-H;=xU
-H;=zgB
-H;=zk
-H;={!
-H;=|3
-H;=|Y
-H;=|h
-H;=|j
-H;=~{
+H;=ur
+H;=w$F
+H;=w-
+H;=w\
+H;=wi
+H;=wm
+H;=y*F
+H;=zO
+H;={5
+H;=}.
+H;=}\
 H;ChH
 H;FPu
 H;G(t+H
@@ -13427,6 +13597,7 @@ Hc:HcB
 Hc@(H
 HcA,HcR,A
 HcB,LcQ,E
+HcB`H
 HcC L
 HcC M
 HcC$9
@@ -13456,7 +13627,6 @@ HcD$ I
 HcD08
 HcE Hc
 HcE0H
-HcF8H
 HcGHH
 HcH LcX
 HcK H
@@ -13506,6 +13676,7 @@ Hc{ H
 Hc{<H
 Hc~0H
 Heals the target back to full health
+Health given to survivors per wave in guardian mode.
 Health: %d, collision group %d
 Health: %i
 Health: %i  (DACC:%1.2f)
@@ -13517,7 +13688,6 @@ Heard noise (%s from %s, pri %s, time %3.1f)
 HeardNoise
 Heat: %.1f
 Heavy 
-Heavy Phoenix 
 Heavy.Step
 HeavyWakeTaunt
 Hex and octal numbers must be integers.
@@ -13525,8 +13695,11 @@ HexesExplored
 Hide from area is NULL.
 HideThinH
 Hiding spot off nav mesh
+HidingSpotService
+HidingSpotServiceHidingSpotArray
 Highlight non-contiguous connections
 Highlight the specified node
+Highlights all dropped weapons for players, or removes all highlights.
 Highlights constraint system graph for an entity
 Hint Group: %s
 Hint Type Range is backwards - Fixing up.
@@ -13654,7 +13827,7 @@ I+@xM
 I+AxH
 I+D$xH
 I+PxH
-I+QxH
+I+PxL
 I+QxL
 I+U`I
 I+V(H
@@ -13721,8 +13894,10 @@ IcD$H9
 IcD$HA
 IcD$HA;D$L
 IcD$HI
+IcD$P
 IcD$P9
 IcD$PA
+IcD$PA;D$T
 IcD$PI
 IcD$X
 IcD$X9
@@ -13761,7 +13936,9 @@ IcE0A;E4tjI
 IcE8A
 IcE8A;E<
 IcEDL
+IcF I
 IcF(f
+IcF8I
 IcF8f
 IcFHf
 IcFpf
@@ -13808,8 +13985,10 @@ IcU0A;U4
 IcU<A
 IcU@D
 IcUXD
+IcV H
 IcV(f
 IcV0H
+IcV8A
 IcV8H
 IcV8f
 IcV<A
@@ -13831,6 +14010,7 @@ Ict$0
 Ict$0A;t$4u
 Icv<E
 Ic|$0
+Ic~(H
 Ic~0H
 Idling
 If 'fill', the server will adjust bots to keep N players in the game, where N is bot_quota.
@@ -13874,11 +14054,11 @@ If nonzero, bots may use the machine gun.
 If nonzero, bots use no CPU for AI. Instead, they run around randomly.
 If nonzero, bots wait until a player joins before entering the game.
 If nonzero, bots will automatically leave to make room for human players.
+If nonzero, bots will ignore enemies (for debugging).
 If nonzero, bots will not buy if their money falls below this amount.
 If nonzero, bots will not fire weapons (for debugging).
 If nonzero, bots will stay in idle mode and not attack.
 If nonzero, bots with high co-op may automatically follow a nearby human player.
-If nonzero, immediately stops all bot processing.
 If running a benchmark and this is set, it will record a vprof file over the duration of the benchmark with filename benchmark.vprof.
 If set one, many debug prints to help track down the TLK_IDLE issue. Set two for super verbose info
 If set then server will save all played rounds information to files filename_date_time_team1_team2_mapname_roundnum_score1_score2.txt
@@ -14242,6 +14422,7 @@ InputOnBreak
 InputOpen
 InputOpenAwayFrom
 InputOutsideTransition
+InputOuttroPerPlayerStart
 InputPass
 InputPausePlayback
 InputPickRandom
@@ -14872,30 +15053,29 @@ K to1
 K(D91t0H
 K([A\]
 K(~'A
-K0@H;=l
+K0@H;=
 K4 H;=
 K4@H;5
-K4@H;=tL
+K4@H;=$
 K8 H;=
 K8;CP
-K< H;5W]A
+K< H;5
 K< H;=
 K<@H;=
-K<@H;=D
-K@ H;=
+K<@H;=dF
+K@ H;=|
 KD H;=
-KD H;=L
-KD@H;=t
-KD@H;=|#
+KD H;=lP
+KD@H;=
+KD@H;=Lv
 KGot a NaN velocity on %s
-KL H;5MMC
+KL H;5
 KL H;=
 KL@H;=u
 KM^bM
-KNIFE
 KP@H;=
-KT H;5w
-KT H;=
+KT H;5'Q
+KT H;=L
 KT;H0s
 KT;H@s
 KV Conditional Evaluation Error
@@ -14932,7 +15112,7 @@ Kochanek-Bartels Late
 KpD#c4
 Kpu(H
 K| H;=
-K|@H;=<s
+K|@H;=
 L$	E1
 L$ 8K 
 L$ 9L$
@@ -14957,7 +15137,7 @@ L$0D9
 L$0E1
 L$0Hc
 L$4 A
-L$4 H;5
+L$4 H;5	
 L$4@A
 L$8 L9
 L$8H9
@@ -14965,7 +15145,7 @@ L$8dH3
 L$< A
 L$< M
 L$<@A
-L$<@H;5
+L$<@H;5	
 L$@ H
 L$@ L9
 L$@@I
@@ -14982,12 +15162,13 @@ L$H+L$L
 L$H@H
 L$L H
 L$L@H;5
-L$L@H;=R
+L$L@H;=
 L$P A
 L$P@A
 L$P@H;5^
 L$PD9
 L$T H
+L$T@A
 L$X M
 L$XH9\$`H
 L$XdH3
@@ -15002,7 +15183,7 @@ L$xH9
 L$xdH3
 L$| H;5
 L$|@H
-L$|@H;5
+L$|@H;5f
 L)$$L
 L)c0M
 L)cXM
@@ -15019,7 +15200,6 @@ L+d$@H
 L+hxH
 L+hxI
 L+l$@H
-L+pxH
 L+pxI
 L+sxI
 L+xxH
@@ -15033,11 +15213,13 @@ L9kHu
 L9s t
 L9t$(I
 L; t/H
+L; t/I
 L; tFI
 L;"tJH
 L;#tPH
 L;$$u
-L;%|8
+L;%1#
+L;2tpH
 L;4$t0L
 L;7t"E1
 L;8t"A
@@ -15045,7 +15227,7 @@ L;:tNH
 L;<$}?I
 L;<$}CI
 L;<$}EI
-L;=zy
+L;=B6
 L;_(D
 L;` tw
 L;c8H
@@ -15120,6 +15302,8 @@ Late precache of %s
 Late precache of %s (file missing?)
 Late precache of %s, need to rebuild modelsounds.cache
 LbsUpdate
+Lc%5M
+Lc%YU
 Lc'H9
 Lc/H9
 Lc/H;
@@ -15178,6 +15362,7 @@ Linear acceleration amount (old value is 5.6)
 Linux PC
 List all URIs currently receiving server logs
 List all the issues that can be voted on.
+List of additional weapons to refill ammo on waves.
 Listener %s sent code 410, removing from update list.
 Listing backup files with prefix: %s
 Lists all active physics objects
@@ -15220,6 +15405,7 @@ LookAngleMaxAccelAttacking
 LookAngleMaxAccelNormal
 LookAngleStiffnessAttacking
 LookAngleStiffnessNormal
+LookAt
 LookAt: %s (%s)
 Looking for next map in mapgroup '%s'...
 LookupActivity
@@ -15282,7 +15468,6 @@ MOUNT_ASCENDING_LADDER RIGHT
 MOUNT_DESCENDING_LADDER
 MOVE_TO_DESTINATION
 MOVE_TO_LAST_KNOWN_ENEMY_POSITION
-MOVE_TO_PLAY_AREA
 MOVE_TO_SNIPER_SPOT
 MPC;L8P~ZI
 MRHcu
@@ -15414,6 +15599,7 @@ Maximum time the bonus time will last (in seconds)
 MaximumState
 Maximun Proxy Messages used - ask a programmer for more.
 May not have cleaned up on NPC death
+Maybe
 MbP?AI Stepping...
 Mb`?h/
 Mc,$E
@@ -15509,6 +15695,7 @@ Missing name.
 Missing nav file for %s
 Missing weapon hand bone attachment for player model.
 MissingWeaponConceptModifier
+MissionCreateAndDetonateDangerZone failed to allocate requested danger zone! Too many explosions?
 ModPrime1PrivateExponent
 ModPrime2PrivateExponent
 Model '%s' doesn't have attachment '%s' to attach particle system '%s' to.
@@ -16472,6 +16659,7 @@ OnEntityFailedSpawn
 OnEntitySpawned
 OnLightOff
 OnLightOn
+OnMyWay
 OnNextPoint
 OnPhysCannonAnimatePostStarted
 OnPhysCannonAnimatePreStarted
@@ -16579,6 +16767,7 @@ OvertimeScore/team1
 OvertimeScore/team2
 Overwriting physics object for %s
 P A;]
+P A;]8|
 P D;c
 P D;c |
 P D;c(|
@@ -16621,6 +16810,7 @@ PARTICLE_ID
 PATH_FAILED
 PCCiu
 PEvent
+PFbRKN20CCStrike15ItemSchema15CharacterDefn_tEE
 PHD9c
 PHD9m
 PHD9s`
@@ -16731,6 +16921,22 @@ Passenger Roles Parsed:	%d
 Path away from best sound too short!
 Pathcorner/goal ent: 
 Pathfind to leader failed.
+PatrolArea01
+PatrolArea02
+PatrolArea03
+PatrolArea04
+PatrolArea05
+PatrolArea06
+PatrolArea07
+PatrolArea08
+PatrolArea09
+PatrolArea10
+PatrolArea11
+PatrolArea12
+PatrolArea13
+PatrolArea14
+PatrolArea15
+PatrolArea16
 Pause the match in the next freeze time
 PauseMatch
 Paused: %s
@@ -16762,6 +16968,7 @@ Physics_RunThinkFunctions
 Physics_SimulateEntity
 Picker %i/%s - ent %s model %s
 PickerDeDup
+PickerGrenadeType
 PickerMaxScore
 PickerNearby
 PickerRandomByDistance
@@ -16834,6 +17041,7 @@ Player.DamageHelmet
 Player.DamageHelmetFeedback
 Player.DamageKevlar
 Player.Death
+Player.DeathFem
 Player.DeathHeadShot
 Player.DenyWeaponSelection
 Player.Dominate
@@ -16873,6 +17081,7 @@ Player: %s1 - Damage Taken
 PlayerActorLook
 PlayerBattleline
 PlayerCommendationInfo
+PlayerData
 PlayerDeH
 PlayerDecalDigitalSignature
 PlayerEnteredVehicle
@@ -17000,6 +17209,7 @@ Prints an alert message in the center print method to all players. Needs to pass
 Prints an alert message in the center print method to the specified team.
 Prints round timers to the console for debugging
 Prints the current mapgroup and the contained maps
+Prints time outs to the console for debugging
 Pro-player entry '%s' doesn't have a valid AccountID
 Pro-player entry '%s' has a duplicate code '%s'
 Pro-player entry '%s' has no code
@@ -17077,9 +17287,12 @@ Quest %d map %s doesn't match event map %s
 Quest %d mapgroup %s doesn't match event mapgroup %s
 Quest %d refers to an event %d that doesn't exist
 Quest %d refers to an event %d that isn't an event
+Quest Event %d references a quest--%s--that does not exist
+Quest Schedule %d references a quest--%s--that is not an event
 Quest definition %s specifies a malformed values range: %s
 Quest definition %s: missing "name"
 Quest definition %s: name must be a positive integer
+Quest events has invalid slack '%s'
 QuestItemData
 QueuedLoaderVersion001
 R A9]8
@@ -17192,6 +17405,7 @@ RampThinH
 RampToDeH
 Random Cull
 RandomAnimation
+RandomApproachPoint
 RandomFloat
 RandomInt
 RandomNumberGenerator: IncorporateEntropy not implemented
@@ -17405,6 +17619,7 @@ RoundResults/round%d
 RoundUpToMultipleOf: integer overflow
 Route Destination No Longer Valid
 RouteService
+RouteServiceDomain%d
 RoutingMethod
 Row has too many bytes to allocate in memory
 Rule is disabled.
@@ -17412,6 +17627,7 @@ Run a vscript file
 Run the single player maps in a continuous loop.
 Run the text as a script
 RunAnimation calling ResetSequence %s
+RunOnce
 RunScriptCode
 S +K$M
 S H;S(
@@ -17573,6 +17789,7 @@ SCRIPT_CUSTOM_MOVE: %s has no sequence:%s
 SD9S@
 SEEK_AND_DESTROY
 SELF_DEFENSE
+SENSOR
 SENTENCE [%d %.2f] %s: %s
 SENTENCEG_Init()
 SEQUENCE_NUMBER
@@ -17582,10 +17799,10 @@ SH9C@
 SHA-1
 SHA-224
 SHA-256
-SHIELD
 SHOCK
 SHc_8
 SLOWBURN
+SMOKE
 SNDLVL_
 SNDLVL_100dB
 SNDLVL_105dB
@@ -17659,7 +17876,6 @@ SS_SLOWDOWN_HIGHSPEED
 SS_START_IDLE
 SS_START_WATER
 SS_TURBO
-STACKABLEITEM
 STAIRS
 STAIRS 
 STAND 
@@ -17690,7 +17906,6 @@ STOP
 STOPPED!
 STRING
 STRING_PIECE
-SUBMACHINEGUN
 SUB_CallH
 SUB_DoNoH
 SUB_FadeH
@@ -17698,6 +17913,7 @@ SUB_RemoH
 SUB_Remove called on entity with health > 0
 SUB_StarH
 SUB_VaniH
+SURVIVAL COOP: Ran out of player spawn hexes to assign!
 SURVIVAL game start teams
 SURVIVAL: PrecomputeDangerZones took %f
 SURVIVAL: ReverseFloodFillBombWaves took %f
@@ -17761,6 +17977,7 @@ Script failed to find output "%s"
 Script file type does not match VM type
 Script not found (%s) 
 ScriptCoopCollectBonusCoin
+ScriptCoopExtendRoundDurationTime
 ScriptCoopGiveC4sToCTs
 ScriptCoopMissionGetMissionNumber
 ScriptCoopMissionRespawnDeadPlayers
@@ -17769,6 +17986,7 @@ ScriptCoopMissionSpawnFirstEnemies
 ScriptCoopMissionSpawnNextWave
 ScriptCoopResetRoundStartTime
 ScriptCoopSetBotQuotaAndRefreshSpawns
+ScriptCoopToggleEntityOutlineHighlights
 ScriptCreateSceneEntity
 ScriptDispatchParticleEffect
 ScriptEmitSound
@@ -17813,6 +18031,7 @@ ScriptIsPlayerNoclipping
 ScriptIsPlayerSpeaking
 ScriptIsWarmupPeriod
 ScriptLoadSceneFromString
+ScriptMissionCreateAndDetonateDangerZone
 ScriptNextMovePeer
 ScriptPrecacheModel
 ScriptPrintMessageCenterAll
@@ -17852,6 +18071,28 @@ Scripting disabled or no server running
 Sd)C`H
 Search criteria:
 Searching for entities with class/target name containing substring: '%s'
+Seasonal operation definition %s: expecting xp_reward lootlist at %s
+Seasonal operation definition %s: expecting xp_reward thresholds as incrementing signed integers (%d <= %d)
+Seasonal operation definition %s: expecting xp_reward thresholds at %s
+Seasonal operation definition %s: failed to find lootlist for xp_reward (%s)
+Seasonal operation definition %s: failed to parse xp_reward (%s)
+Seasonal operation definition %s: found reward %s that has [0] subkey, but not [*] subkey
+Seasonal operation definition %s: mission card id '%s' failed to parse quests '%s'
+Seasonal operation definition %s: mission card id '%s' found 0 quests '%s'
+Seasonal operation definition %s: mission card id '%s' found quest #%d in '%s' which does not refer to a valid game mode ID (%d)
+Seasonal operation definition %s: mission card id '%s' found quest #%d in '%s' which does not refer to a valid map group (%d)
+Seasonal operation definition %s: mission card id '%s' found quest #%d in '%s' which does not refer to a valid quest
+Seasonal operation definition %s: mission card id '%s' found quest #%d in '%s' which has a conflicting game mode ID (%d)
+Seasonal operation definition %s: mission card id '%s' found quest #%d in '%s' which has a conflicting game mode mapgroup (%d:x%08X)
+Seasonal operation definition %s: mission card id '%s' found quest #%d in '%s' which is already in use by another mission card (id=%d)
+Seasonal operation definition %s: mission card id '%s' has already been defined
+Seasonal operation definition %s: mission card id '%s' has operational_points %d that exceed total quests points %d
+Seasonal operation definition %s: mission card id '%s' must be a positive integer
+Seasonal operation definition %s: mission card id '%s' must have a name
+Seasonal operation definition %s: mission card id '%s' needs operational_points, found '%s'
+Seasonal operation definition %s: name must be a positive integer
+Seasonal operation definition %s: unexpected mission card at %s
+Seasonal operation definition %s: unexpected subkey %s
 Second argument to Swap() (of type "
 SecondHalfScore/team1
 SecondHalfScore/team2
@@ -17966,6 +18207,7 @@ SetAdditionalAirDensity
 SetAngVelocityLimit
 SetAngVelocityScale
 SetAngularVelocity
+SetBarrier
 SetBodyGroup
 SetBodygroup
 SetBool
@@ -17981,6 +18223,7 @@ SetEvent()
 SetFailure unimplemented
 SetFloat
 SetForwardVector
+SetGlobalCounter
 SetGravityScale
 SetIdealActivity : %s: %s -> %s
 SetInt32
@@ -18087,6 +18330,7 @@ Show all EmitSound calls including their symbolic name and the actual wave file 
 Show areas that are potentially visible from the current nav area
 Show areas where rushing players will initially meet.
 Show bbox and dismount points for all ladders (must be set before level load.)
+Show bot patrol areas if present.
 Show current 'danger' levels.
 Show current player counts in each area.
 Show entities that are removed on round respawn.
@@ -18158,7 +18402,6 @@ Snap player eyes and orientation to specified pitch yaw <roll:optional> (must ha
 Snap player eyes to specified pitch yaw <roll:optional> (must have sv_cheats).
 Snap to the nav generation grid when creating new nav areas
 SndEmitterSystem
-SniperWarning
 Sniping near a rescue zone
 Sniping near bombsite
 Sniping near escape zone
@@ -18241,7 +18484,7 @@ SprayCan.PaintGhost
 SprayCan.Shake
 SprayCan.ShakeGhost
 Sprite Spray
-Sp}PH
+Sp}pH
 Squad Transition Point
 Squad: 
 SquadSlot:%s
@@ -18290,6 +18533,8 @@ Starting a forced interaction
 Starting benchmark in %d seconds...
 Starting benchmark!
 Starting download for file id %llu:'%s'.
+Starting health in guardian modes.
+Starting health of guardian players when respawned.
 Stat: %s, 
 State: %s
 State: %s, 
@@ -18404,6 +18649,7 @@ Subkey
 Submachine Gun
 SubscribedType
 Subtracts half of the target's ammo
+Subtree ( %s )
 Succeed
 Suppressing %s
 Surface Shatter
@@ -18454,6 +18700,7 @@ Survival.SelectDropLocation
 Survival.ShieldPush
 Survival.UpgradeTabletStart
 Survival.UpgradeTabletSuccess
+Survival.VO.Taunt4a
 Survival.ZoneChosenByFriend
 Survival.ZoneChosenByOther
 Survival: GameStartSpawnAllItems took %f
@@ -18499,13 +18746,11 @@ T$`Hc
 T$`HcU
 T$hH)
 T$pH9
-TABLET
 TADIt
 TADIu
 TADIu!
 TADIu)E
 TADIuJ
-TASER
 TASERTHINK
 TASK_
 TASK_ADDON_WAIT
@@ -18968,6 +19213,7 @@ TemplateEntityData_t
 TerminateRound: unknown round end ID %i
 Terminator
 Terrorist are kicked for killing too much hostages
+Terrorists
 TeslaHitboxes
 Test AI LOS from the player's POV
 Test Item %d
@@ -19143,8 +19389,9 @@ TimeToWin
 Timed out waiting %d secs for reply msg %d from GC.  Assuming connection has been disrupted.
 Timelimit (in seconds) of the stalemate round.
 TimeoutTH
-Timeouts/CT
-Timeouts/Terrorist
+Timeouts remaining:
+Timeouts/team1
+Timeouts/team2
 Timers and related info at %f:
 Times the cost of each active object
 To connect areas, mark an area, highlight a second area, then invoke the connect command. Make sure the cursor is directly north, south, east, or west of the marked area.
@@ -19189,6 +19436,9 @@ Toggles the 'traverse this area by walking' flag used by the AI system.
 Toggles the visibility of the miniscoreboard hud element.
 Toggles the visibility of the radar hud element.
 Toggles visibility display for the node that the player is looking at.  Nodes that are visible from the selected node will be drawn in red with yellow lines connecting to the selected node.  Nodes that are not visible from the selected node will be drawn in blue.
+TokenService
+TokenServiceAssignment
+TokenServiceAssignmentIndex
 TonemapName
 TonemapSystem
 Too frozen
@@ -19296,7 +19546,6 @@ UGCOperation
 UGCUnzipThreadPool
 UHc7H
 UHcG@H
-UHcGpH
 UI.ArmsRace.BecomeMatchLeader
 UI.ArmsRace.BecomeTeamLeader
 UI.ArmsRace.Demoted
@@ -19437,10 +19686,12 @@ Unsupported marker type 0x%02x
 Unsupported text encoding id.
 Updaf
 Update the nav mesh STAIRS attribute
+Update(CEconAccountSeasonalOperationGS)
 Update(CEconDefaultEquippedDefinitionInstanceClient)
 Update(CEconItem)
 Update(CEconPersonaDataPublic)
 UpdateAllClientData
+UpdateDangerZoneController
 UpdateMaH
 UpdatePaH
 UpdateQueryCache
@@ -19482,6 +19733,7 @@ Usage: workshop_start_map <fileid>
 Use IK on in-place turns.
 Use a particular weapon	
 Use entity
+Use new AI system for bots or not.
 Use new style sparks.
 Use the specified behavior tree file to drive the bot behavior.
 UseMoveDH
@@ -19650,22 +19902,22 @@ VoxelTreeSphere - (%f %f %f), %f
 VoxelTreeView
 W H;W(
 W H;W(tR
-W%"|X
-W%6\K
-W%>]K
-W%[iz
+W%Io{
 W%f;w
 W(H92
 W(H92t'H
 W(H;2tDH
 W(Nc,
 W(ufH
-W-FQK
-W-vQK
+W-\_+
+W-xl(
 W0Hc_8A
-W5byI
+W5%`+
+W5Ao(
+W5ql(
 W8[]A\A]A^A_
-W=KyI
+W=Ho(
+W=jl(
 WALK 
 WARNING
 WARNING! Field %s is using the wrong FIELD_ type!
@@ -19699,6 +19951,7 @@ WRITE_SHORT called with no active message
 WRITE_WORD called with no active message
 WTtZH
 W_Precache()
+WaitSuccess
 WaitTillH
 Waiting for script, but lost script!
 WaitingForHumanToDefuseBomb
@@ -19832,6 +20085,7 @@ Whether players can purchase grenades from the buy menu or not.
 Whether players can purchase guns: pistols (1), SMGs (2), rifles (4), shotguns (8), sniper rifles (16), heavy MGs (32).
 Whether the local player has completed the initial training portion of the training map
 Whether the server will attempt to clamp velocities that could cause physics bugs or crashes.
+Whether this a coop mission leveraging the DZ universe (tablets, choppers, drones, etc).
 Whether this map should spawn a c4 bomb for a player or not.
 Whether to automatically pause the match after restoring round data from backup
 Whether to display and score player assists
@@ -19849,7 +20103,6 @@ Will synch post idles
 Will transmit all entities to client, regardless of PVS conditions (will still skip based on transmit flags, however).
 Will transmit players to all clients regardless of PVS checks.
 WindThinH
-WindThinf
 WindThinkContext
 Windows PC
 Wingman
@@ -19914,9 +20167,9 @@ Writes the selected set to disk for merging into another mesh via nav_merge_mesh
 Wrong JPEG library version: library is %d, caller expects %d
 Wx[]A\A]A^A_
 X$ D9
-X%8v+
-X%p4w
-X-7y{
+X%p(*
+X%|o}
+X-L2I
 X-Server-Addr
 X-Server-Instance-Token
 X-Server-Unique-Token
@@ -19924,13 +20177,13 @@ X-SteamID
 X-Tick-End
 X-Tick-Start
 X-Timestamp
+X-ie8
 X0D#h
 X0~tA
-X5RK~
+X5a.<
 X917RNG: Continuous random number generator test failed.
 X<A;\$
 X<A;]
-X=lc*
 XA\A]A^A_]
 XAxis
 XBowBolt
@@ -19951,17 +20204,14 @@ X\$$L
 Xbox 360
 XboxSystemInterface002
 XpProgressData
-Y%RiE
-Y%Yoz
-Y%yoz
-Y-9P)
-Y-KP0
-Y5%mT
-Y5:J0
-Y5LtQ
-Y5o>Q
-Y=	mL
-Y=MAQ
+Y%GP-
+Y%H/P
+Y%kk}
+Y-)d}
+Y-+R0
+Y-<a,
+Y=U;.
+Y=uS0
 Y@CAI_AddOn
 YAxis
 YB,H9
@@ -19987,7 +20237,6 @@ ZA9^
 ZD9{ ~:L
 ZE9u ~
 ZE;t$ 
-Z[A\A]]
 ZapContext
 ZapThinkH
 Zero length tRNS chunk
@@ -19999,13 +20248,22 @@ Zip-bug: tried to change mind, but not allowed
 Zip-bug: trying to seek the unseekable
 Zipfile is corrupt or not a zipfile
 Zrange
-[ AI BT ]: Bot does not seem to own requested weapon: '%s'.
-[ AI BT ]: Bot was unable to equip requested weapon: '%s'.
+[ AI BT ]: Assignment array '%s' missing from KV3 file.
+[ AI BT ]: Bot does not seem to own requested weapon nor it's a valid blackboard entry: '%s'.
+[ AI BT ]: Element '%d' is not a string.
+[ AI BT ]: Element '%d' is not a table.
 [ AI BT ]: Element '%d' is not a waypoint.
 [ AI BT ]: Element '%d' is not an array.
 [ AI BT ]: Element '%d' is not an integer.
+[ AI BT ]: Memory to expire def item is not a table.
+[ AI BT ]: Param item is not a table.
+[ AI BT ]: Param key 'value' is missing.
+[ AI BT ]: Purchase def item is not a table.
 [ AI BT ]: Route array '%s' missing from KV3 file.
+[ AI BT ]: Sensor def item is not a table.
 [ AI BT ]: Strategy array '%s' missing from KV3 file.
+[ AI BT ]: Token array '%s' missing from KV3 file.
+[ AI BT ]: Utility array '%s' missing from KV3 file.
 [ AI BT ]: key '%s' is not a table.
 [ AI BT ]: key '%s' is not an array.
 [%03d] Found: %s, firing
@@ -20024,8 +20282,20 @@ Zrange
 [/list]
 [/url]
 [A:%u:%u:%u]
+[AI BT] - Unable to find convar '%s'.
+[AI BT] : only one level of indirection is supported when referencing Blackboard values.
 [AI BT] Error parsing node (type=%s).
-[AI BT]: Attacking without a target.
+[AI BT] Key '%s' was not found.
+[AI BT]: '%s' is unable to purchase item '%s'. Moving on to the next bot.
+[AI BT]: Blackboard entry '%s' could not be converted to a sensed entity.
+[AI BT]: Blackboard entry '%s' could not be converted to a vector.
+[AI BT]: Blackboard entry '%s' does not exist nor it is a valid entity name.
+[AI BT]: Blackboard entry '%s' is a string that cannot be converted to a vector ('%s').
+[AI BT]: Blackboard entry '%s' is not an array.
+[AI BT]: Blackboard entry '%s' is not an integer or does not exist.
+[AI BT]: Blackboard key '%s' is empty.
+[AI BT]: Blackboard key '%s' is not a string.
+[AI BT]: Blackboard key '%s' was not found.
 [AI BT]: Bot does not have a profile.
 [AI BT]: Bot does not have a target.
 [AI BT]: Bot does not have a weapon.
@@ -20036,46 +20306,73 @@ Zrange
 [AI BT]: Config node 'attack' entry '%d' must contain %d entries.
 [AI BT]: Config node 'attack' is not an array.
 [AI BT]: Config node 'attack' must contain %d entries.
-[AI BT]: Empty or invalid bomb site key.
+[AI BT]: Domain key '%s' does not exist.
+[AI BT]: Domain key is an empty string. 
+[AI BT]: Domain key is empty.
+[AI BT]: Empty grenade type specified.
+[AI BT]: Empty string for destination value.
+[AI BT]: Empty string when trying to look up blackboard entry.
 [AI BT]: Empty/invalid key 'children' for 'CBtNodeComposite'
-[AI BT]: Entity type filter is weapon but the weapon name is empty.
+[AI BT]: Entity type filter is CLASSNAME but the class name attribute is empty.
 [AI BT]: Error loading behavior tree config file '%s': %s
 [AI BT]: Error loading behavior tree file '%s': %s
+[AI BT]: Error loading subtree file '%s': %s
 [AI BT]: Error parsing '%s' node from KV3 file.
 [AI BT]: Error parsing 'config' node from KV3 file.
 [AI BT]: Error parsing 'default' node from KV3 file.
 [AI BT]: Error parsing 'root' node from KV3 file.
+[AI BT]: Error parsing subtree 'root' node from KV3 file.
+[AI BT]: Error trying to create Blackboard entry for tagged entities '%s'.
+[AI BT]: Failed to obtain bot pointer.
+[AI BT]: Hiding spot key is an empty string. 
+[AI BT]: Input domain key is empty.
 [AI BT]: Input key '%s' has no waypoints.
 [AI BT]: Input key '%s' is not an array.
 [AI BT]: Invalid check type '%s'.
 [AI BT]: Invalid entity type filter '%s'.
+[AI BT]: Invalid grenade type '%s'.
 [AI BT]: Invalid movement type '%s'.
 [AI BT]: Invalid operation type '%s'.
 [AI BT]: Invalid route type '%s'.
 [AI BT]: Invalid team filter '%s'.
 [AI BT]: Invalid team type '%s'.
-[AI BT]: Invalid weapon type '%s'.
 [AI BT]: Loaded behavior tree '%s', bot skill = '%g'
+[AI BT]: Location entry '%s' is missing or invalid.
+[AI BT]: Must provide either 'input_angles' or 'input_location'.
+[AI BT]: No grenade types were specified.
 [AI BT]: No route was set and no routes found! Failing.
 [AI BT]: No route was set! Assuming route 0.
 [AI BT]: Output key '%s' already exists and it's not an array.
+[AI BT]: Purchase '%s' could not be completed because item '%s' could not be purchased. Skipping coordinated buy.
+[AI BT]: Purchase '%s' could not be fulfilled by any of the bots. Skipping coordinated buy.
+[AI BT]: Required key '%s' is empty in KV3 file.
 [AI BT]: Required key '%s' missing from KV3 file.
 [AI BT]: Required key 'config' is not a string.
 [AI BT]: Required key 'config' missing from KV3 file.
 [AI BT]: Required key 'root' missing from KV3 file.
 [AI BT]: Required node 'default' not present in KV3 file.
+[AI BT]: Token domain key is empty.
+[AI BT]: Token name key is empty.
 [AI BT]: Trying to buy items outside of buy zone!
 [AI BT]: Trying to dedup records against '%s' which is not an array.
 [AI BT]: Unable to assign route!
+[AI BT]: Unable to assign token!
 [AI BT]: Unable to buy after multiple attempts.
+[AI BT]: Unable to convert value ( '%s' ) to integer type.
+[AI BT]: Unable to create Blackboard entry '%s'.
+[AI BT]: Unable to determine the cost of '%s'. Moving on to the next bot.
 [AI BT]: Unable to find key '%s'.
 [AI BT]: Unable to find team spawn (target team = %d).
 [AI BT]: Unable to load behavior tree '%s', bot skill = '%g'
 [AI BT]: Unable to obtain location at bomb site %d.
+[AI BT]: Unable to retrieve threat location.
 [AI BT]: Unable to sense entities of type '%d'.
 [AI BT]: Unknown node type: %s
-[AI BT]: Unknown weapon type is not supported.
+[AI BT]: Unrecognized weapon '%s'.
+[AI BT]: Unsupported type for destination value.
 [AI BT]: key '%s' invalid or missing from KV3 file.
+[AI BT]: unsupported type for subtree parameter.
+[AI] '%s' was unable to find a safe spot outside the danger zone!
 [AI]: Using regular AI code, bot skill = '%g'
 [A\A]A^A_]
 [A\A]A^A_]A
@@ -20177,8 +20474,7 @@ Zrange
 \$hdH3
 \$x[A\]
 \%03o
-\%\y{
-\-M[(
+\=O[(
 \D$$Hc
 \D$0A
 \D$DA
@@ -20466,6 +20762,8 @@ _ZTVN10__cxxabiv117__class_type_infoE
 _ZTVN10__cxxabiv117__class_type_infoE@@CXXABI_1.3
 _ZTVN10__cxxabiv119__pointer_type_infoE
 _ZTVN10__cxxabiv119__pointer_type_infoE@@CXXABI_1.3
+_ZTVN10__cxxabiv120__function_type_infoE
+_ZTVN10__cxxabiv120__function_type_infoE@@CXXABI_1.3
 _ZTVN10__cxxabiv120__si_class_type_infoE
 _ZTVN10__cxxabiv120__si_class_type_infoE@@CXXABI_1.3
 _ZTVN10__cxxabiv121__vmi_class_type_infoE
@@ -20630,10 +20928,9 @@ _valveinternal
 _xlsp
 `<D9e
 `<D;%
-`<D;%	
-`<D;%19
-`<D;%7
-`<D;%I
+`<D;%Q%
+`<D;%al
+`<D;%u
 `<D;c
 `<E;f
 `>CBaseFlex::ProcessSceneEvents
@@ -20644,7 +20941,7 @@ _xlsp
 `D;{8
 `DD;%
 `DD;%5
-`DD;%T
+`DD;%U
 `L;,$
 `XD3%
 `[A\A]A^]
@@ -20701,25 +20998,34 @@ achievement_name
 achievement_rewards
 acknowledged
 aco-nz
+act_apply_graffiti
 act_armsrace_level
 act_armsrace_steal_level
 act_as_wearable
 act_avoid_motion_detection
+act_bumpmine_launch
 act_cash
 act_damage
 act_defuse_bomb
+act_detonate_smokegrenade
 act_dm_bonus_points
+act_dz_game_end_placement
+act_dz_purchase_item
 act_flashbang_enemy
 act_income
 act_kill_chicken
 act_kill_human
+act_kill_other
 act_kill_target
 act_motion_detect_enemy
+act_parachute_landed
 act_pick_up_hostage
 act_pick_up_trophy
 act_plant_bomb
 act_protect_chicken
 act_rescue_hostage
+act_round_end
+act_round_mvp
 act_spend
 act_vampiric_heal
 act_win_match
@@ -20733,12 +21039,21 @@ action_choose_bomb_site_area
 action_choose_random_waypoint
 action_choose_team_spawn_area
 action_combat_positioning
+action_commit_suicide
+action_compare_global_counter
+action_coordinated_buy
+action_crouch
 action_equip_item
 action_equip_weapon
+action_flee_area_damage
 action_hide
+action_jump
+action_look_at
 action_move_to
 action_pull_trigger
 action_say
+action_set_global_counter
+action_teleport
 action_turn
 action_wait
 active "0"
@@ -20964,6 +21279,7 @@ allowdiversionradius
 allownewgibs
 allowskip
 allowstatic
+allplayerdata
 alpha_fade
 alpha_fade_in_random
 alpha_fade_out_random
@@ -21065,8 +21381,11 @@ and next is the same
 ang: (%f, %f, %f)
 angCameraAngles
 angRelativeAngles
+ang_pitch
+ang_roll
 ang_x
 ang_y
+ang_yaw
 ang_z
 angle
 angleOverride
@@ -21118,6 +21437,7 @@ armory_remap
 armsrace
 armsrace demolition flyingscoutsman
 array_ != __null
+arrival_epsilon_2d
 asctime
 asctime@@GLIBC_2.2.5
 assault_assaultpoint
@@ -21129,6 +21449,7 @@ assaulttolerance
 asset_class_bucket
 asset_class_export
 asset_modifier
+assignments
 assistedflash
 assister
 assists
@@ -21243,6 +21564,7 @@ beamcount_max
 beamcount_min
 become_vip
 begin_new_match
+benefit:
 beta.
 beveragetype
 billard ball
@@ -21287,6 +21609,7 @@ bomb_pickup
 bomb_state
 bomb_wave
 bomb_wave_2x
+bombcarrierkills
 bone_followers
 bonus
 bonus_count
@@ -21342,6 +21665,7 @@ bot_goto_mark
 bot_goto_selected
 bot_gungameselect_weapons_ct
 bot_gungameselect_weapons_t
+bot_ignore_enemies
 bot_ignore_players
 bot_join_after_player
 bot_join_after_player: %d
@@ -21355,6 +21679,8 @@ bot_kill
 bot_kill <all> <t|ct> <type> <difficulty> <name> - Kills a specific bot, or all bots, matching the given criteria.
 bot_knives_only
 bot_loadout
+bot_max_hearing_distance_override
+bot_max_visible_smoke_length
 bot_max_vision_distance_override
 bot_mimic
 bot_mimic_yaw_offset
@@ -21371,8 +21697,10 @@ bot_randombuy
 bot_show_battlefront
 bot_show_nav
 bot_show_occupy_time
+bot_show_patrol_areas
 bot_snipers_only
 bot_stop
+bot_stop <1|all> | <not_bomber> | <t> | <ct>
 bot_takeover
 bot_traceview
 bot_walk
@@ -21412,6 +21740,7 @@ bumpmine_active
 bumpmine_detonate
 bumpmine_player_trail
 bumpmine_projectile
+burndamage
 burning
 burning_character
 burning_gib_01
@@ -21541,6 +21870,7 @@ cash_team_win_by_hostage_rescue
 cash_team_win_by_time_running_out_bomb
 cash_team_win_by_time_running_out_hostage
 cash_team_winner_bonus_consecutive_rounds
+cashspent
 cast_hull
 cast_ray
 caster
@@ -21604,13 +21934,14 @@ cheapwaterenddistance
 cheapwaterstartdistance
 cheat
 check_Type
-cheer
+check_fov
 cheetah
 chest_rightleft
 chet_debug_idle
 chicken_gone_crumble_halloween
 chicken_gone_zombie
 chicken_rez
+chickenskilled
 child
 childfiltername
 chin_raiser
@@ -21701,7 +22032,6 @@ closedir
 closedir@@GLIBC_2.2.5
 closer
 clothing
-clothing0
 clothing1
 clothing2
 clothing4
@@ -21711,6 +22041,7 @@ clothing7
 clothing8
 clothing_hands
 clutchKs
+clutchkills
 cm_session_identifier
 cm_session_sysid
 cmd_friendly
@@ -21778,6 +22109,8 @@ cond_damage_burn
 cond_damage_collateral
 cond_damage_headshot
 cond_damage_penetrate
+cond_damage_utility
+cond_drone_enemy
 cond_item_borrowed
 cond_item_borrowed_enemy
 cond_item_borrowed_teammate
@@ -21786,12 +22119,19 @@ cond_item_nondefault
 cond_item_own
 cond_life_killstreak_chicken
 cond_life_killstreak_human
+cond_match_rounds_mvp
 cond_match_rounds_played
 cond_match_rounds_won
 cond_match_unique_weapon
 cond_match_unique_weapon_count
+cond_player_airborne
 cond_player_blind
 cond_player_ct
+cond_player_money_current
+cond_player_money_spent
+cond_player_money_spent_this_round
+cond_player_money_start
+cond_player_parachute_airborne_time_total
 cond_player_rescuing
 cond_player_terrorist
 cond_player_zoomed
@@ -21806,6 +22146,10 @@ cond_roundstate_bomb_planted
 cond_roundstate_finalround
 cond_roundstate_matchpoint
 cond_roundstate_pistolround
+cond_score_first_half
+cond_score_second_half
+cond_victim_airborne
+cond_victim_armsrace_leader
 cond_victim_blind
 cond_victim_ct
 cond_victim_reloading
@@ -21813,9 +22157,14 @@ cond_victim_rescuing
 cond_victim_seconds_since_fire
 cond_victim_terrorist
 cond_victim_zoomed
+condition_barrier
 condition_distance_less
+condition_inactive
 condition_is_empty
+condition_is_equal
+condition_is_weapon_equipped
 condition_is_weapon_suitable
+condition_out_of_ammo
 condition_owns_item
 conditions
 config
@@ -21858,6 +22207,7 @@ convar
 convars
 cookie
 coop_cementplant
+coop_kasbah
 cooperative
 coopmission
 coopstrike
@@ -21983,6 +22333,10 @@ cs_ShowStateTransitions
 cs_ShowStateTransitions <ent index or -1 for all>. Show player state transitions.
 cs_backalley
 cs_bot
+cs_bot_patrol_area
+cs_bot_patrol_area_group
+cs_bot_patrol_area_group: Tried to add entity (%s) which is not a patrol area entity!
+cs_bot_patrol_area_respawn
 cs_cruise
 cs_downtown
 cs_enable_player_physics_box
@@ -22024,13 +22378,24 @@ ct_init: length != 256
 ct_models
 ct_tally: bad match
 ctm_fbi
+ctm_fbi_variantb
 ctm_fbi_variantc
+ctm_fbi_variantf
+ctm_fbi_variantg
+ctm_fbi_varianth
 ctm_gign
 ctm_gsg9
 ctm_heavy
 ctm_idf
 ctm_sas
+ctm_sas_variantf
 ctm_st6
+ctm_st6_variante
+ctm_st6_variantf
+ctm_st6_variantg
+ctm_st6_varianti
+ctm_st6_variantk
+ctm_st6_variantm
 ctm_swat
 ctm_swat_variantb
 ctype
@@ -22051,6 +22416,7 @@ current value: %f
 current_level
 current_xp
 currentfragment
+curtime: %g	timeout: %g
 curve_%s_to_curve_%s
 custom
 custom desc attr
@@ -22070,8 +22436,11 @@ customize_texture_item
 customkill
 customname
 customorigin_follow
+customplayer_
 cutoff_distance
 cv_bot_ai_bt_debug_target
+cv_bot_ai_bt_hiding_spot_show
+cv_bot_ai_bt_moveto_show_next_hiding_spot
 cvars
 cyber_cafe
 cycle
@@ -22221,32 +22590,45 @@ decodable
 decoder_ring
 decorator_bot_service
 decorator_buy_service
+decorator_dec_global_counter
+decorator_find_utility_strat
+decorator_hiding_spot_service
+decorator_invert
+decorator_maybe
 decorator_memory
 decorator_need_healing
+decorator_picker_blocked_by_smoke
 decorator_picker_dedup
+decorator_picker_grenade_type
 decorator_picker_max_score
 decorator_picker_nearby
 decorator_picker_random_by_distance
 decorator_picker_reaction_time
 decorator_picker_visible
 decorator_picker_weight_as_distance
+decorator_random_approach_point
 decorator_random_int
 decorator_ranker_dist
+decorator_remove
 decorator_remove_key
 decorator_repeat
 decorator_route_service
+decorator_run_once
 decorator_sensor
+decorator_set_barrier
 decorator_set_reaction_time
 decorator_succeed
 decorator_tag_entity
 decorator_tag_threshold
-decorator_throttle
+decorator_token_service
+decorator_wait_success
 decoy_detonate
 decoy_firing
 decoy_projectile
 decoy_started
 default_ammo
 default_behavior
+default_cheer
 default_drop_quality
 default_drop_quantity
 default_game_mode
@@ -22326,6 +22708,7 @@ descriptors
 desired_timescale
 detailmaterial
 details_str
+detriment:
 dev_reportmoneychanges
 developer 0
 developeronly
@@ -22333,6 +22716,7 @@ devshots_nextmap
 devshots_screenshot "%s"
 dialog_type
 dictionary_name
+dinks
 direct_udp_ip
 direct_udp_port
 directional_light
@@ -22457,18 +22841,21 @@ dynamic_prop
 dz_clearteams
 dz_door
 dz_door*
+dz_enabled
 dz_item_interaction
 dz_jointeam
 dz_jointeam team# [userid#|name] - Join DZ team N (0 to leave your team).  Server admins can assign other players to teams.
+dz_missioncontrolled
 dz_shuffle_teams
 dz_spawnselect_choose_hex
+dz_suppressbombalert
 dzc:%u,
 e8HcH
 e@McuHI
-eMoveDonH
+eMoveDonf
 eOutThinf
 ePropTouH
-eScaf
+eScafD
 eShof
 eViewToPH
 easeanglestocamera
@@ -22536,6 +22923,7 @@ endpos
 endround
 endsize
 endwidth
+enemiesflashed
 enemy3Ks
 enemy4Ks
 enemy5Ks
@@ -22789,7 +23177,6 @@ error_message
 error_text
 errormsg
 errors
-es-8R
 essence_item_id
 event %s "%s"
 event %u
@@ -22818,8 +23205,6 @@ exec "%s"
 exec %s
 exec map_edit.cfg
 exec skill%d.cfg
-execwithwhitelist %s.cfg */maps
-execwithwhitelist %s_%d.cfg */maps
 exit anim not yet supported!
 exit@@GLIBC_2.2.5
 exit_activity
@@ -22843,11 +23228,13 @@ experimental_map_key
 expert
 expiration date
 expiration_date
+expiration_time
 explode_3
 explode_fire
 explode_ice
 explodemagnitude
 explodevector
+exploremoney
 explosion_basic
 explosion_basic_water
 explosion_c4_500
@@ -22880,7 +23267,7 @@ eyeangle
 eyeangle_fwd
 eyes_follow
 f == __null || dynamic_cast<To>(f) != __null
-f0D;g0~?D
+f0D;g0~?
 f;CLf
 f;SFt#HcK8
 fA9D$
@@ -22952,6 +23339,7 @@ fastreload
 fatdemo.proto
 faultFadH
 faulty context k:v pair in entity io %s
+fbihrt_epic
 fclose
 fclose@@GLIBC_2.2.5
 featured_display_item_defidx
@@ -23040,6 +23428,7 @@ first_valid_class
 first_valid_item_slot
 first_valid_item_slot not set!
 firstbombs_incoming_warning
+firstkills
 fish_count
 fish_dormant
 fixed point overflow ignored
@@ -23305,7 +23694,6 @@ fx_new_sparks
 fx_time
 fxtime
 g L;%
-g L;%G.
 g tuA
 g$(fD
 g$D;m
@@ -23456,7 +23844,9 @@ gcsystemmsgs.proto"S
 gd_bank
 gd_cbble
 gd_crashsite
+gd_dizzy
 gd_lake
+gd_lunacy
 gd_sugarcane
 gearLimit
 gear_limit
@@ -23527,6 +23917,12 @@ giftdefindex
 gifter account id
 giftidx
 gifts
+gimme_01
+gimme_02
+gimme_03
+gimme_04
+gimme_05
+gimme_06
 givecurrentammo
 given 2 points & ent to ignore, return fraction along line that hits world or models
 given a dummy scene name and a vcd string, load the scene
@@ -23580,8 +23976,6 @@ gsThink
 gscookieid
 guard
 guardian
-guardian_%s
-guardian_defaultmap
 guardian_wave_restart
 gun_barrel_attach
 gun_base_attach
@@ -23599,15 +23993,14 @@ gustdirchange
 gustduration
 h0u$H
 h<D;-
-h<D;-$
-h<D;-2
-h<D;-7n
-h<D;-=
-h<D;-E
-h<D;-H
-h<D;-^
-h<D;-c
-h<D;-zz
+h<D;-0
+h<D;-3
+h<D;-9&
+h<D;-Df
+h<D;-N
+h<D;-V
+h<D;-p
+h<D;-~e
 h<D;k
 h<E;l$
 hBmaps\%s.bsp
@@ -23654,6 +24047,7 @@ head_updown
 head_yaw
 header crc mismatch
 headers
+headshotkills
 health
 health=%d, armor=%d, helmet=%d
 health_threshold
@@ -23675,7 +24069,6 @@ heavy2
 heavy3
 heavy4
 heavy5
-heavyarmor
 hegrenade_detonate
 hegrenade_projectile
 heistbomb
@@ -23701,6 +24094,7 @@ hide_radius
 hide_rope
 hide_silencer
 hide_vest
+hiding_spot_check_distance_threshold
 high_priority
 high_value
 highboundary
@@ -23826,6 +24220,7 @@ iconv_close
 iconv_close@@GLIBC_2.2.5
 iconv_open
 iconv_open@@GLIBC_2.2.5
+id_no_purchase
 identifier_value
 idkey
 idle interval
@@ -24020,10 +24415,15 @@ inposition
 input: (%s) -> (%s,%s), from (%s)
 input: (%s,%d) -> (%s,%s), from (%s)
 input: (%s,%s) -> (%s,%s), from (%s)
+input_angles
+input_domain
 input_item_dupe_counts
 input_items
 input_items_criteria
+input_location
+input_name
 input_type
+input_value
 inrange
 inrestart
 inspect_weapon
@@ -24220,6 +24620,7 @@ item_nvg
 item_nvgs
 item_pickup
 item_pickup_failed
+item_pickup_slerp
 item_positions
 item_purchase
 item_quality
@@ -24253,6 +24654,7 @@ itemflag no item pickup
 itemflag select on empty
 itemid
 iteminfo
+items
 items_game
 items_game_url
 items_game_url_DEPRECATED2013
@@ -24572,9 +24974,11 @@ killed_player
 killer
 killer_account_id
 killing %s
+killreward
 kills
 kills_weapon_pistol
 kills_weapon_sniper
+killswhileblind
 killtarget
 killvector
 knife_damage_scale
@@ -24604,6 +25008,7 @@ l$LE+l$HE
 l$PI9
 l$XE1
 l$XI9
+l$`[H
 l$hA+^@
 lThifD
 l[]A\A]A^A_
@@ -24674,6 +25079,7 @@ leftedge
 leftedge %s %.3f 
 leftleg
 legacy
+legacy_character
 legacy_client_session_need
 legacy_item_id
 legacy_steamdatagram_port
@@ -24729,6 +25135,7 @@ lit data: dyn %ld, stat %ld
 lit tree: sent %ld
 liveallies
 liveenemies
+livetime
 llThink
 load_master_item_schema
 loadondemand
@@ -24740,6 +25147,7 @@ locHeader
 loc_description
 loc_details
 loc_key
+loc_key_character
 loc_key_weapon
 loc_name
 loc_rules
@@ -24808,6 +25216,8 @@ logo_scale
 logocolor%i
 logon_jobs
 logon_queue
+longuseactiontype
+longuseduration
 look_around_awareness_pitch_range
 look_around_awareness_yaw_range
 look_around_focus_interval
@@ -24834,6 +25244,7 @@ loot_list_name
 loot_lists_misc
 lootbag
 lootlists
+loudest
 low_priority
 low_violence
 lowboundary
@@ -25317,6 +25728,7 @@ m_OnUnblockedClosing
 m_OnUnblockedOpening
 m_OnUnpressed
 m_OnUse
+m_OnUseCompleted
 m_OnUseLocked
 m_OnUser1
 m_OnUser2
@@ -25716,6 +26128,7 @@ m_bFireOnEmpty
 m_bFired
 m_bFiresUnderwater
 m_bFirstBlocked
+m_bFirstBombWarning
 m_bFirstCollisionAfterLaunch
 m_bFirstFacing
 m_bFlipViewModel
@@ -25880,6 +26293,7 @@ m_bMapHasRescueZone
 m_bMaster
 m_bMatchWaitingForResume
 m_bMeasurePerf
+m_bMissionControlledExplosions
 m_bMovingAndShooting
 m_bMovingForward
 m_bMovingToCover
@@ -26038,6 +26452,8 @@ m_bWasAttached
 m_bWearingSuit
 m_bWheelInWater
 m_bWheelWasInWater
+m_bWhenAlerted
+m_bWhenNotAlerted
 m_bWorldSpaceScale
 m_bWrap
 m_bYawLocked
@@ -26540,6 +26956,7 @@ m_flLightScale
 m_flLip
 m_flLocalTime
 m_flLogoLength
+m_flLongUseDuration
 m_flLookTime
 m_flLookTimeLast
 m_flLookTimeTotal
@@ -27049,6 +27466,17 @@ m_hOwner
 m_hOwnerEntity
 m_hParent
 m_hPassenger
+m_hPatrolArea
+m_hPatrolAreaName[0]
+m_hPatrolAreaName[1]
+m_hPatrolAreaName[2]
+m_hPatrolAreaName[3]
+m_hPatrolAreaName[4]
+m_hPatrolAreaName[5]
+m_hPatrolAreaName[6]
+m_hPatrolAreaName[7]
+m_hPatrolAreaName[8]
+m_hPatrolAreaName[9]
 m_hPhysReplacement
 m_hPhysicsAttacker
 m_hPhysicsBlocker
@@ -27746,6 +28174,7 @@ m_iszSpriteName
 m_iszSpriteSmoke
 m_iszStartConceptModifier
 m_iszStartEntity
+m_iszStartUseSound
 m_iszSubject
 m_iszSuccessConceptModifier
 m_iszTarget1
@@ -27892,6 +28321,7 @@ m_nCase[7]
 m_nCase[8]
 m_nCase[9]
 m_nChangeCount
+m_nCharacterDefIndex
 m_nClipStyle
 m_nColor
 m_nCompressionType
@@ -28025,6 +28455,7 @@ m_nLogicBranchNames[6]
 m_nLogicBranchNames[7]
 m_nLogicBranchNames[8]
 m_nLogicBranchNames[9]
+m_nLongUseActionType
 m_nLookAtName
 m_nMagnitude
 m_nMaterial
@@ -28079,6 +28510,7 @@ m_nPersonaDataPublicCommendsLeader
 m_nPersonaDataPublicCommendsTeacher
 m_nPersonaDataPublicLevel
 m_nPhysgunState
+m_nPingType
 m_nPlasmaModelIndex
 m_nPlasmaModelIndex2
 m_nPlayer
@@ -28595,6 +29027,7 @@ m_szTournamentPredictionsTxt
 m_szWeaponClassname
 m_szWeaponsToGive
 m_takedamage
+m_targetAttachmentPointName
 m_targetEntName
 m_targetEntityName
 m_targetLevel
@@ -28969,8 +29402,6 @@ maps/%s_selected_%4.4d.txt
 maps/%s_spawnmask.png
 maps/*.bsp
 maps/*_selected_*.txt
-maps/cfg/%s.cfg
-maps/cfg/guardian_%s.cfg
 maps/graphs
 maps/graphs/%s%s.ain
 maps/workshop
@@ -29025,6 +29456,7 @@ max ragdoll count: %d
 max speed: %g
 maxState
 maxThenAnyDispatchDist
+max_attempts
 max_classes
 max_clients
 max_entries
@@ -29033,6 +29465,7 @@ max_ilevel
 max_particles
 max_ping
 max_recipients
+max_search_range
 max_speed
 max_val
 maxburstdelay
@@ -29078,8 +29511,6 @@ memcpy_s: buffer overflow
 memmove
 memmove@@GLIBC_2.2.5
 memmove_s: buffer overflow
-memory_expiration_distance
-memory_expiration_time
 memory_to_expire
 mempool.cpp
 memset
@@ -29101,6 +29532,7 @@ method
 method_name
 mg_%s
 mg_ar_baggage
+mg_ar_lunacy
 mg_ar_monastery
 mg_ar_shoots
 mg_casualdelta
@@ -29129,12 +29561,14 @@ mg_de_seaside
 mg_de_shortdust
 mg_de_shortnuke
 mg_de_stmarc
+mg_de_studio
 mg_de_sugarcane
 mg_de_train
 mg_de_vertigo
 mg_de_zoo
 mg_dust247
 mg_dz_blacksite
+mg_dz_junglety
 mg_dz_sirocco
 mg_gd_rialto
 mg_hostage
@@ -29178,6 +29612,7 @@ misc5
 misc6
 mission_id
 missionlbsdata
+missions_completed
 mkdir
 mkdir@@GLIBC_2.2.5
 mkfifo
@@ -29377,6 +29812,7 @@ models/props_survival/upgrades/parachutepack.mdl
 models/props_survival/upgrades/upgrade_dz_armor.mdl
 models/props_survival/upgrades/upgrade_dz_armor_helmet.mdl
 models/props_survival/upgrades/upgrade_dz_helmet.mdl
+models/props_survival/upgrades/upgrade_heavy_armor.mdl
 models/props_survival/upgrades/upgrade_tablet_drone.mdl
 models/props_survival/upgrades/upgrade_tablet_hires.mdl
 models/props_survival/upgrades/upgrade_tablet_zone.mdl
@@ -29402,6 +29838,9 @@ models/weapons/v_models/arms/balkan/v_sleeve_balkan.mdl
 models/weapons/v_models/arms/bare/v_bare_hands.mdl
 models/weapons/v_models/arms/ctm_heavy/v_sleeve_ctm_heavy.mdl
 models/weapons/v_models/arms/fbi/v_sleeve_fbi.mdl
+models/weapons/v_models/arms/fbi/v_sleeve_fbi_dark.mdl
+models/weapons/v_models/arms/fbi/v_sleeve_fbi_gray.mdl
+models/weapons/v_models/arms/fbi/v_sleeve_fbi_green.mdl
 models/weapons/v_models/arms/ghost/v_ghost_hands.mdl
 models/weapons/v_models/arms/gign/v_sleeve_gign.mdl
 models/weapons/v_models/arms/glove_fingerless/v_glove_fingerless.mdl
@@ -29416,8 +29855,12 @@ models/weapons/v_models/arms/phoenix_heavy/v_sleeve_phoenix_heavy.mdl
 models/weapons/v_models/arms/pirate/v_pirate_watch.mdl
 models/weapons/v_models/arms/professional/v_sleeve_professional.mdl
 models/weapons/v_models/arms/sas/v_sleeve_sas.mdl
+models/weapons/v_models/arms/sas/v_sleeve_sas_ukmtp.mdl
 models/weapons/v_models/arms/separatist/v_sleeve_separatist.mdl
+models/weapons/v_models/arms/st6/v_sleeve_flektarn.mdl
+models/weapons/v_models/arms/st6/v_sleeve_green.mdl
 models/weapons/v_models/arms/st6/v_sleeve_st6.mdl
+models/weapons/v_models/arms/st6/v_sleeve_usaf.mdl
 models/weapons/v_models/arms/swat/v_sleeve_swat.mdl
 models/weapons/v_models/breachcharge/breachcharge_icon
 models/weapons/v_parachute.mdl
@@ -29512,6 +29955,8 @@ mp_consecutive_loss_aversion
 mp_consecutive_loss_max
 mp_coop_force_join_ct
 mp_coopmission_bot_difficulty_offset
+mp_coopmission_dz
+mp_coopmission_dz_use_bt
 mp_coopmission_mission_number
 mp_ct_default_grenades
 mp_ct_default_melee
@@ -29531,6 +29976,7 @@ mp_death_drop_gun
 mp_death_drop_healthshot
 mp_death_drop_taser
 mp_deathcam_skippable
+mp_debug_timeouts
 mp_default_team_winner_no_objective
 mp_defaultteam
 mp_defuser_allocation
@@ -29605,6 +30051,7 @@ mp_ggtr_num_rounds_autoprogress
 mp_give_player_c4
 mp_global_damage_per_second
 mp_guardian_bot_money_per_wave
+mp_guardian_force_collect_hostages_timeout
 mp_guardian_loc_string_desc
 mp_guardian_loc_string_hud
 mp_guardian_loc_weapon
@@ -29981,6 +30428,7 @@ nav_use_place %s
 nav_walk
 nav_warp_to_mark
 nav_world_center
+navareaid
 navprop
 ndThink
 ndWafD
@@ -29988,6 +30436,7 @@ neShim::H
 near_blur
 near_focus
 near_radius
+nearest_area_distance_threshold
 nearlyempty
 nearz
 neck_trans
@@ -30016,6 +30465,7 @@ netmsg
 network_connection.proto
 network_connection_token
 networkid
+never:
 nevertimeout
 new_slot
 new_update
@@ -30070,9 +30520,11 @@ noise1
 noise2
 noise_maker
 nolistrepeats
+nomination
 nomusic
 non-entity blocked area %d
 nonofficial_server
+nopurchasewins
 noreplay
 normal
 normal_points
@@ -30080,6 +30532,7 @@ northoffset
 noscene
 not enough codes
 not started
+not_bomber
 not_connected_to_steam
 not_enough_players
 not_synced_with_server
@@ -30093,6 +30546,7 @@ nothing
 notify
 notsolid
 nozzle
+npATI
 npc_*
 npc_ally_deathmessage
 npc_ammo_deplete
@@ -30272,6 +30726,7 @@ origin_x
 origin_y
 origin_z
 original_id
+orphan_only
 os_type
 oscillate_scalar
 oscillate_vector
@@ -30290,15 +30745,25 @@ output gamma out of expected range
 output specified is NULL
 output: (%s,%s) -> (%s,%s)
 output: (%s,%s) -> (%s,%s,%.1f)
+output_angles
+output_domain
+output_hiding_spot
 output_items
 output_items_criteria
+output_location
+output_token_domain
+output_token_name
 output_type
+output_waypoint
+output_waypoint_name
+output_weapon
 overhead_follow
 overlay_vars
 overlaycolor
 overlaymaterial
 overlaysize
 override_ammo
+override_camera_lookat
 override_default_light
 override_operator_name
 overridescript
@@ -30318,24 +30783,29 @@ p(?!@V>
 p([A\A]A^]
 p(t H
 p<D;5
+p<D;5!
 p<D;5"
-p<D;5$
-p<D;5.
+p<D;5'
+p<D;51
 p<D;53
-p<D;5:
-p<D;5C
+p<D;57
+p<D;5<
+p<D;5=
+p<D;5@
+p<D;5B
+p<D;5F
+p<D;5K
 p<D;5Q
-p<D;5c
-p<D;5i
+p<D;5]
+p<D;5e
+p<D;5m
 p<D;5n
-p<D;5o
-p<D;5p
-p<D;5y
-p<D;5z
-p<D;5{
+p<D;5v
+p<D;5w
 p<D;s
 p<E;t$
 p<E;u
+p<E;w
 pA9U 
 pAVAUL
 pDD;s
@@ -30437,6 +30907,7 @@ payload
 payment_row_usd
 payment_us_usd
 pctChance
+pearlescent
 pedestal display model
 pedestal_display_model
 peekEyeDist
@@ -30530,6 +31001,8 @@ picks
 picks__deprecated
 ping-pong ball
 pings
+pingtype
+pistolkills
 pitch
 pitch "%i"
 pitchrange
@@ -30550,7 +31023,6 @@ player->PhysicsRunThink()
 player->PreThink()
 player->SelectItem()
 player->UpdateButtonState
-player_
 player_activate
 player_animation_extension
 player_array_element
@@ -30608,6 +31080,7 @@ player_vehicle
 player_weaponstrip
 player_xp_bonus_flags
 playeractivity
+playercolor
 playergraceperiod
 playerhealth
 playerhealthfrac
@@ -30643,7 +31116,11 @@ point_clientcommand
 point_commentary_node
 point_commentary_viewpoint
 point_devshot_camera
+point_dz_coop_itemspawn
+point_dz_coop_itemspawn_group
 point_dz_dronegun
+point_dz_itemspawn
+point_dz_itemspawn_group
 point_dz_parachute
 point_dz_weaponspawn
 point_dz_weaponspawn_group
@@ -30687,6 +31164,7 @@ pos_x
 pos_y
 pos_z
 pose: %s
+pose_sequence
 position
 position %.2f, %.2f, %.2f
 position0
@@ -30721,6 +31199,7 @@ preferred_carryangles
 preferredcarryangles
 prefix_item_name
 premium_only
+premium_tiers
 prepared_statements_executed
 prestige_coin
 prestigetime
@@ -30777,6 +31256,7 @@ prop_dynamic_override
 prop_exploding_barrel
 prop_hallucination
 prop_loot_crate
+prop_mapplaced_long_use_entity
 prop_metal_crate
 prop_money_crate
 prop_paradrop_crate
@@ -30791,6 +31271,7 @@ prop_vehicle
 prop_vehicle_airboat
 prop_vehicle_driveable
 prop_vehicle_jeep
+prop_weapon_refill_heavyarmor
 prop_weapon_upgrade_armor
 prop_weapon_upgrade_armor_helmet
 prop_weapon_upgrade_chute
@@ -30846,6 +31327,7 @@ punchangle
 puntsound
 purchase_result_detail
 purchase_type
+purchases
 pushdir
 pushing entity (%s) that has parent (%s)!
 pvs_min_player_distance
@@ -30867,16 +31349,22 @@ quest id
 quest reward lootlist
 quest_bonus_points_earned
 quest_definitions
+quest_events doesn't have 'start' date
+quest_events doesn't havea 'length' per cycle
 quest_id
 quest_index
 quest_item_data
+quest_looping_track
+quest_mission_card
 quest_normal_points_earned
 quest_reward
 quest_reward_loot_lists
 quester_account_id
 questid
+quests
 queue_position
 queue_size
+quietest
 r""\\
 r.w$H
 r0AUI
@@ -31020,6 +31508,7 @@ remap_scalar
 remapactivity
 rematch
 remove 0x%p: %s-%s (%d-%d) [%d in play, %d max]
+removehighlight
 removing %d (%d): %s : %5.3f (%.3f)
 rename
 rename@@GLIBC_2.2.5
@@ -31055,6 +31544,7 @@ request_id
 request_id__deprecated
 request_level
 request_method
+require:
 required
 required_appid_version
 required_event
@@ -31082,6 +31572,7 @@ resetteam
 reslists\%s.snd
 resolution
 resource/ModEvents.res
+resource/characterscenes/%d.res
 resource/closecaption_english.dat
 resource/gameevents.res
 resource/hltvevents.res
@@ -31144,6 +31635,7 @@ rocketspeed
 roger
 rollerThH
 room_type
+root_mdl
 rootbone_follow
 rope_anchor
 rotatesound
@@ -31169,15 +31661,16 @@ round_end_upload_stats
 round_freeze_end
 round_killhs
 round_kills
-round_mvp
 round_officially_ended
 round_poststart
 round_prestart
 round_result
 round_start_pre_entity
+round_start_threshold_seconds
 round_time
 round_time_warning
 roundsWon
+roundssurvived
 roundstats_legacy
 roundstatsall
 route_type
@@ -31251,6 +31744,7 @@ sXu%L
 sYHpu
 s_pInterfaceRegs
 samples_use_time
+save_threshold
 savedwep_lastinv
 savedwep_set
 saveentityindex
@@ -31261,6 +31755,7 @@ scale
 scalesettings
 scandir
 scandir@@GLIBC_2.2.5
+scene
 scene0
 scene1
 scene10
@@ -31387,7 +31882,10 @@ search_type
 season access
 season_number
 season_pass
+season_value
+seasonaloperations
 seasoncoin_levelup
+seasontiers
 second_sequence_random
 second_target
 secondary clip size
@@ -31418,9 +31916,11 @@ send_round_backup_file_list
 send_table_crc
 sender_name
 sendprop_t
+sensor_inactivity_threshold_seconds
 sensor_shape_fov
 sensor_shape_sphere
 sensorpriority
+separation
 sequence: %d, frame %.0f
 sequence_bytes
 sequence_number
@@ -31495,6 +31995,13 @@ sf_ui_tint
 sfixed32
 sfixed64
 shHc@
+shadow_light_angles
+shadow_light_atten_farz
+shadow_light_color
+shadow_light_fov
+shadow_light_offset
+shadow_light_zfar
+shadow_light_znear
 shadowcastdist
 shadowdepthnocache
 shadowquality
@@ -31555,6 +32062,7 @@ sinf@@GLIBC_2.2.5
 single_shot
 single_shot_accurate
 single_shot_npc
+singlematch
 singleplayer
 sint32
 sint64
@@ -31591,6 +32099,7 @@ skybox/%s%s
 skybox_swapper
 skybox_swapper (%s) has no skybox specified!
 skybox_swapper (%s) trigger input failed - cannot find 'sv_skyname' convar!
+slack
 slavename
 sleep
 sleep for time
@@ -31628,6 +32137,7 @@ snd_prevent_ss_duplicates
 snd_sos_show_server_xmit
 snd_surround_speakers
 sniper_warning
+sniperkills
 snow_hit_player_screeneffect
 snowball_hit_player_face
 snowball_projectile
@@ -31663,6 +32173,7 @@ soundpatch_captionlength
 sounds
 soundscape_debug
 soundscape_flush
+soundstartuse
 soundtype
 soundunlockedoverride
 source
@@ -31963,8 +32474,10 @@ subscene
 subscribed
 subscribed_collection_ids.txt
 subscribed_file_ids.txt
+subtree
 subtype
 subtype mismatch
+succeed_after_first
 succeed_when_throttled
 succeeded_lookups
 success
@@ -32152,14 +32665,25 @@ sv_grenade_trajectory_dash
 sv_grenade_trajectory_thickness
 sv_grenade_trajectory_time
 sv_grenade_trajectory_time_spectator
+sv_guardian_extra_equipment_ct
+sv_guardian_extra_equipment_t
+sv_guardian_health_refresh_per_wave
 sv_guardian_heavy_all
 sv_guardian_heavy_count
 sv_guardian_max_wave_for_heavy
 sv_guardian_min_wave_for_heavy
+sv_guardian_refresh_ammo_for_items_on_waves
+sv_guardian_reset_c4_every_wave
+sv_guardian_respawn_health
+sv_guardian_spawn_health_ct
+sv_guardian_spawn_health_t
+sv_guardian_starting_equipment_humans
 sv_health_approach_enabled
 sv_health_approach_speed
 sv_hegrenade_damage_multiplier
 sv_hegrenade_radius_multiplier
+sv_highlight_distance
+sv_highlight_duration
 sv_holiday_mode
 sv_ignoregrenaderadio
 sv_infinite_ammo
@@ -32332,6 +32856,7 @@ sv_unlag_fixstuck
 sv_unlockedchapters
 sv_usercmd_custom_random_seed
 sv_vehicle_autoaim_scale
+sv_versus_screen_scene_id
 sv_voice_proximity
 sv_voice_proximity_minvolume
 sv_voice_proximity_positional
@@ -32365,6 +32890,7 @@ sv_vote_quorum_ratio
 sv_vote_timer_duration
 sv_vote_to_changelevel_before_match_point
 sv_walkable_normal
+sv_warmup_to_freezetime_delay
 sv_water_movespeed_multiplier
 sv_water_swim_mode
 sv_wateraccelerate
@@ -32423,7 +32949,7 @@ szIdealSchedule
 szSchedule
 t	;P$
 t	D; u
-t	H;5n"-
+t	H;5
 t	HcR
 t	L9(
 t	[A\A]A^]
@@ -32474,6 +33000,7 @@ t$@Lc
 t$@Mc|$HL
 t$H9h
 t$HE1
+t$HMc
 t$HcK
 t$Hc{(H
 t$Hc{,H
@@ -32561,7 +33088,6 @@ t.fD;z
 t/90u
 t/<.u
 t/f;J
-t/fD;F
 t0Mcv
 t0[A\A]A^]
 t0f;J
@@ -32591,6 +33117,7 @@ t4f;r
 t4fD;A
 t4fD;B
 t4fD;q
+t4fD;r
 t5f;J
 t5f;q
 t5f;r
@@ -32611,8 +33138,8 @@ t6f;J
 t6f;q
 t6f;r
 t6f;z
-t6fD;A
 t6fD;B
+t6fD;b
 t6fD;i
 t6fD;j
 t6fD;q
@@ -32630,6 +33157,7 @@ t7fD;F
 t7fD;N
 t7fD;b
 t7fD;f
+t7fD;i
 t7fD;j
 t7fD;q
 t7fD;r
@@ -32640,6 +33168,7 @@ t8f;J
 t8f;Z
 t8f;q
 t8f;r
+t8f;y
 t8f;z
 t8fD;A
 t8fD;B
@@ -32662,8 +33191,6 @@ t9fD;A
 t9fD;B
 t9fD;F
 t9fD;N
-t9fD;Q
-t9fD;a
 t9fD;b
 t9fD;i
 t9fD;j
@@ -32681,6 +33208,7 @@ t:fD;A
 t:fD;B
 t:fD;H
 t:fD;b
+t:fD;f
 t:fD;j
 t:fD;q
 t:fD;r
@@ -32702,14 +33230,12 @@ t;fD;r
 t;fD;y
 t;fD;z
 t;fD;~
-t<IcL$
 t<f;J
 t<f;N
 t<f;Q
 t<f;^
 t<f;q
 t<f;r
-t<f;y
 t<f;z
 t<fD9
 t<fD;A
@@ -32717,8 +33243,10 @@ t<fD;B
 t<fD;F
 t<fD;G
 t<fD;N
+t<fD;a
 t<fD;b
 t<fD;j
+t<fD;o
 t<fD;q
 t<fD;r
 t<fD;y
@@ -32733,12 +33261,10 @@ t=f;z
 t=fD;A
 t=fD;B
 t=fD;F
-t=fD;J
 t=fD;N
 t=fD;Y
 t=fD;a
 t=fD;b
-t=fD;f
 t=fD;i
 t=fD;j
 t=fD;q
@@ -32752,6 +33278,7 @@ t>f;J
 t>f;Z
 t>f;q
 t>f;r
+t>f;y
 t>fD9j
 t>fD;B
 t>fD;F
@@ -32773,8 +33300,8 @@ t?f;z
 t?fD9j
 t?fD;B
 t?fD;F
-t?fD;G
 t?fD;b
+t?fD;f
 t?fD;j
 t?fD;q
 t?fD;r
@@ -32806,8 +33333,8 @@ tAfD;A
 tAfD;F
 tAfD;G
 tAfD;I
+tAfD;Q
 tAfD;b
-tAfD;i
 tAfD;j
 tAfD;n
 tAfD;r
@@ -32818,7 +33345,6 @@ tBf;W
 tBf;q
 tBfD;B
 tBfD;F
-tBfD;G
 tBfD;^
 tBfD;b
 tBfD;j
@@ -32826,14 +33352,12 @@ tBfD;r
 tBfD;z
 tCf;J
 tCf;r
-tCf;w
 tCf;z
-tCfD;A
-tCfD;B
 tCfD;F
 tCfD;G
 tCfD;_
 tCfD;j
+tCfD;q
 tCfD;r
 tCfD;z
 tDfD;A
@@ -32841,7 +33365,6 @@ tDfD;F
 tDfD;G
 tDfD;^
 tDfD;n
-tDfD;o
 tEfD;A
 tEfD;F
 tEfD;N
@@ -32854,10 +33377,11 @@ tGUHc
 tHA9\
 tHH+AxH
 tHH+JxH
+tHLce
 tH[A\]
+tHfD;y
 tIfD;w
 tJ[A\]
-tJf;y
 tJfD;q
 tKIcD$
 tKMc}
@@ -32866,7 +33390,6 @@ tKfD;G
 tMH9w(I
 tMIcM
 tNH9P
-tNf;y
 tO[]A\
 tOf;q
 tOvefD
@@ -32885,8 +33408,8 @@ tThif
 tUHc}
 tVH9P
 tVHcA
-tVf;q
 tWA9]
+tWHcS8
 tWfD;F
 tWfD;N
 tWfD;i
@@ -32895,12 +33418,15 @@ tXH+FxH
 tXH+pxH
 tXTiu
 tXTzu
-tYfD;N
+tZf;q
 t\G9l
+t\HcS8
 t\Lc%
+t\Lc%4
 t]D9u
 t_;GP
 t_H;ChtYH
+t_HcS8
 t_IcN`Icu
 t_M;f
 t_equips
@@ -33031,6 +33557,8 @@ thinktime %f, %i entities
 threads
 threads_active
 threads_connected
+threat
+threat_min_keep_distance
 throttle_eval_only
 throttle_expensive_ai
 throttle_time_max
@@ -33038,6 +33566,7 @@ throttle_time_min
 throttleseconds
 throw velocity
 throw velocity alt
+tiD9}
 tick_count
 tick_interval
 ticket
@@ -33045,6 +33574,7 @@ ticket_data
 ticknumber
 tickrate
 ticleSysH
+tier_unlocked
 tifD;j
 tiltfraction
 tilttime
@@ -33088,7 +33618,6 @@ timesinceseenplayer
 timezone@@GLIBC_2.2.5
 tint_
 tint_id
-tlD9}
 tlIc\$(A
 tm_anarchist
 tm_balkan
@@ -33505,7 +34034,7 @@ tzset
 tzset@@GLIBC_2.2.5
 t{HcM
 t{HcO
-t{Lc%)
+t{Lc%
 t|;w t
 t|HcM
 t|Ic]
@@ -33538,6 +34067,7 @@ u3[A\]
 u4E+u0E
 u4IcD$
 u64( %lld = 0x%llX )
+u6D3%\7
 u7IcE
 u8H;^
 u8IcU@
@@ -33557,6 +34087,7 @@ uG[A\A]A^]
 uHMc~
 uHtxH
 uK[A\A]A^]
+uLE9l$
 uL[A\A]A^]
 uME9l$
 uMHcN
@@ -33587,6 +34118,7 @@ unhandled input: (%s) -> (%s), from (%s,%s); target entity not found
 unhandled input: (%s) -> (%s,%s)
 uninterpreted_option
 uniqueid
+uniqueweaponkills
 unknown compression method
 unknown critical chunk
 unknown header flags set
@@ -33652,7 +34184,8 @@ users
 userstatchanges
 uses_essence
 uteThinkH
-utility
+utilities
+utilitydamage
 utime
 utime@@GLIBC_2.2.5
 utimes@@GLIBC_2.2.5
@@ -33663,12 +34196,11 @@ u~[A\]f
 v	[A\A]A^]
 v	[A\]
 v"</u0
-v$~VH
 v)IcE
 v.Hc@
 v/Icw
-v6Hc@
 v9D9{ rKH
+v>Hc@
 v?flashbang_projectile
 v@Lead
 vDtgH
@@ -33680,6 +34212,7 @@ vNHcR
 vP<_tL
 vQLcm
 vRHc@
+vZHc@
 v]Hc@
 v_angle
 vac_banned
@@ -33736,7 +34269,6 @@ vector4_array
 vector::_M_fill_insert
 vector::_M_insert_aux
 vector::_M_range_check
-vector::_M_range_insert
 vector::reserve
 vector<bool>::_M_fill_insert
 vector<bool>::_M_insert_aux
@@ -33823,6 +34355,7 @@ vm_bodygroup_state_override
 vmtPicker
 vmt_overrides
 vmt_path
+vo_prefix
 voice_data
 voice_filename
 voice_player_speaking_delay_threshold
@@ -33892,6 +34425,7 @@ waterbullet
 waterlevel
 waterripple
 watersplash
+wavemoney
 wc_air_edit_further
 wc_air_edit_nearer
 wc_air_node_edit
@@ -33999,7 +34533,6 @@ weapon_mp5sd
 weapon_mp7
 weapon_mp9
 weapon_muzzle
-weapon_name
 weapon_near_empty_sound
 weapon_negev
 weapon_none
@@ -34070,7 +34603,6 @@ weaponrank
 weapons
 weapons_to_give
 weaponworldmodel
-wear_default
 wear_remap_max
 wear_remap_min
 wearable_item
@@ -34084,6 +34616,8 @@ wheel_fr
 wheel_rl
 wheel_rr
 wheels
+whenAlerted
+whenNotAlerted
 whentoreact
 whitelistcmd %.*s
 wild scan
@@ -34129,9 +34663,10 @@ x	HcKpH9
 x ;s|~
 x D9H$ty
 x!Lco(
-x";=?
 x";C8}
 x$E;l$
+x(;="
+x(;=J
 x(u	]
 x*IcL$
 x.;w(})Hc
@@ -34139,6 +34674,7 @@ x2Hcw
 x6;w(}1Hc
 x7Hcw
 x8t{H9
+x:;=L
 x:Hcw
 x<D;=
 x<D;=)
@@ -34192,13 +34728,14 @@ xp_bonus_percent
 xp_category
 xp_progress_data
 xp_reward
+xpgrant
 xt;wD}oUHc
 xuD;h
 xztUI
 yDdist_from_issuer
 yDoorSouH
 yE>SendPropFloat( %s ) is referencing a CNetworkVector, but must be referencing a CNetworkVectorXYZ or CNetworkVectorXY_SeparateZ
-yTriggerH
+yTriggerf
 yaw "%i"
 yaw: %f
 yawrange
@@ -34237,53 +34774,52 @@ zoom_in_sound
 zoom_out_sound
 zt?ERROR: too many nodes in map, deleting last node.
 { H;=
-{ H;=!
 { H;=%
-{ H;=*
-{ H;=/
-{ H;==n
-{ H;=UC
+{ H;=E
+{ H;=U
+{ H;=U9
 { H;=]
-{ H;=mw
-{ H;=u=
+{ H;=a
+{ H;=o
+{ H;=rd
+{ H;=u3
 {(H;=
-{(H;=]v
-{(H;=}
+{(H;=5
+{(H;=D
+{(H;=E
 {(tIL
 {0H;=
-{0H;=5
+{0H;= 
+{0H;=EX
 {0H;=~
 {8H;=
-{8H;=E
-{8H;=M|
+{8H;=M
 {8H;=W
 {@H;=
-{@H;=%r
-{@H;=g4
+{@H;=E
+{@H;=g*
 {@L;'u
 {@L;/u
 {H+S$Hc
 {HH;=
+{PH;=
 {PH;="
-{PH;=a
 {P[A\]
 {XH;=
-{XH;=:
-{XH;=Uo
 {XVCCDt
 {`H;=
+{`H;=e
 {`t"I
 {hH;=
 {hH;{pt
 {pH97tpH
 {pH;=
-{pH;=Er
-{pH;=]
 {}()'
 {}()':
 {}[]()=&, 	
 {}[]=, 	
 |#[Hc
+|$ A\]
 |$ E9
 |$ E97tSw
 |$ L)
@@ -34296,6 +34832,7 @@ zt?ERROR: too many nodes in map, deleting last node.
 |$0H	
 |$0H)
 |$8	~-A
+|$8A\]
 |$8L9
 |$@A)
 |$@A\]
@@ -34304,6 +34841,7 @@ zt?ERROR: too many nodes in map, deleting last node.
 |$@Mc
 |$@[A\]
 |$HIc
+|$PA\]
 |$PtaD
 |$X@u
 |$XE1
@@ -34322,7 +34860,7 @@ zt?ERROR: too many nodes in map, deleting last node.
 |}A;t$0
 } == %s
 } A;D$$
-} H;=m~
+} H;=
 } HcC
 } f;r
 }!f;Q
@@ -34346,7 +34884,7 @@ zt?ERROR: too many nodes in map, deleting last node.
 }<D9{
 }@D9{
 }@H;=
-}@H;=]h
+}@H;=]^
 }@tRH
 }CA;FD
 }DD;{P
@@ -34391,11 +34929,11 @@ zt?ERROR: too many nodes in map, deleting last node.
 ~1L;j
 ~1Lce
 ~2D9e
+~4A;wp
 ~4M;'I
-~6;Cp
 ~7HcE
 ~7fA;T$
-~8;Cp
+~8A;wp
 ~9I;t$
 ~;HcE
 ~?E9et|9L
