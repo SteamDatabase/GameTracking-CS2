@@ -1,0 +1,72 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "decorator_run_once"
+	domain = "'CoordinatedBuy'"
+	child =
+	{
+		type = "sequencer"
+		children =
+		[
+			{
+				type = "action_set_global_counter"
+				input_name = "'WaitForCoordinatedBuy'"
+				input_value = 1
+			},
+			{
+				type = "action_set_global_counter"
+				input_name = "'RushSite'"
+				input_value = 1
+			},
+			{
+				type = "action_wait"
+				wait_time_min = 3
+				wait_time_max = 3
+			},
+			{
+				type = "decorator_succeed"
+				child =
+				{
+					type = "sequencer"
+					children =
+					[
+						{
+							type = "action_coordinated_buy"
+							team_filter = "SAME"
+							save_threshold = 2000
+							id_no_purchase = "DidNotPurchase"
+							purchases =
+							[
+								{
+									items = [ "weapon_flashbang" ]
+									id = "PalaceExit1"
+								},
+								{
+									items = [ "weapon_smokegrenade", "weapon_flashbang" ]
+									id = "ASetupSmokeAndFlashbang1"
+								},
+								{
+									items = [ "weapon_smokegrenade" ]
+									id = "ASetupSmokeOnly1"
+								},
+								{
+									items = [ "weapon_smokegrenade" ]
+									id = "ASetupSmokeOnly2"
+								}
+							]
+						},
+						{
+							type = "action_set_global_counter"
+							input_name = "'RushSite'"
+							input_value = 0
+						}
+					]
+				}
+			},
+			{
+				type = "action_set_global_counter"
+				input_name = "'WaitForCoordinatedBuy'"
+				input_value = 0
+			}
+		]
+	}
+}
