@@ -15,6 +15,7 @@
  const
  restrict
  volatile
+"VVh"
 %-40s: %4.1f MB allocated (%4.1f MB peak), %4.1f MB committed, %4.1f MB reserved
 %.0f pct of time accounted for
 %8.4f / %8.4f:  %s
@@ -34,6 +35,8 @@
 (%zu) Descend: %s, (%s), %s
 (%zu) readdir failed to find '%s' in '%s'
 (anonymous namespace)
+**** WARNING: Core dump requested in child fork, aborting!
+**** WARNING: Core dump requested in child fork, invoking pre-abort callback
 **** WARNING: Watchdog timer exceeded, aborting!
 ***** OUT OF MEMORY! attempted allocation size: %u ****
 ******** BEGIN VPROF REPORT ********
@@ -52,6 +55,8 @@
 -assertstack
 -debugbreak
 -etwprofile
+-forkfdskeepall
+-forkfdskeepstd
 -mpi_worker
 -noassert
 -nonabortingwatchdog
@@ -84,10 +89,12 @@
 .symtab
 .tbss
 .text
+/dev/null
 /home/buildbot/buildslave/csgo_pcbeta_server_linux/build/src/public/tier0/tslist.h
 /proc/%d/cmdline
 /proc/cpuinfo
 /proc/self/exe
+/proc/self/fd
 /proc/self/statm
 0<	w(
 0<	w8
@@ -304,6 +311,7 @@ Plat_DefaultAllocErrorFn
 Plat_ExitProcess
 Plat_FastVerifyHardwareKey
 Plat_FloatTime
+Plat_ForkAndCoredumpChild
 Plat_Free
 Plat_GetClockStart
 Plat_GetCommandLine
@@ -876,6 +884,7 @@ char32_t
 chmod
 chmod@@GLIBC_2.0
 chown@@GLIBC_2.1
+close@@GLIBC_2.0
 closedir
 closedir@@GLIBC_2.0
 complex 
@@ -915,6 +924,7 @@ fopen
 fopen64
 fopen64@@GLIBC_2.1
 fopen@@GLIBC_2.1
+fork@@GLIBC_2.0
 fprintf
 fprintf@@GLIBC_2.0
 fputc
