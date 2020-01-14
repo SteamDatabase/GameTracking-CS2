@@ -1,0 +1,313 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	config = "scripts/ai/guardian/bt_config.kv3"
+	root =
+	{
+		type = "decorator_hiding_spot_service"
+		domain = "AllBots"
+		output_hiding_spot = "HidingSpot"
+		distance_threshold = 800
+		expiration_time = 10
+		child =
+		{
+			type = "decorator_token_service"
+			domain = "'StratTokens'"
+			output_token_name = "GroupId"
+			output_token_domain = "GroupMemberId"
+			config =
+			{
+				tokens =
+				[
+					"StratMid",
+					"StratTuns"
+				]
+				assignments =
+				[
+					[ 1, 4 ],
+					[ 2, 3 ],
+					[ 3, 2 ],
+					[ 4, 1 ]
+				]
+			}
+			child =
+			{
+				type = "decorator_bot_service"
+				memory_to_expire =
+				[
+					{
+						key = "ShortTermAttackMemory"
+						time = 0.7
+						distance = 0
+					},
+					{
+						key = "ShortTermDamageMemory"
+						time = 0.7
+						distance = 0
+					},
+					{
+						key = "ShortTermAreaDamageMemory"
+						time = 3
+						distance = 0
+					},
+					{
+						key = "ShortTermInvestigateMemory"
+						time = 3
+						distance = 200
+					},
+					{
+						key = "LongTermMemory"
+						time = 10
+						distance = 500
+					},
+					{
+						domain = "AllBots"
+						key = "Threats"
+						time = 10
+						distance = 0
+					},
+					{
+						key = "DamageThroughSmokeMemory"
+						time = 3
+						distance = 0
+					}
+				]
+				tagged_entities_to_expire =
+				[
+					"EngagedEntities"
+				]
+				child =
+				{
+					type = "decorator_buy_service"
+					output = "ShouldBuy"
+					child =
+					{
+						type = "parallel"
+						children =
+						[
+							{
+								type = "decorator_repeat"
+								child =
+								{
+									type = "parallel"
+									children =
+									[
+										// memorize enemies through vision
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_enemies_vision.kv3"
+											name = "MemorizeEnemiesVision"
+										},
+										// memorize noises happening right now
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_noises.kv3"
+											name = "MemorizeNoises"
+										},
+										// record the nearest memorized event to investigate
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_nearest_investigation.kv3"
+											name = "MemorizeNearestInvestigation"
+										},
+										// memorize incoming grenades
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_area_damage_grenades.kv3"
+											name = "MemorizeAreaDamageGrenades"
+										},
+										// memorize nearby infernos
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_area_damage_infernos.kv3"
+											name = "MemorizeAreaDamageInfernos"
+										},
+										// memorize incoming damage
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_damage.kv3"
+											name = "MemorizeDamage"
+										},
+										// memorize threats
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/bt_memorize_threats.kv3"
+											name = "MemorizeThreats"
+										},
+										// memorize whether we're standing on damaging area
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_memorize_area_damage_current.kv3"
+											name = "MemorizeAreaDamageCurrent"
+										}
+									]
+								}
+							},
+							{
+								type = "decorator_repeat"
+								child =
+								{
+									type = "selector"
+									children =
+									[
+										{
+											type = "condition_inactive"
+											input =
+											[
+												{
+													key = "ShortTermAttackMemory"
+												},
+												{
+													key = "ShortTermAreaDamageMemory"
+												}
+											]
+											round_start_threshold_seconds = 90
+											sensor_inactivity_threshold_seconds = 60
+											child =
+											{
+												type = "action_commit_suicide"
+											}
+										},
+										// Buy if we have to
+										{
+											type = "condition_is_empty"
+											input = "ShouldBuy"
+											negated = 1
+											child =
+											{
+												// sequencer: evaluate first to last child, in order
+												type = "sequencer"
+												children =
+												[
+													{
+														type = "action_wait"
+														wait_time_min = 3
+														wait_time_max = 3
+													},
+													{
+														type = "action_buy"
+													},
+													{
+														type = "decorator_remove_key"
+														input = "ShouldBuy"
+													}
+												]
+											}
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_attack.kv3"
+											name = "Attack"
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_face_damage_inflictor.kv3"
+											name = "FaceDamageInflictor"
+										},
+										{
+											type = "parallel"
+											children =
+											[
+												{
+													type = "subtree"
+													file = "scripts/ai/modules/bt_flee_area_damage_threats.kv3"
+													name = "FleeAreaDamageThreats"
+												},
+												{
+													type = "decorator_repeat"
+													child =
+													{
+														type = "subtree"
+														file = "scripts/ai/modules/bt_look_around.kv3"
+														name = "LookAround"
+													}
+												}
+											]
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_attack_damage_inflictor_smoke.kv3"
+											name = "AttackDamageInflictorSmoke"
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/bt_clear_threats_within_fov.kv3"
+											name = "ClearThreatsWithinFov"
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/bt_select_nearby_threat.kv3"
+											name = "SelectNearbyThreat"
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/op09_grunts_card11/bt_takeover_strategy.kv3"
+											name = "TakeoverStrategy"
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/bt_plant_bomb_if_covered.kv3"
+											name = "PlantIfCovered"
+										},
+										// plant bomb if we have it and haven't seen anything else
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/bt_plant_bomb_if_owned.kv3"
+											name = "PlantIfOwned"
+										},
+										// go grab the bomb if there's one available
+										{
+											type = "subtree"
+											file = "scripts/ai/guardian/modules/bt_pickup_bomb_if_nearby.kv3"
+											name = "PickupBombIfNearby"
+										},
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_heal_if_needed.kv3"
+											name = "HealIfNeeded"
+										},
+										// Else: investigate the closest memorized event
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_investigate_closest_memorized_event.kv3"
+											name = "InvestigateClosestMemorizedEvent"
+										},
+										// Else: hunt
+										{
+											// sequencer: evaluate first to last child, in order
+											type = "sequencer"
+											children =
+											[
+												{
+													type = "action_equip_weapon"
+													weapon = "BEST"
+												},
+												{
+													type = "action_choose_bomb_site_area"
+													input = "@mp_guardian_target_site"
+													output = "BombSiteArea"
+												},
+												{
+													type = "action_choose_random_waypoint"
+													input = "BombSiteArea"
+													output = "TargetArea"
+												},
+												{
+													type = "action_move_to"
+													destination = "TargetArea"
+													movement_type = "BT_ACTION_MOVETO_RUN"
+													route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+													hiding_spot = "HidingSpot"
+													threat = "NearestThreatMemory"
+												}
+											]
+										}
+									]
+								}
+							}
+						]
+					}
+				}
+			}
+		}
+	}
+}
