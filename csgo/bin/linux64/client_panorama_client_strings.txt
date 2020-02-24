@@ -1129,6 +1129,7 @@
 #Player_DisconnectReason_UntrustedAccount
 #Player_DisconnectReason_VAC
 #Player_DisconnectReason_VotedOff
+#Propcounter_Money
 #PropertyDialog_Apply
 #PropertyDialog_Cancel
 #PropertyDialog_OK
@@ -2025,6 +2026,7 @@
 #base
 #base is NULL
 #bfff90
+#buymenu_cost_amount
 #buymenu_prohibited_weapon_hint
 #c5cad0
 #chat_filterbutton
@@ -2194,6 +2196,7 @@ $aotexture
 $baseTexture
 $basealphaenvmask
 $basealphaphongmask
+$basematerialname
 $basetexture
 $basetextureoffset
 $basetexturescale
@@ -2238,6 +2241,11 @@ $colCorrect_NumLookups
 $color
 $colorgamma
 $crackmaterial
+$custommaterialnameoverride
+$decal%icamerapreset
+$decal%ihighlight
+$decal%iscale
+$decal%itexture
 $decalstyle
 $definemacro
 $definevariable
@@ -2248,6 +2256,7 @@ $detail
 $detailblendfactor
 $detailblendmode
 $detailscale
+$econ_patches_enabled
 $entityorigin
 $envmap
 $envmapfresnelminmaxexp
@@ -2553,6 +2562,7 @@ $world_mins
 %i.%i.%i.%i:%i
 %i:%i
 %i:0%i
+%i_
 %ix%i
 %keywords
 %ld
@@ -3047,7 +3057,7 @@ $world_mins
 *N6google8protobuf12_GLOBAL__N_123GeneratedMessageFactoryE
 *T=
 *X=
-*ZN13CCSGO_BuyMenu26EventPlayerEquipmentChangeEP10C_CSPlayerEUlPN8panorama8CPanel2DEE_
+*ZN13CCSGO_BuyMenu26EventPlayerEquipmentChangeEP10C_CSPlayeriEUlPN8panorama8CPanel2DEE_
 *ZN13CCSGO_Compass10CreatePipsEvEUlPN8panorama6CLabelEE_
 *ZN13CCSGO_Loadout22UpdatePanelsForLoadoutEi19loadout_positions_tS0_EUlPN8panorama8CPanel2DEE_
 *ZN13CCSGO_LoadoutC1EPN8panorama8CPanel2DEPKcEUlS2_E_
@@ -3075,7 +3085,6 @@ $world_mins
 *paintkit
 *rarity
 +
-+$%d
 +%d=
 +%s
 +++ %-20.20s:  %s (was %s)
@@ -3166,7 +3175,6 @@ $world_mins
 - PLAYING DEBUG SOUNDSCAPE: %d [%s]
 - m_AudiblePlayers[%lu] = %u
 - m_ServerBannedPlayers[%lu] = %u
--$%d
 --
 --  Increase the size of the resource stream   --
 --  Need %d bytes, but only have %d bytes
@@ -4340,6 +4348,7 @@ $world_mins
 15CEZParticleInit
 15CEconItemSchema
 15CEconItemSystem
+15CEconTool_Patch
 15CEconTool_Spray
 15CFXDiscreetLine
 15CFleckParticles
@@ -5135,6 +5144,7 @@ $world_mins
 20CMsgStoreGetUserData
 20CMsgUpdateItemSchema
 20CParticleSystemQuery
+20CPatchHighlightProxy
 20CPerfVisualBenchmark
 20CPlayerPositionProxy
 20CRefCountServiceBaseILb1E6CRefMTE
@@ -5447,7 +5457,7 @@ $world_mins
 237
 238
 239
-23:21:23
+23:46:45
 23CAchievementCS_Medalist
 23CAnimateSpecificTexture
 23CAutoGameSystemPerFrame
@@ -5647,6 +5657,7 @@ $world_mins
 25CCSUsrMsg_VGUIMenu_Subkey
 25CConCommandMemberAccessorI11CViewRenderE
 25CConCommandMemberAccessorI17CInventoryManagerE
+25CCrosshairPreviewControls
 25CCustomTextureOnItemProxy
 25CEconItemPreviewDataBlock
 25CEconTool_DuelingMinigame
@@ -7890,9 +7901,11 @@ ACT_CSGO_SILENCER_ATTACH
 ACT_CSGO_SILENCER_DETACH
 ACT_CSGO_TWITCH
 ACT_CSGO_TWITCH_BUYZONE
+ACT_CSGO_UIPLAYER_BUYMENU
 ACT_CSGO_UIPLAYER_CELEBRATE
 ACT_CSGO_UIPLAYER_CONFIRM
 ACT_CSGO_UIPLAYER_IDLE
+ACT_CSGO_UIPLAYER_PATCH
 ACT_CSGO_UIPLAYER_WALKUP
 ACT_DEPLOY
 ACT_DEPLOY_IDLE
@@ -9214,6 +9227,7 @@ Application transferred too many scanlines
 Applies an image as an opacity mask that stretches to the panel bounds and fades out it's content based on the alpha channel. The second float value is an optional opacity value for the mask itself, the image won't interpolate/cross-fade, but you can animate the opacity to fade the mask in/out. The -scroll-up, -scroll-down, and -scroll-up-down varients override the mask and apply only when the various vertical scroll scenarios affect the panel based on the overflow property.<br><br><b>Examples:</b><pre>opacity-mask: url( "file://{images}/upper_row_mask.tga" );opacity-mask: url( "file://{images}/upper_row_mask.tga" ) 0.5;opacity-mask-scroll-up: url( "file://{images}/upper_row_mask_up.tga" ) 0.5;opacity-mask-scroll-down: url( "file://{images}/upper_row_mask_down.tga" ) 0.5;opacity-mask-scroll-up-down: url( "file://{images}/upper_row_mask_up_down.tga" ) 0.5;</pre>
 Applies smoothing/decay curve to flex animation controller changes.
 Apply Velocity in Local Space (0/1)
+Apply a crosshair code to the current crosshair settings.
 ApplyActivityModifier
 ApplyButton
 ApplyButtonEnable
@@ -9413,6 +9427,7 @@ BASE_SCAMPER
 BAcceptsFocus
 BAcceptsInput
 BAdjustingVolume
+BApplyCrosshairCode
 BAscendantHasClass
 BCanSeeInParentScroll
 BCreateChildren
@@ -9482,6 +9497,7 @@ BULLET_PLAYER_9MM
 BULLET_PLAYER_BUCKSHOT
 BULLRUSH
 BUMP_WITH_TIMEOUT_WHEN_LEARNED
+BValidateCrosshairCode
 BYN
 BYOC
 B_txt
@@ -9760,13 +9776,13 @@ ButtonSourceBrowse
 ButtonToggled
 ButtonVTFBrowse
 Buy event.
-BuyMenuItemModel
 BuyMenuMoney
 BuyMenu_ActivateBuyWheel
 BuyMenu_ActivateWedge
 BuyMenu_Back
 BuyMenu_PurchaseFailSlot
 BuyMenu_PurchaseSlot
+BuyMenu_UpdateCharacter
 BuyPreset.Updated
 BuyWheelContainer
 BuyWheel_%s
@@ -11489,7 +11505,6 @@ Castle
 Casual
 Category %d:
 CategoryName
-CategoryPreview
 CategoryWedge
 CategoryWheel
 Catmull-Rom
@@ -12069,9 +12084,9 @@ Creating %s
 Creating ragdoll at tick %d
 Creation Time
 CrossHairColor
-Crosshair scaling factor (deprecated)
 CrosshairColorComboBox
 CrosshairObserver
+CrosshairPreviewControls
 CrosshairSizeComboBox
 CrosshairTranslucencyCheckbox
 Cruise
@@ -12130,6 +12145,7 @@ CustomURL
 Customize texture tool failed: Did not get reply from GC
 Cut : voiceless velar stop
 Cutoff area %.2f
+CycleMoveSpeed
 Cycles through teammate color preference
 Cypriot
 Cyrillic
@@ -12628,6 +12644,7 @@ Debugger
 Dec
 Decal textures
 Decal: entity = %i
+DecalFindReplaceValue
 Decay factor (linear term) for weapon recoil
 Decay factor exponent for view punch
 Decay factor exponent for weapon recoil
@@ -13194,7 +13211,6 @@ EmptyCartLabel
 Enable SteamController
 Enable a flashlight drawing pass on detail props. 0 = off, 1 = single pass, 2 = multipass (multipass is PC ONLY)
 Enable close captioning.
-Enable crosshair scaling (deprecated)
 Enable customized player sound playback
 Enable debug overlay on traces that determine where the client-side visible env_beam is drawn. Has no bearing on the server-side damage-causing part of the beam.
 Enable debug view texture
@@ -13598,7 +13614,10 @@ Failed to join the team we requested.
 Failed to load %s
 Failed to load '%s' from lump pak for conversion or copy in '%s'.
 Failed to load UI control settings!
+Failed to load existing material keyvalues for character patch: %s
+Failed to load material keyvalues for character patch: %s
 Failed to load opacity mask for panel '%s'
+Failed to load shared proxy include for character patch: %s
 Failed to open zip file '%s'. Reason: %s
 Failed to pack .nav file for the BSP you're attempting to upload. Make sure it's located in the game/csgo/maps directory next to your map.
 Failed to parse %s
@@ -13609,6 +13628,7 @@ Failed to publish the file to Steam!
 Failed to read thumbnail %s.
 Failed to ready up
 Failed to reestablish collision model for object
+Failed to replace string in character patch assembly!
 Failed to rescale UGC=%08X%08X to %d, %d.
 Failed to resize preview file!Please verify the image format and try again.
 Failed to resize small thumbnail %s.
@@ -13808,6 +13828,7 @@ FolderName
 FolderUpButton
 FootstepsHeard
 FootstepsMade
+For crosshair style 1: How big to make the gap between the pips in the fixed crosshair
 For doing too much team damage
 For drawing only the crosshair and death notices (used for moviemaking)
 For killing a teammate at round start
@@ -14100,6 +14121,7 @@ General.BurningFlesh
 General.BurningObject
 GeneratableCryptoMaterial: this object does not support key/parameter generation
 Generate a command
+GenerateButton
 GenerateInventoryImages
 Generating a command(%u):
 Generating icon [%s]%s, %i remaining!
@@ -14193,6 +14215,7 @@ GetCampaignNodeSuccessors
 GetCategories
 GetCharacterDefaultCheerByItemId
 GetCharacterDefaultCheerByXuid
+GetCharacterPatchPosition
 GetChild
 GetChildCount
 GetChildIndex
@@ -14219,6 +14242,7 @@ GetCooperativePlayerTeamName
 GetCount
 GetCraftIngredientByIndex
 GetCraftIngredientCount
+GetCrosshairCode
 GetCurrentActiveAlertForUser
 GetCurrentActiveSurveyID
 GetCurrentLevel
@@ -15005,6 +15029,7 @@ Hides the overview map
 High Quality Models
 High seed team: %s
 High seed team: Oregon
+HighlightPatchBySlot
 HighlightStickerBySlot
 Hint: %s: '%s'
 HintConfig.txt contains invalid context setting: %s
@@ -15056,7 +15081,6 @@ HotKey_ReplayLastKill
 HotKey_XRay
 Hotkey
 How aggressive the switch to fallbacks will be depending on how far over the cl_particle_sim_fallback_threshold_ms the sim time is.  Higher numbers are more aggressive.
-How big to make the gap between the pips in the fixed crosshair
 How closely the view tracks with the aim punch from weapon recoil
 How fast a player wearing the heavy assault suit will draw their weapon (1.0 = normal speed, 0.5 = half speed)
 How frequent to hear the player's step sound or how fast they appear to be running from first person.
@@ -15270,6 +15294,7 @@ ImageFileName
 ImageTitle
 Impact.Concrete
 Imperial_Aramaic
+Import
 Import "
 Improper call to JPEG library in state %d
 In competitive, 1 = show teammates as separate colors in the radar, scoreboard, etc., 2 = show colors and letters
@@ -18209,7 +18234,6 @@ N8panorama9CUIEvent1IN13CCSGO_BuyMenu16BuyWheelCategoryEEE
 N8panorama9CUIEvent1IN2v85LocalINS1_6ObjectEEEEE
 N8panorama9CUIEvent1INS_13GamePadData_tEEE
 N8panorama9CUIEvent1INS_9CPanelPtrINS_8CPanel2DEEEEE
-N8panorama9CUIEvent1IP10C_CSPlayerEE
 N8panorama9CUIEvent1IP12C_BaseEntityEE
 N8panorama9CUIEvent1IP12IVideoPlayerEE
 N8panorama9CUIEvent1IPK10C_CSPlayerEE
@@ -18222,6 +18246,7 @@ N8panorama9CUIEvent1IiEE
 N8panorama9CUIEvent1IyEE
 N8panorama9CUIEvent2INS_9CPanelPtrINS_8IUIPanelEEEPKcEE
 N8panorama9CUIEvent2INS_9CPanelPtrINS_8IUIPanelEEEPN2v810PersistentINS4_8FunctionENS4_27NonCopyablePersistentTraitsIS6_EEEEEE
+N8panorama9CUIEvent2IP10C_CSPlayeriEE
 N8panorama9CUIEvent2IPKcN12CCenterPrint9EPriorityEEE
 N8panorama9CUIEvent2IPKcS2_EE
 N8panorama9CUIEvent2IPKcbEE
@@ -18251,9 +18276,11 @@ N8panorama9CUIEvent3IiPKcS2_EE
 N8panorama9CUIEvent3IjiiEE
 N8panorama9CUIEvent3IyiiEE
 N8panorama9CUIEvent4IPKcbbS2_EE
+N8panorama9CUIEvent4IfffbEE
 N8panorama9CUIEvent4IffffEE
 N8panorama9CUIEvent4IiPKcyyEE
 N8panorama9CUIEvent4IiyiiEE
+N8panorama9CUIEvent5IPKcS2_S2_bbEE
 N8panorama9CUIEvent5IiiifiEE
 N8panorama9CUIEvent6IPKcS2_S2_S2_S2_S2_EE
 N9BaseModUI11CUIGameDataE
@@ -19063,6 +19090,7 @@ PassiveItemExoJump
 PassiveItemParachute
 Password2
 PasswordEdit
+PatchHighlight
 Patina
 PatternPopup
 PausePlay
@@ -19481,6 +19509,7 @@ Protobuf: %s(%d): %s
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
 Protocol message serialized itself in invalid fashion.
 Protocol message was modified concurrently during serialization.
+Proxies
 Ps
 PublicElement
 PublishDialogScheme
@@ -20556,7 +20585,7 @@ Set dialog vars from mission schema to this panel.
 Set each light's color: [light0-3] [r0-255] [g0-255] [b0-255]
 Set focus to this panel.
 Set how many seconds the client will extrapolate entities for.
-Set how thick you want your crosshair outline to draw (0.1-3)
+Set how thick you want your crosshair outline to draw (0-3)
 Set non-zero to close the buy menu after buying something
 Set per child control point from particle positions
 Set positions in world space
@@ -20642,7 +20671,7 @@ SetEnum
 SetEvent()
 SetFlashlightAmount
 SetFlashlightAngle
-SetFlashlightAngles( %3.2f, %3.2f, %3.2f )
+SetFlashlightAngle( %3.2f, %3.2f, %3.2f )
 SetFlashlightColor
 SetFlashlightColor( %3.2f, %3.2f, %3.2f )
 SetFlashlightFOV
@@ -20693,6 +20722,7 @@ SetParticleSystemOffsetAngles
 SetParticleSystemOffsetPosition
 SetPlaybackRateMultiplier
 SetPlaybackVolume
+SetPlayerCharacterItemID
 SetPlayerModel
 SetPlayerVoiceVolume
 SetPopupBackgroundBlur
@@ -21646,6 +21676,7 @@ Test a punch-style screen shake.
 Test the freeze frame code.
 Test vgui panel positioning with title safe indentation
 TestMusicVolume
+TestSpread
 Test_ProxyToggle_EnsureValue
 Test_ProxyToggle_EnsureValue: object doesn't exist on the client.
 Test_ProxyToggle_EnsureValue: requires value parameter.
@@ -22134,6 +22165,7 @@ UIItemPreviewPanelSetPanelLightingAmount
 UIItemPreviewPanelSetParticleSystemOffsetAngles
 UIItemPreviewPanelSetParticleSystemOffsetPosition
 UIItemPreviewPanelSetPlaybackRateMultiplier
+UIItemPreviewPanelSetPlayerCharacterItemID
 UIItemPreviewPanelSetPlayerModel
 UIItemPreviewPanelSetScene
 UIItemPreviewPanelSetSceneAngles
@@ -22874,6 +22906,7 @@ WeaponInspectMainMenuPainted
 WeaponLabelText
 WeaponLabelTextPreview
 WeaponLength
+WeaponNameAndRarity
 WeaponPanel--Hidden
 WeaponPanel--Simple
 WeaponPanelBottomBG
@@ -23928,6 +23961,7 @@ appid
 application/json
 application/rss+xml
 application/vnd.twitchtv.v5+json
+apply_crosshair_code
 aqua
 ar_screenglow_leader_red
 archive
@@ -24434,6 +24468,7 @@ can_customize_texture
 can_delete
 can_gift_wrap
 can_increment
+can_patch
 can_stattrack_swap
 can_sticker
 cancelselect
@@ -24497,8 +24532,10 @@ casketretrieve
 casketstore
 casual
 categories: "friendly", "teaching", "leader"
+category-wedge-image-container
 category_name
 category_tags
+categoryimages_%d
 catmullrom
 catmullrom_normalize
 catmullrom_normalize_x
@@ -25001,7 +25038,6 @@ cl_rumblescale
 cl_sanitize_muted_players
 cl_sanitize_player_names
 cl_savescreenshotstosteam
-cl_scalecrosshair
 cl_scoreboard_mouse_enable_binding
 cl_scoreboard_survivors_always_on
 cl_screenshotlocation
@@ -26098,10 +26134,11 @@ easter
 easy
 econ
 econ/default_generated/
+econ/patches/%s
 econ/stickers/%s
 econ_build_pinboard_images_from_collection_name
 econ_build_pinboard_images_from_collection_name set_name wear( -1 uses each paint's default )EX: econ_build_pinboard_images_from_collection_name set_aztec -1
-econ_build_pinboard_images_from_collection_name set_name wear_value( -1 uses each paint's default )EX: econ_build_pinboard_images_from_collection_name set_aztec -1Images dump into resource/Flash/econ/pinboard
+econ_build_pinboard_images_from_collection_name set_name wear_value( -1 uses each paint's default )EX: econ_build_pinboard_images_from_collection_name set_aztec -1Images dump into resource/flash/econ/pinboard
 econ_clear_inventory_images
 econ_debug_loadout_ui
 econ_enable_inventory_images
@@ -26217,6 +26254,9 @@ elites
 ellipses
 ellipsis
 email
+embedded-weapons-overview
+embedded-weapons-overview--hidden
+embedded-weapons-overview--shown
 emission count scale control point
 emission count scale control point field
 emission maximum
@@ -26579,6 +26619,7 @@ file://{resources}/layout/compass.xml
 file://{resources}/layout/context_menus/context_menu_base.xml
 file://{resources}/layout/contextmenu.xml
 file://{resources}/layout/crosshair.xml
+file://{resources}/layout/crosshairpreview.xml
 file://{resources}/layout/debugger.xml
 file://{resources}/layout/debugindividualstyle.xml
 file://{resources}/layout/debuginheritedstylesheader.xml
@@ -27313,6 +27354,7 @@ hidepanel
 hideradar
 hidescores
 highlight_color
+highlight_patch
 highlight_sticker
 hints
 hitbox set
@@ -27379,7 +27421,7 @@ http://blog.counter-strike.net/workshop/faq.php#weapons
 http://blog.counter-strike.net/workshop/finishes/
 http://blog.counter-strike.net/workshop/finishes/index.html
 http://blog.counter-strike.net/workshop/resources.html
-http://cdntest.steampowered.com/apps/%d/web_resources/%s
+http://cdn.beta.steampowered.com/apps/%d/web_resources/%s
 http://media.steampowered.com/
 http://media.steampowered.com/apps/%d/web_resources/%s
 http://media.steampowered.com/apps/570/test/test.txt
@@ -27451,6 +27493,7 @@ hud-game-icons-icon-hostage--rescued
 hud-hint--priority
 hud-hint--visible
 hud-money-amount
+hud-money-delta
 hud-progress-bar--canceled
 hud-progress-bar--finished
 hud-progress-bar--switched
@@ -27604,7 +27647,6 @@ imagename
 img
 img-shadow
 img://inventory_
-img://inventory_%llu
 img://itemdata_
 img://loadjpeg:(640x360):
 imgscaling
@@ -30459,6 +30501,8 @@ m_vecParentBonePos
 m_vecPlayAreaMaxs
 m_vecPlayAreaMins
 m_vecPlayerMountPositionBottom
+m_vecPlayerPatchEconIndices
+m_vecPlayerPatchEconIndices[0]
 m_vecPlayerPositionHistory
 m_vecPlayerPositionHistory[0]
 m_vecPoints
@@ -30839,6 +30883,8 @@ materials/correction/cc_heavyassaultsuit_t.raw
 materials/correction/ghost.raw
 materials/detail/detailsprites.vmt
 materials/models/player/player_skin_shared.vmt
+materials/models/weapons/customization/patches/%s.vmt
+materials/models/weapons/customization/patches/default/patch_replaces.vmt
 materials/models/weapons/customization/stickers/%s.vmt
 materials/models/weapons/customization/stickers/default/sticker_proxies_%i.vmt
 materials/models/weapons/v_models/%s/%s.vmt
@@ -31302,9 +31348,11 @@ models/weapons/customization/%s/%s_masks.vtf
 models/weapons/customization/%s/%s_pos.vtf
 models/weapons/customization/%s/%s_surface.vtf
 models/weapons/customization/paints/%s/%s.vtf
+models/weapons/customization/patches/default/patch_default
 models/weapons/customization/shared/gun_grunge.vtf
 models/weapons/customization/shared/paint_wear.vtf
 models/weapons/customization/uvs/%s.vtf
+models/weapons/patch_inspect.mdl
 models/weapons/pedestal_ground_shadow_plane.mdl
 models/weapons/shared/scope/scope_dot_green
 models/weapons/shared/scope/scope_dot_red
@@ -31762,6 +31810,8 @@ netmsg
 network/access
 network_connection.proto
 never:
+neverfade
+neverselected
 newPanel
 new_rank
 newest
@@ -31960,6 +32010,7 @@ oncontextmenu
 oncontextmenu="
 ondblclick
 ondeselect
+ondropdownselectionchanged
 one of these types: ScrimComp2v2_2017, ScrimComp5v5_2017
 one_per_account_cdkey
 onfirstimpact
@@ -32269,6 +32320,11 @@ partybrowser_timeout
 pass %d: size is %d, grp uses are
 password "%s";
 paste
+patch_
+patch_apply
+patch_material
+patch_remove
+patch_tool
 path_corner
 pattern
 pattern_scale
@@ -32516,7 +32572,6 @@ playerid__icon--hidden
 playerid__name--hidden
 playerid__weaponicon--hidden
 playerid__weapons--hidden
-playermoney
 playername
 playerping--Animate-FadeIn
 playerresource
@@ -33257,13 +33312,6 @@ resource/ChatScheme.res
 resource/ClientScheme.res
 resource/CommentaryItem.res
 resource/DemoImportantEvents.res
-resource/Flash/econ/_temp_generated/
-resource/Flash/econ/pinboard/
-resource/Flash/econ/weapons/cached/
-resource/Flash/econ/weapons/cached/%X-%X-%X-%X.iic
-resource/Flash/econ/weapons/cached/%X-%X-%X.iic
-resource/Flash/econ/weapons/cached/%s
-resource/Flash/econ/weapons/cached/*.iic
 resource/HintConfig.txt
 resource/LoadCommentaryDialog.res
 resource/LoadGameDialog.res
@@ -33295,7 +33343,14 @@ resource/closecaption_english.dat
 resource/colorpicker.cur
 resource/colorpicker.res
 resource/colorpickerframe.res
+resource/flash/econ/default_generated/
+resource/flash/econ/pinboard/
 resource/flash/econ/tournaments/teams/%s.png
+resource/flash/econ/weapons/cached/
+resource/flash/econ/weapons/cached/%X-%X-%X-%X.iic
+resource/flash/econ/weapons/cached/%X-%X-%X.iic
+resource/flash/econ/weapons/cached/%s
+resource/flash/econ/weapons/cached/*.iic
 resource/flash/loading-%s.swf
 resource/g15.res
 resource/icon_explore
@@ -33311,7 +33366,6 @@ resource/overviews/%s_radar_spectate.dds
 resource/subtitles_%s.dat
 resource/subtitles_english.dat
 resource/ui/RadioPanel.txt
-resource/ui/econ/ItemModelPanelCharWeaponInspect.res
 resource/ui/econ/ItemModelPanelWeaponPreviewManifest.res
 resource/ui/econ/ItemModelPanelWorkshopWeaponPreview.res
 resource/ui/econ/StorePage.res
@@ -33884,6 +33938,7 @@ slot, class
 slot0
 slot12
 slot13
+slotIndex
 slot_token
 slot_token_id
 small car
@@ -34073,6 +34128,7 @@ spec_menu
 spec_mode %d
 spec_mode %i
 spec_mode_updated
+spec_money
 spec_next
 spec_overwatch_skip_idle_ticks
 spec_player
@@ -36362,6 +36418,7 @@ webapi_values_init_buffer_size
 webapi_values_max_pool_size_mb
 wedding_ring
 wedgesize
+wepicon_%d
 wheat
 wheelpanel_kv
 when set to 0, ragdolls will settle dynamically before and after Killer Replay

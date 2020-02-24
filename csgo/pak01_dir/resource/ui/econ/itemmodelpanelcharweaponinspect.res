@@ -1398,6 +1398,42 @@
 		}
 	}
 
+	"patch_tool"
+	{
+		"rule"
+		{
+			"type" "patch_tool"
+		}
+		"config"
+		{
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.68 0.68 0.82} dir[0.21 -0.91 -0.37] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.47 0.39 0.39} dir[-0.34 -0.40 -0.85] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{1.14 1.14 1.14} dir[-0.59 0.78 0.22] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.20 0.20 0.22} dir[-0.40 -0.52 -0.76] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "3.08 20.89 12.45"
+			"shadow_light_orient"        "21.24 -97.18 0.00"
+			"shadow_light_brightness"    "1.2"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "53.9"
+			"shadow_light_vfov"       "53.9"
+			"shadow_light_znear"       "8"
+			"shadow_light_zfar"       "32"
+			"shadow_light_atten_farz"       "57.4"
+			"light_ambient"              "[0.5 0.5 0.5]"
+			"root_mdl"					"models\weapons\pedestal_patch.mdl"
+			"root_anim"					"ACT_IDLE_INSPECT_START"		
+			"root_anim_loop"				"ACT_IDLE_INSPECT_LOOP"
+			"camera_offset"   "-6.24 23.49 6.45"
+			"camera_orient"   "5.04 -75.63 0.00"
+			"orbit_pivot"     "-0.21 -0.05 4.30"
+			"root_camera_fov"     "54.0"
+			"item_rotate"				    "y[-8 8] x[-1 1]"
+		}
+	}
+	
 
 	"Knives"
 	{
@@ -3094,9 +3130,12 @@
 			"camera_preset_add"   "pos[350 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 14
 			"camera_preset_add"   "pos[370 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 15
 
-			//16
+			//inspect
 			"camera_preset_add"   "pos[382.11 -54.77 28.43] pivot[-0.74 0.81 42.31] orient[-2.06 171.74 0.00] fov[20.0]" // 16 inspect unzoomed
 			"camera_preset_add"   "pos[124.97 -16.83 62.49] pivot[0.13 1.29 64.50]  orient[-0.91 171.74 0.00] fov[20.0]" // 17 inspect zoomed
+
+			// buymenu
+			"camera_preset_add"   "pos[226.06 73.87 64.82] pivot[-1.00 0.66 53.36] orient[2.75 -162.13 0.00] fov[20.0]"// 18 buymenu
 		}
 	}
 
@@ -3392,6 +3431,50 @@
 			"camera_preset_add"   "pos[-79.35 181.14 49.98] pivot[-0.71 4.45 -10.68] orient[17.42 -66.01 0.00] fov[54.0]" // zoomed out.
 			"camera_preset_add"   "pos[-85.12 165.55 63.25] pivot[0.67 -1.39 9.29] orient[16.04 -62.80 0.00] fov[54.0]" // opening scroll
 			"camera_preset_add"   "pos[-53.09 121.06 39.72] pivot[2.30 -4.75 22.04] orient[7.33 -66.24 0.00] fov[54.0]" // open anim
+		}
+	}
+	
+	"weapon_case"
+	{
+		"rule"
+		{
+			"model_partial" "patch_envelope"
+		}
+		"config"
+		{
+
+			"root_mdl"					    ""		                                // Which pedestal model to load, weapon model is merged to the pedestal, null => weapon model is the scene
+			"root_anim"					    ""                          			// Which activity to play on the pedestal
+			"root_anim_loop"			    ""				                        // Which activity to play on the pedestal after the initial pedestal animation finishes
+			"weapon_anim"				    ""						                // Which activity to play on the weapon
+			"weapon_anim_loop"			    ""										// Which pedestal model to load, weapon model is merged to the pedestal
+			"root_camera"				"cam_inspect"								// Which attachment specifies camera location
+			"camera_offset"   "8.29 29.57 71.52"
+			"camera_orient"   "66.92 -104.28 0.00"
+			"orbit_pivot"     "0.93 0.66 1.52"
+			"root_camera_fov"     "54.0"
+			"item_rotate" "y[-10 5]" //- x horizontal, z vertical
+
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.77 0.94 1.00} dir[0.15 -0.39 -0.91] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.73 0.73 0.73} dir[0.63 0.53 -0.56] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.79 0.67 0.41} dir[0.24 0.87 -0.43] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "14.24 -34.26 52.07"
+			"shadow_light_orient"        "58.60 111.56 0.00"
+			"shadow_light_brightness"    "2.70"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "53.9"
+			"shadow_light_vfov"       "53.9"
+			"shadow_light_znear"       "23.9"
+			"shadow_light_zfar"       "59.7"
+			"shadow_light_atten_farz"       "119.4"
+			"light_ambient"              "[0.06 0.06 0.06]"
+
+			"camera_preset_add"   "pos[4.88 53.53 144.79] pivot[-0.38 3.69 -7.05] orient[71.74 -96.03 0.00] fov[39.8]" // zoomed out.
+			"camera_preset_add"   "pos[31.70 5.11 128.97] pivot[-8.17 0.07 -4.72] orient[73.27 -172.81 0.00] fov[39.8]" // opening scroll
+			"camera_preset_add"   "pos[120.13 49.61 121.84] pivot[-15.86 -4.33 7.64] orient[37.98 -158.37 0.00] fov[39.8]" // open anim
 		}
 	}
 
