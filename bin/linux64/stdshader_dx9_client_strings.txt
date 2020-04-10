@@ -1058,6 +1058,7 @@ $texture2 texcoord transform
 ( params[info.m_nLocalRefract]->GetIntValue() != 0 )
 ( shaderFlags & SHADER_USE_CONSTANT_COLOR ) ? true : false
 ( shaderFlags & SHADER_USE_VERTEX_COLOR ) ? true : false
+(bCSMEnabled)
 (bHasTexture2)?(1):(0)
 (fogType == MATERIAL_FOG_LINEAR_BELOW_FOG_Z) && (nBlendType != BT_BLENDADD) && (nBlendType != BT_BLEND) && !bIsAlphaTested
 (g_pHardwareConfig->GetHDRType() == HDR_TYPE_FLOAT) ? true : false
@@ -2293,6 +2294,7 @@ bAlphaMaskTexture
 bBackSurface
 bBaseAlphaEnvMask
 bBaseAlphaPhongMask
+bBaseAlphaSelfIllumMask
 bBlend
 bBlend && bRefraction
 bBlendFrames
@@ -2354,9 +2356,12 @@ bGenerateNormalMap
 bGhostOverlay
 bGlow
 bHalfLambert
+bHasAmbientReflection
+bHasAnisotropy
 bHasBaseAlphaEnvmapMask
 bHasBaseTexture
 bHasBlendModulateTexture
+bHasBounceColor
 bHasCheapFlow
 bHasDecalTexture ? Min( nDecalBlendMode, 1 ) : 2
 bHasDecalTexture ? nDecalBlendMode : 2
@@ -2368,15 +2373,19 @@ bHasEnvmap
 bHasEnvmapMask
 bHasEnvmapMask && !bHasFlashlight && ( bHasEnvmap || bHasSelfIllumInEnvMapMask )
 bHasEnvmapMask && ( bHasEnvmap || bHasSelfIllumInEnvMapMask )
+bHasFakeRim && !bHasFlashlight
 bHasFlashlight
 bHasFlowmap
 bHasFogFade
+bHasFresnelRangesTexture
 bHasMultiTexture
+bHasPhongWarpTexture
 bHasSelfIllum
 bHasSelfIllum && !bHasFlashlight
 bHasSelfIllumFresnel
 bHasSelfIllumInEnvMapMask
 bHasSelfIllumInEnvMapMask && !bHasFlashlight
+bHasShadowSaturation
 bHasSimpleOverlay
 bHasStatic
 bHasTintMaskTexture
@@ -2443,6 +2452,7 @@ bSoftMask
 bSphereTexKillCombo ? 1 : 0
 bStaticBlendTexture
 bStaticLight3
+bSupportsCSM
 bSwapPatternMasks
 bTangentS
 bTangentT
@@ -2463,6 +2473,7 @@ bUseRampTexture
 bUseStaticControlFlow ? 0 : ( IsPS3() ) ? MIN(2, lightState.m_nNumLights) : lightState.m_nNumLights
 bUseStaticControlFlow ? 0 : ( lightState.m_nNumLights )
 bUseStaticControlFlow ? 0 : lightState.m_nNumLights
+bUseStaticControlFlow ? 0 : nNumLights
 bUsesColor
 bVertexColorOrAlpha ? 1 : 0
 bVertexShaderFastPath
@@ -2535,12 +2546,12 @@ cbrtf
 cbrtf@@GLIBC_2.2.5
 center .5 .5 scale 1 1 rotate 0 translate 0 0
 center if the model in world space
-character_ps20b
 character_ssao_ps20
 character_ssao_ps20b
 character_ssao_ps30
 character_ssao_vs20
 character_ssao_vs30
+character_uber_ps30
 character_vs20
 chdir
 chdir@@GLIBC_2.2.5
