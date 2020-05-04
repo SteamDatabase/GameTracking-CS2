@@ -39,6 +39,9 @@
 		"wipe"			"short"		// is the kill resulting in squad wipe
 		"penetrated"	"short"	// number of objects shot penetrated before killing target
 		"noreplay"		"bool"  // if replay data is unavailable, this will be present and set to false
+		"noscope"		"bool"  // kill happened without a scope, used for death notice icon
+		"thrusmoke"		"bool"  // hitscan weapon went through smoke grenade
+		"attackerblind"	"bool"  // attacker was blind from flashbang
 	}
 
 	"other_death"
@@ -52,6 +55,9 @@
 		"weapon_originalowner_xuid"	"string"
 		"headshot"		"bool"		// singals a headshot
 		"penetrated"	"short"	// number of objects shot penetrated before killing target
+		"noscope"		"bool"  // kill happened without a scope, used for death notice icon
+		"thrusmoke"		"bool"  // hitscan weapon went through smoke grenade
+		"attackerblind"	"bool"  // attacker was blind from flashbang
 	}
 
 	"player_hurt"
