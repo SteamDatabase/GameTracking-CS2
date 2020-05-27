@@ -53,7 +53,6 @@ $dudvmap
 $dummyVar
 $envmap
 $envmapFresnelMinMaxExp
-$envmapcameraspace
 $envmapfresnel
 $envmapmask
 $envmapmaskframe
@@ -83,12 +82,12 @@ $maskstexture
 $materialmask
 $model
 $multiply
+$needspostasyncprecache
 $no_draw
 $no_fullbright
 $nocull
 $nodecal
 $nofog
-$noise
 $normalmap
 $normalmapalphaenvmapmask
 $opaquetexture
@@ -107,6 +106,7 @@ $pseudotranslucent
 $selfillum
 $showalpha
 $sidespeed
+$skip_representative_texture
 $softwareskin
 $surfacetexture
 $tI
@@ -315,7 +315,6 @@ $znearer
 /home/buildbot/buildslave/csgo_pcbeta_client_linux/build/src/public/tier1/utlsortvector.h
 0
 0 - do not support flashlight (don't load flashlight shader combos), 1 - flashlight is supported
-0.5
 0123456789ABCDEF
 0123456789abcdef
 0@
@@ -632,6 +631,7 @@ AllocateLightmapTexture(%d) in unknown lightmap state (%d), skipped.
 Allocated optimal read buffer of %d bytes @ 0x%p
 Allow Threading
 Assertion Failed: !m_bNeedsSort
+Async texture taking synchronous path: %s
 Attempted to morph too many meshes in a single model!
 B
 BGR565
@@ -763,6 +763,7 @@ DebugPrintUsedMaterials: material: "%s" didn't unache
 DebugPrintUsedMaterials: refCount (%d) < 0 for material: "%s"
 DebugTextureInfo001
 Decal textures
+Defer asynchronous loading of high-resolution textures.
 Depth must be 1 for cubemaps!
 Destroying a texture that is in the queue!
 DevMsg(char const*, ...)
@@ -785,7 +786,7 @@ Enable/Disable specularity for perf testing.  Will cause a material reload upon 
 Enable/Disable specularity for visual testing.  Will not reload materials and will not affect perf.
 Endframe_Wait
 Error
-Error creating composite tex8ture! Could not find render target texture.
+Error creating composite texture! Could not find render target texture.
 Error creating compositing material! Marking composite complete and not rendering to RT...
 Error in .VMT file: error parsing vector element "%s" in "%s"
 Error reading material "%s"
@@ -937,6 +938,7 @@ MemFreeScratch
 MemOutOfMemory
 Memory Level - Default: High
 MeshSystem001
+Model textures
 Module %s is a debug build
 Morph :
 Morph Targets
@@ -1055,6 +1057,7 @@ SonyPS3
 SoundSystem001
 Spew info about the hardware aspect ratio
 StandardRenderStateList_t pool
+StaticProp textures
 String %d: ref:%d %s
 Swap_Buffers
 T
@@ -1088,7 +1091,6 @@ Total committed memory: %d KB
 Total used memory:      %d KB
 Tried BeginRenderTargetAllocation after game startup. If I let you do this, all users would suffer.
 Tried to create render target outside of CMaterialSystem::BeginRenderTargetAllocation/EndRenderTargetAllocation block
-Trying to bind texture %s, but texture handles are not valid. Binding a white texture!
 U
 UCS-2LE
 UCS-4LE
@@ -1160,6 +1162,7 @@ Warning:  %s = '%s' is infinite, clamping value.
 Whether QMS can be enabled on single threaded CPU
 Wireframe_DX6
 Wireframe_DX9
+World textures
 WorldRendererMgr001
 WriteMiniDump
 X
@@ -1186,6 +1189,7 @@ Z
 [/u]
 [/url]
 [0 5 .4]
+[AsyncStandin_TEXID]
 [BLACKALPHAZERO_TEXID]
 [BLACK_TEXID]
 [CHAR_MASKS1_TEXID]
@@ -1220,9 +1224,6 @@ _ITM_registerTMCloneTable
 _Jv_RegisterClasses
 _SubDSysMemTexture
 _SubDVidMemTexture
-_ZTVN10__cxxabiv117__class_type_infoE@@CXXABI_1.3
-_ZTVN10__cxxabiv120__si_class_type_infoE@@CXXABI_1.3
-_ZTVN10__cxxabiv121__vmi_class_type_infoE@@CXXABI_1.3
 ___%s_%d.vmt
 ___AccumulateMorph%d.vmt
 ___buffer_clear_obey_stencil0.vmt
@@ -1306,6 +1307,7 @@ _edata
 _end
 _fini
 _init
+_rt_
 _rt_CustomMaterial1024
 _rt_CustomMaterial128
 _rt_CustomMaterial256
@@ -1438,6 +1440,7 @@ libdl.so.2
 libm.so.6
 libpthread.so.0
 libstdc++.so.6
+libsteam_api.so
 libtier0_client.so
 libvstdlib_client.so
 lightmap fullpage texlock
@@ -1559,6 +1562,7 @@ mat_specular
 mat_spewalloc
 mat_supportflashlight
 mat_texture_tracking
+mat_texturestreaming
 mat_tonemapping_occlusion_use_stencil
 mat_triplebuffered
 mat_using_d3d9ex
@@ -1587,7 +1591,7 @@ memset
 memset@@GLIBC_2.2.5
 min. %f
 mipSkipCount
-models/weapons/customization/materials/noise
+models/weapons/customization/materials/noise.vtf
 models/weapons/customization/shared/gun_grunge.vtf
 models/weapons/customization/shared/paint_wear.vtf
 monitor gamma (typically 2.2 for CRT and 1.7 for LCD)
