@@ -207,11 +207,14 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 %s 0
 %s algorithm "%s" unsupported
 %s appears to be SDR public address.
+%s destroyed (%s)
 %s downtime warning expired; assumed back online.
-%s has received sequence packets, but MaxRecvPktNum==0
 %s isn't valid SteamID for identity.
+%s not found in %s.
+%s says: %s
 %s sent routing secret in msg 0x%02x.  Marking as fully trusted.  (Previous trust was %d)
 %s#%d (%s)
+%s#%d (via %s %s)
 %s%02X
 %s%lld
 %s%s
@@ -363,6 +366,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamdatagram_internal.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworking_statsutils.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworkingsockets_internal.h
+/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworkingsockets_thinker.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingmessages.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets.h
@@ -379,6 +383,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/steamnetworkingsockets_sdr_client.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/steamnetworkingsockets_sdr_common.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/steamnetworkingsockets_sdr_common.h
+/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/steamnetworkingsockets_sdr_hostedserver.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/steamnetworkingsockets_snp.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/steamdatagram_network_config.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/steamdatagram_network_config.h
@@ -426,6 +431,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 22CEC25519PrivateKeyBase
 22CMsgICERendezvous_Auth
 23CECKeyExchangePublicKey
+23ISteamNetworkingSockets
 24CCryptoKeyBase_RawBuffer
 24CECKeyExchangePrivateKey
 24ISteamNetworkingMessages
@@ -486,6 +492,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 40CMsgSteamDatagramRouterHealth_DataCenter
 41CMsgSteamDatagramGameserverSessionRequest
 41ISteamNetworkingConnectionCustomSignaling
+42CMsgSteamDatagramClientPingSampleReply_POP
 42CMsgSteamDatagramLegacyGameserverPingReply
 42CMsgSteamDatagramP2PBadRouteRouterToClient
 42CMsgSteamNetworkingP2PRendezvous_ConnectOK
@@ -494,6 +501,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 43CMsgSteamDatagramGameCoordinatorServerLogin
 43CMsgSteamDatagramGameServerSampleDataCenter
 43CMsgSteamDatagramRelayAuthTicket_ExtraField
+43CMsgSteamDatagramRouterPingReply_AltAddress
 45CMsgSteamDatagramGameserverSessionEstablished
 45CMsgSteamDatagramHostedServerAddressPlaintext
 46CMsgSteamDatagramConnectionStatsClientToRouter
@@ -504,7 +512,6 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 47CMsgSteamDatagramRouterPingReply_RouteException
 47CMsgSteamNetworkingP2PRendezvous_ConnectRequest
 48CMsgSteamNetworkingP2PRendezvous_ReliableMessage
-49CMsgSteamDatagramClientPingSampleReply_DataCenter
 49CMsgSteamDatagramConnectionStatsP2PClientToRouter
 49CMsgSteamDatagramConnectionStatsP2PRouterToClient
 49CMsgSteamDatagramConnectionStatsP2PRouterToRouter
@@ -517,8 +524,9 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 50th
 52CMsgSteamDatagramClientSwitchedPrimary_RouterQuality
 52CMsgSteamDatagramNetworkNextRouterPingReplyExtraData
-53CMsgSteamDatagramClientPingSampleReply_RoutingCluster
+53CMsgSteamDatagramClientPingSampleReply_POP_AltAddress
 54CMsgSteamDatagramNetworkNextRouterPingRequestExtraData
+55CMsgSteamDatagramClientPingSampleReply_LegacyDataCenter
 5g*
 6
 6666666666666666\\\\\\\\\\\\\\\\bn_add.c
@@ -567,7 +575,6 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 >g*
 ?
 ???
-?GetHostedDedicatedServerPort
 ?g*
 @
 @%04x
@@ -616,7 +623,6 @@ AES-256-CTR
 AES-256-ECB
 AES-256-OFB
 AES-256-XTS
-ALinkStatsTrackerRelayOutside
 ANSI X9.62
 ANY PRIVATE KEY
 ASCII
@@ -651,6 +657,7 @@ ASN1_UTF8STRING
 ASN1_VISIBLESTRING
 AUTHORITY_INFO_ACCESS
 AUTHORITY_KEYID
+A[%s] Primary router %s going offline in %d seconds; seeking replacement
 Abandoning migration to %s.  We obtained a session on this relay, but decided to use %s as the primary instead.
 AcceptConnection
 AcceptSessionWithUser
@@ -679,22 +686,26 @@ After sending stats, we still want to send for reason '%s'!
 Ag*
 All apps excluded by auth chain!
 All pops excluded by auth chain!
-Already have a listen socket on P2P virtual port %d
+Already have a listen socket on P2P vport %d
 Already have a ticket for server '%s' vport %d with expiry at %u.  Discarding ticket with expiry at %u
 Already have a ticket for server '%s' with older expiry %u.  Discarding and replacing with new ticket expiring at %u
 Already saw decimal point or exponent; can't have another one.
 Already talking to %s on this shared socket, cannot add another remote host!
+Alt address %s (from %s) changed protocol %d -> %d?
+AltTransportCheck
 Any Extended Key Usage
 Any Purpose
 Any language
 App %u is using legacy (unencrypted) server addresses in tickets
+App did not respond to Messages session request in time, discarding.
 App didn't accept or close incoming connection in time.
+App ignored P2P connect request from %s on vport %d
 AppIDs . . :
 Application closed connection
 Application closed connection in an unusual way
 Application didn't accept or close incoming connection in a reasonable amount of time.  This is probably a bug.
 Apr
-Assertion Failed: !( m_recvPktNumberMask[ idxRecvBitmask ] & bit )
+Assertion Failed: !( TLinkStatsTracker::m_recvPktNumberMask[ idxRecvBitmask ] & bit )
 Assertion Failed: !( msgStatsIn.flags() & msgStatsIn.ACK_REQUEST_E2E )
 Assertion Failed: !(pQueue->m_pLast->*pMbrLinks).m_pNext
 Assertion Failed: !HasOverlappingRange( range, m_senderState.m_listInFlightReliableRange )
@@ -712,6 +723,7 @@ Assertion Failed: !g_mapConnections.IsValidIndex( idx )
 Assertion Failed: !g_mapListenSockets.IsValidIndex( idx )
 Assertion Failed: !g_mapMessagesInterfaceByListenSocket.HasElement( m_pListenSocket->m_hListenSocketSelf )
 Assertion Failed: !g_mapPollGroups.IsValidIndex( idx )
+Assertion Failed: !g_mapRelayServersByAddr.IsValidIndex( idxServer )
 Assertion Failed: !g_mapSessionsByConnection.HasElement( pConn->m_hConnectionSelf )
 Assertion Failed: !g_mapSharedClusterData[ hCluster ]->m_pConfig
 Assertion Failed: !g_sLauncherPartner.empty()
@@ -724,7 +736,6 @@ Assertion Failed: !m_bHaveLowLevelRef
 Assertion Failed: !m_bPassive
 Assertion Failed: !m_connection.m_bConnectionInitiatedRemotely
 Assertion Failed: !m_connectionConfig.m_SymmetricConnect.IsLocked()
-Assertion Failed: !m_identity.IsInvalid()
 Assertion Failed: !m_identityRemote.IsInvalid()
 Assertion Failed: !m_mapInFlightPacketsByPktNum.empty()
 Assertion Failed: !m_msgICESessionSummary.has_local_candidate_types()
@@ -744,7 +755,6 @@ Assertion Failed: !m_status_msg.empty()
 Assertion Failed: !m_steamNetworkingSockets.m_mapListenSocketsByVirtualPort.HasElement( k_nVirtualPort_Messages )
 Assertion Failed: !m_unConnectionIDRemote
 Assertion Failed: !m_value.m_pInherit
-Assertion Failed: !msg.has_connection_closed()
 Assertion Failed: !msg.has_from_connection_id() || msg.from_connection_id() == pInfo->m_unConnectionIDSrc
 Assertion Failed: !msg.has_to_connection_id()
 Assertion Failed: !msgStatsIn.has_quality_e2e()
@@ -762,6 +772,7 @@ Assertion Failed: !pMsg->m_linksSecondaryQueue.m_pQueue
 Assertion Failed: !pQueue->m_pFirst
 Assertion Failed: !pResult
 Assertion Failed: !pSendMessage->SNPSend_IsReliable()
+Assertion Failed: !pServer->IsPrimaryTransport()
 Assertion Failed: !pSession->m_stats.m_expectedAcks.m_vecAcks.empty() && pSession->m_stats.m_expectedAcks.m_vecAcks[ len( pSession->m_stats.m_expectedAcks.m_vecAcks )-1 ].Timestamp( usecNow ) == usecNow
 Assertion Failed: !pToCopy || (pToCopy + num <= Base()) || (pToCopy >= (Base() + Count()) )
 Assertion Failed: !remoteCluster.m_sRemoteSessionToken.empty()
@@ -794,6 +805,8 @@ Assertion Failed: 0
 Assertion Failed: 0 < flPct && flPct < 1.0f
 Assertion Failed: 0 <= bucket.m_nMinPing
 Assertion Failed: 0 <= nFrontPingLocalMin
+Assertion Failed: AltAddressPenalty() == 0
+Assertion Failed: AltAddressPenalty() == k_nSDRAltAddressPenalty_PingOnly
 Assertion Failed: BCryptKeysValid()
 Assertion Failed: BEnumerateConfigValue( s_vecConfigValueTable[0] )
 Assertion Failed: BStateIsActive()
@@ -808,6 +821,7 @@ Assertion Failed: GetState() == k_ESteamNetworkingConnectionState_None
 Assertion Failed: GetState() == k_ESteamNetworkingConnectionState_None || GetState() == k_ESteamNetworkingConnectionState_Connecting
 Assertion Failed: GetState() == k_ESteamNetworkingConnectionState_ProblemDetectedLocally
 Assertion Failed: IsInList(before)
+Assertion Failed: IsPrimaryTransport()
 Assertion Failed: IsText()
 Assertion Failed: IsValidIndex(elem)
 Assertion Failed: IsValidSteamIDForIdentity( steamID )
@@ -818,9 +832,15 @@ Assertion Failed: SteamDatagramTransportLock::s_nLocked == 1
 Assertion Failed: SteamNetworkingSocketsInterface()->m_keyPrivateKey.IsValid()
 Assertion Failed: TLinkStatsTracker::m_pktNumInFlight == 0
 Assertion Failed: a.MicrosecondsAge( usecNow ) < k_nMillion*10
+Assertion Failed: a.m_adr == m_adr
+Assertion Failed: a.m_eProtocol == m_eProtocol
+Assertion Failed: a.m_pServer == nullptr
+Assertion Failed: a.port()
 Assertion Failed: adr.GetType() == k_EIPTypeV4
 Assertion Failed: adr.HasIP()
+Assertion Failed: alt.m_nPenalty == k_nSDRAltAddressPenalty_PingOnly
 Assertion Failed: authScope.m_timeExpiry > 0
+Assertion Failed: bHasOverride
 Assertion Failed: bOK
 Assertion Failed: bStillInQueue == ( ( seg.m_hdr[0] & 0x20 ) == 0 )
 Assertion Failed: bStillInQueue == ( seg.m_nOffset + seg.m_cbSegSize < seg.m_pMsg->m_cbSize )
@@ -842,7 +862,6 @@ Assertion Failed: cbPkt == pEnd - pkt
 Assertion Failed: cbPkt >= 1
 Assertion Failed: cbSegData > 0
 Assertion Failed: cbSegData > 0 || ( cbSegData == 0 && pMsg->m_cbSize == 0 )
-Assertion Failed: cbSegmentSize > 0
 Assertion Failed: cbSegmentSize >= 0
 Assertion Failed: cbSend <= sizeof(pkt)
 Assertion Failed: cbSent > 0
@@ -855,6 +874,7 @@ Assertion Failed: cert.m_signature.length() == sizeof(CryptoSignature_t)
 Assertion Failed: cert.m_signed_data == c.m_signed_data
 Assertion Failed: cert.m_timeCreated == c.m_timeCreated
 Assertion Failed: cluster.m_nPenaltyLocal >= 1000
+Assertion Failed: clusterLocal.m_nPingLocal >= 0
 Assertion Failed: clusterLocal.m_nSortScore < k_nRouteScoreHuge
 Assertion Failed: clusterMetrics.m_nDataCenterPing >= 0
 Assertion Failed: clusterMetrics.m_nFrontPingLocal >= 0
@@ -888,15 +908,17 @@ Assertion Failed: g_eAvailNetworkConfig != k_ESteamNetworkingAvailability_Previo
 Assertion Failed: g_mapMessagesInterfaceByListenSocket[idx] == this
 Assertion Failed: g_mapP2PConnectionsByRemoteInfo.Key( m_idxMapP2PConnectionsByRemoteInfo ) == key
 Assertion Failed: g_mapP2PConnectionsByRemoteInfo[ m_idxMapP2PConnectionsByRemoteInfo ] == this
+Assertion Failed: g_mapRelayServersByAddr.Count() == 0
 Assertion Failed: g_mapRelayServersByAddr.Find( adr ) == g_mapRelayServersByAddr.InvalidIndex()
 Assertion Failed: g_mapRelayServersByAddr[idxServer]->m_adr == adr
-Assertion Failed: g_mapRelayServersByAddr[idxServer]->m_hRoutingCluster == hCluster
+Assertion Failed: g_mapRelayServersByAddr[idxServer]->m_eProtocol == RelayServer::k_EProtocol_UDP
 Assertion Failed: g_mapRelayServersByAddr[idxServer]->m_idx == idxServer
-Assertion Failed: g_mapSharedClusterData[ m_hRoutingCluster ]->m_ping.m_usecTimeLastSentPingRequest == usecNow
+Assertion Failed: g_mapRelayServersByAddr[idxServer]->m_pCluster == pClusterData
 Assertion Failed: g_nRouteSelectionDataRevisionNumber != 0
 Assertion Failed: g_nRoutingSecret
 Assertion Failed: g_nRoutingSecret != 0
 Assertion Failed: g_vecCachedCachedDataCenterRoutes.size() == m_vecClusters.size()
+Assertion Failed: g_vecSDRClients.empty()
 Assertion Failed: g_vecSharedClusterDataInConfigOrder.size() == g_SteamDatagramNetwork.m_vecPOPs.size()
 Assertion Failed: gapFilled->first < gapFilled->second
 Assertion Failed: gapFilled->first <= nSegBegin
@@ -915,6 +937,7 @@ Assertion Failed: identityPeer == pConn->m_identityRemote
 Assertion Failed: idx < 0 || ( m_vecClusters[idx].m_pData->m_idxInConfig == idx && m_vecClusters[idx].m_pData->m_pConfig->m_id == id )
 Assertion Failed: idx < 0x1000
 Assertion Failed: idx < m_map.m_nMaxElement
+Assertion Failed: idxAltTransport >= 0 && idxAltTransport < len( m_vecAltTransports )
 Assertion Failed: idxRecvBitmask < 2
 Assertion Failed: idxRecvBitmask >= 0
 Assertion Failed: idxSession >= 0
@@ -951,7 +974,6 @@ Assertion Failed: m->m_conn == m_hConnectionSelf
 Assertion Failed: m.m_nIndirectPing >= 0
 Assertion Failed: m_CertStatus.m_eAvail != k_ESteamNetworkingAvailability_NeverTried
 Assertion Failed: m_CertStatus.m_eAvail == k_ESteamNetworkingAvailability_Current
-Assertion Failed: m_CertStatus.m_eAvail == k_ESteamNetworkingAvailability_NeverTried
 Assertion Failed: m_Put >= 0
 Assertion Failed: m_TotalElements != InvalidIndex()
 Assertion Failed: m_arMarker[n-1].m_nID != m_arMarker[n].m_nID
@@ -974,6 +996,7 @@ Assertion Failed: m_eConnectionWireState == k_ESteamNetworkingConnectionState_De
 Assertion Failed: m_eKeyType == x.m_eKeyType
 Assertion Failed: m_eNegotiatedCipher != k_ESteamNetworkingSocketsCipher_INVALID
 Assertion Failed: m_eNegotiatedCipher == k_ESteamNetworkingSocketsCipher_INVALID
+Assertion Failed: m_eProtocol == k_EProtocol_UDP
 Assertion Failed: m_eTrust <= k_ETrust_NotTrusted
 Assertion Failed: m_fnCallback
 Assertion Failed: m_hConnectionSelf == k_HSteamNetConnection_Invalid
@@ -1011,9 +1034,9 @@ Assertion Failed: m_nAppID == 0 || m_nAppID == nAppID
 Assertion Failed: m_nEnd >= m_nBegin
 Assertion Failed: m_nFrontPingLocal <= m_nFrontPingLocalMax
 Assertion Failed: m_nFrontPingLocalMin <= m_nFrontPingLocal
-Assertion Failed: m_nPktsRecvWeirdSequenceCurrentInterval <= m_nPktsRecvSequencedCurrentInterval
 Assertion Failed: m_nSamples > 0
 Assertion Failed: m_nSupressStateChangeCallbacks >= 0
+Assertion Failed: m_pCluster->m_ping.m_usecTimeLastSentPingRequest == usecNow
 Assertion Failed: m_pConnection->m_hConnectionSelf == pInfo->m_hConn
 Assertion Failed: m_pCurrentTransportP2P->m_usecWhenSelected
 Assertion Failed: m_pCurrentTransportP2P->m_usecWhenSelected == 0
@@ -1027,6 +1050,7 @@ Assertion Failed: m_pLast->m_links.m_pNext == nullptr
 Assertion Failed: m_pMaxOut >= m_pOut
 Assertion Failed: m_pMemory
 Assertion Failed: m_pOut <= m_pMaxOut
+Assertion Failed: m_pOuter && m_method
 Assertion Failed: m_pParentListenSocket == nullptr
 Assertion Failed: m_pParentListenSocket == nullptr || m_pSteamNetworkingSocketsInterface == m_pParentListenSocket->m_pSteamNetworkingSocketsInterface
 Assertion Failed: m_pPartner
@@ -1035,6 +1059,7 @@ Assertion Failed: m_pPollGroup && pMsg->m_linksSecondaryQueue.m_pQueue == &m_pPo
 Assertion Failed: m_pRawSock == nullptr
 Assertion Failed: m_pServer->m_nReplyTimeoutsSinceLastRecv == 0
 Assertion Failed: m_pSignaling == nullptr
+Assertion Failed: m_pSock
 Assertion Failed: m_pSock == nullptr
 Assertion Failed: m_pSock->GetRemoteHostAddr() == m_adr
 Assertion Failed: m_pSteamNetworkingMessages == nullptr
@@ -1042,6 +1067,7 @@ Assertion Failed: m_pSteamNetworkingSocketsSerialized
 Assertion Failed: m_pTransportICE
 Assertion Failed: m_pTransportICE != m_pTransportICEPendingDelete
 Assertion Failed: m_padzero == 0 && x.m_padzero == 0
+Assertion Failed: m_pingTracker.m_usecTimeLastSentPingRequest == usecNow
 Assertion Failed: m_pktNumInFlight == 0 && !m_bPassive
 Assertion Failed: m_pszNeedToSendSignalReason
 Assertion Failed: m_queueIndex == -1
@@ -1051,6 +1077,8 @@ Assertion Failed: m_receiverState.m_itPendingAck->first == INT64_MAX
 Assertion Failed: m_receiverState.m_itPendingNack->first < nBegin
 Assertion Failed: m_receiverState.m_mapReliableStreamGaps.rbegin()->second < nExpectNextStreamPos
 Assertion Failed: m_response.m_nStatusCode >= 0
+Assertion Failed: m_routeSelector.m_vecClusters.size() == g_vecSharedClusterDataInConfigOrder.size()
+Assertion Failed: m_routeSelector.m_vecClusters.size() == vecPOPs.size()
 Assertion Failed: m_sCertRemote.empty()
 Assertion Failed: m_sCryptRemote.empty()
 Assertion Failed: m_senderState.PendingBytesTotal() == 0
@@ -1099,9 +1127,10 @@ Assertion Failed: m_vecAllRelaySessions.Count() > 0
 Assertion Failed: m_vecAllRelaySessions.IsEmpty()
 Assertion Failed: m_vecConnections.Count() == i
 Assertion Failed: m_vecRoutes.empty()
+Assertion Failed: m_vecServers.empty()
 Assertion Failed: marker.m_nIndirectPing >= 0 && marker.m_nIndirectPing <= SteamNetworkPingLocationInternal_t::k_nMaxReasonablePing
 Assertion Failed: maxLen == 0 || pDest != NULL
-Assertion Failed: metrics.m_hRoutingCluster == server.m_hRoutingCluster
+Assertion Failed: metrics.m_hRoutingCluster == server.m_pCluster->m_hCluster
 Assertion Failed: metrics.m_nClusterPenaltyLocal == clusterLocal.m_nPenaltyLocal
 Assertion Failed: metrics.m_nDataCenterPing >= 0
 Assertion Failed: metrics.m_nFrontPingLocal == clusterLocal.m_nPingLocal
@@ -1114,8 +1143,8 @@ Assertion Failed: msg.has_connection_closed()
 Assertion Failed: msg.relay_mode() != CMsgSteamDatagramConnectionClosed_ERelayMode_ClosedByPeer
 Assertion Failed: msg.relay_mode() == CMsgSteamDatagramConnectionClosed_ERelayMode_None
 Assertion Failed: msg.server_time() != 0
-Assertion Failed: msg.your_public_ip() != 0
 Assertion Failed: msgConnectionClosed.relay_mode() == CMsgSteamDatagramConnectionClosed_ERelayMode_None
+Assertion Failed: msgPOP.default_dc_score() >= msgPOP.best_dc_score()
 Assertion Failed: msgSessionEstablished.connection_id() == ConnectionIDLocal()
 Assertion Failed: msgSessionEstablished.connection_id() == m_unConnectionIDLocal
 Assertion Failed: msgSignedCert.has_cert()
@@ -1152,7 +1181,7 @@ Assertion Failed: nFrontPingLocalMax < 5000
 Assertion Failed: nFrontPingLocalMin <= nFrontPingLocal && nFrontPingLocal <= nFrontPingLocalMax
 Assertion Failed: nFrontPingRemote >= 0 && nFrontPingRemote < 5000
 Assertion Failed: nGap != 0
-Assertion Failed: nGap >= -8 * (int64)sizeof(m_recvPktNumberMask)
+Assertion Failed: nGap >= -8 * (int64)sizeof(TLinkStatsTracker::m_recvPktNumberMask)
 Assertion Failed: nGrowSize >= 0
 Assertion Failed: nLastRefCount > 0
 Assertion Failed: nLocalVirtualPort >= 0
@@ -1165,7 +1194,7 @@ Assertion Failed: nPingEstimateFromRouting >= 0 && nPingEstimateFromRouting < 10
 Assertion Failed: nPingMS >= 0
 Assertion Failed: nPktNum == nWirePktNum
 Assertion Failed: nPktNum > 0
-Assertion Failed: nPktNum > 0 && nPktNum < m_nMaxRecvPktNum
+Assertion Failed: nPktNum > 0 && nPktNum < TLinkStatsTracker::m_nMaxRecvPktNum
 Assertion Failed: nPktNum >= 0
 Assertion Failed: nPktNum+1 == m_statsEndToEnd.m_nNextSendSequenceNumber
 Assertion Failed: nPktNumAckBegin >= 0
@@ -1182,6 +1211,7 @@ Assertion Failed: nSegEnd < gapFilled->second
 Assertion Failed: nSize >= 0
 Assertion Failed: nTotalPenalty >= 0
 Assertion Failed: nUpper3Bits <= 4
+Assertion Failed: nWeirdSequenceCurrentInterval <= m_seqPktCounters.m_nRecv
 Assertion Failed: nWirePktNum > 0 && nWirePktNum == msgSessionEstablished.seq_num_r2c()
 Assertion Failed: num > 0
 Assertion Failed: num >= 0
@@ -1195,6 +1225,8 @@ Assertion Failed: outTempKeymaterial == tempKeyMaterial + cbTempKeyMaterial
 Assertion Failed: p == pkt+cbSendTotal
 Assertion Failed: p->m_pInherit
 Assertion Failed: pAckEnd <= pPayloadEnd
+Assertion Failed: pAltTransport->AltAddressPenalty() == k_nSDRAltAddressPenalty_PingOnly
+Assertion Failed: pAltTransport->m_pServerPrimaryTransport == pServer
 Assertion Failed: pChild->m_hSelfInParentListenSocketMap == h
 Assertion Failed: pChild->m_pParentListenSocket == this
 Assertion Failed: pClient->m_identityRemote == identity
@@ -1221,6 +1253,8 @@ Assertion Failed: pDecodedData
 Assertion Failed: pDest != NULL
 Assertion Failed: pEnd == pOut + cbSerialized
 Assertion Failed: pEndingDelim && pEndingDelim[0]
+Assertion Failed: pExisting
+Assertion Failed: pExisting->m_pCluster == pCluster
 Assertion Failed: pFmt
 Assertion Failed: pFormat != NULL
 Assertion Failed: pGlobal->IsSet()
@@ -1262,14 +1296,15 @@ Assertion Failed: pResult->m_links.m_pPrev == nullptr
 Assertion Failed: pResult->m_links.m_pQueue == this
 Assertion Failed: pSearch != NULL
 Assertion Failed: pSendMessage->SNPSend_IsReliable()
+Assertion Failed: pServer->IsPrimaryTransport()
 Assertion Failed: pServer->m_idx == idxServer
-Assertion Failed: pServer->m_pSock
+Assertion Failed: pServer->m_vecSessions.Count() == idx
 Assertion Failed: pSess->m_identityRemote == identityRemote
 Assertion Failed: pSess->m_pConnection
 Assertion Failed: pSession
 Assertion Failed: pSession->m_nP2PCurrentForwardTargetRevision > 0
 Assertion Failed: pSession->m_pClient == this
-Assertion Failed: pSession->m_pServer == &server
+Assertion Failed: pSession->m_pServer == pServer
 Assertion Failed: pSession->m_stats.m_nMaxRecvPktNum > 0
 Assertion Failed: pSignerKey->m_eTrust != k_ETrust_UnknownWorking
 Assertion Failed: pSock->m_callback.m_fnCallback
@@ -1298,10 +1333,12 @@ Assertion Failed: q.m_pFirst == this
 Assertion Failed: q.m_pLast != this
 Assertion Failed: q.m_pLast == this
 Assertion Failed: r.m_nSortScoreLocal < 9999
+Assertion Failed: r.pop_id() == c.m_pConfig->m_id
 Assertion Failed: range.m_nBegin < u->first.m_nBegin
 Assertion Failed: remotePublicKey.IsValid()
 Assertion Failed: resizeNumBits >= 0
 Assertion Failed: result != 0
+Assertion Failed: result == -1
 Assertion Failed: route.m_idxClusterLocal == pClusterData->m_idxInConfig
 Assertion Failed: route.m_nBackPing >= 0
 Assertion Failed: route.m_nScoreLocal == nCheckScore
@@ -1316,6 +1353,7 @@ Assertion Failed: s_nHostedDedicatedServerPort
 Assertion Failed: s_nLocked > 0
 Assertion Failed: s_nLowLevelSupportRefCount.load(std::memory_order_acquire) == 0 || s_bManualPollMode
 Assertion Failed: s_nLowLevelSupportRefCount.load(std::memory_order_acquire) > 0
+Assertion Failed: s_nSDRNetworkRefCount == 0
 Assertion Failed: s_nSDRNetworkRefCount > 0
 Assertion Failed: s_pConfigFetchInProgress
 Assertion Failed: s_pSDRPhsyicalSocket == nullptr
@@ -1341,7 +1379,6 @@ Assertion Failed: server.m_idx == idxServer
 Assertion Failed: server.m_nChallenge && server.m_unChallengeServerTime
 Assertion Failed: server.m_usecActivePingTimeout > 0
 Assertion Failed: server.m_vecSessions.Count() == 0
-Assertion Failed: server.m_vecSessions.Count() == idx
 Assertion Failed: sort.m_nOptimisticScore <= metrics.m_nScore
 Assertion Failed: stats.m_flConnectionQualityLocal >= 0.0f
 Assertion Failed: stats.m_flConnectionQualityRemote >= 0.0f
@@ -1359,7 +1396,6 @@ Assertion Failed: usecTimeoutDuration > 0
 Assertion Failed: usecWhen > 0
 Assertion Failed: whenEnded >= m_usecWhenSelected
 Assertion Failed: x != kInvalidItem
-AsyncCertRequest
 Attempt #%d to fetch config from %s
 Attempt to register more config values after table is already initialized
 Attempting
@@ -1367,7 +1403,6 @@ Attempting to connect via steam datagram using unsigned ticket, as per steamdata
 Attemt to send packet, but socket has been closed!
 Aug
 Auth ticket failed to parse.  %s
-AuthStatus (%s interface):  %s  (%s)
 AuthStatus (%s):  %s  (%s)
 AuthenticAMD
 Authority Information Access
@@ -1418,7 +1453,7 @@ BackUp() can only be called after a successful Next().
 Backup router %s going offline in %d seconds; seeking replacement
 Backup router: %s  Ping = %d+%d=%d (front+back=total)
 Bad IV size
-Bad P2P signal from '%s': no connect_request or (
+Bad P2P signal from '%s': neither from/to connection IDs present
 Bad P2P signal: invalid from_identity '%s'
 Bad P2P signal: no from_identity
 Bad boolean
@@ -1443,6 +1478,7 @@ Biometric Info
 Bogus cipher %d
 Bookkeeping bug!
 Bookkeeping bug: Can't remove logical socket from physical socket's table, it isn't there
+Bookkeeping error
 Boolean default must be true or false.
 Buffer isn't big enough to hold padded+encrypted data and tag
 Buffer might not be big enough to hold decrypted data
@@ -1723,6 +1759,7 @@ CSteamNetworkConnectionToSDRServer received e2e stats while in Connecting state.
 CSteamNetworkConnectionlocalhostLoopback::BInitConnection failed.  %s
 CSteamNetworkingMessages::ConnectionStatusChangedCallback
 CSteamNetworkingMessages::DestroySession
+CSteamNetworkingMessages::FreeResources
 CSteamNetworkingSockets::Destroy
 CSteamNetworkingSockets::KillConnections
 CSteamNetworkingSocketsSDR::Destroy
@@ -1772,7 +1809,7 @@ Cannot connect to proxied gameserver %s via steam datagram.  Library has not bee
 Cannot connect to proxied gameserver %s via steam datagram.  We don't have an authorization ticket!
 Cannot create IPv4 connection.  %s
 Cannot create P2P connection to %s.  %s
-Cannot create P2P connection to local identity %s.  We are not listening on virtual port %d
+Cannot create P2P connection to local identity %s.  We are not listening on vport %d
 Cannot create P2P connection.  %s
 Cannot create SDR connection to hosted dedicated server.  %s
 Cannot create hosted dedicated server listen socket.  %s
@@ -1788,6 +1825,7 @@ Cannot talk to any relays. Check Internet connection
 Cannot use specific IP address.
 Cert allows POPID %s, but CA trust chain does not
 Cert allows appid %u, but CA trust chain does not
+Cert already invalid / expired?
 Cert does not authorize us for App %u
 Cert expired %d seconds ago.  Discarding and requesting another
 Cert expired %lld seconds ago
@@ -1895,6 +1933,7 @@ CreateListenSocketP2P
 CreatePollGroup
 CreateSocketPair
 CreateSteamNetworkingMessages
+CreateWebRTCICESession
 Created
 CrlID
 Crypt info failed protobuf decode
@@ -1941,8 +1980,6 @@ DSO lib
 DSO support routines
 Data Encipherment
 Data contains revision %d, not newer than current revision %d; ignoring.
-Data has success=false. message=%s
-Data has success=false. message=document is not an object
 Data:
 DataPacket
 DataRouterToClient
@@ -1952,6 +1989,7 @@ Deduced universe %d from certificate
 Default value for an enum field must be an identifier.
 Destroy() not used properly
 DestroyPollGroup
+Destroying relay '%s' because %s
 Dg*
 Didn't find quality metrics for old primary?
 Didn't send valid connection ID
@@ -2056,6 +2094,7 @@ Expected string.
 Expecting ack for wire seq 0x%4x, with two different send timestamps %llx and %llx
 Expecting:
 Experimental
+Expired
 Expires. . :
 Expiring packet gap, which had pending NACK
 Extended OCSP Status
@@ -2099,6 +2138,7 @@ Failed to create UDP socket to talk to %s.  %s
 Failed to create connection to '%s' for new messages session
 Failed to create/find poll group
 Failed to determine our public address via STUN
+Failed to dlopen %s.  %s
 Failed to get cert from steam
 Failed to initialize SDR client functionality.  %s
 Failed to initialize SDR network access functionality.  %s
@@ -2107,6 +2147,7 @@ Failed to parse %s value %s
 Failed to parse '%s' as per SDR_NETWORK_CONFIG.  %s
 Failed to parse authorized client identity.  %s
 Failed to parse gameserver identity.  %s
+Failed to parse result JSON.  %s
 Failed to parse string
 Failed to send P2P signal
 Failed to serialize identity to %s message.  %s
@@ -2116,6 +2157,7 @@ Failed to set socket for dual stack (IPV6_V6ONLY=0).  Error code 0x%08X.  Contin
 Failed to set socket nonblocking mode.  Error code 0x%08x.
 Failed to set socket recv buffer size.  Error code 0x%08x.
 Failed to set socket send buffer size.  Error code 0x%08x.
+Failed to start accepting P2P connect request from %s on vport %d; %s
 Failed to varint decode size of stats blob
 FakePacketDup_Recv
 FakePacketDup_Send
@@ -2252,6 +2294,7 @@ GetEnum
 GetFloat
 GetGameCoordinatorServerLogin
 GetHTTPResponseBodyData failed
+GetHostedDedicatedServerPort
 GetIdentity
 GetInt32
 GetInt64
@@ -2276,6 +2319,7 @@ GetStringReference
 GetUInt32
 GetUInt64
 Gg*
+Giving up on %s after %d consecutive ping timeouts
 Got CMsgSteamDatagramGameserverPingRequest from %s with your_public_ip=%s.  But we put %s in our routing blob!
 Got SDR network config.  %s
 Got callback for wrong request?
@@ -2339,17 +2383,19 @@ ISSUING_DIST_POINT
 ISteamHTTP::CreateHTTPRequest failed
 ISteamHTTP::SendHTTPRequest failed
 ISteamHTTP::SetHTTPRequestHeaderValue failed
+ISteamHTTPDestroyed while request in flight
 ISteamNetworkingSocketsSerialized::GetCertAsync failed
 Identity %s isn't valid for Messages sessions.  (Only SteamIDs currently supported).
 Identity is blank
 Ig*
-Ignoring P2P CMsgSteamDatagramConnectRequest from %s on virtual port %d; %s
 Ignoring P2P CMsgSteamDatagramConnectRequest from %s; can't get NetworkingMessages interface!
 Ignoring P2P CMsgSteamDatagramConnectRequest from %s; missing required fields
-Ignoring P2P CMsgSteamDatagramConnectRequest from %s; we're not listening on virtual port %d
+Ignoring P2P CMsgSteamDatagramConnectRequest from %s; we're not listening on vport %d
 Ignoring P2P connect request through Steam backend from %s; no virual_port!
 Ignoring P2P connection request from %s.  We cannot accept it since we don't have a cert yet!
 Ignoring P2P signal from %s.  For our cxn #%u, they first used remote cxn #%u, not using #%u
+Ignoring P2P signal from '%s', no local identity
+Ignoring P2P signal from '%s', unknown remote connection #%u
 Ignoring P2PFailure notification about unknown ConnectionID %u from %s
 Ignoring P2PRendezvous from %s to unknown connection #%u
 Ignoring bad ping time override '%s'
@@ -2357,7 +2403,6 @@ Ignoring inavlid forced relay cluster '%s'
 Ignoring invalid forced relay address '%s'
 Ignoring nonsensical migration request from %s to migrate to %s, which is his own address
 Ignoring ping override for unknown cluster '%s'
-Ignoring request by %s to migrate to %s.  Can't locate requesting relay shared cluster data???
 Ignoring stray packet from %s received on port %d.  Should only be talking to %s on that port.
 Ignoring unsolicited/spoofed/late packet from %s.
 Ignoring weird timestamp %llu in ChallengeReply, current time is %llu.
@@ -2510,12 +2555,12 @@ Malformed CMsgSteamDatagramNoSession.  Missing / invalid relay session.  [ %s ]
 Malformed MsgSteamDatagramDataRouterToClient from %s: Failed to varint decode size of stats message
 Malformed MsgSteamDatagramDataRouterToClient from %s: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %d, packet size %d
 Malformed MsgSteamDatagramDataRouterToClient from %s: packet too small
-Malformed MsgSteamDatagramDataRouterToClient from %s: stats message size doesn't make sense.  Stats message size %d, packet size %d
+Malformed MsgSteamDatagramDataRouterToClient from %s: stats message size doesn't make sense.  Stats message size %u, packet size %d
 Malformed MsgSteamDatagramDataRouterToServer: Failed to varint decode size of stats message
 Malformed MsgSteamDatagramDataRouterToServer: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %d, packet size %d
 Malformed MsgSteamDatagramDataRouterToServer: packet too small
 Malformed MsgSteamDatagramDataRouterToServer: protobuf failed to parse inline stats message
-Malformed MsgSteamDatagramDataRouterToServer: stats message size %d doesn't make sense.
+Malformed MsgSteamDatagramDataRouterToServer: stats message size %u doesn't make sense.
 Management
 Mar
 Mask Algorithm:
@@ -2561,6 +2606,7 @@ Missing required 'pops' list.
 Modulus:
 Msg type %d is %d bytes, larger than MTU of %d bytes
 Multiple extension registrations for type "
+Multiple relay servers at %s?
 Multiple sessions on %s with the same connection ID %u?
 Must be called through a gameserver ISteamSocketNetworking
 Must init either user or gameserver interface before accessing SDR network.
@@ -2590,13 +2636,14 @@ N25SteamNetworkingSocketsLib13CSharedSocket10RemoteHostE
 N25SteamNetworkingSocketsLib15CSDRHTTPRequestE
 N25SteamNetworkingSocketsLib15IBoundUDPSocketE
 N25SteamNetworkingSocketsLib16LinkStatsTrackerINS_24LinkStatsTrackerEndToEndEEE
-N25SteamNetworkingSocketsLib16LinkStatsTrackerINS_28LinkStatsTrackerRelayOutsideEEE
 N25SteamNetworkingSocketsLib16LinkStatsTrackerINS_34LinkStatsTrackerClientRelaySessionEEE
+N25SteamNetworkingSocketsLib16LinkStatsTrackerINS_34LinkStatsTrackerRelayServerSessionEEE
 N25SteamNetworkingSocketsLib18CHTTPRequest_SteamE
 N25SteamNetworkingSocketsLib20CConnectionTransportE
 N25SteamNetworkingSocketsLib20LinkStatsTrackerBaseE
 N25SteamNetworkingSocketsLib21CDedicatedBoundSocketE
 N25SteamNetworkingSocketsLib21CSteamNetworkingUtilsE
+N25SteamNetworkingSocketsLib22ScheduledMethodThinkerINS_23CSteamNetworkingSocketsEEE
 N25SteamNetworkingSocketsLib23CConnectionTransportUDPE
 N25SteamNetworkingSocketsLib23CSteamNetworkingSocketsE
 N25SteamNetworkingSocketsLib24CSDRServerPhysicalSocketE
@@ -2616,7 +2663,6 @@ N25SteamNetworkingSocketsLib27CConnectionTransportUDPBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionPipeE
 N25SteamNetworkingSocketsLib28CSteamNetworkListenSocketP2PE
-N25SteamNetworkingSocketsLib28LinkStatsTrackerRelayOutsideE
 N25SteamNetworkingSocketsLib29CSteamNetworkListenSocketBaseE
 N25SteamNetworkingSocketsLib30CSteamNetworkingUtilsSteamBaseE
 N25SteamNetworkingSocketsLib30SteamNetworkingMessagesSessionE
@@ -2634,6 +2680,7 @@ N25SteamNetworkingSocketsLib34CSteamNetworkListenSocketDirectUDPE
 N25SteamNetworkingSocketsLib34CSteamNetworkListenSocketSDRServerE
 N25SteamNetworkingSocketsLib34ISteamNetworkingSocketsRunWithLockE
 N25SteamNetworkingSocketsLib34LinkStatsTrackerClientRelaySessionE
+N25SteamNetworkingSocketsLib34LinkStatsTrackerRelayServerSessionE
 N25SteamNetworkingSocketsLib35CSteamNetworkingSocketsCallbackBaseE
 N25SteamNetworkingSocketsLib35CSteamNetworkingSocketsSteamPartnerE
 N25SteamNetworkingSocketsLib36CP2PConnectionSignaling_SteamBackendE
@@ -2814,6 +2861,7 @@ Not After :
 Not After:
 Not Attempted
 Not Before:
+Not a JSON object
 Not configured to lsten for for SDR
 Not from trusted address; dropped
 Not in manual poll mode!
@@ -3017,7 +3065,6 @@ Ping failure to cluster %s was %.1fs ago.  Discarding record of failure, might t
 Ping location: %s
 Ping measurement completed
 Ping timed out to %s
-Ping to %s timed out.  Giving up after %d consecutive failures
 Ping to relay = %d
 PingDataGoodEnoughForRouting
 PingMeasurementCompleted
@@ -3043,6 +3090,7 @@ Private key mismatch
 Private-Key: (%d bit)
 Privilege Withdrawn
 Probe
+Probing alt transport '%s' because of forced relay cluster/address
 Problem     :
 Problem     : Enum value did not match field type:    Expected  :
 Problem     : Field is not the right type for this message:    Expected  :
@@ -3110,6 +3158,7 @@ RSA_blinding
 Ranges should not overlap in this map!
 Reached an unintended state: CPPTYPE_MESSAGE
 Reading dangerously large protocol message.  If the message turns out to be larger than
+ReallyAsyncCertRequest
 ReceiveMessagesOnChannel
 ReceiveMessagesOnConnection
 ReceiveMessagesOnPollGroup
@@ -3134,9 +3183,8 @@ Received redundant ConnectOK for ConnectionID %u to %s.
 Received successful communication from Steam Datagram routing cluster.
 Received unexpected 'no connection'
 Received unexpected 'no connection' from peer
-Received unexpected P2P 'non connection' signal
+Received unexpected P2P 'no connection' signal
 Received unknown control message %d from %s
-Received unreliable msg %lld offset %d twice.  Sizes %d,%d
 ReceivedP2PSignal
 Recv %s stats from %s for %s:%s
 RecvP2PBadRoute
@@ -3214,6 +3262,8 @@ SDRClient_ForceProxyAddr
 SDRClient_ForceRelayCluster
 SDRClient_MinPingsBeforePingAccurate
 SDRClient_SingleSocket
+SDRNetworkCleanup
+SDRNetworkInit
 SDR_CERT
 SDR_IP
 SDR_IP = '%s'
@@ -3263,7 +3313,6 @@ SNP decode first reliable stream pos underflow.  %llx mod %llx, expected next %l
 SNP decode overrun %d bytes for %s segment data.
 SNP decode overrun, %d bytes for %s
 SNP decode unreliable msgnum underflow.  %llx mod %llx, highest seen %llx
-SNP expiring unreliable segments for msg %lld, while receiving unreliable segments for msg %lld
 SNP stop waiting reduced %lld (pkt %lld) -> %lld (pkt %lld)
 SSL CA
 SSL Client
@@ -3317,6 +3366,7 @@ SetAllocatedMessage
 SetBool
 SetCertificate
 SetCertificate: We are not currently able to verify our own cert!  %s.  Continuing anyway!
+SetCertificateAndPrivateKey
 SetConfigValue
 SetConnectionName
 SetConnectionPollGroup
@@ -3347,7 +3397,6 @@ Signature has invalid length
 Signature verification failed
 Signed blob is %d bytes, won't fit in %d byte buffer
 Size mismatch after serializing inline stats blob
-Socket was left open!
 Something wrong with m_nTotalPorts!
 Specified only one of SDR_PRIVATE_KEY and SDR_CERT
 St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
@@ -3359,6 +3408,7 @@ St3mapIN25SteamNetworkingSocketsLib28SSNPRecvUnreliableSegmentKeyENS0_29SSNPRecv
 St3mapIxN25SteamNetworkingSocketsLib13SSNPPacketGapESt4lessIxESaISt4pairIKxS1_EEE
 St3mapIxN25SteamNetworkingSocketsLib19SNPInFlightPacket_tESt4lessIxESaISt4pairIKxS1_EEE
 St3mapIxxSt4lessIxESaISt4pairIKxxEEE
+Starting ping collection on '%s'
 Stats sending didn't clear stats need to send reason %s!
 StatsP2PRouterToClient
 Steam datagram
@@ -3400,6 +3450,7 @@ SteamNetworkingSocketsSerialized004
 SteamNetworkingSockets_Lib
 SteamNetworkingSockets_Poll
 SteamNetworkingSockets_SetLockAcquiredCallback
+SteamNetworkingSockets_SetLockHeldCallback
 SteamNetworkingSockets_SetLockWaitWarningThreshold
 SteamNetworkingSockets_SetManualPollMode
 SteamNetworkingUtils_Lib
@@ -3543,6 +3594,7 @@ Unsigned certs are not allowed
 Unspecified
 Unsupported DH key type
 Unsupported key type %d
+Unsupported protocol %d
 Unused
 Using cert from SDR_PRIVATE_KEY and SDR_CERT environment vars
 V
@@ -3719,6 +3771,7 @@ ZLONG
 [%s] %s=%s
 [%s] Abandoning attempt to migrate to %s, relay is shutting down soon.
 [%s] AcceptConnection put the connection into state %d
+[%s] Accepting connection, transitioning to 'finding route' state
 [%s] Accepting inbound connection implicitly, based on matching outbound connect request
 [%s] Active sessions changed and we are controlling agent.  Triggering rebuild of routes message.
 [%s] After sending stats, we still need to send for %s
@@ -3763,6 +3816,7 @@ ZLONG
 [%s] Ignoring request by %s to migrate to %s.  We already know that relay is shutting down very soon.
 [%s] Ignoring request by %s to migrate to %s.  We don't recognize that target address in the network config.
 [%s] Ignoring request by %s to migrate to %s.  We had problems communicating with that relay %.1fs ago.
+[%s] Ignoring unreliable segment with invalid offset %u size %d
 [%s] Ignoring/abandoning migration request.  Current primary %s is requesting to send us to %s, but our migration target is %s?
 [%s] Ignoring/abandoning migration request.  Current primary %s no longer has a request active
 [%s] Ignoring/abandoning migration request.  SDR client deactivated, or no primary selected
@@ -3773,13 +3827,13 @@ ZLONG
 [%s] No relevant changes to routing messsage, revision %d.
 [%s] Not using STUN servers as per P2P_Transport_ICE_Enable
 [%s] Our cert expires in %d seconds.
+[%s] P2P connect request actively rejected by app, sending rejection (%s)
 [%s] P2P route through '%s' now forwarding to '%s%s', revision %d
 [%s] Packet data chunk failed to decrypt!  Could be tampering/spoofing or a bug.
 [%s] Packet gap bug.  %lld [%lld,%lld) %s | %s
 [%s] Peer acked our routes for revision %u, but our latest revision is %u!
 [%s] Peer appears to be using '%s' transport as primary
 [%s] Posting SteamNetworkingMessagesSessionFailed_t
-[%s] Primary router %s going offline in %d seconds; seeking replacement
 [%s] Processed remote Ice Candidate '%s' (type %d)
 [%s] Protobuf failed to parse CMsgSteamDatagramP2PRoutes routes
 [%s] Queue reliable signal message %s: { %s }
@@ -3797,7 +3851,9 @@ ZLONG
 [%s] Received Stats while in state %d.  Rejecting packet with ConnectionClosed message.
 [%s] Received data packet while in state %d.  Rejecting packet with ConnectionClosed message.
 [%s] Received data packet while in the 'connecting' state.  Dropping packet; resending ConnctRequest
+[%s] Received incoming P2P connect request; awaiting app to accept connection
 [%s] Received request to migrate to %s from %s.
+[%s] Received unreliable msg %lld segment offset %d twice.  Sizes %d,%d, last=%d,%d
 [%s] Recv P2PRendezvous
 [%s] Recv UDP stats:%s
 [%s] RecvMessage MsgNum=%lld sz=%d
@@ -3811,6 +3867,7 @@ ZLONG
 [%s] Route through '%s' is '%s%s'
 [%s] Route through '%s' is now '%s%s' (was '%s%s')
 [%s] Routes through '%s' to '%s%s'  lost.  No P2P route available through that cluster
+[%s] SNP expiring unreliable segments for msg %lld, while receiving unreliable segments for msg %lld
 [%s] Selected '%s' transport (ping=%d, score=%d+%d)
 [%s] Selecting %s as backup #%d (%s)
 [%s] Selecting %s as primary.  (%s)
@@ -3830,7 +3887,7 @@ ZLONG
 [%s] Sequence number from relay is duplicate or old, and end-to-end sequence number is duplicate or old or fails to decrypt
 [%s] Sequence number from relay is duplicate or old, but end-to-end sequence number is OK?
 [%s] Set remote auth to %s / %s
-[%s] Setting SymmetricConnect=1 because it is enabled on listen socket on virtual port %d.  To avoid this warning, specify the option on connection creation
+[%s] Setting SymmetricConnect=1 because it is enabled on listen socket on vport %d.  To avoid this warning, specify the option on connection creation
 [%s] Should not be trying to acccept this connection, it was not initiated remotely.
 [%s] Shouldn't be rbeuilding routing message - basic routing data is dirty for reason '%s'
 [%s] Started migration to %s at request of current primary %s
@@ -3838,6 +3895,7 @@ ZLONG
 [%s] StatsRouterToServer: Discarding end-to-end wire packet number %lld (latest %lld) and relay wire pkt num %lld (last %lld) from %s
 [%s] StatsRouterToServer: Discarding end-to-end wire packet number %lld (latest %lld), but relay pkt num is OK %lld (latest %lld) from %s
 [%s] StatsRouterToServer: Discarding relay wire pkt num %lld (last %lld) from %s duplicate or old
+[%s] Submitted client ping sample to %s.  {%s}
 [%s] Switched primary to %s (%s) from %s (%s)
 [%s] Switched to '%s' transport (ping=%d, score=%d=%d) from '%s' (ping=%d, score=%d+%d)
 [%s] Switched to backup #%d %s (%s) as primary, from %s (%s)
@@ -3874,6 +3932,7 @@ ZLONG
 [%s] messages session %s: %d %s
 [%s] packet number not properly initialized!
 [%s] pkt %lld %s, queueing retry of reliable range [%lld,%lld)
+[%s] problem (%d) %s, but connection already dead (%d %d %s)
 [%s] problem detected locally (%d): %s
 [%s] received %s packet from %s which should confirm end-to-end connectivity.
 [%s] received e2e stats while in Connecting state.  Resending ConnectRequest.
@@ -4185,6 +4244,9 @@ affiliationChanged
 aggregate_value
 alias
 aliases
+alt_address_dropped
+alt_address_protocol_change
+alt_ping_complete
 always
 ameth_lib.c
 ansi-X9-62
@@ -4561,6 +4623,12 @@ distinguishedName
 distpoint
 dl_iterate_phdr
 dl_iterate_phdr@@GLIBC_2.2.5
+dlerror
+dlerror@@GLIBC_2.2.5
+dlopen
+dlopen@@GLIBC_2.2.5
+dlsym
+dlsym@@GLIBC_2.2.5
 dmdName
 dmp1
 dmq1
@@ -4755,7 +4823,6 @@ g*
 g_eAvailNetworkConfig is Current, but failed to select random relay to probe?
 g_mapConnections corruption!
 g_mapIncomingP2PConnections bookkeeping mismatch
-gameserver
 gcm128.c
 gen:
 generate cryptogram
@@ -5204,10 +5271,12 @@ lhash.c
 lhs
 lib(%lu)
 libc.so.6
+libdl.so.2
 libm.so.6
 libpthread.so.0
 librt.so.1
 libstdc++.so.6
+libsteamwebrtc.so
 line
 listen
 localKeyID
@@ -5648,7 +5717,7 @@ ripemd160WithRSA
 roleOccupant
 room
 roomNumber
-router_ping_reply %s
+router_backhaul_latencies %s
 routes
 rsa
 rsa routines
@@ -5954,7 +6023,7 @@ sslv23
 stack.c
 standalone
 stateOrProvinceName
-stats message size doesn't make sense.  Stats message size %d, packet size %d
+stats message size doesn't make sense.  Stats message size %u, packet size %d
 stats.life
 stats.rate
 std::_Hash_bytes(void const*, unsigned long, unsigned long)
@@ -6325,6 +6394,7 @@ zlib compression
 zone
 {
 {$0$1}
+{%s %s}
 |
 }
 } routes:{
