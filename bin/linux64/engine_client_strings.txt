@@ -1088,7 +1088,6 @@ $worldimposter
 (%s) Reduced To Only Dynamic Lighting Data: %.2f MB
 (%s:%s)
 (%u)
-(%u): %s
 (%zu) Descend: %s, (%s), %s
 (%zu) readdir failed to find '%s' in '%s'
 (*%s*),
@@ -1414,7 +1413,6 @@ $worldimposter
 -nodev
 -nodns
 -nogamedll
--nogamestats
 -nohltv
 -noip
 -nomaster
@@ -1633,6 +1631,7 @@ $worldimposter
 /proc/version_signature
 /simpleworldmodel.vmt
 /sync
+/sync?fragment=%d
 0
 0 "polymsh_extracted2" -1
 0 - disable, 1 - default, 2 - force always ON
@@ -1662,6 +1661,7 @@ $worldimposter
 0.7f
 0.8
 0.85
+00000000.dix
 000000000000000000000000000000000000000000000000000000000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
@@ -1704,7 +1704,6 @@ $worldimposter
 027B680AC8B8596DA5A4AF8A19A0303FCA97FD7645309FA2A581485AF6263E313B79A2F5
 028
 029
-02:40:56
 02F40E7E2221F295DE297117B7F3D62F5C6A97FFCB8CEFF1CD6BA8CE4A9A18AD84FFABBD8EFA59332BE7AD6756A66E294AFD185A78FF12AA520E4DE739BACA0C7FFEFF7F2955727A
 030
 032
@@ -2296,7 +2295,6 @@ $worldimposter
 16CSVCMsg_Prefetch
 16CSVCMsg_SetPause
 16CSosOperatorVec3
-16CUploadGameStats
 16CVProfGraphPanel
 16CWorldRenderList
 16IClientStatsTime
@@ -2308,7 +2306,6 @@ $worldimposter
 16IOcclusionSystem
 16IRecipientFilter
 16IResourcePreload
-16IUploadGameStats
 16IWorldRenderList
 170
 171
@@ -2635,6 +2632,7 @@ $worldimposter
 237
 238
 239
+23:22:46
 23CAudioMixerWave16Stereo
 23CBoundedCvar_UpdateRate
 23CCLCMsg_LoadingProgress
@@ -4292,6 +4290,11 @@ CDemoFile::ReadRawData: buffer overflow (%i).
 CDemoFile::WriteConsoleCommand: command too long (>1024).
 CDemoFile::WriteNetworkDataTables: Haven't opened file yet!
 CDemoFile::WriteStringTables: Haven't opened file yet!
+CDemoPlayer::MakeDemoIndex: WritePacket failed.
+CDemoPlayer::MakeDemoIndex: entity_data_buf buffer overflowed.
+CDemoPlayer::MakeDemoIndex: missing instance baseline for '%s'.
+CDemoPlayer::MakeDemoIndex: missing pFromData for '%s'.
+CDemoPlayer::MakeDemoIndex: pClass->m_ClassID(%i) >= %i
 CDemoPlayer::ScanForImportantTicks: failed to create table "%s".
 CDemoRecorder::NETMsg_PlayerAvatarData
 CDemoRecorder::RecordServerClasses
@@ -4533,6 +4536,11 @@ CL_CopyExistingEntity: missing client entity %d.
 CL_CopyNewEntity: GetClassBaseline(%d) failed.
 CL_CopyNewEntity: invalid class index (%d).
 CL_CopyNewEntity: m_nNewEntity >= MAX_EDICTS
+CL_DemoIndex_StoreFullUpdate entity_data_buf
+CL_DemoIndex_StoreFullUpdate update_msg_buf
+CL_Demo_RestoreIndex
+CL_Demo_RestoreIndex: frame window too big (>%i)
+CL_Demo_RestoreIndex: missing ent %d
 CL_FireEvents
 CL_GetPrecacheUserData(%d,%d) - length (%d) invalid.
 CL_Init()
@@ -4543,6 +4551,7 @@ CL_ParseClassInfo_EndClasses: CreateDecoders failed.
 CL_ParseClassInfo_EndClasses: class %d not initialized.
 CL_ParseClassInfo_EndClasses: server and client classes for '%s' use different datatables (server: %s, client: %s)
 CL_ParseDelta: invalid recv table for ent %d.
+CL_ParseDelta: no packedEntity2 for ent %d.Try to set demo_index 0 as workaround.
 CL_ParsePacketEntities:  Error creating entity %s(%i)
 CL_ParsePacketEntities:  buffer read overflow
 CL_PreserveExistingEntity: missing client entity %d.
@@ -4999,7 +5008,6 @@ CheckUpdatingSteamResources
 CheckUpdatingSteamResources: Downloading UGC Map.... %f%%
 CheckUpdatingSteamResources: downloading UGC map file '%s' id %llu
 CheckUpdatingSteamResources: downloading file '%s'
-Checking response.
 Child finished successfully!
 Choose .dem file
 Choose .vmf folder
@@ -5068,8 +5076,6 @@ Closed demo frame stats file '%s'
 Closed temporary file %s
 Closing SDR listen socket on '%s'
 Closing Steam Net Connection to %s, handle %x (%d %s)
-Closing connection to server.
-Closing socket, upload succeeded.
 Cloud enabled from (from HKCU\Software\Valve\Steam\Apps\appid\Cloud)
 CmdEncryptedDataMessageCodec failed to parse embedded message
 CmdEncryptedDataMessageCodec key size is %d, but %d is expected!
@@ -5118,7 +5124,6 @@ Comma-separated IP ranges which require Steam3 challenge protocol even for GOTV 
 CommandLine
 Commencing GOTV[%u] connection retry to %s
 Commencing connection retry to
-Commencing game stats upload connection.
 Comment started here.
 Committing AutoSaveDangerous...
 CompareRecvPropToSendProp: missing a property.
@@ -5160,11 +5165,9 @@ Connected to Steam DEV universe.
 Connected to Steam universe %d
 Connecting to
 Connecting to %s
-Connecting to game stats harvesting server.
 Connection closing
 Connection error
 Connection failed after %i retries.
-Connection failed.
 Connection lost
 Connection lost: %s.
 Connection rejected by game
@@ -5300,8 +5303,6 @@ Created class baseline: %i classes, %i bytes.
 Creating compressed version of file %s (%d -> %d)
 Creating default cubemaps for env_cubemap using skybox %s...
 Creating dictionary %s
-Creating game stats upload socket.
-Creating initial report.
 CryptoMaterial: this object contains invalid values
 CryptoMaterial: this object does not support loading
 CryptoMaterial: this object does not support precomputation
@@ -5605,7 +5606,6 @@ Device_SpatializeChannel
 Diag:%s
 DialogVariables
 Didn't expect more than one scan
-Didn't receive protocol failure data.
 Dig : voiced alveolar flap or tap
 Dig : voiced bilabial stop
 Dimensions(%dx%d)
@@ -5620,7 +5620,6 @@ DirectorySelected
 Disable
 Disable area to area connection testing.
 DisableColorCorrection
-DisableGameStats
 Disables drawing of notification area (for taking screenshots).
 Disables the simulation and returns focus to the editor
 Disables using an audio cache and relies on streaming audio data instead.
@@ -5951,6 +5950,13 @@ Error: %s : Math expression type not currently supported in sound operator math_
 Error: %s, input_entity_index %i invalid
 Error: %s, input_source_index %i is greater than MAX_SPLITSCREEN_CLIENTS, clamped
 Error: %s, input_source_index %i is invalid, clamped
+Error: CL_Demo_RestoreIndex:  Entity %i already exists!
+Error: CL_Demo_RestoreIndex:  Error creating entity %s(%i)
+Error: CL_Demo_RestoreIndex:  Error reading packet %i from index.
+Error: CL_Demo_RestoreIndex: GetClassBaseline(%d) failed.
+Error: CL_Demo_RestoreIndex: ent %d class %d not in [0,%d).
+Error: CL_Demo_RestoreIndex: ent %d client class %d not found.
+Error: CL_Demo_RestoreIndex: ent %d not in [0,%d).
 Error: Could not save changes.  File is most likely read only.
 Error: Execute iterator unable to find sound operator %s
 Error: Failed to get mix group %s!
@@ -6004,7 +6010,7 @@ Exceeded MAX_DECALS (%d).
 Exceeded max number of datatable proxies in SendTable_BuildHierarchy()
 Exclu Props   : %i
 Exclude
-Exe build: 02:40:28 Sep 17 2020 (%i) (%i)
+Exe build: 23:21:55 Oct 14 2020 (%i) (%i)
 Exe:  %s
 Execing config: %s
 Execute script file if file exists.
@@ -6736,6 +6742,7 @@ If set, whenever a game ends, if the total memory used by the server is greater 
 If the clock offset is less than this amount (in milliseconds), then no clock correction is applied.
 If this is nonzero, then the texture list panel will render thumbnails of currently-loaded textures.
 If this is nonzero, then the texture list panel will show all currently-loaded textures.
+If to use demo index. Needs to be set before loading demo.
 If true use Steam to record voice (not the engine codec)
 If true when log when a query is blocked (can cause very large log files)
 If you are accessing from VPN at home, try this:Set the ConVar 'bugreporter_username' to your Valve user name.Then call the command '_bugreporter_restart autoselect'.
@@ -6924,7 +6931,6 @@ Jitter fakelag packet time
 Joint Stereo
 Joy : voiced postalveolar afficate
 Jul
-Jul 23 2020
 Jump To
 Jumping to %s
 Jun
@@ -7158,6 +7164,7 @@ Lighting Verts
 LightingData
 Limit debug sounds to those containing this substring
 Limits spectators to chat only every n seconds
+Limits the the count of index files of other (non-current) demos. Needs to be set before loading demo.
 Linear Interp Angles
 Linear Interp Origin
 Lines of crash dump console spew to keep.
@@ -8324,7 +8331,6 @@ No phase end in this demo.
 No physics for world in map %s
 No plugin provided
 No pure server whitelist. sv_pure = 0
-No response from server.
 No rights to app
 No selection.
 No smoothing info loaded
@@ -8410,6 +8416,7 @@ Occl %.2f (%d/%d)
 Occlusion Tool
 Occlusion statistics; [-jitter] [-reset]
 Oct
+Oct 14 2020
 Official relay disconnected and shutting down...
 Old challenge from %s.
 OnCancel
@@ -8793,13 +8800,11 @@ Prop Fade Distance Tool
 Protobuf: %s(%d): %s
 Protocol    : %d
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
-Protocol OK.
 Protocol error from %s
 Protocol message serialized itself in invalid fashion.
 Protocol message was modified concurrently during serialization.
 Protocol version %i [%i/%i]Exe version %s (%s)
 Provide a substr to match class info against.
-PseudoUUID
 Public :  %s
 Public IP is %d.%d.%d.%d.
 Public Tags   : %s
@@ -8929,8 +8934,6 @@ Really old map format! Static props can't be loaded...
 Reason for late load of '%s': Calling Host_GetSoundDuration().
 Rebuild cubemaps.
 Rebuild dictionary file on every level load
-Receive failed.
-Receive game stats harvesting protocol upload permissible.
 Received a remote bug request from rcon client, but not running with '-remotebug'. Ignoring.
 Received connection fail for user %llx %s
 Received delta packet entities while spawing!
@@ -8938,14 +8941,11 @@ Received fragment chunk out of bounds: %i+%i>%i from %s
 Received fragments: start %i, num %i
 Received from %llx %u bytes on %s
 Received packet entities while connecting!
-Received response.
 Received signon %i when at %i
 Received voice from: %d
 Received wrong spawn count %i when at %i
 Receiving complete: %i fragments, %i bytes
 Receiving failed: too many fragments %i/%i from %s
-Receiving game stats upload success/fail message.
-Receiving harvesting protocol acknowledgement.
 Receiving uncompressed update from server, baseline %d, byte size %d
 RecomputeSurfaceFlags
 Recomputes clock speed (for debugging purposes).
@@ -9066,8 +9066,6 @@ Report which panel has keyboard focus.
 Report which panel is under the mouse.
 ReportType not set!
 Request a VProf data stream from the remote server (requires authentication)
-Request denied, invalid message protocol.
-Request denied, invalid message type.
 RequestFile: %s (ID %i)
 Requested feature was omitted at compile time
 Requested max packet size before packets are 'split'.
@@ -9265,15 +9263,15 @@ STEAMAUTH: Client %s not immediately kicked because sv_steamauth_enforce=%d
 STEAMAUTH: Client %s received failure code %d
 STEAMHTMLSURFACE_INTERFACE_VERSION_005
 STEAMHTTP_INTERFACE_VERSION003
-STEAMINVENTORY_INTERFACE_V001
+STEAMINVENTORY_INTERFACE_V003
 STEAMMUSICREMOTE_INTERFACE_VERSION001
 STEAMMUSIC_INTERFACE_VERSION001
+STEAMPARENTALSETTINGS_INTERFACE_VERSION001
 STEAMREMOTESTORAGE_INTERFACE_VERSION014
 STEAMSCREENSHOTS_INTERFACE_VERSION003
 STEAMUGC_INTERFACE_VERSION014
-STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001
 STEAMUSERSTATS_INTERFACE_VERSION012
-STEAMVIDEO_INTERFACE_V001
+STEAMVIDEO_INTERFACE_V002
 STEAM_
 STEAM_%u:%u:%u
 STOP Operators:
@@ -9459,7 +9457,6 @@ Send Table buffer for class '%s' overflowed!!!
 Send Table signon buffer overflowed %i bytes!!!
 Send Tables   : %i
 Send a screen message to all clients [-instance <inst> ]
-Send failed.
 Send to %llx %u bytes on %s (status %s - %s)
 SendClientMessages
 SendConnectPacket
@@ -9489,9 +9486,6 @@ SendUserMessage: Error serializing %s!
 Sending complete: %i fragments, %i bytes.
 Sending connect packet to unexpected address %s
 Sending full update to Client %s (%s)
-Sending game stats harvester protocol info.
-Sending game stats to server %s.
-Sending harvesting protocol upload request.
 Sending null userdata inside Baseline item along with entity.
 Sending server info signon packet for %s: %u / %u buffer %s
 Sending subchan %i: start %i, num %i
@@ -9503,7 +9497,6 @@ SentenceGroupPickSequential with NULL name
 SentenceIndexFromName with NULL pSentenceName
 SentenceModeMenu
 Sep
-Sep 17 2020
 SerializeDMX: Unable to open file "%s"
 SerializeKeyValues:: not supported
 Serializing event '%s' (%i):
@@ -9536,9 +9529,6 @@ Server not active, ignoring %s
 Server only accepting connections from game lobby %s %d.
 Server password for entry into multiplayer games
 Server queue reservation
-Server rejected protocol.
-Server rejected upload command.
-Server requested game stats upload to %s.
 Server reservation%u is awaiting %d/%d
 Server running with server_is_unavailable, ignoring challenge from %s
 Server sent bogus string index %i for table %s
@@ -9563,7 +9553,6 @@ ServerGameEnts001
 ServerGameTags001
 ServerLog
 ServerRemoteAccess: Sending AdminUI message to non-AdminUI listener
-ServerUploadGameStats001
 ServerVersion=
 Session migrated
 Set View
@@ -9802,7 +9791,6 @@ Socket accept ioctl(FIONBIO) failed (%i)
 Socket bind failed (%s)
 Socket bound to non-default port %i because original port was already in use.
 Socket connection failed (%s)
-Socket creation failed.
 Socket ioctl(FIONBIO) failed (%s)
 Socket listen failed (%s)
 Socket unable to create socket (%s)
@@ -9915,7 +9903,6 @@ StaticPropMgrClient005
 StaticPropMgrServer002
 StaticSound
 Static_Prop_Rendering
-Stats report accepted, data upload skipped.
 StatusLabel
 Stay Out
 Stay out
@@ -9942,8 +9929,8 @@ SteamAPI_UseBreakpadCrashHandler
 SteamAPI_WriteMiniDump
 SteamAppId
 SteamAppUser
-SteamClient017
-SteamController003
+SteamClient020
+SteamController007
 SteamDatagram
 SteamDatagramClient_Init_InternalV9
 SteamDatagramClient_Internal_SteamAPIKludge
@@ -9963,19 +9950,24 @@ SteamGameServer_RunCallbacks
 SteamGameServer_Shutdown
 SteamID.AccountID: Client connected with forged accountid: userid %x, steamid: %llx, SDR: %llx
 SteamID.AccountID: Client connected with forged accountid: userid %x, steamid: %llx, accountid: %u
+SteamInput001
+SteamInternal_ContextInit
 SteamInternal_CreateInterface
+SteamInternal_FindOrCreateGameServerInterface
+SteamInternal_FindOrCreateUserInterface
 SteamInternal_GameServer_Init
+SteamMatchGameSearch001
 SteamMatchMaking009
 SteamMatchMakingServers002
 SteamNetSockets
-SteamNetworking005
+SteamNetworking006
 SteamNetworkingSockets_Lib
 SteamNetworkingUtils_Lib
 SteamP2P
 SteamSocketMgr Status
 SteamUser021
 SteamUserPassphrase
-SteamUtils009
+SteamUtils010
 StepBack
 Still more data to unzip
 StolenIV
@@ -10375,6 +10367,7 @@ Two Point Origin Ease Out
 TxEdt
 TxViewPanel
 Type appears to be in generated pool but wasn't
+Type does not match
 Type is already registered:
 U
 UCS-2LE
@@ -10542,12 +10535,8 @@ Updated %i out of %i cached files [%.3f msec]
 Updated stringtable dictionary saved to %s
 Updates leafvis debug render every frame (expensive)
 Updating sound cache [%d entries]
-Upload OK.
 Upload attachments asynchronously
-Upload failed.
 Uploading %s to %s
-Uploading game stats data.
-Uploads most recent benchmark stats to the Valve servers.
 Uppercase
 Uptime: %f
 UrE66!Ap
@@ -10860,7 +10849,6 @@ WORDS
 WRITEOUT
 WRITEOUT "1"
 WaitForAsyncServer
-Waiting for response.
 Warning
 Warning - trying to enforce model bounds on %s
 Warning parsing text-format
@@ -11412,6 +11400,8 @@ __strcat_chk
 __strcat_chk@@GLIBC_2.3.4
 __strcpy_chk
 __strcpy_chk@@GLIBC_2.3.4
+__strncpy_chk
+__strncpy_chk@@GLIBC_2.3.4
 __swprintf_chk
 __swprintf_chk@@GLIBC_2.4
 __utilVertexColor
@@ -11637,7 +11627,6 @@ before_start
 bench_end
 bench_start
 bench_start %s: invalid path.
-bench_upload
 benchframe
 benchframe <demoname> <frame> <tgafilename>: takes a snapshot of a particular frame in a demo
 benefit:
@@ -11830,6 +11819,7 @@ cl_csm_enabled
 cl_debug_ugc_downloads
 cl_decryptdata_key
 cl_decryptdata_key_pub
+cl_demo.cpp
 cl_detaildist
 cl_detailfade
 cl_download_demoplayer
@@ -12205,6 +12195,13 @@ dem_stringtables
 dem_synctick
 dem_unknown
 dem_usercmd
+demindex/
+demindex/*-*-*_*.dix
+demindex/00000000-
+demindex/00000000-00000000-
+demindex/00000000-00000000-00000000_
+demindex/00000000-00000000-00000000_00000000.dix
+demindex/00000000-00000000-00000000_00000000.err
 demo tick,frame start time,frame start delta,frame swap time,frame swap delta,FPS variability
 demo_avellimit
 demo_debug
@@ -12219,6 +12216,8 @@ demo_highlight_fastforwardspeed
 demo_highlight_skipthreshold
 demo_highlight_timeafter
 demo_highlight_timebefore
+demo_index
+demo_index_max_other
 demo_info
 demo_interplimit
 demo_interpolateview
@@ -12353,7 +12352,6 @@ dtwatchvar
 dulltext
 dummy
 dup@@GLIBC_2.2.5
-duplicating %d samples
 duration "%.3f"
 dutch
 dxSupportLevel: %d
@@ -14304,6 +14302,8 @@ readdir64
 readdir64@@GLIBC_2.2.5
 reading file '%s' of legacy format '%s' - dmxconvert this file to a newer format!
 real-time
+realloc
+realloc@@GLIBC_2.2.5
 realpath
 realpath@@GLIBC_2.3
 realtime_passthrough
@@ -14601,6 +14601,7 @@ setting.gpu_mem_level
 setting.laptop
 setting.mat_aaquality
 setting.mat_antialias
+setting.mat_enable_uber_shaders
 setting.mat_forceaniso
 setting.mat_grain_scale_override
 setting.mat_monitorgamma
@@ -14619,6 +14620,7 @@ setting.nowindowborder
 setting.preferhardwaresync
 setting.prefertexturesinhwmemory
 setting.preferzprepass
+setting.r_player_visibility_mode
 setting.suppresspixelshadercentroidhackfixup
 setting.unsupported
 setting.videoconfig_version
