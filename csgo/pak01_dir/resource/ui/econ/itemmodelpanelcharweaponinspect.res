@@ -1370,23 +1370,22 @@
 		}
 		"config"
 		{
-			"light_directional_clearall" "1"
-			"light_directional_add"      "rgb{0.68 0.68 0.82} dir[0.21 -0.91 -0.37] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
-			"light_directional_add"      "rgb{0.47 0.39 0.39} dir[-0.34 -0.40 -0.85] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
-			"light_directional_add"      "rgb{1.14 1.14 1.14} dir[-0.59 0.78 0.22] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
-			"light_directional_add"      "rgb{0.20 0.20 0.22} dir[-0.40 -0.52 -0.76] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
-			"shadow_light_offset"        "-15.70 10.95 19.80"
-			"shadow_light_orient"        "44.39 -51.80 0.00"
-			"shadow_light_brightness"    "1.52"
-			"shadow_light_color"         "[1.00 1.00 1.00]"
-			"shadow_light_rotation"      "[0.00 0.00 0.00]"
-			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
-			"shadow_light_hfov"       "53.9"
-			"shadow_light_vfov"       "53.9"
-			"shadow_light_znear"       "25.2"
-			"shadow_light_zfar"       "28.7"
-			"shadow_light_atten_farz"       "57.4"
-			"light_ambient"              "[0.48 0.48 0.48]"
+"light_directional_clearall" "1"
+"light_directional_add"      "rgb{0.47 0.47 0.47} dir[-0.47 -0.84 -0.26] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+"light_directional_add"      "rgb{0.00 0.27 0.89} dir[0.96 -0.00 -0.27] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+"light_directional_add"      "rgb{0.08 0.08 0.08} dir[-0.59 0.78 0.22] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+"shadow_light_offset"        "-0.79 7.85 12.19"
+"shadow_light_orient"        "43.25 -100.16 0.00"
+"shadow_light_brightness"    "1.00"
+"shadow_light_color"         "[1.00 1.00 1.00]"
+"shadow_light_rotation"      "[0.00 0.00 0.00]"
+"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+"shadow_light_hfov"       "24.0"
+"shadow_light_vfov"       "24.0"
+"shadow_light_znear"       " 9.7"
+"shadow_light_zfar"       "52.1"
+"shadow_light_atten_farz"       "104.2"
+"light_ambient"              "[0.16 0.16 0.16]"
 			"root_mdl"					"models\weapons\pedestal_sticker_panorama.mdl"
 			"root_anim"					"ACT_IDLE_INSPECT_START"		
 			"root_anim_loop"				"ACT_IDLE_INSPECT_LOOP"
@@ -3136,7 +3135,15 @@
 
 			// buymenu
 			"camera_preset_add"   "pos[226.06 73.87 64.82] pivot[-1.00 0.66 53.36] orient[2.75 -162.13 0.00] fov[20.0]"// 18 buymenu
+
+			// operation item store
+			"camera_preset_add"   "pos[184.68 -48.68 53.68] pivot[-0.00 -0.85 69.06] orient[-4.61 165.48 0.00] fov[20.0]" //19 Position
+			"camera_preset_add"   "pos[104.82 -19.56 63.48] pivot[0.08 -0.15 67.89] orient[-2.37 169.50 0.00] fov[20.0]" //20 Position for smaller tiles
+
+			// operation item store inspect hover
+			"camera_preset_add"   "pos[97.52 -14.58 108.28] pivot[-0.12 -0.80 67.50] orient[22.47 171.97 0.00] fov[20.0]" //21 Position 
 		}
+
 	}
 
 	"StatTrak"

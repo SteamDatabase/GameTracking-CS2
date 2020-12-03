@@ -12,7 +12,7 @@ unzip -lv ./csgo/panorama/code.pbin > ./csgo/panorama/code_pbin.txt
 
 while IFS= read -r -d '' file
 do
-	/home/steamdb/EntityLumpDumper/EntityLumpDumper/bin/Release/EntityLumpDumper "$file"
+	/home/steamdb/EntityLumpDumper/EntityLumpDumper/bin/Release/linux-x64/publish/EntityLumpDumper "$file"
 done <   <(find "csgo/maps/" -type f -name "*.bsp" -print0)
 
 FixUCS2

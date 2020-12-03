@@ -1,0 +1,88 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	// using a sequencer so that we can properly commit to throwing the utility even if original conditions change ( enemy moved, friends covering me died, etc )
+
+	type = "sequencer"
+	children =
+	[
+		// first part: preconditions for throwing the utility
+		{
+			type = "decorator_picker_reaction_time"
+			input = "ShortTermAttackMemory"
+			output = "Enemy"
+			child =
+			{
+				type = "condition_is_empty"
+				input = "Enemy"
+				negated = 1
+				child =
+				{
+					type = "decorator_tag_entity"
+					input = "Enemy"
+					output = "EngagedEntities"
+					operation_type = "BT_DECORATOR_TAG_ENTITY_CLEAR"
+					child =
+					{
+						type = "decorator_tag_threshold"
+						entity_input = "Enemy"
+						tagged_entities_input = "EngagedEntities"
+						amount = 2
+						check_type = "BT_DECORATOR_TAG_THRESHOLD_AT_LEAST"
+						child =
+						{
+							type = "condition_owns_item"
+							items_one_of =
+							[
+								"weapon_hegrenade",
+								"weapon_incgrenade"
+							]
+						}
+					}
+				}
+			}
+		},
+		// second part: maybe execute the movement - this might take some time, and we'll commit to doing it even if part 1's conditions have changed
+		{
+			type = "decorator_maybe"
+			chance = 0.15
+			child =
+			{
+				type = "sequencer"
+				children =
+				[
+					// compute the aiming first because if this fails we bail now before equipping an item
+					{
+						type = "action_aim_projectile"
+						input = "Enemy"
+						output = "UtilityTarget"
+					},						
+					{
+						type = "action_equip_item"
+						items_one_of =
+						[
+							"weapon_hegrenade",
+							"weapon_incgrenade"
+						]
+					},
+					{
+						type = "action_wait"
+						wait_time_min = 0.5
+						wait_time_max = 0.5
+					},
+					{
+						type = "action_look_at"
+						input_location = "UtilityTarget"
+					},
+					{
+						type = "action_pull_trigger"
+					},
+					{
+						type = "action_wait"
+						wait_time_min = 0.5
+						wait_time_max = 0.5
+					}
+				]
+			}
+		}
+	]
+}

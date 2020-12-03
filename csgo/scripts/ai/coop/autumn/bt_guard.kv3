@@ -1,0 +1,213 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	config = "scripts/ai/coop/bt_config.kv3"
+	root =
+	{
+		type = "decorator_hiding_spot_service"
+		domain = "AllBots"
+		output_hiding_spot = "HidingSpot"
+		distance_threshold = 800
+		expiration_time = 10
+		child =
+		{
+			type = "decorator_bot_service"
+			memory_to_expire =
+			[
+				{
+					key = "ShortTermAttackMemory"
+					time = 0.7
+					distance = 0
+				},
+				{
+					key = "ShortTermDamageMemory"
+					time = 0.7
+					distance = 0
+				},
+				{
+					key = "ShortTermAreaDamageMemory"
+					time = 3
+					distance = 0
+				},
+				{
+					key = "ShortTermInvestigateMemory"
+					time = 3
+					distance = 200
+				},
+				{
+					key = "LongTermMemory"
+					time = 10
+					distance = 500
+				},
+				{
+					domain = "AllBots"
+					key = "Threats"
+					time = 10
+					distance = 0
+				},
+				{
+					key = "DamageThroughSmokeMemory"
+					time = 3
+					distance = 0
+				}
+			]
+			tagged_entities_to_expire =
+			[
+				"EngagedEntities"
+			]
+			basic_chatter_enable = 1
+			input_chatter_enemies = "ShortTermAttackMemory"
+			child =
+			{
+				type = "parallel"
+				children =
+				[
+					{
+						type = "decorator_repeat"
+						child =
+						{
+							type = "subtree"
+							file = "scripts/ai/coop/autumn/modules/bt_basic_player_memorization.kv3"
+							name = "BasicPlayerMemorization"
+						}
+					},
+					{
+						type = "decorator_repeat"
+						child =
+						{
+							type = "selector"
+							children =
+							[
+								{
+									type = "subtree"
+									file = "scripts/ai/coop/autumn/modules/bt_basic_player_engagement.kv3"
+									name = "BasicPlayerEngagement"
+								},
+								// Else: if something happened in the vicinity and is within LOS, look at it for a couple of seconds
+								{
+									type = "decorator_picker_reaction_time"
+									input = "ShortTermInvestigateMemory"
+									output = "ShortTermInvestigateMemoryWithinReactionTime"
+									child =
+									{
+										type = "decorator_picker_visible"
+										input = "ShortTermInvestigateMemoryWithinReactionTime"
+										check_fov = 0
+										child = 
+										{
+											type = "decorator_ranker_dist"
+											input = "ShortTermInvestigateMemoryWithinReactionTime"
+											child =
+											{
+												type = "decorator_picker_max_score"
+												input = "ShortTermInvestigateMemoryWithinReactionTime"
+												child =
+												{
+													type = "condition_is_empty"
+													input = "ShortTermInvestigateMemoryWithinReactionTime"
+													negated = 1
+													child =
+													{
+														type = "sequencer"
+														children =
+														[
+															{
+																type = "action_look_at"
+																input_location = "ShortTermInvestigateMemoryWithinReactionTime"
+															},
+															{
+																type = "action_wait"
+																wait_time_min = 1
+																wait_time_max = 2
+															}
+														]
+													}
+												}
+											}
+										}
+									}
+								},
+								// Else: if something happened very close abandon post and go investigate
+								{
+									type = "decorator_picker_reaction_time"
+									input = "ShortTermInvestigateMemory"
+									output = "ShortTermInvestigateMemoryWithinReactionTime"
+									child =
+									{
+										type = "condition_distance_less"
+										input = "ShortTermInvestigateMemoryWithinReactionTime"
+										distance_threshold_min = 450
+										distance_threshold_max = 550
+										child =
+										{
+											type = "subtree"
+											file = "scripts/ai/modules/bt_investigate_closest_memorized_event.kv3"
+											name = "InvestigateClosestMemorizedEvent"
+										}
+									}
+								},
+								// Else: go back to initial spawn point and look around
+								{
+									type = "sequencer"
+									children =
+									[
+										{
+											type = "action_equip_weapon"
+											weapon = "BEST"
+										},
+										{
+											type = "action_move_to"
+											destination = "LastCoopSpawnPointLocation"
+											movement_type = "BT_ACTION_MOVETO_RUN"
+											route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+											hiding_spot = "HidingSpot"
+											threat = "NearestThreatMemory"
+										},
+										{
+											type = "parallel"
+											children =
+											[
+												{
+													type = "decorator_repeat"
+													child =
+													{
+														type = "subtree"
+														file = "scripts/ai/modules/bt_look_around.kv3"
+														name = "LookAround"
+													}
+												},
+												{
+													type = "decorator_repeat"
+													child =
+													{
+														type = "sequencer"
+														children =
+														[
+															{
+																type = "decorator_maybe"
+																chance = 0.7
+																child = 
+																{
+																	type = "action_say"
+																	phrase = "Clear"
+																}
+															},
+															{
+																type = "action_wait"
+																wait_time_min = 4
+																wait_time_max = 8
+															}
+														]
+													}
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

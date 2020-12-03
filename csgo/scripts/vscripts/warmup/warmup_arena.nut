@@ -42,17 +42,8 @@ function OnPostSpawn()
 		EntFire( "@skybox_swap", "Trigger", "", 0.0,  null );	// skybox_swapper entity 
 	}
 	
-	CreateRelay();
-	
 }
 
-function CreateRelay()
-{
-		RELAY_CLEARDECAL = Entities.CreateByClassname( "logic_relay" );
-		RELAY_CLEARDECAL.ValidateScriptScope();
-		
-		EntFireByHandle(RELAY_CLEARDECAL, "addoutput", "OnTrigger @warmup.cmd,Command,r_cleardecals", 0, null, null);
-}
 
 function DebugInfo()
 {
@@ -67,8 +58,11 @@ function DebugInfo()
 function TSpawnCheck()
 {
 	// loops every .1 sec in the arena
+	if (WARMUP == true)
+	{
 	EntFireByHandle( TRIGGER_T ,"TouchTest", "", 0, null, null );
 	return;
+	}
 }
 
 function DisableTSpawn()
@@ -88,8 +82,11 @@ function EnableTSpawn()
 function CTSpawnCheck()
 {
 	// loops every .1 sec in the arena, checks if player is still there (fixes bug with players removing bots on connect)
+	if (WARMUP == true)
+	{
 	EntFireByHandle( TRIGGER_CT ,"TouchTest", "", 0, null, null );
 	return;
+	}
 }
 
 function DisableCTSpawn()
@@ -139,15 +136,7 @@ function ArenaStart()		// called when the arena has two players, checks every .1
 		
 		local RandomPick = RandomInt(0, WEAPON.len()-1 );	// pick a gun from the weapon list
 		local PickedGun = WEAPON[RandomPick];
-
-	//	EntFire( "@warmup.cmd", "Command", "r_cleardecals", 0.0,  PLAYER_CT );		// clear decals command run on client, so everybody isnt affected
-	//	EntFire( "@warmup.cmd", "Command", "r_cleardecals", 0.0,  PLAYER_T );
 	
-		// clear arena decals
-		EntFireByHandle( RELAY_CLEARDECAL, "Trigger", "", 0.0, PLAYER_CT, null )
-		EntFireByHandle( RELAY_CLEARDECAL, "Trigger", "", 0.1, PLAYER_T, null )
-	
-		
 		// reset player positions, to ensure survivor is not spawn camping
 		PLAYER_T.SetOrigin( SPAWN_T.GetOrigin() );
 		PLAYER_T.SetAngles( 0, SPAWN_T.GetAngles().y, 0 );

@@ -714,6 +714,7 @@
 	{
 		"userid"		"short"
 		"reason"		"short"
+		"value"			"long"
 		"musickitmvps"	"long"
 		"nomusic"	"byte"
 	}
@@ -1083,6 +1084,7 @@
 		"x"		"float"
 		"y"		"float"
 		"z"		"float"
+		"urgent"	"bool"
 	}
 	
 	"player_ping_stop"

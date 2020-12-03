@@ -97,6 +97,8 @@ enum ECsgoGCMsg {
 	k_EMsgGCCStrike15_v2_ClientReportValidation = 9205;
 	k_EMsgGCCStrike15_v2_GC2ClientRefuseSecureMode = 9206;
 	k_EMsgGCCStrike15_v2_GC2ClientRequestValidation = 9207;
+	k_EMsgGCCStrike15_v2_ClientRedeemMissionReward = 9209;
+	k_EMsgGCCStrike15_ClientDeepStats = 9210;
 }
 
 enum ECsgoSteamUserStat {
@@ -307,6 +309,54 @@ message PlayerQuestData {
 	repeated .MatchEndItemUpdates item_updates = 6;
 	optional bool operation_points_eligible = 7;
 	repeated .CMsgCsgoSteamUserStatChange userstatchanges = 8;
+}
+
+message DeepPlayerStatsEntry {
+	optional uint32 accountid = 1;
+	optional uint64 match_id = 2;
+	optional uint32 mm_game_mode = 3;
+	optional uint32 mapid = 4;
+	optional bool b_starting_ct = 5;
+	optional uint32 match_outcome = 6;
+	optional uint32 rounds_won = 7;
+	optional uint32 rounds_lost = 8;
+	optional uint32 stat_score = 9;
+	optional uint32 stat_deaths = 12;
+	optional uint32 stat_mvps = 13;
+	optional uint32 enemy_kills = 14;
+	optional uint32 enemy_headshots = 15;
+	optional uint32 enemy_2ks = 16;
+	optional uint32 enemy_3ks = 17;
+	optional uint32 enemy_4ks = 18;
+	optional uint32 total_damage = 19;
+	optional uint32 engagements_entry_count = 23;
+	optional uint32 engagements_entry_wins = 24;
+	optional uint32 engagements_1v1_count = 25;
+	optional uint32 engagements_1v1_wins = 26;
+	optional uint32 engagements_1v2_count = 27;
+	optional uint32 engagements_1v2_wins = 28;
+	optional uint32 utility_count = 29;
+	optional uint32 utility_success = 30;
+	optional uint32 flash_count = 32;
+	optional uint32 flash_success = 33;
+	repeated uint32 mates = 34;
+}
+
+message DeepPlayerMatchEvent {
+	optional uint32 accountid = 1;
+	optional uint64 match_id = 2;
+	optional uint32 event_id = 3;
+	optional uint32 event_type = 4;
+	optional bool b_playing_ct = 5;
+	optional int32 user_pos_x = 6;
+	optional int32 user_pos_y = 7;
+	optional int32 user_pos_z = 12;
+	optional uint32 user_defidx = 8;
+	optional int32 other_pos_x = 9;
+	optional int32 other_pos_y = 10;
+	optional int32 other_pos_z = 13;
+	optional uint32 other_defidx = 11;
+	optional int32 event_data = 14;
 }
 
 message CMsgGC_ServerQuestUpdateData {
@@ -640,6 +690,13 @@ message CMsgGCCstrike15_v2_ClientRequestNewMission {
 	optional uint32 campaign_id = 3;
 }
 
+message CMsgGCCstrike15_v2_ClientRedeemMissionReward {
+	optional uint32 campaign_id = 1;
+	optional uint32 redeem_id = 2;
+	optional uint32 redeemable_balance = 3;
+	optional uint32 expected_cost = 4;
+}
+
 message CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded {
 	repeated .XpProgressData xp_progress_data = 1;
 	optional uint32 account_id = 2;
@@ -647,6 +704,23 @@ message CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded {
 	optional uint32 current_level = 4;
 	optional uint32 upgraded_defidx = 5;
 	optional uint32 operation_points_awarded = 6;
+}
+
+message CMsgGCCStrike15_ClientDeepStats {
+	message DeepStatsRange {
+		optional uint32 begin = 1;
+		optional uint32 end = 2;
+		optional bool frozen = 3;
+	}
+
+	message DeepStatsMatch {
+		optional .DeepPlayerStatsEntry player = 1;
+		repeated .DeepPlayerMatchEvent events = 2;
+	}
+
+	optional uint32 account_id = 1;
+	optional .CMsgGCCStrike15_ClientDeepStats.DeepStatsRange range = 2;
+	repeated .CMsgGCCStrike15_ClientDeepStats.DeepStatsMatch matches = 3;
 }
 
 message CMsgGCCStrike15_v2_WatchInfoUsers {
@@ -949,6 +1023,8 @@ message CSOAccountSeasonalOperation {
 	optional uint32 premium_tiers = 3;
 	optional uint32 mission_id = 4;
 	optional uint32 missions_completed = 5;
+	optional uint32 redeemable_balance = 6;
+	optional uint32 season_pass_time = 7;
 }
 
 message CSOPersonaDataPublic {
