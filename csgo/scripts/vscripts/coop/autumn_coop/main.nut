@@ -1021,6 +1021,9 @@ EntFire( "@coopscript", "RunScriptCode", "SpawnNextWave( 5 )", 1 );
 function BunkerRollupOpen()		// coop button used
 {
 
+		EntFire( "CT_*", "SetDisabled", "", 0 );
+		EntFire( "CT_11", "SetEnabled", "", 0 );
+
 EntFire( "@trigger_finale_reinf_emptydoor", "Enable", "", 0 );	// close trigger
 
 EntFire( "@bunker.rollup1", "Close", "", 0 );
