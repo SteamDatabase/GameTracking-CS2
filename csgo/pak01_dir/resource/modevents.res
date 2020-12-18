@@ -42,6 +42,7 @@
 		"noscope"		"bool"  // kill happened without a scope, used for death notice icon
 		"thrusmoke"		"bool"  // hitscan weapon went through smoke grenade
 		"attackerblind"	"bool"  // attacker was blind from flashbang
+		"distance"		"float" // distance to victim in meters
 	}
 
 	"other_death"
