@@ -4889,7 +4889,6 @@ $tK
 369
 36CAI_MappedActivityBehavior_Temporary
 36CCSUsrMsg_ProcessSpottedEntityUpdate
-36CCSUsrMsg_RetakeUpdatePlayerCardList
 36CInfoInstructorHintHostageRescueZone
 36CMsgAMGetUserGameStatsResponse_Stats
 36CMsgGCCStrike15_v2_ClientAuthKeyCode
@@ -5008,7 +5007,6 @@ $tK
 41CAttributeIterator_GetTypedAttributeValueIjfE
 41CAttributeIterator_GetTypedAttributeValueIjjE
 41CBtActionChooseRandomWaypointWithinRadius
-41CCSUsrMsg_RetakeUpdatePlayerCardSelection
 41CDataGCCStrike15_v2_TournamentGroup_Picks
 41CMsgGCCStrike15_v2_AccountPrivacySettings
 41CMsgGCCStrike15_v2_Account_RequestCoPlays
@@ -17332,6 +17330,10 @@ Zrange
 [ RETAKE RUKES ] - Bad coordinate entry in %s (%s).  Each entry needs 6 numbers, 'x y z pitch yaw roll'. Players will spawn at their opposite sites.
 [ RETAKE RUKES ] - Bad coordinate entry in %s (%s). Each entry needs 7 numbers, 'weight x y z pitch yaw roll'. Bombs will be planted at random locations.
 [ RETAKE RUKES ] - Bad coordinate entry in %s (%s). Weight must be greater than zero. Bombs will be planted at random locations.
+[ RETAKE RUKES ] - Player ( %s ) has an invalid offering index assigned ( %d ).
+[ RETAKE RUKES ] - Player ( %s ) sending a card request but there are no offerings assigned.
+[ RETAKE RUKES ] - Unable to assign MVP boost to Player ( %s ) - cannot find a regular card to boost.
+[ RETAKE RUKES ] - Unable to assign MVP boost to Player ( %s ) - offering isn't set or is invalid.
 [ RETAKE RULES ] - Error loading '%s' - Players will spawn at their opposite sites.
 [ RETAKE RULES ] - Unable to find 'BombPlants' section in '%s' - Bombs will be planted at random locations.
 [ RETAKE RULES ] - Unable to find 'Spawns' section in '%s' - Players will spawn at their opposite sites.
@@ -17351,15 +17353,18 @@ Zrange
 [ RETAKE RULES ] Invalid card assigned to a player ( loadout = %d, card = %d, type = %d ).
 [ RETAKE RULES ] Invalid utility id '%s'. Ignoring.
 [ RETAKE RULES ] Invalid weapon id '%s'. Ignoring.
+[ RETAKE RULES ] No offerings - this shouldn't happen.
 [ RETAKE RULES ] No spawn points.
 [ RETAKE RULES ] No valid loadouts found for round '%s'. Adding a default loadout.
 [ RETAKE RULES ] None of the specified cards were valid - adding a default card.
+[ RETAKE RULES ] Player ( %s ) does not have any offerings assigned - assigning first offering.
 [ RETAKE RULES ] Ran out of loadouts before fulfilling amount required ( %d ).
+[ RETAKE RULES ] Ran out of offerings for players - '%s' will get offer 0 as fallback.
 [ RETAKE RULES ] Ran out of spawn points? Looping back around ( this shouldn't happen ).
 [ RETAKE RULES ] Round should contain at least one loadout.
 [ RETAKE RULES ] Unable to find a card for this player ( %s ).
+[ RETAKE RULES ] Unable to find any offerings for team %d.
 [ RETAKE RULES ] Unable to plant bomb!
-[ RETAKE RULES ] Unable to produce an MVP card for player '%s' ( loadout = %d, card = %d ).
 [$0]
 [%.3f server clamped to %.3f]
 [%03d] Found: %s, firing
@@ -22015,6 +22020,7 @@ m_RequestedPlayerHealth
 m_Resolution
 m_ResponseContexts
 m_RetakeRules
+m_RetakesMVPBoostExtraUtility
 m_RopeFlags
 m_RopeLength
 m_RotationSpeed
@@ -22569,6 +22575,8 @@ m_bRemoveable
 m_bRenderInPSPM
 m_bRenderInTablet
 m_bResumeZoom
+m_bRetakesHasDefuseKit
+m_bRetakesMVPLastRound
 m_bReversed
 m_bRolledOutroCredits
 m_bRoundInProgress
@@ -24050,6 +24058,9 @@ m_iReapplyProvisionParity
 m_iRefName
 m_iReloadHudHintCount
 m_iRespawnFrames
+m_iRetakesMVPBoostItem
+m_iRetakesOffering
+m_iRetakesOfferingCard
 m_iRetrievePlayer
 m_iRetrieveWaitForSpeak
 m_iRopeMaterialModelIndex
@@ -24672,6 +24683,7 @@ m_nMapId2
 m_nMapId3
 m_nMapId4
 m_nMapId5
+m_nMatchSeed
 m_nMaterial
 m_nMaxBurstShots
 m_nMaxCPULevel
