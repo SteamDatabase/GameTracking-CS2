@@ -1,7 +1,8 @@
 includeTestString <- "!!!INCLUDE SUCCESS!!!"
 
 SceneTable <- {}
-if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
+//if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
+if (self.GetName() == "@radiovoice")
 	{
 		printl(self.GetName() + " INCLUDING COOPRADIO SCENE TABLE FELIX AUTUMN!!!!" );
 
@@ -155,7 +156,135 @@ if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
 		//Felix - Well it would have been handy if we found this first, now wouldn't it -  believe me the advance team is gonna hear about this.  Extraction should be there any moment, let's get you back home and figure out a way to crack that door.
 		SceneTable["felix_broken_fang_mission1_end_alt_01"] <- {vcd=CreateSceneEntity("scenes/coop_radio/autumn/felix_broken_fang_mission1_end_alt_01.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
 		
+		// M2
 		
+		//200
+		//Felix - I was hoping to find a way to breach the Phoenix facility without having to ask Booth for a favor, but desperate times and blah blah blah. The point is, we got the the explosives we need to knock Valeria's front door down.  It's time to finish Operation Broken Fang.
+		SceneTable["felix_broken_fang_pt2_intro"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_intro.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//201
+		//Felix - Do you know what sort of deal I had to make with Booth to get that Breach Charge? You're not leavin' it behind, you're gonna use that to blow a hole through a damn door.
+		SceneTable["felix_broken_fang_pt2_breach_charge_pickup"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_breach_charge_pickup.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+	
+		//202
+		//Felix - Are you daft?  Pick up the charge and get moving, Operator!
+		SceneTable["felix_broken_fang_pt2_breach_charge_nag"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_breach_charge_nag.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//203
+		//Felix - Valeria knows her facility is exposed, be careful, they’re going to be on high alert.
+		SceneTable["felix_broken_fang_pt2_elevator_down"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_elevator_down.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//204
+		//Felix - Here's hoping Booth's merchandise works as advertised.  Place the breach charge and stand back…it's time we knock on that door and say hello.
+		SceneTable["felix_broken_fang_pt2_breach_ready"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_breach_ready.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//205
+		//Felix - Well… shit.  In hindight low balling booth for 1 charge was probably not the best idea.  That one's on me, sorry mate.  Time to improvise and find a way around that door.
+		SceneTable["felix_broken_fang_pt2_second_breach"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_second_breach.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//206
+		//Felix - Christ, it's some sort of training facility… 
+		SceneTable["felix_broken_fang_pt2_mirage_area_entry"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_mirage_area_entry.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//207
+		//Felix - Brilliant work, Operator… now lets keep moving, we bought some time: we can't afford to waste it.
+		SceneTable["felix_broken_fang_pt2_mirage_fight_end"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_mirage_fight_end.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//208
+		//Felix - "Under construction" eh? Let's take a peek inside… maybe we can see what Valeria's next move is gonna be…
+		SceneTable["felix_broken_fang_pt2_main_hall"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_main_hall.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//209
+		//Felix - Wow that looks expensive… wonder what it does…
+		SceneTable["felix_broken_fang_pt2_sim_entry"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_sim_entry.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//210
+		//Felix - What the hell is this?
+		SceneTable["felix_broken_fang_pt2_sim_entry_alt"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_sim_entry_alt.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//211
+		//Felix - It’s another layout… don't recognize it… could be where the Phoenix is planning to strike next, though.  Make your way to that control room, and see what you can find out.
+		SceneTable["felix_broken_fang_pt2_ancient_entry"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_ancient_entry.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//212
+		//Felix - We're close to what Valeria is hiding, I can feel it.  Get to that control room and secure as much intel as you can.
+		SceneTable["felix_broken_fang_pt2_ancient_fight"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_ancient_fight.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//213
+		//Felix - Search the room and grab any piece of intel you can find!  We'll sort through it later.
+		SceneTable["felix_broken_fang_pt2_ancient_intel_search"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_ancient_intel_search.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//214
+		//Felix - We're out of time, get the hell out of there!
+		SceneTable["felix_broken_fang_pt2_ancient_intel_picked_up"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_ancient_intel_picked_up.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//215
+		//Felix - I just got reports of an inbound vehicle closing in on the farm, and it's not one of ours.  If you don't hurry, Valeria may be able to cut off your extraction route.
+		SceneTable["felix_broken_fang_pt2_nearing_exit"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_nearing_exit.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//216
+		//Felix - Bollocks, this is bad.  
+		SceneTable["felix_broken_fang_pt2_exit_blocked"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_exit_blocked.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//217
+		//Felix - This isn't some fanatic with knife and an AK, that's a goddamn tank!  Don't make your move until you find something that will actually damage that thing.
+		SceneTable["felix_broken_fang_pt2_final_room"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_final_room.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//218
+		//Felix - I was hoping for a rocket launcher or something, but since we can't blow up the tank we're gonna have to settle for cooking the bastard driving it.
+		SceneTable["felix_broken_fang_pt2_molotovs_found"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_molotovs_found.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//219
+		//Felix - Use the molotovs to take out the tank!
+		SceneTable["felix_broken_fang_pt2_molotov_nag"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_molotov_nag.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//220
+		//Felix - That’s it! Again!
+		SceneTable["felix_broken_fang_pt2_molotov_hit1"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_molotov_hit1.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//221
+		//Felix - Keep it up!
+		SceneTable["felix_broken_fang_pt2_molotov_hit2"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_molotov_hit2.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//222
+		//Felix - Nicely done!
+		SceneTable["felix_broken_fang_pt2_molotov_hit3"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_molotov_hit3.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//223
+		//Felix - I'm not gonna lie, when that tank showed up I was worried I'd have to be delivering some bad news tonight.  But you kept your wits about you and dealt a helluva blow to The Phoenix.  I'm honored to have you on the Taskfoce.  Now lets get you home so you can have the celebration heroes like you deserve.
+		SceneTable["felix_broken_fang_pt2_end"] <- {vcd=CreateSceneEntity("scenes/m2/felix_broken_fang_pt2_end.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}
+		
+		//300
+		//Valeria - It would appear that the tyrants have breached our house of learning.  Recruits… report to Mirage Sector and show these interlopers what The Phoenix has taught you.  
+		SceneTable["valeria_broken_fang_pt2_mirage_wave1"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_mirage_wave1.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}		
+		
+		//301
+		//Valeria - The despots are still in the Mirage Sector, reenforcements are needed, now!
+		SceneTable["valeria_broken_fang_pt2_mirage_wave2"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_mirage_wave2.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
+		
+		//302
+		//Valeria - For the love of god, KILL THEM!
+		SceneTable["valeria_broken_fang_pt2_mirage_wave3"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_mirage_wave3.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
+		
+		//303
+		//Valeria - Blood has been spilt in these hallowed halls by the Coalition Taskforce.  Our brothers and sisters in The Struggle are dead, and their murderers have advanced to Hall 3.  Greet them with the respect these murderers deserve.
+		SceneTable["valeria_broken_fang_pt2_ancient_fight"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_ancient_fight.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
+		
+		//304
+		//Valeria - Felix… I know you can hear me.  Your thugs are a long way from home and they will answer for your transgressions here.  I promise you, they will be found… and they will suffer on your behalf.
+		SceneTable["valeria_broken_fang_pt2_intel_search_alt01"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_intel_search_alt01.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
+		
+		//305
+		//Valeria - Lock it down!  No one leaves the facility or the farm!
+		SceneTable["valeria_broken_fang_pt2_lock_down"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_lock_down.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
+		
+		//306
+		//Valeria - No more games Felix.  It's over.  Don’t let your stupidity masquerade as courage.  I'm going to be perfectly clear: your team will die… but how much they suffer is up to you.  Surrender.
+		SceneTable["valeria_broken_fang_pt2_final_room"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_final_room.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
+		
+		//307
+		//Valeria - well well well
+		SceneTable["valeria_broken_fang_pt2_facility_intro"] <- {vcd=CreateSceneEntity("scenes/m2/valeria_broken_fang_pt2_facility_intro.vcd"),postdelay=0.00,next=null,char="radiovoice",predelay=0.00}	
 		
 		//General
 		
@@ -261,7 +390,8 @@ if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
 
 
 SceneTableLookup <- {}
-if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
+//if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
+if (self.GetName() == "@radiovoice")
 	{
 		printl(self.GetName() + " POPULATING LIST!!!!" );
 		SceneTableLookup[1] <- "felix_broken_fang_mission1_intro_alt_01_tk01"
@@ -301,6 +431,38 @@ if (curMapName=="coop_autumn" && self.GetName() == "@radiovoice")
 		SceneTableLookup[114] <- "felix_broken_fang_mission1_elevator_out_alt_01"
 		SceneTableLookup[115] <- "felix_broken_fang_mission1_elevator_out_tk01"
 		SceneTableLookup[116] <- "felix_broken_fang_mission1_end_alt_01"
+		SceneTableLookup[200] <- "felix_broken_fang_pt2_intro"
+		SceneTableLookup[201] <- "felix_broken_fang_pt2_breach_charge_pickup"
+		SceneTableLookup[202] <- "felix_broken_fang_pt2_breach_charge_nag"
+		SceneTableLookup[203] <- "felix_broken_fang_pt2_elevator_down"
+		SceneTableLookup[204] <- "felix_broken_fang_pt2_breach_ready"
+		SceneTableLookup[205] <- "felix_broken_fang_pt2_second_breach"
+		SceneTableLookup[206] <- "felix_broken_fang_pt2_mirage_area_entry"
+		SceneTableLookup[207] <- "felix_broken_fang_pt2_mirage_fight_end"
+		SceneTableLookup[208] <- "felix_broken_fang_pt2_main_hall"
+		SceneTableLookup[209] <- "felix_broken_fang_pt2_sim_entry"
+		SceneTableLookup[210] <- "felix_broken_fang_pt2_sim_entry_alt"
+		SceneTableLookup[211] <- "felix_broken_fang_pt2_ancient_entry"
+		SceneTableLookup[212] <- "felix_broken_fang_pt2_ancient_fight"
+		SceneTableLookup[213] <- "felix_broken_fang_pt2_ancient_intel_search"
+		SceneTableLookup[214] <- "felix_broken_fang_pt2_ancient_intel_picked_up"
+		SceneTableLookup[215] <- "felix_broken_fang_pt2_nearing_exit"
+		SceneTableLookup[216] <- "felix_broken_fang_pt2_exit_blocked"
+		SceneTableLookup[217] <- "felix_broken_fang_pt2_final_room"
+		SceneTableLookup[218] <- "felix_broken_fang_pt2_molotovs_found"
+		SceneTableLookup[219] <- "felix_broken_fang_pt2_molotov_nag"
+		SceneTableLookup[220] <- "felix_broken_fang_pt2_molotov_hit1"
+		SceneTableLookup[221] <- "felix_broken_fang_pt2_molotov_hit2"
+		SceneTableLookup[222] <- "felix_broken_fang_pt2_molotov_hit3"
+		SceneTableLookup[223] <- "felix_broken_fang_pt2_end"
+		SceneTableLookup[300] <- "valeria_broken_fang_pt2_mirage_wave1"
+		SceneTableLookup[301] <- "valeria_broken_fang_pt2_mirage_wave2"
+		SceneTableLookup[302] <- "valeria_broken_fang_pt2_mirage_wave3"
+		SceneTableLookup[303] <- "valeria_broken_fang_pt2_ancient_fight"
+		SceneTableLookup[304] <- "valeria_broken_fang_pt2_intel_search_alt01"
+		SceneTableLookup[305] <- "valeria_broken_fang_pt2_lock_down"
+		SceneTableLookup[306] <- "valeria_broken_fang_pt2_final_room"
+		SceneTableLookup[307] <- "valeria_broken_fang_pt2_facility_intro"
 		SceneTableLookup[9001] <- "mx_ally_down_05"
 		SceneTableLookup[9002] <- "mx_ally_down_04"
 		SceneTableLookup[9003] <- "mx_ally_down_03"
