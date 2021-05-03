@@ -23,3 +23,4 @@ models/props_street/flagpole.mdl
 models/de_treasure/skeleton_01.mdl
 models/de_treasure/skeleton_02.mdl
 models/de_treasure/a_trims_skulls.mdl
+models/props/mexico/calavera_decor.mdl
