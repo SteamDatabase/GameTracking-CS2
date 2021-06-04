@@ -151,7 +151,7 @@ function DrawAxis(pos,s,nocull,time)
 //Draw the bounding box of a given entity.
 function DrawEntityBBox(ent,r,g,b,a,time)
 {
-	DebugDrawBox(ent.GetOrigin(),ent.GetBoundingMins(), ent.GetBoundingMaxs(), r, g, b, a, time)
+	DebugDrawBoxAngles(ent.GetOrigin(),ent.GetBoundingMins(), ent.GetBoundingMaxs(), ent.GetAngles(), r, g, b, a, time)
 }
 
 //Draws a line along a given normal.

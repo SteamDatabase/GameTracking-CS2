@@ -535,7 +535,7 @@
 	{
 		"ControlName"	"ComboBox"
 		"fieldName"		"PaintKitComboBox"
-		"xpos"			"372"
+		"xpos"			"268"
 		"ypos"			"612"
 		"wide"			"200"
 		"tall"			"20"
@@ -550,7 +550,7 @@
 	{
 		"ControlName"	"Button"
 		"fieldName"		"Save"
-		"xpos"			"576"
+		"xpos"			"472"
 		"ypos"			"612"
 		"wide"			"100"
 		"tall"			"20"
@@ -571,7 +571,7 @@
 	{
 		"ControlName"	"Button"
 		"fieldName"		"SaveAs"
-		"xpos"			"680"
+		"xpos"			"576"
 		"ypos"			"612"
 		"wide"			"100"
 		"tall"			"20"
@@ -592,7 +592,7 @@
 	{
 		"ControlName"	"Button"
 		"fieldName"		"Load"
-		"xpos"			"784"
+		"xpos"			"680"
 		"ypos"			"612"
 		"wide"			"100"
 		"tall"			"20"
@@ -607,6 +607,27 @@
 		"brighttext"	"0"
 		"wrap"			"0"
 		"Command"		"load:-1,TXT"
+		"Default"		"0"
+	}
+	"Import"
+	{
+		"ControlName"	"Button"
+		"fieldName"		"Import"
+		"xpos"			"784"
+		"ypos"			"612"
+		"wide"			"100"
+		"tall"			"20"
+		"autoResize"	"0"
+		"pinCorner"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"20"
+		"labelText"		"#Workshop_Preview_Import"
+		"textAlignment"	"center"
+		"dulltext"		"0"
+		"brighttext"	"0"
+		"wrap"			"0"
+		"Command"		"import:-3,TGA"
 		"Default"		"0"
 	}
 	"Submit"
