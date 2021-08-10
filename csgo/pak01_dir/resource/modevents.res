@@ -85,31 +85,31 @@
 	"bomb_beginplant"
 	{
 		"userid"	"short"		// player who is planting the bomb
-		"site"		"short"		// bombsite index
+		"site"		"long"		// bombsite entindex
 	}
 
 	"bomb_abortplant"
 	{
 		"userid"	"short"		// player who is planting the bomb
-		"site"		"short"		// bombsite index
+		"site"		"long"		// bombsite entindex
 	}
 
 	"bomb_planted"
 	{
 		"userid"	"short"		// player who planted the bomb
-		"site"		"short"		// bombsite index
+		"site"		"long"		// bombsite entindex
 	}
 	
 	"bomb_defused"
 	{
 		"userid"	"short"		// player who defused the bomb
-		"site"		"short"		// bombsite index
+		"site"		"long"		// bombsite entindex
 	}
 	
 	"bomb_exploded"
 	{
 		"userid"	"short"		// player who planted the bomb
-		"site"		"short"		// bombsite index
+		"site"		"long"		// bombsite entindex
 	}
 	
 	"bomb_dropped"
