@@ -3129,9 +3129,9 @@
 			"camera_preset_add"   "pos[350 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 14
 			"camera_preset_add"   "pos[370 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 15
 
-			//inspect
-			"camera_preset_add"   "pos[382.11 -54.77 28.43] pivot[-0.74 0.81 42.31] orient[-2.06 171.74 0.00] fov[20.0]" // 16 inspect unzoomed
-			"camera_preset_add"   "pos[124.97 -16.83 62.49] pivot[0.13 1.29 64.50]  orient[-0.91 171.74 0.00] fov[20.0]" // 17 inspect zoomed
+			//inspect ( continued at 26)
+			"camera_preset_add"   "pos[382.11 -54.77 28.43] pivot[-0.74 0.81 42.31] orient[-2.06 171.74 0.00] fov[20.0]" //	inspect unzoomed 	4x3 or 5x4  // 16
+			"camera_preset_add"   "pos[124.97 -16.83 62.49] pivot[0.13 1.29 64.50]  orient[-0.91 171.74 0.00] fov[20.0]" //	inspect zoomed		4x3 or 5x4  // 17
 
 			// buymenu
 			"camera_preset_add"   "pos[226.06 73.87 64.82] pivot[-1.00 0.66 53.36] orient[2.75 -162.13 0.00] fov[20.0]"// 18 buymenu
@@ -3142,6 +3142,19 @@
 
 			// operation item store inspect hover
 			"camera_preset_add"   "pos[97.52 -14.58 108.28] pivot[-0.12 -0.80 67.50] orient[22.47 171.97 0.00] fov[20.0]" //21 Position 
+
+			// 4 more camera positions for end of match formations. Continues from 15.
+			"camera_preset_add"   "pos[390 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 22
+			"camera_preset_add"   "pos[410 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 23
+			"camera_preset_add"   "pos[430 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 24
+			"camera_preset_add"   "pos[450 0 55] pivot<camera_target> orient[-0.23 180 0.00] fov[20.0]" // 25
+
+			// more inspect ( continued from 17)
+			"camera_preset_add"   "pos[535.63 -77.05 22.82] pivot[-0.74 0.81 42.31] orient[-2.06 171.74 0.00] fov[20.0]" //	inspect unzoomed 	16x9  // 26
+			"camera_preset_add"   "pos[173.11 -23.82 61.72] pivot[0.13 1.29 64.50] orient[-0.91 171.74 0.00] fov[20.0]"  //	inspect zoomed   	16x9  // 27
+			"camera_preset_add"   "pos[703.05 -101.66 17.83] pivot[-0.74 0.51 43.41] orient[-2.06 171.74 0.00] fov[20.0]"//	inspect unzoomed  	21x9  // 28
+			"camera_preset_add"   "pos[225.99 -31.50 60.87] pivot[0.13 1.29 64.50] orient[-0.91 171.74 0.00] fov[20.0]"  //	inspect zoomed  	21x9  // 29
+
 		}
 
 	}
@@ -3610,4 +3623,41 @@
 			"camera_preset_add"   "pos[182.70 -28.86 109.65] pivot[1.06 0.00 -7.41] orient[32.48 170.97 0.00] fov[29.3]" //out
 		}
 	}
+	
+	"op11_coin"
+	{
+		"rule"
+		{
+			"model_partial" "operation_11_"
+		}
+		"config"
+		{
+			"camera_offset"   "41.66 6.47 14.25"
+			"camera_orient"   "7.27 -171.38 0.00"
+			"orbit_pivot"     "0.17 0.18 8.90"
+			"root_camera_fov"     "54.0"
+			"light_directional_clearall" "1"
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.62 0.64 0.83} dir[-0.77 -0.04 -0.63] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{4.35 4.35 4.35} dir[-0.19 0.98 -0.06] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.54 0.57 0.60} dir[-0.34 -0.76 -0.55] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.16 0.16 0.16} dir[-0.25 0.05 -0.97] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "15.48 -2.03 21.14"
+			"shadow_light_orient"        "53.56 172.53 0.00"
+			"shadow_light_brightness"    "3.86"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "53.9"
+			"shadow_light_vfov"       "53.9"
+			"shadow_light_znear"       "12.6"
+			"shadow_light_zfar"       "31.6"
+			"shadow_light_atten_farz"       "63.2"
+			"light_ambient"              "[0.03 0.03 0.03]"
+			"item_orient"		"-10.0 0.0 0.0"
+			"item_rotate"		"y[-20 20]"
+			"root_mdl"					 ""
+		}
+	}
+	
 }

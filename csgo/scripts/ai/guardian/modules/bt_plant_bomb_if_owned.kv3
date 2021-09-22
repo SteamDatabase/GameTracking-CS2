@@ -21,14 +21,41 @@
 							weapon = "BEST"
 						},
 						{
-							type = "action_choose_bomb_site_area"
-							input = "@mp_guardian_target_site"
-							output = "BombSiteArea"
-						},
-						{
-							type = "action_choose_random_waypoint"
-							input = "BombSiteArea"
-							output = "TargetArea"
+							type = "selector"
+							children =
+							[
+								{
+									type = "sequencer"
+									children =
+									[
+										{
+											type = "condition_is_equal"
+											source = "@mp_plant_c4_anywhere"
+											destination = 1
+										},
+										{
+											type = "action_choose_guardian_bomb_plant_location"
+											output = "TargetArea"
+										}
+									]
+								},
+								{
+									type = "sequencer"
+									children =
+									[
+										{
+											type = "action_choose_bomb_site_area"
+											input = "@mp_guardian_target_site"
+											output = "BombSiteArea"
+										},
+										{
+											type = "action_choose_random_waypoint"
+											input = "BombSiteArea"
+											output = "TargetArea"
+										}
+									]
+								}
+							]
 						},
 						{
 							type = "action_move_to"
@@ -39,7 +66,18 @@
 							threat = "NearestThreatMemory"
 						},
 						{
-							type = "condition_is_at_bomb_site"
+							type = "selector"
+							children =
+							[
+								{
+									type = "condition_is_equal"
+									source = "@mp_plant_c4_anywhere"
+									destination = 1
+								},
+								{
+									type = "condition_is_at_bomb_site"
+								}
+							]
 						},
 						{
 							type = "action_equip_item"
