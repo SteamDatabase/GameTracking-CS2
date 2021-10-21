@@ -2993,6 +2993,43 @@
 		}
 	}
 
+		"pgl_pickem_2021"
+	{
+		"rule"
+		{
+			"model_partial" "inventory_items/pgl_pickem_2021"
+		}
+		"config"
+		{
+			"camera_offset"   "0.21 0.02 13.70"
+			"camera_orient"   "90.00 178.76 0.00"
+			"orbit_pivot"     "0.21 0.02 0.00"
+			"root_camera_fov"     "60"
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.16 0.16 0.16} dir[-0.01 0.02 1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.70 0.79 0.85} dir[0.48 -0.52 -0.71] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.04 0.05 0.05} dir[-0.10 -0.20 -1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.03 0.03 0.03} dir[0.00 0.00 -1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "-29.75 20.14 42.52"
+			"shadow_light_orient"        "50.35 -32.59 0.00"
+			"shadow_light_brightness"    "1.00"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "53.9"
+			"shadow_light_vfov"       "53.9"
+			"shadow_light_znear"       "23.9"
+			"shadow_light_zfar"       "59.7"
+			"shadow_light_atten_farz"       "119.4"
+			"light_ambient"              "[0.00 0.00 0.00]"
+			"item_orient"		"-10.0 0.0 0.0"
+			"item_rotate"		"z[20 -20]"
+			"root_mdl"					 ""
+
+			"camera_preset_add"   "pos[0.22 0.01 13.05] pivot[0.22 0.01 0.45] orient[90.00 179.46 0.00] fov[30.5]"
+		}
+	}
+
 	"op09"
 	{
 		"rule"
@@ -3473,7 +3510,7 @@
 			"camera_orient"   "66.92 -104.28 0.00"
 			"orbit_pivot"     "0.93 0.66 1.52"
 			"root_camera_fov"     "54.0"
-			"item_rotate" "y[-10 5]" //- x horizontal, z vertical
+			"item_rotate" "y[-15 15] z[-10 10]" //- x horizontal, z vertical
 
 			"light_directional_clearall" "1"
 			"light_directional_add"      "rgb{0.77 0.94 1.00} dir[0.15 -0.39 -0.91] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
@@ -3492,7 +3529,7 @@
 			"shadow_light_atten_farz"       "119.4"
 			"light_ambient"              "[0.06 0.06 0.06]"
 
-			"camera_preset_add"   "pos[4.88 53.53 144.79] pivot[-0.38 3.69 -7.05] orient[71.74 -96.03 0.00] fov[39.8]" // zoomed out.
+			"camera_preset_add"   "pos[17.93 96.37 104.27] pivot[-0.15 7.73 -7.89] orient[51.11 -101.53 0.00] fov[40]" // zoomed out.
 			"camera_preset_add"   "pos[31.70 5.11 128.97] pivot[-8.17 0.07 -4.72] orient[73.27 -172.81 0.00] fov[39.8]" // opening scroll
 			"camera_preset_add"   "pos[120.13 49.61 121.84] pivot[-15.86 -4.33 7.64] orient[37.98 -158.37 0.00] fov[39.8]" // open anim
 		}

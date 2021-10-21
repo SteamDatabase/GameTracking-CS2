@@ -1525,6 +1525,10 @@ $tK
 %sCurrent time: %6.3f
 %sLock acquired: %s:%d
 %sRecent NPC speech:
+%sTeam "CT" is unset.
+%sTeam "TERRORIST" is unset.
+%sTeam playing "CT": %s
+%sTeam playing "TERRORIST": %s
 %s\%s
 %s\*
 %s\Settings
@@ -2225,6 +2229,7 @@ $tK
 1,1,2
 1.0 1.0 1.0
 1.05
+1.0f
 1.1.3
 1.2.5
 1.25
@@ -3537,6 +3542,7 @@ $tK
 16CActivityDataOps
 16CBaseAchievement
 16CBaseRopePhysics
+16CBtActionStandUp
 16CBtNodeComposite
 16CBtNodeCondition
 16CBtNodeDecorator
@@ -3811,6 +3817,7 @@ $tK
 18CBaseServerVehicle
 18CBaseTransmitProxy
 18CBotDoorEnumerator
+18CBtActionCustomBuy
 18CBtActionEquipItem
 18CBtDecoratorInvert
 18CBtDecoratorMemory
@@ -4193,6 +4200,7 @@ $tK
 21CBaseWeaponWorldModel
 21CBreakModelsPrecached
 21CBtActionAcquireItems
+21CBtDecoratorGameEvent
 21CBtDecoratorRandomInt
 21CBtDecoratorRemoveKey
 21CBtDecoratorTagEntity
@@ -4486,6 +4494,7 @@ $tK
 25CAI_ExpresserWithFollowup
 25CAttributeContainerPlayer
 25CBroadcastRecipientFilter
+25CBtActionDropActiveWeapon
 25CBtActionSetGlobalCounter
 25CBtDecoratorPickerVisible
 25CBtNodeConditionIsGreater
@@ -4685,6 +4694,7 @@ $tK
 29CBasePlayerSendTableExtension
 29CBtActionChooseRandomWaypoint
 29CBtActionCompareGlobalCounter
+29CBtActionInspectCurrentWeapon
 29CBtActionParachutePositioning
 29CBtDecoratorHidingSpotService
 29CBtDecoratorPickerGrenadeType
@@ -5223,6 +5233,7 @@ $tK
 50CMsgGCCStrike15_v2_MatchListRequestLiveGameForUser
 50CMsgGCCStrike15_v2_MatchListRequestRecentUserGames
 50CMsgGCCStrike15_v2_MatchListRequestTournamentGames
+50CMsgGCCStrike15_v2_MatchListTournamentOperatorMgmt
 50CMsgGCCStrike15_v2_MatchmakingGC2ClientUpdate_Note
 50CQuest_PublisherAddCommunityItemsToPlayer_Response
 510
@@ -7263,6 +7274,7 @@ Accel/Deaccel (cosine)
 Access of EHANDLE/CHandle for class %s:%p in destructor!
 Account is Convicted
 Account is Untrusted
+AccountBalance
 AccumulatePose
 Achievement count increased for %s: %d/%d
 Achievement failed: %s (%s)
@@ -7669,6 +7681,7 @@ BlendBonesMode
 Blind
 Blinded
 Blinded: holdTime = %3.2f, fadeTime = %3.2f, alpha = %3.2f
+BlindnessPercentage
 Block size: %-11s Alloc'd: %8d Num blobs: %5d (%s)
 BlockPaddingScheme
 BlockSpeechUntil(%f) %f
@@ -7698,6 +7711,7 @@ Bogus virtual array access
 BoltWidth
 Bomb Damage is %.0f, Radius is %.0f
 Bomb Plant
+BombIsBeingDefused
 BombPlants
 BombTargetUse does nothing
 BombX
@@ -8056,8 +8070,11 @@ CBtActionAimProjectile
 CBtActionAttack
 CBtActionCombatPositioning
 CBtActionCrouch
+CBtActionCustomBuy
+CBtActionDropActiveWeapon
 CBtActionEquipItem
 CBtActionEquipWeapon
+CBtActionInspectCurrentWeapon
 CBtActionJump
 CBtActionLookAt
 CBtActionMoveTo
@@ -8065,6 +8082,7 @@ CBtActionParachutePositioning
 CBtActionPullTrigger
 CBtActionReload
 CBtActionSecondaryAttack
+CBtActionStandUp
 CBtActionUse
 CBtNodeConditionHasParachute
 CBtNodeConditionIsInvSlotEmpty
@@ -11120,6 +11138,7 @@ Game.TeamWin%d
 Game.YourTeamLost
 Game.YourTeamWon
 GameData: Too many community maps installed, not advertising for map id "%llu (0x%s)"
+GameEvents
 GameModes.txt
 GameMovement001
 GameStartFrame
@@ -12911,6 +12930,8 @@ MatchStats/Totals/UtilityDamage
 MatchStats/Totals/UtilityEnemies
 MatchStats/Totals/UtilitySuccesses
 MatchStats/UtilityDamage/round%d
+MatchStatus:
+MatchStatus: Score: %d:%d on map "%s" RoundsPlayed: %d
 Matched '%s' -> '%s'
 Matched rule '%s',
 Material %s used by particle systems cannot use proxies!
@@ -16417,8 +16438,6 @@ Team deathmatch victory points to award for collecting enemy dogtags
 Team deathmatch victory points to award for enemy kill
 Team deathmatch victory points to award for kill with bonus weapon
 Team for queue player#%d/%d (%x - %s) on %s team for %s teams: %s
-Team playing "CT": %s
-Team playing "TERRORIST": %s
 Teammate said what I was going to say - shutting up.
 Teamplay
 Teams are unbalanced when one team has this many more players than the other team. (0 disables check)
@@ -17186,6 +17205,8 @@ WeaponID
 WeaponLength
 WeaponPreference
 WeaponPurchases/DefIndex_%d
+WeaponPurchasesRound/DefIndex%d/count
+WeaponPurchasesRound/DefIndex%d/round
 WeaponResources
 Weapon_Knife.Deploy
 Weapon_Knife.Hit
@@ -17336,6 +17357,8 @@ WriteVec3Normal called with no active message
 Writes the selected set to disk for merging into another mesh via nav_merge_mesh.
 Wrong JPEG library version: library is %d, caller expects %d
 X
+X-LogBytes-BeginOffset
+X-LogBytes-EndOffset
 X-Server-Addr
 X-Server-Instance-Token
 X-Server-Unique-Token
@@ -17393,6 +17416,7 @@ Zrange
 [ AI BT ]: '%s': Jumping is not supported by this agent.
 [ AI BT ]: '%s': Looking is not supported by this agent.
 [ AI BT ]: '%s': Primary attack is not supported by this agent.
+[ AI BT ]: '%s': Purchasing is not supported by this agent.
 [ AI BT ]: '%s': Reloading is not supported by this agent.
 [ AI BT ]: '%s': Running is not supported by this agent.
 [ AI BT ]: '%s': Secondary attack is not supported by this agent.
@@ -17408,6 +17432,7 @@ Zrange
 [ AI BT ]: Element '%d' is not a waypoint.
 [ AI BT ]: Element '%d' is not an array.
 [ AI BT ]: Element '%d' is not an integer.
+[ AI BT ]: Item alias array '%s' missing from KV3 file.
 [ AI BT ]: Item array '%s' missing from KV3 file.
 [ AI BT ]: Memory to expire def item is not a table.
 [ AI BT ]: Param item is not a table.
@@ -17491,6 +17516,7 @@ Zrange
 [/url]
 [1:12][2:25][5:12][6:11]
 [A:%u:%u:%u]
+[AI BT] - GameEvents table is missing.
 [AI BT] - Unable to find convar '%s'.
 [AI BT] : only one level of indirection is supported when referencing Blackboard values.
 [AI BT] Error parsing node (type=%s).
@@ -18047,10 +18073,13 @@ action_commit_suicide
 action_compare_global_counter
 action_coordinated_buy
 action_crouch
+action_custom_buy
+action_drop_active_weapon
 action_equip_item
 action_equip_weapon
 action_flee_area_damage
 action_hide
+action_inspect_current_weapon
 action_jump
 action_look_at
 action_move_to
@@ -18064,6 +18093,7 @@ action_set_global_counter
 action_set_global_flag
 action_set_value_float
 action_set_value_vector
+action_standup
 action_teleport
 action_use
 action_wait
@@ -19130,7 +19160,9 @@ const google::protobuf::UnknownFieldSet& google::protobuf::UnknownField::group()
 const string& google::protobuf::UnknownField::length_delimited() const
 constant
 consumer_appid
+contains_patches_representing_organizations
 contains_stickers_autographed_by_proplayers
+contains_stickers_representing_organizations
 contextsubject
 contributionscore_assist
 contributionscore_bomb_defuse_major
@@ -19514,6 +19546,7 @@ decorator_bot_service
 decorator_buy_service
 decorator_dec_global_counter
 decorator_find_utility_strat
+decorator_game_event
 decorator_hiding_spot_service
 decorator_invert
 decorator_maybe
@@ -21271,6 +21304,7 @@ iszVal
 item time data: "%s<%d><%s>" %s "%s" for "%.2f"s
 item_
 item_*
+item_aliases
 item_ammo_ar2
 item_ammo_ar2_large
 item_ammo_pistol
