@@ -1848,7 +1848,7 @@
 			"root_mdl"					 ""
 			
 			// used in tournament journal
-			"camera_preset_add"   "pos[-24.55 0.72 16.55] pivot[-0.30 -0.06 15.22] orient[3.14 -1.83 0.00] fov[20.0]"
+			"camera_preset_add"   "pos[-31.78 1.05 18.05] pivot[-0.23 0.04 16.32] orient[3.14 -1.83 0.00] fov[20.0]"
 
 		}
 	}
