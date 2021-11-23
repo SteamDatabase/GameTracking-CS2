@@ -144,6 +144,7 @@ message CMsgSteamNetworkingP2PRendezvous {
 		optional .CMsgSteamDatagramCertificateSigned cert = 7;
 		optional uint32 to_virtual_port = 9;
 		optional uint32 from_virtual_port = 10;
+		optional string from_fakeip = 11;
 	}
 
 	message ConnectOK {
@@ -160,6 +161,13 @@ message CMsgSteamNetworkingP2PRendezvous {
 		optional .CMsgICERendezvous ice = 1;
 	}
 
+	message ApplicationMessage {
+		optional bytes data = 1;
+		optional uint64 msg_num = 2;
+		optional uint32 flags = 3;
+		optional uint32 lane_idx = 4;
+	}
+
 	optional string from_identity = 8;
 	optional fixed32 from_connection_id = 9;
 	optional string to_identity = 10;
@@ -174,6 +182,7 @@ message CMsgSteamNetworkingP2PRendezvous {
 	optional uint32 ack_reliable_msg = 11;
 	optional uint32 first_reliable_msg = 12;
 	repeated .CMsgSteamNetworkingP2PRendezvous.ReliableMessage reliable_messages = 13;
+	repeated .CMsgSteamNetworkingP2PRendezvous.ApplicationMessage application_messages = 15;
 }
 
 message CMsgSteamNetworkingICESessionSummary {
@@ -184,6 +193,10 @@ message CMsgSteamNetworkingICESessionSummary {
 	optional uint32 initial_ping = 4;
 	optional uint32 initial_score = 6;
 	optional uint32 negotiation_ms = 5;
+	optional uint32 best_route_kind = 16;
+	optional uint32 best_ping = 17;
+	optional uint32 best_score = 18;
+	optional uint32 best_time = 19;
 	optional uint32 selected_seconds = 12;
 	optional uint32 user_settings = 13;
 	optional uint32 ice_enable_var = 14;
