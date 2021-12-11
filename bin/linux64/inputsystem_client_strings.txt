@@ -11,6 +11,12 @@
 #INPUT_DEVICE_MOVE_NAV_CONTROLLER
 #INPUT_DEVICE_PSMOVE
 #INPUT_DEVICE_SHARPSHOOTER
+#base
+#base is NULL
+#empty#
+#include
+#include is NULL
+#int#
 $
 $tI
 %
@@ -18,14 +24,21 @@ $tI
 %-80s
 %-80s - %.80s
 %02x
+%d %d %d %d
 %d total counted strings.
+%f %f %f %f
+%hd
 %hu
 %i %i %i %i
 %i%s
 %lg
+%lld
+%llu
+%ls [wstring, len = %d]
 %s
 %s %s %s %s
 %s%d
+%s,
 %s/%s
 %s/bin/%s
 %u
@@ -141,12 +154,14 @@ $tI
 '
 (
 ( def. "%s" )
+(*%s*),
 )
 *
 +
 ,
 ,%03d
 -
+--- Number of Steam Input Actions parsed from steam_input_manifest.vdf: %d. ActionSets: %d. Of which are override layers: %d
 -->
 -1
 -allowdebug
@@ -167,12 +182,15 @@ $tI
 0123456789ABCDEF
 0123456789abcdef
 0@
+0x%016llX
 1
 10ConCommand
 10IAppSystem
 12CEmptyConVar
 12CInputSystem
 12IInputSystem
+13CCallbackBase
+13CCallbackImplILi32EE
 14CBaseAppSystemI12IInputSystemE
 14CBaseAppSystemI17IInputStackSystemE
 14ConCommandBase
@@ -191,8 +209,11 @@ $tI
 2
 20ConVar_ServerBounded
 21CUtlCStringConversion
+21IKeyValuesDumpContext
 23CSplitScreenAddedConVar
 23IConCommandBaseAccessor
+27IKeyValuesDumpContextAsText
+29CKeyValuesDumpContextAsDevMsg
 3
 4
 5
@@ -219,6 +240,7 @@ $tI
 </u>
 </ul>
 <<
+<< NULL >>
 <INVALID>
 <b>
 <br>
@@ -242,12 +264,16 @@ APP
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 A_BUTTON
 Analog axis range before a button press is registered.
+AnalogTrigger
 Automatically set to 1 if an xcontroller has been detected.
 B
 BACK
 BACKSPACE
 B_BUTTON
+Bad expression operator: '%c%c', expected C style operator
+Bad expression token: %c
 BuiltDebug
+Button
 C
 C0
 CAPSLOCK
@@ -255,9 +281,11 @@ CAPSLOCKTOGGLE
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CInputSystem::AttachToWindow: Cannot attach to two windows at once!
+CKeyValuesTokenReader::SeekBackOneToken: It is only possible to seek back one token at a time
 COLORCORRECTION_VERSION_1
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
+CThreadFastMutex::Lock(unsigned int, unsigned int) volatile
 CThreadRWLock::LockForWrite()
 CThreadRWLock::UnlockWrite()
 CThreadRWLock::WaitForRead()
@@ -272,16 +300,19 @@ CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
 CXXABI_1.3
+CkeyValuesTokenReader::SeekBackOneToken: No tokens read yet
 CommandLine
 ConMsg(char const*, ...)
 ConVar(%s) defined with infinite float value (%s)
 ConVarRef %s doesn't point to an existing ConVar
+Conditional Error: %s
 Controller %d, action set = %d
 Controllers connected: %d
 Could not open joystick %i: %s
 Couldn't play rumble (strength %.1f): %s
 CreateInterface
 D
+DEMO
 DLOPEN Error:%s
 Dead zone near the zero point to not report movement.
 DebugTextureInfo001
@@ -315,11 +346,13 @@ FmtStrVSNPrintf truncated to %d without QUIET_TRUNCATION specified!
 Found joystick '%s' (%s), but no recognized controller configuration for it.
 G
 G0
+GAMECONSOLE
 GAMEPAD
 GCC: (Ubuntu 4.8.1-2ubuntu1~12.04+steamrt2+srt1) 4.8.1
 GLIBC_2.14
 GLIBC_2.15
 GLIBC_2.2.5
+GLIBC_2.3
 GLIBC_2.3.4
 GLIBC_2.4
 GNU
@@ -333,6 +366,7 @@ I
 I0
 IMEManager001
 Ignoring hotplug remove for #%i, active joystick is #%i.
+In Game Actions
 Initializing joystick #%i and making it active.
 InputStackSystemVersion001
 InputSystemVersion001
@@ -394,18 +428,32 @@ KP_PLUS
 KP_RIGHTARROW
 KP_SLASH
 KP_UPARROW
+KV Conditional Evaluation Error
+KeyValues Error: %s in file %s line %d
+KeyValues::ParseIncludedKeys: Couldn't load included keyvalue file %s
+KeyValues::RecursiveSaveToFile: TODO, missing code for TYPE_COLOR.
+KeyValues::SaveToFile: couldn't open file "%s" in path "%s".
+KeyValuesSystem
 L
+LINUX
 LOG_GENERAL
+LOWVIOLENCE
 LWIN
 L_SHOULDER
 Linux PC
+LoadFromBuffer: missing {
+Local IGA file does not exist for this Mod. Partner site should be set to "Custom Configuration (Bundled with Game)" for this app for cloud settings to work.
+Local IGA file exists for this Mod, but it could not be parsed successfully.
+Local IGA file exists for this Mod. It will be used for canonical inputs instead of the Steam Workshop. Be sure to set "Custom Configuration (Bundled with Game)" on Steam Partner site for this App ID.
 Localize_001
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
+Logic Error in CExpressionEvaluator
 M
 MATCHFRAMEWORK_001
 MB
 MDLCache004
+MOD
 MOUSE1
 MOUSE2
 MOUSE3
@@ -425,6 +473,7 @@ MeshSystem001
 Module %s is a debug build
 Msg
 N
+N12CInputSystem49CCallbackInternal_OnSteamInputConfigurationLoadedE
 NAV_CONTROLLER
 NONE (Not Set)
 NUMLOCK
@@ -433,15 +482,19 @@ NetworkSystemVersion001
 No input system
 Not active device input system (%i x %i)
 O
+OSX
 P
 PAUSE
+POSIX
 POV_DOWN
 POV_LEFT
 POV_RIGHT
 POV_UP
+PS3
 PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
+Parsing ActionSetName: %s, Title: %s
 Passing joy_gamecontroller_config to SDL ('%s').
 Physics2 Interface ActorMgr v0.1
 Physics2 Interface ResourceMgr v0.1
@@ -461,6 +514,13 @@ RCTRL
 RSHIFT
 RWIN
 R_SHOULDER
+ReadToken overflow
+RecursiveLoadFromBuffer:  got EOF instead of keyname
+RecursiveLoadFromBuffer:  got NULL key
+RecursiveLoadFromBuffer:  got conditional between key and value
+RecursiveLoadFromBuffer:  got empty keyname
+RecursiveLoadFromBuffer:  got } in key
+RecursiveLoadFromBuffer:  recursion overflow
 RenderDevice001
 RenderDeviceMgr001
 RenderHardwareConfig001
@@ -556,9 +616,9 @@ STEAMINVENTORY_INTERFACE_V003
 STEAMMUSICREMOTE_INTERFACE_VERSION001
 STEAMMUSIC_INTERFACE_VERSION001
 STEAMPARENTALSETTINGS_INTERFACE_VERSION001
-STEAMREMOTESTORAGE_INTERFACE_VERSION014
+STEAMREMOTESTORAGE_INTERFACE_VERSION016
 STEAMSCREENSHOTS_INTERFACE_VERSION003
-STEAMUGC_INTERFACE_VERSION014
+STEAMUGC_INTERFACE_VERSION016
 STEAMUSERSTATS_INTERFACE_VERSION012
 STEAMVIDEO_INTERFACE_V002
 STICK1
@@ -570,10 +630,12 @@ Steam controller API is unavailable
 Steam controller mode: %s (%d)
 SteamAPI_GetHSteamUser
 SteamAPI_InitSafe
+SteamAPI_RegisterCallback
+SteamAPI_UnregisterCallback
 SteamClient020
-SteamController007
+SteamController008
 SteamFriends017
-SteamInput001
+SteamInput005
 SteamInternal_ContextInit
 SteamInternal_CreateInterface
 SteamInternal_FindOrCreateUserInterface
@@ -583,6 +645,7 @@ SteamMatchMakingServers002
 SteamNetworking006
 SteamUser021
 SteamUtils010
+StickPadGyro
 String %d: ref:%d %s
 Successfully Initialized Steam Controller Configuration.
 T
@@ -630,6 +693,8 @@ VStudioRender026
 V_AppendSlash: ran out of space on %s.
 V_MakeAbsolutePath: _getcwd failed.
 W
+WIN32
+WINDOWS
 Warning
 Warning:  %s = '%s' is infinite, clamping value.
 Which of the connected joysticks / gamepads to use (-1 means first found)
@@ -640,6 +705,7 @@ X
 X AXIS
 X AXIS NEG
 X AXIS POS
+X360
 X_BUTTON
 Xbox 360
 Y
@@ -680,21 +746,21 @@ _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
 __bss_start
+__ctype_b_loc
+__ctype_b_loc@@GLIBC_2.3
 __cxa_atexit
 __cxa_atexit@@GLIBC_2.2.5
 __cxa_finalize
 __cxa_finalize@@GLIBC_2.2.5
 __cxa_guard_abort
-__cxa_guard_abort@@CXXABI_1.3
 __cxa_guard_acquire
-__cxa_guard_acquire@@CXXABI_1.3
 __cxa_guard_release
-__cxa_guard_release@@CXXABI_1.3
 __dynamic_cast
 __dynamic_cast@@CXXABI_1.3
+__errno_location
+__errno_location@@GLIBC_2.2.5
 __gmon_start__
 __gxx_personality_v0
-__gxx_personality_v0@@CXXABI_1.3
 __pow_finite
 __pow_finite@@GLIBC_2.15
 __printf_chk
@@ -705,6 +771,8 @@ __stack_chk_fail
 __stack_chk_fail@@GLIBC_2.4
 __strcpy_chk
 __strcpy_chk@@GLIBC_2.3.4
+__swprintf_chk
+__swprintf_chk@@GLIBC_2.4
 __vsnprintf_chk
 __vsnprintf_chk@@GLIBC_2.3.4
 __vswprintf_chk
@@ -718,15 +786,20 @@ _xlsp
 `
 a
 abort@@GLIBC_2.2.5
+action_layers
+actions
 active action: %d
 archive
 aux
 b
 bin/
+borrow
 br
 bytes
 c
 c0
+cfg/controller_config/steam_input_manifest.vdf
+cfg\controller_config\steam_input_manifest.vdf
 chdir
 chdir@@GLIBC_2.2.5
 cheat
@@ -734,7 +807,9 @@ client
 clientcmd_can_execute
 command
 d
+delete
 dev_force_selected_device
+developer
 dl_iterate_phdr
 dl_iterate_phdr@@GLIBC_2.2.5
 dlclose
@@ -748,6 +823,7 @@ dlsym@@GLIBC_2.2.5
 e
 f
 failed to dlopen %s error=%s
+float( %f )
 free
 free@@GLIBC_2.2.5
 g
@@ -768,6 +844,7 @@ image not found
 img
 inputsystem
 inputsystem_client.so
+int( %d = 0x%X )
 isalnum
 isalnum@@GLIBC_2.2.5
 iscntrl
@@ -800,6 +877,7 @@ libpthread.so.0
 libstdc++.so.6
 libsteam_api.so
 libtier0_client.so
+libvstdlib_client.so
 m
 malloc
 malloc@@GLIBC_2.2.5
@@ -828,6 +906,7 @@ notconnected
 notify
 o
 p
+parent_set_name
 pause_menu
 pc_fake_controller
 pre
@@ -845,16 +924,19 @@ pthread_mutexattr_settype
 pthread_mutexattr_settype@@GLIBC_2.2.5
 pthread_once
 pthread_once@@GLIBC_2.2.5
+ptr( 0x%p )
 q
 r
 rand
 rand@@GLIBC_2.2.5
+rb
 replicated
 s
 s_pInterfaceRegs
 sc_joystick_map
 script
 server_can_execute
+set_layer
 singleplayer
 ss
 ss_added
@@ -875,6 +957,8 @@ strlen
 strlen@@GLIBC_2.2.5
 strncat
 strncat@@GLIBC_2.2.5
+strncpy
+strncpy@@GLIBC_2.2.5
 strnlen
 strnlen@@GLIBC_2.2.5
 strstr
@@ -889,8 +973,11 @@ strtoul
 strtoul@@GLIBC_2.2.5
 strtoull
 strtoull@@GLIBC_2.2.5
+swscanf
+swscanf@@GLIBC_2.2.5
 t
 t%
+title
 tolower
 tolower@@GLIBC_2.2.5
 toupper
@@ -900,6 +987,9 @@ towlower@@GLIBC_2.2.5
 towupper
 towupper@@GLIBC_2.2.5
 u
+u64( %lld = 0x%llX )
+unknown
+update
 user
 v
 vote_no
@@ -908,6 +998,7 @@ vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
 w
+wb
 wcschr
 wcschr@@GLIBC_2.2.5
 wcslen
@@ -916,6 +1007,10 @@ wcsncat
 wcsncat@@GLIBC_2.2.5
 wcsncpy
 wcsncpy@@GLIBC_2.2.5
+wcstof
+wcstof@@GLIBC_2.2.5
+wcstol
+wcstol@@GLIBC_2.2.5
 wcstombs
 wcstombs@@GLIBC_2.2.5
 x

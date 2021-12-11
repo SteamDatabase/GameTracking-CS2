@@ -1,0 +1,65 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "condition_owns_item"
+	item = "weapon_shield"
+	child =
+	{
+		type = "decorator_picker_reaction_time"
+		input = "ShortTermAttackMemory"
+		output = "Enemy"
+		child =
+		{
+			type = "decorator_ranker_dist"
+			input = "Enemy"
+			child =
+			{
+				type = "decorator_picker_max_score"
+				input = "Enemy"
+				child =
+				{
+					type = "condition_is_empty"
+					input = "Enemy"
+					negated = 1
+					child =
+					{
+						type = "condition_distance_less"
+						input = "Enemy"
+						distance_threshold_min = 120
+						distance_threshold_max = 550
+						negated = 1
+						child =
+						{
+							type = "parallel"
+							children =
+							[
+								{
+									type = "action_equip_item"
+									item = "weapon_shield"
+								},
+								{
+									type = "decorator_repeat"
+									child =
+									{
+										type = "action_aim"
+										input = "Enemy"
+										acquire_only = 1
+									}
+								},
+								{
+									type = "decorator_repeat"
+									child =
+									{
+										type = "action_move_to"
+										destination = "Enemy"
+										movement_type = "BT_ACTION_MOVETO_RUN"
+										route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+									}
+								}
+							]
+						}
+					}
+				}
+			}
+		}
+	}
+}

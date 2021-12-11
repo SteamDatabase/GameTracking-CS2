@@ -1,0 +1,62 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "decorator_picker_reaction_time"
+	input = "ShortTermInvestigateMemory"
+	output = "Event"
+	child =
+	{
+		type = "condition_is_empty"
+		input = "Event"
+		negated = 1
+		child =
+		{
+			type = "sequencer"
+			children =
+			[
+				{
+					type = "action_equip_weapon"
+					weapon = "weapon_shield"
+				},
+				{
+					type = "decorator_succeed"
+					child =
+					{
+						type = "decorator_picker_visible"
+						input = "Event"
+						output = "VisibleShortTermInvestigateMemory"
+						check_fov = 0
+						child =
+						{
+							type = "condition_is_empty"
+							input = "VisibleShortTermInvestigateMemory"
+							negated = 1
+							child =
+							{
+								type = "sequencer"
+								children =
+								[
+									{
+										type = "action_look_at"
+										input_location = "VisibleShortTermInvestigateMemory"
+									},
+									{
+										type = "action_wait"
+										wait_time_min = 0.2
+										wait_time_max = 0.5
+									}
+								]
+							}
+						}
+					}
+				},
+				{
+					type = "action_move_to"
+					destination = "Event"
+					movement_type = "BT_ACTION_MOVETO_RUN"
+					route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+					threat = "NearestThreatMemory"
+				}
+			]
+		}
+	}
+}

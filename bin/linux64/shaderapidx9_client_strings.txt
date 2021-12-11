@@ -7,6 +7,7 @@
 "%s" = "%s"
 "></img>
 #
+##### swap interval = %d     swap limit = %d #####
 #base
 #base is NULL
 #empty#
@@ -187,24 +188,38 @@ $tI
 -allowdebug
 -arbmode
 -debugdxsupport
+-disable_d3d9_hacks
 -disablemaxvertexshaderconstanthints
 -disallowhwmorph
+-exclusivefs
 -force_device_id
 -force_vendor_id
 -forceatifetch4
 -forcenovsync
+-gl_debug
+-gl_dump_strings
+-glmdisableclipplanes
+-glmdisabletrustblit
+-glmdualshaders
+-glmenableclipplanes
+-glmenabletrustblit
 -ignoredxsupportcfg
 -limitvsconst
 -maxdxlevel
+-mousegrab
 -no_compressed_verts
+-noexclusivefs
 -nogammaramp
 -noglslcontrolflow
+-nomousegrab
+-noshaderapi
 -nosrgb
 -nouserclip
 -shader
 -shadersondemand
 -tools
 -valveinternal
+-vulkan
 -xlsp
 .
 .%c
@@ -212,6 +227,7 @@ $tI
 ../bin/dxsupport.cfg
 ./
 .\
+.bmp
 .ekv
 .pfm
 .psd
@@ -237,9 +253,12 @@ $tI
 12CEmptyConVar
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
 12CTempMeshDX8
+12GLMDisplayDB
 12IIndexBuffer
+12ILauncherMgr
 13CShaderAPIDx8
 13CShaderBufferI11ID3DXBufferE
+13IShaderAPIDX8
 13IShaderBuffer
 13IShaderDevice
 13IShaderShadow
@@ -293,12 +312,14 @@ $tI
 3
 333?CShaderAPIDX8::BlitTextureBits: couldn't lock texture rect
 4
+400
 5
 5IMesh
 6
 6"
 6ConVar
 7
+7CSDLMgr
 7IConVar
 8
 8CFmtStrNILi256ELb0EE
@@ -456,6 +477,7 @@ ConVarRef %s doesn't point to an existing ConVar
 Conditional Error: %s
 CopyToMeshBuilder called on something other than a temp mesh.
 Could not find base GL shader cache file
+Could not find required OpenGL entry point '%s'! Either your video card is unsupported, or your OpenGL driver needs to be updated.
 Could not find user GL shader cache file
 Could not link OpenGL shaders
 Could not load program cache file %s
@@ -465,6 +487,7 @@ Count
 CreateDynamicIndexBuffers
 CreateDynamicVertexBuffers
 CreateEmptyColorMesh
+CreateGameWindow failed
 CreateIndexBuffer failed!
 CreateInterface
 CreatePreTessPatchVertexBuffers
@@ -480,6 +503,7 @@ D24X4S4
 D24X8
 D24X8_SHADOW
 D32
+D3D
 D3D9
 D3D9Ex
 D3DDECLMETHOD_CROSSUV
@@ -525,36 +549,11 @@ D3DERR_OUTOFVIDEOMEMORY - Index Buffer Lock Failed in %s on line %d (offset %d, 
 D3DERR_OUTOFVIDEOMEMORY - Vertex Buffer Lock Failed in %s on line %d (offset %d, size %d, flags 0x%x)
 D3DPERF_SetOptions
 D3DQUERYTYPE_EVENT not available on this driver
-D3DXCompileShader
-D3DXCreateMatrixStack
-D3DXMATRIX::operator float*()
-D3DXMATRIX::operator!=(D3DXMATRIX const&) const
-D3DXMATRIX::operator()(int, int)
-D3DXMATRIX::operator*(D3DXMATRIX const&) const
-D3DXMatrixIdentity
-D3DXMatrixInverse
-D3DXMatrixMultiply
-D3DXMatrixOrthoOffCenterRH
-D3DXMatrixPerspectiveOffCenterRH
-D3DXMatrixPerspectiveRH
-D3DXMatrixTranslation
-D3DXMatrixTranspose
-D3DXPLANE::operator float*()
-D3DXPLANE::operator!=(D3DXPLANE const&)
-D3DXPLANE::operator[](int)
-D3DXPlaneNormalize
-D3DXPlaneTransform
-D3DXVECTOR2::operator float*()
-D3DXVECTOR3::D3DXVECTOR3(float, float, float)
-D3DXVECTOR3::operator float*()
-D3DXVECTOR4::D3DXVECTOR4(float, float, float, float)
-D3DXVec3TransformCoord
-D3DXVec4Normalize
-D3DXVec4Transform
 DEFAULT_WRITE_PATH
 DEMO
 DEPTHBUFFER
 DLOPEN Error:%s
+DXT1DXT5DXT3INTZ
 DXT1_ONEBITALPHA
 DXT1_RUNTIME
 DXT3_RUNTIME
@@ -602,6 +601,10 @@ FOGRANGE %s FOGTABLE %s FOGVERTEX %s ZFOG %s WFOG %s
 FRONTBUFFER
 Failed to create %s device! Please see the following for more info.http://support.steampowered.com/cgi-bin/steampowered.cfg/php/enduser/std_adp.php?p_faqid=772
 Failed to create D3D9!
+Failed to create GL context: %s
+Failed to create SDL window: %s
+Failed to load cursor from %s: %s
+Failed to load image for cursor from %s: %s
 Failed to lock index buffer in CIndexBufferDx8::LockIndexBuffer
 Failed to lock vertex buffer in CVertexBufferDx8::Lock
 Fatal error loading %s shader %s (%08X)
@@ -633,6 +636,17 @@ GLIBC_2.2.5
 GLIBC_2.3
 GLIBC_2.3.4
 GLIBC_2.4
+GL_ATI_meminfo: %s
+GL_ATI_meminfo: Failed retrieving available GPU memory
+GL_ATI_meminfo: GL_TEXTURE_FREE_MEMORY_ATI: Total Free: %i, Largest Avail: %i, Total Aux: %i, Largest Aux Avail: %i
+GL_EXTENSIONS:%s
+GL_MAX_SAMPLES_EXT: %i
+GL_NVX_gpu_memory_info: %s
+GL_NVX_gpu_memory_info: Failed retrieving available GPU memory
+GL_NVX_gpu_memory_info: Total Dedicated: %u, Total Avail: %u, Current Avail: %u
+GL_RENDERER: %s
+GL_VENDOR: %s
+GL_VERSION: %s
 GNU
 GameUISystemMgr001
 GenericThreadLocals::CThreadLocalBase::CThreadLocalBase()
@@ -651,19 +665,6 @@ Height
 I
 I0
 IA88
-ID3DXBuffer::GetBufferPointer()
-ID3DXBuffer::GetBufferSize()
-ID3DXMatrixStack::GetTop()
-ID3DXMatrixStack::LoadIdentity()
-ID3DXMatrixStack::LoadMatrix(D3DXMATRIX const*)
-ID3DXMatrixStack::MultMatrix(D3DXMATRIX const*)
-ID3DXMatrixStack::MultMatrixLocal(D3DXMATRIX const*)
-ID3DXMatrixStack::Pop()
-ID3DXMatrixStack::Push()
-ID3DXMatrixStack::Release(int, char*)
-ID3DXMatrixStack::RotateAxisLocal(D3DXVECTOR3 const*, float)
-ID3DXMatrixStack::ScaleLocal(float, float, float)
-ID3DXMatrixStack::TranslateLocal(float, float, float)
 IDirect3D9::CheckDepthStencilMatch(unsigned int, _D3DDEVTYPE, _D3DFORMAT, _D3DFORMAT, _D3DFORMAT)
 IDirect3D9::CheckDeviceFormat(unsigned int, _D3DDEVTYPE, _D3DFORMAT, unsigned int, _D3DRESOURCETYPE, _D3DFORMAT)
 IDirect3D9::CheckDeviceMultiSampleType(unsigned int, _D3DDEVTYPE, _D3DFORMAT, int, _D3DMULTISAMPLE_TYPE, unsigned int*)
@@ -824,7 +825,6 @@ N
 N %1.2f %1.2f %1.2f
 NOT
 NOTE: You must change mat_forceaniso after changing this convar for this to take effect
-NULLATI2ATI1$
 NV_NULL
 Name
 NeedsReset
@@ -904,19 +904,79 @@ RenderSystemSurface001
 ResourceSystem004
 S
 S %1.2f %1.2f %1.2f
+SDL failed to create GL compatibility profile (whichProfile=%x!
+SDL fullscreen display index.
+SDL video target is '%s'
+SDLMgrInterface001
+SDL_CreateColorCursor
+SDL_CreateWindow
+SDL_DestroyWindow
+SDL_FreeCursor
+SDL_FreeSurface
+SDL_GL_CreateContext
+SDL_GL_DeleteContext
+SDL_GL_GetProcAddress
+SDL_GL_LoadLibrary
+SDL_GL_LoadLibrary(NULL) failed: %s
+SDL_GL_MakeCurrent
+SDL_GL_SetAttribute
+SDL_GL_SetSwapInterval
+SDL_GL_SwapWindow
+SDL_GL_UnloadLibrary
+SDL_GetCurrentVideoDriver
+SDL_GetDesktopDisplayMode
+SDL_GetDisplayBounds
+SDL_GetError
+SDL_GetMouseState
+SDL_GetNumVideoDisplays
+SDL_GetWindowDisplayIndex
+SDL_GetWindowDisplayMode
+SDL_GetWindowGrab
+SDL_GetWindowSize
+SDL_HideWindow
+SDL_Init
+SDL_Init(SDL_INIT_VIDEO) failed: %s
+SDL_LoadBMP_RW
+SDL_PollEvent
+SDL_PumpEvents
+SDL_QuitSubSystem
+SDL_RWFromFile
+SDL_RaiseWindow
+SDL_SetCursor
+SDL_SetHint
+SDL_SetModState
+SDL_SetRelativeMouseMode
+SDL_SetWindowDisplayMode
+SDL_SetWindowFullscreen
+SDL_SetWindowGammaRamp
+SDL_SetWindowGammaRamp failed: %d
+SDL_SetWindowGrab
+SDL_SetWindowIcon
+SDL_SetWindowPosition
+SDL_SetWindowSize
+SDL_SetWindowTitle
+SDL_ShowCursor
+SDL_ShowWindow
+SDL_VIDEO_X11_XINERAMA
+SDL_VIDEO_X11_XRANDR
+SDL_VIDEO_X11_XVIDMODE
+SDL_WaitEventTimeout
+SDL_WarpMouseInWindow
+SDL_WasInit
 SEPARATETEXTUREMEMORIES %s TEXTURENONLOCALVIDMEM %s TEXTURESYSTEMMEMORY %s
 SHADERAPI CAPS:
 SSE and SSE2 are required.
 SceneSystem_001
 Set developer message level
+SetAssertDialogParent
 SetHardwareGammaRamp( %f )
+SetWindowGrab( %s )
 Shader %s is the wrong version %d, expecting %d
 Shader '%s' - All dynamic combos skipped. This is bad!
 Shader '%s' - Cannot read, skipping.
 Shader '%s' - Couldn't load combo %d of shader (dyn=%d)
 Shader API Driver Info:Driver : %s Version : %lld
 Shader File Cache:
-Shader compilation failed! Reported the following errors:%s
 Shader specifying too-thin vertex format, should be at least %d bytes! (Supressing furthur warnings)
 Shader: %s static: %d dynamic: %d
 ShaderAPIDX8::CreateD3DTexture: D3DERR_INVALIDCALL
@@ -977,6 +1037,7 @@ Trying to set dxlevel (%d) which is lower than the card can support (%d)!
 U
 UCS-2LE
 UCS-4LE
+UNAVAILABLE
 UNKNOWN
 USRLOCAL
 UTF-32LE
@@ -1431,7 +1492,10 @@ failed to create shader
 failed to dlopen %s error=%s
 failed to lock index buffer in CMeshDX8::LockIndexBuffer
 failed to lock vertex buffer in CMeshDX8::LockVertexBuffer
+false
 fff?
+fflush
+fflush@@GLIBC_2.2.5
 fillrate_ps20
 fillrate_ps20b
 fillrate_vs20
@@ -1460,6 +1524,7 @@ floattoscreen_vanilla_ps20b
 free
 free@@GLIBC_2.2.5
 g
+g_ClockSpeedMillisecondsMultiplier
 g_PerfStats
 g_VProfCurrentProfile
 g_pMemAlloc
@@ -1469,6 +1534,16 @@ gamecontrols_ps20
 gamecontrols_vs20
 getcwd
 getcwd@@GLIBC_2.2.5
+glGetIntegerv
+glGetString
+gl_blit_halfx
+gl_blit_halfy
+gl_disable_forced_vsync
+gl_swapdebug
+gl_swapinterval
+gl_swaplimit
+gl_swaplimit_mt
+gl_swaptear
 glbaseshaders.cfg
 global_lit_simple_ps20
 global_lit_simple_ps20b
@@ -1477,6 +1552,8 @@ global_lit_simple_vs20
 global_lit_simple_vs30
 glshadercache
 glshaders.cfg
+grab/ungrab window.
+grab_window
 h
 haloadd_ps20
 haloadd_ps20b
@@ -1486,6 +1563,8 @@ hdrcombineto16bit_vs20
 hdrselectrange_ps20
 hdrselectrange_ps20b
 hdrselectrange_vs20
+hotx
+hoty
 hsl_filmgrain_pass1_ps20
 hsl_filmgrain_pass1_ps20b
 hsl_filmgrain_pass2_ps20
@@ -1524,6 +1603,7 @@ k
 l
 ld-linux-x86-64.so.2
 left4dead
+libSDL2-2.0.so.0
 libc.so.6
 libdl.so.2
 libm.so.6
@@ -1604,7 +1684,7 @@ m_nDXSupportLevel: %d
 m_nMaxAnisotropy: %d
 m_pHardwareShaders was null
 m_pShaderDLL: %s
-main
+m_rawinput
 makemelast
 malloc
 malloc@@GLIBC_2.2.5
@@ -1824,10 +1904,12 @@ ragdoll_sleepaftertime
 rand
 rand@@GLIBC_2.2.5
 rb
+reacquire_resources
 rendertargetblit_ps20
 rendertargetblit_ps20b
 rendertargetblit_vs20
 replicated
+resource/cursor/cursor.res
 s
 sW9.JupP
 s_pInterfaceRegs
@@ -1847,6 +1929,9 @@ screenspacepulse_ps20b
 screenspacezone_ps20
 screenspacezone_ps20b
 script
+sdl_displayindex
+sdl_double_click_size
+sdl_double_click_time
 server_can_execute
 setauto.
 setauto.%s
@@ -1967,6 +2052,8 @@ ss_added
 sscanf
 sscanf@@GLIBC_2.2.5
 static combos:
+stdout
+stdout@@GLIBC_2.2.5
 steam://openurl/
 steam://openurl_external/
 strcasecmp
@@ -2033,7 +2120,6 @@ toggleLmapPath = %s
 toggleShadowPath
 toggleUnlitPath
 toggleVtxLitPath
-toglGetClientRect
 tolower
 tolower@@GLIBC_2.2.5
 too many indices for index buffer. . tell a programmer (%d>%d)
@@ -2046,6 +2132,7 @@ towupper@@GLIBC_2.2.5
 treeleaf_ps20
 treeleaf_ps20b
 treeleaf_vs20
+true
 u
 u64( %lld = 0x%llX )
 ui_ps20
