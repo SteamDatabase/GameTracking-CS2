@@ -971,10 +971,10 @@
 		"NumericInputOnly"		"0"
 		"unicode"		"0"
 	}
-	"CheckboxContest"
+	"CheckboxWeaponContest"
 	{
 		"ControlName"		"CheckButton"
-		"fieldName"		"CheckboxContest"
+		"fieldName"		"CheckboxWeaponContest"
 		"xpos"		"10"
 		"ypos"		"431"
 		"wide"		"640"
@@ -984,8 +984,8 @@
 		"RoundedCorners"		"15"
 		"pin_corner_to_sibling"		"0"
 		"pin_to_sibling_corner"		"0"
-		"visible"		"1"
-		"enabled"		"1"
+		"visible"		"0"
+		"enabled"		"0"
 		"tabPosition"		"0"
 		"labelText"		"#Workshop_Contest"
 		"textAlignment"		"west"
