@@ -2997,7 +2997,7 @@
 	{
 		"rule"
 		{
-			"model_partial" "inventory_items/pgl_pickem_2021"
+			"model_partial" "inventory_items/pgl_pickem_"
 		}
 		"config"
 		{
