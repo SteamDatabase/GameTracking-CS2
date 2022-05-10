@@ -360,6 +360,7 @@ $vertexcolor
 $worldimposter
 %
 % 2d   % 17s      %0.2f
+% 6d bytes: %s
 %%%d
 %%%s%%
 %%(connected: %s
@@ -542,6 +543,8 @@ $worldimposter
 %d == '%s'
 %d Leaves in PVS, %d visible, %d outside of PVS
 %d PackedEntity leaks
+%d avatar(s) cleared from preload
+%d avatar(s) for preload
 %d connections
 %d dem_consolecmd [%s]
 %d dem_synctick
@@ -622,6 +625,7 @@ $worldimposter
 %ld.%ld.%ld.%ld
 %lg
 %lld
+%llu %s
 %llx,%llx,%d:
 %ls [wstring, len = %d]
 %lu
@@ -1676,7 +1680,7 @@ $worldimposter
 0066647EDE6C332C7F8C0923BB58213B333B20E9CE4281FE115F7D8F90AD
 00689918DBEC7E5A0DD6DFC0AA55C7
 0095E9A9EC9B297BD4BF36E059184F
-00:08:36
+00:20:43
 00C9BB9E8927D4D64C377E2AB2856A5B16E3EFB7F61D4316AE
 00E8BEE4D3E2260744188BE0E9C723
 00FDFB49BFE6C3A89FACADAA7A1E5BBC7CC1C2E5D831478814
@@ -3875,7 +3879,6 @@ ApplyDataToControls
 ApplySchemeSettings
 ApproximateProcessMemoryUsage
 Apr
-Apr 23 2022
 Area Portal Tool
 Area not set!
 AreaPortalUIPanel
@@ -6011,7 +6014,7 @@ Exceeded MAX_DECALS (%d).
 Exceeded max number of datatable proxies in SendTable_BuildHierarchy()
 Exclu Props   : %i
 Exclude
-Exe build: 22:26:24 Mar  1 2022 (%i) (%i)
+Exe build: 00:20:06 May  6 2022 (%i) (%i)
 Exe:  %s
 Execing config: %s
 Execute script file if file exists.
@@ -7353,7 +7356,6 @@ Map_VisClear
 Map_VisCurrentCluster() < 0!
 Map_VisMark
 Mar
-Mar  1 2022
 Mark Keyframe
 Mark Look Target
 Marlett
@@ -7417,6 +7419,7 @@ Maximum supported image dimension is %u pixels
 Maximum updates per second that the server will allow
 Maxplayers is deprecated, set it in gamemodes_server.txt.example or use -maxplayers_override instead.
 May
+May  6 2022
 MemAllocScratch
 MemFreeScratch
 MemTotal: %llu kB
@@ -8501,7 +8504,7 @@ OutputLevelSlider
 OutputStringPointer
 Overall music volume
 Overall volume of voice over IP 0.0-1.0
-Overflow error writing string table baseline %s
+Overflow error writing string table baseline %s [bytes previously written %d, remaining %d bytes, estimated size requirement %d bytes]
 Overflowed a PropIndicesCollection_t on %s
 Overflowed datatable prop list in SendTable '%s'.
 OverlayMeshCreate
@@ -10086,6 +10089,8 @@ TODO demo file name
 TODO: SV_User_f.
 TUNNEL Detected
 TV%d not active
+TV[%d] broadcast signon buffer prepared: %d bytes
+TV[%d] broadcast starting... preparing signon buffer @ %d(%d) %d(%d) (buffer was %d bytes)
 Tab
 Table %s (changed on ticks %d, %d)
 Table Props   : %i
@@ -10564,6 +10569,7 @@ Usage:  userinfo_show [sv|tv0|tv1] [id] [var]
 Usage:  vgui_showpanel panelname
 Usage:  writeconfig <controller index> <filename.cfg>
 Usage:  writeconfig <filename.cfg>
+Usage: %s 76511111111111 to add SteamID avatar for preload
 Usage: 'mat_texture_list_txlod +1' to inc lod | 'mat_texture_list_txlod -1' to dec lod
 Usage: buildcubemaps [numBounces]
 Usage: debug_drawbox x1 y1 z1 x2 y2 z2 r g b a t
@@ -11472,6 +11478,7 @@ actionname
 actionstart
 actiontype
 add a new budget group dynamically for debugging
+add certain avatars to be preloaded from disk
 addfile
 addip
 addip %i %s
@@ -11574,6 +11581,11 @@ autoqueue_entry_at_end_point
 autoresize
 autosavedangerousissafe
 autoselect
+avatar %llu %s added for preload
+avatar %llu %s already scheduled for preload
+avatar %llu %s cleared from preload
+avatar %llu %s never scheduled for preload
+avatars image data [%d connected / %d total]
 avatars/%llu.rgb
 avatars/default.rgb
 avg ms,
@@ -11884,6 +11896,7 @@ cl_voip_lobby_audio_volume
 clamp
 clamp_range
 cldll
+clear all avatars that were scheduled to be preloaded from disk
 clearfiles
 clearform
 clearmessage
@@ -12282,6 +12295,7 @@ disconnect;
 disconnect; map %s
 disp_dynamic
 disp_list_all_collideable
+display which avatars will be preloaded from disk
 display_elapsedtime
 display_game_events
 dist data: dyn %ld, stat %ld
@@ -14015,6 +14029,7 @@ position %s
 pow
 pow@@GLIBC_2.2.5
 pre
+pre-spawn tv signon data
 preloadDataSize
 prepend
 preserveLuminosity
@@ -14531,9 +14546,11 @@ sentences.m3u
 sequence < 0, in COM_BlockSequenceCRCByte
 serialize
 serializing
+server class tables
 server cvars end
 server cvars start
 server does not have hash for this file. Waiting for consensus
+server info
 server model cache miss on %s
 server/server
 serverGameDLL->DLLInit - Finish
@@ -14944,6 +14961,7 @@ southwest
 sp_%d%s.vhv
 sp_hdr_%d%s.vhv
 spanish
+spawn entities
 spawning
 speak
 speakerentity
@@ -15544,6 +15562,9 @@ tv_broadcast_max_requests1
 tv_broadcast_origin_auth
 tv_broadcast_origin_auth1
 tv_broadcast_origin_delay
+tv_broadcast_preload_avatars_add
+tv_broadcast_preload_avatars_clear
+tv_broadcast_preload_avatars_show
 tv_broadcast_resend
 tv_broadcast_server_info_message_size_kb
 tv_broadcast_startup_resend_interval
