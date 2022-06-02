@@ -3916,6 +3916,7 @@ $world_mins
 098
 099
 0: Automatically turn on/off glyphs based in input. 1: Glyphs never turn on. 2: Glyphs always on.
+0: Gyro Always on. 1: Gyro on while scoping only 2. Gyro on when right stick released
 0: No response curves. 1: Use response values (i.e. aim_gyro_low_sense_speed, aim_gyro_base_sensitivity, aim_gyro_high_sense_speed,aim_gyro_high_sense_multiplier
 0: Use Response Curves etc. 1: Use 1:1 Gyro angles.
 0: Use connect method requested by GC.  >0: Always use SDR if possible.  <0: Always use direct UDP if possible
@@ -5832,6 +5833,7 @@ $world_mins
 23IPhysicsCollisionSolver
 23IRenderToRTHelperObject
 23SetupRenderablesListJob
+23SteamActionToggleGyro_t
 240
 2400
 241
@@ -5999,6 +6001,7 @@ $world_mins
 25IVideoPlayerEventCallback
 25IVideoPlayerVideoCallback
 25I_C_MapVetoPickController
+25SteamActionSuppressGyro_t
 25SteamAimAffectingAction_t
 25VScrollBarReversedButtons
 260
@@ -6315,6 +6318,7 @@ $world_mins
 27OperationalStatisticElement
 27OperationalStatisticsPacket
 27PlayerDecalDigitalSignature
+27SteamActionLookSpinCamera_t
 27SteamInputDigitalMenuAction
 280
 2800
@@ -10342,6 +10346,7 @@ CCSGO_MapOverview
 CCSGO_OutOfAmmo
 CCSGO_RadialMenuBase
 CCSGO_RetakeLoadout
+CCSGO_Scoreboard
 CCSGO_ShieldDamageAlert
 CCSGO_SurvivalPlayerRemainingCounter
 CCSGO_TabletPanoLayer
@@ -13064,6 +13069,7 @@ DeathNotice_Victim
 Deathcam.Review_End
 Deathcam.Review_Start
 Deathcam.Review_Victory
+DeathmatchLayer
 Debug view texture scale
 DebugAutoComplete
 DebugComputedName
@@ -19146,7 +19152,6 @@ Noise scale 3
 Noisy player xray glow scaling (pop when noise is made).  Make >1 to add a 'spike' to noise-making players
 Noisy players stay at full brightness for this long.
 Non zero values will bias aim toward straight horizontal aiming. Not recommended.
-Non zero values will bias aim toward straight vertical aiming. Not recommended.
 Non zero values will bias forward movement to zero for better strafe lines.
 Non zero values will bias strafe movement to zero to help run directly forward more easily
 Non-Sendtable
@@ -19242,6 +19247,7 @@ NumericInputOnly
 O
 O*9y
 O->
+O: Conventional aiming. 1: FlickStick aiming. 2: Flick stick except for scoping.
 OAEP-
 OFFSCREEN_ICON
 OGS PK VIOLATION: Dropping round data for round %d session %llu because we've already submitted it.
@@ -20267,6 +20273,7 @@ PropertySheet.TextColor
 PropertySheet.TransitionEffectTime
 PropertySheetBorder
 PropertyTransitionEnd
+Proportion of middle stick throw dedicated to walking speed.
 Protobuf: %s(%d): %s
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
 Protocol message serialized itself in invalid fashion.
@@ -22171,7 +22178,7 @@ Steamworks gamestats: %s adding game session %llu
 StepSounds
 Stick inputs at this deflection or less appear as zero.
 Stick inputs at this deflection or more appear as one.
-StickAimEnabled
+StickAndFlickStickAimEnabled
 Stick_Pri
 Stick_Snd
 Sticker kit '%s' rotate range is not valid %f:%f
@@ -23847,7 +23854,6 @@ When enabled will automatically pause the match at next freeze time if less than
 When enabled will show knife reticle on clients. Used for game modes requiring target id display when holding a knife.
 When enabled, 220x45 (<16kb) image file will be displayed to on-server spectators.
 When enabled, 360x60 (<16kb) image file will be displayed to on-server spectators.
-When enabled, the stick bound to the 'JoystickCamera' action will use FlickStick behaviour instead of conventional analog stick aiming behaviour
 When in thirdperson and cam_collision is set to 1, an attempt is made to keep the camera from passing though walls.
 When in thirdperson, print viewangles/idealangles/cameraoffsets to the console.
 When overtime is enabled play additional rounds to determine winner
@@ -24717,6 +24723,7 @@ aim_gyro_acceleration
 aim_gyro_base_sensitivity
 aim_gyro_circular_deadzone
 aim_gyro_conversion_mode
+aim_gyro_enable_mode
 aim_gyro_high_sense_multiplier
 aim_gyro_high_sense_speed
 aim_gyro_invert_pitch
@@ -28386,6 +28393,7 @@ glow_muzzle_debug
 glow_outline_effect_enable
 glow_outline_width
 glyphsize
+glyphstyle
 go_away_from_keyboard
 goal
 gold
@@ -28468,6 +28476,8 @@ gungameprogressive
 gungametrbomb
 gunshotsplash
 gunsmith
+gyrosuppress
+gyrotoggle
 h
 hB
 hack_disable_armory_type_desc
@@ -32930,6 +32940,7 @@ move_stick_circular_deadzone_min
 move_stick_response_curve
 move_stick_square_deadzone_forward
 move_stick_square_deadzone_strafe
+move_stick_walk_zone
 move_touchpad_circular_deadzone_min
 move_touchpad_sensitivity_forward
 move_touchpad_sensitivity_strafe
@@ -35954,11 +35965,11 @@ steamchina
 steamcode
 steamglobal
 steaminfo.txt
-steaminput_default_glyphstyle
-steaminput_default_neutral
-steaminput_default_solid
 steaminput_firsttimepopup
 steaminput_glyph_display_mode
+steaminput_glyph_neutral
+steaminput_glyph_solid
+steaminput_glyph_style
 steammessages.proto
 steampowered
 steamworks_sessionid_client
