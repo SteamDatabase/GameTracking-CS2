@@ -61,6 +61,12 @@ function TSpawnCheck()
 	if (WARMUP == true)
 	{
 	EntFireByHandle( TRIGGER_T ,"TouchTest", "", 0, null, null );
+
+		if ( SPAWN_T == null )
+		{	// try to re-locate T-spawn if it wasn't available at spawn time
+			SPAWN_T <- Entities.FindByName(null, INSTANCE_PREFIX + "-tspawn");
+		}
+
 	return;
 	}
 }
@@ -85,6 +91,12 @@ function CTSpawnCheck()
 	if (WARMUP == true)
 	{
 	EntFireByHandle( TRIGGER_CT ,"TouchTest", "", 0, null, null );
+
+		if ( SPAWN_CT == null )
+		{	// try to re-locate CT-spawn if it wasn't available at spawn time
+			SPAWN_CT <- Entities.FindByName(null, INSTANCE_PREFIX + "-ctspawn");
+		}
+
 	return;
 	}
 }
@@ -129,7 +141,7 @@ function ArenaStart()		// called when the arena has two players, checks every .1
 	TSpawnCheck();
 	CTSpawnCheck();
 
-	if (AVAILABLE_TSPAWN == false && PLAYER_T != null && AVAILABLE_CTSPAWN == false && PLAYER_CT != null && RESET == false && WARMUP == true)
+	if (AVAILABLE_TSPAWN == false && PLAYER_T != null && SPAWN_T != null && AVAILABLE_CTSPAWN == false && PLAYER_CT != null && SPAWN_CT != null && RESET == false && WARMUP == true)
 	{
 		
 		RemoveDroppedWeapons();
