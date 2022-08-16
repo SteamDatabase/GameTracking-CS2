@@ -3697,4 +3697,35 @@
 		}
 	}
 	
+	"cupcake_year_10"
+	{
+		"rule"
+		{
+			"model_partial" "cupcake"
+		}
+		"config"
+		{
+			"camera_offset"   "0.51 19.34 9.56"
+			"camera_orient"   "18.49 -90.93 0.00"
+			"orbit_pivot"     "0.20 0.00 3.09"
+			"root_camera_fov"     "52.0"
+			"item_rotate" "y[-12 12]z[-0 0]"
+
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.14 0.10 0.07} dir[0.16 0.04 -0.99] rot[0.0 0.0 0.0] flicker[0.00 0.00 518400.00 0.33]"
+			"light_directional_add"      "rgb{0.05 0.05 0.05} dir[-0.24 -0.82 -0.52] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "2.49 18.18 11.91"
+			"shadow_light_orient"        "23.54 -97.64 0.00"
+			"shadow_light_brightness"    "1.31"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "21.8"
+			"shadow_light_vfov"       "21.8"
+			"shadow_light_znear"       "14.6"
+			"shadow_light_zfar"       "25.4"
+			"shadow_light_atten_farz"       "50.7"
+			"light_ambient"              "[0.36 0.35 0.32]"
+		}
+	}
 }

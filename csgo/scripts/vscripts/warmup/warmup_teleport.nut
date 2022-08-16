@@ -34,6 +34,9 @@ WINGMAN <- false;	// wingman mode
 PLAYERLIST_T <- [];	// list of Ts currently not in an arena
 PLAYERLIST_CT <- [];	// list of CTs currently not in an arena
 
+CHECKLIST_DELAYED_T <- false;
+CHECKLIST_DELAYED_CT <- false;
+
 
 // type 0, mode 0 = casual
 // type 0, mode 1 = competitive
@@ -67,69 +70,93 @@ function OnPostSpawn()
 
 
 
-function CheckListT()
+function CheckListT( bFromTimer )
 {
+	if ( CHECKLIST_DELAYED_T && bFromTimer )
+	{
+		CHECKLIST_DELAYED_T = false;	// allow re-checking of the list
+	}
+
+	local delayed = [];
 	
 	foreach (index, item in PLAYERLIST_T)  
 	{
-		if (item.IsValid())
+		if ( item != null && item.IsValid() )
 		{
-		local MovePlayer = PlayerMoveT(item);	// move the player
+			local MovePlayer = PlayerMoveT(item);	// move the player
 		
 			if (MovePlayer)
 			{
-			item.EmitSound(SND_SPAWN);
-			PLAYERLIST_T.remove(index);		// remove the player from the list
+				item.EmitSound(SND_SPAWN);
 			}
-			else if (!MovePlayer)
-				{
-				printl ("MovePlayerT failed, leaving player in list");
-				}
-		}
-		else
+			else
 			{
-			PLAYERLIST_T.remove(index);		// remove the player from the list
+				delayed.push( item );
+
+				if (!CHECKLIST_DELAYED_T)
+				{
+					CHECKLIST_DELAYED_T <- true;
+					EntFire ( "!self","RunScriptCode", "CheckListT(true)", 0.5 );		// queue up a re-check of list
+					printl ("MovePlayerT failed, leaving player in list");
+				}
 			}
+		}
 	}
-	
+
+	PLAYERLIST_T = delayed;
 }
 
 
-function CheckListCT()
+function CheckListCT( bFromTimer )
 {
+	if ( CHECKLIST_DELAYED_CT && bFromTimer )
+	{
+		CHECKLIST_DELAYED_CT = false;	// allow re-checking of the list
+	}
+	
+	local delayed = [];
 	
 	foreach (index, item in PLAYERLIST_CT)  
 	{
-		if (item.IsValid())
+		if ( item != null && item.IsValid() )
 		{
-		local MovePlayer = PlayerMoveCT(item);	// move the player
+			local MovePlayer = PlayerMoveCT(item);	// move the player
 		
 			if (MovePlayer)
 			{
-			item.EmitSound(SND_SPAWN);
-			PLAYERLIST_CT.remove(index);		// remove the player from the list
+				item.EmitSound(SND_SPAWN);
 			}
-			else if (!MovePlayer)
-				{
-				printl ("MovePlayerCT failed, leaving player in list");
-				}
-		}
-		else
+			else
 			{
-			PLAYERLIST_CT.remove(index);		// remove the player from the list
+				delayed.push( item );
+
+				if ( !CHECKLIST_DELAYED_CT )
+				{
+					CHECKLIST_DELAYED_CT <- true;
+					EntFire ( "!self","RunScriptCode", "CheckListCT(true)", 0.5 );		// queue up a re-check of list
+					printl ("MovePlayerCT failed, leaving player in list");
+				}
 			}
+		}
 	}
-	
+
+	PLAYERLIST_CT = delayed;
 }
 
 function PlayerSpawnedT()	// called by trigger in spawn, add each activator to a list, then move them to an arena
 {
 	local player = activator;
 	
-	PLAYERLIST_T.push(player);
-	
-	CheckListT();	// check list and move whoever
+	foreach (index, item in PLAYERLIST_T)
+	{
+		if ( item == player )
+		{
+			return;
+		}
+	}
 
+	PLAYERLIST_T.push(player);
+	CheckListT(false);	// check list and move whoever
 }
 
 
@@ -179,7 +206,6 @@ function PlayerMoveT( player )
 			}
 			else
 			{
-				EntFire ( "!self","RunScriptCode", "CheckListT()", 0.25 );		// queue up a re-check of list
 				return false;	// move failed
 			}
 			
@@ -190,10 +216,17 @@ function PlayerSpawnedCT()	// called by trigger in spawn, add each activator to 
 {
 	local player = activator;
 	
+	foreach (index, item in PLAYERLIST_CT)
+	{
+		if ( item == player )
+		{
+			return;
+		}
+	}
+
 	PLAYERLIST_CT.push(player);
 	
-	CheckListCT();	// check list and move whoever
-	
+	CheckListCT(false);	// check list and move whoever
 }
 
 
@@ -244,7 +277,6 @@ function PlayerMoveCT( player )
 		}
 		else
 		{
-			EntFire ( "!self","RunScriptCode", "CheckListCT()", 0.25 );		// queue up a re-check of list
 			return false;	// move failed
 		}
 		
