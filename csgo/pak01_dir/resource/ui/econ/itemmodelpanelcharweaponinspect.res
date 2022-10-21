@@ -2993,11 +2993,48 @@
 		}
 	}
 
-		"pgl_pickem_2021"
+	"pgl_pickem_2021"
 	{
 		"rule"
 		{
 			"model_partial" "inventory_items/pgl_pickem_"
+		}
+		"config"
+		{
+			"camera_offset"   "0.21 0.02 13.70"
+			"camera_orient"   "90.00 178.76 0.00"
+			"orbit_pivot"     "0.21 0.02 0.00"
+			"root_camera_fov"     "60"
+			"light_directional_clearall" "1"
+			"light_directional_add"      "rgb{0.16 0.16 0.16} dir[-0.01 0.02 1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.70 0.79 0.85} dir[0.48 -0.52 -0.71] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.04 0.05 0.05} dir[-0.10 -0.20 -1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"light_directional_add"      "rgb{0.03 0.03 0.03} dir[0.00 0.00 -1.00] rot[0.0 0.0 0.0] flicker[0.00 0.00 0.00 0.00]"
+			"shadow_light_offset"        "-29.75 20.14 42.52"
+			"shadow_light_orient"        "50.35 -32.59 0.00"
+			"shadow_light_brightness"    "1.00"
+			"shadow_light_color"         "[1.00 1.00 1.00]"
+			"shadow_light_rotation"      "[0.00 0.00 0.00]"
+			"shadow_light_flicker"       "[0.00 0.00 0.00 0.00]"
+			"shadow_light_hfov"       "53.9"
+			"shadow_light_vfov"       "53.9"
+			"shadow_light_znear"       "23.9"
+			"shadow_light_zfar"       "59.7"
+			"shadow_light_atten_farz"       "119.4"
+			"light_ambient"              "[0.00 0.00 0.00]"
+			"item_orient"		"-10.0 0.0 0.0"
+			"item_rotate"		"z[20 -20]"
+			"root_mdl"					 ""
+
+			"camera_preset_add"   "pos[0.22 0.01 13.05] pivot[0.22 0.01 0.45] orient[90.00 179.46 0.00] fov[30.5]"
+		}
+	}
+
+	"iem_pickem_2021"
+	{
+		"rule"
+		{
+			"model_partial" "inventory_items/iem_pickem_"
 		}
 		"config"
 		{
