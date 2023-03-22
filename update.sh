@@ -6,6 +6,7 @@ cd "${0%/*}"
 echo "Processing CS:GO..."
 
 ProcessDepot ".so"
+ProcessDepot ".dll"
 ProcessVPK
 
 unzip -lv ./csgo/panorama/code.pbin > ./csgo/panorama/code_pbin.txt

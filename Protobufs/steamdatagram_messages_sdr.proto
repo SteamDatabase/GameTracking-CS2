@@ -50,6 +50,7 @@ message CMsgSteamDatagramSignedMessageGeneric {
 	optional .CMsgSteamDatagramCertificateSigned cert = 1;
 	optional bytes signed_data = 2;
 	optional bytes signature = 3;
+	optional bytes dummy_pad = 1023;
 }
 
 message CMsgSteamDatagramRouterPingReply {
@@ -113,6 +114,7 @@ message CMsgSteamDatagramGameserverPingRequestEnvelope {
 	optional fixed32 legacy_relay_unix_time = 2;
 	optional fixed64 legacy_challenge = 3;
 	optional fixed32 legacy_router_timestamp = 4;
+	optional bytes dummy_pad = 1023;
 }
 
 message CMsgSteamDatagramGameserverPingReplyData {
@@ -124,7 +126,7 @@ message CMsgSteamDatagramGameserverPingReplyData {
 	optional uint32 appid = 6;
 	optional uint32 protocol_version = 7;
 	optional string build = 9;
-	optional uint32 network_config_version = 10;
+	optional uint64 network_config_version = 10;
 	optional fixed32 my_unix_time = 11;
 }
 
@@ -305,10 +307,12 @@ message CMsgSteamDatagramGameserverSessionRequest {
 	optional fixed64 challenge = 4;
 	optional fixed32 client_connection_id = 5;
 	optional fixed32 server_connection_id = 8;
-	optional uint32 network_config_version = 6;
+	optional uint64 network_config_version = 6;
 	optional uint32 protocol_version = 7;
 	optional string platform = 9;
 	optional string build = 10;
+	optional string dev_gameserver_identity = 100;
+	optional .CMsgSteamDatagramCertificateSigned dev_client_cert = 101;
 }
 
 message CMsgSteamDatagramGameserverSessionEstablished {
@@ -415,7 +419,7 @@ message CMsgSteamDatagramP2PSessionRequestBody {
 	optional uint32 encryption_your_public_key_lead_byte = 15;
 	optional bytes encryption_my_ephemeral_public_key = 16;
 	optional uint32 protocol_version = 8;
-	optional uint32 network_config_version = 9;
+	optional uint64 network_config_version = 9;
 	optional string platform = 12;
 	optional string build = 13;
 }

@@ -1,0 +1,226 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+//==================================================================================================
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+@BaseClass = ChoreoEvent
+[
+	Name( string ) : "Name"
+
+	StartTime( float) : "Start Time"
+	EndTime( float ) : "End Time"
+	Duration( float ) : "Duration"
+
+	Disabled( boolean ) : "Disabled"
+	FixedLength( boolean ) : "Fixed Length"
+
+	ResumeCondition( boolean ) : "Resume Condition"
+
+	Tag( string ) : "Relative Tag Name/Sound"
+	
+	EventID( integer ) : "Event ID"
+	ConstrainedEventID( integer ) : "Constrained to"
+]
+
+@BaseClass = ChoreoGlobalEvent
+[
+	Name( string ) : "Name"
+
+	StartTime( float) : "Start Time"
+]
+
+@BaseClass = PitchYaw
+[
+	Pitch( integer ) : "Pitch"
+	Yaw( integer ) : "Yaw"
+]
+
+@PointClass base(ChoreoEvent) = expression : "Expression" 
+[
+	ExpressionGroup( string ) : "Expression Group"
+	ExpressionName( string ) : "Expression Name"
+]
+
+@PointClass base(ChoreoEvent, PitchYaw) = lookat : "Look At Target" 
+[
+	ActorName( string ) : "Look at Actor"
+	LookType( string ) : "Type" : "How much of the body looks at the target, fullbody faces"
+	LookSpeed( string ) : "Speed" : "How fast does the head/chest look at the target"
+	HoldEvent( bool ) : "Hold Event" : 0 : "When event is over, hold the look at target until the next look at event"
+]
+
+@PointClass base(ChoreoEvent) = iklockleftarm : "Lock IK Left Arm" 
+[
+	ActorName( string ) : "Lock To Actor"
+	LockBodyFacing( boolean ) : "Lock Rotation" : 1 : "Lock Rotation"
+]
+
+@PointClass base(ChoreoEvent) = iklockrightarm : "Lock IK Right Arm" 
+[
+	ActorName( string ) : "Lock To Actor"
+	LockBodyFacing( boolean ) : "Lock Rotation" : 1 : "Lock Rotation"
+]
+
+
+@PointClass base(ChoreoEvent) = moveto : "Move To Target" 
+[
+	ActorName( string ) : "Move To Actor"
+	MovementStyle( string ) : "MovementStyle"
+	ClosestTo( string ) : "Closest To Actor"
+	DistanceToTarget( float ) : "Stop Distance"
+	ForceShortMovements( boolean ) : "Force Short Movements"
+]
+
+@PointClass base(ChoreoEvent) = speak : "Speak" 
+[
+	ChooseSoundEvent( string ) : "Speak Sound Event"
+	SoundLevel( string ) : "Sound Level (dB)"
+
+	CloseCaptionNoAttenuate( boolean ) : "Don't Attenuate Captions"
+	HardStopSpeakEvent( boolean )  : "Hard Stop Speak Event"
+	SoundDelayOrSkip( float ) : "Delay or Skip Amount"
+	VolumeMatchesRamp( boolean ) : "Volume Matches Event Ramp"
+]
+
+@PointClass base(ChoreoEvent) = gesture : "Gesture" 
+[
+	GestureName( string ) : "Gesture"
+
+	SyncToFollowingGesture( boolean ) : "Sync Exit tag to next gesture Entry tag"
+]
+
+@PointClass base(ChoreoEvent) = sequence : "Sequence" 
+[
+	SequenceName( string ) : "Sequence"
+	PlaySequenceOverScript( boolean ) : "Play Sequence Overtop Script"
+]
+
+// lockbodyfacing is designed to run on top of both normal AI and on top of
+// scripted_sequences.  By allowing torso turns during post-idles, pre-idles, 
+// act-busy's, scripted_sequences, normal AI movements, etc., it increases 
+// the functionality of those AI features without breaking their assuptions 
+// that the entity won't be made to "turn" by something outside of those 
+// AI's control.
+// lockbody facing is also usefull when npcs are moving and you want them to turn
+// towards something but still walk in the direction of travel.
+@PointClass base(ChoreoEvent, PitchYaw) = face : "Face To Actor" 
+[
+	ActorName( string ) : "Face Actor"
+	LockBodyFacing( boolean ) : "Lock Body Facing" : 0 : "Lock Facing (twist but don't turn)"
+]
+
+@PointClass base(ChoreoEvent) = facetransition : "Face Transition" 
+[
+	ActorName( string ) : "Transition To Actor"
+	LockBodyFacing( boolean ) : "Lock Body Facing" : 0 : "Lock Facing (twist but don't turn)"
+]
+
+
+@PointClass base(ChoreoEvent) = firetrigger : "Fire Trigger" 
+[
+	SceneTrigger( string ) : "Scene Trigger"
+]
+
+@PointClass base(ChoreoEvent) = animgraphcontroller : "AnimGraph Controller" 
+[
+	AnimGraphParameters( string ) : "Graph Parameter Name"
+	AnimGraphValue( string ) :	"Value"
+]
+
+@PointClass base(ChoreoEvent) = mood : "Mood Event" 
+[
+	MoodName( string ) : "Mood"
+	HoldEvent( bool ) : "Hold Event" : 0 : "When event is over, don't reset animgraph to default"
+]
+
+@PointClass base(ChoreoEvent) = moodbody : "Mood Body Event" 
+[
+	MoodBodyName( string ) : "Mood"
+	HoldEvent( bool ) : "Hold Event" : 0 : "When event is over, don't reset animgraph to default"
+]
+
+
+@PointClass base(ChoreoEvent) = flexanimation : "Flex Animation" 
+[
+]
+
+@PointClass base(ChoreoEvent) = subscene : "Sub Scene" 
+[
+	ChooseFile( string ) : "Scene File" // TBD need a new control which is a file choose control, should add this to PropEdAttributeConstraint_t
+]
+
+@PointClass base(ChoreoEvent) = interrupt : "Interrupt" 
+[
+	Parameters( string ) : "Interrupt"
+]
+
+@PointClass base(ChoreoEvent) = permitresponses : "Permit Responses" 
+[
+	Parameters( string ) : "Permit"
+]
+
+
+@PointClass base(ChoreoEvent) = generic : "Generic AI Event" 
+[
+	AIGeneric( string ) : "Generic AI Event"
+	ActorName2( string ) : "Actor Name" // in Parameters spot 2
+]
+
+@PointClass base(ChoreoEvent) = camera : "Camera" 
+[
+	Parameters( string ) : "Camera Name"
+	ActorName2( string ) : "Actor1"
+	ActorName3( string ) : "Actor2"
+]
+
+@PointClass base(ChoreoEvent) = script : "Script Function Call" 
+[
+	ActorName( string ) : "Actor Name"
+	Parameters2( string ) : "Function Name"
+	Parameters3( string ) : "Function Parameters"
+]
+
+@PointClass base(ChoreoEvent) = noblink : "Disable Blinking" 
+[
+]
+
+@PointClass base(ChoreoEvent) = ignoreai : "Ignore AI" 
+[
+]
+
+@PointClass base(ChoreoEvent) = holsterweapon : "Holster Weapon" 
+[
+]
+
+@PointClass base(ChoreoEvent) = unholsterweapon : "Unholster Weapon" 
+[
+]
+
+@PointClass base(ChoreoEvent) = aimat : "Aim At Target" 
+[
+	ActorName( string ) : "Aim At Target"
+]
+
+@PointClass base(ChoreoEvent) = ignorecollision : "Ignore Collision" 
+[
+	ActorName( string ) : "Ignore Actor"
+]
+
+// Global events (different base class)
+
+@PointClass base(ChoreoGlobalEvent) = section : "Section Start/End"    // Pause point
+[
+	SectionPause( string ) : "Automated Action" // optional automation "automate typeStr waittimefloat" or "noaction""
+]
+
+@PointClass base(ChoreoGlobalEvent) = loop : "Loop Point" 
+[
+	LoopTime( float ) : "Loop Time" // goes into Parameters
+	LoopCount( integer ) : "Number of Loops (-1=forever)"
+]
+
+@PointClass base(ChoreoGlobalEvent) = stoppoint : "Stop Point" 
+[
+	Parameters( string ) : "Action"
+]

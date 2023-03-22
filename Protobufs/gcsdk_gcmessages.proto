@@ -1,13 +1,9 @@
 import "steammessages.proto";
 
-option optimize_for = SPEED;
-option cc_generic_services = false;
-
 enum GCClientLauncherType {
 	GCClientLauncherType_DEFAULT = 0;
 	GCClientLauncherType_PERFECTWORLD = 1;
 	GCClientLauncherType_STEAMCHINA = 2;
-	GCClientLauncherType_SOURCE2 = 3;
 }
 
 enum GCConnectionStatus {
@@ -300,4 +296,28 @@ message CProductInfo_SetRichPresenceLocalization_Request {
 }
 
 message CProductInfo_SetRichPresenceLocalization_Response {
+}
+
+message CMsgSerializedSOCache {
+	message TypeCache {
+		optional uint32 type = 1;
+		repeated bytes objects = 2;
+		optional uint32 service_id = 3;
+	}
+
+	message Cache {
+		message Version {
+			optional uint32 service = 1;
+			optional uint64 version = 2;
+		}
+
+		optional uint32 type = 1;
+		optional uint64 id = 2;
+		repeated .CMsgSerializedSOCache.Cache.Version versions = 3;
+		repeated .CMsgSerializedSOCache.TypeCache type_caches = 4;
+	}
+
+	optional uint32 file_version = 1;
+	repeated .CMsgSerializedSOCache.Cache caches = 2;
+	optional uint32 gc_socache_file_version = 3;
 }

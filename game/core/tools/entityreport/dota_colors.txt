@@ -1,0 +1,40 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	//////////////////////////////////////////////////////////////////
+	// entity report colors
+	//
+	// the class key can be a regexp, e.g.:  "CCOTA_BaseNPC_*" using the Qt QRegExp syntax https://doc.qt.io/qt-5/qregexp.html
+	// color needs to be "#rrggbb" or "#aarrggbb" format or the from https://www.w3.org/TR/SVG11/types.html#ColorKeywords
+	// or can be "(r, g, b [, a ])" format
+	// or can be "hsv( h, s, v )"
+	// could support others if desired
+
+	// color can be a single entry "color" which spans dark and light mode UI (black or white background to qt controls
+	// or can be split out into color_light, color_dark entries
+
+	// entries are matched in the order specified so if there there are multiple matches
+	// the first one wins
+	//////////////////////////////////////////////////////////////////
+	rules = 
+	[
+	// special entries
+		{ class = "change"		color_light = "hsv( 0, 255, 255 )"		color_dark = "hsv( 15, 255, 255 )" },   // special entry, actively changing
+		{ class = "preserve"	color_light = "hsv( 200, 255, 255 )"	color_dark = "hsv( 180, 255, 200 )" },  // special entry, preserved
+		{ class = "leave"		color_light = "hsv( 0, 0, 31 )"			color_dark = "hsv( 0, 0, 212 )"},  // special entry, leaving pvs or deleted
+
+		{ class = "data_bytes"		color = "( 240, 50, 20 )"	},  // special entry, horiz bar showing current data bytes
+		{ class = "data_average"	color = "( 255, 255, 200 )"	},  // special entry, tick showing running avg bytes
+		{ class = "data_peak"		color = "( 0, 255, 50 )"	},  // special entry, tick showing peak bytes over last few seconds
+
+	// game specific entries
+		{ class = "CDOTA_BaseNPC_Hero*"     color = "light green" },
+		{ class = "CDOTA_BaseNPC_Creep*"    color = "yellow" },
+		{ class = "CDOTA_BaseNPC_Creature*" color = "orange" },
+		
+		{ class = ".*Sky.*|CPoint*" 		color = "(0, 200, 250, 255)" },
+		// { class = "CCitadel*"			color = "(255, 0, 255, 255)" },
+		{ class = "CWorld" 					color = "(255, 255, 0, 255)" },
+		{ class = ".*Rules.*" 				color = "(100, 255, 50, 255)" },
+		
+	]
+}

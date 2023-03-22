@@ -1,0 +1,99 @@
+﻿"lang"
+{
+	"Tokens"
+	{
+		"DynamicExpressions"		"Dynamic Expressions"
+		"DynamicExpressions:help"		"Material expressions look very similar to HLSL code. Expressions can have one of two basic structures:
+A simple inline expression that's just one math expression.<br>
+<br>
+<code>sin(SomeAttribute)<br>
+10 + sqrt( 2 ) * frac( time() )</code><br>
+<br>
+Expressions can also be composed of multiple intermediate expressions -- each of which computes a temporary value -- followed by a return expression that uses the intermediate values.<br>
+<br>
+<code>tempVar1 = sin(SomeAttribute);<br>
+tempVar2 = exists(SomeOtherAttribute) ? float4( 1, 2, 3, 4 ) : float4( 5, 6, 7, 8 );<br>
+tempVar3 = cos(tempVar1)<br>
+return tempVar1 + dot4( tempVar2, SomeThirdAttribute.xyzz ) * tempVar3;</code><br>
+<br>
+<b>Identifiers</b><br>
+<br>
+Identifiers in expressions can refer either to intermediate values stored in local variables (e.g. tempVar1 in the example above) or to attributes supplied by game code (e.g. SomeAttribute in the example above). If an identifier isn't a local variable it is assumed to be supplied by game code.
+<br>
+If an expression relies on a value supplied by game code but the code doesn't provide it, expression evaluation will silently fail and the value of the parameter with the expression will fall back to the value set for the parameter in the material.<br>
+<br>
+<b>Data Types</b><br>
+<br>
+The internal type for computations is float4, everything gets converted to a four-component float internally by smearing the last specified component into the remaining ones.
+<ul>
+<li>3.5 becomes (3.5, 3.5, 3.5, 3.5)</li>
+<li>float2( 1, 2 ) becomes (1, 2, 2, 2)</li>
+<li>float3( 1, 2, 3 ) becomes (1, 2, 3, 3)</li>
+<li>vSomeVector.xyz becomes vSomeVector.xyzz</li>
+<li>vVec3.zx becomes vVec3.zxxx</li>
+</ul>
+Any scalar function is applied to all four components of the input vectors. Any function that returns a scalar result will output the same result to all four components.<br>
+<br>
+<b>Operators</b><br>
+<br>
+Supported operators in order of precedence:
+<ul>
+<li>function call</li>
+<li>()</li>
+<li>. (for swizzles, e.g. .xyxy)</li>
+<li> ! - (- meaning negate)</li>
+<li>* / % (muliply, divide, modulo)</li>
+<li>+ - (addition, subtraction)</li>
+<li>< > <= >= (comparisons)</li>
+<li>== != (equality, inequality)</li>
+<li>&& (logical and. Lazy evaluation like in C.)</li>
+<li>|| (logical or. Lazy evaluation like in C.)</li>
+<li> ?: (conditional. Lazy evaluation: Only the subexpression indicated by the predicate is evaluated.)</li>
+<li>= (assignment)</li>
+</ul>
+<br>
+<font size=\"+4\"><a href='helpsystem:Functions'>Click Here For Built-in Functions</a>
+</font>"
+		"Functions"		"Built-in Functions"
+		"Functions:help"		"All functions take float4() as parameters. All scalar operations will be applied to all four components of the input.<br>For example:<br><code>sin(vSomeVector)</code> will compute the output vector <code>(sin(vSomeVector.x),sin(vSomeVector.y),sin(vSomeVector.z),sin(vSomeVector.w))</code>
+<ul>
+<li>exists(x) - Returns 1 if the attribute named x exists, 0 otherwise</li>
+<li>sin(x)</li>
+<li>cos(x)</li>
+<li>tan(x)</li>
+<li>frac(x) - Fractional part of each floating point value</li>
+<li>floor(x) - Returns the largest int that's smaller than x</li>
+<li>ceil(x) - Returns the smallest int that's larger than x</li>
+<li>saturate(x) - Clamps x between 0 and 1</li>
+<li>clamp(x, min, max) - Clamps x between min and max</li>
+<li>lerp(a, b, t) - Linearly interpolates t between a and b (returns a for t=0 and b for t=1)</li>
+<li>dot4(v0, v1) - Four-component dot product</li>
+<li>dot3(v0, v1) - Three-componend dot product</li>
+<li>dot2(v0, v1) - Two-component dot product</li>
+<li>log(x)</li>
+<li>log2(x)</li>
+<li>log10(x)</li>
+<li>exp(x)</li>
+<li>exp2(x)</li>
+<li>sqrt(x)</li>
+<li>rsqrt(x) - 1/sqrt(x)</li>
+<li>sqr(x) - Returns x*x</li>
+<li>sign(x)</li>
+<li>abs(x)</li>
+<li>pow(x, y)</li>
+<li>step(a, b) - If ( a >= b ) return 1; else return 0;</li>
+<li>smoothstep( a, b, t ) - Return 0 for t==a, 1 for t==b, smoothly interpolate using a cubic polynomial for 0<t<1</li>
+<li>float4(v0, v1, v2, v3) - Returns (v0.x, v1.x, v2.x, v3.x)</li>
+<li>float3(v0, v1, v2) - Returns (v0.x, v1.x, v2.x, v2.x)</li>
+<li>float2(v0, v1) - Returns (v0.x, v1.x, v1.x, v1.x)</li>
+<li>time() - Returns the current time</li>
+<li>min(v0, v1)</li>
+<li>max(v0, v1)</li>
+<li>SrgbLinearToGamma(x)</li>
+<li>SrgbGammaToLinear(x)</li>
+<li>random(xMin, xMax) - Returns a random value between xMin.x and xMax.x</li>
+<li>normalize(v0) - Returns the normalized 3-vector in the xyz components. w component remains unchanged.</li>
+<li>length(v0) - Returns the length of 3-vector in xyz.</li>
+</ul>"
+	}
+}
