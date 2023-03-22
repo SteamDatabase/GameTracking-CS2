@@ -3,6 +3,7 @@
 !! No context to execute within.
 !!! WARNING: Can't swap the physcollide lump!
 !%d
+!6
 !=
 != [%s]
 != true
@@ -1121,7 +1122,6 @@
 #OpenGeneralLoadout
 #Overwatch_Error_DownloadFailed
 #Overwatch_Error_ExtractionFailed
-#Overwatch_Error_FilesAccess
 #P2Econ_Keep
 #PANOHUD_GhostBecomeSpectator
 #PANOHUD_Spectate_Navigation_Control_Bot
@@ -6627,6 +6627,7 @@ $world_mins
 33CEconAccountRecurringSubscription
 33CEconItemPreviewDataBlock_Sticker
 33CEp1IntroVortRefractMaterialProxy
+33CMsgGCCStrike15_v2_BetaEnrollment
 33CMsgGCCStrike15_v2_ClientToGCChat
 33CMsgGCCStrike15_v2_GCToClientChat
 33CMsgGCCStrike15_v2_Party_Register
@@ -6921,6 +6922,7 @@ $world_mins
 43CMsgGCCStrike15_v2_GiftsLeaderboardResponse
 43CMsgGCMsgMasterSetClientMsgRouting_Response
 43CTraceFilterSkipTwoEntitiesAndCheckTeamMask
+43ClientJob_EMsgGCCStrike15_v2_BetaEnrollment
 43ClientJob_EMsgGCCStrike15_v2_GCToClientChat
 43ClientJob_EMsgGCCStrike15_v2_PlayersProfile
 43ClientJob_EMsgGCCStrike15_v2_WatchInfoUsers
@@ -9366,6 +9368,7 @@ AcknowledgeNewItems
 ActionAbandonOngoingMatch
 ActionAcknowledgeNotifications
 ActionAcknowledgePenalty
+ActionBetaEnrollmentActivate
 ActionBuyLicense
 ActionClientAuthKeyCode
 ActionElevate
@@ -12168,6 +12171,7 @@ ClientJob_EMsgGCCStrike15_GotvSyncPacket
 ClientJob_EMsgGCCStrike15_StartAgreementSessionInGame
 ClientJob_EMsgGCCStrike15_v2_AccountPrivacySettings
 ClientJob_EMsgGCCStrike15_v2_Account_RequestCoPlays
+ClientJob_EMsgGCCStrike15_v2_BetaEnrollment
 ClientJob_EMsgGCCStrike15_v2_Client2GCEconPreviewDataBlockResponse
 ClientJob_EMsgGCCStrike15_v2_Client2GCRequestPrestigeCoin
 ClientJob_EMsgGCCStrike15_v2_ClientAccountBalance
@@ -15102,6 +15106,7 @@ GetMouseEnableBindingName
 GetMusicDescription
 GetMusicIDForPlayer
 GetMusicNameFromMusicID
+GetMyBetaEnrollmentStatus
 GetMyClanCount
 GetMyClanId32BitByIndex
 GetMyClanIdByIndex
@@ -17759,6 +17764,7 @@ MuzzleFlash_Shotgun_Player
 MyPersona::ActionManageRecurringSubscription : agreementid %llu is currently set to renew %s
 MyPersona::ActionManageRecurringSubscription : enrolling into new recurring subscription (defidx %d)
 MyPersona::ActionManageRecurringSubscription : subscription state is not available yet, checking out to refresh status...
+MyPersona::BetaEnrollment : %d
 MyPersona::RecurringSubscriptionStatusChange : agreement id %llu renewing %s
 MyPersona::RecurringSubscriptionStatusChange : not enrolled
 MyPersonaAPI
@@ -18066,6 +18072,7 @@ N5GCSDK12CProtoBufMsgI31CMsgGCCStrike15_v2_Party_SearchEE
 N5GCSDK12CProtoBufMsgI31CMsgGCHAccountPhoneNumberChangeEE
 N5GCSDK12CProtoBufMsgI31CMsgGCStorePurchaseInitResponseEE
 N5GCSDK12CProtoBufMsgI32CMsgAdjustItemEquippedStateMultiEE
+N5GCSDK12CProtoBufMsgI33CMsgGCCStrike15_v2_BetaEnrollmentEE
 N5GCSDK12CProtoBufMsgI33CMsgGCCStrike15_v2_ClientToGCChatEE
 N5GCSDK12CProtoBufMsgI33CMsgGCCStrike15_v2_GCToClientChatEE
 N5GCSDK12CProtoBufMsgI33CMsgGCCStrike15_v2_Party_RegisterEE
@@ -18199,6 +18206,7 @@ N5GCSDK22CProtoBufMsgMemoryPoolI31CMsgGCCStrike15_v2_Party_SearchEE
 N5GCSDK22CProtoBufMsgMemoryPoolI31CMsgGCHAccountPhoneNumberChangeEE
 N5GCSDK22CProtoBufMsgMemoryPoolI31CMsgGCStorePurchaseInitResponseEE
 N5GCSDK22CProtoBufMsgMemoryPoolI32CMsgAdjustItemEquippedStateMultiEE
+N5GCSDK22CProtoBufMsgMemoryPoolI33CMsgGCCStrike15_v2_BetaEnrollmentEE
 N5GCSDK22CProtoBufMsgMemoryPoolI33CMsgGCCStrike15_v2_ClientToGCChatEE
 N5GCSDK22CProtoBufMsgMemoryPoolI33CMsgGCCStrike15_v2_GCToClientChatEE
 N5GCSDK22CProtoBufMsgMemoryPoolI33CMsgGCCStrike15_v2_Party_RegisterEE
@@ -19833,6 +19841,7 @@ PanoramaComponent_MatchList_FantasyUploaded
 PanoramaComponent_MatchList_PredictionUploaded
 PanoramaComponent_MatchList_StateChange
 PanoramaComponent_MyPersona_AccountPrivacySettingsChanged
+PanoramaComponent_MyPersona_BetaEnrollmentStatusChange
 PanoramaComponent_MyPersona_ClansInfoUpdated
 PanoramaComponent_MyPersona_ClientAuthKeyCode
 PanoramaComponent_MyPersona_ElevatedStateUpdate
@@ -35018,6 +35027,7 @@ returns: "none", "free", "shared", "purchased"
 returns: "steam", "china"
 returns: "steam", "perfectworld"
 returns: '' (if never queried), 'not_enrolled' (never enrolled, should buy from scratch), 'renew_automatically' (when auto-renew is enabled), 'renew_manually' (user must manually renew subscription)
+returns: '' (if not eligible), 'eligible' (can enroll), 'enrolled' (already enrolled)
 returns: number
 revenge
 reverse warp (0/1)
