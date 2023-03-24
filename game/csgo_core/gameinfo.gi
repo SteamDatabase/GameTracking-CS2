@@ -465,6 +465,7 @@
 		"GraphicsPipelineLibrary"					"1"
 		"IndexBufferPoolSizeMB"						"32"
 		"LowLatency"								"1"
+		"MinDXLevel"								"110" // DX 11.0 is the minimum
 	}
 
 	PostProcessingEditor
