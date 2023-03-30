@@ -133,6 +133,7 @@
 		"HasLegacyGameUI" "1" // csgo uses some legacy gameui systems
 		// Default MSAA sample count when run in non-VR mode
 		"MSAADefaultNonVR"	"4" 
+		"DefensiveConCommands"	"1"
 	}
 
 	NetworkSystem
@@ -252,7 +253,6 @@
 		"TimeSlicedShadowMapRendering"	"1"
 		"TerrainTools"					"1"
 		"DefaultGrassMaterial"			"materials/grass/grassquad1.vmat"
-		"VertexNormalPaintEnabled"		"1"
 		"SteamAudioEnabled"				"1"
 		"AddonMapCommand"				"csgo_launch_workshop_map"
 	}
@@ -377,6 +377,9 @@
 
 		TextureCompiler
 		{
+			//Compressor              "lz4"
+			Compressor              "mermaid"
+			//Compressor              "kraken" 
 			CompressMipsOnDisk      "1"
 			CompressMinRatio        "95"
 		}
@@ -479,5 +482,11 @@
 		"SteamAudioEnabled"            "1"
 		Budget_StackSimulationUS		25
 		Budget_FirstStackSimulationUS	50
+	}
+
+	Licenses
+	{
+		//OodleTexture    "0"
+		//OodleLZ         "0"
 	}
 }

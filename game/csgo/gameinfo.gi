@@ -172,4 +172,18 @@
 		retail_filter3		"patches/"
 		retail_filter4		"stickers/"
 	}
+
+	AddonConfig	
+	{
+		"VpkDirectories"
+		{
+			"dir"       "maps"
+			"dir"       "cfg/maps"
+			"dir"       "materials"
+			"dir"       "models"
+			"dir"       "panorama/images/overheadmaps"
+			"dir"       "scripts/vscripts"
+			"dir"       "sound"
+		} 
+	}
 }
