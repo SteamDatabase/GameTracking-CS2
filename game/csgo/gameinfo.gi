@@ -42,6 +42,11 @@
 	{
 		"DepotBuildDateTimeInTitleBar" "1"
 	}
+	
+	pulse
+	{
+		"pulse_enabled"					"1"
+	}
 
 	ConVars
 	{
@@ -140,9 +145,13 @@
 		"inferno_scorch_decals" "0"
 
 		// Steam Audio project specific convars
-		"snd_hrtf_distance_behind"				"400.0"
-		"snd_steamaudio_enable_custom_hrtf"		"0"
-		"snd_steamaudio_active_hrtf"			"0"
+		"snd_musicvolume"
+		{
+			"version"	"2"
+		}
+		"snd_steamaudio_enable_custom_hrtf"					"1"
+		"snd_steamaudio_enable_perspective_correction"		"1"
+		"snd_steamaudio_perspective_correction_factor"		"1.0"
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 
@@ -171,19 +180,26 @@
 		retail_filter2		"panorama/"
 		retail_filter3		"patches/"
 		retail_filter4		"stickers/"
+		retail_filter5		"weapons/"
+		retail_filter6		"materials/models/inventory_items/"
 	}
 
 	AddonConfig	
 	{
 		"VpkDirectories"
 		{
-			"dir"       "maps"
-			"dir"       "cfg/maps"
-			"dir"       "materials"
-			"dir"       "models"
-			"dir"       "panorama/images/overheadmaps"
-			"dir"       "scripts/vscripts"
-			"dir"       "sound"
+			"exclude"       "maps/content_examples"
+			"include"       "maps"
+			"include"       "cfg/maps"
+			"include"       "materials"
+			"include"       "models"
+			"include"       "panorama/images/overheadmaps"
+			"include"       "scripts/vscripts"
+			"include"       "sounds"
+			"include"       "soundevents"
+			"include"       "lighting/postprocessing"
+			"include"       "postprocess"
+			"include"       "addoninfo.txt"
 		} 
 	}
 }

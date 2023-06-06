@@ -134,6 +134,7 @@
 		// Default MSAA sample count when run in non-VR mode
 		"MSAADefaultNonVR"	"4" 
 		"DefensiveConCommands"	"1"
+		"PauseSinglePlayerOnGameOverlay" "1"
 	}
 
 	NetworkSystem
@@ -228,6 +229,7 @@
 	{
 		"Engine"	"Source 2"
 		"ToolsDir"	"../sdktools"	// NOTE: Default Tools path. This is relative to the mod path.
+		"RestrictWorkshopItemTools"	"1"
 	}
 	
 	Hammer
@@ -254,7 +256,7 @@
 		"TerrainTools"					"1"
 		"DefaultGrassMaterial"			"materials/grass/grassquad1.vmat"
 		"SteamAudioEnabled"				"1"
-		"AddonMapCommand"				"csgo_launch_workshop_map"
+		"AddonMapCommand"				"map_workshop"
 	}
 
 	RenderPipelineAliases
@@ -326,11 +328,13 @@
 			MinimumTrianglesPerClusteredMesh	"2048"
 			MinimumVerticesPerClusteredMesh		"2048"
 			MinimumVolumePerClusteredMesh		"1800"		// ~12x12x12 cube
-			MaxPrecomputedVisClusterMembership	"48"
+			MaxPrecomputedVisClusterMembership	"16"
 			UseAggregateInstances			"1"
 			AggregateInstancingMeshlets			"1"
 			UseModelDoc							"1"
+			UseModelDocForEntityModels			"1"
 			UseStaticEnvMapForObjectsWithLightingOrigin	"1"
+			WorldPhysicsModelDoc				"1"
 		}
 
 // Optimisation for Hammer Mesh Physics
@@ -391,20 +395,9 @@
 		"NavCellSize" "1.5"
 		"NavCellHeight" "2.0"
 
-		"NavAgentNumHulls" "1"
-
-		"NavAgentRadius_0" "16.0"
-		"NavAgentHeight_0" "71.0"
-		"NavAgentShortHeightEnabled_0" "1"
-		"NavAgentShortHeight_0" "35.5"
-		"NavAgentMaxClimb_0" "16.0"
-		"NavAgentMaxSlope_0" "50"
-		"NavAgentMaxJumpDownDist_0" "157.0"
-		// Make sure we can reach locations using jump + crouch
-		//"NavAgentMaxJumpUpDist_0" "41.8"
-		"NavAgentMaxJumpUpDist_0" "68.0"
-		"NavAgentMaxJumpHorizDistBase_0" "64.0"
-		"NavAgentBorderErosion_0" "0"
+		// Hull definitions live in scripts/nav_hulls.vdata
+		// Preset definitions live in scripts/nav_hulls_presets.vdata
+		"NavHullsPreset" "default"
 
 		"NavRegionMinSize" "8"
 		"NavRegionMergeSize" "20"
