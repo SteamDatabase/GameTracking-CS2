@@ -1,0 +1,185 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+// Defines entity classes to control lighting and sky rendering.
+//
+//==================================================================================================
+
+@BaseClass base(Targetname, Parentname) tags( Lighting ) = light_base
+[
+	enabled(boolean) : "Enabled" : 1
+
+	color(color255) : "Color" : "255 255 255"
+	brightness(float) : "Brightness" : "1.0"
+	range(float) { min="0" } : "Range" : "512" : "Distance range for light. 0=infinite"
+
+	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "1" : "Whether this light casts shadow" =
+	[
+		"0" : "No"
+		"1" : "Yes"
+		"2" : "Baked Only"
+	]
+	nearclipplane(float) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Near Clip Plane" : 1 : "Distance for near clip plane for shadow map"	
+	shadowpriority(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Priority" : "-1" : "Priority for the lights shadowmap" =
+	[
+		"100" : "Highest"
+		"10"  : "High"
+		"5"   : "Medium"
+		"-5"  : "Low"
+		"-1"  : "Default"
+	]
+
+	input SetParent(string) : "Changes the entity's parent in the movement hierarchy."
+	input SetParentAttachment(string) : "Change this entity to attach to a specific attachment point on its parent. Entities must be parented before being sent this input. The parameter passed in should be the name of the attachment."
+	input SetParentAttachmentMaintainOffset(string) : "Change this entity to attach to a specific attachment point on it's parent. Entities must be parented before being sent this input. The parameter passed in should be the name of the attachment. The entity will maintain it's position relative to the parent at the time it is attached."
+	input ClearParent(void) : "Removes this entity from the the movement hierarchy, leaving it free to move independently."
+	input Kill(void) : "Removes this entity from the world."
+	input KillHierarchy(void) : "Removes this entity and all its children from the world."
+	input AddOutput(string) : "Adds an entity I/O connection to this entity. Parameter format: outputname>targetname>inputname>parameter>delay>max times to fire (-1 == infinite). Very dangerous, use with care."
+	input FireUser1(void) : "Causes this entity's OnUser1 output to be fired."
+	input FireUser2(void) : "Causes this entity's OnUser2 output to be fired."
+	input FireUser3(void) : "Causes this entity's OnUser3 output to be fired."
+	input FireUser4(void) : "Causes this entity's OnUser4 output to be fired."
+	output OnUser1(void) : "Fired in response to FireUser1 input."
+	output OnUser2(void) : "Fired in response to FireUser2 input."
+	output OnUser3(void) : "Fired in response to FireUser3 input."
+	output OnUser4(void) : "Fired in response to FireUser4 input."
+	output OnKilled(void) : "Fired when the entity is killed and removed from the game."
+
+	style(Choices) [ group="Style" ] : "Appearance" : 0 =
+	[
+		0 : "Normal"
+		10: "Fluorescent flicker"
+		2 : "Slow, strong pulse"
+		11: "Slow pulse, noblack"
+		5 : "Gentle pulse"
+		1 : "Flicker A"
+		6 : "Flicker B"
+		3 : "Candle A"
+		7 : "Candle B"
+		8 : "Candle C"
+		4 : "Fast strobe"
+		9 : "Slow strobe"
+	]
+	pattern(string) [ group="Style" ]: "Custom Appearance" : "" : "Set a custom pattern of light brightness for this light. Pattern format is a string of characters, where 'a' is total darkness, 'z' fully bright. i.e. 'aaggnnttzz' would be a steppy fade in from dark to light."
+
+	fademindist(float) [ group="Fade Distance" ] : "Start Fade Dist" : -250 : "Distance at which the light starts to fade (<0 = use fademaxdist)."
+	fademaxdist(float) [ group="Fade Distance" ] : "End Fade Dist" : 1250 : "Maximum distance at which the light is visible (0 = don't fade out)."
+
+	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"
+	priority(integer) [ group="Render Properties" ] : "Priority" : 0 : "When the number of visible lights exceeds the rendering budget, higher priority lights are chosen for rendering first."
+	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Semicolon-delimited list of light groups to affect"
+
+	input SetLightEnabled(void) : "Sets whether the light is enabled (takes parameter of 0 or 1)"
+	input TurnOn(void) : "Turn the light on."
+	input TurnOff(void) : "Turn the light off."
+	input Toggle(void) : "Toggle the light on/off."
+	input SetLightColor(vector) : "Set light color"
+	input SetLightBrightness(float) : "Set light brightness"
+	input SetAppearance(integer) : "Set appearance 0=Normal 1=Flicker A, 2=Slow, strong pulse 3=Candle A ..."
+	input SetCustomAppearance(string) : "Set a custom pattern of light brightness for this light. Pattern format is a string of characters, where 'a' is total darkness, 'z' fully bright. i.e. 'aaggnnttzz' would be a steppy fade in from dark to light."
+]
+
+// An extra base class containing light parameters from the early days of Source 2 that not all mods want to support
+@BaseClass = light_base_legacy_params
+[
+	bouncescale(float) : "Indirect Light Multiplier" : "1.0"
+	renderdiffuse(boolean) : "Render Diffuse" : "1" : ""
+
+	renderspecular(choices) : "Render Specular" : "1" : "" =
+	[
+		"0" : "Off"
+		"1" : "On"
+		"2" : "Bake into cubemaps"
+	]
+
+	rendertransmissive(choices) : "Render Transmissive" : "1" : "" =
+	[
+		"0" : "Off"
+		"1" : "On"
+	]
+
+	directlight(choices) : "Direct Lighting" : "2" : "How direct lighting should be represented" =
+	[
+		"0" : "None"
+		"1" : "Baked"
+		"2" : "Per-Pixel"
+	]
+
+	indirectlight(choices) : "Indirect Lighting" : "1" : "How indirect lighting should be represented" =
+	[
+		"0" : "None"
+		"1" : "Baked"
+	]
+]
+
+
+@BaseClass = light_base_attenuation_params
+[
+	attenuation1(float) : "Linear Attenuation" : "0.0"
+	attenuation2(float) : "Quadratic Attenuation" : "1.0"
+	lightsourceradius(float) { min="0" } : "Light Source Radius" : "2.0" : "The radius of the light source in game units"
+]
+
+
+@PointClass
+	light()
+	base(light_base, light_base_legacy_params)
+	editormodel( "models/editor/light_environment", lightModeTint, "124 255 157", "255 64 64" )
+	iconsprite
+	{
+		image = "materials/editor/light_environment.vmat"
+		tintKey = "color"
+	}	
+	iconsprite
+	{
+		image = "materials/editor/light_environment_2.vmat"
+		tintKey = "skycolor"
+	}	
+	global( sun )
+	bakeskylight()
+	bakeambientocclusion( ambient_occlusion, max_occlusion_distance, fully_occluded_fraction, occlusion_exponent )
+	= light_environment : 
+	"Sets the color and angle of the light from the sun and sky.<br><br>" +
+	"Typical setup:<br>" +
+	"1. Create an <b>env_sky</b> entity to use as your skybox<br>" +
+	"2. Create a <b>light_environment</b> entity and set <b>Sky IBL Source</b> to the name of the <b>env_sky</b> entity<br>" +
+	"3. Right-click on your <b>light_environment</b> entity and select 'Selected environment light -> Estimate lighting from HDR skybox'<br>" +
+	"4. Adjust angle and brightness of the sunlight as you see fit"
+
+[
+	angulardiameter(float) { min="0.1" } : "Sun Spread Angle" : "1.0" : "The angular extent of the sun for casting soft shadows. Higher numbers are more diffuse. 1 is a good starting value."
+
+	numcascades(integer) [ group = "Shadows" ] : "Cascade Count" : 3 : "Number of shadow cascades to use."
+	shadowcascadedistance0(float) { group = "Shadows" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } }: "Cascade Distance 0" : "0.0"
+	shadowcascadedistance1(float) { group = "Shadows" enabled={ variable="numcascades" values=[     "2", "3", "4"] } }: "Cascade Distance 1" : "0.0"
+	shadowcascadedistance2(float) { group = "Shadows" enabled={ variable="numcascades" values=[          "3", "4"] } }: "Cascade Distance 2" : "0.0"
+	shadowcascadedistance3(float) { group = "Shadows" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Distance 3" : "0.0"
+	shadowcascaderesolution0(integer) { group = "Shadows" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } } : "Cascade Resolution 0" : 0
+	shadowcascaderesolution1(integer) { group = "Shadows" enabled={ variable="numcascades" values=[     "2", "3", "4"] } } : "Cascade Resolution 1" : 0
+	shadowcascaderesolution2(integer) { group = "Shadows" enabled={ variable="numcascades" values=[          "3", "4"] } } : "Cascade Resolution 2" : 0
+	shadowcascaderesolution3(integer) { group = "Shadows" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Resolution 3" : 0
+
+	cascadecrossfade(float) { min="0" max=".3" group="Shadows" enabled={ variable="numcascades" values=[ "2", "3", "4" ] } } : "Cascade Cross Fade Size" : ".1" : "Size of the region at the edge of the cascade that will be crossfaded to the next (to hide resolution changes)"
+	cascadedistancefade(float) { group="Shadows" } : "Cascade Distance Fade Out Size" : ".05" : "Size of the region where shadows are faded out at the end of the cascades"
+
+	cascaderenderstaticobj(int) { group="Shadows" enabled={ variable="baked_light_indexing" value="1" } } : "Render Static Objects To Cascades" : "-1" : "Renders static objects to cascades <= this cascade when using mixed shadows (Stationary / Indexed lights)"
+
+	skycolor(color255) { group = "Sky" enabled={ variable="skytexture" values=[""] } } : "Sky Color" : "255 255 255"
+	skyintensity(float) { group = "Sky" enabled={ variable="skytexture" values=[""] } } : "Sky Intensity" : "1.0"
+	skytexture(target_destination) [ group = "Sky" ] : "Sky IBL Source" : "" : "env_sky entity, lat-long/h-cross/v-cross skybox image, or sky material to use for sky IBL"
+	skytexturescale(float) [ group = "Sky" ] : "Sky IBL Scale" : "1.0" : "Scale value for IBL intensity fine-tuning"
+	skyambientbounce(color255alpha) [ group = "Sky" ] : "Sky Ground Albedo" : "0 0 0" : "This is the color of the virtual ground plane used for skybox IBL / color ambient lighting"
+	sunlightminbrightness(float) [ group = "Sky" ] : "Sun Light Minimum Brightness Threshold" : "32" : "Brightness beyond which pixels in the Sky IBL Source are considered to be coming from the sun"
+	skydirectlight(choices) [ group = "Sky" ] : "Sky Direct Light" : "1" =
+	[
+		"0" : "None"
+		"1" : "Baked"
+	]
+	skybouncescale(float) [ group = "Sky" ] : "Sky Bounce Light Multiplier" : "1.0"
+	brightnessscale(float) { group="Render Properties" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount" 
+	
+	ambient_occlusion(boolean) [ group = "Ambient Occlusion" ] : "Ambient Occlusion" : "0"
+	max_occlusion_distance(float) [ group = "Ambient Occlusion" ] : "Ambient Occlusion Max Distance" : "16.0"
+	fully_occluded_fraction(float) [ group = "Ambient Occlusion" ] : "Ambient Occlusion Fully Occluded Fraction" : "1.0"
+	occlusion_exponent(float) [ group = "Ambient Occlusion" ] : "Ambient Occlusion Exponent" : "1.0"
+]

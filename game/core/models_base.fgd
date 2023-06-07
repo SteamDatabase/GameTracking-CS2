@@ -1,0 +1,399 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+//==================================================================================================
+
+@ModelGameData = prop_data
+[
+	base(propdataname) 		: "Base Prop" : : "Base keys (entry from propdata.txt)"
+	allowstatic(boolean) 	: "Allow As Static Prop" : 0
+	bakelighting(boolean)	: "Bake Lighting As Static Prop" : 1
+	damage_table(choices) 	: "Damage Table" : "" : "" =
+	[
+		""						:	"Inherit Default"
+		"player"				:	"Player"
+		"player_vehicle"		:	"Player Vehicle"
+		"npc"					:	"NPC"
+		"glass"					:	"Glass"
+		"props"					:	"Props"
+		"prevent_impact_damage"	:	"Prevent All Impact Damage"
+	]
+	dmg.bullets(float) 		: "Damage Bullets" : -1
+	dmg.club(float) 		: "Damage Club" : -1
+	dmg.explosive(float) 	: "Damage Explosive" : -1
+	dmg.fire(float) 		: "Damage Fire" : -1
+	health(float) 			: "Health" : -1
+	spawn_motion_disabled(boolean) : "Spawn as Motion-Disabled" : 0
+]
+
+
+@ModelGameData game_data_list( particles_list ) = particle
+[
+	name(resource:particle) : "Particle"
+	attachment_point(model_attachment) : "Attachment"
+	attachment_type(choices) : "Attachment Type" : "point_follow" =
+	[
+		"absorigin"				: "PATTACH_ABSORIGIN"			// Create at absorigin, but don't follow
+		"absorigin_follow"		: "PATTACH_ABSORIGIN_FOLLOW"		// Create at absorigin, and update to follow the entity
+		"customorigin"			: "PATTACH_CUSTOMORIGIN"			// Create at a custom origin, but don't follow
+		"customorigin_follow"	: "PATTACH_CUSTOMORIGIN_FOLLOW"	// Create at a custom origin, follow relative position to specified entity
+		"point"					: "PATTACH_POINT"					// Create on attachment point, but don't follow
+		"point_follow"			: "PATTACH_POINT_FOLLOW"			// Create on attachment point, and update to follow the entity
+		"eyes_follow"			: "PATTACH_EYES_FOLLOW"			// Create on eyes of the attached entity, and update to follow the entity
+		"overhead_follow"		: "PATTACH_OVERHEAD_FOLLOW"		// Create at the top of the entity's bbox
+		"worldorigin"			: "PATTACH_WORLDORIGIN"			// Used for control points that don't attach to an entity
+		"rootbone_follow"		: "PATTACH_ROOTBONE_FOLLOW"		// Create at the root bone of the entity, and update to follow
+		"renderorigin_follow"	: "PATTACH_RENDERORIGIN_FOLLOW"			// Create at the renderorigin of the entity, and update to follow
+		"main_view"				: "PATTACH_MAIN_VIEW"
+		"water_wake"			: "PATTACH_WATERWAKE"
+		"center_follow"			: "PATTACH_CENTER_FOLLOW"
+	]
+	attachment_offset(vector) : "Attachment Offset"
+	
+	// TODO: additional control points?
+]
+
+@ModelGameData game_data_list( particle_cfg_list ) = particle_cfg
+[
+	name(resource:particle) : "Particle"
+	config(particle_cfg) : "Config Name"
+]
+
+@ModelAnimEvent = AE_CL_BODYGROUP_SET_VALUE
+[
+	bodygroup(model_bodygroup) : "Body Group"
+	value(int) : "Value" : 0
+]
+
+
+@ModelAnimEvent = AE_SV_BODYGROUP_SET_VALUE
+[
+	bodygroup(model_bodygroup) : "Body Group"
+	value(int) : "Value" : 0
+]
+
+
+@ModelAnimEvent = AE_CL_CREATE_PARTICLE_EFFECT
+[
+	name(resource:particle)		[report, group="Particles"]	: "Particle System"
+	detach_from_owner(bool)		[group="Particles"]			: "Detach From Owner" : "0"
+	always_run(bool)			[group="Particles"]			: "Always Run" : "0"
+	stop_on_seq_change(bool)	[group="Sequence"]			: "Stop On Sequence Change" : "0"
+	stop_immediately(bool)		[group="Sequence"]			: "Sequence Change Stop Is Instant" : "0"
+	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
+	tags(string)											: "Tags"
+	attachment_point(model_attachment)	[group="Attachments"]	: "Attachment"
+	attachment_type(choices)			[group="Attachments"]	: "Attachment Type" : "point_follow" =
+	[
+		"absorigin"				: "PATTACH_ABSORIGIN"			// Create at absorigin, but don't follow
+		"absorigin_follow"		: "PATTACH_ABSORIGIN_FOLLOW"		// Create at absorigin, and update to follow the entity
+		"customorigin"			: "PATTACH_CUSTOMORIGIN"			// Create at a custom origin, but don't follow
+		"customorigin_follow"	: "PATTACH_CUSTOMORIGIN_FOLLOW"	// Create at a custom origin, follow relative position to specified entity
+		"point"					: "PATTACH_POINT"					// Create on attachment point, but don't follow
+		"point_follow"			: "PATTACH_POINT_FOLLOW"			// Create on attachment point, and update to follow the entity
+		"eyes_follow"			: "PATTACH_EYES_FOLLOW"			// Create on eyes of the attached entity, and update to follow the entity
+		"overhead_follow"		: "PATTACH_OVERHEAD_FOLLOW"		// Create at the top of the entity's bbox
+		"worldorigin"			: "PATTACH_WORLDORIGIN"			// Used for control points that don't attach to an entity
+		"rootbone_follow"		: "PATTACH_ROOTBONE_FOLLOW"		// Create at the root bone of the entity, and update to follow
+		"renderorigin_follow"	: "PATTACH_RENDERORIGIN_FOLLOW"			// Create at the renderorigin of the entity, and update to follow
+		"main_view"				: "PATTACH_MAIN_VIEW"
+		"water_wake"			: "PATTACH_WATERWAKE"
+		"center_follow"			: "PATTACH_CENTER_FOLLOW"
+	]
+
+	attachment_point_cp1(model_attachment)	[group="Attachments"]	: "Attachment (Control Point 1)"
+	attachment_type_cp1(choices)			[group="Attachments"]	: "Attachment Type (Control Point 1)" : "point_follow" =
+	[
+		"absorigin"				: "PATTACH_ABSORIGIN"			// Create at absorigin, but don't follow
+		"absorigin_follow"		: "PATTACH_ABSORIGIN_FOLLOW"		// Create at absorigin, and update to follow the entity
+		"customorigin"			: "PATTACH_CUSTOMORIGIN"			// Create at a custom origin, but don't follow
+		"customorigin_follow"	: "PATTACH_CUSTOMORIGIN_FOLLOW"	// Create at a custom origin, follow relative position to specified entity
+		"point"					: "PATTACH_POINT"					// Create on attachment point, but don't follow
+		"point_follow"			: "PATTACH_POINT_FOLLOW"			// Create on attachment point, and update to follow the entity
+		"eyes_follow"			: "PATTACH_EYES_FOLLOW"			// Create on eyes of the attached entity, and update to follow the entity
+		"overhead_follow"		: "PATTACH_OVERHEAD_FOLLOW"		// Create at the top of the entity's bbox
+		"worldorigin"			: "PATTACH_WORLDORIGIN"			// Used for control points that don't attach to an entity
+		"rootbone_follow"		: "PATTACH_ROOTBONE_FOLLOW"		// Create at the root bone of the entity, and update to follow
+		"renderorigin_follow"	: "PATTACH_RENDERORIGIN_FOLLOW"			// Create at the renderorigin of the entity, and update to follow
+		"main_view"				: "PATTACH_MAIN_VIEW"
+		"water_wake"			: "PATTACH_WATERWAKE"
+		"center_follow"			: "PATTACH_CENTER_FOLLOW"
+	]
+]
+
+@ModelAnimEvent = AE_CL_STOP_PARTICLE_EFFECT
+[
+	name(resource:particle) [report] : "Particle System"
+	stop_instantly(bool) : "Stop Instantly" : "0"
+	play_endcap(bool)    : "Play Endcap" : "0"
+]
+
+@ModelAnimEvent = AE_CL_ADD_PARTICLE_EFFECT_CP
+[
+	name(resource:particle) [report] : "Particle System"
+	control_point(int) : "Control Point Number"
+
+	attachment_point(model_attachment) : "Attachment"
+	attachment_type(choices) : "Attachment Type" : "point_follow" =
+	[
+		"absorigin"				: "PATTACH_ABSORIGIN"			// Create at absorigin, but don't follow
+		"absorigin_follow"		: "PATTACH_ABSORIGIN_FOLLOW"		// Create at absorigin, and update to follow the entity
+		"customorigin"			: "PATTACH_CUSTOMORIGIN"			// Create at a custom origin, but don't follow
+		"customorigin_follow"	: "PATTACH_CUSTOMORIGIN_FOLLOW"	// Create at a custom origin, follow relative position to specified entity
+		"point"					: "PATTACH_POINT"					// Create on attachment point, but don't follow
+		"point_follow"			: "PATTACH_POINT_FOLLOW"			// Create on attachment point, and update to follow the entity
+		"eyes_follow"			: "PATTACH_EYES_FOLLOW"			// Create on eyes of the attached entity, and update to follow the entity
+		"overhead_follow"		: "PATTACH_OVERHEAD_FOLLOW"		// Create at the top of the entity's bbox
+		"worldorigin"			: "PATTACH_WORLDORIGIN"			// Used for control points that don't attach to an entity
+		"rootbone_follow"		: "PATTACH_ROOTBONE_FOLLOW"		// Create at the root bone of the entity, and update to follow
+		"renderorigin_follow"	: "PATTACH_RENDERORIGIN_FOLLOW"			// Create at the renderorigin of the entity, and update to follow
+		"main_view"				: "PATTACH_MAIN_VIEW"
+		"water_wake"			: "PATTACH_WATERWAKE"
+		"center_follow"			: "PATTACH_CENTER_FOLLOW"
+	]
+]
+
+@ModelAnimEvent = AE_CL_PANORAMA_EVENT
+[
+	label(string) [report]		: "Label"
+]
+
+@ModelAnimEvent = AE_CL_PLAYSOUND_ATTACHMENT
+[
+	name(sound) [report] : "Sound"
+	attachment(model_attachment) : "Attachment"
+	stop_on_seq_change(bool) : "Auto-stop on sequence change or death" : "0"
+	use_layer_sequence(bool) : "Use Layer Sequence" : "0"
+	tags(string)				: "Tags"
+]
+
+@ModelAnimEvent = AE_CL_PLAYSOUND_LOOPING
+[
+	name(sound) [report]		: "Sound"
+	attachment(model_attachment) : "Attachment"
+	emitFromWorld(bool)			: "Emit From World" : "0"
+	tags(string)				: "Tags"
+]
+
+@ModelAnimEvent = AE_CL_PLAYSOUND
+[
+	name(sound) [report]		: "Sound"
+	stop_on_seq_change(bool)	: "Auto-stop on sequence change or death" : "0"
+	use_layer_sequence(bool)	: "Use Layer Sequence" : "0"
+	tags(string)				: "Tags"
+]
+
+@ModelAnimEvent = AE_CL_PLAYSOUND_POSITION
+[
+	name(sound) [report]		: "Sound"
+	stop_on_seq_change(bool)	: "Auto-stop on sequence change or death" : "0"
+	use_layer_sequence(bool)	: "Use Layer Sequence" : "0"
+	tags(string)				: "Tags"
+]
+
+@ModelAnimEvent = AE_CL_SUPPRESS_EVENTS_WITH_TAG
+[
+	tag(string)				: "Tag"
+	suppress(bool)			: "Suppress" : "1"
+]
+
+@ModelAnimEvent = AE_FOOTSTEP
+[
+	attachment(model_attachment) [report] : "Attachment"
+	foot(choices) [report] : "Foot" : 0 =
+	[
+		0 : "Left"
+		1 : "Right"
+		2 : "(Use Override Sound)"
+	]
+
+	overridesound(sound) [report] : "Override Sound"
+	debug_anim_source(string) [report] : "(Debug) Animation Source"
+	overridewalktorunspeed(float) [report] : "Override Walk to Run Speed (-1.0f for auto detect)" : "-1.0"
+]
+
+@ModelAnimEvent = AE_CL_STOPSOUND
+[
+	name(sound) [report] : "Sound"
+]
+
+@ModelAnimEvent = AE_CL_STOP_RAGDOLL_CONTROL
+[
+]
+
+@ModelAnimEvent = AE_CL_CREATE_PARTICLE_EFFECT_CFG 
+[
+	name(resource:particle)		[report, group="Particles"] : "Particle System"
+	detach_from_owner(bool)		[group="Particles"]			: "Detach From Owner" : "0"
+	always_run(bool)			[group="Particles"]			: "Always Run" : "0"
+	stop_on_seq_change(bool)	[group="Sequence"]			: "Stop On Sequence Change" : "0"
+	stop_immediately(bool)		[group="Sequence"]			: "Sequence Change Stop Is Instant" : "0"
+	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
+	tags(string)											: "Tags"
+	config(particle_cfg)									: "Config"
+]
+
+@ModelAnimEvent = AE_SV_CREATE_PARTICLE_EFFECT_CFG 
+[
+	name(resource:particle)	[report]	: "Particle System"
+	detach_from_owner(bool)				: "Detach From Owner" : "0"
+	config(particle_cfg)				: "Config"
+]
+
+@ModelAnimEvent = AE_SV_STOP_PARTICLE_EFFECT
+[
+	name(resource:particle) [report] : "Particle System"
+	stop_instantly(bool) : "Stop Instantly" : "0"
+	play_endcap(bool)    : "Play Endcap" : "0"
+]
+
+
+@ModelAnimEvent = AE_CL_HIDE_PARTICLE_EFFECT 
+[
+	name(resource:particle)		[report] : "Particle System"
+	stop_on_seq_change(bool)			: "Stop On Sequence Change" : "0"
+]
+
+@ModelAnimEvent = AE_CL_SHOW_PARTICLE_EFFECT 
+[
+	name(resource:particle)		[report] : "Particle System"
+	stop_on_seq_change(bool)			: "Stop On Sequence Change" : "0"
+]
+
+@ModelAnimEvent = AE_SCRIPT_EVENT_FIRE_INPUT 
+[
+	input(string) : "Input"
+]
+
+
+@ModelAnimEvent = AE_SV_PLAYSOUND 
+[
+	name(sound) : "Sound Name"
+]
+
+@ModelAnimEvent = AE_SCRIPT_EVENT_SOUND 
+[
+	name(sound) : "Sound Name"
+]
+
+@ModelAnimEvent = AE_SCRIPT_EVENT_SOUND_VOICE 
+[
+	name(sound) : "Sound Name"
+]
+
+@ModelAnimEvent = AE_SCRIPT_EVENT_SENTENCE_RND1 
+[
+	name(string) : "Sentence Name"
+]
+
+@ModelAnimEvent = AE_SCRIPT_EVENT_SENTENCE
+[
+	name(string) : "Sentence Name"
+]
+
+@ModelAnimEvent = AE_START_SCRIPTED_EFFECT
+[
+	name(string) : "Name"
+]
+
+@ModelAnimEvent = AE_STOP_SCRIPTED_EFFECT
+[
+	name(string) : "Name"
+]
+
+@ModelAnimEvent = AE_CL_ENABLE_BODYGROUP
+[
+	name(model_bodygroup) : "Body Group"
+]
+
+@ModelAnimEvent = AE_CL_DISABLE_BODYGROUP
+[
+	name(model_bodygroup) : "Body Group"
+]
+
+@ModelAnimEvent = AE_CL_CLOTH_ATTR
+[
+	script(string): "Script"
+]
+
+@ModelAnimEvent duration_info { LengthSeconds="Length" SpeedIn="SpeedIn" SpeedOut="SpeedOut" Value="Value" } = AE_CL_CLOTH_STIFFEN
+[
+	Value(float) : "Stiffness" : 1
+	SpeedIn(float) : "Ease-In Speed (0=infinite speed)" : 10
+	SpeedOut(float) : "Ease-Out Speed (0=infinite speed)" : 10
+	Length(float) : "Stiffen for Seconds" : 1
+	VertexSet(model_cloth_vertex_map) : "Vertex Set Name"
+]
+
+@ModelAnimEvent = AE_CL_CLOTH_GROUND_OFFSET
+[
+	Height(float) : "Ground Offset Height" : 0
+	VertexSet(string) : "Vertex Set Name"
+]
+
+@ModelAnimEvent = AE_CL_CLOTH_EFFECT
+[
+	FeEffectName(model_cloth_effect) : "Effect Name"
+	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
+	tags(string)			[group="Sequence"]			: "Tags"
+]
+
+@ModelAnimEvent = AE_CL_CREATE_ANIM_SCOPE_PROP
+[
+	name(resource:model) : "Model Name"
+	attachment(model_attachment) : "Attachment"
+	parent(bool) : "Parent When Created" : "1"
+	activity(string) : "Activity or Sequence"
+	stop_immediately(bool)		[group="Sequence"]			: "Sequence Change Stop Is Instant" : "0"
+	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
+	tags(string)			[group="Sequence"]			: "Tags"
+]
+
+
+@ModelGameData
+capsule
+{
+	transform =
+	{
+		bone_key = "bonename"
+	}
+	point0_key = "point0"
+	point1_key = "point1"
+	radius_key = "radius"
+}
+game_data_list( ao_proxy_capsule_list )
+ = ao_proxy_capsule
+[
+	bonename(model_bone) : "Bone"
+	radius(float) [ scale_bone_relative ] : "Radius" : 5
+	point0(local_point) [ scale_bone_relative ] : "Point 0" : "0 0 0"
+	point1(local_point) [ scale_bone_relative ] : "Point 1" : "10 0 0"
+]
+
+@ModelGameData
+box
+{
+	transform =
+	{
+		bone_key = "bonename"
+		origin_key = "offset_origin"
+		angles_key = "offset_angles"
+	}
+	dimensions_key = "dimensions"
+}
+locator_axis
+{
+	transform =
+	{
+		bone_key = "bonename"
+		origin_key = "offset_origin"
+		angles_key = "offset_angles"
+	}
+}
+game_data_list( ao_proxy_box_list )
+= ao_proxy_box
+[
+	bonename(model_bone) : "Bone"
+	dimensions(vector) [ scale_bone_relative ] : "Dimensions" : "10 10 10"
+	offset_origin(vector) [ scale_bone_relative ] : "Offset" : "0 0 0"
+	offset_angles(angle) : "Angles" : "0 0 0"
+]

@@ -1,0 +1,85 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+// Defines markup volume classes
+//
+//==================================================================================================
+
+//--------------------------------------------------------------------------------------------------
+//
+// Markup volumes
+//
+//--------------------------------------------------------------------------------------------------
+@SolidClass base(Targetname, Parentname, Global, EnableDisable)
+	metadata
+	{
+		collision_group = "never"
+	}
+= markup_volume : "Generic markup volume entity, can be queried in-game by name/type/location"
+[
+]
+
+
+@SolidClass base(markup_volume)
+= markup_volume_tagged : "Tagged generic markup volume entity, can be queried in-game by tag/name/type/location"
+[
+	// Each markup group has an associated markup_group entity; 'groupnames' controls
+	// group membership by listing the targetnames of markup_group entities.
+	groupnames(tag_list_dynamic) : "Markup Groups" =
+	[
+	]
+]
+
+
+@SolidClass base(markup_volume_tagged)
+= markup_group : "Markup group entity; add the group's targetname to the 'Markup Groups' field of a markup entity to add that entity to this group"
+[
+	// markup_group represents a group of markup objects.
+	// It has tags, so you can search for the group using those tags.
+	// You can then search within the markup objects comprising the group.
+
+	// TODO: groupbyprefab(boolean)    : "Auto Group By Prefab"    : 0 : "Automatically add all markup entities to this group, within this prefab (and child prefabs)"
+	groupbyvolume(boolean)    : "Auto Group By Volume"    : 0 : "Automatically add any markup entities to this group that overlap this volume"
+	groupothergroups(boolean) : "Auto Group Other Groups" : 0 : "When auto-grouping (by prefab or by volume), include other markup_group entities in this group. By default this does not happen."
+]
+
+
+@SolidClass base(markup_volume_tagged) tags( NavMarkup )
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolsnavattribute.vmat"
+	}
+= func_nav_markup : "Tagged NAV markup volume entity, used during export and can be queried in-game by tag/name/type/location"
+[
+	navProperty_NavGen(tag_list) : "Nav Generation Markup" = 
+	[
+		"WALKABLESEED" : "Walkable Seed" : 0
+		"NONAV" : "No Nav" : 0
+	]
+
+	navProperty_NavAttributes(tag_list) : "Nav Attributes"  =
+	[
+		"AVOID": "Avoid" : 0
+		"SPLIT": "Split" : 0
+	]
+]
+
+
+@SolidClass base( markup_volume_tagged )
+	vecline_local( ref_position, 255, 255, 255 )
+	text_local( ref_position, "  Ref Pos", 255, 255, 255 )
+ = markup_volume_with_ref : "Tagged markup volume entity with a target reference point.  Points are only in volume if behind the reference point relative to a given query position."
+[
+	ref_position(local_point) : "Ref Pos" : "0 0 0" : "Reference position."
+	use_ref_position(boolean) : "Use Reference Position" : 1 : "Use the reference position when calculating validity of query positions."
+]
+
+
+@SolidClass base( func_nav_markup ) 
+	model( "models/editor/arrow.vmdl" )
+ = func_nav_gen_proj : "Generate nav inside this volume and in the direction of the arrow"
+[
+	navProperty_NavGenProj(tag_list) : "nav gen proj markup" = 
+	[
+		"NAV_GEN_PROJ": "Oriented nav generation (along projection indicated by arrow)" : 1
+	]
+]

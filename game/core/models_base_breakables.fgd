@@ -1,0 +1,129 @@
+// Shared modeldoc FGD entries for breakable models
+
+@BaseClass
+= base_break_force
+[
+	offset(vector)									: "Offset"						: ""	: "Offset for the influence point (in the space of the model or attachment)"
+	attachment_point(model_attachment)				: "Attachment Point"			: ""	: "Offset the influence point from the named attachment rather than the root of the model"
+	center_on_damage_point(bool)					: "Center on Damage Point"		: ""	: "Center the influence point (will ignore cause attachment to be ignored, but still honor offset)"
+	limit_to_piece(model_breakpiece)				: "Limit to piece"				: ""	: "Limit this effect to the named piece"
+]
+
+@ModelBreakCommand base(base_break_force)
+= break_uniform_burst : "Applies a radial burst to breakpieces outwards from the influence point (default is the origin of the model)"
+[
+	burst_scale(float) [ min="0", max="500" ]		: "Burst Scale"					: 0		: "Velocity added to each piece (radially away from the influence point)"
+	burst_randomize(float) [ min="0", max="500" ]	: "Burst Randomize"				: 0		: "Magnitude of random vector that will be added to the burst velocity"
+]
+
+@ModelBreakCommand base(base_break_force)
+= break_flip_pieces : "Applies an angular 'flip' to breakpieces (like objects tipping over from an explosion or flower petals opening) causing them to tip outwards from the influence point (default is the origin of the model)"
+[
+	burst_scale(float) [ min="-500", max="500" ]	: "Flip Scale"					: 0		: "Angular velocity added to each piece (Positive value will cause pieces to flip 'head-first' away from the influence point, negative is 'feet-first')"
+	burst_randomize(float) [ min="0", max="500" ]	: "Flip Randomize"				: 0		: "Largest possible value that will be randomly added/removed to Flip Scale for each piece"
+]
+
+@ModelBreakCommand base(base_break_force)
+= break_twist_pieces : "Applies an angular 'twist' to breakpieces, causing them to roll around the radial axis outward from the influence point (default is the origin of the model)"
+[
+	burst_scale(float) [ min="-500", max="500" ]	: "Twist Scale"					: 0		: "Angular velocity added to each piece"
+	burst_randomize(float) [ min="0", max="500" ]	: "Twist Randomize"				: 0		: "Largest possible value that will be randomly added/removed to Twist Scale for each piece"
+]
+
+@ModelBreakCommand
+= break_change_material_group : "Overrides the materialgroup on spawned breakpieces. (By default the active material group of the parent model is propagated to the breakpieces.)"
+[
+	material_group_name(materialgroup) : "Material Group" : "Material group name to switch to"
+	limit_to_piece(model_breakpiece) : "Limit to piece" : "If set, only apply this command to a particular piece"
+	limit_to_material_group(materialgroup) : "Limit to instances using material group" : "If set, only apply this command if the parent model had a particular materialgroup active"
+]
+
+@ModelBreakCommand
+= break_create_particle : "Spawn a particle system when this model breaks"
+[
+	name(resource:particle)			: "Particle"
+	cp0_model(resource:model)		: "CP 0 Model" 						: "" 	: "(Optional) Set the particle control point #0 to the specified model"
+	cp0_snapshot(resource:snapshot)	: "CP 0 Snapshot" 					: "" 	: "(Optional) Set the particle control point #0 to the specified snapshot"
+	skin_cp(int)					: "CP To Set To Skin" 				: 1 	: "(Optional) Set this control point to the parent model's active materialgroup name"
+	damage_position_cp(int)			: "CP To Set To Damage Position" 	: 2 	: "(Optional) Set this control point the position of the break damage"
+	damage_direction_cp(int)		: "CP To Set To Damage Direction"	: 3 	: "(Optional) Set this control point the direction of the break damage"
+]
+
+@ModelBreakCommand
+= break_damage_nested_break_pieces : "After breaking, further damage the spawned pieces (creates more dynamic breaks for multi-tier breakables)"
+[
+	break_radius(float) [ min="0", max="250" ] : "Break Radius"			: 0		: "Radius within which we break nested pieces"
+]
+
+@ModelBreakCommand
+= break_disable_impact_damage : "Disables impact (physics) damage on spawned breakpiece(s)"
+[
+	limit_to_piece(model_breakpiece) : "Limit to piece" : "If set, only apply this command to a particular piece"
+]
+
+
+@ModelBreakCommand
+	locator_axis
+	{
+		transform =
+		{
+			origin_key = "anchor_position"
+			angles_key = "anchor_angles"
+		}
+	}
+	physicsjoint_hinge
+	{
+		transform =
+		{
+			origin_key = "anchor_position"
+			angles_key = "anchor_angles"
+		}
+		enable_limit = "enable_limit"
+		min_angle = "min_angle"
+		max_angle = "max_angle"
+	}
+= break_create_joint_revolute : "Creates a revolute (hinge) joint between two spawned breakpieces"
+[
+	parent_piece(model_breakpiece)	: "Parent Piece" : ""
+	child_piece(model_breakpiece)	: "Child Piece" : ""
+	anchor_position(vector)			: "Anchor Position (relative to model)"
+	anchor_angles(angle)			: "Anchor Angles (relative to model)"
+	
+	friction(float)					: "Friction" : 0
+
+	enable_limit(bool)				: "Enable Limit" : 0
+	min_angle(float)				: "Min Angle" : 0
+	max_angle(float)				: "Max Angle" : 0
+]
+
+
+@ModelGameData
+	game_data_list( animating_breakable_stage_list )
+= animating_breakable_stage : "A stage in a prop_animating_breakable progression"
+[
+	stage_health(int) 					: "Stage Health" : 10 : "How much health this stage has before it breaks (-1 to disable damage)"
+
+	materialgroup_name(materialgroup)	{ group="+Stage Start" } : "Material Group" : "" : "When this stage starts, optionally set a materialgroup"
+
+	set_bodygroup(bool)				    { group="+Stage Start" } : "Set Bodygroup?" : 0 : "When this stage is entered, set a bodygroup?"
+	bodygroup_name(model_bodygroup)		{ group="+Stage Start" suppress_expr="!set_bodygroup" } : "Stage Bodygroup"
+	bodygroup_choice(int)				{ group="+Stage Start" suppress_expr="!set_bodygroup" } : "Stage Bodygroup Choice"
+
+	sequence_name(string)				{ group="+Stage Start" } : "Sequence Name" : "" : "Play this sequence when the stage starts"
+	sequence_loops(bool)				{ group="+Stage Start" suppress_expr="sequence_name == \"\"" } : "Sequence Loops?" : 0 : "Should the sequence loop?"
+
+	spawn_breakpieces(bool)				{ group="+Stage End" } : "Spawn Breakpices?"
+	breakpieces_substring(string)		{ group="+Stage End" suppress_expr = "!spawn_breakpieces" } : "Breakpiece Substring"
+
+	particle_effect(resource:particle)	{ group="+Stage End" } : "Broken Particle Effect" : "" : "When this stage breaks, spawn this particle"
+	particle_config(particle_cfg)		{ group="+Stage End" suppress_expr="particle_effect == \"\"" } : "Particle Configuration Name"
+
+	sound_effect(sound)					{ group="+Stage End" } : "Broken Sound" : "" : "When this stage breaks, play this sound"
+]
+
+@ModelBreakCommand
+= break_add_modifier : "Adds a modifier to each break piece"
+[
+	modifier_name(string) : "Modifier Name" : "" : "Name of the modifier to add"
+	duration(float) : "Duration" : -1 : "How long should the modifier last, in seconds? (-1: Infinite)"
+]

@@ -1,0 +1,203 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+// Defines entity classes to control lighting and sky rendering.
+//
+//==================================================================================================
+
+@include "lights_base.fgd"
+
+@PointClass light() base(light_base, light_base_legacy_params, light_base_attenuation_params, CanBeClientOnly) leansphere(lightsourceradius,255,255,255) sphere(range,255,255,0)
+	iconsprite
+	{
+		image = "materials/editor/light_omni.vmat"
+		tintKey = "color"
+	}
+	metadata
+	{
+		entity_tool_name = "Point Light"
+		entity_tool_tip = "Omni directional point light source"
+		entity_tool_group = "Lighting"
+		entity_tool_sortname = "lights"
+	}
+= light_omni : "A point light source."
+[
+	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "0" : "Whether this light casts shadow" =
+	[
+		"0" : "No"
+		"1" : "Yes"
+		"2" : "Baked Only"
+	]
+]
+
+
+@PointClass light() base(light_base, light_base_legacy_params, light_base_attenuation_params, CanBeClientOnly) editormodel( "models/editor/spot", lightModeTint, "124 255 157", "255 64 64" ) leansphere(lightsourceradius,255,255,255) lightcone()
+	iconsprite
+	{
+		image = "materials/editor/light_spot_icon.vmat"
+		tintKey = "color"
+	}
+	metadata
+	{
+		entity_tool_name = "Spot Light"
+		entity_tool_tip = "Spot light source"
+		entity_tool_group = "Lighting"
+		entity_tool_sortname = "lights"
+	}
+= light_spot : "A spot light source."
+[
+	lightcookie(resource:vtex) : "Light Cookie" : ""
+
+	falloff(float) : "Falloff" : "1" : "angular falloff exponent for spot lights"
+	innerconeangle(float) { min="1" max="89" } : "Inner Cone Angle" : "45" : "inner cone angle. no angular falloff within this cone"
+	outerconeangle(float) { min="1" max="89" } : "Outer Cone Angle" : "60" : "outer cone angle"
+
+	shadowfademindist(float) : "Shadow Start Fade Dist" : -250 : "Distance at which the shadow starts to fade (<0 = use fademaxdist)."
+	shadowfademaxdist(float) : "Shadow End Fade Dist" : 1000 : "Maximum distance at which the shadow is visible (0 = don't fade out)."
+
+	shadowtexturewidth(integer) [ group = "Shadows" ] : "Shadow Texture Width" : 0 : "0 = use default texture resolution"
+	shadowtextureheight(integer) [ group = "Shadows" ] : "Shadow Texture Height" : 0 : "0 = use default texture resolution"
+]
+
+@PointClass light() base(light_base, light_base_legacy_params, CanBeClientOnly) editormodel( "models/editor/spot", lightModeTint, "0 255 192", "255 64 64" ) lightortho() = light_ortho : "An orthographic spot light source."
+[
+	lightcookie(resource:vtex) : "Light Cookie" : ""
+
+	ortholightwidth(float) { min="1" } : "Width" : "512.0" : "Ortho light rectangle width"
+	ortholightheight(float) { min="1" } : "Height" : "512.0" : "Ortho light rectangle height"
+	range(float) { min="0" } : "Range" : "2048.0" : "Distance range for light. 0=infinite"
+	angulardiameter(float) : "Sun Spread Angle" : "1.0" : "The angular extent of the sun for casting soft shadows. Higher numbers are more diffuse. 1 is a good starting value."
+	shadowtexturewidth(integer) [ group = "Shadows" ] : "Shadow Texture Width" : 0 : "0 = use default texture resolution"
+]
+
+@BaseClass = IndoorOutdoorLevel
+[
+	indoor_outdoor_level(choices) : "Priority" : "0" : "If multiple volumes contain an object, the highest priority volume takes precedence." = 
+	[
+		"-2" : "Lowest"
+		"-1" : "Low"
+		"0" : "Normal"
+		"1" : "High"
+		"2" : "Highest"
+	]
+]
+
+@BaseClass = SetBrightnessColor
+[
+	input SetColor(vector) : "Set color"
+	input SetBrightness(float) : "Set brightness"
+]
+
+@BaseClass tags( Lighting ) = BaseLightProbeVolume
+[
+	lightprobetexture(resource:texture) : "Light Probe Texture" : "" : "Name of the light probe texture"
+	box_mins(vector) : "Box Mins" : "-72 -72 -72"
+	box_maxs(vector) : "Box Maxs" : "72 72 72"
+	voxel_size(choices) : "Voxel Size" : "48.0" : "" = 
+	[
+		"12.0" : "Very High Resolution"
+		"24.0" : "High Resolution"
+		"48.0" : "Medium Resolution"
+		"108.0" : "Low Resolution"
+	]
+	flood_fill(boolean) : "Ignore Unreachable Space" : 1
+	voxelize(boolean) : "Ignore Voxelized Solid Space" : 1
+	light_probe_volume_from_cubemap(boolean) : "Calculate Diffuse Lighting Using Cubemap" : 0
+	lightgroup(string) : "Light Group" : "" : "Semicolon-delimited list of light groups to affect"
+	moveable(boolean) : "Moveable" : "0" : "Can be moved, parented, enabled, or disabled at runtime."
+	storage(choices) : "Storage" : "-1" : "" =
+	[
+		"-1" : "Default"
+		"0" : "AmbientCube RGBM8888 Uncompressed"
+		"1" : "AmbientCube RGBMDXT5 Compressed"
+	]
+]
+
+@BaseClass tags( Lighting ) = BaseCubemap 
+[
+	cubemaptexture(resource:texture) : "Cubemap Texture" : "" : "Name of the cubemap texture"
+	bakenearz(float) : "Bake Near Z" : "2.0" : "Near clip plane used for the camera when baking the cube map"
+	bakefarz(float) : "Bake Far Z" : "4096.0" : "Far clip plane used for the camera when baking the cube map"
+	lightgroup(string) : "Light Group" : "" : "Semicolon-delimited list of light groups to affect"
+	moveable(boolean) : "Moveable" : "0" : "Can be moved, parented, enabled, or disabled at runtime."
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseLightProbeVolume, IndoorOutdoorLevel )
+	tags( VisPreview )
+	editormodel( "models/editor/iv_helper" )
+	box_oriented
+	{
+		box_min = "box_mins"
+		box_max = "box_maxs"
+		is_light_probe_volume = true
+	}
+	bakeresource( lightprobetexture, vtex, env_light_probe_volume, "ToolObjects/LightProbeVolume" )
+= env_light_probe_volume : "A grid of precomputed light probes."
+[
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseCubemap, IndoorOutdoorLevel )
+	tags( VisPreview )
+	editormodel( "models/editor/env_cubemap" )
+	leansphere
+    {
+        radius = "influenceradius"
+        color = [128, 128, 255]
+        edge_fade = "edge_fade_dist"
+    }
+	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
+= env_cubemap :	"Cubemap for sampling indirect specular reflection."
+[
+	influenceradius(float) { min=12 } : "Influence Radius" : "256.0" : "The radius of influence for this cubemap"
+
+	// Subclasses in mods which want to support this feature can add this property.
+	// The name cannot be changed, as it is used by the leansphere helper.
+	//edge_fade_dist(float) : "Edge Fade" : "0.0"
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseCubemap, IndoorOutdoorLevel )
+	tags( VisPreview )
+	editormodel( "models/editor/env_cubemap" )
+	box_oriented
+	{
+		box_min = "box_mins"
+		box_max = "box_maxs"
+		auto_center = false
+		// will not do anything until this property is added
+		edge_fades = "edge_fade_dists"
+		// will not do anything until this property is added
+		single_edge_fade = "edge_fade_dist"
+	}
+	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
+= env_cubemap_box : "An env_cubemap with box projection."
+[
+	box_mins(vector) : "Box Projection Mins" : "-72 -72 -72"
+	box_maxs(vector) : "Box Projection Maxs" : "72 72 72"
+	// Subclasses in mods which want to support this feature can add this property.
+	// The name cannot be changed, as it is used by the box_oriented helper.
+	//edge_fade_dists(vector) : "Edge Fade Dist" : "0 0 0"
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseCubemap, BaseLightProbeVolume, SetBrightnessColor, IndoorOutdoorLevel )
+	tags( VisPreview )
+	editormodel( "models/editor/env_cubemap" )
+	box_oriented
+	{
+		box_min = "box_mins"
+		box_max = "box_maxs"
+		auto_center = false
+		is_light_probe_volume = true
+		// will not do anything until this property is added
+		edge_fades = "edge_fade_dists"
+	}
+	bakeresource( lightprobetexture, vtex, env_light_probe_volume, "ToolObjects/LightProbeVolume" )
+	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
+= env_combined_light_probe_volume : "Combination of an env_cubemap_box and an env_light_probe_volume"
+[
+	// Subclasses in mods which want to support this feature can add this property.
+	// The name cannot be changed, as it is used by the box_oriented helper.
+	//edge_fade_dists(vector) : "Edge Fade Dist" : "0 0 0"
+]

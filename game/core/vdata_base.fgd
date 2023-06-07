@@ -1,0 +1,78 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+//==================================================================================================
+
+@VData
+= light_style_event_type
+[
+]
+
+@struct = light_style_event :
+[
+	event(vdata_choice:scripts/light_style_event_types.vdata) : "Event" : ""
+	fire_time(float) : "Fire At (seconds)" : ""
+]
+
+@VData
+= light_styles
+[
+	dimmer( curve ) : "Dimmer" : "" : "X is seconds, Y is brightness multiplier (1 = 100%)"
+	tint( kv3:Gradient ) : "Color Tint"
+	events( array:struct:light_style_event ) : "Events"
+]
+
+@VData
+	metadata { MVDataOverlayType=1 }	// 1=VDATA_OVERLAY_SINGLE, Means inheritance is supported
+= prop_data
+[
+	blockLOS( boolean )		: "Blocks LOS" : "0" : "Override whether this prop should block NPC's Line-Of-Sight."
+	AIWalkable( boolean )	: "AI Walkable" : "0" : "Override whether AI should consider this prop as walkable on."
+	dmg.bullets( float )	: "Bullet Dmg Mult" : "-1" : "Mod damage done by bullets to this prop."
+	dmg.club( float )		: "Club Dmg Mult" : "-1" : "Mod damage done by clubs to this prop."
+	dmg.explosive( float )	: "Explosive Dmg Mult" : "-1" : "Mod damage done by explosives to this prop."
+	dmg.fire( float )		: "Fire Dmg Mult" : "-1" : "Mod damage done by fire to this prop."
+	glow( boolean )			: "Enable Glow" : "0" : "Enable glow"
+	spawn_motion_disabled( boolean ) : "Spawn Motion-Disabled" : "0" : "Allow physics props to spawn motion-disabled"
+
+	allow_player_push( boolean ) : "Allow Player Push" : "1" : "Allow this object to be pushed by the player capsule if it's light enough"
+	allow_grav_pull( boolean ) : "Allow Grav Pull" : "0" : "Allow pullable from the gravity glove/cannon"
+
+	//	NOTE: Use damage modifiers to reflect differences between the amount of
+	//		  damage that an object takes from different damage types. Don't
+	//		  use them to reflect overall damage strength. i.e. Stone is resilient
+	//		  to everything. To reflect this, increase the health of all stone
+	//		  objects, don't set the damage modifiers lower.
+	damage_table( string )	: "Custom Impact Table" : "" : "Specify a custom physics impact damage table for this prop."
+	health( integer )		: "Health" : "-1" : "Amount of damage this prop should take before breaking."
+
+	explosion_type( string )	: "Explosive Type" : "" : "Type of explosion to create"
+	explosive_damage( integer )	: "Explosive Damage" : "0" : "Explosive damage done by this prop."
+	explosive_radius( integer )	: "Explosive Radius" : "0" : "Radius of the explosion caused by this prop when it breaks."
+	explosion_delay( float )	: "Explosive Delay" : "0" : "Delay before the explosion happens."
+	explosion_buildup( string )	: "Explosive Buildup Sound" : "" : "Sound to play before the explosion happens."
+
+	//	NOTE: If these two fields are specified for a prop, then the prop will automatically
+	//		  create an explosion with the specified values when the prop is broken.
+	allowstatic( boolean )	: "Allow Static" : "0" : "Allow this prop to be static as well as physically simulated."
+]
+
+@VData
+    metadata
+    { 
+        MVDataPreviewWidget="subsurface_profile"
+    }
+= subsurface_profile
+[
+    index( integer )    { hidden=1 suppressed_field=1 MVDataUniqueMonotonicInt="_editor/next_index" } : "Shader Index"
+    near_red( float )   { min=".01" max="1.0" } : "Red Near Scattering Variance" : ".25"
+    near_green( float ) { min=".01" max="1.0" } : "Green Near Scattering Variance" : ".08"
+    near_blue( float )  { min=".01" max="1.0" } : "Blue Near Scattering Variance " : ".02"
+    far_red( float )    { min=".01" max="1.0" } : "Red Far Scattering Variance" : "1"
+    far_green( float )  { min=".01" max="1.0" } : "Green Far Scattering Variance" : ".3"
+    far_blue( float )   { min=".01" max="1.0" } : "Blue Far Scattering Variance" : ".05"
+    near_weight( float ) { min="0.0" max="1.0" } : "Near Scattering Weight" : ".5" : "Controls relative weighting of near and far scattering components"
+
+    dual_lobe_roughness_0( float ) { min="0.5" max="2.0" } : "Dual Lobe Roughness 0" : "1" : "Roughness multiplier for first lobe of dual-lobe specular"
+    dual_lobe_roughness_1( float ) { min="0.5" max="2.0" } : "Dual Lobe Roughness 1" : "1" : "Roughness multiplier for first lobe of dual-lobe specular"
+    dual_lobe_roughness_mix( float ) { min="0.0" max="1.0" } : "Dual Lobe Mix" : ".5" : "Mix between the two roughness lobes"
+]

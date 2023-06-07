@@ -1,0 +1,1278 @@
+//====== Copyright © 1996-2005, Valve Corporation, All rights reserved. =======
+//
+// Purpose: Counter-Strike: Source game definition file (.fgd) 
+//
+//=============================================================================
+
+@include "base.fgd"
+
+//-------------------------------------------------------------------------
+//
+// Base Classes
+//
+//-------------------------------------------------------------------------
+
+
+@BaseClass = Target 
+[ 
+	target(target_destination) : "Target" 
+]
+
+@BaseClass = TeamNum
+[
+	TeamNum(choices) : "Team Number (int)" : 0 =
+	[
+		-1 : "None"
+		0 : "All Teams"
+		2 : "Terrorist"
+		3 : "Counter-Terrorist"
+	]
+	input SetTeam(integer) : "Changes the entity's team"
+]
+
+@BaseClass color(0 0 200) base(Targetname, RenderFields, Angles) = Weapon
+[
+	spawnflags(Flags) =
+	[
+		1 : "Start constrained" : 0
+	]
+	CanBePickedUp(boolean) : "Is this weapon allowed to be picked up?" : 1
+
+	output OnPlayerUse(void) : "Fires when the player +uses this weapon"
+	output OnPlayerPickup(void) : "Fires when the player picks up this weapon"
+
+	input SetReserveAmmoAmount(integer) : "Set the reserve ammo on this weapon"
+	input SetAmmoAmount(integer) : "Set the ammo on this weapon"
+	input ToggleCanBePickedUp(void) : "Toggle CanBePickedUp"
+]
+
+@FilterClass base(BaseFilter) size(-8 -8 -8, 8 8 8) = filter_activator_team :
+	"A filter that filters by the team of the activator."
+[
+	filterteam(choices) : "Filter Team Number" : 2 : "The team number to filter by.  If the filter mode is Allow, only entities whose "+
+		"team number matches the given team will pass the filter. If the filter mode is Disallow, "+
+		"all entities EXCEPT those whose team number matches the given team will pass the filter." =
+	[
+		2 : "Terrorist"
+		3 : "Counter-Terrorist"
+	]
+]
+
+//-------------------------------------------------------------------------
+//
+// Point Classes
+//
+//-------------------------------------------------------------------------
+
+@PointClass base(prop_dynamic) studioprop() = prop_dynamic_glow :
+	"A prop that can be placed in hierarchy and can play animations. It can also be configured to break when it takes enough damage.\n"+
+	"Works exactly like a prop_dynamic, but it can optionally have a custom glow around it."
+[
+	glowdist(integer)		: "Glow Distance" : 1024
+	glowenabled(boolean) : "Does the prop glow by default?" : 1
+	glowcolor(color255) : "Glow Color (R G B)" : "255 255 255" : "The color of the glow (if enabled)."
+	glowstyle(choices) : "Glow Style" : 0 : "What style of glow should be used." =
+	[
+		0 : "Default (through walls)"
+		1 : "Shimmer (doesn't glow through walls)"
+		2 : "Outline (doesn't glow through walls)"
+		3 : "Outline Pulse (doesn't glow through walls)"
+	]
+
+	input SetGlowEnabled(void) : "Starts the glow."
+	input SetGlowDisabled(void) : "Stops the glow."
+	input SetGlowColor(color255) : "Change the glow's color. Format: <Red 0-255> <Green 0-255> <Blue 0-255>"
+	input GlowColorRedValue(float) : "Sets the glow red color channel's value (0 - 255)."
+	input GlowColorGreenValue(float) : "Sets the glow green color channel's value (0 - 255)."
+	input GlowColorBlueValue(float) : "Sets the glow blue color channel's value (0 - 255)."
+]
+
+@PointClass base(Targetname, Angles) studio("models/player/ctm_st6.mdl") = info_player_counterterrorist :
+	"This entity marks the start point for counter-terrorists. One of these needs to be placed for each team member. " +
+	"20 start points is typical. Should be placed at least 128 units away from each other and surrounding walls"
+[
+	priority(integer) : "Spawn Priority (int)" : 0 : "Determines which spawn points get used first.  Smaller numbers are used before larger numbers."
+	enabled(boolean) : "Enabled by default?" : 1
+
+	input SetEnabled(void) : "Sets this spawn point as enabled."
+	input SetDisabled(void) : "Sets this spawn point as disabled."
+	input ToggleEnabled(void) : "Toggle the enabled/disabled state of this spawn point."
+]
+
+@PointClass base(Targetname, Angles) studio("models/player/tm_phoenix.mdl") = info_player_terrorist :
+	"This entity marks the start point for terrorists. One of these needs to be placed for each team member. " +
+	"20 start points is typical. Should be placed at least 128 units away from each other and surrounding walls."
+[
+	priority(integer) : "Spawn Priority (int)" : 0 : "Determines which spawn points get used first.  Smaller numbers are used before larger numbers."
+	enabled(boolean) : "Enabled by default?" : 1
+
+	input SetEnabled(void) : "Sets this spawn point as enabled."
+	input SetDisabled(void) : "Sets this spawn point as disabled."
+	input ToggleEnabled(void) : "Toggle the enabled/disabled state of this spawn point."
+]
+
+@PointClass base(Targetname, Angles) studio("models/player/tm_pirate.mdl") = info_deathmatch_spawn :
+	"This entity marks a deathmatch spawn point. This is the entity that populates the map when mp_random_spawn is used." +
+	"Manually adding them to the map will guarantee that these spawn points are included in the set"
+[
+	enabled(boolean) : "Enabled by default?" : 1
+
+	input SetEnabled(void) : "Sets this spawn point as enabled."
+	input SetDisabled(void) : "Sets this spawn point as disabled."
+	input ToggleEnabled(void) : "Toggle the enabled/disabled state of this spawn point."
+]
+
+@PointClass base(Targetname, Angles) studio("models/player/ctm_idf_variantb.mdl") = info_armsrace_counterterrorist :
+	"This entity marks the start point for counter-terrorists in Arms Race. " +
+	"Should be placed at least 128 units away from each other and surrounding walls"
+[
+	priority(integer) : "Spawn Priority (int)" : 0 : "Determines which spawn points get used first.  Smaller numbers are used before larger numbers."
+	enabled(boolean) : "Enabled by default?" : 1
+
+	input SetEnabled(void) : "Sets this spawn point as enabled."
+	input SetDisabled(void) : "Sets this spawn point as disabled."
+	input ToggleEnabled(void) : "Toggle the enabled/disabled state of this spawn point."
+]
+
+@PointClass base(Targetname, Angles) studio("models/player/tm_leet_varianta.mdl") = info_armsrace_terrorist :
+	"This entity marks the start point for terrorists in Arms Race. " +
+	"Should be placed at least 128 units away from each other and surrounding walls."
+[
+	priority(integer) : "Spawn Priority (int)" : 0 : "Determines which spawn points get used first.  Smaller numbers are used before larger numbers."
+	enabled(boolean) : "Enabled by default?" : 1
+
+	input SetEnabled(void) : "Sets this spawn point as enabled."
+	input SetDisabled(void) : "Sets this spawn point as disabled."
+	input ToggleEnabled(void) : "Toggle the enabled/disabled state of this spawn point."
+]
+
+@PointClass base(Targetname, Angles) studio("models/player/tm_phoenix.mdl") sphere(hide_radius) = info_enemy_terrorist_spawn :
+	"This entity marks the start point for enemy terrorists in a coop game. " +
+	"Should be placed at least 80 units away from each other and surrounding walls."
+[
+	priority(integer) : "Spawn Priority (int)" : 0 : "Determines which spawn points get used first.  Smaller numbers are used before larger numbers."
+	enabled(boolean) : "Enabled by default?" : 1
+
+	input SetEnabled(void) : "Sets this spawn point as enabled."
+	input SetDisabled(void) : "Sets this spawn point as disabled."
+	input ToggleEnabled(void) : "Toggle the enabled/disabled state of this spawn point."
+	model_to_use(studio) : "Override player model" : "" : "Select a model to override the model used for enemies spawned at this spawn point." 
+	weapons_to_give(string) : "Weapons to spawn with" : "glock" : "Weapons and items to give to the bot on spawn. Ex. 'vesthelm, usp, awp, smokegreande, hegrenade'" 
+	armor_to_give(choices) : "Armor" : 1 : "What armor should the bot spawn with." =
+	[
+		0 : "None"
+		1 : "Vest and Helmet"
+		2 : "Heavy Armor"
+	]
+
+	start_asleep(boolean) : "Spawn alseep?" : 1 : "Do the bots that spawn here start alseep? If so, they will wait until they see or hear the player to move."
+	default_behavior(choices) : "Default Behavior" : 0 : "What behavior the bot should have when idle." =
+	[
+		0 : "Defend Camp"
+		1 : "Hunt"
+		2 : "Charge Enemy"
+		3 : "Defend Investigate"
+	]
+	bot_difficulty(integer) : "Bot Difficulty (int)" : 0 : "How hard the bot is to fight and what his skill level is. [0-7] (0 = super easy, 7 = super human)."
+	is_agressive(boolean) : "Is agressive?" : 0 : "Is the bot agreesive for his difficulty level?"
+	hide_radius(float) : "Hide Radius": 1000 : "Range around the spawn spot the bot will try to hide. Set to 0 to hold position and never try to hide."
+	behavior_tree_file(string) : "Behavior Tree File" : "" : "The behavior tree file to use for this bot ( empty = classic AI )." 
+]
+
+@PointClass base(Targetname, Angles) studio("models/props_junk/wood_crate001a.mdl") = info_survival_crate_spawn :
+	"This entity marks a potential spawn point for a survival crates. " +
+	""
+[
+	bonuscrate(boolean) : "Bonus Crate?" : 0 : "Bonus crates spawn loot that is higher than default and will not be included in the initial spawn wave collection.."
+	input ForceSpawnBonusCrate(void) : "Forces a bonus crate to spawn on intput."
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_logo :
+	"This is for logo maps for demos. All players will spawn here, and there will be no " +
+	"class menu, team menu, or HUD."
+[
+]
+
+@PointClass base(Targetname, Angles) studio("models/Characters/hostage_04.mdl") = hostage_entity :
+	"Hostage. A hostage NPC will spawn at this point.\n\n" +
+	"There are usually four hostages placed in each hostage rescue map. The model for each Hostage is randomly chosen."
+[
+
+	HostageType(choices) : "Hostage Model (int)" : 0 : "Not used. Hostage models are chosen randomly by the game." =
+	[
+		0 : "A"
+		1 : "B"
+		1 : "C"
+		1 : "D"
+	]
+
+	HostageSpawnRandomFactor(integer) : "Hostage Spawn Random Factor (int)" : 1 : "Allows to increase probability of this hostage being picked during random spawn selection process, essentially considering this spawn point specified number of times."
+	
+	HostageSpawnExclusionGroup1(choices) : "Hostage Spawn Exclusion Group 1" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup2(choices) : "Hostage Spawn Exclusion Group 2" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup3(choices) : "Hostage Spawn Exclusion Group 3" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup4(choices) : "Hostage Spawn Exclusion Group 4" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup5(choices) : "Hostage Spawn Exclusion Group 5" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup6(choices) : "Hostage Spawn Exclusion Group 6" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup7(choices) : "Hostage Spawn Exclusion Group 7" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup8(choices) : "Hostage Spawn Exclusion Group 8" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup9(choices) : "Hostage Spawn Exclusion Group 9" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup10(choices) : "Hostage Spawn Exclusion Group 10" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup11(choices) : "Hostage Spawn Exclusion Group 11" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup12(choices) : "Hostage Spawn Exclusion Group 12" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup13(choices) : "Hostage Spawn Exclusion Group 13" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup14(choices) : "Hostage Spawn Exclusion Group 14" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup15(choices) : "Hostage Spawn Exclusion Group 15" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup16(choices) : "Hostage Spawn Exclusion Group 16" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup17(choices) : "Hostage Spawn Exclusion Group 17" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup18(choices) : "Hostage Spawn Exclusion Group 18" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup19(choices) : "Hostage Spawn Exclusion Group 19" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup20(choices) : "Hostage Spawn Exclusion Group 20" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup21(choices) : "Hostage Spawn Exclusion Group 21" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup22(choices) : "Hostage Spawn Exclusion Group 22" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup23(choices) : "Hostage Spawn Exclusion Group 23" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup24(choices) : "Hostage Spawn Exclusion Group 24" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup25(choices) : "Hostage Spawn Exclusion Group 25" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup26(choices) : "Hostage Spawn Exclusion Group 26" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup27(choices) : "Hostage Spawn Exclusion Group 27" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup28(choices) : "Hostage Spawn Exclusion Group 28" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup29(choices) : "Hostage Spawn Exclusion Group 29" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+
+	HostageSpawnExclusionGroup30(choices) : "Hostage Spawn Exclusion Group 30" : 0 : "Hostages sharing same spawn exclusion group will never spawn together." =
+	[
+		0 : "n/a"
+		1 : "Do not spawn together"
+	]
+	output OnHostageBeginGrab(void): "Fires when a player starts to use a hostage"
+	output OnFirstPickedUp(void): "Fires when the hostage is first picked up"
+	output OnDroppedNotRescued(void): "Fires when the hostage is dropped, but not rescued"
+	output OnRescued(void): "Fires when the hostage is rescued"
+]
+
+@PointClass base(hostage_entity) studio("models/Characters/hostage_04.mdl") = info_hostage_spawn :
+	"Hostage. A hostage NPC will spawn at this point.\n\n" +
+	"There are usually four hostages placed in each hostage rescue map. The model for each Hostage is randomly chosen."
+[
+]
+
+@PointClass base(Angles) studio("models/chicken/chicken.mdl") = pet_entity :
+	"Pet. A pet animal will spawn at this point.\n"
+[
+]
+
+@PointClass base(Angles) = info_view_parameters :
+	"This entity selects whether or not this level uses the Half-Life 2 view parameters (eye height: 64, FOV: 75) " +
+	"or the old Counter-Strike settings (eye height: 53.5, FOV: 90)."
+[
+	ViewMode(choices) : "View Mode" : 0 =
+	[
+		0 : "Old"
+		1 : "New"
+	]
+]
+
+@PointClass base(Targetname,Angles) = info_map_parameters :
+	"Map parameters. Used to set which teams can buys, and the C4 bomb detonation radius."
+[
+	buying(choices) : "Teams that can buy" : 0 =
+	[
+		0 : "Everyone"
+		1 : "Only Counter-Terrorists"
+		2 : "Only Terrorists"
+		3 : "Nobody"
+	]
+
+	bombradius(float) : "C4 Explosion Radius" : 500 : "Overrides the default radius of the c4 bomb explosion. Effective radius is 3.5x this. Max value is 2048"
+	bombradiusa(float) : "C4 Explosion Radius, Bombsite A" : -1 : "Overrides the radius of the c4 bomb explosion at bomb site A. Effective radius is this value x 3.5 units. Set to -1 to ignore."
+	bombradiusb(float) : "C4 Explosion Radius, Bombsite B" : -1 : "Overrides the radius of the c4 bomb explosion at bomb site B. Effective radius is this value x 3.5 units. Set to -1 to ignore."
+	petpopulation(float) : "Pet Population" : 0 : "Determines the target population of pets." 
+	usenormalspawnsfordm(boolean) : "Use Normal Spawns in Deathmatch?" : 0 : "Set to true if the map should use the mapper-placed spawn points instead of generating random ones."
+	disableautogenerateddmspawns(boolean) : "Disable Autogenerated DM Spawns?" : 0 : "Set to true if you want to manually place info_deathmatch_spawns and not have the engine generate them."
+	botmaxvisiondistance(float) : "Bot max vision distance" : "-1" : "Sets the maximum distance bots can see enemies. Default is -1, unlimited."
+	fadeplayervisibilityfarz(boolean) : "Fade Player Visibility Far Z" : 0 : "Fade player visibility beyond far z distance."
+	
+	input FireWinCondition(integer) : "Fires win conditions for the win."
+	
+]
+
+@PointClass base(Angles) = env_detail_controller : "An entity that lets you control the fade distances for detail props."
+[
+	fademindist(float) : "Start Fade Dist/Pixels" : 400 : "Distance at which the prop starts to fade."
+	fademaxdist(float) : "End Fade Dist/Pixels" : 1200 : "Maximum distance at which the prop is visible."
+]
+
+//-------------------------------------------------------------------------
+//
+// Weapons
+//
+//-------------------------------------------------------------------------
+
+@PointClass base(Weapon) studio("models/weapons/w_rif_ak47_dropped.mdl") = weapon_ak47 : "AK-47" []
+@PointClass base(Weapon) studio("models/weapons/w_rif_aug_dropped.mdl") = weapon_aug : "AUG" []
+@PointClass base(Weapon) studio("models/weapons/w_snip_awp_dropped.mdl") = weapon_awp : "AWP" []
+@PointClass base(Weapon) studio("models/weapons/w_smg_bizon_dropped.mdl") = weapon_bizon : "PP-Bizon" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_cz_75_dropped.mdl") = weapon_cz75a : "CZ75a" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_deagle_dropped.mdl") = weapon_deagle : "Desert Eagle" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_decoy_dropped.mdl") = weapon_decoy : "Decoy Grenade" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_elite_dropped.mdl") = weapon_elite : "Dual Berettas" []
+@PointClass base(Weapon) studio("models/weapons/w_rif_famas_dropped.mdl") = weapon_famas : "FAMAS" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_fiveseven_dropped.mdl") = weapon_fiveseven : "Five-SeveN" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_flashbang_dropped.mdl") = weapon_flashbang : "Flashbang" []
+@PointClass base(Weapon) studio("models/weapons/w_snip_g3sg1_dropped.mdl") = weapon_g3sg1 : "G3SG1 Sniper" []
+@PointClass base(Weapon) studio("models/weapons/w_rif_galilar_dropped.mdl") = weapon_galilar : "Galil AR" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_glock18_dropped.mdl") = weapon_glock : "Glock-18" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_fraggrenade_dropped.mdl") = weapon_hegrenade : "HE Grenade" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_hkp2000_dropped.mdl") = weapon_hkp2000 : "P2000" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_incendiarygrenade_dropped.mdl") = weapon_incgrenade : "Incendiary Grenade" []
+@PointClass base(Weapon) studio("models/weapons/w_knife.mdl") = weapon_knife : "Knife" []
+@PointClass base(Weapon) studio("models/weapons/w_rif_m4a1_dropped.mdl") = weapon_m4a1 : "M4A4" []
+@PointClass base(Weapon) studio("models/weapons/w_rif_m4a1_s_dropped.mdl") = weapon_m4a1_silencer : "M4A1 Silenced" []
+@PointClass base(Weapon) studio("models/weapons/w_mach_m249_dropped.mdl") = weapon_m249 : "M249 Para" []
+@PointClass base(Weapon) studio("models/weapons/w_smg_mac10_dropped.mdl") = weapon_mac10 : "MAC-10" []
+@PointClass base(Weapon) studio("models/weapons/w_shot_mag7_dropped.mdl") = weapon_mag7 : "MAG-7" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_molotov_dropped.mdl") = weapon_molotov : "Molotov" []
+@PointClass base(Weapon) studio("models/weapons/w_smg_mp7_dropped.mdl") = weapon_mp7 : "MP7" []
+@PointClass base(Weapon) studio("models/weapons/w_smg_mp9_dropped.mdl") = weapon_mp9 : "MP9" []
+@PointClass base(Weapon) studio("models/weapons/w_mach_negev_dropped.mdl") = weapon_negev : "Negev" []
+@PointClass base(Weapon) studio("models/weapons/w_shot_nova_dropped.mdl") = weapon_nova : "Nova" []
+@PointClass base(Weapon) studio("models/weapons/w_smg_p90_dropped.mdl") = weapon_p90 : "P90" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_p250_dropped.mdl") = weapon_p250 : "P250" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_revolver_dropped.mdl") = weapon_revolver : "Revolver " []
+@PointClass base(Weapon) studio("models/weapons/w_shot_sawedoff_dropped.mdl") = weapon_sawedoff : "Sawed-Off" []
+@PointClass base(Weapon) studio("models/weapons/w_rif_sg556_dropped.mdl") = weapon_sg556 : "SG 553" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_sensorgrenade_dropped.mdl") = weapon_tagrenade : "TAGrenade" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_smokegrenade_dropped.mdl") = weapon_smokegrenade : "Smoke Grenade" []
+@PointClass base(Weapon) studio("models/weapons/w_snip_ssg08_dropped.mdl") = weapon_ssg08 : "SSG 08" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_tec9_dropped.mdl") = weapon_tec9 : "Tec-9" []
+@PointClass base(Weapon) studio("models/weapons/w_smg_ump45_dropped.mdl") = weapon_ump45 : "UMP-45" []
+@PointClass base(Weapon) studio("models/weapons/w_pist_223_dropped.mdl") = weapon_usp_silencer : "USP Silenced" []
+@PointClass base(Weapon) studio("models/weapons/w_shot_xm1014_dropped.mdl") = weapon_xm1014 : "XM1014" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_taser.mdl") = weapon_taser : "weapon_taser" []
+@PointClass base(Weapon) studio("models/weapons/w_defuser.mdl") = item_defuser : "Defuse Kit" []
+@PointClass base(Weapon) studio("models/weapons/w_c4.mdl") = weapon_c4 : "C4 Bomb" []
+@PointClass base(Weapon) studio("models/weapons/w_eq_healthshot_dropped.mdl") = weapon_healthshot : "Medi-Shot" []
+@PointClass base(Weapon) studio("models/weapons/w_snip_scar20_dropped.mdl") = weapon_scar20 : "Scar20" []
+@PointClass base(Weapon) studio("models/props_survival/repulsor/repulsor.mdl") = weapon_zone_repulsor : "Zone Repulsor Device" []
+
+//-------------------------------------------------------------------------
+// Spawnable grenades for the training map
+//-------------------------------------------------------------------------
+@PointClass base(Targetname, Angles) studio("models/weapons/w_eq_flashbang_thrown.mdl") = flashbang_projectile : "Flashbang Projectile"
+[
+	//TimeToDetonate(float) : "Time to detonate" : 2 : "The time it takes to detonate from when the grenade spawns."
+
+	//ParticleTrailLifetime(float) : "Particle Trail Lifetime" : 4 : "Lifetime of the particles to emit"
+
+	input SetTimer(float) : "Specify how many seconds before it explodes."
+]
+@PointClass base(Weapon, TeamNum) studio("models/weapons/w_eq_fraggrenade.mdl") = hegrenade_projectile : "HE Grenade Projectile"
+[
+	input InitializeSpawnFromWorld(void) : "If spawned from a env_entity_maker, you need to call this after spawn for it to work properly."
+]
+@PointClass base(Weapon, TeamNum) studio("models/weapons/w_eq_molotov.mdl") = molotov_projectile : "Molotov Projectile"
+[
+	input InitializeSpawnFromWorld(void) : "If spawned from a env_entity_maker, you NEED to call this after spawn for it to work properly."
+]
+
+//-------------------------------------------------------------------------
+// Spawnable C4 for the training map
+//-------------------------------------------------------------------------
+@PointClass base(Targetname, Angles) studio("models/weapons/w_c4_planted.mdl") = planted_c4_training : "Training C4"
+[
+	input ActivateSetTimerLength(float) : "Activate the bomb and specify how many seconds before it explodes."
+
+	output OnBombExploded(void): "Fires when C4 explodes"
+	output OnBombDefused(void): "Fired when C4 is defused by a player"
+	output OnBombBeginDefuse(void): "Fired when a player successfully begins to defuse the bomb"
+	output OnBombDefuseAborted(void): "Fired when a player starts defusing and then stops"
+]
+
+
+@PointClass base(BaseNPC, Parentname, RenderFields, Shadow) studio() = generic_actor : "Generic Actor NPC"
+[
+	model(studio) : "Model"
+
+	hull_name(choices) : "Hull type" : "Human" =
+	[
+		"HUMAN_HULL" : "Human"
+		"WIDE_HUMAN_HULL" : "Wide"
+		"TINY_HULL" : "Tiny"
+		"MEDIUM_HULL" : "Medium"
+		"LARGE_HULL" : "Large"
+	]
+]
+
+@PointClass base(Targetname, Parentname, RenderFields, Shadow) studio() = npc_heardanger : 
+	"A Generic NPC entity that hears and reports 'danger' and is not preverved on round restart. " +
+	"Danger sounds consist of gunshots, player sounds, bullet impacts, nearby vehicles and andything else that " +
+	"gives off a danger sound."
+[
+	model(studio) : "Model"
+	output OnHearWorld(void) : "Fired when this NPC hears a sound (other than combat or the player)."
+	output OnHearPlayer(void) : "Fired when this NPC hears the player."
+	output OnHearCombat(void) : "Fired when this NPC hears combat sounds."
+
+	// Inputs
+	input Kill( void ) : "Removes this entity from the world"
+]
+
+//-------------------------------------------------------------------------
+//
+// Solid Classes
+//
+//-------------------------------------------------------------------------
+
+@SolidClass = func_ladder : 
+	"Ladder. Players will be able to freely along this brush, as if it was a ladder. If you are using a model prop " +
+	"for the visual representation of the ladder in the map, apply the toolsinvisibleladder material to the " +
+	"func_ladder brush."
+[
+]
+
+@SolidClass base(func_physbox) = func_physbox_multiplayer : 
+	"This class is the same as func_physbox, except the runtime collisions use a more bouncy method that avoids " +
+	"the prediction errors normal physics objects get."
+[
+]
+
+@SolidClass base(Targetname, TeamNum) = func_buyzone:  
+	"Buy Zone. Players can buy equipment while standing in this zone, if the zone matches their current team.\n\n" +
+	"A single Buy Zone entity must be either terrorist or counter-terrorist, it cannot be both. Should have " +
+	"the toolstrigger material applied to all sides"
+	
+[
+	input SetEnabled(void) : "Sets this buyzone as enabled."
+	input SetDisabled(void) : "Sets this buyzone as disabled."
+
+	input SetTeam_TerroristOnly(void) : "Make it so only terrorist can buy from this buyzone."
+	input SetTeam_CTOnly(void) : "Make it so only CT's can buy from this buyzone."
+	input SetTeam_AllTeams(void) : "Make it so all teams can buy from this buyzone."
+	input SetTeam_None(void) : "Make it so no teams can buy from this buyzone (this essentially disables the buyzone)."
+]
+
+@SolidClass base(Targetname, Parentname ) = func_bomb_target:  
+	"Bomb Target. The terrorists can place C4 explosives while standing in this zone.\n\n" +
+	"When the bomb is planted and explodes inside this area, the BombExplode outputs are fired. The game handles " +
+	"all of the bomb planting and scoring logic – the BombExplode outputs are provided to add visual and damage effects."
+[
+	output BombExplode(void): "Fires when C4 explodes"
+	output BombPlanted(void): "Fires when a C4 is planted"
+	output BombDefused(void): "Fires when a C4 is defused"
+
+	heistbomb(boolean) : "Heist Mode bomb target" : 0 : "This is a Bomb Target designed for the Heist game mode."
+
+	bomb_mount_target(string) : "Bomb Mount Target" 
+]
+
+@SolidClass base(Targetname, Parentname ) = func_no_defuse:  
+	"No Defuse Area.  The counter-terrorists will not be able to defuse bombs while they are touching this trigger volume.\n\n" +
+	"This is used in map design to prevent players from defusing bombs through walls or floors."
+[
+]
+
+@SolidClass base(Trigger) = func_hostage_rescue:  
+	"Hostage Rescue Zone. When a hostage is led into this zone, it is marked as rescued."
+[
+]
+
+//-------------------------------------------------------------------------
+//
+// Sound Test Map Entities
+//
+//-------------------------------------------------------------------------
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = point_surroundtest
+	: "Surround Sound Test"
+[
+	input FireCorrectOutput(void)	: "Fire output based on snd_surround_speaker cvar value"
+	output On2Speakers(void)	: "Fired if player is using 2 speakers."
+	output On4Speakers(void)	: "Fired if player is using 4 speakers."
+	output On51Speakers(void)	: "Fired if player is using 5.1 speakers."
+]
+
+
+@BaseClass base(Targetname, Angles) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = Territory 
+[ 
+	respawn_area(string) : "Respawn area name" 
+	buyzone(string)	:	"Buy Zone name"
+]
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_hospital : "Hospital Territory Control Point"
+[
+
+
+]
+
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_terrorist : "Terrorists' Base Territory Point (Non-Capturable)"
+[
+
+
+]
+
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_counterterrorist : "Counter-Terrorists' Base Territory Point (Non-Capturable)"
+[
+
+
+]
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_barracks : "Barracks Territory Control Point"
+[
+
+
+]
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_bank : "Bank Territory Control Point"
+[
+
+
+]
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_encryption : "Encryption Center Territory Control Point"
+[
+
+
+]
+
+@PointClass base(Territory) studio( "models/props/cs_assault/consolepanelloadingbay.mdl" ) = info_territory_control_surveillance : "Surveillance Center Territory Control Point"
+[
+
+
+]
+
+@PointClass base(Targetname) iconsprite("editor/gibshooter.vmt") = info_gascanister_launchpoint : 
+	"The position a gas canister will launch from in Survival Mode." 
+[
+]
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = point_territory_control_rules
+	: "The Territory Control rules entity (VERY IMPORTANT!)"
+[
+	respawntime(float) : "Wave Respawn Time" : 30 : "Respawn time in seconds."
+]
+
+@SolidClass base(Targetname) = func_territory_respawn_area:  
+	"Players will respawn inside this area."
+[
+]
+
+@PointClass base(Targetname) iconsprite("editor/game_end.vmt") = game_round_end : 
+	"An entity that ends a multiplayer game ROUND." 
+[
+	input EndRound_Draw(float) : "End the round in a draw after x seconds."
+	input EndRound_TerroristsWin(float) : "End the round, terrorists win after x seconds."
+	input EndRound_CounterTerroristsWin(float) : "End the round, CTs win after x seconds."
+
+	output OnRoundEnded(void) : "Fires when the round ends regardless of it ended via input to this entity or not."
+]
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = game_score : 
+	"An entity that awards/deducts points from the player who activates it or to a specific team." 
+[
+	spawnflags(flags) =
+	[
+		1: "Allow Negative" : 0
+		2: "Team Points" : 0
+	]
+
+	points(integer) : "Points to add (+/-)" : 1
+	master(string) : "Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this entity will not activate."
+	
+	// Inputs
+	input ApplyScore(void) : "Add score to player."
+	input AddScoreTerrorist(void) : "Add score to team TERRORIST."
+	input AddScoreCT(void) : "Add score to team COUNTER TERRORIST."
+]
+
+@PointClass base(Targetname) iconsprite("editor/game_money.vmt") = game_money : 
+	"An entity that awards money to a specific team." 
+[
+	Money(integer)		: "Amount of money to add (+/-)" : 1000
+	AwardText(string)	: "Award Text" : : "The text that will print in the chat next to the award amount.  Will look like this:	'1000: <Award Text>'"
+	
+	// Inputs
+	input SetMoneyAmount(void) : "Set the money value that will be awarded. (without awarding it)"
+	input AddTeamMoneyTerrorist(void) : "Add money to players on team TERRORIST."
+	input AddTeamMoneyCT(void) : "Add money to players on team COUNTER TERRORIST."
+	input AddMoneyPlayer(void) : "Add money directly to the player activating this entity. (no chat description)"
+	input SpendMoneyFromPlayer(void) : "If the player has [money amount] or more, take [money amount] away."
+	
+	output OnMoneySpent(void) : "Fires when input SpendMoneyFromPlayer succeeded."
+	output OnMoneySpentFail(void) : "Fires when input SpendMoneyFromPlayer failed. (Player didn't have enough money)"
+]
+
+//-------------------------------------------------------------------------
+//
+// Vehicles.
+//
+//-------------------------------------------------------------------------
+@BaseClass base(Targetname, Origin, Global, prop_static_base) = BaseVehicle
+[
+	vehiclescript(string) : "Vehicle Script File" : "scripts/vehicles/jeep_test.txt"
+	actionScale(float) : "Scale of action input / framerate" : "1"
+
+	// Inputs
+	input Action(float) : "Set the speed of the action animation"
+
+	input TurnOn(void) : "Turn on: Start engine & enable throttle"
+	input TurnOff(void) : "Turn off: Stop engine, disable throttle, engage brakes."
+
+	input Lock(void) : "Prevent the player from entering or exiting the vehicle."
+	input Unlock(void) : "Re-allow the player to enter or exit the vehicle."
+]
+
+
+@BaseClass base(BaseVehicle) = BaseDriveableVehicle
+[
+	VehicleLocked(boolean) : "Start locked" : 0
+
+	// Outputs
+	output PlayerOn(void) : "Player entered the vehicle"
+	output PlayerOff(void) : "Player exited the vehicle"
+	
+	output PressedAttack(void) : "Player Pressed attack key"
+	output PressedAttack2(void) : "Player Pressed attack2 key"
+
+	output AttackAxis(string) : "State of attack button [0,1]"
+	output Attack2Axis(string) : "State of attack2 button [0,1]"
+	
+	// Inputs
+	input HandBrakeOn(void) : "Turns the handbrake on"
+	input HandBrakeOff(void): "Releases the handbrake"
+]
+
+@PointClass base(BaseVehicle) studioprop() = prop_vehicle :
+	"Studiomodel vehicle that can be driven via inputs."
+[
+	// Inputs
+	input Steer(float) : "Steer the vehicle +/-1"
+	input Throttle(float) : "Throttle +/-1"
+
+	spawnflags(flags) =
+	[
+		1 : "Always Think (Run physics every frame)" : 0
+	]
+]
+
+
+@PointClass base(BaseDriveableVehicle) studioprop() = prop_vehicle_driveable :
+	"Generic driveable studiomodel vehicle."
+[
+]
+
+@SolidClass base(Trigger) = trigger_bomb_reset : 
+	"A trigger volume that resets the bomb by teleporting it back into the playable area."
+[
+
+]
+
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = game_survival_logic : 
+	"An entity that will fire outputs when events happen during Survival mode." 
+[
+	// Outputs
+	output OnZoneRocketWarning(void) : "Fired when the warning sound plays that announcing incoming rockets"
+	output OnZoneRocketStartLaunch(void) : "Fired when the barrage of rockets start launching (after the announce)"
+	output OnZoneEndGameStart(void) : "Fired when the end game starts and no more rockets will fire, but the zones start shrinking"
+]
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = game_coopmission_manager : 
+	"An entity that keeps track of the coop wave/phase and fires outputs when players complete them." 
+[
+	// Inputs
+	//input ApplyScore(void) : "Add score to player."
+
+	// Outputs
+	output OnWaveCompleted(void) : "When players kill all enemies in this wave/section"
+	output OnRoundReset(void) : "Called when the round resets"
+	output OnSpawnsReset(void) : "Called right before the level restarts, so the spawns can be set up"
+
+	output OnRoundLostKilled(void) : "Called when the round is lost and the players are killed"
+	output OnRoundLostTime(void) : "Called when the round is lost because time ran out"
+	output OnMissionCompleted(void) : "Called when the mission is completed"
+]
+
+@PointClass base(Targetname, Parentname, Targetname, EnableDisable) = env_gunfire : "Gunfire Effect"
+[
+	target(target_destination) : "Target" : "" : "Shoot at this target."
+
+	minburstsize(integer) : "Min Burst Size" : 2 : "Minimum number of rounds in a burst."
+	maxburstsize(integer) : "Max Burst Size" : 7 : "Maximum number of rounds in a burst."
+
+	minburstdelay(float) : "Min Delay Between Bursts" : 2 : "Minimum delay between bursts. (seconds)"
+	maxburstdelay(float) : "Max Delay Between Bursts" : 5 : "Maximum delay between bursts. (seconds)"
+
+	//rateoffire(float) : "Rate of fire" : 10 : "Expressed as rounds per second"
+
+	spread(choices) : "Bullet spread" : 5 : "The 'cone of inaccuracy' of the shots fired by this entity." =
+	[
+		1 : "1 Degree"
+		5 : "5 Degrees"
+		10 : "10 Degrees"
+		15 : "15 Degrees"
+	]
+
+	bias(choices) : "Bullet distribution should be..." : 1 : "How to distribute bullets within the spread. Even distribution is a true scatter throughout the spread. Biased towards the outside makes the shots 'miss' the target by tending towards the outside of the spread." =
+	[
+		1 : "Evenly distributed"
+		-1 : "Biased towards the outside"
+	]
+
+//	collisions(choices) : "Collision detection" : 0 : "Whether/how to handle bullet collision detection. NOTE: If you select NONE, this entity will be very cheap to use, but all bullets will stop short at their target's position in space and there will be no impact effects. Normal collision detection does the same things NPCs do when they fire their guns (except harm anything)." =
+//	[
+//		0 : "None. Cheap for performance."
+//		1 : "Normal collision detection."
+//	]
+
+//	shootsound(choices) : "Shoot Sound" : "Weapon_AR2.NPC_Single" : "Gunfire sound to make" = 
+//	[
+//		"Weapon_AR2.NPC_Single" : "AR2"
+//		"Weapon_SMG1.NPC_Single" : "SMG1"
+//	]
+
+//	tracertype(choices) : "Tracer" : "AR2TRACER" : "Type of tracer to display" = 
+//	[
+//		"Tracer" : "Default"
+//		"AR2TRACER" : "AR2"
+//	]
+
+	weaponname(choices) : "Weapon" : "weapon_ak47" : "The weapon that this entity emulates when it shoots." =
+	[
+		"weapon_deagle" : "Deagle"
+		"weapon_elite" : "Elites"
+		"weapon_fiveseven" : "FiveSeven"
+		"weapon_glock" : "Glock"
+		"weapon_p228" : "p228"
+		"weapon_usp" : "USP"
+
+		"weapon_ak47" : "AK47"
+		"weapon_aug" : "Aug"
+		"weapon_awp" : "AWP"
+		"weapon_famas" : "Famas"
+		"weapon_g3sg1" : "g3sg1"
+		"weapon_galil" : "Galil"
+		"weapon_m249" : "M249"
+		"weapon_m4a1" : "m4a4"
+		"weapon_mac10" : "Mac10"
+		"weapon_p90" : "P90"
+		"weapon_ump45" : "Ump45"
+		"weapon_xm1014" : "XM1014"
+
+		"weapon_bizon" : "Bizon"
+		"weapon_mag7" : "Mag7"
+		"weapon_negev" : "Negev"
+		"weapon_sawedoff" : "Sawedoff"
+		"weapon_tec9" : "Tec9"
+		"weapon_mp7" : "Mp7"
+		"weapon_mp9" : "Mp9"
+		"weapon_nova" : "Nova"
+		"weapon_p250" : "p250"
+		"weapon_scar20" : "Scar20"
+		"weapon_sg556" : "sg556"
+		"weapon_ssg08" : "ssg08"
+		
+		"weapon_usp_silencer" : "USP"
+		"weapon_m4a1_silencer" : "M4A1 Silencer"
+		
+	]
+]
+
+@PointClass base(Targetname) sphere(radius) = point_hiding_spot:
+	"Adds a hiding spot to the nav mesh at this location."
+[
+]
+
+@PointClass base(Targetname, Angles) studio("models/coop/challenge_coin.mdl") = item_coop_coin :
+	"Collectable coin for coop missions."
+[
+]
+
+@PointClass base(Targetname, Angles) studio("models/props/coop_cementplant/exloding_barrel/exploding_barrel.mdl") = prop_exploding_barrel :
+	"Exploding barrel.  BOOM!"
+[
+]
+
+@SolidClass base(Trigger) = trigger_softbarrier : 
+	"A trigger volume that softly slows player velocity in a given direction."
+[
+	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0" : "Angles indicating the direction to slow player velocity."
+
+	// Inputs
+	input SetPushDirection(vector) : "Sets the angles indicating the direction to slow player velocity."
+]
+
+
+@SolidClass base(Targetname, Origin) = func_nav_blocker : "A brush entity that can block nav areas touching its AABB." 
+[
+	input BlockNav(string) : "Starts blocking nav areas."
+	input UnblockNav(void) : "Stops blocking nav areas."
+
+	teamToBlock(choices) : "Team(s) to block" : -1 : "Team(s) this entity should block" =
+	[
+		-1 : "Everyone"
+		2 : "TEAM_TERRORIST"
+		3 : "TEAM_CT"
+	]
+	
+	affectsFlow(choices) : "Affects Flow?" : 0 : "Does this func_nav_blocker block flow in the level? Only func_nav_blockers with this enabled will cause flow recomputation on blocking/unblocking." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+]
+
+@PointClass base(Targetname) = point_give_ammo :
+	"An entity that gives ammo to the activator.  Use a trigger or a button to trigger this entity."
+[
+	// Inputs
+	input GiveAmmo(void) : "Fill up the ammo of all weapons held by the activator of this entity."
+]
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = skybox_swapper : 
+	"An entity that precaches skybox materials and swaps them on trigger." 
+[
+	SkyboxName(string) : "Skybox Material Name" : "sky_dust"
+	input Trigger(void) : "Swap to this skybox."
+]
+
+@BaseClass base(Targetname) = point_dz_itemspawn :
+	"Survival item spawn point.\n"
+[
+]
+
+@PointClass base(Angles, point_dz_itemspawn) studio("models/props_survival/cases/case_heavy_weapon.mdl") = point_dz_weaponspawn :
+	"Survival weapon spawn point.\n"
+[
+	groupID(integer) : "Group ID" : 0 : "When an item spawns in a spawn point, other nearby spawn points with the same ID will have less chance of spawning an item."
+	default_weight(float) : "Default Weight" : 100 : "Weight used to distribute item"
+	door_name(string) : "Door Name" : "" : "This point is behind a specific door"
+]
+
+@BaseClass base(Targetname) = point_dz_itemspawn_group : 
+	"Survival item spawn grouping.\n"
+[
+	radius(integer) : "Radius" : 512
+]
+
+@PointClass base(point_dz_itemspawn_group) sphere() = point_dz_weaponspawn_group : 
+	"Survival weapon spawn grouping.\n"
+[
+]
+
+@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = dangerzone_controller
+	: "Danger Zone Controller entity for mission-driven bomb explosions"
+[
+	dz_enabled(boolean) : "Enabled" : 1 : "Must be enabled when placed in the map"
+	dz_suppressbombalert(boolean) : "Suppress Bomb Alert" : 1 : "Disable if you need to generate alerts for players to activate their tablets"
+	dz_missioncontrolled(boolean) : "Mission Controls Explosions" : 1 : "Must be enabled for mission scripting flow to control explosions"
+]
+
+@SolidClass base(Trigger) = trigger_survival_playarea : 
+	"A trigger volume that defines the bounds of the survival play area."
+[
+]
+
+@SolidClass base(Trigger) = trigger_survival_maproom : 
+	"A trigger volume that encompasses the survival map room."
+[
+]
+
+@SolidClass base(Trigger) = trigger_survival_maproom_table : 
+	"A trigger volume that defines the top of the survival map room minimap table."
+[
+]
+
+@PointClass base(Targetname, Angles) studio("models/props_survival/dronegun/dronegun.mdl") = point_dz_dronegun :
+	"DroneGun Emplacement\n"
+[
+	spawnAutomatically(choices) : "Spawn Automatically?" : 1 : "Dronegun always spawns on game start, no input required." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	input spawn(void) : "Input to spawn the dronegun."
+]
+
+@PointClass base(Targetname, Angles) studio("models/props_survival/upgrades/parachutepack.mdl") = point_dz_parachute :
+	"Parachute Backpack\n"
+[
+]
+
+@PointClass base(PropDoorRotating, DamageFilter) studioprop() = dz_door : "Survival Door"
+[
+	is_security_door(boolean) : "Security door" : 0 : "This is a security door"
+]
+
+@PointClass base(Targetname, Parentname, Angles) studio("models/props_survival/counter/counter_a.mdl") = prop_counter :
+	"Numerical Display Counter\n"
+[
+	initialValue(integer) : "Initial Value" : 0
+]
+
+@PointClass base(Targetname, Angles, Parentname) studio("models/editor/axis_helper_thick.mdl") = vgui_world_text_panel : 
+	"A VGUI world panel that can be placed and modified by entity logic and display localized text"
+[
+	enabled(boolean) : "Enabled by default?" : 1
+
+	displaytext(string) : "Display Text" : "" : "The default text to display"
+	displaytextoption(string) : "Display Text Option" : "" : "Text that will be inserted in the place of a %s1 if you token has one - if you don't know what that is, don't use this"
+	font(string) : "Font" : "DefaultLarge" : "The font that will be used (should match an entry in your Scheme.res file)"
+
+	width(integer) : "Panel width" : 256 : "Width of the panel in units."
+	height(integer) : "Panel height" : 128 : "Height of the panel in units."
+	textpanelwidth(integer) : "Text Panel Width" : 256 : "Sometimes the text panel needs to be smaller to force a wrap, but keep the same font size."
+
+	textcolor(color255) : "Text Color (R G B)" : "255 255 255" : "The color of the text."
+
+	input Enable(void) : "Make text visible."
+	input Disable(void) : "Make text invisible."
+
+	input SetDisplayText(string) : "Sets the display text."
+]
+
+@PointClass base(Targetname, Angles) studio("models/props_survival/safe/safe.mdl") sphere(radius) = func_survival_c4_target : 
+	"A brush entity that can be broken by c4 within specific radius in survival mode." 
+[
+	radius(float) : "Radius" : 350 : "C4 must be planted within this radius to destroy this entity"
+]
+
+@SolidClass base(Targetname, Parentname ) = func_tablet_blocker:  
+	"Disable the tablet for players within this region."
+[
+]
+
+@PointClass sphere(radius) = info_map_region: 
+	"Point entity for setting the name of a map region for display." 
+[
+	radius(float) : "Radius" : 1200 : "The area of the map witin this sphere will be named according to this entity."
+	token(string) : "Name Token" : "" : "Localization token for this region's name."
+]
+
+@PointClass sphere(radius) = info_paradrop_denial: 
+	"Danger Zone paradrops will avoid this volume." 
+[
+	radius(float) : "Radius" : 128 : "Area of denial radius"
+]
+
+@PointClass base(Targetname, Parentname) = game_dz_coop_manager :
+	"Manager for DZ coop missions."
+[
+	configFile(string) : "Config File" : "" : "Path to the KV3 configuration file."
+	input OnHostageFirstPickedUp(void) : "OnHostageFirstPickedUp"
+	input OnHostageRescued(void) : "OnHostageRescued"
+]
+
+@PointClass base(Targetname, Parentname) studio("models/props_survival/crates/crate_ammobox.mdl") = prop_ammo_box_generic :
+	"Sharable ammo box."
+[
+	spawnflags(Flags) =
+	[
+		1 : "Start constrained" : 0
+	]
+]
+
+@PointClass base(Targetname, Parentname) studio("models/props_survival/upgrades/upgrade_dz_armor.mdl") = prop_weapon_upgrade_armor:
+	"One time use armor activating on touch."
+[
+]
+
+@PointClass base(Targetname, Parentname) studio("models/props_survival/upgrades/upgrade_heavy_armor.mdl") = prop_weapon_refill_heavyarmor:
+	"One time heavy armor refill activating with long use."
+[
+	skin(integer) : "Skin" : 0 : "Some models have multiple versions of their textures, called skins. Set this to a number other than 0 to use that skin instead of the default."
+	body(integer) : "Body" : 0 : "Some models have multiple bodygroups. Set this to a number other than 0 to use that bodygroup instead of the default."
+]
+
+@PointClass base(Targetname, Parentname, Angles) studio() = prop_mapplaced_long_use_entity:
+	"A map placed entity which activates with long use."
+[
+	model(studio) report : "World Model"
+	skin(integer) : "Skin" : 0 : "Some models have multiple versions of their textures, called skins. Set this to a number other than 0 to use that skin instead of the default."
+	body(integer) : "Body" : 0 : "Some models have multiple bodygroups. Set this to a number other than 0 to use that bodygroup instead of the default."
+	sequence(integer) : "Sequence" : 0 : "Default animation sequence for the model to be playing after spawning."
+
+	// Long Use Configuration
+	pingtype(choices) : "Ping Type (int)" : 0 =
+	[
+		0 : "Default"
+		3 : "Item"
+		4 : "Danger"
+		5 : "Helmet"
+		6 : "Armor"
+		7 : "Armor and Helmet"
+		8 : "Ammunition"
+		9 : "Radar Jammer"
+		10 : "ExoJump"
+		11 : "Parachute"
+		12 : "Contract"
+		13 : "Tablet Upgrade"
+		14 : "Money"
+	]
+
+	longuseactiontype(choices) : "Use Type (int)" : 0 =
+	[
+		0 : "Disabled"
+		1 : "Defusing"
+		2 : "Defusing with Kit"
+		3 : "Hostage Pickup"
+		4 : "Hostage Drop-off"
+		5 : "Opening Safe"
+		6 : "Equipping Parachute"
+		7 : "Equipping Heavy Armor"
+		8 : "Equipping Contract"
+		9 : "Equipping Tablet Upgrade"
+		10 : "Taking off Heavy Armor"
+		11 : "Paying to Open Door"
+		12 : "Letting go of rope"
+		13 : "Equipping ExoJump"
+		14 : "Picking up Bump Mine"
+		15 : "Picking up Item"
+		16 : "Placing Item"
+	]
+
+	longuseduration(float) : "Use Duration (float)" : 0 : "How long the player must use this item until pickup, must be positive"
+
+	soundstartuse(string) : "Sound name" : "" : "Name of sound script empty to play when use begins, e.g. Player.PickupWeapon" 
+
+	// Outputs
+	output OnUseCompleted(void) : "Fired when a player finishes the long use."
+]
+
+@PointClass base(Weapon) studio("models/weapons/w_smg_mp5sd.mdl") = weapon_mp5sd : "MP5-SD" 
+[
+]
+
+@PointClass base(Targetname, Parentname, Global, Angles, BreakableProp, SystemLevelChoice, BaseFadeProp, RenderFields, Shadow) studio("models/chicken/chicken.mdl") = chicken :
+    "Chicken AI entity."
+[
+    Health(integer) : "Health" : 1 : "Set higher with damage to hurt to make chicken invincible."
+    minhealthdmg(integer) : "Damage to hurt" : 1 : "Set higher with health to make chicken invincible."
+    glowdist(integer)       : "Glow Distance" : 1024
+    glowenabled(boolean) : "Glow by default?" : 0
+    glowcolor(color255) : "Glow Color (R G B)" : "255 255 255" : "The color of the glow (if enabled)."
+    glowstyle(choices) : "Glow Style" : 0 : "What style of glow should be used." =
+    [
+        0 : "Default (through walls)"
+        1 : "Shimmer (doesn't glow through walls)"
+        2 : "Outline (doesn't glow through walls)"
+        3 : "Outline Pulse (doesn't glow through walls)"
+    ]
+ 	skin(integer) : "Skin" : 0 : "Some models have multiple versions of their textures, called skins. Set this to a number other than 0 to use that skin instead of the default."
+    SetBodyGroup(choices) : "Chicken model": 0 : "Holiday submodels of chicken" =
+    [
+        0 : "Default"
+        1 : "Party Hat"
+        2 : "Ghost"
+        3 : "Sweater"
+        4 : "Bunny ears"
+	5 : "Pumpkin head"
+    ]
+    input SetGlowEnabled(void) : "Starts the glow."
+    input SetGlowDisabled(void) : "Stops the glow."
+    input SetGlowColor(color255) : "Change the glow's color. Format: <Red 0-255> <Green 0-255> <Blue 0-255>"
+    input GlowColorRedValue(float) : "Sets the glow red color channel's value (0 - 255)."
+    input GlowColorGreenValue(float) : "Sets the glow green color channel's value (0 - 255)."
+    input GlowColorBlueValue(float) : "Sets the glow blue color channel's value (0 - 255)."
+ 
+    output OnHealthChanged(void) : "Fires output when health changes."
+           
+]
+
+@PointClass base(Parentname, Angles) studioprop("models/editor/camera.mdl") = point_camera : "Camera"
+[
+    spawnflags(Flags) =
+    [
+        1 : "Start Off" : 0 
+    ]
+
+    targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+    FOV(float) : "FOV" : 90 : "Field of view in degrees"
+    UseScreenAspectRatio(choices) : "Screen Aspect Ratio" : 0 =
+    [
+        0 : "No"
+        1 : "Yes"
+    ]   
+    fogEnable(choices) : "Fog Enable" : 0 =
+    [
+        0 : "No"
+        1 : "Yes"
+    ]   
+    fogColor(color255) : "Fog Color" : "0 0 0"
+    fogStart(float) : "Fog Start" : 2048 : "The near fog plane."
+    fogEnd(float) : "Fog End" : 4096 : "The far fog/clipping plane."
+    fogMaxDensity(float) : "Fog Max Density [0..1]" : 1 : "The maximum fog density. 0=no fog, 1=full fog."
+
+    // Inputs
+    input ChangeFOV(string) : "Changes camera's FOV over time"
+    input SetOnAndTurnOthersOff(void) : "Turn the camera on, and turn all other cameras off."
+    input SetOn(void) : "Turn the camera on."
+    input SetOff(void) : "Turn the camera off."
+]
+
+@SolidClass base(func_brush) = func_monitor :
+    "A monitor that renders the view from a given point_camera entity."
+[
+    target(target_destination) : "Camera name"
+
+    // Inputs
+    input Toggle(void) : "Toggle - If on, turn off, if off, turn on."
+    input Enable(void) : "Enable."
+    input Disable(void) : "Disable."
+    input SetCamera(string) : "Sets the camera to use for this monitor. Takes the name of a point_camera entity in the map."
+] 
+
+@PointClass base(Angles) = mapvetopick_controller :
+	"Map veto controller."
+[
+	// Outputs
+	output OnMapVetoed(string) : "Triggered when a map is vetoed (multiple times at once)"
+	output OnMapPicked(string) : "Triggered when a map is picked to be played (usually one)"
+	output OnSidesPicked(integer) : "Triggered when sides are decided (0 = stay, 1 = switch)"
+	output OnNewPhaseStarted(integer) : "Triggered when new veto pick phase starts ( n = phase )"
+	output OnLevelTransition(integer) : "Triggered when level transition begins ( n = phase )"
+]
