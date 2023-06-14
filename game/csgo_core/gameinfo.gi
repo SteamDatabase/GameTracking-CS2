@@ -43,6 +43,11 @@
 		}
 	}
 
+	Physics
+	{
+		"BuildMeshWings"		"1"
+	}
+
 	MaterialSystem2
 	{
 		RenderModes
