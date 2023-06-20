@@ -152,6 +152,9 @@
 		"snd_steamaudio_enable_custom_hrtf"					"1"
 		"snd_steamaudio_enable_perspective_correction"		"1"
 		"snd_steamaudio_perspective_correction_factor"		"1.0"
+		// Need much tighter sound clock sync
+		"snd_delay_sound_ms_max"	"40"
+
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 
