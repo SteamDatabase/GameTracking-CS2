@@ -310,21 +310,14 @@
 			EncodeIndexBuffer       "1"
 			UseMikkTSpace           "1"
 			MeshletConeWeight       ".15"
+
+			// Because CS will integrate compiled vpks to their release branch, until the release
+			// branch takes a full integrate we need to only generate legacy format vertices
+			// (otherwise the integrated maps will have vertices that cannot be interpreted).
+			// Remove this and the checking code once the next integration is done.
+			// - peted 6/6/2023
+			UseLegacyNormalEncoding "1"
 		}
-
-// Original Cluster Settings
-
-//		WorldRendererBuilder
-//		{
-//			FixTJunctionEdgeCracks  "1"
-//			VisibilityGuidedMeshClustering      "1"
-//			MinimumTrianglesPerClusteredMesh    "1024"
-//			MinimumVerticesPerClusteredMesh     "1024"
-//			MinimumVolumePerClusteredMesh       "768"       // ~9x9x9 cube
-//			MaxPrecomputedVisClusterMembership  "20"
-//		}
-
-// Testing large cluster settings
 
 		WorldRendererBuilder
 		{
@@ -336,10 +329,7 @@
 			MaxPrecomputedVisClusterMembership	"16"
 			UseAggregateInstances			"1"
 			AggregateInstancingMeshlets			"1"
-			UseModelDoc							"1"
-			UseModelDocForEntityModels			"1"
 			UseStaticEnvMapForObjectsWithLightingOrigin	"1"
-			WorldPhysicsModelDoc				"1"
 		}
 
 // Optimisation for Hammer Mesh Physics
