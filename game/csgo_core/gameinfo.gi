@@ -222,10 +222,10 @@
 			"muzzleflash" "materials/effects/lightcookies/muzzleflash.vtex"
 		}
 
-		"TransformTextureRowCount" "256"
-		"CMTAtlasWidth" "16"
-		"CMTAtlasHeight" "16"
-		"CMTAtlasChunkSize" "16"
+		"TransformTextureRowCount" "512"
+		"CMTAtlasWidth" "512"
+		"CMTAtlasHeight" "256"
+		"CMTAtlasChunkSize" "128"
 
 		"DynamicDecalsUseShrinkWrap" "1"	// enable shrinkwrap optimization for dynamic decal materials using F_FASTAPPROX
 	}
@@ -457,6 +457,11 @@
 		"IndexBufferPoolSizeMB"						"32"
 		"LowLatency"								"1"
 		"MinDXLevel"								"110" // DX 11.0 is the minimum
+	}
+
+	Manifest
+	{
+		"GenerateVPKManifest" "1"
 	}
 
 	PostProcessingEditor

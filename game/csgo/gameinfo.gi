@@ -124,7 +124,7 @@
 		// Default to binding keys based on keyboard position instead of key name
 		"input_button_code_is_scan_code"	"1"
 
-		//Disable Cubemap Brightening
+		// Disable Cubemap Brightening
 		"lb_cubemap_normalization_max" 		"1"
 
 		// For low quality shaders, cubemap bounds are scaled by this percentage of the fade region
@@ -162,6 +162,8 @@
 		"cl_disconnect_voice_fade"	"-1.0"
 		"cl_disconnect_soundevent"	"Music.StopAllExceptMusic"
 		
+		// Physics specific customization
+		"phys_use_position_based_toi_test" "1"
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 

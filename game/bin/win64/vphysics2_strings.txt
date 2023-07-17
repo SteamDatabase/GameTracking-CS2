@@ -1,3 +1,4 @@
+		V_qsort_s
 		cfFF                      - collision function mask
 		client                    - draw client world(s)
 		debugName substring       - filter by substring in debug name
@@ -22,9 +23,9 @@
 	H#F8H
 	HcA 
 	IcA4=
+	V_modff
 	V_powf
 	V_qsort
-	V_qsort_s
 	V_sincosf
 	V_sinf
 	V_snprintf
@@ -83,6 +84,7 @@
  A\_^
  A]A\^][
  A^A\_
+ A^A]A\^]
  A^A]A\_^
  A^A][
  A^A]^
@@ -102,6 +104,7 @@
  A_A^A\
  A_A^A\_^
  A_A^A]
+ A_A^A]A\^
  A_A^A]A\_
  A_A^A]A\_^]
  A_A^A]_^
@@ -148,6 +151,8 @@
  Shape(
  Type Descriptor'
  [%llu]
+ [clone 
+ _][H
  at offset 
  both sides of collision in the same hierarchy must have self-collision and solid contacts enabled.
  delete
@@ -162,12 +167,11 @@
  with collision enabled
  {%d,%d,%d}
  }::H
-!	V_stricmp_fast
 !>6'Y
 !hn7!
 !m_bNeedsSort
 "D;L;
-#	V_strlower_fast
+#	V_stricmp_fast
 # Faces: %d
 # Vertices: %d
 ##Unexpected## (%d)
@@ -185,10 +189,12 @@ $A;M$A
 $Hc/H
 $IHcp
 $tIs1
+%	V_strlower_fast
 %+.2f*%.1f in 
 %.3f behind, %d nodes, FeModel %s bytes, %s
 %02X%02X\
 %14s %-30s[%u]%s
+%<ou	H
 %d %d %d
 %d %d %d %d
 %d %s
@@ -217,6 +223,7 @@ $tIs1
 %s(): Bone referenced by collision mesh not found in render skeleton. Skipping collision mesh.
 %s/%s
 %s: %s
+%s: CDwarfVector count overflow
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
 %s: invalid nBeforeIndex %d
@@ -225,23 +232,20 @@ $tIs1
 %s_color
 %s_matgrp
 %u.%u
+&H#F8I
 &YA1+
 &YA1A
 &YA1E
 &YA1H
 &YA1I
 ',=?k
-'wOHc
+'wMHc
 ( + %d more)
 (%.4g,%.4g)
-(%F% 
 (%d,%d)
-(%hD 
-(%z( 
+(5+y.
 (;^ |
 (<$fD
-(=h.'
-(=~"'
 (A\^][
 (A]_^]
 (A^A\
@@ -281,6 +285,7 @@ $tIs1
 (D$`D
 (D$`H
 (D$`L
+(D$`M
 (D$pA
 (D$pD
 (D$pE
@@ -289,6 +294,7 @@ $tIs1
 (D$pL
 (D$pL;
 (D$pz
+(HcItE3
 (L$ %
 (L$ A
 (L$ D
@@ -306,12 +312,12 @@ $tIs1
 (L$PA
 (L$PD
 (L$PH
-(L$PL
 (L$`A
 (L$`D
 (L$`H
 (L$`f
 (L$p3
+(L$pA
 (L$pD
 (L$pH
 (L$pJc
@@ -327,7 +333,6 @@ $tIs1
 (T$0D
 (T$0H
 (T$0f
-(T$@A
 (T$@D
 (T$@L
 (T$@s
@@ -337,10 +342,10 @@ $tIs1
 (T$`A
 (T$`D
 (T$`E
-(T$`H
 (T$`I
 (T$pD
 (T$pL
+(U@fD
 (YA13
 (YA1H
 (\$ A
@@ -357,10 +362,8 @@ $tIs1
 (\$PD
 (\$PH
 (\$PL
-(\$`A
 (\$`D
 (\$pD
-(\$pL
 (_^][
 (d$ A
 (d$ D
@@ -371,11 +374,10 @@ $tIs1
 (d$0E3
 (d$0H
 (d$@3
-(d$@A
 (d$@D
 (d$@H
+(d$PA
 (d$PD
-(d$PE
 (d$PH
 (d$PL
 (d$`A
@@ -383,7 +385,9 @@ $tIs1
 (d$`H
 (d$pA
 (d$pD
+(d$pE
 (d$pH
+(ea-<
 (f*^[0
 (l$ D
 (l$ H
@@ -398,10 +402,10 @@ $tIs1
 (l$@E
 (l$@H
 (l$@L
-(l$PD
 (l$PE
 (l$PH
 (l$PL
+(l$`A
 (l$`D
 (l$pD
 (l$pH
@@ -422,17 +426,18 @@ $tIs1
 (t$0I
 (t$0L
 (t$0fD
+(t$@2
 (t$@D
 (t$@H
 (t$@I
 (t$@L
 (t$@f
 (t$@fA
-(t$PA
 (t$PD
 (t$PH
 (t$PI
 (t$PL
+(t$`A
 (t$`D
 (t$`H
 (t$`L
@@ -440,10 +445,8 @@ $tIs1
 (t$p;uH
 (t$pA
 (t$pD
-(t$pE
 (t$pH
 (t$pL
-(t+@2
 (|$ A
 (|$ D
 (|$ H
@@ -485,7 +488,6 @@ $tIs1
 )$$H;
 )4$JcL
 )<$Hc
-)<ou	H
 )>6{1n
 )D$ 3
 )D$ A
@@ -505,7 +507,6 @@ $tIs1
 )D$@D
 )D$@H
 )D$@I
-)D$@I;
 )D$@L
 )D$@f
 )D$@fA
@@ -597,12 +598,14 @@ $tIs1
 )\$0r
 )\$@D
 )\$@H
+)\$PA
 )\$PD
 )\$PE
 )\$PH
 )\$PI
 )\$Pf
 )\$Pfff
+)\$`A
 )\$`D
 )\$`Ic
 )\$pA
@@ -612,7 +615,6 @@ $tIs1
 )] Lco@I
 )d$ D
 )d$09}0
-)d$0D
 )d$0E
 )d$0I
 )d$0Ik
@@ -732,13 +734,14 @@ $tIs1
 )|$@E
 )|$@H
 )|$@I
-)|$@Ic
 )|$@L
 )|$PD
 )|$PE
 )|$PH
+)|$PI;
 )|$PL
 )|$PM
+)|$Pf
 )|$Ps
 )|$`A
 )|$`D
@@ -753,7 +756,6 @@ $tIs1
 )|$pI
 )|$pI;
 )|$pL
-*	V_strtoui64
 *%d %s
 *?333?
 *HcD;LH
@@ -762,10 +764,13 @@ $tIs1
 *YA1I
 *xNIL
 +C$Lc
++EHE3
 +G$Hc
 +G$Lc
++L$@H
 +L9d$ t
 +M<7>
++MHE3
 +Xt@(
 +YA1A
 +YA1H
@@ -773,9 +778,11 @@ $tIs1
 +f)>0'
 +h->|
 +o'q)}
+,	V_strtoui64
 , Fully Rigid
 , Null body
 ,/<-w
+,0<	w 
 ,0<	w&H
 ,0</w
 ,HcD;LH
@@ -801,26 +808,27 @@ $tIs1
 -touch
 -unittest
 -validate
-.	V_tanf
 .%x.%x.copy_tmp
 .00cfg
+.:u IcAtD
 .?AUAsyncProcessResult@CBaseIntrospectedToKV3TypeManager@@
 .?AUCMorphSetData@@
 .?AV<lambda_1>@?1??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
 .?AV<lambda_1>@?8???0CMultiworldSoftbodyStepper@@QEAA@PEAPEAVCRnSoftbody@@HMH@Z@
 .?AV<lambda_1>@?8??ReleaseRef@CRnRopeJobContinuation@@QEAAXXZ@
+.?AV<lambda_1>@?BJ@??BeginTautLineJobs@CRnParticleRope@@AEAAXXZ@
 .?AV<lambda_1>@?CK@??UpdateSceneObjects@CRnWorldHelper@@QEAAXAEAVCCallQueue@@URnDebugDrawOptions_t@@@Z@
-.?AV<lambda_1>@?N@??RunParallel@?$CParallelForAndPostProcessor@V?$CUtlVectorFixedGrowable@UEmptyPostElem_t@@$0BA@H@@V<lambda_1>@?4??Step@CRnWorld@@QEAAXM_N@Z@UEmptySequentialFunctor_t@@$00@@QEAAXXZ@
+.?AV<lambda_1>@?N@??RunParallel@?$CParallelForAndPostProcessor@V?$CUtlVectorFixedGrowable@UEmptyPostElem_t@@$0BA@H@@V<lambda_1>@?8??Step@CRnWorld@@QEAAXM_N@Z@UEmptySequentialFunctor_t@@$00@@QEAAXXZ@
 .?AV<lambda_1>@?N@??RunParallel@?$CParallelForAndPostProcessor@V?$CUtlVectorFixedGrowable@VCPostUpdateContacts@@$0BA@H@@V<lambda_1>@?2??CollideParallel@CRnWorld@@AEAAXM@Z@UEmptySequentialFunctor_t@@$00@@QEAAXXZ@
 .?AV<lambda_1>@?N@??RunParallel@?$CParallelForAndPostProcessor@V?$CUtlVectorFixedGrowable@VCPostUpdateIslands@@$0IA@H@@V<lambda_1>@?EP@??Solve@CRnWorld@@AEAAXM@Z@UEmptySequentialFunctor_t@@$00@@QEAAXXZ@
 .?AV<lambda_1>@?N@??RunParallel@?$CParallelForAndPostProcessor@V?$CUtlVectorFixedGrowable@VCPostUpdateTOI@@$0BA@H@@V<lambda_1>@?9??SolveTOI@CRnWorld@@AEAAXM@Z@UEmptySequentialFunctor_t@@$00@@QEAAXXZ@
 .?AV<lambda_1>@?O@??BeginMotionControlCallbacksJob@CRnParticleRope@@AEAAXXZ@
-.?AV<lambda_1>@?O@??BeginTautLineJob@CRnParticleRope@@AEAAXXZ@
-.?AV<lambda_2>@?BE@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
+.?AV<lambda_2>@?BG@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
+.?AV<lambda_2>@?BH@??BeginTautLineJobs@CRnParticleRope@@AEAAXXZ@
 .?AV<lambda_2>@?DO@??UpdateSceneObjects@CRnWorldHelper@@QEAAXAEAVCCallQueue@@URnDebugDrawOptions_t@@@Z@
-.?AV<lambda_3>@?BG@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
-.?AV<lambda_4>@?BJ@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
-.?AV<lambda_5>@?BL@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
+.?AV<lambda_3>@?BI@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
+.?AV<lambda_4>@?BN@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
+.?AV<lambda_5>@?BP@??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
 .?AV<lambda_6>@?1??BeginSimJobs@CRnParticleRope@@AEAAXM@Z@
 .?AV?$CMutableRefCountBase@VCRefMT@@@@
 .?AV?$CMutableRefCounted@V?$CMutableRefCountBase@VCRefMT@@@@@@
@@ -831,6 +839,7 @@ $tIs1
 .?AVCBaseConstraint@@
 .?AVCBaseIntrospectedToKV3TypeManager@@
 .?AVCBoneConstraintBase@@
+.?AVCBoneConstraintDotToMorph@@
 .?AVCBoneConstraintPoseSpaceBone@@
 .?AVCBoneConstraintPoseSpaceMorph@@
 .?AVCBreakLegacyParser@@
@@ -909,13 +918,13 @@ $tIs1
 .D$$zbu`
 .D$(z
 .D$(zSuQ
-.D$Hz6u4
+.D$Lz4u2
+.D$xzXuVD
 .I(tD
 .IhtR
 .YA1A
 .YA1H
 .build-id\
-.d$tz?u=
 .dSYM
 .data
 .data$r
@@ -953,14 +962,15 @@ $tIs1
 .text$yd
 .tls$
 .tls$ZZZ
+.upz=u;
 .vmdl
 .xJ>Hf
 .xdata
 .xdata$x
 /%u.rnsave
+/-bu	
 /6sRH
 />58d%
-/A+mHA
 /BTwG
 /CLs3
 /CLsTI
@@ -983,6 +993,7 @@ $tIs1
 /w\s'
 /{\s'
 0	P!Y
+0	V_tanf
 0 0 0
 0 0 0 0
 0 0 0 255
@@ -1011,7 +1022,6 @@ $tIs1
 0A_A^A\_]
 0A_A^A\_^
 0A_A^A]
-0A_A^A]A\]
 0A_A^A]A\^
 0A_A^A]A\_
 0A_A^A]A\_^[
@@ -1046,8 +1056,9 @@ $tIs1
 220323000000Z
 220801000000Z
 220921000000Z
-230629214530Z0/
+230712171710Z0/
 241009235959Z0a1
+2<iu	H
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA0
 2L;t$8
@@ -1075,7 +1086,9 @@ $tIs1
 4@KcD
 4HfE;`
 4YA1H
+4YA1I
 4http://crl3.digicert.com/DigiCertAssuredIDRootCA.crl0
+4wPH}
 5'YA1i
 5FjiT
 5YA1H
@@ -1083,10 +1096,10 @@ $tIs1
 5http://cacerts.digicert.com/DigiCertTrustedRootG4.crt0C
 6*f(_
 64-bit DWARF format is not supported
-6<iu	H
 6D9l$Lt
 6I]Dc
 6OB,n_
+6mh;C
 70503
 7H9t$H
 7HcC0M
@@ -1099,23 +1112,20 @@ $tIs1
 8A^A]
 8A^A]A\]
 8A^A]A\^
-8A^A]A\_
 8A^A]_^][
 8A^^][
 8A_A]
+8A_A]_^
 8A_A^
 8A_A^A\^][
 8A_A^A]A\_^][
-8Bu$H
 8C|t(
 8D$@t
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA10
-8EtPHc{
-8Et`Hc{
-8EtlI
-8Eu5HcQ
+8Eu:HcQ
 8F9D	
+8IcItA
 8Iu&3
 8Iu=@
 8Iu?3
@@ -1125,7 +1135,6 @@ $tIs1
 8YA1H
 8_t/H
 8_u	H
-8_uhI
 8nu	H
 9)~P3
 9-t}H
@@ -1148,7 +1157,6 @@ $tIs1
 9X0~;H
 9X0~>H
 9X0~?H
-9Xq`{
 9Y ~C
 9Y0~$
 9Y0~'
@@ -1170,7 +1178,6 @@ $tIs1
 9^H~/3
 9_$~(D
 9_H~-
-9_unH
 9i(~4H
 9i(~HH
 9i(~xH
@@ -1178,6 +1185,7 @@ $tIs1
 9i0~yH
 9iH~*
 9ih|AH
+9it~+
 9ixv'
 9k |AH
 9k(~(H
@@ -1201,7 +1209,6 @@ $tIs1
 9t$hu
 9t'E;
 9u ~:L
-9w#I;
 9w'I;
 9w0~RH
 9wxv\f
@@ -1222,6 +1229,8 @@ $tIs1
 9{@~)H
 9{H~1H
 9{H~M
+9{H~u
+9{P~)
 9{X~%H
 9|$(u
 9|$8u
@@ -1229,6 +1238,7 @@ $tIs1
 9|$Xu
 9|$hu
 9~0~LH
+:!=;h 
 :!C<0tYH
 :!L$ 0
 :!\$<0
@@ -1245,7 +1255,6 @@ $tIs1
 ;Ct} 
 ;D$0uyH
 ;D$Xu
-;D$hu
 ;E@uxH
 ;EguI3M
 ;G0slH
@@ -1255,7 +1264,6 @@ $tIs1
 ;Kt}x
 ;Qt}~
 ;T$@v
-;T$x}
 ;YA1D
 ;\$H|
 ;^(s!L
@@ -1266,9 +1274,9 @@ $tIs1
 <	u%H
 <	u)Mcp
 <	u|I
-<	wAI
+<	wBI
 <	wD3
-<	wk3
+<	wq3
 < t=<	t9
 <$D8o
 <(HcG0
@@ -1284,8 +1292,8 @@ $tIs1
 <:t=< t9
 <<t#<>t
 <@HcA,H
-<A|?<Z
-<Ku,A
+<A|:<Z
+<Ku.A
 <No caller file>
 <No name>
 <PuWH
@@ -1334,16 +1342,17 @@ $tIs1
 <phys_validate
 <pointer>
 <pre style="white-space:pre-wrap">
-<pueI
 <su	H
 <table: %u members>
 <td>%d</td><td>%s</td></tr>
 <tr><td>Mask <i>OFF<i></td>
 <tr><td>Set <b>ON</b></td>
+<tuKH
 <undefined>
 <unknown KV3 basic type '%s' (%d)>
 <y:Ic
 =YA1H
+=YA1I
 =imb;D
 =rIQU
 =y;Hc
@@ -1353,10 +1362,13 @@ $tIs1
 >PushBack
 >cloth_legacy_stretch_force
 >jtm}S
+>nutHc{
 ?3s,H
 ?3{TH
 ?7zQ6$
 ?:kP<
+?;]Hu
+?<du	H
 ??0CCountedStringPool@@QEAA@W4StringPoolCase_t@@@Z
 ??0CDirIterator@@QEAA@PEBDI@Z
 ??0CThreadMultiWaitEvent@@QEAA@_N@Z
@@ -1368,7 +1380,7 @@ $tIs1
 ??0CUtlMemoryPoolBase@@QEAA@HHHW4MemoryPoolGrowType_t@@PEBDW4MemAllocAttribute_t@@@Z
 ??0CUtlString@@QEAA@AEBVCBufferString@@@Z
 ??0CUtlSymbolTable@@QEAA@HH_N@Z
-??0KeyValues@@QEAA@PEBD@Z
+??0KeyValues@@QEAA@PEBDPEAVIKeyValuesSystem@@_N@Z
 ??1CCountedStringPool@@UEAA@XZ
 ??1CDirIterator@@QEAA@XZ
 ??1CThreadMultiWaitEvent@@QEAA@XZ
@@ -1418,8 +1430,9 @@ $tIs1
 ?EitherSymInitialize@CDbgHelpFunctionsLoader@@QEAAPEAXPEBD_N@Z
 ?EndsWith@CBufferString@@QEBA_NPEBD@Z
 ?EnsureTrailingSlash@CBufferString@@QEAAPEBDD_N@Z
+?Eu1H
 ?ExtendPath@CBufferString@@QEAAPEBDPEBDD_N@Z
-?ExtractFileBase@CBufferString@@QEAAPEBDPEBD@Z
+?ExtractFileBase@CBufferString@@QEAAPEBDPEBD_N@Z
 ?Find@CUtlSymbolTable@@QEBA?AVCUtlSymbol@@PEBD@Z
 ?FindDebugFiles@CDbgHelpFunctionsLoader@@QEAAXPEAXPEBDI1W4StackTools_ModuleIDFormat_t@@PEBX_KPEAD454@Z
 ?FindOrAddFileName@CUtlFilenameSymbolTable@@QEAAIPEBD@Z
@@ -1457,7 +1470,7 @@ $tIs1
 ?PutString@CUtlBuffer@@QEAAXPEBD@Z
 ?QY^&
 ?RemoveAt@CBufferString@@QEAAPEBDHH@Z
-?RemoveToFileBase@CBufferString@@QEAAPEBDXZ
+?RemoveToFileBase@CBufferString@@QEAAPEBD_N@Z
 ?ReportInvalidStringConversion@@YAXPEBD@Z
 ?ReportInvalidStringConversion@@YAXPEB_W@Z
 ?Reset@CThreadMultiWaitEvent@@QEAAXXZ
@@ -1490,11 +1503,10 @@ $tIs1
 ?V_strnlen@@YAHPEBDH@Z
 ?Wait@CThreadSyncObject@@QEAA_NI@Z
 ?YA1A
-?YA1I
+?YA1H
 ?blendweights
 ?f`Y4
 ?fff?
-?nuJHc{
 ?unsupported?
 @.data
 @.reloc
@@ -1502,11 +1514,13 @@ $tIs1
 @80t	E
 @84)u
 @84:u
+@85G_*
 @88tSE3
 @8j(t
 @8k(t
 @8r#|
 @8w$t
+@8y<u"A
 @8z$u
 @8z%u
 @8{(u
@@ -1514,7 +1528,6 @@ $tIs1
 @@<unknown>
 @@IcH8L
 @A]A\[
-@A]A\_
 @A]_]
 @A]_^][
 @A^A\_^]
@@ -1530,6 +1543,7 @@ $tIs1
 @A_A^A\_^
 @A_A^A\_^][
 @A_A^A]
+@A_A^A]A\]
 @A_A^A]A\_
 @A_A^A]A\_^]
 @A_A^]
@@ -1595,7 +1609,6 @@ $tIs1
 @UATAWH
 @UAUAVAWH
 @UAUAVH
-@UAUAWH
 @UAVAWH
 @UAVH
 @UAWH
@@ -1635,7 +1648,6 @@ $tIs1
 @UWAUH
 @UWAVH
 @UWAWH
-@Use implicit integrator for gyroscopic forces
 @VATAUAVAWH
 @VATAUAVH
 @VATAUAWH
@@ -1648,8 +1660,6 @@ $tIs1
 @VWATH
 @VWAUAVH
 @VWAVH
-@WATAUAVH
-@WATAUH
 @WAUAVH
 @WAUAWH
 @WAVAWH
@@ -1672,10 +1682,12 @@ A8H+A0H
 A8p#}
 A8}(u
 A99~EL
+A9C8t
 A9D$xu
 A9N\t
+A9T$ 
 A9^0~.
-A9o$u)A9n v
+A9o$u*A9n v
 A9v0t
 A9x0~\H
 A:8ucI
@@ -1685,6 +1697,7 @@ A;A0|
 A;Exr
 A;Exsff
 A;JPsAM
+A;KP}
 A;M t
 A;M8v#A
 A;U0|
@@ -1697,6 +1710,7 @@ A;wxs
 A;x0|
 A;~Xu	I
 A>pP&
+A@ D9
 A@;_0|
 AABB_t
 ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -1851,7 +1865,6 @@ AnimationSystem_001
 ApD9A@~RE3
 AppPolicyGetProcessTerminationMethod
 April
-Arange terminator not at the end of a set
 AreFileApisANSI
 Asleep
 AssetBrowserSystem_001
@@ -1869,9 +1882,7 @@ Available Interaction Layers:
 Available debug layers:
 Awake
 B(I9A(
-B(f%d6
 B2t,f;
-B84(u
 B;D1X
 B@M9@
 BBu=L
@@ -1944,7 +1955,6 @@ C:\buildworker\csgo_rel_win64\build\src\vphysics2\vphys2_debug.cpp
 C:\buildworker\csgo_rel_win64\build\src\vphysics2\vphys2_world.cpp
 C:\buildworker\csgo_rel_win64\build\src\vphysics2\vphysics2.cpp
 C<;C4A
-C<du	H
 C@H9,
 CAimConstraint
 CAnimCycle
@@ -1952,6 +1962,7 @@ CAnimFoot
 CAttachment
 CBaseConstraint
 CBoneConstraintBase
+CBoneConstraintDotToMorph
 CBoneConstraintPoseSpaceBone
 CBoneConstraintPoseSpaceBone::Input_t
 CBoneConstraintPoseSpaceMorph
@@ -1964,6 +1975,27 @@ CCycleBase
 CD$8D
 CDrawCullingData
 CDualHullAgglomerator: Degenerate topology, %d faces removed
+CDwarfVector capacity overflow
+CDwarfVector<char *>::GetInsertPtr
+CDwarfVector<char>::GetInsertPtr
+CDwarfVector<enum EDwarfSymbolKind>::GetInsertPtr
+CDwarfVector<struct CDwarfFile::SSection>::GetInsertPtr
+CDwarfVector<struct CDwarfModule::SAddrToCompilationUnit>::GetInsertPtr
+CDwarfVector<struct CDwarfModule::SCompilationUnit>::GetInsertPtr
+CDwarfVector<struct CDwarfModule::SDebugInfoEntryRefs>::GetInsertPtr
+CDwarfVector<struct CDwarfModule::SInlineFrame>::GetInsertPtr
+CDwarfVector<struct CDwarfModule::SSourceLine>::GetInsertPtr
+CDwarfVector<struct CDwarfModule::SSymbol>::GetInsertPtr
+CDwarfVector<struct CDwarfUndecorateName::STextRange>::GetInsertPtr
+CDwarfVector<struct CieInfoRef_t>::GetInsertPtr
+CDwarfVector<struct SDieParent>::GetInsertPtr
+CDwarfVector<struct SDwarfAbbrevEntry>::GetInsertPtr
+CDwarfVector<struct SDwarfCieInfo>::GetInsertPtr
+CDwarfVector<struct SDwarfFdeInfo>::GetInsertPtr
+CDwarfVector<struct SDwarfIncompleteName>::GetInsertPtr
+CDwarfVector<struct SDwarfRelVirtRange>::GetInsertPtr
+CDwarfVector<unsigned char>::GetInsertPtr
+CDwarfVector<unsigned int>::GetInsertPtr
 CFeIndexedJiggleBone
 CFeJiggleBone
 CFeNamedJiggleBone
@@ -2040,7 +2072,7 @@ CResourceStreamFixed: trying to write past the end of allocated memory (new comm
 CResourceStreamFixed::Commit
 CRnParticleRope::BeginMotionControlCallbacksJob
 CRnParticleRope::BeginSimJobs
-CRnParticleRope::BeginTautLineJob
+CRnParticleRope::BeginTautLineJobs
 CRnRopeJobContinuation CUtlMemoryPoolMT
 CRnRopeJob_t CUtlMemoryPoolMT
 CSceneObjectData
@@ -2194,6 +2226,7 @@ D$ Qx;
 D$ Vi5
 D$ ^"
 D$ ^vo
+D$ aQl
 D$ cdF
 D$ fA
 D$ fH
@@ -2216,7 +2249,6 @@ D$(C
 D$(D;
 D$(E3
 D$(F	
-D$(H+
 D$(H;
 D$(HcC
 D$(I9
@@ -2242,7 +2274,7 @@ D$01(
 D$03~
 D$07*
 D$08vIMH
-D$09D$`}
+D$09D$p}
 D$0;D
 D$0@8{
 D$0A+
@@ -2349,14 +2381,17 @@ D$PD;D$X}
 D$PE3
 D$PH+
 D$PH;
+D$PHc
 D$PI+
 D$PI;
 D$PIcE
 D$PIc|$XE
 D$PLcb
+D$PMc
 D$P_4M
 D$PfA
 D$Pn:,
+D$TfE
 D$XH9
 D$XH;
 D$XHc
@@ -2365,24 +2400,26 @@ D$XL;
 D$XfA;
 D$Xfff
 D$Xts
-D$`;A<t
+D$\fA
+D$\fE
 D$`;~0
 D$`D;
 D$`E3
 D$`H;
 D$`L+
 D$`L;
+D$`fE
 D$`ff
 D$`fff
 D$`tFH
-D$dE3
+D$dfA
 D$hE3
 D$hH;
 D$hH;E
-D$hHc
 D$hI;
 D$hJcD
 D$hL;
+D$hfE
 D$hfff
 D$hw&H
 D$p0H
@@ -2410,19 +2447,14 @@ D$xJcD
 D$xL;
 D$xfD
 D$xfD;N:sx
-D+gHA
+D+{HA
 D8 uF
 D8#t@H
-D8-75)
 D81uUL9r
 D848u
 D8<(u
-D8=]O
-D8=bR
 D8`ztdL9
 D8`zu
-D8a<u/
-D8g<t<H
 D8hzt_L9
 D8hzu
 D8l$p
@@ -2433,16 +2465,15 @@ D9 ~2
 D9.~VE
 D9/~/
 D9/~1fff
+D9/~qD
 D91tl
 D9AxvX
-D9Ct~
 D9D$P~83
+D9Gt~
 D9IxvW
 D9J0~)E3
 D9S8u
 D9[xvxf
-D9\$T
-D9a t
 D9d$Hu
 D9d$hu
 D9g0~II
@@ -2456,7 +2487,6 @@ D9t$Hu
 D9t$Xu
 D9t$xu
 D9y0~
-D9{H~>ff
 D9~0u	L
 D;&sEI
 D;&sGI
@@ -2467,13 +2497,14 @@ D;&sOI
 D;/}_H
 D;A(s
 D;A@|
+D;At|
 D;B|L
 D;C(|
 D;C@|
 D;CX|
-D;Ct} H
 D;D$0|
 D;D$P|
+D;Gt} H
 D;HHcD;<
 D;I`H
 D;I`I
@@ -2490,7 +2521,6 @@ D;l$4u
 D;l$Ds
 D;l$H
 D;l$P|
-D;mhv{E
 D;s |
 D;s@|
 D;s`|
@@ -2542,7 +2572,9 @@ DAvfF
 DAxfF
 DAzfF
 DA|fF
+DOT_TO_MORPH
 DWARF
+DWARF WARNING: arange terminator not at the end of a set
 DWARF deferred symbols
 DWARF: 
 DWARF:   %s build ID does not match %s, ignoring
@@ -2597,7 +2629,6 @@ Dissolved edge
 Dop26_t
 Double-save to Member '%s'
 Download process succeeded but didn't write a local file
-DuJHc~
 DualHull
 Duplicate abbrev code 0x%x at 0x%x
 Dv missing '_' ending
@@ -2611,28 +2642,34 @@ E0HcH
 E0Lc`
 E8p.A
 E8q(u
-E8u9tT
 E8uBuw
 E8uCu
 E9&~JM
-E9t$t~7I
+E9Y,t
+E9Y0t
+E9Y4t
+E9Y8t
+E9Y@t
+E9YDt
 E9z0~
 E9}x~9
 E;<$}
 E;AD|
 E;Atu
 E;Axr
-E;D$t|
 E;Eh|
 E;^`s7I
-E;g |
+E;g(|
+E;g,|
 E;h(sEI
 E;hPsLH
 E;n(sBI
 E;u$t>H
-E;w |
+E;w(|
+E;w,|
 E;w0|
 E;|$<
+E;}hv
 EH*?H
 EHH;E@
 EHHcI
@@ -2640,10 +2677,12 @@ EHI+E@H
 ELF DWARF symbols
 ELF fallback symbols
 EPfff
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 EX;H$
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EconItemToolModel_001
 Ed$@Hc
+Ed$xE3
 EgA;F8
 EgD8!t
 EgD;e
@@ -2667,6 +2706,7 @@ F$D8v
 F8,1u
 F8D9p
 FATAL
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FDE aug data too large (%llu bytes)
@@ -2931,7 +2971,9 @@ H UWH
 H WATAUAVAWH
 H!D$ I
 H!T$0D
+H#F8I
 H*0"ZOW
+H+CHH
 H+CHI
 H+D$@
 H+D$H
@@ -2942,11 +2984,12 @@ H+_0H
 H9(t8
 H97u+A
 H99tjH
+H9=L]/
 H9>t	H
 H9A`u2I
 H9K8u0H
 H9P`t
-H9PptAH
+H9PptuH
 H9VHt
 H9WHt
 H9^pt{D
@@ -2981,9 +3024,11 @@ H;T$
 H;T$ ~Q
 H;T$X~bA
 H;XXs
+H;\$@
 H;]8t
+H;iHs
 H;t$8
-H;t$h
+H;t$P
 H;xXu5
 H;{Ht
 HA]A\
@@ -2991,9 +3036,6 @@ HA]A\_[
 HA]_^[
 HA^A]
 HA^A]_[
-HA^A]_^
-HA^_^[
-HA_A\_^
 HA_A]A\[
 HA_A^A\^][
 HA_A^A]A\_^[]
@@ -3006,11 +3048,14 @@ HammerMapLoader001
 Hc)A;
 Hc+;k
 Hc/;o
+Hc8HcC
+Hc8HcK
 Hc;E3
 Hc;Lc
 HcA 3
 HcA Hi
 HcA I
+HcA L
 HcA$D
 HcA$H
 HcA(H
@@ -3024,6 +3069,7 @@ HcA@E3
 HcA@L
 HcAXI
 HcAhH
+HcAtE3
 HcB0H
 HcBHHcJ`H
 HcBxH
@@ -3038,9 +3084,9 @@ HcCD=
 HcCHM
 HcCLH
 HcCPH
+HcCXD
 HcChH
 HcCp=
-HcCtH
 HcD$ 
 HcD$ E3
 HcD$ H
@@ -3050,7 +3096,6 @@ HcD$@
 HcD$@A
 HcD$P
 HcD$XD
-HcD$XH
 HcD$`H+
 HcD$dH+
 HcD$hA
@@ -3099,20 +3144,19 @@ HcPhE
 HcQ<H
 HcS(H
 HcS03
-HcStH
-HcStL
 HcT$ 
 HcT$0L
 HcT$XH
 HcT$hH
 HcVHL
+HcWHH
 HcW`;
 HcY@L
 HcYHE3
 HcZ H
+HcZH+
 Hc\$0A
 Hc\$HD
-Hc\$x
 Hc\$xH
 Hc]hL
 Hc]pA
@@ -3136,7 +3180,10 @@ Hcu`M
 Hcw03
 HcwHL
 HcwxHcC
+Hcy A
+Hcy,H
 Hcy@I
+Hc|$X
 Hc}hE
 Hc~ HcK0;
 Hc~0H
@@ -3181,16 +3228,18 @@ Ic7A;w
 Ic@@E
 IcAhMc
 IcAtH
+IcAtI
 IcD$0H
 IcE0D
 IcE0E3
 IcE0H
+IcEHH
 IcG L
+IcG(L;
 IcG03
 IcHtD
-IcIHH
 IcItI
-IcL$tH
+IcOtIc
 IcQtI
 IcQtM
 IcUdB
@@ -3202,13 +3251,8 @@ Ic^0A
 Ic^@A
 Ic^@H
 Icl$xE
-Icm8A
 Ico03
 Icv0Ic^H
-IcvHA
-IcwXA
-IcwhA
-Ic}8A
 Ic~HL
 Identity
 If enabled, surfaces with default material are highlighted in physics debug geometry.
@@ -3391,6 +3435,7 @@ L$0D;`
 L$0E3
 L$0H3
 L$0H;
+L$0Hc
 L$0HcD$,
 L$0HcGtH
 L$0Hi
@@ -3403,6 +3448,7 @@ L$8;P0
 L$8D;
 L$8E+L$
 L$8H3
+L$8H;t$X}WD
 L$8Hc
 L$8t8E
 L$@;|
@@ -3421,26 +3467,28 @@ L$PD;
 L$PE;
 L$PH;
 L$PH;M
-L$PL+
+L$PHc
 L$PL;
 L$PfD
 L$PfE;\$:
 L$XE;
 L$XMcd$HD
+L$XfE
 L$Xff
 L$`!<(H
 L$`E3
-L$`H;M
-L$`Hi
 L$`Lc'D;g
 L$`McP
+L$`fE
 L$hHc
 L$hMcn0M
 L$iE3
 L$pE3
 L$pH+
 L$pH;
+L$pHi
 L$pJcD
+L$pt=
 L$tL+
 L$x+G$3
 L$xD+
@@ -3452,11 +3500,11 @@ L+vPI
 L,(I;
 L9't	H
 L9(tZL9h
-L9-N,/
 L93t	H
-L9=K)/
-L9=s*/
+L9;t	H
+L9=1[.
 L9?t	H
+L9ZXuAM
 L9` u
 L9d$ t
 L9d$(t
@@ -3469,7 +3517,6 @@ L9g`H
 L9ghH
 L9gpH
 L9gxH
-L9k t
 L9t$(t
 L9t$8
 L9t$Pt
@@ -3483,11 +3530,10 @@ L9|$ t
 L9|$(t
 L9|$0
 L9|$Pt
-L9} t
 L;l$0
 L;l$x
-L;qHs
 L;|$`
+L<bu	H
 L?33s?8
 L?n(Zy&
 LCMapStringEx
@@ -3564,6 +3610,7 @@ Lc`hM
 Lca0H
 Lca@I
 LccXD;ch
+Lcd$4I
 Lcd$@H
 Lcf0D;k
 LcfXD;fh
@@ -3576,9 +3623,9 @@ Lcq8E
 Lcs8A
 LcsPA
 Lcu D;u0
-Lcw0D;w@
 Lcz8%
 Lc|$0M
+Lc|$H+
 Lc|$pD
 Lc}`D;}p
 Lc}pF
@@ -3616,8 +3663,6 @@ M0;T$@v
 M9.t	I
 M9O(t
 M9W(t
-M9g t
-M9o t
 MATCHFRAMEWORK_001
 MB(iVR
 MESH_DRAW_FLAGS_CAN_BATCH_WITH_DYNAMIC_SHADER_CONSTANTS
@@ -3660,7 +3705,6 @@ MP;H8s
 MPropertyFriendlyName
 MPropertySuppressField
 M`;T$@v
-M`H;M
 M`f;YX
 Mach-O DWARF symbols
 Mach-O fallback symbols
@@ -3685,6 +3729,7 @@ McN8I
 McNhI
 McO(I
 McW<A
+McYtI
 McfXE;fh
 Mcg0E3
 Mcn$M
@@ -3755,7 +3800,7 @@ MurmurHash3_32
 Mx;T$@v
 NJ2"v
 NULL_JOINT
-NXHcNPA
+NXHcOPA
 N`H+^
 Name attr without string value
 NameIndex:AcquireName( %x ) without name string
@@ -3817,9 +3862,9 @@ Out of range abbrev code %llu
 Out of range abbrev tag %llu
 Out of range compilation unit code %llu
 OxtjI
+P u3H
 P89D$l
 P8IcV8H
-P<bu	H
 P@3(D
 P@D3 D
 P@Hc@8L
@@ -3936,7 +3981,6 @@ QuaternionStorage
 Query and shape in hierarchy id=%d
 Query ignored this shape by owner ID. query(%08x, %08x) shape owner:%08x, shape entity:%08x).
 QueryPerformanceCounter
-QxIcIt
 R1h58
 R8E;L
 RESLH
@@ -4078,6 +4122,7 @@ SUVWATAUH
 SUVWATAVAWH
 SUVWATH
 SUVWAUAVAWH
+SUVWAUAVH
 SUVWAVH
 SUWATAVH
 SUWAVAWH
@@ -4204,7 +4249,6 @@ SurfacePropertiesList
 SurfacePropertiesStartup
 Suspicious: there is a joint between these two bodies
 SweepSingleConvex
-SxHcKt
 Symbol name index invalid (%lld)
 Symbol name index too large
 Symbol nesting too deep
@@ -4233,7 +4277,6 @@ T$0E3
 T$0E;
 T$0H;
 T$0I;
-T$0L;
 T$0Li
 T$0fD
 T$0tOA
@@ -4243,6 +4286,7 @@ T$8A;
 T$8D9
 T$8D;w
 T$8E3
+T$8L;
 T$@;K
 T$@E3
 T$@H;
@@ -4250,33 +4294,33 @@ T$@Hk
 T$@fD
 T$DE3
 T$HE+
+T$HM;
 T$PE3
-T$PH;
-T$PM;
 T$X9O
 T$XE+
 T$XE3
+T$XH;
 T$XIcT
 T$`8CQt
 T$`8Cpt
 T$`8C|t(
 T$`E3
 T$`Hc
-T$`I;
 T$`Ii
+T$dfE
+T$hH;
 T$hHc
+T$lfE
 T$pD;
 T$pD;S(sDL
 T$pD;SPsHL
 T$pE3
-T$pH;
 T$pHc
 T$pIc
 T$xD;g
 T$xH;
 T$xL+
 T$xfD;AL
-T%zO'
 T<Xu9H
 TD u"E;
 TILT_TWIST
@@ -4332,13 +4376,12 @@ Tried to load resource reference '%s' from a value without a resource reference 
 Trigger
 Trigger <font color="red">Query</font>, common interaction flags
 Tuesday
-Tv).L
+Tv).H
 Twist: %.1f, Swing: %.1f, Twist Lambda: %.1f, Swing Lambda: %.1f
 Two meshes may not have collision
 Two non-dynamics do NOT have a Trigger flag
 Two non-dynamics have a Trigger flag
 TypeManager
-U	V_vsnprintf
 UATAUAVAWH
 UATAUAWH
 UATAUH
@@ -4356,6 +4399,7 @@ USATAUAWI
 USATAVH
 USATH
 USAUAVH
+USAUAVI
 USAUAWH
 USAVAWI
 USAVH
@@ -4506,6 +4550,8 @@ UpdateSceneObjects
 UpdateSolverContacts
 UpdateVelocities
 Usage: phys_debug_draw [options]:
+Use a position based heuristic to cull slow objects from the TOI phase of the solver
+Use implicit integrator for gyroscopic forces
 Used Groups:
 Used Layers:
 UtlMemory_Alloc
@@ -4531,6 +4577,7 @@ VFileSystem017
 VMaterialSystem2_001
 VMediaFoundation001
 VP4003
+VPHcJ
 VPhysXAggregateData_t
 VPhysXAggregateData_t::VPhysXFlagEnum_t
 VPhysXBodyPart_t
@@ -4569,10 +4616,10 @@ VWATAUAVH
 VWATAUAWH
 VWATAVAW
 VWATAVAWH
-VWATAWH
 VWATH
 VWAUAVAWH
 VWAUAVH
+VWAUAWH
 VWAUH
 VWAVH
 VWAWH
@@ -4632,7 +4679,6 @@ V_fseek
 V_fseeki64
 V_ftell
 V_logf
-V_modff
 V_~]	,
 Valve Corp.0
 Valve Corp.1
@@ -4654,9 +4700,9 @@ VisBuilder_001
 Visited: Nodes/Tris/Mesh
 Vortices
 Vrad3_001
+W	V_vsnprintf
 W I;\
 W u3M
-W-/S#
 WARNING: Failed to convert introspected block for file: %s
 WARNING: Invalid resource version (%d): %s
 WARNING: Trying to create a CRenderContextPtr without a valid context.
@@ -4700,6 +4746,12 @@ X UVWATAUAVAWH
 X UVWAVAWH
 X UWATAUAWH
 X UWAVH
+X$Lc@
+X$LcX
+X%z(*
+X-BC!
+X-gC!
+X=0|,
 X@Hc@8H
 XA]A\
 XA]_^[
@@ -4725,6 +4777,7 @@ XT$TA
 XT$\A
 XT$pA
 X\$8A
+X\$PA
 X\$XA
 X\$XD
 X\$pE
@@ -4744,17 +4797,15 @@ X|$8D
 X|$TfD
 Y u!H
 Y u"H
-Y%*j+
-Y-;+'
-Y-}q2
-Y5B!'
-Y5Z-'
-Y5y!'
+Y-n3!
+Y-}7-
+Y0r6A
+Y5R(-
 Y8HcA0
 Y9"SD
-Y=c-'
+Y=`~,
+Y={3!
 Y@HcA8Li
-YD$ D
 YD$$A
 YD$$E
 YD$$I
@@ -4763,12 +4814,11 @@ YD$0D
 YD$4A
 YD$8A
 YD$<D
-YD$@A
+YD$@D
 YD$@E
 YD$HA
 YD$HE
 YD$PA
-YD$PD
 YD$PE
 YD$PH
 YD$TD
@@ -4783,14 +4833,13 @@ YD$hH
 YD$lA
 YD$lD
 YD$pA
-YD$pD
 YD$pE
 YD$tA
 YD$tD
 YD$tE
+YD$|A
 YL$ ;
 YL$ A
-YL$ D
 YL$0A
 YL$0E
 YL$8A
@@ -4801,14 +4850,13 @@ YL$HA
 YL$HD
 YL$LA
 YL$PA
+YL$PD
 YL$TD
 YL$\E
 YL$`A
-YL$dA
 YL$hA
 YL$hH
 YL$hL
-YL$pD
 YL$xA
 YL$xD
 YL$|A
@@ -4817,7 +4865,6 @@ YT$ f;Q
 YT$$A
 YT$(E
 YT$0A
-YT$0E
 YT$4A
 YT$4H
 YT$DH
@@ -4831,32 +4878,31 @@ YT$TH
 YT$`A
 YT$dA
 YT$dH
-YT$pA
 YT$pD
 Y\$$A
 Y\$4A
-Y\$@A
 Y\$PA
 Y\$PD
 Y\$\A
-Y\$`D
 Y\$dA
+Y\$pD
 Y\0(H
 Y`D9A@~WE3
 Yb0fD
 Yd$$A
 Yd$(A
 Yd$@A
-Yd$`E
 Yd$hA
 Yd$hD
 Yl$(E
 Yl$0D
 Yl$4A
+Yl$@A
 Yl$DA
 Yl$HA
 Yl$HD
 Yl$\D
+Yl$`E
 Yl$pA
 Yt$8H
 Yt$@A
@@ -4866,7 +4912,6 @@ Yt$dA
 Yt$tA
 Y|$ A
 Y|$0A
-Y|$0D
 Y|$0E
 Y|$<D
 Y|$HA
@@ -4922,7 +4967,6 @@ Zd?es-8R
 \$@E3
 \$@H;
 \$@Hc
-\$@IcVHL
 \$@L;
 \$@tNH
 \$HB;
@@ -4939,23 +4983,23 @@ Zd?es-8R
 \$TIc
 \$`Ai
 \$`E3
-\$`H;
 \$`fE;Bb
 \$`tMH
 \$`tPH
 \$h9Xx
-\$hD;
+\$hIc
 \$lHcM
 \$pD;g
 \$pE3
+\$pff
 \$xA;
 \$xA;v
 \$xE2
 \$xE3
 \$xE;n
 \$xH;
-\$xIcVHL
 \$|L+
+\-{C!
 \<$fA
 \D$,A
 \D$<H
@@ -4963,12 +5007,11 @@ Zd?es-8R
 \D$Tf
 \D$`A
 \D$xA
-\EpfD
+\E@fD
 \L$ D
 \L$0A
 \L$@D
 \L$XH
-\L$pA
 \L$pv
 \L$xA
 \L$|Hc
@@ -4978,6 +5021,7 @@ Zd?es-8R
 \T$XA
 \T$pA
 \\$(A
+\\$`D
 \\$pA
 \\symbols
 \d$,H
@@ -4994,6 +5038,7 @@ Zd?es-8R
 \|$\H
 \}@Hc
 ] Lc{
+]8A8Z9
 ]D$`H
 ]D$pf
 ]J<0"0i3
@@ -5048,9 +5093,9 @@ _elf_
 _gUT^
 _macho_
 _t$lr"
-_u1E8^
+_u+E8^
+_u,E8^
 ` UAVAWH
-`(5[L
 `.rdata
 `A\_^
 `A]_]
@@ -5116,7 +5161,6 @@ audioreflectivity
 audioroughnessfactor
 audiosounds
 awake_bodies
-b	Warning
 b+GnH
 b+GnL
 bad exception
@@ -5148,6 +5192,7 @@ ccffcc
 chancetospawn
 char16_t
 char32_t
+char8_t
 cl_jiggle_bone_debug
 cl_jiggle_bone_debug_pitch_constraints
 cl_jiggle_bone_debug_yaw_constraints
@@ -5204,6 +5249,7 @@ contacts
 covariant virtual thunk to 
 curl --connect-timeout 5 --no-progress-meter --max-time %u -s -o "%s" %s
 curvature
+d	Warning
 d$ D9d$0|LH
 d$ E3
 d$ E;g
@@ -5213,6 +5259,7 @@ d$ Lcg B
 d$ UAVAWH
 d$ fD
 d$ fI
+d$$9w
 d$$E;g
 d$$Hc
 d$$Lc
@@ -5232,7 +5279,6 @@ d$@D9&
 d$@L;
 d$@L;d$H
 d$@fff
-d$HHc
 d$PA9
 d$PH9]ptwD
 d$PH9]pt{D
@@ -5249,11 +5295,9 @@ d$PI9^pt|D
 d$PL+
 d$PLc
 d$XA+
-d$XHc
 d$XI+
 d$XI9_pt|D
 d$XIc
-d$XM;
 d$hD;y
 d$hE3
 d$hE;
@@ -5309,6 +5353,7 @@ e@A_A^A]A\_^]
 e@L9!t
 ePA_A^A]A\_^]
 e`Hc@hH
+ehA_A^A]A\_^[]
 eh_frame
 elasticity
 error
@@ -5329,8 +5374,8 @@ f;C0u L
 f;O*u
 f;i^sJL
 f;ibsGL
-f;~,s.H
-f;~8s1H
+f;~,s0H
+f;~8s+H
 fA9DN
 fA;D$L
 fA;O 
@@ -5464,6 +5509,7 @@ h VWAVH
 hA]A\_[
 hA]A\_^][
 hA]_^[
+hA^A]_^][
 hA_A^A]A\_^[]
 hHc2H
 hSphys2_debug_broadphase
@@ -5488,6 +5534,7 @@ hullivr_faceisland_merge_disp
 hullivr_faceisland_merge_tan
 hullivr_version
 hull{
+iH+iH;.w
 impactHardThreshold
 impacthard
 impactsoft
@@ -5527,10 +5574,12 @@ jj@0HK4
 joints
 joints[%d]
 k(H9+t	H
+k0H9k H
 k0i0$
 k8D9c ~9I
 kE_PL
 kHH9k0H
+kIc_X
 kPHcCHH
 kXD9c@~<I
 kXD9s@~>3
@@ -5572,8 +5621,6 @@ l$,D;
 l$0A+
 l$0E3
 l$0Hc
-l$0Hci A
-l$0Hck
 l$0Lc)
 l$0|LH
 l$4wAD
@@ -5585,6 +5632,7 @@ l$@9^0~0H
 l$@9{H~2H
 l$@E3
 l$@Icl
+l$@L9s t
 l$@fD;N@ss
 l$@u!H
 l$HA+
@@ -5602,11 +5650,11 @@ l$PH9{pt~E
 l$PH9~pt}E
 l$PH;
 l$PHck
+l$PM;
 l$TLcE
 l$XA;
 l$XE2
 l$XI;
-l$`D;
 l$`E3
 l$`H9wpt~E
 l$`fff
@@ -6011,6 +6059,8 @@ m_flPitchFriction
 m_flPitchStiffness
 m_flPlugLength[ 0 ]
 m_flPlugLength[ 1 ]
+m_flPlugMassInv[ 0 ]
+m_flPlugMassInv[ 1 ]
 m_flPlugRadius[ 0 ]
 m_flPlugRadius[ 1 ]
 m_flPosition
@@ -6022,6 +6072,7 @@ m_flRadius0
 m_flRadius1
 m_flRatio
 m_flReferenceMass
+m_flRemap
 m_flRestLength
 m_flRestLength1
 m_flRestLength2
@@ -6290,8 +6341,10 @@ m_roughnessFactor
 m_sAttachmentName
 m_sBoneName
 m_sDebugName
+m_sMorphChannelName
 m_sName
 m_sSurfaceProperty
+m_sTargetBoneName
 m_sTargetMorph
 m_sceneObjects
 m_scrapeRough
@@ -6542,6 +6595,7 @@ phys_position_iterations
 phys_reload_immediately
 phys_res
 phys_step_threaded
+phys_use_position_based_toi_test
 phys_velocity_iterations
 physib
 physics
@@ -6569,7 +6623,6 @@ pushaway
 pz_clip
 q%d.%d
 qAdjust
-qHD+qHD;7w
 qXHcAPH
 qangle
 qxHcApH
@@ -6586,7 +6639,6 @@ recorded_raycasts
 reference temporary for 
 resourcesystem
 restrict(
-rjIcw
 roHcV03
 rod%u
 rolling
@@ -6595,7 +6647,9 @@ rubikon_joint_deepdebugging
 s WATAVH
 s off
 s(fff
+s*HcD
 s09s@|AH
+s0L9s H
 s0Lc{HE
 s8HcC0H
 s8HcC0L
@@ -6666,13 +6720,13 @@ t fff
 t!I+I
 t"fff
 t#<-u
-t$ <Rt
 t$ A+
 t$ ATAVAWH
 t$ AVH
 t$ AWH
 t$ D9t$0|UH
 t$ E3
+t$ H9|$Xt
 t$ Hc
 t$ L9!t
 t$ L9#t	H
@@ -6699,7 +6753,6 @@ t$(L+
 t$(L;
 t$(fD
 t$09G rZH
-t$09k |AH
 t$0A;
 t$0A^_
 t$0D;u
@@ -6707,7 +6760,6 @@ t$0E3
 t$0H9)t
 t$0H;
 t$0Hc
-t$0Hcs 
 t$0Hi
 t$0Hk
 t$0Ik
@@ -6731,26 +6783,28 @@ t$8fff
 t$@D;
 t$@E3
 t$@Hc
-t$@HcrH
 t$@L9t$(t
-t$@Lcs
 t$@LcsHD;sX
 t$@Lk
 t$@fA
 t$@ff
 t$@u)
+t$DHcD$H
 t$H9y0~*
-t$H@2
 t$HE3
 t$HH;
 t$HHc
 t$HL;
+t$LHc
+t$P@2
 t$PA+
 t$PA9w
 t$PE3
 t$PE97uvL
 t$PHc
 t$PHc1L
+t$PHcq
+t$PL9t$@t
 t$Pff
 t$P|?H
 t$XD9u
@@ -6784,7 +6838,6 @@ t$pE3
 t$pHc
 t$pM;
 t$xE3
-t$xHc3
 t$xHcC@A
 t$xHcD$pM
 t$xIcG0A
@@ -6795,20 +6848,44 @@ t'fff
 t)HcA
 t+fff
 t-Lck
-t.E81t)H
 t/fff
 t1@8:t,
+t1E81t,H
 t1H;s
 t3@8*t.
 t3D8't.
 t3D8*t.
-t3E9l$
+t3H9-
+t3H9-@
+t3H95
 t3I9@ u-I
+t3L9%
+t3L9%i
+t3L9%q
+t3L95
+t3L9=
+t4L95f
 t4fff
 t59{0
 t5fff
+t6H9-
+t6H95
+t6H9=
+t6H9=t
+t6L9%p
+t6L95
+t6L95|
+t6L9=
 t7HcP
+t8H95T
+t9H9=Y]/
+t9L95
+t9L95s
+t9L9=>[.
 t>9_0~9
+t?H9-
+t?H9=
+t?L9%
 t@D8{8t:D8{=H
 tA;V`s<H
 tAA;;s<L
@@ -6853,7 +6930,6 @@ tKHcH
 tLA;IPsFH
 tLE;F(sFfL
 tM;W`H
-tMHc{
 tN;Q`sII
 tO;Q(sJI
 tOD;&sJI
@@ -6907,7 +6983,6 @@ transparent %d
 trigger
 tt9(}
 ttHcK0H
-ttIc~HA
 tvD9~
 twIcF
 type %u, version %u, total size %u. %d data headers:
@@ -6927,26 +7002,20 @@ u0IcE(L
 u3HcH<H
 u4I9}(
 u<Ic{
-u>Hc{
-u@Hc{
-uAHc{
 uED8r(t
-uHHc{
 uHL;u@
-uPHc_
-uPHc{
 uQfff
 uT3Mg
 u]D;E0}WE
-u]Hc{
-u^Hc{
 u`fA9M
 uhL9=
+uiHc{
 uiL9=
 uint16
 uint32
 uint64
 ujI9H udH9Y
+ukHc{
 unknown compression method
 unknown header flags set
 unload %s 0x%llX - 0x%llX
@@ -6958,6 +7027,7 @@ unsigned long long
 unsigned short
 unwind_info
 uoIc6A;v
+upHc{
 usemtl initialShadingGroup
 uuI+OPH
 uuids\
@@ -7047,17 +7117,25 @@ y HcA
 y9WuL
 y\PD>!
 z"u H
-zIuGD
-zRuPD
-z^u\D
+zAu?A
+zFuDD
+zIuGE
+zOuMD
+zQuOE
+zYuWE
+ziugE
+zlujE
 zquoE
+zturE
 zyuwE
-{	_V_StringAfterPrefix
+z|uzE
 { H9;t	H
 { lambdaH
 { parm#
+{(9k |AH
 {09s(|AH
 {0Hc~8HcKH;
+{0L9{ H
 {0x%x}
 {2fA;
 {89s0|AH
@@ -7066,13 +7144,13 @@ zyuwE
 {HHcC@H
 {Hfff
 {Pf;~,s{H
-{Pf;~8s~H
+{Pf;~8s
 {`HcKXH
 {un'%
 {unnamed type
 {}()'
 {}()':
-|	_V_StringAfterPrefixCaseSensitive
+|$ <Rt
 |$ A;
 |$ ATAUAVAW
 |$ ATAUAVAWL
@@ -7092,7 +7170,7 @@ zyuwE
 |$ H;
 |$ Hc
 |$ L;
-|$ Lc{
+|$ Lc
 |$ Lc{@D;{P
 |$ Li
 |$ UATAUAVAWH
@@ -7114,13 +7192,13 @@ zyuwE
 |$0D9|$@|LH
 |$0D9}
 |$0E3
+|$0H;\$@
 |$0Hc
 |$0L;
 |$0Lc?H
 |$0LcQ
 |$0uE
 |$8A9o0
-|$8E3
 |$8Hc
 |$8Hk
 |$8Ic|
@@ -7157,10 +7235,11 @@ zyuwE
 |$HIk
 |$HMc
 |$HtG
+|$LfA
 |$PE3
 |$PH9|$@t
-|$PHcy
 |$PI+
+|$PfA
 |$P|LH
 |$TE3
 |$XA+
@@ -7193,6 +7272,7 @@ zyuwE
 |$pHc
 |$pIk
 |$pfA
+|$puAH
 |$xE3
 |$xHc
 |$xM;
@@ -7202,9 +7282,11 @@ zyuwE
 |Lu?c
 |^A;N
 |b=})>
+}	_V_StringAfterPrefix
 }'fff
 }1fff
 }>;_$
+}@HcE8
 }HHcK
 }LuHO
 }PHc+G
@@ -7213,18 +7295,19 @@ zyuwE
 }ifD;v:wbL
 }r;^$
 }}f;{:wwL
+~	_V_StringAfterPrefixCaseSensitive
 ~'fff
 ~,fff
 ~0HcF(L
 ~0McS
 ~3fff
-~?Hc{
-~EHck0
-~FHcs 
 ~HHcF@L
 ~L$0fD
-~LHck 
 ~PHcFHM
+~iHc{
 ~l$`fD
+~pHc{ 
+~qHco0
 ~qj#k"
 ~t&LN
+~tHcs 

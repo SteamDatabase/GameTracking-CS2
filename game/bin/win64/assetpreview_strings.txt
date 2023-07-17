@@ -11,6 +11,7 @@
 			Shadows 1
 		%.*s
 		PointLight
+		V_qsort_s
 	 The lexer was matching from line %d, offset %d, which
 	 This indicates a poorly specified lexer RULE
 	 or unterminated input element such as: "STRING["]
@@ -40,7 +41,6 @@
 	V_powd
 	V_powf
 	V_qsort
-	V_qsort_s
 	V_roundf
 	V_sincosf
 	V_sind
@@ -117,6 +117,8 @@
  - Drop with Modifier, Open paste special pop-up
  - MMB press stopping buttonless drag
  - RMB Drop - open context menu of interactions
+ - pos
+ - rot
  -o "
  -of 
  -testmode
@@ -142,7 +144,6 @@
  ?timerEvent@QAbstractSpinBox@@MEAAXPEAVQTimerEvent@@@Z
  @SUWATAVH
  A\^]
- A\_[
  A]A\^][
  A]A\_^[
  A]A\_^]
@@ -151,6 +152,7 @@
  A^A\^
  A^A\_
  A^A\_H
+ A^A\_][
  A^A]A\^[
  A^A]A\_^
  A^A]_
@@ -238,9 +240,11 @@
  REPEAT
  Type Descriptor'
  X?setAlignment@QTextOption@@QEAAXV?$QFlags@W4AlignmentFlag@Qt@@@@@Z
+ [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]
  [%1]
  [SYNCED]
  _^[H
+ center %f %f scale %f %f rotate %f translate %f %f
  clean
  delete
  delete[]
@@ -254,7 +258,6 @@
  tDE3
  uncorrected errors
 !	%!d
-!	V_stricmp_fast
 !!!!!!
 !!!!!!!!
 !!!!!!!!!!!!!!!!!!
@@ -266,7 +269,16 @@
 " ?timerEvent@QListView@@MEAAXPEAVQTimerEvent@@@Z
 "%s" 
 "%s" "
+"%s" "%.10f"
+"%s" "%d"
+"%s" "%f"
+"%s" "%s"
 "%s" "%s" 
+"%s" "[ %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ]"
+"%s" "[ %f %f %f %f ]"
+"%s" "[ %f %f %f ]"
+"%s" "[ %f %f ]"
+"%s" "{ %d %d %d }"
 "%s": Bad mode
 "%s": Information lost writing value (%g) as (unsigned) RATIONAL
 "?update@QWidget@@QEAAXXZ
@@ -309,9 +321,11 @@
 "?wheelEvent@QPlainTextEdit@@MEAAXPEAVQWheelEvent@@@Z
 "?wheelEvent@QWidget@@MEAAXPEAVQWheelEvent@@@Z
 "?widget@QLayoutItem@@UEAAPEAVQWidget@@XZ
+"ActBusy.txt"
 "L;RPt
 "LightRigs"
 "Predictor" value %d not supported
+"Proxies"
 "T$hD
 "X?setAlpha@QColor@@QEAAXH@Z
 "channels" attribute not found in the header.
@@ -324,11 +338,13 @@
 "pixelAspectRatio" attribute not found in the header.
 "screenWindowCenter" attribute not found in the header.
 "screenWindowWidth" attribute not found in the header.
+#	V_stricmp_fast
 # of channels is zero.
 #%3[%2] %1
 #?widgetAt@QApplication@@SAPEAVQWidget@@AEBVQPoint@@@Z
 #?winId@QWidget@@QEBA_KXZ
 #?window@QWidget@@QEBAPEAV1@XZ
+#\$`D
 #bML"
 #t'fA
 $#?windowIcon@QWidget@@QEBA?AVQIcon@@XZ
@@ -343,11 +359,13 @@ $[?setRange@QDoubleValidator@@UEAAXNNH@Z
 $^fE;
 $prefix_attribute$
 $prefix_element$
+%	V_strlower_fast
 % ?timerEvent@QMenu@@MEAAXPEAVQTimerEvent@@@Z
 %""""D
 %-40s	%6d	%9d		%5.2f
 %.04f
 %.100s: Can not read TIFF directory
+%.10f
 %.2f FPS (%.2fms%s)
 %.3f %.3f %.3f
 %05d,     0x%p,     %5d,      '%s'
@@ -384,6 +402,9 @@ $prefix_element$
 %d instruction(s)
 %d register(s) %d byte(s)
 %d trace results
+%d,%d
+%d,%d,%d
+%d,%d,%d,%d
 %d_%lld_%x.dmx
 %d_%lld_%x_in.dmx
 %f %f
@@ -393,13 +414,16 @@ $prefix_element$
 %g %g
 %g %g %g
 %g %g %g %g
+%i %i %i
 %i.txt
 %ld%c
 %lu: Row out of range, max %lu
 %lu: Sample out of range, max %lu
 %s %s decoding is not implemented
 %s %s encoding is not implemented
+%s (%s -> %s)
 %s (%s) = remove( pos %i, count %i )
+%s - %s
 %s AllViewsDirectLight
 %s AllViewsIndirectLight
 %s AllViewsParticles
@@ -411,6 +435,7 @@ $prefix_element$
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
 %s allocation count overflow( add %llu + current %llu > max %llu )
+%s channel
 %s compression support is not configured
 %s encoding %s %d format %s %d %s
 %s(%d) : %s
@@ -433,6 +458,7 @@ $prefix_element$
 %s: Cannot modify tag "%s" while writing
 %s: Data buffer too small to hold strip %lu
 %s: Decoding error at scanline %d, %s
+%s: Element uses unknown element type %s
 %s: Encoder error: %s
 %s: Error writing SubIFD directory link
 %s: Failed to allocate space for list of custom values
@@ -474,11 +500,11 @@ $prefix_element$
 %s: unknown field with tag %d (0x%x) encountered
 %s: wrong data type %d for "%s"; tag ignored
 %s: zlib error: %s
+%s:%s
 %sEOL padding
 %suncompressed data
 %u (0x%x)
 & ?timerEvent@QMenuBar@@MEAAXPEAVQTimerEvent@@@Z
-&#HSp
 &?PPPPPPP?
 &Add...
 &Allow Wrapping
@@ -528,9 +554,9 @@ $prefix_element$
 &YA1E
 &YA1H
 &YA1I
-&YA1L
 &fD9~
 ' ?timerEvent@QPlainTextEdit@@MEAAXPEAVQTimerEvent@@@Z
+'%/g3
 ', type<
 ',=?k
 ( %1, %2 )
@@ -539,12 +565,15 @@ $prefix_element$
 (#%d)
 (#?windowModality@QWidget@@QEBA?AW4WindowModality@Qt@@XZ
 (%1,%2)
+(%d,%d
 (%d,%d)
+(%d,%d,%d
+(%d,%d,%d,%d
 (*%s*), 
+(-)W!
 (<$fD
-(=8X&
-(=Q^&
-(=rg4
+(=NE!
+(=xJ!
 (A]A\^[
 (A]A\_[
 (A]^][
@@ -601,7 +630,6 @@ $prefix_element$
 (D$pD
 (D$pH
 (D$pHc
-(D$pL
 (D$pu
 (Edit w/ Spinbox)
 (Expecting %s)
@@ -618,6 +646,7 @@ $prefix_element$
 (L$0f
 (L$@D
 (L$@H
+(L$@L
 (L$PD
 (L$Pf
 (L$`@
@@ -628,9 +657,11 @@ $prefix_element$
 (N/A)
 (No User Picks)
 (None)
+(T$ A
 (T$ D
 (T$ H
 (T$0D
+(T$0L
 (T$@D
 (T$@L
 (T$PD
@@ -667,7 +698,6 @@ $prefix_element$
 (l$PD
 (l$`D
 (l$`L
-(l$pD
 (null)
 (t$ 3
 (t$ 9h
@@ -685,7 +715,6 @@ $prefix_element$
 (t$0L
 (t$0M
 (t$0fA
-(t$@A
 (t$@D
 (t$@H
 (t$@L
@@ -715,7 +744,6 @@ $prefix_element$
 (|$ L
 (|$ t-
 (|$0@
-(|$0A
 (|$0D
 (|$0H
 (|$0f
@@ -737,11 +765,13 @@ $prefix_element$
 (|$pH
 (|$pL
 )	?buddy@QAbstractItemModel@@UEBA?AVQModelIndex@@AEBV2@@Z
+)	V_strtod
 )  max:
 ) ?timerEvent@QTableView@@MEAAXPEAVQTimerEvent@@@Z
 )$$H;
 )<$E3
 )>6{1n
+)D$ A
 )D$ D
 )D$ H
 )D$ L
@@ -770,9 +800,9 @@ $prefix_element$
 )L$0D
 )L$0E
 )L$0H
+)L$0I;
 )L$@E
 )L$PE
-)L$`D
 )L$`E
 )L$`H
 )L$`I
@@ -832,9 +862,11 @@ $prefix_element$
 )t$0Hc
 )t$0I
 )t$0L
+)t$0f
 )t$@3
 )t$@A
 )t$@D
+)t$@E
 )t$@H
 )t$@I
 )t$@Ic
@@ -860,6 +892,7 @@ $prefix_element$
 )t$pu.H
 )|$ H
 )|$ t
+)|$0A
 )|$0D
 )|$0H
 )|$0f
@@ -872,8 +905,8 @@ $prefix_element$
 )|$PD
 )|$PE
 )|$PH
-)|$Pff
 )|$`A
+)|$`B
 )|$`D
 )|$`H
 )|$`M
@@ -885,6 +918,22 @@ $prefix_element$
 )|B?d!
 * Rehandling active codes
 * { font-size: 10px }
+*** Converter error - element "%s" already has a non-int attribute "%s"!
+*** Element "%s" has attribute "%s" with an unexpected type!
+*** Log "%s" has attribute "%s" with an unexpected type (expected int array)!
+*** Log "%s" is missing attribute "%s"!
+*** Problem in converter encountered!
+*** Problem in file encountered!
+*** Setting new attribute "%s" to 0
+*** TimeFrame "%s" has attribute "%s" with an unexpected type (expected float)!
+*** TimeFrame "%s" is missing attribute "%s"!
+*** Unable to find or add attribute "%s" to element "%s"!
+*** line %d: Bad command "%s"!
+*** line %d: invalid packmode specified, allowed values are 'rgba' or 'rgb+a'!
+*** line %d: invalid sequence type '%s', allowed 'sequence-rgba' or 'sequence-rgb' or 'sequence-a'!
+*** line error: 'rgb+a' packing cannot pack image '%s' belonging to sequences %d and %d!
+*** line error: incompatible packmode change when %d sequences already defined!
+*** line error: invalid sequence type '%s', packing 'flat' allows only 'sequence-rgba'!
 *;Eot	;Ew
 *StO9>T
 *YA1H
@@ -963,6 +1012,7 @@ $prefix_element$
 -experimental_smartprops
 -memory-
 -min:
+-rgba
 -smoothtoolcamera
 -sse2
 -sse3
@@ -971,10 +1021,10 @@ $prefix_element$
 -unknown source-
 -unknown source-(
 -vsync
-.	V_tanf
 .#?windowTitle@QWidget@@QEBA?AVQString@@XZ
 ..om?
 .00cfg
+.5<>*
 .>PJ;I:qE>
 .?AU?$_InitialTaskHandle@XV<lambda_5a9ef80d79df7873994019ff15dceae5>@@U_TypeSelectorNoAsync@details@Concurrency@@@?$task@E@Concurrency@@
 .?AU?$_InitialTaskHandle@XV<lambda_60c5de84e69e46aa92419d47e2f3ad51>@@U_TypeSelectorNoAsync@details@Concurrency@@@?$task@E@Concurrency@@
@@ -1071,6 +1121,7 @@ $prefix_element$
 .?AV?$CBaseAppSystem@VIAssetPreviewSystem@@@@
 .?AV?$CBaseAppSystem@VIDataModel@@@@
 .?AV?$CBaseAppSystem@VIDmElementFramework@@@@
+.?AV?$CBaseAppSystem@VIDmSerializers@@@@
 .?AV?$CBindTargetDescriptor@VCAssetPreviewToolScene@@@@
 .?AV?$CBindTargetDescriptor@VCBindableCamera@@@@
 .?AV?$CBindTargetDescriptor@VCGlobalHotkeyCommands@@@@
@@ -1177,7 +1228,8 @@ $prefix_element$
 .?AV?$CTier0AppSystem@VIAssetPreviewSystem@@$0A@@@
 .?AV?$CTier1AppSystem@VIAssetPreviewSystem@@$0A@@@
 .?AV?$CTier2AppSystem@VIAssetPreviewSystem@@$0A@@@
-.?AV?$CTier3AppSystem@VIAssetPreviewSystem@@$0A@@@
+.?AV?$CTier2DmAppSystem@VIAssetPreviewSystem@@$0A@@@
+.?AV?$CTier3DmAppSystem@VIAssetPreviewSystem@@$0A@@@
 .?AV?$CUndoArrayAttributeSetMultipleValueElement@E@@
 .?AV?$CUndoArrayAttributeSetMultipleValueElement@H@@
 .?AV?$CUndoArrayAttributeSetMultipleValueElement@M@@
@@ -1464,9 +1516,46 @@ $prefix_element$
 .?AVCDmElementFactoryDefault@@
 .?AVCDmElementFactoryInternal@@
 .?AVCDmElementFramework@@
+.?AVCDmFormatUpdater_animflags@@
+.?AVCDmFormatUpdater_dmx@@
+.?AVCDmFormatUpdater_facial_animation@@
+.?AVCDmFormatUpdater_gui@@
+.?AVCDmFormatUpdater_model@@
+.?AVCDmFormatUpdater_movieobjects@@
+.?AVCDmFormatUpdater_mp_anim@@
+.?AVCDmFormatUpdater_mp_bonemask@@
+.?AVCDmFormatUpdater_mp_eyes@@
+.?AVCDmFormatUpdater_mp_hitbox@@
+.?AVCDmFormatUpdater_mp_keyvalues@@
+.?AVCDmFormatUpdater_mp_materialgroup@@
+.?AVCDmFormatUpdater_mp_model@@
+.?AVCDmFormatUpdater_mp_physics@@
+.?AVCDmFormatUpdater_mp_preprocess@@
+.?AVCDmFormatUpdater_mp_root@@
+.?AVCDmFormatUpdater_pcf@@
+.?AVCDmFormatUpdater_preset@@
+.?AVCDmFormatUpdater_schema@@
+.?AVCDmFormatUpdater_sfm@@
+.?AVCDmFormatUpdater_sfm_session@@
+.?AVCDmFormatUpdater_sfm_settings@@
+.?AVCDmFormatUpdater_sfm_trackgroup@@
+.?AVCDmFormatUpdater_vanim@@
+.?AVCDmFormatUpdater_ved@@
+.?AVCDmFormatUpdater_virtualvolumetexture@@
+.?AVCDmFormatUpdater_vmap@@
+.?AVCDmFormatUpdater_vmks@@
+.?AVCDmFormatUpdater_vtex@@
+.?AVCDmFormatUpdater_world@@
+.?AVCDmFormatUpdater_worldnode@@
 .?AVCDmSerializerBinary@@
 .?AVCDmSerializerKeyValues2@@
 .?AVCDmSerializerKeyValues@@
+.?AVCDmSerializers@@
+.?AVCDmeBaseImporter@@
+.?AVCElementForKeyValueCallback@@
+.?AVCElementVisitor_DmeMeshFinder@@
+.?AVCElementVisitor_DotaLightFinder@@
+.?AVCElementVisitor_LightEnvironment@@
 .?AVCEmptySequence@@
 .?AVCEntityComponent@@
 .?AVCEntityComponentHelper@@
@@ -1495,6 +1584,21 @@ $prefix_element$
 .?AVCGenericExpr_VariableReference@@
 .?AVCGlobalHotkeyCommands@@
 .?AVCHitBoxObjectDesc@@
+.?AVCImportActBusy@@
+.?AVCImportCommentary@@
+.?AVCImportKeyValueBase@@
+.?AVCImportMKS@@
+.?AVCImportSFMV1@@
+.?AVCImportSFMV2@@
+.?AVCImportSFMV3@@
+.?AVCImportSFMV4@@
+.?AVCImportSFMV5@@
+.?AVCImportSFMV6@@
+.?AVCImportSFMV7@@
+.?AVCImportSFMV8@@
+.?AVCImportSFMV9@@
+.?AVCImportTex@@
+.?AVCImportVMT@@
 .?AVCInputLayoutRegistration_s_hColoredVertexLayout@@
 .?AVCKV3TransferContextBase@@
 .?AVCKV3TransferLoadContext@@
@@ -1618,6 +1722,7 @@ $prefix_element$
 .?AVCQtImageCache@@
 .?AVCReadFromBackBufferProceduralLayer@@
 .?AVCRenderOptionsPopupUI@@
+.?AVCSFMBaseImporter@@
 .?AVCSceneObject@@
 .?AVCSceneSkyBoxLightQuery@@
 .?AVCSchemaInstallCallback@@
@@ -1799,6 +1904,7 @@ $prefix_element$
 .?AVCUiMaterialPreviewSceneObject@@
 .?AVCUiMaterialPreviewSceneObjectDesc@@
 .?AVCUndoAttributeAddRemove@@
+.?AVCUndoAttributeRenameElement@@
 .?AVCUndoCreateElement@@
 .?AVCUndoDestroyElement@@
 .?AVCUndoElement@@
@@ -1806,6 +1912,7 @@ $prefix_element$
 .?AVCVariantSaveDataOps@@
 .?AVCVertexListSceneObject@@
 .?AVCVertexListSceneObjectDescriptor@@
+.?AVFindByTypeVisitor@@
 .?AVIAnimTagListener@@
 .?AVIAnimationHelperAnimGraphChangeLister@@
 .?AVIAppSystem@@
@@ -1828,7 +1935,12 @@ $prefix_element$
 .?AVIDmAttributeOp@@
 .?AVIDmElementFactory@@
 .?AVIDmElementFramework@@
+.?AVIDmFormatUpdater@@
+.?AVIDmLegacyUpdater@@
 .?AVIDmSerializer@@
+.?AVIDmSerializers@@
+.?AVIElementForKeyValueCallback@@
+.?AVIElementVisitor@@
 .?AVIErrorListener@@
 .?AVIGenericInterface@@
 .?AVIHelpChangeListener@@
@@ -1994,6 +2106,9 @@ $prefix_element$
 .D$4z@u>
 .D$Dz
 .D$Dz@u>
+.D$`D
+.D$dz
+.D$hz
 .E8u5
 .K(DH
 .K(DL
@@ -2041,12 +2156,28 @@ $prefix_element$
 .text$yd
 .tls$
 .tls$ZZZ
+.vmat
 .vsky
 .xJ>Hf
 .xdata
 .xdata$x
-/%6x&
+// 						"BA_INT_AMBUSH"		someone please define this - I have no idea what it does
+// 						"BA_INT_COMBAT"		break out of this anim if combat occurs in my line of sight (bullet hits, grenades, etc), -OR- the max time is reached
+// 						"BA_INT_DANGER"		break out of this anim only if threatened
+// 						"BA_INT_NONE"		break out only when time runs out. No external influence will break me out.
+// 						"BA_INT_PLAYER"		break out of this anim if I can see the player, or I'm threatened
+// 	"busy_anim"			"Activity Name".
+// 	"busy_sequence"		"Sequence Name". If specified, this is used over the activity name. Specify it in the hint node.
+// 	"entry_anim"		"Activity Name"
+// 	"entry_sequence"	"Sequence Name". If specified, this is used over the entry anim.
+// 	"exit_anim"			"Activity Name"
+// 	"exit_sequence"		"Sequence Name". If specified, this is used over the exit anim.
+// 	"interrupts"		One of:
+// 	"max_time"			"Maximum time to spend in this busy anim"	0 = only stop when interrupted by external event
+// 	"min_time"			"Minimum time to spend in this busy anim"
+// "act busy name"		This is the name that a mapmaker must specify in the hint node.
 /2GG>!B
+/5Kk!
 />58d%
 /D$pv
 /D$tv
@@ -2056,7 +2187,7 @@ $prefix_element$
 /TF<)VGy#WH
 /YA1H
 /]?size@QImage@@QEBA?AVQSize@@XZ
-0	V_tanhf
+0	V_tanf
 0 0 -1
 0 0 0
 0 0 0 0
@@ -2103,7 +2234,6 @@ $prefix_element$
 0A_A^A]A\_H
 0A_A^A]A\_^[
 0A_A^A]A\_^]
-0A_A^A]^[
 0A_A^[
 0A_A^^
 0A_A^_
@@ -2167,6 +2297,7 @@ $prefix_element$
 1EndTypeInput()
 1EndWheelSequence()
 1FocusChanged( QWidget *, QWidget * )
+1I9FPt
 1InitRandom()
 1InvokeCommand()
 1LaunchPopUpArithmeticAdd()
@@ -2343,12 +2474,13 @@ $prefix_element$
 1setValue(double)
 1update()
 1wsHp
+2	V_tanhf
 210429000000Z
 211007000000Z
 220323000000Z
 220801000000Z
 220921000000Z
-230629214633Z0/
+230712171840Z0/
 241009235959Z0a1
 255 255 255
 2AnimationLoopingChanged( bool )
@@ -2435,7 +2567,9 @@ $prefix_element$
 5FjiT
 5YA1H
 5http://cacerts.digicert.com/DigiCertTrustedRootG4.crt0C
+5sfm_v8
 6*f(_
+64 283 0
 6I]Dc
 6OB,n_
 6YA1H
@@ -2486,6 +2620,7 @@ $prefix_element$
 8fB9l
 8fff?
 8ke?;
+8text
 8vmatt
 9)~P3
 94(t.H
@@ -2504,6 +2639,7 @@ $prefix_element$
 9Sh~]E3
 9Sxv(L
 9T$<~
+9W0|U
 9W8~Q
 9Y@~ML
 9YA1i
@@ -2535,7 +2671,13 @@ $prefix_element$
 9s|~%H
 9t$(u
 9t$Hu
+9t$H~"H
+9t$H~'H
+9t$H~,
+9t$H~-H
+9t$H~7
 9t$Pu	
+9t$`~,H
 9t$hu
 9wP~;
 9wP~IL
@@ -2545,6 +2687,7 @@ $prefix_element$
 9|$(u
 9|$8u
 9|$Hu
+9|$H~$3
 9|$Xu
 9|$hu
 9|$xu
@@ -2557,11 +2700,13 @@ $prefix_element$
 9~P~7
 : Add
 : lexer error %d :
-:!-cS6
-:!-mR6
-:!-qP6
-:!-wQ6
-:!=j.6
+:!-/*1
+:!-ZS1
+:!-dT1
+:!-rR1
+:!-{Q1
+:!5D-1
+:!=+u0
 :!\$\0
 :!d$`0
 :>)*	v
@@ -2577,6 +2722,7 @@ $prefix_element$
 ;G(uSL
 ;H9>&X
 ;I9}(tiH
+;L$0u-
 ;YA1D
 ;YHt6H
 ;\$0|
@@ -2585,13 +2731,17 @@ $prefix_element$
 ;\$p|
 ;]p}~H
 ;|$ |
+;|$H|
+;|$`|
 <	u2H
 <	u8H
 <	uZH
 <	w	@
 < t=<	t9
+< tG<	tC<
 <!-- DMXVersion
 <!-- dmx
+<!uCH
 <#tPC
 <$IcL$
 <$Ico
@@ -2641,12 +2791,14 @@ $prefix_element$
 =rIQU
 >0<0:
 >Mp$d
+>WorldGroupId_t
 >YA1H
 >ff&?
 >jtm}S
 >vmdl
 >vmdlut
 ?!5WOo
+?#\$ 
 ?+>^m
 ?333333
 ?49HoKC
@@ -2654,6 +2806,12 @@ $prefix_element$
 ?7{KV
 ?8bunz8
 ?:kP<
+?<!t	3
+?<!u	H
+?<!u0H
+?<!uIH
+?<!uQH
+?<"t2H
 ?<%u	H
 ??0?$CUniformRandomStreamImpl@VCThreadNullMutex@@@@QEAA@XZ
 ??0CCountedStringPool@@QEAA@W4StringPoolCase_t@@@Z
@@ -2667,7 +2825,7 @@ $prefix_element$
 ??0CUtlString@@QEAA@AEBVCBufferString@@@Z
 ??0CUtlSymbolTable@@QEAA@HH_N@Z
 ??0KeyValues@@QEAA@PEBD00@Z
-??0KeyValues@@QEAA@PEBD@Z
+??0KeyValues@@QEAA@PEBDPEAVIKeyValuesSystem@@_N@Z
 ??0QAction@@QEAA@AEBVQString@@PEAVQObject@@@Z
 ??0QAction@@QEAA@PEAVQObject@@@Z
 ??0QActionGroup@@QEAA@PEAVQObject@@@Z
@@ -2879,6 +3037,7 @@ $prefix_element$
 ??3KeyValues@@SAXPEAX@Z
 ??4CUtlBinaryBlock@@QEAAAEAV0@AEBV0@@Z
 ??4CUtlString@@QEAAAEAV0@AEBVCBufferString@@@Z
+??4KeyValues@@QEAAAEAV0@AEBV0@@Z
 ??4QColor@@QEAAAEAV0@AEBV0@@Z
 ??4QColor@@QEAAAEAV0@W4GlobalColor@Qt@@@Z
 ??4QCursor@@QEAAAEAV0@$$QEAV0@@Z
@@ -2946,7 +3105,7 @@ $prefix_element$
 ?EnterScope@CVProfile@@QEAAXPEBDH0_NH@Z
 ?ExitScope@CVProfile@@QEAAXXZ
 ?ExtendPath@CBufferString@@QEAAPEBDPEBDD_N@Z
-?ExtractFileBase@CBufferString@@QEAAPEBDPEBD@Z
+?ExtractFileBase@CBufferString@@QEAAPEBDPEBD_N@Z
 ?ExtractFilePath@CBufferString@@QEAAPEBDPEBD_N@Z
 ?Find@CUtlSymbolTable@@QEBA?AVCUtlSymbol@@PEBD@Z
 ?FindFileName@CUtlFilenameSymbolTable@@QEBAIPEBD@Z
@@ -2970,11 +3129,13 @@ $prefix_element$
 ?GetFloat@KeyValues@@QEBAMPEBDM@Z
 ?GetForModify@CUtlString@@QEAAPEADXZ
 ?GetInt@KeyValues@@QEBAHPEBDH@Z
+?GetLine@CUtlBuffer@@QEAAXPEADH@Z
 ?GetName@KeyValues@@QEBAPEBDXZ
 ?GetNextKey@KeyValues@@QEBAPEAV1@XZ
 ?GetNextTrueSubKey@KeyValues@@QEBAPEAV1@XZ
 ?GetNextValue@KeyValues@@QEBAPEAV1@XZ
 ?GetOverflow@CUtlBuffer@@IEAA_NH@Z
+?GetPtr@KeyValues@@QEBAPEAXPEBDPEAX@Z
 ?GetString@CUtlBuffer@@QEAAXPEADH@Z
 ?GetString@KeyValues@@QEAAPEBDPEBD0PEAD_K@Z
 ?Ic.D
@@ -3029,21 +3190,27 @@ $prefix_element$
 ?SetBufferType@CUtlBuffer@@QEAAX_N0@Z
 ?SetCopy@CStrAutoEncode@@QEAAXPEBDH@Z
 ?SetDirect@CUtlString@@QEAAXPEBDH@Z
-?SetExtension@CBufferString@@QEAAPEBDPEBD@Z
+?SetExtension@CBufferString@@QEAAPEBDPEBD_N@Z
 ?SetExternalBuffer@CUtlBuffer@@QEAAXPEAXHHH@Z
+?SetFloat@KeyValues@@QEAAXPEBDM@Z
+?SetInt@KeyValues@@QEAAXPEBDH@Z
 ?SetLength@CBufferString@@QEAAPEADH_NPEAH@Z
 ?SetLength@CUtlBinaryBlock@@QEAAXH@Z
 ?SetLength@CUtlString@@QEAAXH@Z
 ?SetOverflowFuncs@CUtlBuffer@@IEAAXP81@EAA_NH@Z0@Z
 ?SetPtr@CBufferString@@QEAAXPEADHH_N1@Z
+?SetPtr@KeyValues@@QEAAXPEBDPEAX@Z
 ?SetSeed@?$CUniformRandomStreamImpl@VCThreadNullMutex@@@@QEAAXH@Z
+?SetString@KeyValues@@QEAAXPEBD0@Z
 ?ShortenPath@CBufferString@@QEAAPEBD_N@Z
 ?String@CUtlSymbolTable@@QEBAPEBDVCUtlSymbol@@@Z
 ?TY,>5
 ?ToLowerFast@CBufferString@@QEAAXH@Z
 ?ToLowerFast@CUtlString@@QEAAXXZ
+?ToolScene
 ?Tools_Unlit_Opaque
 ?TrimTail@CBufferString@@QEAAPEBDPEBD@Z
+?TruncateAt@CBufferString@@QEAAPEBDH_N@Z
 ?Type
 ?UUUUUU
 ?V_SplitString@@YAXPEBD0AEAV?$CUtlVector@PEADHV?$CUtlMemory@PEADH@@@@@Z
@@ -4174,7 +4341,7 @@ $prefix_element$
 ?typeName@QMetaProperty@@QEBAPEBDXZ
 ?typeName@QMetaType@@SAPEBDH@Z
 ?u='@
-?ujIcN
+?ugIcN
 ?unregisterConverterFunction@QMetaType@@SAXHH@Z
 ?upHcN
 ?userType@QVariant@@QEBAHXZ
@@ -4186,7 +4353,6 @@ $prefix_element$
 @ HcI0H
 @"t$hD
 @#?write@QTableWidgetItem@@UEBAXAEAVQDataStream@@@Z
-@%.10f
 @.data
 @.reloc
 @0A9@ }+Ic@ A
@@ -4196,6 +4362,7 @@ $prefix_element$
 @84)u
 @848u
 @84:u
+@88t9H
 @8IcO(H
 @8j(t
 @8k(t
@@ -4227,6 +4394,7 @@ $prefix_element$
 @A^A]A\^[
 @A^A]A\_^
 @A^^]
+@A^_[
 @A^_]
 @A^_^
 @A^_^][
@@ -4255,7 +4423,6 @@ $prefix_element$
 @A_][
 @A__[
 @A__[H
-@Hc57)0
 @HcAp3
 @HcYP3
 @Integer overflow in %s
@@ -4265,11 +4432,13 @@ $prefix_element$
 @SATH
 @SAUAVH
 @SAUAWH
+@SAUH
 @SAVAWH
 @SAVH
 @SAWH
 @SUATAUAVH
 @SUATAWH
+@SUATH
 @SUAUAVH
 @SUAVAWH
 @SUAVH
@@ -4290,6 +4459,7 @@ $prefix_element$
 @SUVWAVH
 @SUVWAWH
 @SUVWH
+@SUWATAVH
 @SUWATAWH
 @SUWATH
 @SUWAUAWH
@@ -4300,7 +4470,7 @@ $prefix_element$
 @SVATAUH
 @SVATAVH
 @SVATAWH
-@SVAUAVAWH
+@SVATH
 @SVAUAVH
 @SVAUAWH
 @SVAUH
@@ -4322,7 +4492,6 @@ $prefix_element$
 @SWATAVAWH
 @SWATAVH
 @SWATAWH
-@SWATH
 @SWAUAVAWH
 @SWAUAVH
 @SWAVAWH
@@ -4334,6 +4503,7 @@ $prefix_element$
 @UATAUH
 @UATAVH
 @UAUAVAWH
+@UAUAVH
 @UAUAWH
 @UAVAWH
 @UAVH
@@ -4341,13 +4511,14 @@ $prefix_element$
 @USATAUAVAWH
 @USATAUAWH
 @USATAVAWH
-@USATAWH
 @USATH
 @USAUAWH
+@USAUH
 @USAVH
 @USAWH
 @USVAUAVAWH
 @USVAUAVH
+@USVAUH
 @USVAVH
 @USVAWH
 @USVH
@@ -4394,7 +4565,6 @@ $prefix_element$
 @VAVAWH
 @VAVH
 @VAWH
-@VWATAUAWH
 @VWATAUH
 @VWATAVAWH
 @VWAUAVAWH
@@ -4524,6 +4694,7 @@ A]A\_]
 A]A\_^[]
 A]A\_^]
 A]A\_^][
+A]^[]
 A]_[]
 A]_][
 A]_^[]
@@ -4557,7 +4728,6 @@ A^_^[
 A^_^[]
 A^_^][
 A_A\[
-A_A\[]
 A_A\]
 A_A\^
 A_A\_
@@ -4574,10 +4744,10 @@ A_A]A\_^
 A_A]A\_^[
 A_A]A\_^[]
 A_A]A\_^]
+A_A][
 A_A][]
 A_A]]
 A_A]_
-A_A]_]
 A_A]_^]
 A_A^A\
 A_A^A\[]
@@ -4607,6 +4777,7 @@ A_A^A]^[]
 A_A^A]_]
 A_A^A]_^
 A_A^A]_^[
+A_A^[
 A_A^]
 A_A^^
 A_A^^[]
@@ -4633,6 +4804,8 @@ AcceptDropMenu
 AcceptDropSpecialMenu
 Access violation - no RTTI data!
 AcquireSRWLockExclusive
+ActBusy Script File
+ActBusyList
 ActivateTypeInput
 Active Window Widget
 ActiveArea
@@ -4664,6 +4837,10 @@ Allow CursorPowerDrag
 Allows the parent element to be conditionally evaluated base on the current surface angle. The surface angle is set based on the initial placement of the smart prop object, but can also be updated by the Trace to Surface modifier.
 Allows the parent element to be conditionally evaluated based on surface properties.
 Alpha
+Alpha Fade In Random
+Alpha Fade Out Random
+Alpha Fade and Decay
+Alpha Random
 Alpha:
 An element which fits one or more instances of a set of choices on to a line.
 An element which is used to apply a set of modifiers to the state of its parent.
@@ -4677,6 +4854,8 @@ Angles
 AnimGraphEditorUtils001
 AnimatableSceneObjectDesc
 Animation
+Animation Bone Flags
+Animation Configuration File
 AnimationLoopingChanged
 AnimationSystemUtils_001
 AnimationSystem_001
@@ -4720,6 +4899,7 @@ Async Fire C%d:I%d
 Asynchronous - returns and continues despite the called method yielding
 At marker 0x%02x, recovery action %d
 AttachPos
+Attachments
 Attempt to apply the same amount of scale to all of the elements placed on the line while still respecting their size constraints.
 Attempted to add two format updaters with the same file format (%s)!
 Attempted to add two legacy updaters with the same file format (%s)!
@@ -4727,10 +4907,13 @@ Attempted to add two serializers with the same file encoding (%s)!
 Attempted to read an attribute ("%s") of an inappropriate type %s!
 Attempted to read an attribute ("%s") of an inappropriate type!
 Attempted to read an attribute ("%s") of unknown type %s!
+Attempted to serialize an unsupported shader parameter type %s (%s)
 Attempted to set attribute %s as if it was a non-attribute key!
 Attempted to set non-attribute value %s as if it was an attribute!
 Attempting to create unknown particle system '%s'
 Attempting to register the command %s for context %s multiple times
+Attempting to set %s when there is no current sequence!
+Attempting to set name when there is no current sequence!
 AuQIc
 August
 Axis around which the rotation will occur
@@ -4743,6 +4926,7 @@ B.f?y
 B09B }&HcB 
 B:8A:
 BACKSLASH_CHAR
+BA_INT_NONE
 BC?>6t9^	c:>
 BF>^G
 BGR565
@@ -4847,6 +5031,7 @@ Boolean
 Break
 Break Camera Sync
 Brightness
+BrowInV
 Buffer passed to JPEG library is too small
 BuildParticleSimList
 C ;C$t
@@ -4918,7 +5103,6 @@ CBasePulseGraphInstance::StartGraphReload( %p ) %s
 CBasePulseGraphInstance::~CBasePulseGraphInstance( %p )
 CBindableCamera
 CBufferString
-CBw	=
 CCIR601 sampling not implemented yet
 CCITT Group 3
 CCITT Group 4
@@ -4942,6 +5126,7 @@ CDependencyGraph::FindAttrNode
 CDependencyGraph::Reset
 CDmAttribute pool
 CDmElement CUtlMemoryPool
+CDmExtraVertexStream
 CDmSerializerBinary: Attribute '%s' of element '%s' read as '%s' but expected '%s'
 CDmSerializerBinary: Encountered element attribute while reading prefix element: '%s' attribute '%s' of element '%s'
 CDmSerializerBinary: Encountered element_array attribute while reading prefix element: '%s' attribute '%s' of element '%s'
@@ -4950,6 +5135,12 @@ CDmSerializerBinary: Removing deprecated objectid attribute '%s' of element '%s'
 CDmSerializerBinary: Unable to read attribute '%s' of element '%s' - unknown attribute type!
 CDmSerializerBinary: Unknown error reading '%s' attribute '%s' of element '%s'
 CDmSerializerBinary::UnserializeElements: recoverable error reading file without a prefix element count. Continuing...
+CDmeAmalgamatedTexture
+CDmeDotaTileGrid
+CDmePolygonMeshDataStream
+CDmeSheetImage
+CDmeSheetSequence
+CDmeSheetSequenceFrame
 CELL_INVOKE
 CENTER
 CEmptyEntityInstance
@@ -4968,8 +5159,10 @@ CFAPlaneColor
 CGlobalHotkeyCommands
 CHUNK_LEAP
 CHUNK_LEAP_COND
+CHammerMesh
 CHandle
 CIRCLE
+CImagePlaneNode
 CInputBindManager::HandleInputCode recursion depth got too deep.
 CKV3MemberNameWithStorage
 CKeyValues3Context::Root
@@ -4980,6 +5173,30 @@ CLOSE_BRACKET
 CLOSE_PAREN
 CLightingControlRig
 CLightingPreviewPopupUI
+CManifestInstance
+CMapCable
+CMapCordon
+CMapDotaTileGrid
+CMapEntity
+CMapGameDataNode
+CMapGroup
+CMapGroupProxy
+CMapMesh
+CMapMeshBase
+CMapPath
+CMapPathNode
+CMapPrefab
+CMapProxyInstance
+CMapRootElement
+CMapSelectionSet
+CMapSolid
+CMapStaticOverlay
+CMapTerrain
+CMapTerrainCell
+CMapTileMesh
+CMapTileProxy
+CMapVariableSet
+CMapWorld
 CMemAllocSystemInitialize
 CModelPreviewAttachedModel
 CNetworkUtlVectorBase
@@ -5035,6 +5252,7 @@ CPulseCell_Val_TestDomainFindEntityByName
 CPulseCell_Val_TestDomainGetEntityName
 CPulseCell_Value_RandomInt
 CPulseCell_Value_TestValue50
+CPulseExecCursor
 CPulseGraphDef
 CPulseGraphInstance_TestDomain
 CPulseGraphInstance_TestDomain!Graph_GenerateInt
@@ -5042,8 +5260,10 @@ CPulseGraphInstance_TestDomain!Graph_GenerateIntWithResult
 CPulseGraphInstance_TestDomain!Graph_GenerateVector
 CPulseGraphInstance_TestDomain!Graph_HandleInt
 CPulseGraphInstance_TestDomain_Derived
+CPulseGraphInstance_TestDomain_Derived!GetInstanceValueX
 CPulseGraphInstance_TestDomain_Derived!Graph_GenerateIntWithResult
 CPulseGraphInstance_TestDomain_Derived!Graph_HandleIntDerived
+CPulseGraphInstance_TestDomain_Derived!SetInstanceValueX
 CPulseGraphInstance_TurtleGraphics
 CPulseGraphInstance_TurtleGraphics!Graph_Go
 CPulseMathlib
@@ -5062,12 +5282,12 @@ CPulseRuntimeMethodArg
 CPulseTestFuncs_DerivedDomain
 CPulseTestFuncs_DerivedDomain!GetCursorValueA
 CPulseTestFuncs_DerivedDomain!SetCursorValueA
-CPulseTurtleGraphicsLib
-CPulseTurtleGraphicsLib!Move
-CPulseTurtleGraphicsLib!PenDown
-CPulseTurtleGraphicsLib!PenUp
-CPulseTurtleGraphicsLib!SetColor
-CPulseTurtleGraphicsLib!Turn
+CPulseTurtleGraphicsCursor
+CPulseTurtleGraphicsCursor!Move
+CPulseTurtleGraphicsCursor!PenDown
+CPulseTurtleGraphicsCursor!PenUp
+CPulseTurtleGraphicsCursor!SetColor
+CPulseTurtleGraphicsCursor!Turn
 CPulseValueFullType
 CPulse_CallInfo
 CPulse_Chunk
@@ -5314,6 +5534,10 @@ CTSQueue corruption
 CTSQueue: Misaligned queue
 CTSQueue<class std::function<void __cdecl(void)> *,0>::Push
 CTSQueue<struct ParticleSoundQueueEntry_t *,0>::Push
+CTerrainSelection
+CTestDomainDerived_Cursor
+CTestDomainDerived_Cursor!GetCursorValueB
+CTestDomainDerived_Cursor!SetCursorValueB
 CTonemappingPopupUI
 CToolAxisObjectDesc::DrawArray
 CToolHud
@@ -5353,6 +5577,8 @@ CToolSceneToolObject
 CToolSceneTraceEnvironment::Draw_SetupIdForCurrentNode
 CToolSceneTraceEnvironment::Draw_SetupIdForCurrentNode - Trying to draw with no node. You need to call Draw_SetCurrentNode() before drawing
 CToolsVisPopupUI
+CTrajectoryPath
+CTrajectoryPathNode
 CUndoArrayAttributeSetMultipleValueElement
 CUndoArrayAttributeSetValueElement
 CUndoAttributeAddRemove
@@ -5360,6 +5586,7 @@ CUndoAttributeArrayCopyAllElement
 CUndoAttributeArrayInsertBefore
 CUndoAttributeArrayInsertCopyBefore
 CUndoAttributeArrayRemoveElement
+CUndoAttributeRenameElement
 CUndoAttributeSetValueElement
 CUndoCreateElement
 CUndoDestroyElement
@@ -5367,6 +5594,7 @@ CUndoManager::GetUndoDescInternal
 CUndoManager::Redo
 CUndoManager::Undo
 CUtlBlockMemory overflow!
+CUtlFixedMemory overflow!
 CUtlLeanVector
 CUtlLeanVectorBase<class PulseDocNodeID_t,short>::EnsureCapacity
 CUtlLeanVectorBase<struct CPulse_RegisterInfo,short>::EnsureCapacity
@@ -5376,6 +5604,7 @@ CUtlLeanVectorImpl<class CUtlLeanVectorBase<class PulseDocNodeID_t,short>,class 
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CPulse_RegisterInfo,short>,struct CPulse_RegisterInfo,short>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct PGDInstruction_t,short>,struct PGDInstruction_t,short>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class KeyValues3 *,4,int>,class KeyValues3 *,int>::InsertBeforeGetPtr
+CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
 CUtlMemory_RawAllocator<class CUtlHashtableEntry<unsigned int,struct empty_t> >::EnsureCapacity
 CUtlMemory_RawAllocator<unsigned int>::EnsureCapacity
@@ -5390,6 +5619,7 @@ CUtlVectorFixedGrowable
 CVariantBase
 CVariantDefaultAllocator
 CVertexListSceneObject
+CVisibilityMgr
 CWD>~3
 CWeakHandle
 C_NetworkUtlVectorBase
@@ -5448,6 +5678,7 @@ CellWidth
 Center
 ChangeAccessorFieldPathIndex_t
 Channel:
+CheekH
 Child Selection Mode
 Child elements will be placed within a circle of the specified radius.
 Child elements will be placed within a sphere of the specified radius.
@@ -5475,12 +5706,16 @@ ClipBoard
 ClipPath
 CloseClipboard
 CloseHandle
+CloseLid
 CloseThreadpoolWork
 Closed temporary file %s
 CloudTexture
 Coefficient to modulate the rotation
 Color
+Color Fade
+Color Light From Control Point
 Color Picker
+Color Random
 Color to be applied if this choice is selected.
 Color to use to display the configuration handle.
 ColorChoice_t
@@ -5496,8 +5731,10 @@ Command Filter
 Command Name
 Command.%s.%s
 CommandLine
+Commentary File
 CompareStringEx
 Compares the current value of a variable to the specified value. If the comparison is false the element evaluation is stopped.
+Compiled GUI file
 Component index %d: mismatching sampling ratio %d:%d, %d:%d, %c
 CompressBlocksBC1
 CompressBlocksBC3
@@ -5541,6 +5778,7 @@ Corrupt JPEG data: found marker 0x%02x instead of RST%d
 Corrupt JPEG data: premature end of data segment
 Cosine of angle, in degrees (0 -> 1, 90 -> 0)
 Courier
+Create In Hierarchy
 Create Locator
 Create Rotator
 Create Sizer
@@ -5559,6 +5797,7 @@ CreateUniqueId
 CreateVertexListObject
 Cross Product
 CtrlAltV
+Cull Random
 CurrentFrameChanged
 CurrentICCProfile
 CurrentPreProfileMatrix
@@ -5585,11 +5824,17 @@ D$ F9<(
 D$ H9|$@t
 D$ H;
 D$ Hc
+D$ Hc(H
+D$ Hc0H
 D$ I9P
 D$ I;
 D$ I;R
 D$ Jz
+D$ L9d$(t
+D$ L9l$@
 D$ L;
+D$ Lc0M
+D$ Lc8M
 D$ Sl
 D$ S~*
 D$ Xi
@@ -5630,6 +5875,7 @@ D$(hH
 D$0&s
 D$0*2
 D$0,M
+D$09(tSH
 D$09\$<
 D$0@8{
 D$0BE
@@ -5641,6 +5887,8 @@ D$0H#
 D$0H9D$8
 D$0H9l$8t
 D$0H;
+D$0H;A t
+D$0H;C t
 D$0H=
 D$0Hc
 D$0HcH
@@ -5649,6 +5897,7 @@ D$0Ic
 D$0Jz
 D$0L+
 D$0Lc
+D$0Lc(M
 D$0Sl
 D$0S~*
 D$0Ww
@@ -5665,6 +5914,7 @@ D$0~(
 D$18F(u
 D$49C
 D$4;C
+D$4D;
 D$8;C
 D$8;D$@
 D$8BE
@@ -5674,6 +5924,7 @@ D$8E3
 D$8E;t$
 D$8H9
 D$8H;
+D$8H=
 D$8HcC(I
 D$8HcH
 D$8HcJ
@@ -5685,7 +5936,6 @@ D$8JD
 D$8L9
 D$8L;
 D$8M+
-D$8eH
 D$8f;
 D$8fH
 D$8ff
@@ -5707,6 +5957,7 @@ D$@H;
 D$@H;F
 D$@H=
 D$@Hc
+D$@Ic
 D$@L;
 D$@Sl
 D$@S~*
@@ -5725,6 +5976,7 @@ D$H;D$L
 D$HBE
 D$HE3
 D$HH;
+D$HH=
 D$HHc
 D$HL+
 D$HL9gXt
@@ -5755,6 +6007,7 @@ D$Pxxx
 D$TA;
 D$TE3
 D$XE3
+D$XE;
 D$XH;
 D$XHc
 D$XHcG
@@ -5768,6 +6021,8 @@ D$`@*
 D$`E3
 D$`H+
 D$`H;
+D$`H=
+D$`Hc
 D$`HcH
 D$`HcX
 D$`Hcx
@@ -5779,6 +6034,7 @@ D$`fA
 D$`fA	
 D$`t;H
 D$`tBH
+D$dD;~
 D$dE3
 D$dfff
 D$h9C
@@ -5792,6 +6048,7 @@ D$hD;
 D$hE3
 D$hH+
 D$hI;
+D$hLc>
 D$hf;
 D$hfH
 D$ht{H
@@ -5801,6 +6058,7 @@ D$lD9
 D$p;D
 D$p@2
 D$pE3
+D$pH=
 D$pHc
 D$pHcH
 D$pL;
@@ -5811,9 +6069,12 @@ D$pt;H
 D$pt>H
 D$ptj
 D$pv8
+D$x9CX
 D$x;M
 D$xE3
+D$xH9u
 D$xH;
+D$xH=
 D$xHc
 D$xL+
 D$xf;
@@ -5841,14 +6102,15 @@ D24S8
 D24X8
 D24X8_SHADOW
 D32FS8
+D8 tZH
 D8$.u
+D8%$9,
+D8%R:,
 D8(tj
-D8(uwH
 D8*t$Ic
 D81uUL9r
 D84:u
 D84>u
-D85D L
 D8<2u
 D8>t{H
 D8L$0u`
@@ -5887,6 +6149,7 @@ D9(tT
 D9.t_I
 D9/~|
 D97uFA
+D9=X8@
 D9Ch~n3
 D9H$t
 D9I$t
@@ -5933,7 +6196,6 @@ D;|$0
 D;|$<
 DCT coefficient out of range
 DCT scaled block size %dx%d not supported
-DD85n L
 DE0I+
 DE2H+
 DIAMOND
@@ -5941,6 +6203,18 @@ DIGIT
 DISCARD
 DIV_FLOAT
 DIV_INT
+DMX Model
+DMX Model Pipeline Animation Script File
+DMX Model Pipeline Bone Mask Script File
+DMX Model Pipeline Eyes Script File
+DMX Model Pipeline Hitbox Script File
+DMX Model Pipeline KeyValues Script File
+DMX Model Pipeline Material Group Script File
+DMX Model Pipeline Model Script File
+DMX Model Pipeline Physics Script File
+DMX Model Pipeline Preprocess File
+DMX Model Pipeline Root Script File
+DMX_MODEL_SOURCE_UNKNOWN
 DNGBackwardVersion
 DNGPrivateData
 DNGVersion
@@ -5954,6 +6228,7 @@ D_BORDER
 D_COMPRESSED_NORMALS_AND_TANGENTS
 D_NO_ZTEST
 Da\">c]$8c^
+Dampen Movement Relative to Control Point
 DataModel needs the file system to function
 DataType
 Datamodel symbol table: %d entries %llu bytes
@@ -6003,6 +6278,7 @@ Destroy Fake Entity
 DestroyFakeEntity( idx %d = handle %d)
 DestroyThreadPool
 Diamond
+Did you forget to surround the vector with "s?
 Didn't expect more than one scan
 DigiCert Assured ID Root CA0
 DigiCert Inc1
@@ -6015,7 +6291,9 @@ Direct Offset
 Direction Vector
 Display Model
 Distance
+Distance Between Control Points Scale
 Distance along the PlaneUpDirection to offset the trace. (YM: Eliminate in favor of requiring xform on Node? Or keep it and make it a range? )
+Distance to Control Points Scale
 Distribute the child element evenly within the specified area of volume
 Distribute the child elements randomly within the specified area or volume
 Distribution Mode
@@ -6030,7 +6308,97 @@ DmAttributeRemovedListenerInfo_t CUtlMemoryPool
 DmElement
 DmElementChangedListenerInfo_t CUtlMemoryPool
 DmElementDeletedListenerInfo_t CUtlMemoryPool
+DmSerializers needs the file system to function
+DmeAmalgamatedTexture
+DmeAmbientLight
+DmeAnimationList
+DmeAnimationSet
+DmeAnimationSetGroup
+DmeAxisSystem
+DmeBalanceToStereoCalculatorOperator
+DmeBookmark
+DmeBookmarkSet
+DmeBoolCurveInfo
+DmeBoolLog
+DmeBoolLogLayer
+DmeCamera
+DmeChannel
+DmeChannelsClip
+DmeColorCurveInfo
+DmeColorLog
+DmeColorLogLayer
+DmeCombinationOperator
+DmeCommentaryNodeEntity
+DmeControlDisplaySet
+DmeControlGroup
+DmeDag
+DmeDirectionalLight
 DmeElement
+DmeExportTags
+DmeFilmClip
+DmeFloatCurveInfo
+DmeFloatLog
+DmeFloatLogLayer
+DmeGameParticleSystem
+DmeHSLGrainFXClip
+DmeIntCurveInfo
+DmeIntLog
+DmeIntLogLayer
+DmeJoint
+DmeLight
+DmeLog
+DmeLogLayer
+DmeModel
+DmePackColorOperator
+DmeParticleOperator
+DmePointLight
+DmePrecompiledTexture
+DmePreset
+DmePresetGroup
+DmeProceduralPresetSettings
+DmeProjectedLight
+DmeQAngleCurveInfo
+DmeQAngleLog
+DmeQAngleLogLayer
+DmeQuaternionCurveInfo
+DmeQuaternionLog
+DmeQuaternionLogLayer
+DmeRig
+DmeRigAimConstraintOperator
+DmeRigAnimSetElements
+DmeRigIKConstraintOperator
+DmeRigOrientConstraintOperator
+DmeRigParentConstraintOperator
+DmeRigPointConstraintOperator
+DmeRigRotationConstraintOperator
+DmeSheetImage
+DmeSheetSequence
+DmeSheetSequenceFrame
+DmeSpotLight
+DmeStringCurveInfo
+DmeStringLogLayer
+DmeTP_ChangeColorChannels
+DmeTP_ComputeMipmaps
+DmeTP_ScaleColor
+DmeTimeCurveInfo
+DmeTimeFrame
+DmeTimeLogLayer
+DmeTimeSelection
+DmeTransform
+DmeTransformControl
+DmeVMatrixCurveInfo
+DmeVMatrixLog
+DmeVMatrixLogLayer
+DmeVector2CurveInfo
+DmeVector2Log
+DmeVector2LogLayer
+DmeVector3CurveInfo
+DmeVector3Log
+DmeVector3LogLayer
+DmeVector4CurveInfo
+DmeVector4Log
+DmeVector4LogLayer
+DmeVertexData
 Do not allow selected elements to be scaled, the parts may not fit the line exactly
 Do not trace against any models (only hit world geometry).
 Do not trace against detail geometry (materials with attribute 'mapbuilder.detail', or static props with detail geometry flag set).
@@ -6065,6 +6433,7 @@ DragOffsetRelativeUpdate
 DragStarted
 DragUpdated
 Draw Shadows
+Dt$8D
 Dump all new particles, optional name substring.
 Dump all simulating particles, optional name substring.
 DumpModeDecode: Not enough data for scanline %d
@@ -6076,6 +6445,7 @@ E(HcH
 E),$H
 E)n(u
 E+A@H
+E09GX
 E0HcH
 E0Lc`
 E8,7u
@@ -6087,16 +6457,17 @@ E8~8u
 E8~Lt
 E8~Lu
 E8~Lu'E3
+E9&~&A
 E9.taI
-E9.~&A
 E9n(E
 E9optrE
+E9wXt"H
 E;Fx|
 E;t$(|
 E;u$t>H
 E;|$<
-E=5 L
 E>nEA
+E@9FX
 E@t	H
 EH*?H
 EHHcI
@@ -6121,9 +6492,13 @@ EQ_STRING
 ERROR! LoadFromJPG( %s ) failed!
 ERROR! LoadFromPNG( %s ) failed!
 ERROR! TiffReadFile( %s ) failed!
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Failed to open file for key bindings:
 ERROR: Failed to read key bindings from:
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
+ERROR: Sequence %d already specified!
+ERROR: Sequence %d is missing, total of %d sequences!
+ERROR: Sequence number %d is too big!
 ERROR: Unable to create an attribute handle! Save, quit, restart and clean up your file to have fewer elements!
 ESCAPE_CHAR
 ESCAPE_CODE
@@ -6146,6 +6521,7 @@ Each element will be scaled to is maximum allowable size that will still fit on 
 Early exit
 EarlyRetireParticleSystems
 EconItemToolModel_001
+EditGameClassProps
 EditingCancelled
 EditingFinished
 EditingStarted
@@ -6212,10 +6588,15 @@ Error fetching data for field "%s"
 Error fetching directory count
 Error fetching directory link
 Error flushing data before directory write
+Error importing actbusy element %s
+Error importing txt file! %s
+Error importing vmt shader parameter %s
+Error in .VMT file: error parsing vector element "%s" in "%s"
 Error in the undo system! Grab a programmer!
 Error post-encoding before directory write
 Error reading attribute "%s"
 Error reading in array attribute "%s" element %d
+Error reading texture compile settings file "%s"!
 Error writing TIFF header
 Error writing data for field "%s"
 Error writing directory contents
@@ -6254,6 +6635,7 @@ ExtraSamples
 Extraneous token
 F	tj<
 F 9F(r
+F A;F
 F H9,
 F(I9@
 F0I9@
@@ -6261,6 +6643,7 @@ F8I9@
 F;$>|
 F>qUxv
 F@I9@ u	
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FHA9@(tYH
@@ -6270,6 +6653,7 @@ FLOAT
 FORWARD
 FPIcF H
 FX9CXu
+Facial Animation File
 Factory for element type '%s' already exists (Check your IMPLEMENT_ELEMENT_FACTORY macros for duplicate lookupNames)
 Fail to schedule the chore!
 Failed to allocate a lexer for '%s'. (Out of memory?)
@@ -6327,6 +6711,9 @@ FindClose
 FindFirstFileExW
 FindNextFileW
 FindRegisteredGlobalObjectInternal
+Fingers
+Fingers_L
+Fingers_R
 Finished %d Blocks out of %d
 Fire And Forget
 Fire input {m_Input}
@@ -6378,6 +6765,8 @@ FocusChanged
 FocusIn
 FocusLeft
 FocusOut
+FoldLipLo
+FoldLipUp
 FontManager_001
 Forward direction (+x)
 Fractional sampling not implemented yet
@@ -6390,6 +6779,7 @@ FreeOffsets
 Freed EMS handle %u
 Freed XMS handle %u
 Friday
+Fsfm_v3
 Func( %s )
 Function "%s" takes %i parameters, but %i were given
 FxD9x
@@ -6402,6 +6792,7 @@ GD$(H
 GD$83
 GD$8A
 GD$8E
+GD$8H
 GD$8N
 GD$HA
 GD$XH
@@ -6429,6 +6820,7 @@ GT$HH
 GT$HI
 GT$hH
 GT$hI
+GUxE3
 GX9CXu
 GX9GXu
 G\$(H
@@ -6449,8 +6841,13 @@ GenerateInt
 GenerateIntWithResult
 GenerateVector
 Generates set of child instances arranged in a regular grid layout.
+Generic DMX
+Generic MovieObjects
+Generic SFM
 Get Fake Entity Name
 Get the 'ValueA' number off the cursor.
+Get the 'ValueB' number off the cursor.
+Get the 'ValueX' number off the graph instance.
 Get the test value as a float
 Get the test value as an int
 GetACP
@@ -6470,6 +6867,7 @@ GetCurrentProcessId
 GetCurrentThreadId
 GetCursorPos
 GetCursorValueA
+GetCursorValueB
 GetDateFormatEx
 GetDefaultMiniDumpTypeFlags
 GetDesktopWindow
@@ -6479,6 +6877,7 @@ GetEnvironmentStringsW
 GetFileSizeEx
 GetFileType
 GetFloatValue
+GetInstanceValueX
 GetIntValue
 GetLastActivePopup
 GetLastError
@@ -6569,30 +6968,40 @@ H*0"ZOW
 H9(t8
 H9(tw
 H9+u]H
-H9-nT5
-H9-oP1
+H9-3~,
 H93t	H
 H97t	H
 H97u+A
 H98t$H
 H99tjH
 H9;t	H
-H9=Mc*
 H9A(u
+H9CPt
+H9CPu
+H9CPu3@
 H9D$0
 H9D$Pu>I
 H9Fpt&H
+H9GPu
+H9H uIH
+H9HPM
+H9HPu
+H9J t
+H9JPH
+H9KPu
 H9L$0t
 H9L$H
 H9L$Ht?H
 H9L$`t
+H9OPu
 H9\$8E
 H9\$X
 H9]`H
 H9]pt}D
+H9^ u
 H9k0H
 H9k@H
-H9k`t
+H9k`H
 H9l$0t
 H9l$Xt
 H9o@t
@@ -6602,6 +7011,7 @@ H9sXH
 H9t$xt
 H9ugt
 H9uwt
+H9w u
 H9{XH
 H9{`H
 H9|$(t
@@ -6616,17 +7026,22 @@ H9|$ptUH
 H9|$xt
 H9~Pu
 H;A t
+H;A toH
+H;C t
 H;D$Pu
 H;D$`
 H;D$h
+H;G tmH
 H;G0t
 H;G0t.H
 H;L$8
 H;Q0u
 H;Q0utH
+H;T$X}8H
 H;XXs
 H;\$8
 H;\$8H
+H;]8u~H
 H;^Ht)H
 H;t$8
 H;xXu5
@@ -6643,12 +7058,16 @@ HA^A\_^][
 HA^A]
 HA^A]A\]
 HA^A]_^][
+HA^_^]
 HA_A\^]
+HA_A]_]
 HA_A^
+HA_A^A\[
 HA_A^A\_
 HA_A^A]A\
 HA_A^A]A\_^[]
 HA_A^A]A\_^][
+HA_A^][
 HA_A^_^
 HA__H
 HA__^[
@@ -6657,11 +7076,14 @@ HH:mm:ss
 HHcY0H
 HSLA	
 HSVA	
+HXA9NX
+HXA9NXt
 H[><y5
 H_^][
 Hack Dota Layer Opaque
 Hack Dota Layer Opaque Translucent
 HalftoneHints
+Hammer temp export
 HammerMapLoader001
 Handle Settings
 HandleInt
@@ -6691,11 +7113,13 @@ HcCXH
 HcCxH;
 HcD$ 
 HcD$0
+HcD$4M
 HcD$8
 HcD$@H
 HcD$PH
 HcD$XH
 HcD$XI
+HcD$\H
 HcD$d
 HcD$hH
 HcD$x
@@ -6706,7 +7130,6 @@ HcEwH;
 HcEwL;
 HcExH
 HcF(E3
-HcF(H
 HcF0A
 HcF@H
 HcG H
@@ -6718,6 +7141,8 @@ HcK8Hc
 HcKp;
 HcKxH;
 HcKxL;
+HcL$hHc
+HcL$p
 HcL$pL
 HcL$pLcl$@L
 HcMXH
@@ -6735,6 +7160,8 @@ HcS@H
 HcSPH
 HcT$0H
 HcT$PH
+HcT$`
+HcT$`M
 HcT$hH
 HcV0H
 HcW H
@@ -6775,6 +7202,7 @@ Hc{8H
 Hc{TL
 Hc{XH
 Hc{hE3
+Hc|$ H
 Hc}pH
 Hc}wE3
 HelpSystem_001
@@ -6791,6 +7219,8 @@ Huffman table 0x%02x was not defined
 I I;4
 I could not work out what I was expecting, like so many of us these days!
 I+4$H
+I9@Pt
+I9D$P
 I9Jhs
 I@H9k8u
 IACSmartPropElement_PlaceMultiple
@@ -6878,6 +7308,7 @@ IiGM>nw
 Il?333333c?
 Illegal to wait on a task in a Windows Runtime STA
 Image data size is zero or too large: width = 
+Image packing validation failed!
 Image too wide for this implementation
 ImageDepth
 ImageDescription
@@ -6890,6 +7321,7 @@ Immediately reactivate any waiting cursors regardless of how long they have been
 Impact High: clamp offset to 
 Impact Low: clamp offset to 
 Improper call to JPEG library in state %d
+Improper number of values for crop coordinates. Need 4 in the format of ( xstart, ystart, xend, yend )!
 Inappropriate photometric interpretation %d for SGILog compression; %s
 Include Hidden
 Include Inactive
@@ -6897,12 +7329,17 @@ Inconsistent progression sequence for component %d coefficient %d
 IncreaseMoveSpeed
 Increment
 Index      Address       References   String
+Infinite recursion in patch file?
 InflowA
 InflowB
 InfoForResourceTypeCModel
 InfoForResourceTypeCSmartProp
+Inherit Velocity
 InitCCITTFax3
 InitRandom
+Initial Repulsion Velocity
+Initial Scalar Noise
+Initial Velocity Noise
 InitializeConditionVariable
 InitializeCriticalSectionAndSpinCount
 InitializeCriticalSectionEx
@@ -6960,10 +7397,12 @@ Invalid data width value
 Invalid format for element ID encountered for attribute "%s"
 Invalid memory pool code %d
 Invalid offset value in DecodeEXRImage.
+Invalid packing mode!
 Invalid progressive parameters Ss=%d Se=%d Ah=%d Al=%d
 Invalid progressive parameters at scan script entry %d
 Invalid property specification
 Invalid scan script at entry %d
+Invalid sequence type.
 Invalid tile size x : 
 Invalid tile size y : 
 InvalidateUniqueId
@@ -7075,8 +7514,10 @@ L$(;k
 L$(D;
 L$(E3
 L$(IcA
+L$(Lc
 L$(Mc
 L$(fH
+L$(fI
 L$*H+
 L$0+C$L
 L$09H@
@@ -7089,6 +7530,7 @@ L$0HcP
 L$0I;
 L$0L;
 L$0Lc
+L$0Lc1M
 L$0Lc@
 L$0f;
 L$0fD
@@ -7106,6 +7548,7 @@ L$8H3
 L$8H;
 L$8H=
 L$8L+
+L$8Lc
 L$8f;
 L$8ff
 L$8t#
@@ -7122,9 +7565,11 @@ L$@E3
 L$@H3
 L$@H;
 L$@H=
+L$@Lc
 L$@f;
 L$@fA
 L$@fD
+L$@fI
 L$@uU
 L$AE3
 L$DD+
@@ -7132,6 +7577,7 @@ L$HA;
 L$HD;
 L$HE3
 L$HI;
+L$HLc
 L$Hf;
 L$HfH
 L$LfA
@@ -7154,6 +7600,7 @@ L$XE3
 L$XE;
 L$XH3
 L$XH;
+L$XLc
 L$Xf;
 L$XfD
 L$`;M
@@ -7177,6 +7624,9 @@ L$h+G$3
 L$h;M
 L$hA;
 L$hE3
+L$hHc
+L$hIc
+L$hLc
 L$hf;
 L$iE3
 L$lE+
@@ -7198,17 +7648,15 @@ L$xf;
 L$xff
 L+d$PI+
 L+|$8
-L9%.@7
+L9%>c2
+L9%z{,
 L9+t	H
-L95ba4
 L96t	H
 L97t	H
 L97u	L9
 L97vH
 L9;t	H
 L9;tHA
-L9=E''
-L9=ak&
 L9AHA
 L9aHA
 L9d$(uhH
@@ -7224,6 +7672,7 @@ L9mPt
 L9m`t
 L9mot
 L9mxt
+L9s u
 L9s8H
 L9t$ t
 L9t$Xt
@@ -7234,6 +7683,7 @@ L9yHA
 L9|$ht
 L;E0H
 L;L$8v7H
+L;d$8}`H
 L;d$@|
 L;l$ 
 L;l$H
@@ -7360,9 +7810,11 @@ Lcd$pD
 LceXD;eh
 Lcg H
 Lcg(D;g8
+Lcg0D;g@u5
 Lcl$ 
 Lcl$@L
 Lcl$XM
+Lcl$dE
 Lcl$xfff
 Lcmw3
 LcmwH
@@ -7382,7 +7834,6 @@ LcuwE3
 Lcv E3
 Lcv M
 Lcv(D;v8
-Lcw0D;w@u5
 Lcy H
 Lc{HM
 Lc{LE3
@@ -7394,11 +7845,17 @@ Leap to Chunk C%d
 LeaveCriticalSection
 Left Mouse (Point)
 Left direction (+y)
+LeftFingers
 LensInfo
 Less R%d <- R%d < R%d
 LessEq R%d <- R%d <= R%d
 Lexer encountered %d error(s)
 Lhttp://cacerts.digicert.com/DigiCertTrustedG4RSA4096SHA256TimeStampingCA.crt0
+Lifespan Decay
+Lifespan from distance to world
+Lifetime Pre-Age Noise
+Lifetime Random
+Lifetime from Time to Impact
 LightSourceRadius
 Lighting Preview
 LightingControl
@@ -7410,6 +7867,9 @@ Linear Length
 LinearResponseLimit
 LinearScale
 LinearizationTable
+LipLoV
+LipUpV
+LipsV
 List of child elements which will appear if this element appears
 List of possible colors which may be selected
 List of surface properties on which this element is not valid. If empty element is not restricted to any specific surfaces.
@@ -7513,6 +7973,7 @@ MPulseDomainOptInFeatureTag
 MPulseEditorHeaderIcon
 MPulseEditorHeaderText
 MPulseInstanceDomainInfo
+MPulseInternal_IsCursor
 MPulseLibraryBindings
 MPulseProvideFeatureTag
 MPulseRegisterTypeInfo
@@ -7547,12 +8008,16 @@ MWheelRight
 MWheelUp
 M\$ A
 M\$$D;L$(L
+Make sheet file
 MakerNoteSafety
 Manipulators
+MapClass
 MapListService_001
+MapNode
 March
 MaskedAreas
 MatGrp:
+Match Particle Velocities
 Material
 Material Group
 Material Group:
@@ -7568,6 +8033,7 @@ MathLib_Init
 MatrixWorldToCamera
 MatrixWorldToScreen
 Matteing
+Max Velocity
 MaxEV
 MaxEvaluationDepth
 MaxFloat
@@ -7589,6 +8055,7 @@ Maximum slope on which the target will be placed.
 Maximum supported image dimension is %u pixels
 Mc&E;f
 Mc'E;g
+Mc<$E;|$
 Mc<$L
 Mc>A+
 Mc>E;~
@@ -7679,8 +8146,16 @@ MoveCameraForward3D
 MoveCameraLeft3D
 MoveCameraRight3D
 MoveCameraUp3D
+Movement Basic
+Movement Dampen Relative to Control Point
+Movement Lock to Bone
+Movement Lock to Control Point
+Movement Maintain Position Along Path
+Movement Match Particle Velocities
+Movement Max Velocity
 Movement Speed: %0.*fx   [%s] to reset
 MovementSettings
+MovieSettings
 MpD8u
 Mul R%d <- R%d * R%d
 Mulitply object tint
@@ -7774,12 +8249,16 @@ No space to write per-sample values
 No support for converting user data format to LogL
 No support for converting user data format to LogLuv
 NodeID %d port '%s' called from C%d:I%d
+Noise Scalar
+Noise Vector
 Nonstandard tile length %d, convert file
 Nonstandard tile width %d, convert file
 Normal
 Normalize Vector
 Normalize the value of a 3d vector.
 Normalized (Direction Vector)
+NoseV
+NostrilFlare
 Not R%d <- !R%d
 Not a JPEG file: starts with 0x%02x 0x%02x
 Not a TIFF file, bad magic number %d (0x%x)
@@ -7945,9 +8424,13 @@ Optional text that will appear in the outliner to help organize Smart Prop eleme
 OptionallyCompressedTangentFram
 Or R%d <- R%d || R%d
 Ordered constructor wrapped type has no default constructor.
+Orient Rotation to 2D Direction
 Orientation
 OriginalRawFileData
 OriginalRawFileName
+Oscillate Scalar
+Oscillate Vector
+Other
 Out of memory allocating %d byte temp buffer.
 Outer radius from the placement position where the model can appear.
 OuterConeAngle
@@ -7967,6 +8450,7 @@ P(Hc^(I
 P0H9{p
 P0Hcu
 P0L9e0t
+P0Lc}
 P0f!k
 P0fD!k*H
 P0fD!{*H
@@ -7994,14 +8478,16 @@ PA^_^H
 PA_A\_
 PA_A\_][
 PA_A\_^[
+PA_A\_^]
 PA_A]A\
 PA_A]_^[
 PA_A^A\_^
 PA_A^A\_^][
-PA_A^A]A\]
+PA_A^A]A\_
 PA_A^A]A\_^]
 PA_A^A]][
 PA_A^A]_^][
+PA_A^[
 PA_A^]
 PA_A^_
 PA_A^_^]
@@ -8052,6 +8538,7 @@ ParentToCamera
 ParseEXRHeaderFromMemory failed! Error message: %s
 Parser encountered %d error(s)
 Partially Locked (Driven by some random choices in current config)
+Particle Configuration File
 Particle Simulation
 ParticleSystemMgr003
 ParticlesLib
@@ -8134,11 +8621,22 @@ PopupClosed
 PosXyz
 Position
 Position A
+Position Along Path Random
+Position Along Path Sequential
 Position B
+Position From Parent Particles
+Position In CP Hierarchy
+Position Modify Offset Random
+Position Modify Warp Random
+Position Within Box Random
+Position Within Sphere Random
 Position of origin point.
+Position on Model Random
 PostProcessing
 PostProcessingSystem_001
+PosterSettings
 Powerbar
+Pre-Age Noise
 Predictor
 PredictorEncodeTile
 PredictorSetup
@@ -8147,6 +8645,7 @@ Prefix element cannot contain element or element_array attributes. ('%s')
 Premature EOL
 Premature end of JPEG file
 Premature end of input file
+Preset File
 PressTimerStop
 PressTimerUpShift
 Preview
@@ -8159,6 +8658,7 @@ PreviewUIMaterialOnModel
 PreviewVisibilityChanged
 Previous
 PrimaryChromaticities
+Procedural
 ProcessIncrementKey
 Program has invalid instruction %i
 Program uses more temp variables than are supported. Needs %i, max is %i
@@ -8170,6 +8670,7 @@ PropWorldOrigin
 Properties
 Property
 PropertyEditorSystem_001
+Proxies
 Pull From Global Browser
 PullSelectionFromGlobalBrowser
 Pulse
@@ -8281,14 +8782,18 @@ RMouseDoubleClick
 RST%d
 R^?supportedDropActions@QStandardItemModel@@UEBA?AV?$QFlags@W4DropAction@Qt@@@@XZ
 Radius
+Radius Random
+Radius Scale
 Radius at which the rotator handle should be displayed.
 Raise pen.
 RaiseException
 Random
+Random Cull
 Random Integer
 Random fitting
 RandomFloat
 RandomInt
+Randomly Flip Yaw
 Randomly pick a choice. If the choices have weights, the weights will be used to determine the probability of picking a given choice
 Randomly taken half of the time
 RawDataUniqueID
@@ -8319,6 +8824,10 @@ Release
 ReleaseSRWLockExclusive
 ReloadLightRigDefinitions
 Reloading
+Remap Distance Between Two Control Points to Scalar
+Remap Distance to Control Point to Scalar
+Remap Noise to Scalar
+Remap Scalar
 Remove
 RemoveColor
 Rename
@@ -8361,11 +8870,27 @@ RestartSim
 Restore State
 Resume
 RichTIFFIPTC
+RigArms
+RigBody
+RigConstraints
+RigHelpers
+RigLegs
+RigRoot
 Right
 Right Mouse (Average)
+RightFingers
 Root of a smart prop, contains a list of elements to evaluate.
+RootSelectionSet
 RotateAboutTarget3D
 RotateLights
+Rotation Basic
+Rotation Orient to 2D Direction
+Rotation Random
+Rotation Speed Random
+Rotation Spin Roll
+Rotation Spin Yaw
+Rotation Yaw Flip Random
+Rotation Yaw Random
 Row pixels integer overflow (rowpixels %u)
 RowsPerStrip
 RtlCaptureContext
@@ -8375,6 +8900,7 @@ RtlUnwind
 RtlUnwindEx
 RtlVirtualUnwind
 RunFrame
+S M;C8u
 S,;S(~9D
 S0Q0O
 S8HcA
@@ -8402,6 +8928,9 @@ SET_REGISTER_LIT_INVAL_SNDEVT_GUID
 SET_REGISTER_LIT_STR
 SET_REGISTER_LIT_VEC3
 SET_VAR
+SFM Session
+SFM Settings
+SFM TrackGroup
 SGILog
 SGILog compression cannot handle non-contiguous data
 SGILog compression supported only for %s, or raw data
@@ -8482,6 +9011,7 @@ SVWAVH
 SVWAWH
 SWATAUAVH
 SWATAWH
+SWAUAWH
 SWAVH
 SYMLH
 SYNC_WAIT_FOR_COMPLETION
@@ -8516,12 +9046,14 @@ Scale last
 Scale to apply only to the locator model
 Scale to apply to the current transform
 ScaleMode_t
+ScalpD
 Scan script does not transmit all data
 SceneCameraChanged
 ScenePreview
 SceneSystem
 SceneSystem_002
 SceneUtils_001
+Schema description file
 SchemaSystem_001
 SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
@@ -8541,6 +9073,9 @@ Selection Criteria
 Selection Mode
 September
 Sequence
+Sequence %d out of order (@position %d).
+Sequence Random
+Sequence Two Random
 Serialize
 Serialize: File encoding %s is undefined!
 Serialize: File encoding '%s' is undefined!
@@ -8550,6 +9085,8 @@ ServerResourceCompilerInfo_001
 Set Slider Sensitivity
 Set Variable
 Set the 'ValueA' number on the cursor.
+Set the 'ValueB' number on the cursor.
+Set the 'ValueX' number on the graph instance.
 Set the color tint to a random selection from within the defined gradient.
 Set the color tint to one color out of a pre-selected set of colors.
 Set the current color
@@ -8589,6 +9126,7 @@ SetCurrentPopupUI
 SetCursorPos
 SetCursorPowerDragEnabled
 SetCursorValueA
+SetCursorValueB
 SetDecimals
 SetDefaultValue
 SetDisplayPrecision
@@ -8599,6 +9137,7 @@ SetEvent
 SetFilePointerEx
 SetFilter
 SetFocusOnPauseProxyEnabled
+SetInstanceValueX
 SetIntValue
 SetLabelCenter
 SetLabelHidden
@@ -8847,6 +9386,7 @@ State
 StatsService_001
 SteamAudio001
 StepTimed
+StereoFlip
 StoNits
 Stop When
 Stop evaluation
@@ -8872,6 +9412,7 @@ Symbol table:  %d entries %llu bytes
 Synchronous - wait for the method to fully complete before returning
 T	?canFetchMore@QSortFilterProxyModel@@UEBA_NAEBVQModelIndex@@@Z
 T$ E3
+T$ E;}
 T$ Ei
 T$ H;
 T$ Hc
@@ -8887,6 +9428,7 @@ T$&E3
 T$(9|$ t
 T$(E3
 T$(H;
+T$(Ic
 T$(L;T$H
 T$(LcA
 T$(iU
@@ -8940,6 +9482,7 @@ T$`t"
 T$`t43
 T$hA;
 T$hE3
+T$hI;
 T$hLc
 T$pA;
 T$pD+
@@ -8948,8 +9491,7 @@ T$pH;u
 T$pfD
 T$pfff
 T$xE3
-T%O|&
-T5]|&
+T%is!
 T?parent@QStandardItemModel@@UEBA?AVQModelIndex@@AEBV2@@Z
 T?pos@QCursor@@SA?AVQPoint@@XZ
 T?pos@QDropEvent@@QEBA?AVQPoint@@XZ
@@ -9006,6 +9548,7 @@ TestScriptMgr001
 Text Color
 TextLayout_001
 TextProgramaticallyChanged
+Texture Configuration File
 TextureFormat
 TextureWrapModes
 The target point to trace to from the origin.
@@ -9038,12 +9581,16 @@ ToggleLights
 ToggleLockCameraHeight
 ToggleSettingsPopup
 Tone Mapping
+TongueCurl
+TongueD
+TongueH
+TongueV
+TongueWidth
 Too many color components: %d, max %d
 Too many simultaneously active particle systems!
 Too much
 ToolFramework2_002
 ToolObjects
-ToolScene
 ToolSceneBitmapOverlay.vtex
 ToolSceneDebugOverlays
 ToolSceneLightRigPostProcessing
@@ -9086,6 +9633,7 @@ Trace outwards from center to prevent children from penetrating solid scene geom
 TraceNoHitResult_t
 Tracepoint
 Track Mouse & Focus
+Trail Length Random
 TransferFunction
 Transform
 Transform: Random Offset
@@ -9103,11 +9651,12 @@ Transform: Trace To Line
 Transform: Trace To Point
 Transform: Translate
 Tried to load a polymorphic pointer with no '%s' key
+Tried to rename from '%s' to '%s', but '%s' already exists
 TryAcquireSRWLockExclusive
+Trying to add a frame when there is no current sequence.
 Tuesday
 Turtle Graphics Domain
 TurtleGraphics
-U	V_vsnprintf
 U 8](t
 U D8m(t
 U I;U(
@@ -9135,6 +9684,7 @@ UNRECOGNIZED
 USATAUH
 USATH
 USAUAVH
+USAUAWH
 USAVH
 USAVI
 USAWH
@@ -9154,14 +9704,17 @@ USVWATAVH
 USVWATI
 USVWAUAVH
 USVWAVH
+USVWAWH
 USVWAWI
 USVWH
 USWATAUAVAWH
 USWATAUAWH
 USWATAVAWH
+USWATAWH
 USWAUAVH
 USWAUH
 USWAVH
+USWAWH
 UUUUD
 UUUUUU
 UUUUUUU
@@ -9195,7 +9748,7 @@ UWATAWH
 UWATAWI
 UWATH
 UWAUAVAWH
-UWAUAWI
+UWAUAWH
 UWAUH
 UWAVAWH
 UWAVAWI
@@ -9209,9 +9762,14 @@ UnNegate
 UnNot
 UnSync
 Unable find required entry points in %s
+Unable to create new frame.
+Unable to create new sequence.
 Unable to create unknown element %s!
 Unable to load %s, error %d
 Unable to read file %s
+Unable to set packing mode.
+Unable to set type unless you're creating untyped elements!
+Unabled to parse frame images.
 UnderMouse
 Unexpected EOF in quoted string
 Unexpected character
@@ -9221,6 +9779,7 @@ Unexpected marker 0x%02x
 Unexpected node
 Unexpected token
 Unexpected token '%s' %s
+Unhandled proxy keyvalues type (proxy %s var %s)
 UnhandledExceptionFilter
 UniqueCameraModel
 UniqueIdFromString
@@ -9313,6 +9872,7 @@ VD$Pf
 VDataModelMaterialGroup( m_sModelName )
 VDataModelVersion001
 VDmElementFrameworkVersion001
+VDmSerializers001
 VECTOR2
 VECTOR3
 VECTOR4
@@ -9421,6 +9981,10 @@ ValueSetSizeChanged
 Valve
 Valve Corp.0
 Valve Corp.1
+Valve Make Sheet File
+Valve Map File
+Valve Material File
+Valve Texture Configuration File
 Var( %s )
 Variable "%s" has %i components, a specific component must be specified, for example use: "%s.x"
 Variables
@@ -9439,18 +10003,25 @@ Vector up direction of the plane of the circle. This in the local space of the c
 Vector2D
 Vector3
 Vector4D
+Velocity Inherit from Control Point
+Velocity Noise
+Velocity Random
+Velocity Repulse from World
 VertexColorUVPos_t
 VertexElementAnnotation
 VertexPaintBlendParams
 VertexPaintBlendParams1
 VertexPaintTintColor
 VerticalStrafeCamera
+Vgui editor file
 Virtual array controller messed up
+Virual volume texture file
 Vis:0 
 Vis:1 
 VisBuilder_001
 Visit Developer Help URL
 Vrad3_001
+W	V_vsnprintf
 W fff
 W?rowCount@QStandardItemModel@@UEBAHAEBVQModelIndex@@@Z
 W?save@QPixmap@@QEBA_NPEAVQIODevice@@PEBDH@Z
@@ -9483,6 +10054,8 @@ WaitForSingleObjectEx
 WakeAllConditionVariable
 WakeConditionVariable
 WarnTrailingWhitespace
+Warning changing packing mode when %d sequences already defined. This may not be serialized correctly.
+Warning in .VMT file (%s): no ']' or '}' found in vector key "%s".
 Warning: This text ends with whitespace
 Warning: thumbnail image size does not match data length %u
 Warning: unknown JFIF revision number %d.%02d
@@ -9502,9 +10075,10 @@ Wireframe
 WireframeDecal
 WireframeEffectsBloom
 WireframeTranslucent
+World Files
+World Node Files
 World space
 World space transform, not relative to the specific smart prop object placement.
-WorldGroupId_t
 WorldRendererMgr001
 Writable
 Write error at scanline %lu
@@ -9523,12 +10097,8 @@ X UVWH
 X VWATH
 X to the Y power
 X!t5~
-X%AA%
 X-Axis Size
-X.s(]
-X5Yg%
-X5js&
-X5{F.
+X57[ 
 X?setBrush@QPainter@@QEAAXAEBVQBrush@@@Z
 X?setBrush@QPainter@@QEAAXW4BrushStyle@Qt@@@Z
 X?setBrush@QPalette@@QEAAXW4ColorGroup@1@W4ColorRole@1@AEBVQBrush@@@Z
@@ -9540,6 +10110,8 @@ XA\^][
 XA]A\
 XA]_^[
 XA^A\_]
+XA^A]
+XA^A]_^][
 XA^_][
 XA^_^]
 XA_A\_[
@@ -9563,22 +10135,28 @@ X|$ A
 X|$8E
 Y u!H
 Y u"H
-Y%-d%
-Y%9A(
-Y%d>%
-Y-0c&
-Y-4`&
+Y%$6 
+Y%)k"
+Y%S> 
+Y%k5 
+Y%lY 
+Y-,A 
 Y-Axis Size
-Y-WW&
-Y-md%
-Y5+F$
-Y5?f%
-Y5JU&
-Y5ig%
-Y5jZ&
+Y-[L!
+Y-tR!
+Y5"; 
+Y5"I!
+Y5/R!
+Y5>k!
+Y5G[ 
+Y5JG!
+Y5Mk!
+Y5YI!
+Y5a[ 
+Y5jz!
 Y9"SD
-Y=Ek#
-Y=sZ&
+Y=C3*
+Y=Is!
 Y>kX>M
 Y?setData@QStandardItem@@UEAAXAEBVQVariant@@H@Z
 Y?setData@QStandardItemModel@@UEAA_NAEBVQModelIndex@@AEBVQVariant@@H@Z
@@ -9688,6 +10266,7 @@ Zpm"U
 \$ E9\$
 \$ H;
 \$ H;y
+\$ SUAVAWH
 \$ UH
 \$ UVATAUAWH
 \$ UVATH
@@ -9715,6 +10294,7 @@ Zpm"U
 \$(A;
 \$(E3
 \$(Lc
+\$(fA
 \$0A;
 \$0E3
 \$0H;
@@ -9752,6 +10332,7 @@ Zpm"U
 \$PA+
 \$PA_A^A]A\_^]
 \$PE3
+\$PE;
 \$PHc
 \$PHk
 \$PI+
@@ -9768,6 +10349,7 @@ Zpm"U
 \$`I;V
 \$`fD
 \$`fE;Bb
+\$`ff
 \$`t H
 \$gm?
 \$hE3
@@ -9778,16 +10360,17 @@ Zpm"U
 \$pE3
 \$pHc
 \$ptXH
+\$pt}D9}
 \$pu1H
 \$pu7H
 \$p|HH
 \$tH;
 \$xE3
 \$xHcX
+\5<U*
+\=r) 
 \?setWeight@QFont@@QEAAXH@Z
 \?setWidth@QPen@@QEAAXH@Z
-\AW|j' 
-\CPOU
 \D$ A
 \D$@D
 \D$HH
@@ -9795,11 +10378,12 @@ Zpm"U
 \L$<E
 \N0E3
 ] tLH
-]%~w&
+]%&o!
 ])6M>&
 ],fD;
 ]0tKH
 ]0tLH
+]3V}G
 ]4fD;
 ]8tHH
 ]8tIH
@@ -9814,6 +10398,7 @@ Zpm"U
 ]hHcu`H
 ^ H9^
 ^,tyI
+^8Ic~0H
 ^<V7w
 ^?text@QClipboard@@QEBA?AVQString@@W4Mode@1@@Z
 ^Q?lighter@QColor@@QEBA?AV1@H@Z
@@ -9851,6 +10436,7 @@ __swift_2
 __swift_3
 __thiscall
 __unaligned
+__unspecified_texture
 __vectorcall
 _base
 _cabs
@@ -9861,6 +10447,7 @@ _editor/next_element_id
 _gUT^
 _hypot
 _include
+_light
 _linked_type_
 _logb
 _m_bUseShadowFastPath
@@ -9877,6 +10464,7 @@ _oD>Kg
 `?validate@QIntValidator@@UEBA?AW4State@QValidator@@AEAVQString@@AEAH@Z
 `?value@QColor@@QEBAHXZ
 `?valueF@QColor@@QEBANXZ
+`A\^[
 `A\_^
 `A^A\_^]
 `A^A]]
@@ -9884,6 +10472,7 @@ _oD>Kg
 `A^_^
 `A^_^[]
 `A_A\^][H
+`A_A\_[]
 `A_A]A\_[
 `A_A]]
 `A_A^A\_^[]
@@ -9899,6 +10488,7 @@ _oD>Kg
 `D;f8
 `D;s8
 `D;w8
+`HcA(L
 `Q?lightnessF@QColor@@QEBANXZ
 `RTTI
 `anonymous namespace'
@@ -9939,14 +10529,46 @@ _oD>Kg
 a0IcN
 a?write@QStandardItem@@UEBAXAEAVQDataStream@@@Z
 abcdefghijklmnopqrstuvwxyz
+actBusy
+actBusyList
+actbusy
+activeBookmarkSet
 active_frame
 address family not supported
 address in use
 address not available
 allowSetInversion
 alpha
+alphaTestDownsampleHiFreqThreshhold
+alphaTestDownsampleThreshhold
+alphaTestDownsampling
+alpha_fade
+alpha_fade_in_random
+alpha_fade_out_random
+alpha_random
+alphacrop
+alphatest
+alphatest_hifreq_threshhold
+alphatest_threshhold
 already connected
 ambientColor
+ambientOcclusionMode
+ambientcolor2
+ambientcolor3
+angle
+animSetList
+anim_duration
+anim_frameRate
+animationLifeSpan
+animationList
+animationScale
+animationSet
+animationSetGroups
+animationSets
+animationTime
+animations
+animflags
+anisotropic
 antlr3BaseRecognizerNew
 antlr3BitsetCopy
 antlr3BitsetList
@@ -10002,9 +10624,13 @@ assetsystem_clear_thumbnail_cache
 assetthumbnail_old_fingerprint_style
 at4<rt!<wt,M
 atan2
+attached_prop_physics
 attrib
+audioTarget
+autoTime
+auto_time
 averageColor
-b	Warning
+axisSystem
 b?^Cy
 bChecked
 bDisplay
@@ -10022,6 +10648,7 @@ bTakesFocusOnHover
 bTentative
 bUserEdit
 bWrapValueIn
+background
 background-color: #22b14c
 backgroundCornerColor0
 backgroundCornerColor1
@@ -10029,6 +10656,7 @@ backgroundCornerColor2
 backgroundCornerColor3
 backgroundEnabled
 backgroundFill
+backgroundMap
 backgroundMaterial
 backgroundStyle
 background_color
@@ -10040,6 +10668,16 @@ bad file descriptor
 bad function call
 bad locale name
 bad message
+balance
+balance$0
+balance$0Indices
+balanceIndices
+balancechannel
+baseLayer
+baseMapToOverride
+baseName
+baseStates
+basic_movement
 bc7e.dll
 bc7e_compress
 bc7e_init
@@ -10053,15 +10691,36 @@ binary_blob
 binary_seqids
 binary_v
 black
+blendColor
+blendMaxPathOpacity
+blendTransition
+blendTransitionAndPath
 blendindices
+blendindices$0
+blendindices$0Indices
 blendweight
 blendweights
+blendweights$0
+blendweights$0Indices
+bloomScale
+bonemask
+bookmarkSets
+bookmarks
+bool log
 bool_array
 boolean
+bouncescale
+box_maxs
+box_mins
+boxproject_maxs
+boxproject_mins
 bp(=>?g
+brightness
 broken pipe
 broken promise
 buffer error
+busy_anim
+busy_sequence
 buttons
 by this version of libtiff.
 c [1>H'
@@ -10070,11 +10729,21 @@ c0&>`
 c?FA@s}
 cR?metaObject@QDrag@@UEBAPEBUQMetaObject@@XZ
 cU	F9
+cable_static
 canModifyOutputs
 cannot read TIFF_ANY type %d for field "%s"
+cannotgravitygrab
+cannotgravitypunt
+castshadows
+cellConfiguration
 cell_info
+cellsNodeID
+changeColorChannels
+channel
 channels
 character
+children
+choices
 chunkCount
 cl_particle_batch_mode
 cl_particle_fallback_base
@@ -10087,34 +10756,77 @@ cl_particle_simulate
 cl_particles_dumplist
 cl_particles_dumpsimlist
 clamp
+clamp-extendlastframe
+clampextendlastframe
+clampextendtlastframe
+clamps
+clampt
+clampu
 class 
+classname
 clearColor
+clearDecals
 clicked
+collisionmesh
 color
+color log
+color$0
+color$0Indices
+color1
+color255
 colorCorrectionParams
 colorSelected
 color_array
+color_blue
+color_fade
+color_green
+color_hdr
+color_pack
+color_random
+color_red
+color_tint
 colors
+colorsIndices
+combo
+commentary
+compileAsOverride
 compressedtangentframe
 compression
+computeMipmaps
 configName
 connection aborted
 connection already in progress
 connection refused
 connection reset
+connections
+connectionsData
 const char *__cdecl Reflection::Internal::GetFuncName<class IMaterialAttributeAnimTag>(void)
 const char *__cdecl Reflection::Internal::GetFuncName<float>(void)
 const char*
+constrainVelocity
+constrain_velocity
+controlColor
+controlValues
+controlValuesLagged
 control_point
+controlpoint_light
+controls
+coordSys
+create from parent particles
 cross device link
 cstring
 cube_indices
 cube_verts
+cubemap
 currentColorChanged
 cursorPowerDragEnabled
 cursors
 curvature
+curve info
+curvetypes
+custom
 custom_colors
+d	Warning
 d"?validate@QDoubleSpinBox@@UEBA?AW4State@QValidator@@AEAVQString@@AEAH@Z
 d$ D!
 d$ D9d$0|LH
@@ -10134,14 +10846,17 @@ d$0E;
 d$0E;e
 d$8E3
 d$8L+
+d$<s*
 d$@@8sYuAH
 d$@A;
+d$@E2
 d$@E3
 d$HA;
 d$HE2
 d$HE3
 d$IfD
 d$PD;h$
+d$PE3
 d$PH9^pt{D
 d$PH9_pt{D
 d$PI9^pt|D
@@ -10152,6 +10867,7 @@ d$XfD
 d$`E;
 d$`fff
 d$dD;d$ltY
+d$hE3
 d$pA;
 d$pE3
 d$pI;
@@ -10167,26 +10883,59 @@ dataWindow
 data_height = 
 data_with or data_height too large. data_width: 
 dddd, MMMM dd, yyyy
+decalDepth
+decalFadeDuration
+decalModulate
+decalScale
+decalScaleVariation
+decalStartFadeTime
 decimalPlaces
 decimals
 default
+default set
+defaultBalance
+defaultCurveType
+defaultEdgeZeroValue
+defaultLayer
+defaultLeftValue
+defaultMultilevel
+defaultRightValue
 defaultValue
+defaultcurvetype
+defaultedgezerovalue
 deg2rad
 destination address required
 device or resource busy
 dfValueChanged
 direct
 directLighting
+direction
 directory not empty
 disableSetInversion
+disableShadows
+disableShadows2
 disableVisualEffects
+disableinlowquality
+disablemultiplegravitygrab
+disallowOverride
+displaySet
+displaySetElements
+displaySets
 displayWindow
+displaytime
+dmemesh
+dmfbxserializer
+dmx file
 dmxconvert -allowdebug -i "
 doItemsLayout
 double
+drawGameRenderablesMask
 drawShadows
+drawToolRenderablesMask
 dropDraggedColorSet
 dummyfilename.tif
+duration
+durationTime
 e A^_]
 e'u!H
 e+000
@@ -10204,20 +10953,43 @@ econitemH;
 econitemL
 editingCancelled
 editingFinished
+editorType
 effortblocks = %d
 ehandle
 element
+elementList
 element_array
 elementid
+embeddedTarget
+emissionStopTime
+emitting
+enablemotionongravitygrab
+enableuseoutput
 encoding %s %d format %s %d
+endFrame
+endTime
+endframe
+ent_dota_lightinfo
+entity
 entity2
 entityIdentityNameChanged
 entity_component_error_class_decl_says_contained_but_impl_is_referenced
 entity_log_load_unserialize
+entity_properties
+entry_anim
+entry_sequence
+env_cubemap_box
+env_global_light
+env_sky
 error
 event
 ewh/?y
 executable format error
+exit_anim
+exit_sequence
+exportTags
+exporttags
+eye_target
 eyeball_l
 eyeball_r
 f!C"3
@@ -10233,6 +11005,7 @@ f9G`u1H
 f9G`uCH
 f9PpI
 f9Qpu	H
+f9SpucH
 f9^"t
 f9_"t
 f9t$bu
@@ -10281,13 +11054,13 @@ fD98uOH
 fD9;u
 fD9Ab
 fD9B u}fD9B0uvfD9B@uofD9BPuhfD9B`uafD9BpuZ
+fD9d;p~p
 fD9dD u
 fD9dD u 
 fD9dD u1
 fD9dD uA
 fD9dD uO
-fD9l;p
-fD9op
+fD9op~q
 fD9t$b
 fD;A^
 fD;Cvs<f
@@ -10305,7 +11078,14 @@ fJBGo
 fNewDefaultValueIn
 fValueChanged
 fValueSetChanged
+facial_animation
+fadeIn
+fadeOut
+fallbacks
+falloff_left
+falloff_right
 false
+fbx2dmx
 ffValueIn
 ffValueOut
 fffff
@@ -10314,9 +11094,14 @@ fffffff
 file error
 file exists
 file too large
+filename
 filename too long
 fillBufferExt
 filter
+filterType
+filterclass
+finalTime
+final_time
 flDegrees
 flDistance
 flDurationSec
@@ -10330,14 +11115,18 @@ flOffsetDelta
 flSpeed
 flValue
 flVaue
+flags
+flipVCoordinates
 flnewMaxVal
 flnewMinVal
 float
+float log
 float32
 float64
 float_array
 floating point predictor 
 floor
+fog_lighting
 for "ReferenceBlackWhite" array
 for "StripByteCounts" array
 for Group 3/4 run arrays
@@ -10346,11 +11135,21 @@ for chopped "StripByteCounts" array
 for chopped "StripOffsets" array
 for field info array
 for strip array
+forwardParity
+frame
+frame %s{r=0},%s{g=a},%s{b=0},%s{a=a} %s
+frameRate
+framerate
+frames
 frexp
+fromAttribute
+fromElement
+func_physbox
 function not supported
+functionName
 future
 future already retrieved
-g?Rec)
+ga_frame
 game:
 game:tools/images//common/control_pause_sm.png
 game:tools/images//common/control_play_sm.png
@@ -10394,6 +11193,8 @@ game:tools/images/common/widgetdebugger_treehover.png
 game:tools/images/common/widgetdebugger_undermouse.png
 game:tools/images/cursors/eyedropper.png
 game:tools/images/valve_style/arrow_left.png
+gameitemclass
+gameunitclass
 gangindex
 gangtotal
 generic
@@ -10402,12 +11203,17 @@ generic_exprLexerNew
 generic_exprLexerNewSSD
 generic_exprParserNew
 generic_exprParserNewSSD
+gfff;
 gfffA
-gfffA;
 gfffD
 gfffffffH
 gotoReadyState
+gravity
+gravity_grab_priority
+gravitygrabignoremassandsize
 green
+gridspacing
+groupColor
 h AVH
 h VATAWH
 h WAVAWH
@@ -10420,18 +11226,29 @@ hA_A]A\^[]
 hA_A]A\^][
 hA_A][]
 hA_A][]H
+hA_A]_[
 hA_A^
 hA_A^A]A\_^[]
 hD9AHL
 hEntity
 hResource
 hTarget
+hammer
 handleSize
 handleType
+hcrop
 header crc mismatch
+height
+hiddenFlags
+hiddenGroups
+hintDxt5Compression
+hitbox
+hold_left
+hold_right
 horizontal differencing 
 host unreachable
 host_framerate
+houdini
 hscript
 hscript_lightbinding
 http://ocsp.digicert.com0A
@@ -10446,8 +11263,11 @@ iValueChanged
 iValueIn
 identifier removed
 illegal byte sequence
+imageFileName
+images
 immediate
 inappropriate io control operation
+include
 incompatible version
 incorrect count for field "%s" (%u, expecting %u); tag ignored
 incorrect count for field "%s" (%u, expecting %u); tag trimmed
@@ -10456,14 +11276,23 @@ incorrect header check
 incorrect length check
 indirectLighting
 ineID
+info_particle_system
+initialMass
+initial_mass
+insert
 instance
+instance_file
+instance_parm
+instance_variable
 insufficient memory
 int16
 int32
 int64
 int_array
 integer
+intensity
 interrupted
+interrupts
 invalid
 invalid argument
 invalid bit length repeat
@@ -10489,8 +11318,12 @@ iostream
 iostream stream error
 is a directory
 is also the end of the line, so you must check your lexer rules
+isGroup
+isOrientation
+isPosition
 ispc_texcomp.dll
 iszString
+item_item_crate
 iu+-,
 j'Vlk
 j>>A?1
@@ -10499,6 +11332,12 @@ j?{$*
 jM9 t
 jZ?setMimeData@QDrag@@QEAAXPEAVQMimeData@@@Z
 jj@0HK4
+jointIndices
+jointIndicesIndices
+jointList
+jointTransforms
+jointWeights
+jointWeightsIndices
 js_array
 js_object
 js_raw_args
@@ -10540,7 +11379,6 @@ l$ Lcy
 l$ V3
 l$ VAVAWH
 l$ VH
-l$ VWATAUAVH
 l$ VWATAVAWH
 l$ VWAUAVAWH
 l$ VWAVH
@@ -10568,12 +11406,14 @@ l$0L+
 l$0Lc)
 l$0fI
 l$0ff
+l$0u!H
 l$0u"I
 l$0x(Hc
 l$8A;
 l$8D;
 l$8E3
 l$8Hk
+l$8Ic6A;v
 l$@A;
 l$@E3
 l$@Hc
@@ -10581,6 +11421,7 @@ l$@Hck
 l$@Hck0;k@
 l$@L+
 l$@eH
+l$@eL
 l$@fD
 l$@tO
 l$@u!H
@@ -10643,17 +11484,42 @@ l6qnk
 lR?metaObject@QIntValidator@@UEBAPEBUQMetaObject@@XZ
 labelPos
 labelText
+layers
 ldexp
+leftEdgeActive
+leftEdgeCurveType
+leftEdgeValue
+leftValue
+left_edge_active
+left_edge_curvetype
+left_edge_value
+leftvaluechannel
 length2d
 length3d
 lexer->mTokens(): Error: No lexer rules were added to the lexer yet!
+lifespan_decay
+lifetime_random
+light
+light_directional
+light_environment
+light_omni
+light_ortho
+light_sky
+light_spot
+light_sun
+lights
 lineOrder
 live_preview
+local_point
+localaxis
+lock to bone
 log10
 looks like this:
+lower_hemisphere_is_black
 lowprecisionuv
 lowprecisionuv1
 m0k0$
+m>nMC*_
 mL+7H
 mX?setBlueF@QColor@@QEAAXN@Z
 m_AllowedSurfaceProperties
@@ -10852,6 +11718,7 @@ m_bMarkedForRemoval
 m_bNeedsBBoxUpdate
 m_bNormalized
 m_bOrientAlongLine
+m_bPenUp
 m_bPlane
 m_bPrioritizeUp
 m_bRemove
@@ -10892,6 +11759,7 @@ m_flFireTime
 m_flFreezeTransitionDuration
 m_flFreezeTransitionOverride
 m_flFreezeTransitionStart
+m_flHeadingDeg
 m_flInitialMaxX
 m_flInitialMaxY
 m_flInitialMaxZ
@@ -10952,12 +11820,14 @@ m_nCountMax
 m_nCountMin
 m_nCountW
 m_nCursorValueA
+m_nCursorValueB
 m_nDestChunk
 m_nDestInstruction
 m_nEditorNodeID
 m_nElementID
 m_nFlags
 m_nHandle
+m_nInstanceValueX
 m_nInstruction
 m_nInvokeBindingIndex
 m_nLastReadByInstruction
@@ -11007,6 +11877,7 @@ m_pPrev
 m_pPrevByClass
 m_pTarget
 m_pTargetInput
+m_pVertexData
 m_sLabel
 m_sModelName
 m_sSmartProp
@@ -11026,6 +11897,7 @@ m_vOffset
 m_vOriginPos
 m_vPathOffset
 m_vPlaneUpDirection
+m_vPos
 m_vPosition
 m_vRandomPositionMax
 m_vRandomPositionMin
@@ -11045,8 +11917,16 @@ m_variantValue
 m_vecAggregationCenter
 m_worldGroupId
 m`Hc4
+maintain position along path
+makefile
+manipulatorSettings
+mapNodeName
+mapUsageType
 mapped
+mapsequences
+material
 materialGroup
+materialgroup
 materials/dev/gray_50.vmat
 materials/dev/tools_2d_generic.vmat
 materials/tools/fill_vertex_color.vmat
@@ -11083,18 +11963,47 @@ materials/tools/wireframe_vertex_color_translucent.vmat
 materialsystem2
 matrix
 matrix_array
+maxChannels
+maxThrust
 maxValue
+max_thrust
+max_time
 maximum
 mesh_calculate_curvature_smooth_invert
 mesh_calculate_curvature_smooth_pass_count
 mesh_calculate_curvature_smooth_weight
 meshsystem
 message size
+midpoint
+minThrust
 minValue
+min_thrust
+min_time
 minimum
 mj>zjZ
+model
+modelPath
+model_attachment
+model_bone
 model_default_preview_sequence_name
+model_path
+movieSettings
+movieobjects
+mp_anim
+mp_bonemask
+mp_eyes
+mp_hitbox
+mp_keyvalues
+mp_materialgroup
+mp_model
+mp_physics
+mp_preprocess
+mp_root
 mpfff
+multi
+multi_%s
+multilevel
+multilevelchannel
 must be either LogLUV or LogL
 mwtMH
 n03>Pu
@@ -11105,6 +12014,7 @@ nFrame
 nIndex
 nL$ L
 nL>0fA
+nLayoffState
 nMode
 nModifiers
 nMouseButton
@@ -11153,20 +12063,44 @@ no such device
 no such device or address
 no such file or directory
 no such process
+noCompression
+noDebugOverride
+noLod
+noMip
+noNiceFiltering
+noalphacrop
+nocompress
+nodeID
+node_dest
 node_id
+node_id_List
+nodebug
+nodes
+noise
+nolod
+nomip
 none 
+nonice
 normal
+normal$0
+normal$0Indices
+normals
+normalsIndices
 not a directory
 not a socket
 not a stream
 not connected
 not enough memory
 not supported
+npcclass
 ntelA
+numTimeSteps
+numchannels
 n|$`fA
-o%mGJ
-o5xGJ
-o=kGJ
+o-5QN
+o-KE#
+o5(QN
+o=0]<
 oD$ H
 oD$ f
 oD$@H
@@ -11176,7 +12110,6 @@ oD$`f
 oD$pf
 oI0E3
 oI>O7
-oL90D
 oT$ f
 o\$ f
 o\$Pf
@@ -11185,6 +12118,7 @@ od$@f
 offset
 offsetDelta
 offsetDeltaF
+offsetTime
 offsetValueF
 offsetValues
 opH9oPH
@@ -11197,10 +12131,16 @@ operator
 operator "" 
 operator co_await
 operator<=>
+operators
 optionallycompressedtangentframe
+orientation
+orientationChannel
+oscillate_scalar
+oscillate_vector
 ot$ H
 outputcolor
 owner dead
+ownerlog
 oypfD
 o|$0f
 p AVH
@@ -11213,6 +12153,7 @@ p;Y>u
 p?ati_compress_wrapper.dll
 pA]][
 pA]^[
+pA^A]]
 pA^^]
 pA^^]H
 pA^_]
@@ -11221,6 +12162,7 @@ pA^_^[]
 pA^_^][
 pA_A^A]A\_^[
 pA_A^A]A\_^]
+pA_A^]
 pA_A^_
 pA_A^_^]
 pA__^][
@@ -11245,8 +12187,12 @@ pTraceString
 pV?read@QImageReader@@QEAA?AVQImage@@XZ
 pWidget
 p`?type@QStandardItem@@UEBAHXZ
+packmode
 param
+parameter %s has no value
 parent
+parentConstraint
+particle
 particle_trace_against_map
 particles
 particles/dev/dev_cables_preview.vpcf
@@ -11255,23 +12201,66 @@ particles/dev/dev_preview_sequence_color_effect.vpcf
 particles/dev/dev_preview_sequence_effect.vpcf
 particles/error/error.vpcf
 pass %u
+patch
+path_generic
+path_node_cable
+path_node_generic
+path_node_particle_rope
+path_node_trajectory
+path_particle_rope
+path_trajectory
 permission denied
+pfmscale
+physics
+physicsSimplificationError
+physicsSimplificationOverride
 pickedColor
+pinEnabled
+pin_enabled
+pivotOffset
 pixelAspectRatio
 plane_indices
 plane_verts
+pointentityclass
+pointsample
 port_name
+posTolerance
 position
 position of target point.
 position of up point.
+position$0
+position$0Indices
+positionChannel
+position_offset_random
+position_tolerance
+position_warp_random
+position_within_box
+position_within_sphere
+positions
+positionsIndices
+posterSettings
+postion_lock_to_controlpoint
+postprocessing
 posxyz
 pqWidget
+preset
+presetGroups
+presetRemap
+presets
 preview
 preview_camera_locked
 preview_menu_enabled
+procedural
+processors
 promise already satisfied
+prop_physics
+prop_physics_override
+prop_physics_respawnable
+propdataname
 protocol error
 protocol not supported
+proxies
+proxyType
 pseudo-
 public_output::%s
 pulse_runtime_lib
@@ -11300,26 +12289,63 @@ r_threaded_particles
 r_wZH
 r`w[I
 rad2deg
+radiusScale
+radius_random
+radius_scale
+random position along path
+random position on model
+random yaw
+rawControlNames
 rbf;\$l
 read only file system
 readbackcolor
+refOrientation
 registers
+remap_scalar
 renderDecals
+renderOnlySelectedClips
 renderOpaque
 renderSSAO
 renderScalableAO
+renderSettings
 renderSun
+renderTarget
 renderTranslucent
 render_3d_skybox
+rendertarget
+replace
+resampleinterval
+resource
 resource deadlock would occur
 resource unavailable try again
 resourcehandle
 resourcesystem
 restrict(
 result out of range
+result_left
+result_right
 retval
+rgb+a
 rigIdx
 rigType
+rightEdgeActive
+rightEdgeCurveType
+rightEdgeTime
+rightEdgeValue
+rightValue
+right_edge_active
+right_edge_curvetype
+right_edge_value
+rightedgetime
+rightvaluechannel
+rootControlGroup
+rootGroup
+rootSelectionSet
+rotation_movement
+rotation_random
+rotation_speed_random
+rotation_spin
+rotation_spin yaw
 round
 rsf;\$d
 rsqrt
@@ -11341,11 +12367,16 @@ s_flExplicitCurTime
 s_hColoredVertexLayout
 saL;D$
 saturate
+saturation
+scale
+scaleColor
 scaleFactor
 scaleValuesToMax
 scaleValuesToMin
 scanline
+scene
 scenesystem
+schema
 scratchColor
 scratchDepth
 scratchcolor_screenspace
@@ -11355,10 +12386,22 @@ scratchdepth_screenspace
 screenWindowCenter
 screenWindowWidth
 script
+scriptlist
 scripts/activity_modifier_weights.txt
+second_sequence_random
 selectall
+selectedControls
+selectedControls2
+selectionGroups
 self_with_wearables
+semanticName
 seqName
+sequence
+sequence_random
+sequencenumber
+sequences
+sequential position along path
+sessionSettings
 setDecimals
 setDefaultValueF
 setHoverTakesFocus
@@ -11375,14 +12418,46 @@ setValueF
 setValueI
 setValueSetF
 setValueTextType
+sfm_session
+sfm_settings
+sfm_trackgroup
 sfm_v
+sfm_v1
+sfm_v10
+sfm_v2
+sfm_v4
+sfm_v5
+sfm_v6
+sfm_v7
+sfm_v9
+shader
+shadow_color_day
+shadow_color_night
+shadow_secondary_color_day
+shadow_secondary_color_night
+shared
+sheetimages
+showAmbientOcclusion
 showAsTickMark
+showCameraFrustum
 showDefault
 showDefaultValue
 showDelta
+showFocalPlane
 showP4Value
 showValueText
+showViewTargets
+shutterSpeed
+sidelist
+simulating
+simulationTime
+simulationTimeScale
 singleStep
+skeleton
+sketchup
+skycolor
+skyintensity
+skyname
 sliderMoved
 sliderPressed
 sliderReleased
@@ -11405,16 +12480,45 @@ smartprops
 smoothstep
 snapDefaultValue
 snapToDefault
+snappable
+snapshotOverride
+snapshot_file
+sound
+spawnFlags
+spawnflags
+specificImpulse
+specific_impulse
+specular_direction_day
+specular_direction_night
+specularangles
+speed
+speed$0
+speed$0Indices
+speedIndices
 sphere_indices
 sphere_verts
+srcCropXEnd
+srcCropXStart
+srcCropYEnd
+srcCropYStart
 stack
+staggerinterval
+standard
+start
+startFrame
+startTime
+startframe
 state not recoverable
+stereo
+stereoSingleFile
+stereoscopic
 stream end
 stream error
 stream timeout
 string
 string too long
 string_array
+string_instanced
 string_t
 strip
 strips
@@ -11422,8 +12526,10 @@ struct
 subkeys
 success
 svDE3
+syncEngineFramerate
+t	D8(
+t	D;#
 t	Hcp
-t	L98
 t fA;
 t fff
 t!D8p t
@@ -11432,6 +12538,7 @@ t$ ;{
 t$ A+
 t$ A9G4t	A
 t$ A;
+t$ ATAVAWH
 t$ AVAWH
 t$ AVH
 t$ AVL
@@ -11471,6 +12578,7 @@ t$(HcD$ L
 t$(L#
 t$(Lc
 t$(f;
+t$(fI
 t$(u4A
 t$,E9t$
 t$09i(~"
@@ -11487,10 +12595,12 @@ t$0Hc
 t$0Hcq@H
 t$0Hc~
 t$0Lc
+t$0eH
 t$8;;
 t$8;Upr4I
 t$8A^A\_
 t$8Ai
+t$8E2
 t$8E3
 t$8H+
 t$8Hc
@@ -11535,7 +12645,11 @@ t$HLcw
 t$Hff
 t$HtPf;
 t$Hu!H
+t$Hu$M
 t$Hu&H
+t$Hu+L
+t$Hu+M
+t$HuFM
 t$H}2H
 t$LD;
 t$P9E
@@ -11558,6 +12672,7 @@ t$Pff
 t$Pfff
 t$Pt!
 t$Pu-
+t$Pu1H
 t$PufD
 t$XD8s
 t$XD9
@@ -11565,10 +12680,12 @@ t$XE3
 t$XI;
 t$XLc2E
 t$XMc0E;p
+t$Xfff
 t$\D;
 t$`@8
 t$`A+
 t$`E3
+t$`H9]
 t$`Hc
 t$`Hc2+
 t$`Ic
@@ -11578,6 +12695,7 @@ t$`Mc7E
 t$`fD
 t$`fD9+t$I
 t$`fE
+t$`uDH
 t$dIc6A;v
 t$fff
 t$hE3
@@ -11587,6 +12705,7 @@ t$hIc
 t$heH
 t$ht<H
 t$pE3
+t$pH;
 t$pHc~
 t$pL+|$pH
 t$pLc7H
@@ -11599,16 +12718,18 @@ t$xLc
 t$xfA;
 t$xff
 t$xt*3
+t$xu3H
 t%D8e
 t%fE9
 t&A88t
-t&D85
+t&D85,"P
 t&H9{Pt H
 t&HcD
 t'<Zt
 t'HcW
 t'fff
 t(H9yPt"H
+t(fff
 t)IcV
 t*D9&}%H
 t*IcH
@@ -11616,23 +12737,61 @@ t+D96}&H
 t+fff
 t,D8p t&H
 t-Lck
+t.fff
 t0@8}pt
 t0Ic>A
 t2D8(t-H
 t2H9x8t,L
 t2H9{
+t2L9-
 t3@8:t.
+t3H9-%
+t3H9-@~,
+t3H9-C
+t3H95A
+t3L95g
 t4D9R$t
+t4L9%
 t4fff
 t5Ich
+t6H9-
+t6H9-+
+t6H9-A
+t6H9-a
+t6H95
+t6H9=)
+t6L9%
 t6fE94
 t7@8sXt1H
 t7HcP
 t7fff
+t8H9-
+t8H9-.
+t8H95
+t8H9=#
+t8L9%
+t8L95
+t8L95l
+t8L9=
 t9M9oht3H
+t:D8't5A
 t;E9P$t
 t;LcF
+t?H9-
+t?H9-a
+t?H9-k
+t?H95
+t?H95?
+t?H95G
+t?H95H
+t?H95v
+t?H9=
 t?HcS
+t?L9%Kc2
+t?L95
+t?L95%
+t?L95p
+t?L95t
 t?fff
 t@9+u,9s
 tBMcW<IcO@Lc
@@ -11656,7 +12815,7 @@ tSf91tNH
 tU;Cxr
 tU;\$0tH
 tWfff
-tY@85Z
+tY@85
 tYKcD
 t[HcILE
 t[IcD
@@ -11665,8 +12824,25 @@ t^D;@
 t^E8>tYI
 tabStyle
 table
+tag_list
+tag_list_dynamic
 tangent
+tangent$0
+tangent$0Indices
+tangents
+tangentsIndices
 tangentu_signv
+targetGroup
+targetGroupNodeID
+targetName
+targetTileSet
+targetTileSetNodeID
+targetType
+target_destination
+target_name_or_class
+target_source
+targetname
+tbHcE
 tbHc}
 tbJcD
 tcD82t^H
@@ -11674,10 +12850,20 @@ tdJcD
 teJcD
 teMcY
 tentative
+tex_source1
 texcoord
+texcoord$0
+texcoord$0Indices
 text file busy
 text/plain
 textValue
+text_block
+texture
+textureCompileSettings
+textureCoordinates
+textureCoordinatesIndices
+textureFrame
+textureType
 tfMcB
 tgD9f
 tgHcM
@@ -11687,8 +12873,12 @@ thfff
 thumbnail_background
 tier0.dll
 tiles
+timeFrame
 time_array
+time_steps
 timed out
+times
+tintColor
 tkD+c
 to fetch array of rationals
 to fetch per-sample values
@@ -11696,8 +12886,11 @@ to fetch strip tag
 to fetch tag value
 to read "TransferFunction" tag
 to read TIFF directory
+toAttribute
+toElement
 tofff
 toggleSetInversion
+toneMapScale
 tonemapMaskColor
 tonemapRenderer
 tonemapSystem
@@ -11722,8 +12915,13 @@ toolscenelightrigs.txt
 toolscenenodes
 toolscenevismodes.txt
 tpfff
+trB9<
+trail_length_random
+transform
 transient
 transparency
+treeColor
+trilinear
 tsLcG$E
 tvD9~
 tvH9}
@@ -11823,11 +13021,17 @@ unknown error
 unknown exception
 unknown header flags set
 unknown_variant_type
+unnamed
+unrecognized option in text file - %s
 unsigned
 uoIcN(;
 uoIcv
+upAxis
 upD9`hujD9
 uqHcC
+useEdgeInfo
+usecurvetypes
+useedgeinfo
 userEdit
 utKf;
 utlstringtoken
@@ -11851,19 +13055,37 @@ valueAdd
 valueChanged
 valueChangedByEdit
 valueChangedBySlider
+valueDeltaRotation
 valueEdit_ModifierMoveTakesFocus
 valueEdit_PauseProxyTakesFocus
 valueEdited
 valueIn
+valueOrientation
+valuePivot
+valuePosition
+valueTransform
 valueWrappingEnabled
+valuechannel
+values
+vanim
+variableOverrideKeys
+variableOverrideNames
+variableOverrideValues
+variableSubTypes
+variableTypeNames
+variableTypes
 variant
 vcompmatH;
 vcompmat_thumbnail
+vcrop
 vcsHeadShow
 vcsHeadValue
 vecSave
+vecline
 vector
+vector noise
 vector too long
+vector2
 vector2_array
 vector2d
 vector3
@@ -11872,19 +13094,42 @@ vector4
 vector4_array
 vector4d
 vector<T> too long
+velTolerance
+velocity
+velocity_random
+velocity_tolerance
+vertexFormat
 vfD9d
 vffValueSetIn
+videoTarget
+virtualvolumetexture
+visbility
+visible
 vmatH
 vmdlH
 vmdlI
+vmdlL
+vmesh
+vmtFallback
+vmtProxy
+volumeTextureDepth
+volumefogenabled
+volumetexture
 vpcfH
+vphzc
 vpost
 vpulse
+vsDmxIO SketchUpScene
+vsDmxIO houdiniSceneIO
+vsUtils.py
 vsmart
+vsnap
+vsutils_py
+vwnod
+vwrld
 v}`[>
 w Hco
 w L9w
-w!FJ6h
 w"?valueFromText@QDoubleSpinBox@@UEBANAEBVQString@@@Z
 w$fA;
 w+OQvr
@@ -11893,11 +13138,21 @@ w+r6H
 w1kK0
 w4fA;
 w4kK0
+weightweight$0
+weightweight$0Indices
 white
+width
 wireframeColor
 wlt\D
 wn>Jj
+world
+world_point
+worldnode
 wrapping
+wrinkle
+wrinkle$0
+wrinkle$0Indices
+wrinkleIndices
 wrong protocol type
 wwH9Q
 www.digicert.com1!0
@@ -11916,7 +13171,9 @@ x#;QH}
 x)fff
 x/fff
 x3D;|$0},H
+x4HcM
 x<H9{0
+x<HcM
 x<fff
 x=HcS
 x@fD+xp
@@ -11925,14 +13182,23 @@ xA^_][H
 xA_A\_]
 xA_A\_^
 xA_A]A\_[]
+xA_A][]
 xA_A^A]A\_^[]
 xA_A^A]A\_^][
 xC;_(}>;_<
+xIH;A
 xQD;P
+xSH;A
 x[A;Sp}UI
 x\LcS E;
+x^H;A
 x^j=|
+xcoord
 xfA;C0}`H
+xgH;A
+xiM;P
+xlH;A
+xpH;B
 xwHcK
 xy;KX}tD
 x|HcC
@@ -11942,12 +13208,13 @@ y899u
 y:gt	3
 yU?qt_metacall@QDoubleValidator@@UEAAHW4Call@QMetaObject@@HPEAPEAX@Z
 y\PD>!
+ycoord
 z%u#H
 z/u-A
 z/u-E
 z8u6H
+z>%lf
 z>u<H
-z>vector2
 zU?qt_metacall@QDrag@@UEAAHW4Call@QMetaObject@@HPEAPEAX@Z
 zY;>u:m	
 { AUAVAWH
@@ -11969,7 +13236,6 @@ zY;>u:m
 {pHck0H
 {pHc{`Hc
 {un'%
-|	_V_StringAfterPrefixCaseSensitive
 |"?verticalHeader@QTableView@@QEBAPEAVQHeaderView@@XZ
 |#tAM
 |$ 9|$0|LH
@@ -11987,6 +13253,7 @@ zY;>u:m
 |$ AVL
 |$ AWH
 |$ D!
+|$ D;
 |$ E3
 |$ H;
 |$ Hc
@@ -12013,6 +13280,7 @@ zY;>u:m
 |$0A_A^
 |$0B+
 |$0E3
+|$0E;
 |$0E;Z
 |$0Hc
 |$0HcD$(M
@@ -12094,6 +13362,7 @@ zY;>u:m
 |$`fA
 |$hE3
 |$hH9~pt}E
+|$hHc
 |$hIc
 |$hM+
 |$hu!I
@@ -12105,6 +13374,7 @@ zY;>u:m
 |$pIcO
 |$pL;
 |$pLc
+|$ptp
 |$xA;
 |$xD;8
 |$xE;>
@@ -12117,6 +13387,7 @@ zY;>u:m
 |^A;N
 |aA;N
 |b=})>
+}	_V_StringAfterPrefix
 } ;{|
 } H99u
 }"f;_
@@ -12135,6 +13406,7 @@ zY;>u:m
 }dD;K$
 }qD;CL
 }sD;K$
+~	_V_StringAfterPrefixCaseSensitive
 ~ $s%r
 ~"fff
 ~)fff
