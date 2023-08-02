@@ -741,6 +741,13 @@
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
 ]
 
+@PointClass base(point_soundevent) tags( Sound ) iconsprite("editor/snd_event.vmat") box_oriented( box_mins, box_maxs ) = snd_event_orientedbox :
+	"Plays a sound event from a point closest to the player on the box."
+[
+	box_mins(vector) : "Box Mins" : "-64 -64 -64"
+	box_maxs(vector) : "Box Maxs" : "64 64 64"
+]
+
 @PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/snd_event.vmat") = snd_event_path_corner :
 	"Plays some number of soundevents (up to max) along segments of a path corner network"
 [
@@ -908,6 +915,18 @@
 	pathCornerEntityName(target_destination) : "Path Corner Starting Entity" : "" : "The name of the entity that is at the start of the path"
 ]
 
+
+//@BaseClass = SndOpvarSetPointAutoRoomBase
+//[ 
+	//size(float) : "Size (radius)" : "25.0" : "Size of the room to analyze"
+	//height_tolerance(float) : "Height Tolerance (units)" : "50.0" : "If the player's height and the raycast height are within this many units, the difference is ignored when performing distance calculations"
+//]
+
+//@PointClass base( Targetname, SndOpvarSetPointAutoRoomBase, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) sphere(size, 250, 101, 252)= snd_opvar_set_auto_room :
+	//"Analyzes a mostly enclosed space and defines walls and doorways within that space. Sets an opvar value on a library stack based on distance from the doorways"
+//[
+//]
+
 @PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
 [
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
@@ -952,22 +971,6 @@
 [
 	areaMin(vector) : "Sound Area Min" : "-32 -32 -32"
 	areaMax(vector) : "Sound Area Max" : "32 32 32"	
-]
-
-@PointClass base(Targetname) = env_zoom : 
-	"An entity that can be used to control the player's FOV. Useful for scenes where the player's view is being controlled, or player-usable binoculars/telescopes, etc."
-[
-	Rate(float) : "Seconds to reach target" : "1.0" : "Amount of time it should take to reach the specified FOV."
-	FOV(integer) : "Target FOV" : 75 : "FOV that this entity should set the player's FOV to when active."
-
-	// Inputs
-	input Zoom(void) : "Start controlling the player's FOV."
-	input UnZoom(void) : "Stop controlling the player's FOV."
-
-	spawnflags(flags) =
-	[
-		1: "Allow Suit Zoom" : 0
-	]
 ]
 
 @PointClass base(Targetname) = env_screenoverlay: 
@@ -3432,41 +3435,6 @@
 	output OnVRNotEnabled(void) : "Fired when the map is loaded without a VR HMD active."
 ]
 
-@PointClass base(Targetname,Parentname) editormodel("models/editor/camera.vmdl") = point_viewcontrol : 
-	"A camera entity that controls the player's view. While it's active, the player will see out of the camera." 
-[
-	fov(float) : "Field of view" : "90" : "Player FOV (if Set FOV spawnflag is set)"
-	fov_rate(float) : "Seconds to reach FOV target" : "1.0" : "Amount of time it should take to reach the specified FOV"
-
-	target(target_destination) : "Entity to Look At" : : "Name of the entity that the camera should point at and track while active."
-	targetattachment(string) : "Target Attachment Name" : : "If set, the camera will focus on the specified attachment on the 'Entity to Look At'."
-	wait(integer) : "Hold Time" : 10 : "The amount of time the camera should control the player's view for, after which it deactivates itself. If the camera should stay active until told to deactive, set the 'Infinite Hold Time' spawnflag."
-	moveto(target_destination) : "Path Corner" : : "The first path corner in a track that the camera should move along once it's activated. If not specified, the camera won't move."
-	interpolatepositiontoplayer(boolean) : "Interpolate Position To Player" : 0 : "Gradually interpolate player's position to here on start. (Episodic only)"
-
-	spawnflags(flags) =
-	[
-		1: "Start At Player" : 1
-		2: "Follow Player" : 1
-		4: "Freeze Player" : 0
-		8: "Infinite Hold Time" : 0
-		16:"Snap to goal angles" : 0
-		32:"Make Player non-solid" : 0
-		64:"Interruptable by Player" : 0
-		128:"Set FOV" : 0
-	]
-	speed(string) : "Initial Speed" : "0" : "The starting speed that the camera moves at, if it's on a path track."
-	acceleration(string) : "Acceleration units/sec^2" : "500" : "The speed at which the camera accelerates to path corner's desired speeds."
-	deceleration(string) : "Stop Deceleration units/sec^2" : "500" : "The speed at which the camera decelerates to path corner's desired speeds."
-
-	// Inputs
-	input Enable(void) : "Enable the point_viewcontrol, and start controlling the player's view."
-	input Disable(void) : "Disable the point_viewcontrol, and stop controlling the player's view."
-
-	// Outputs
-	output OnEndFollow(void) : "Fired when the point_viewcontrol deactivates, due to the Disable input being received, the Entity to Look At being destroyed, or the Hold Time expiring."
-]
-
 @PointClass base(Targetname) tags( Logic ) iconsprite("editor/logic_compare.vmat") = logic_compare :
 	"Compares an input value to another value. " +
 	"If the input value is less than the compare value, the OnLessThan output is fired with the input value. " +
@@ -4758,7 +4726,7 @@
 
 	attach1(target_destination) : "Target Entity" : "" : "The entity to align to the desired angles."
 	angularlimit(float) : "Angular Limit" : "15" : "The maximum angular velocity that this controller can compensate for, in degrees per second."
-
+	dampAllRotation(boolean) : "Damp all rotation" : "" : "Forces the upright behavior to have perfect damping, instead of progressively damping."
 	// Inputs
 	input TurnOn(void) : "Enable the controller."
 	input TurnOff(void) : "Disable the controller." 

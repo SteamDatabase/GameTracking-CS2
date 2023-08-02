@@ -43,11 +43,6 @@
 		}
 	}
 
-	Physics
-	{
-		"BuildMeshWings"		"1"
-	}
-
 	MaterialSystem2
 	{
 		RenderModes
@@ -310,13 +305,6 @@
 			EncodeIndexBuffer       "1"
 			UseMikkTSpace           "1"
 			MeshletConeWeight       ".15"
-
-			// Because CS will integrate compiled vpks to their release branch, until the release
-			// branch takes a full integrate we need to only generate legacy format vertices
-			// (otherwise the integrated maps will have vertices that cannot be interpreted).
-			// Remove this and the checking code once the next integration is done.
-			// - peted 6/6/2023
-			UseLegacyNormalEncoding "1"
 		}
 
 		WorldRendererBuilder
