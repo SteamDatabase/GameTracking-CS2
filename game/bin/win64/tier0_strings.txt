@@ -93,6 +93,12 @@
  (UBR: %lu)
  (including user space up to 63 bits)
  (once).
+ + %u header stack frames
+ + full mem debug
+ + light mem debug
+ + light verifier
+ + mem init
+ + stackstats
  - SymFindFileInPath failed
  - SymFindFileInPath_ returned %s
  - context match
@@ -102,6 +108,7 @@
  8}+M8
  <:uIL
  @8~8t
+ @kMcB
  A\_[
  A\_^
  A\_^H
@@ -161,7 +168,6 @@
  File
  Hc)H
  Hc1L
- Hc=z
  HcA H
  HcA L
  HcA8H
@@ -184,17 +190,14 @@
  g<Z"
  max. %f
  max. %s
- mh`e
  min. %f
  min. %s
  new[]
- noexcept
  t$<#t
  t38S<u
  tDE3
  tED8k2u7H
  tQD8c:u0M
- volatile
  with base 
  }::H
  }HE;
@@ -222,7 +225,7 @@
 "f^n[
 "name" of the file referenced by the symbolic link named /etc/malloc.conf
 "pA3Q
-"pA3Q(
+"pA3Qh7.
 #%llu
 #4o>w
 #D$8H
@@ -239,10 +242,8 @@
 $	A+F
 $<1mm
 $E+O0I
-$H;=]
 $I94$u+H
 $Ib?s
-$u"8K
 %%-%ds 
 %%.%if
 %%.%if%s
@@ -525,19 +526,19 @@ $u"8K
 ( %u: group %u, mask 0x%llx )
 ( %u: max procs %u, active proc %u, active mask 0x%llx )
 ( cubGap & 15 ) == 0
-(%-i0
-(%co1
+(%.\1
+(%=N0
 (%d,%d)
 (%f) 
+(%sT1
 (*%s*), 
-(-'i0
-(-Ip1
-(-~o1
+(-7N0
+(-YU1
 (;l$Tv@A
 (;l$Xr
 (;{0u
-(=$i0
-(=_i0
+(=4N0
+(=oN0
 (A\_][
 (A\_^]
 (A]A\_]
@@ -593,6 +594,9 @@ $u"8K
 (\$pD
 (d$5V
 (f*^[0
+(m_pCurMem=%p, m_pCurMemEnd=%p (avail=%d), m_nCurMemBlockIndex=%d, m_memoryBlocks=%[*]?)
+(m_pMemory=%p, m_nNumBytesAvailable=%d)
+(m_pMemory=%p, m_nNumBytesAvailable=%d, NONPOOLED)
 (main)
 (no name set)
 (none)
@@ -699,7 +703,6 @@ $u"8K
 )t$pM
 )t$pM+
 )t$pf
-)u"D8)t
 )|$ H
 )|$ I
 )|$0L
@@ -722,7 +725,6 @@ $u"8K
 *YA1I
 *nullptr*
 +#G%L
-+$(V.
 +A$Hc
 +B$Hc
 +B9D:
@@ -779,10 +781,8 @@ $u"8K
 ,0<	w 
 ,0<	w&H
 ,0<	wGH
-,0<	w[H
 ,0</w
 ,6H;o
-,<ellipsis>
 ,D$Hf
 ,HR><y5
 ,HR>O
@@ -861,6 +861,7 @@ $u"8K
 -lmvnoguard
 -load_string_token_database
 -memstackstats_disable_pools
+-memstacktraceframes
 -minidump_full
 -minidump_log_path
 -no_assert_dialog
@@ -901,6 +902,7 @@ $u"8K
 ./?\]_
 .00cfg
 .;D$T
+.=H2 
 .>PJ;I:qE>
 .?AU_Crt_new_delete@std@@
 .?AV?$CBaseAppSystem@VICvar@@@@
@@ -913,12 +915,7 @@ $u"8K
 .?AV?$CRefCountServiceBase@VCRefMT@@@@
 .?AV?$CRefCounted1@VIRefCounted@@V?$CRefCountServiceBase@VCRefMT@@@@@@
 .?AV?$CRefCounted1@VIThreadPool@@V?$CRefCountServiceBase@VCRefMT@@@@@@
-.?AV?$CStdMemAlloc@U?$MemConfig@$0A@$0A@UDefaultAdditionalProperties@@@@@@
-.?AV?$CStdMemAlloc@U?$MemConfig@$0A@$0A@URuntimeAdditionalProperties@@@@@@
-.?AV?$CStdMemAlloc_Data@U?$MemConfig@$0A@$0A@UDefaultAdditionalProperties@@@@@@
-.?AV?$CStdMemAlloc_Data@U?$MemConfig@$0A@$0A@URuntimeAdditionalProperties@@@@@@
-.?AV?$CStdMemAlloc_Data_StackStats@U?$MemConfig@$0A@$0A@UDefaultAdditionalProperties@@@@$0A@@@
-.?AV?$CStdMemAlloc_Data_StackStats@U?$MemConfig@$0A@$0A@URuntimeAdditionalProperties@@@@$0A@@@
+.?AV?$CStdMemAlloc@UMemConfig_t@@@@
 .?AV?$CTier0AppSystem@VICvar@@$0A@@@
 .?AV?$CTier0AppSystem@VIProcessUtils@@$0A@@@
 .?AV?$CTier0AppSystem@VITestScriptMgr@@$0A@@@
@@ -969,7 +966,6 @@ $u"8K
 .?AVCSimpleLoggingListener@@
 .?AVCStdFunctionJob@@
 .?AVCStdIOFormatOutputStream@@
-.?AVCStdMemAlloc_Data_Base@@
 .?AVCStringConstructor@CUtlStringTokenSystem@@
 .?AVCTestOps@TSListTests@@
 .?AVCTestScriptMgr@@
@@ -999,8 +995,6 @@ $u"8K
 .?AVConCommand@@
 .?AVConCommandRef@@
 .?AVCpuidImpl@?A0x04b694f6@@
-.?AVDNameNode@@
-.?AVDNameStatusNode@@
 .?AVDefaultImpl@?A0x04b694f6@@
 .?AVGlpiExImpl@?A0x04b694f6@@
 .?AVGlpiImpl@?A0x04b694f6@@
@@ -1044,16 +1038,12 @@ $u"8K
 .?AVbad_cast@std@@
 .?AVbad_exception@std@@
 .?AVbad_function_call@std@@
-.?AVcharNode@@
 .?AVerror_category@std@@
 .?AVexception@std@@
 .?AVfacet@locale@std@@
 .?AVformat_error@v9@fmt@@
 .?AVlength_error@std@@
 .?AVlogic_error@std@@
-.?AVpDNameNode@@
-.?AVpairNode@@
-.?AVpcharNode@@
 .?AVruntime_error@std@@
 .?AVstl_condition_variable_interface@details@Concurrency@@
 .?AVstl_condition_variable_win7@details@Concurrency@@
@@ -1068,12 +1058,14 @@ $u"8K
 .CRT$XCU
 .CRT$XCZ
 .CRT$XDA
+.CRT$XDU
 .CRT$XDZ
 .CRT$XIA
 .CRT$XIC
 .CRT$XIZ
 .CRT$XLA
 .CRT$XLC
+.CRT$XLD
 .CRT$XLY
 .CRT$XLZ
 .CRT$XPA
@@ -1188,7 +1180,6 @@ $u"8K
 0A^A\[
 0A^A\_
 0A^A]A\^[
-0A^A]A\_[
 0A^A]A\_^
 0A^A]A\_^][
 0A^A]_
@@ -1242,7 +1233,6 @@ $u"8K
 0fA;G
 0ffffff
 0iN>/
-0tHA+
 0taff
 0w0c1
 0x%016llX
@@ -1273,8 +1263,8 @@ $u"8K
 211007000000Z
 220323000000Z
 220801000000Z
-220921000000Z
-230801224058Z0/
+230714000000Z
+230815165620Z0/
 241009235959Z0a1
 29C }X
 29G }AA
@@ -1283,7 +1273,7 @@ $u"8K
 2CV-i
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA0
-2Hc=b
+2Hc=R
 2YA1H
 2YA1I
 2]fQ	?5!
@@ -1293,13 +1283,13 @@ $u"8K
 2http://crl3.digicert.com/DigiCertTrustedRootG4.crl0 
 3+5<t
 311109235959Z0b1
-331121235959Z0F1
 33333333
 33333333H+
 33333333I
 33333333f
 3333A
 333?3
+341013235959Z0H1
 360428235959Z0i1
 370322235959Z0c1
 380115120000Z0b1
@@ -1335,6 +1325,7 @@ $u"8K
 5nsfZ
 6*f(_
 64-bit DWARF format is not supported
+6>86.
 6C2:A
 6D9l$Lt
 6I]Dc
@@ -1356,8 +1347,6 @@ $u"8K
 7http://cacerts.digicert.com/DigiCertAssuredIDRootCA.crt0E
 7jU'9
 7uhD85
-8$u*E
-8$uFH
 8-u3;
 8/tZH
 80tWD
@@ -1365,13 +1354,6 @@ $u"8K
 82Pa8
 8;OLt>H
 8>G#g$
-8?u$H
-8@t?E3
-8@tTH
-8@tvD
-8@u4H
-8@u?H
-8@uqH
 8A tk
 8A\]H
 8A\^][
@@ -1405,7 +1387,6 @@ $u"8K
 8D$@t
 8D$Xt
 8D$xt
-8D8%L
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA10
 8HcK$H
@@ -1416,7 +1397,6 @@ $u"8K
 8Iu?3
 8J;@ts
 8Q<u}H
-8XugH
 8[tWfA
 8[urA
 8\$Pt
@@ -1436,20 +1416,12 @@ $u"8K
 8otnfA
 8pt^fA
 8st$fA
-8x U.
-9	tYH
 9#ueH
 9)~P3
-9-,V,
-9-<<$
-9-\d$
-9-bL/
-9-dc$
-9-fd$
+9-5J!
+9-YD!
+9-{G!
 9.~%H
-95&S/
-95.R,
-95yQ,
 96ID3
 98t H
 98~!H
@@ -1466,8 +1438,6 @@ $u"8K
 9;u(f
 9>powf
 9>~DH
-9?uR3
-9@u6H
 9A~_]
 9A~v]
 9C |c
@@ -1520,7 +1490,6 @@ $u"8K
 9|$X}
 9|$h}
 9|$xtD
-:$t>H
 :(uJH
 :.t6H
 :/t<I
@@ -1529,7 +1498,6 @@ $u"8K
 ::<lambda_
 ::string literal
 ::{ default arg#
-:<\t/</t+<.t
 :>	Q>>
 :>)*	v
 :>t6k'
@@ -1540,14 +1508,13 @@ $u"8K
 :LZSSu
 :R;uD
 :[ugH
+:`A86.
 :u A8N
 :u(f9Q
 :~dm1	
-;	t/H
 ;.t A
 ;.u1L
-;=8>=
-;=iJ'
+;=FF!
 ;A rg
 ;BIb?
 ;C ~x
@@ -1630,9 +1597,7 @@ $u"8K
 <!-- schema 
 <"t	< r
 <"t&I
-<"xW.
 <%u:>
-<*J=)
 <*u1A
 <-u	I
 <-u A
@@ -1652,11 +1617,9 @@ $u"8K
 </uEA:
 </ul>
 <0:08
-<0t0<2t
 <0udD
 <0udE
 <0ujA
-<0|=<9
 <3Hc]x;
 <8H;S
 <:t L
@@ -1669,9 +1632,6 @@ $u"8K
 <<t#<>t
 <<tp<{t[<}tFH
 <>#n2
-<>u:D8t$(
-<>u<D8e
-<?u@H
 <A|:<Z
 <Ct-<D
 <CtK<Dv
@@ -1717,16 +1677,15 @@ $u"8K
 <\u/A
 <\u0A
 <\u48G
+<\u4A
 <\u7A
 <\u:A
 <_u8A
-<`t-L
 <array: %u elements>
 <assertion dialog internal error>
 <au	H
 <binary blob: %u bytes>
 <dtY<itU<uu
-<ellipsis>
 <ftY<lu
 <g9;c
 <htl<jt\<lt4<tt$<wt
@@ -1791,7 +1750,6 @@ $u"8K
 =dn"M,
 =imb;D
 =rIQU
->	t.H
 >%H5<mN
 >+>ZQ"v
 >/u	I
@@ -1799,6 +1757,7 @@ $u"8K
 >5PJ>
 >::operator ()
 >;D$P
+>L)=}
 >Mp$d
 >VBKVuT
 >YA1H
@@ -2134,6 +2093,7 @@ $u"8K
 ?Allocate3D@CUtl3DAllocator@@QEAA_NHHH_NPEAURect3D_t@@@Z
 ?Allocate@COneTimeEvent@@SAPEAV1@XZ
 ?Allocate@CStringPool@@QEAAPEBDPEBD@Z
+?AllocateGuts@CUtlLocalStackAllocator@@IEAAPEAXH@Z
 ?AllocationCount@CUtlScratchMemoryPool@@QEBA_KXZ
 ?Append@CUtlString@@QEAAXPEBD@Z
 ?Append@CUtlString@@QEAAXPEBDH@Z
@@ -2172,6 +2132,7 @@ $u"8K
 ?BuildMidpoint@CVertexKDTree@@QEAAXPEBMHH@Z
 ?BuildMidpointFromVertexSubSet@CVertexKDTree@@QEAAXPEBMHPEBHH@Z
 ?BuildNode@CVertexKDTree@@AEAAHHH@Z
+?C0d.
 ?CalcBudgetGroupTimes_Recursive@CVProfile@@QEAAXPEAVCVProfNode@@PEAIHM@Z
 ?CalcStackDepth@CThread@@QEAA_KPEAX@Z
 ?Capture@CCallStackCapture@@QEAAXP6AHIPEAPEAXHH@ZII@Z
@@ -2391,6 +2352,7 @@ $u"8K
 ?FormatTo@@YAXPEAVIFormatOutputStream@@VCFormatStringElement@@_K@Z
 ?FormatTo@@YAXPEAVIFormatOutputStream@@VCFormatStringElement@@_N@Z
 ?FormatTo@CBufferString@@QEBAXPEAVIFormatOutputStream@@VCFormatStringElement@@@Z
+?FormatTo@CUtlLocalStackAllocator@@QEBAXPEAVIFormatOutputStream@@VCFormatStringElement@@@Z
 ?FormatTo@CUtlStringToken@@QEBAXPEAVIFormatOutputStream@@VCFormatStringElement@@@Z
 ?FormatTo@CUtlSymbol@@QEBAXPEAVIFormatOutputStream@@VCFormatStringElement@@@Z
 ?FormatTo@Color@@QEBAXPEAVIFormatOutputStream@@VCFormatStringElement@@@Z
@@ -2404,6 +2366,7 @@ $u"8K
 ?FreeAll@CMemoryStack@@QEAAX_N@Z
 ?FreeAll@CStringPool@@QEAAXXZ
 ?FreeAll@CUtlScratchMemoryPool@@QEAAXXZ
+?FreeGuts@CUtlLocalStackAllocator@@IEAAXPEBX@Z
 ?FreeInts@CVariableBitStringBase@@AEAAXXZ
 ?FreeMemoryBlock@CUtlString@@AEAAXXZ
 ?FreeNodes_R@CVProfile@@IEAAXPEAVCVProfNode@@@Z
@@ -3272,7 +3235,6 @@ $u"8K
 ?p7M}
 ?s_iCurrentUniqueNodeID@CVProfNode@@1HA
 ?t_v>
-?uRE3
 ?ulJcL*
 ?uyHcJ
 ?wo"|
@@ -3288,27 +3250,27 @@ $u"8K
 @4D3@ D3@
 @8)u&I
 @8,>u
-@8-+>)
+@8-Dx'
+@8-Ox'
+@8-s4$
 @8/t|D
 @8/uJ
 @83tQD
 @84)u
 @84+u
 @848u
-@85KL
-@85Mh%
+@85Ma,
 @8:tyD
 @8;t;I
-@8=+K'
-@8=9J)
-@8=xI)
+@8=5C&
+@8=:F4
+@8=uC&
 @8i(u
 @8i(u:
 @8j(t
 @8k(t
 @8kIt
-@8kIumH9-n9$
-@8l$(
+@8kIumH9-
 @8l$H
 @8l$Pu<
 @8q2u}H
@@ -3394,6 +3356,7 @@ $u"8K
 @SUVATH
 @SUVAUAVH
 @SUVAUH
+@SUVH
 @SUVWATAUAVAWH
 @SUVWATAUAVH
 @SUVWATAVAWH
@@ -3402,7 +3365,6 @@ $u"8K
 @SUVWAUH
 @SUVWAVAWH
 @SUVWAVH
-@SUVWAWH
 @SUVWH
 @SUWATAUAVAWH
 @SUWATAVAWH
@@ -3582,13 +3544,14 @@ A8+A(D;
 A8,>u
 A8.t|M
 A84.u
+A8<4u
 A8<6u
 A8>t;H
 A8A	}"A9Q
 A8m(u
 A8m(u=I
 A8mPt
-A8w(tc
+A8w(th
 A8}(u
 A8~(u
 A9,A$
@@ -3613,6 +3576,7 @@ A9o$u*A9n v
 A9s(D
 A9u(D
 A9v0t
+A9v`~;H
 A:8ucI
 A;,6|
 A;@8u
@@ -3631,6 +3595,7 @@ A;M8v#A
 A;P ~
 A;P ~%
 A;v(|
+A;v`|
 A>l$/
 A>pP&
 A>}?E>
@@ -3801,6 +3766,7 @@ A_A^]
 A_A^][
 A_A^^
 A_A^_
+A_A^_[
 A_A^_[]
 A_A^_]
 A_A^_^[
@@ -3812,7 +3778,6 @@ A__[]
 A__^[
 A__^[]
 A__^]
-A__^][
 A`1w>
 AbortMessage({
 AbsolutePoseControl
@@ -3912,7 +3877,6 @@ AssetSystem001
 AssetSystemTest001
 AssignProcessToJobObject
 AsyncScheduledFunctions
-At"A+
 AttachConsole
 Attempted to add job to job queue that has already been completed
 August
@@ -4040,7 +4004,6 @@ C84&u
 C847u
 C84>u
 C8;C4s
-C8<4u
 C:\buildworker\csgo_rel_win64\build\_build_\tier0\_vpc_tier0\default\win64\_msvc_\Retail\tier0.pdb
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\memstack.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\threadmutex.h
@@ -4062,7 +4025,7 @@ C:\buildworker\csgo_rel_win64\build\src\tier0\kv3format_manager.cpp
 C:\buildworker\csgo_rel_win64\build\src\tier0\logging.cpp
 C:\buildworker\csgo_rel_win64\build\src\tier0\mem_helpers.cpp
 C:\buildworker\csgo_rel_win64\build\src\tier0\mempool.cpp
-C:\buildworker\csgo_rel_win64\build\src\tier0\memprocessheap.cpp(329):***** OUT OF MEMORY! attempted allocation size: %I64d ****
+C:\buildworker\csgo_rel_win64\build\src\tier0\memprocessheap.cpp(341):***** OUT OF MEMORY! attempted allocation size: %I64d ****
 C:\buildworker\csgo_rel_win64\build\src\tier0\memstack.cpp
 C:\buildworker\csgo_rel_win64\build\src\tier0\memstd.cpp
 C:\buildworker\csgo_rel_win64\build\src\tier0\minidump.cpp
@@ -4639,8 +4602,8 @@ CStanceScaleAnimNode
 CStateAction
 CStateMachineAnimNode
 CStateStatusCondition
-CStdMemAlloc<struct MemConfig<0,0,struct DefaultAdditionalProperties> >::NoteAlloc
-CStdMemAlloc<struct MemConfig<0,0,struct RuntimeAdditionalProperties> >::NoteAlloc
+CStdMemAlloc<struct MemConfig_t>::InternalComputeAllocSize
+CStdMemAlloc<struct MemConfig_t>::NoteAlloc
 CStepsRemainingMetric
 CStopAtGoalAnimNode
 CSubGraphAnimNode
@@ -4874,7 +4837,7 @@ Can't open file (%s) passed to -testscript
 Can't write binary data to a text buffer.
 CancelIo
 Cannot Start Process '%s'
-Cannot copy '%s' to '%s'
+Cannot copy '%s' to '%s'. 
 Cannot flush timstamped event log with no listener!
 Cannot mix and match tag specifiers with channel name specifiers.
 Cannot register same format from/to a KV3 conversion (from '%s' to '%s')
@@ -4989,6 +4952,7 @@ ControlValue_TotalTranslation_TargetState
 ControlValue_WayPointDistance
 ControlValue_WayPointHeading
 ConvertKV3Format
+Copy failed.
 CopyDependencyToAlternateLocation
 CopyFileA
 CopyFileW
@@ -5123,7 +5087,7 @@ D$0<A
 D$0@8{
 D$0A+
 D$0D+
-D$0D8%
+D$0D8%Q0
 D$0D;
 D$0E+
 D$0E3
@@ -5228,7 +5192,7 @@ D$@y>
 D$DA+
 D$DE3
 D$Dt1
-D$H9=!
+D$H9=
 D$H;\$
 D$H;|$
 D$H@83
@@ -5391,42 +5355,62 @@ D3@0A
 D3@4A
 D3@8A
 D3@<A#
-D5G)0
 D8$+u
 D8$.u
 D8$/u
 D8$:u
 D8$;u
-D8%|n$
-D8(tLH
-D8)u#L
+D8%w1$
 D8,+u
 D8,.u
 D8,/u
 D8,2u
 D8,;u
-D8-hj$
-D8-yY,
+D8-%l)
+D8-&t)
+D8-'z)
+D8-1u)
+D8-1{)
+D8-4i)
+D8-:p)
+D8-<v)
+D8-?|)
+D8-Am)
+D8-Iq)
+D8-Pj)
+D8-Tr)
+D8-Tw)
+D8-V]
+D8-W})
+D8-\x)
+D8-an)
+D8-es)
+D8-jy)
+D8-ok)
+D8-p~)
+D8-vo)
+D8-wh)
+D8-{z)
 D8.t;H
 D8.ui;
 D80fH
 D81uUL9r
 D82f;
+D84.u
 D84/u
 D841u
+D843u
 D848u
 D84:u
-D85,_$
-D858[$
-D85<V2
-D85x_$
-D88tS3
+D85=i2
 D8;tpL
 D8<.u
 D8<0u
 D8<:u
 D8<;u
 D8<>u
+D8=;L0
+D8=L7$
 D8?t|E
 D8L$0u`
 D8[(u
@@ -5447,16 +5431,13 @@ D8l$@t
 D8l$pt
 D8l$ptGH
 D8l$xtiHc}
-D8q(u
 D8sIt
 D8t$ 
 D8t$ t
 D8t$!
-D8t$(
 D8t$@t
 D8t$ht
 D8uxt
-D8|$"t
 D8|$0t
 D8|$`t
 D8|$`tjHc|$x
@@ -5464,13 +5445,13 @@ D8}/t
 D8}?t	H
 D93tgH
 D93|$A
-D93}jL
+D93}mL
 D941L
 D942H
 D949L
-D95/3#
 D99tNH
 D9<1H
+D9=bb?
 D9D$Pw
 D9E }
 D9Gd~/A
@@ -5489,6 +5470,8 @@ D9|$0r
 D9|$`t
 D9|$`u(fff
 D9~0vFf
+D;%ta?
+D;="+
 D;C ~
 D;D$T
 D;D$t
@@ -5530,8 +5513,10 @@ D;t$X
 D;t$h
 D;x$r
 D;{ u
+D;{(u
 D;|$(
 D;|$P
+D=qm#
 DBGHELP::FindDebugFiles( %s )
 DBGHELP_SERVICE
 DD$xH
@@ -5602,11 +5587,11 @@ DeviceIoControl
 DialogBoxParamA
 DigiCert Assured ID Root CA0
 DigiCert Inc1
-DigiCert Timestamp 2022 - 20
+DigiCert Timestamp 20230
 DigiCert Trusted Root G40
+DigiCert, Inc.1 0
 DigiCert, Inc.1;09
 DigiCert, Inc.1A0?
-DigiCert1$0"
 DirectFileTest( %s ) - 
 DispatchMessageA
 DoAssertDialog: invalid Assert response returned from dialog/vxconsole - breaking to debugger
@@ -5647,6 +5632,7 @@ E8$6u
 E8$?u
 E80t"A
 E84/u
+E84<u
 E8<>u
 E8D$$I
 E8D$%H
@@ -5665,10 +5651,8 @@ E9Y4t
 E9Y8t
 E9Y@t
 E9YDt
-E9l$`
 E9~(~
 E;<$|
-E;t$`
 E;u$t>H
 E;|$<
 E;}hv
@@ -5915,7 +5899,7 @@ FreeLibraryAndExitThread
 FreeSid
 Friday
 G#+Hc
-G$McD
+G$IcD
 G(+G<
 G(H9GPt
 G0(E3
@@ -5923,6 +5907,7 @@ G0;G4t
 G8+G(;
 G8,&u
 G8;G(u;
+G=YJ%
 GAMECONSOLE
 GAMEDLL
 GCoroutineMgr().IsValidCoroutine( hCoroutine )
@@ -6087,6 +6072,7 @@ GetTempPath2W
 GetTempPathW
 GetThreadDescription
 GetThreadInformationBlock
+GetThreadLocalStackAllocator
 GetThreadPriority
 GetThreadedLoadLibraryFunc
 GetTickCount
@@ -6137,7 +6123,6 @@ H UVATAUAWH
 H VWATAVH
 H!D$ I
 H!T$0D
-H!|$ H
 H#D$0H
 H#T$ 
 H(VVH
@@ -6165,22 +6150,18 @@ H+sxL
 H+t$pH
 H+y H
 H+|$@L+|$HH
+H-^Eu
 H3L$H
 H3l$XH3
 H3l$hH3
 H9(ta
 H9,8u)H
-H9-?e0
-H9-@y&
-H9-]z&
+H9-D7$
 H9.uMH
-H95=@1
-H95ur%
+H959R#
 H97u+A
 H99tjH
-H9=426
-H9=Yq
-H9=Z~$
+H9=I]
 H9A u
 H9C s
 H9D$0u
@@ -6206,6 +6187,12 @@ H9uhu
 H9w v\H
 H9y v
 H9|$ u
+H;5)0&
+H;5.0&
+H;5:3&
+H;5?3&
+H;5}4&
+H;=t+%
 H;C s
 H;C(L
 H;C(w
@@ -6296,11 +6283,9 @@ H_^][
 HammerMapLoader001
 HasExpandedResources
 Hc3;s
-Hc5|D
 Hc7;w
 Hc;9E0t
 Hc<8H
-Hc=v3#
 Hc>;~
 HcAdL
 HcB@L
@@ -6792,14 +6777,11 @@ KeyValuesSystem
 KeyValuesToJSON
 Kp0qb
 Ksa}?
-Kwvt,
 K}*n:	
 K}udN
 K~Je#>!
 L!d$(L!d$@D
-L!l$pH
 L!|$(L!
-L$ !|$(
 L$ A+
 L$ A;
 L$ ATAUAWH
@@ -6827,6 +6809,7 @@ L$ SUVWH
 L$ SUWAUAVAWH
 L$ SVWAVAWH
 L$ SVWH
+L$ SWAVAWH
 L$ SWH
 L$ UATAUAVAWH
 L$ UATAUAWH
@@ -6888,13 +6871,13 @@ L$0fA
 L$0fD
 L$0fH
 L$0fI
-L$0t(
 L$1E3
 L$4+L$8
 L$4+L$H
 L$4;L$@
 L$4;L$@~e
 L$4A;
+L$4H+
 L$4v!A
 L$88_
 L$89<
@@ -6913,6 +6896,7 @@ L$8t8E
 L$9E3
 L$<;L$P
 L$<E;
+L$?H;
 L$@;|
 L$@A+
 L$@A9MP
@@ -6970,9 +6954,9 @@ L$`E3
 L$`H+
 L$`H9L$htPA;
 L$`H;
+L$`Hc
 L$`I+
 L$`I;
-L$`Lc
 L$`M;
 L$`f;
 L$h;M
@@ -6985,7 +6969,6 @@ L$hI;
 L$hf;
 L$hfH
 L$pA9|$
-L$pD!l$x
 L$pD;
 L$pE3
 L$pH%
@@ -7009,7 +6992,6 @@ L$xI+
 L$xf;
 L$xfD
 L$|E3
-L+5pu"
 L+CpA
 L+t$pH;T$pL
 L+|$pH;T$pL
@@ -7018,18 +7000,16 @@ L-n>4
 L9	t(
 L9	t5
 L9#t!H
-L9%B0&
-L9%K6$
-L9-*c1
-L9-<d1
-L9-Hl1
-L9-ef1
-L9-o5&
+L9%-l"
+L9%oh"
+L9%pb"
+L9%~m"
+L9-3$
 L9/u7I
-L97t{L
-L9:t[
 L9<*u
-L9?tb
+L9=<p"
+L9=Ru"
+L9=rq"
 L9@ s
 L9B8u
 L9H s
@@ -7045,8 +7025,6 @@ L9v8I
 L9|$P
 L9|$xD
 L:TLcD:XI
-L;5Hl
-L;5yo
 L;@ A
 L;@ v
 L;B r
@@ -7246,8 +7224,6 @@ M H9M0t+H
 M'y>0y
 M0H9MXL
 M15I?
-M9/tA
-M9<$t;
 M9n8M
 MATCHFRAMEWORK_001
 MAk1%
@@ -7316,15 +7292,11 @@ Maximum thread-cached size class
 Mc4$A;
 McE8I
 Md$@A
-MemAlloc_AllocAlignedFunc
 MemAlloc_AllocFunc
 MemAlloc_CallocFunc
-MemAlloc_FreeAlignedFunc
 MemAlloc_FreeFunc
 MemAlloc_GetAllocAttributesFunc
-MemAlloc_GetSizeAlignedFunc
 MemAlloc_GetSizeFunc
-MemAlloc_ReallocAlignedFunc
 MemAlloc_ReallocFunc
 MemAlloc_SetAllocAttributesFunc
 MemAlloc_StrDupFunc
@@ -7336,6 +7308,7 @@ MessageBoxA
 Mhttp://crl3.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crl0S
 Mhttp://crl4.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crl0>
 MicroProfilerAddTS
+Mii91
 MiniDumpAdditionalStringData_t
 MiniDumpCommentEnsureOSDescription
 MiniDumpExceptionHandler
@@ -7410,7 +7383,6 @@ NeverNetwork
 Newline in string literal
 NextBot
 NfD9d$pu
-Nf{lQ
 NhIcD
 No Buffer
 No THP support
@@ -7484,17 +7456,13 @@ Outflow_If
 Outflow_IntSwitch
 Outflow_Simultaneous
 OutputDebugStringA
-P HcF
-P HcF 
+P Hck
 P I;Q I
 P I;S I
-P L9%
-P L9% 
-P L9%.
-P L9%`
-P L9=
+P Lc{
 P(H9t$@u
-P(YX0
+P(YXp
+P0HcK
 P43P 3P
 P83P 3P
 P83P$3P
@@ -8420,7 +8388,6 @@ SmoothLoop
 Software\Classes\%s
 Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\%s
 Sorry -- no stats saved to file memstats.txt when the heap allocator is enabled.
-Sort Check Failure: %s
 SortCheck_Failure
 SoundMix
 SoundOpSystem001
@@ -8428,6 +8395,7 @@ SoundOpSystemEdit001
 SoundOperators
 SoundService_001
 SoundSystem001
+Source file not found.
 Source line end address before start address
 Source line end address out of range
 Source line end sequence address out of range
@@ -8663,6 +8631,7 @@ T$xD;D$x
 T$xE3
 T$xM;
 T$xt*M
+T5)R0
 T<Xu9H
 TASK8
 TASKD
@@ -8681,7 +8650,6 @@ TEMPh
 TESTSCRIPT: CheckPoint -> '%s'.
 TESTSCRIPT: waiting for checkpoint '%s'%s
 TM$	1;
-TOL(Q
 TSList cannot hold more that %d nodes
 TTBL$
 TTBLX
@@ -8857,10 +8825,8 @@ UATAUH
 UATAVAWI
 UATAVH
 UATAWH
-UAUAVH
 UAVAWH
 UCS-2
-UNKNOWN
 UNLOGGED
 UNhkk%
 UPDATE_STRING_TOKEN_DATABASE
@@ -9043,6 +9009,7 @@ Unserialize
 Unsupported ELF compression type %u
 Unsupported ELF machine type %d
 Unsupported Mach-O machine type %d
+Unsupported allocation alignment (%llu), max is %u
 Unsupported binary encoding id.
 Unsupported define_file instruction
 Unsupported escape character '\%c'
@@ -9159,7 +9126,6 @@ V_GetFileExtensionSafe
 V_GetPathForm
 V_GetPathOriginLength
 V_GetProcessUtils
-V_GetRtSupportFunctions
 V_GetVPKPathForm
 V_Get_stderr
 V_Get_stdin
@@ -9479,7 +9445,6 @@ V_towlower
 V_towlower32
 V_towupper
 V_towupper32
-V_undname
 V_vfprintf
 V_vscprintf
 V_vsnprintf
@@ -9511,6 +9476,7 @@ VerifyFileIndexes( %s ) -
 VerifyVersionInfoA
 VerifyVersionInfoW
 Version
+Vh$#\
 Virtual Memory %s Report for PID %u
 Virtual memory regions sorted by size:
 VirtualAlloc
@@ -9526,6 +9492,7 @@ Vtube
 W(;W8~
 W(D8l
 W(t.H
+W)lQ(d.
 W,+L$
 W,CiT(
 W/q#IX
@@ -9620,13 +9587,14 @@ WriteConsoleW
 WriteFile
 Wrote
 X 843"8
-X @8u
 X @8u/t
 X D8e
 X D8u
 X VWATH
 X!t5~
-X%Nu1
+X%%T1
+X%^Z1
+X-,Z1
 X360GUEST
 X360HIDEF
 X360LODEF
@@ -9652,10 +9620,15 @@ XS&Y+
 XXXXXX: found leading plus sign while parsing string '%s' as float64, ignoring it
 X_^][
 Xi#/H
+X|((7.
+X|(X7.
 Y	rH5
 Y(uh8
+Y-,N0
 Y8+Y(
 Y9"SD
+Y=sN 
+Y=vM 
 Y>kX>
 Y>kX>M
 YD$@f
@@ -9673,6 +9646,7 @@ ZwSetTimerResolution
 [   func+child         func ]
 [   func+child       func ]
 [ func+child         func ]
+[)M[c[@
 [*ncd>0
 [*ncd>TQ
 [,A_A^_^[
@@ -9693,7 +9667,6 @@ ZwSetTimerResolution
 [code]
 [img]
 [list]
-[thunk]:
 [url=
 \$ 9\$0|IH
 \$ A+
@@ -9708,6 +9681,7 @@ ZwSetTimerResolution
 \$ M+
 \$ M;
 \$ UH
+\$ UVATH
 \$ UVAVH
 \$ UVAWH
 \$ UVE3
@@ -9728,7 +9702,6 @@ ZwSetTimerResolution
 \$ WH
 \$ f;
 \$ fA
-\$ fI
 \$ uV
 \$(A^
 \$(A^A]A\]
@@ -9757,7 +9730,6 @@ ZwSetTimerResolution
 \$0eH
 \$0fA;
 \$4D+
-\$5L3
 \$8A+
 \$8E+
 \$8E3
@@ -9780,8 +9752,6 @@ ZwSetTimerResolution
 \$DD8t$@
 \$DD8|$@
 \$HA;
-\$HD8|$!tB
-\$HE3
 \$HH+
 \$HH;
 \$P;|$H
@@ -9822,6 +9792,7 @@ ZwSetTimerResolution
 \$xD;
 \$xE3
 \$xE;
+\&)c+r
 \)0A;
 \..\src\devtools\bin
 \..\src\devtools\bin\win32
@@ -9863,11 +9834,9 @@ ZwSetTimerResolution
 ^,tyI
 ^8U)zj
 ^<V7w
-^=t7/
 ^>&qN
 ^RfN>
 ^oEZ_
-^oY	0
 _ ;_$t
 _0IcG(L
 _8;_<t
@@ -9927,10 +9896,6 @@ __fastcall
 __float128
 __float80
 __int128
-__int16
-__int32
-__int64
-__int8
 __oldschema_object_name
 __pascal
 __ptr64
@@ -9945,7 +9910,6 @@ __unaligned
 __unwind_info
 __vector( 
 __vectorcall
-__w64 
 _breakpad_
 _cabs
 _class
@@ -9992,7 +9956,6 @@ _wWT+
 `A__^][
 `Bk|+
 `RTTI
-`adjustor{
 `anonymous namespace'
 `copy constructor closure'
 `default constructor closure'
@@ -10003,10 +9966,6 @@ _wWT+
 `eh vector destructor iterator'
 `eh vector vbase constructor iterator'
 `eh vector vbase copy constructor iterator'
-`generic-class-parameter-
-`generic-method-parameter-
-`generic-type-
-`local static destructor helper'
 `local static guard'
 `local static thread guard'
 `local vftable constructor closure'
@@ -10014,20 +9973,13 @@ _wWT+
 `managed vector constructor iterator'
 `managed vector copy constructor iterator'
 `managed vector destructor iterator'
-`non-type-template-parameter
 `omni callsig'
 `placement delete closure'
 `placement delete[] closure'
 `scalar deleting destructor'
 `string'
-`template static data member constructor helper'
-`template static data member destructor helper'
-`template-parameter
-`template-parameter-
-`template-type-parameter-
 `typeof'
 `udt returning'
-`unknown ecsu'
 `vbase destructor'
 `vbtable'
 `vcall'
@@ -10039,9 +9991,7 @@ _wWT+
 `vector vbase copy constructor iterator'
 `vftable'
 `virtual displacement map'
-`vtordispex{
-`vtordisp{
-a-tkh
+a7hIw
 a?y#c?sIe?
 aL;u@r
 a]{?P
@@ -10193,7 +10143,6 @@ c:\source2_minidump_log.txt
 c>v	k
 c?FA@s}
 cL;u8r
-cU	F9
 cable
 cache*
 cache_oblivious
@@ -10202,7 +10151,6 @@ cannot switch from manual to automatic argument indexing
 cantdie
 carry_type
 center
-char 
 char16_t
 char32_t
 char8
@@ -10210,9 +10158,6 @@ char8_t
 cheat
 children
 cl_language
-class 
-cli::array<
-cli::pin_ptr<
 client
 clientcmd_can_execute
 cloth_collide
@@ -10220,8 +10165,6 @@ cloth_collision_layer0
 cloth_collision_layer1
 cloth_collision_layer2
 cloth_collision_layer3
-coclass 
-cointerface 
 collision_group
 collision_prop
 color
@@ -10247,7 +10190,6 @@ connection refused
 connection reset
 consoleonly
 const
-const 
 construction virtual table for derived 
 content_assertion
 control_point
@@ -10401,7 +10343,7 @@ double
 dr0ff
 dr=ff
 ds:@85
-ds@@8=
+ds@@8=O
 duration
 dynamic_interaction
 dynstr
@@ -10426,7 +10368,6 @@ enable_limit
 enabled
 encoding
 english
-enum 
 epA_A^A]A\_^]
 epoch
 error
@@ -10458,7 +10399,6 @@ extents
 extents_dirty
 extents_muzzy
 extents_retained
-extern "C" 
 f,CiT(
 f9)u4H9j
 f9)u:H
@@ -10532,6 +10472,7 @@ fC94wu
 fC;DA
 fC;DB
 fC;DH
+fD)-R
 fD9	t(L
 fD9 t
 fD9!H
@@ -10658,7 +10599,6 @@ game_keys
 gamemode.dll
 gc.dll
 gdump
-generic-type-
 gfFeEaAG
 gfffA
 gfffD
@@ -10733,7 +10673,6 @@ hurt_me
 hurt_them
 i&Ma.
 iH+iH;.w
-iL97u
 identifier removed
 ignored_assertions.txt
 ih0sUr
@@ -10818,6 +10757,7 @@ l$ VAVAWH
 l$ VAWIc
 l$ VH
 l$ VWATAUAVAWE3
+l$ VWATAUAVH
 l$ VWATAVAWH
 l$ VWATH
 l$ VWAUAVAWH
@@ -10925,10 +10865,10 @@ l$xD9m
 l$xH+
 l$xHc
 l$xHcE@A
+l2|X/gGe
 l6qnk
 l<}2l
 lR(g 
-lambda
 large
 last_sniff
 lazy_lock
@@ -10963,7 +10903,6 @@ log_level is deprecated, please use log_verbosity. Severity '%s' translates to v
 log_start
 log_stop
 log_verbosity
-long 
 long long
 lookup
 loop_break_on_damage
@@ -11618,7 +11557,6 @@ ntelu
 nteluJ
 nthreads
 nullH
-nullptr
 num_ops
 num_owner_switch
 num_runs
@@ -11627,10 +11565,10 @@ num_threads
 num_wait
 number is too big
 numsegments
-o-Hi0
-o-ei0
-o5di0
-o=to0
+o-)T0
+o-XN0
+o-uN0
+o5tN0
 oA fD
 oD$ f
 oD$0f
@@ -11804,7 +11742,6 @@ precision not allowed for this argument type
 preferred_carryangles
 prefix
 primary
-private: 
 privinstruction
 prof.active
 prof.lg_sample
@@ -11830,12 +11767,10 @@ prof_thds_data
 prof_thread_active_init
 prof_time_resolution
 prop_data
-protected: 
 protocol error
 protocol not supported
 psapi.dll
 ptr( 0x%p )
-public: 
 purecall
 purge
 p}?fff?
@@ -11872,6 +11807,7 @@ r_f;\$l
 radius
 radius0
 radius1
+range check failure
 rbD;G
 rbf;\$l
 read only file system
@@ -11900,7 +11836,7 @@ retained
 retained_bytes
 retval
 rewjH
-rgH;=q
+rgH;=
 rhf;\$t
 rootNode
 rotation
@@ -11911,7 +11847,6 @@ rsf;\$d
 rtree
 run_interval
 rvf;\$d
-rwH;=
 ryf;\$l
 r|f;\$l
 s AWH
@@ -11950,9 +11885,7 @@ shell32.dll
 shf9kZt[D
 shlwapi.dll
 short
-short 
 signature has no argument types
-signed 
 signed char
 singleplayer
 singlestep
@@ -11973,8 +11906,8 @@ speed
 sqAiN
 srv*http:
 srv*https:
+stack buffer overrun (/GS failure)
 state not recoverable
-static 
 stats
 stats.mapped
 stats_interval
@@ -11989,7 +11922,6 @@ std::basic_ostream< char, std::char_traits< char > >
 std::basic_string
 std::basic_string< char, std::char_traits< char >, std::allocator< char > >
 std::nullptr_t
-std::nullptr_t 
 steam://openurl/
 steam://openurl_external/
 steam_api64.dll
@@ -12008,7 +11940,6 @@ string_token
 stringtokendatabase.txt
 strp offset too large (0x%llx)
 strtab
-struct 
 subclass
 substitution doesn't start with 'S'
 success
@@ -12029,7 +11960,6 @@ t	Hcp
 t	L9g
 t	L9w
 t	f97t
-t D8h
 t H9z
 t fA;
 t fff
@@ -12044,7 +11974,6 @@ t$ AVAWL
 t$ AVH
 t$ AWE3
 t$ AWH
-t$ D8t$(uVH
 t$ D;
 t$ E3
 t$ H;
@@ -12162,6 +12091,7 @@ t$XL;
 t$Xt*
 t$XtZ
 t$`;_pu	H
+t$`@8
 t$`E3
 t$`E;
 t$`H;
@@ -12193,7 +12123,6 @@ t$xt*3
 t$|E3
 t%</t!<\t
 t%@83t A
-t%D8h
 t%fE9
 t&A88t
 t&E8)t!E
@@ -12257,19 +12186,19 @@ tJfA9>t
 tKHcH
 tNfA;
 tNfE9u
-tQ@8-&D%
+tQ@8-f
 tQfD9 tK
 tQfff
-tRHcT$hH
 tRLcY
 tSE9<$t
 tSf91tNH
 tU;\$0tH
-tUH95e
+tUH95
 tUfff
 tXfff
 t[fff
 t\;4$vWC
+t\HcT$hH
 t_IcD
 t_s]H9|
 t`f9Q
@@ -12296,7 +12225,6 @@ template-arg doesn't end with an 'E'
 template-args doesn't start with 'I' or 'J'
 template-param doesn't start with a 'T'
 template-param index doesn't end with a '_'
-template-parameter-
 test_angles_relative
 testscript_debug
 text file busy
@@ -12304,7 +12232,6 @@ texturescale
 tgHcD$@
 th9o ~Y
 th</t
-this 
 thread
 thread_active_init
 tiHcD
@@ -12349,7 +12276,7 @@ u	L9G
 u	L;G
 u D85
 u!@8-
-u!@8-.o$
+u!@8-n
 u!H;C(w
 u!L9L$Pu
 u"HcM@H
@@ -12368,6 +12295,7 @@ u&L;c
 u&L;o
 u'fA;
 u)HcA<H
+u*;53O?
 u+fff
 u,!T$(H!T$ 
 u,AiT
@@ -12394,17 +12322,17 @@ u<Hc
 u<P/Y
 u<g~l<it[<ntP<ot,<pt
 u=@8+
-u>H95*2/
+u>H95:
 u>L9L$Pu7L9L$Xu0L9L$`u)H
 u@HcC
 uAD83
 uCD8#
-uCH;=
-uCL;5
+uCH;=3
+uCL;5L
 uDD83
 uDHcD$HH
 uED8r(t
-uEH;5/E
+uEH;5
 uHA9P
 uHD8+
 uID8e
@@ -12417,11 +12345,8 @@ uND83
 uO@83
 uO]O<I
 uPL;I rJD
-uR@83
 uRD8#
 uRDZZ
-uSD8;
-uTM9<$tN
 uUD8;
 uUHcl$@A;
 uWD8#
@@ -12442,7 +12367,6 @@ ujGs?
 ukHc{
 ulHc{
 unable to get file indexes
-union 
 unknown
 unknown compression method
 unknown error
@@ -12451,7 +12375,6 @@ unknown header flags set
 unknown index type %u - 
 unknown module
 unmatched '}' in format string
-unsigned 
 unsigned __int128
 unsigned char
 unsigned int
@@ -12513,7 +12436,6 @@ vector4d
 verbosity: off, essential, default,         // Sets how verbose a channel is allowed to be.
 version
 vfbasics.dll
-virtual 
 virtual table for 
 virtual thunk to 
 virtual-table number doesn't end with '_'
@@ -12524,9 +12446,7 @@ vmdlkeys0
 vmdlkeys1
 vmdlkeys2
 vmdlkeys3
-void 
 volatile
-volatile 
 vpcf1
 vpcf10
 vpcf11
@@ -12602,10 +12522,10 @@ vsnap
 vtest
 vtune
 vtuneapi.dll
-vwL95c
+vwL95C
 v}`[>
 w!fff
-w"@85
+w"@85.
 w"fff
 w#Lc?H
 w&fA+
@@ -12641,7 +12561,6 @@ wutsI
 wwH9Q
 www.digicert.com1!0
 www.digicert.com1$0"
-x	hW.
 x ;Ex}
 x A;@X}
 x ATAVAWH
@@ -12690,7 +12609,7 @@ x_^][
 x`tm6
 xaH;B
 xcH;A
-xe;=k
+xe;={
 xfH;A
 xgH;B
 xhH;A
@@ -12699,7 +12618,6 @@ xiM;Y
 xlH;A
 xmalloc
 xqkfa]YUQMJGDA><97520.,*('%#! 
-xrYxV.
 xuRCk
 xwH;A
 x}HcF`H;
@@ -12733,8 +12651,6 @@ zzzzzzzzI
 {Pf;~8
 {YIN?
 {[o>Z[
-{flat}
-{for 
 {pH9{(t	H
 {un'%
 {unnamed type
@@ -12765,7 +12681,6 @@ zzzzzzzzI
 |$ A^
 |$ D!
 |$ D+
-|$ D8t$(
 |$ E2
 |$ E3
 |$ E;
@@ -12939,8 +12854,6 @@ zzzzzzzzI
 }0<}ts<:toL
 }1;C$
 }1@8-
-}1@8-|
-}1@8-}
 }1f;C
 }6;s(u
 }HfD9#A
@@ -12972,10 +12885,10 @@ zzzzzzzzI
 ~,*u<I
 ~,AiT
 ~0@8-
-~0@8-:
+~0@8-+
 ~0@8-;
+~0@8-z
 ~0@8-{
-~3"Fp1
 ~<uZEeu
 ~BH98t
 ~DSTRCT
