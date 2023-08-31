@@ -1,6 +1,5 @@
 					
 								
-		V_remainderf
 	!s99
 	"Emit continuously" and "Emit noise" no longer support "scale emission to used control points".
 	"Position from control points" had a max control point added to it.
@@ -11,6 +10,8 @@
 	D;ZtD
 	V_powf
 	V_qsort_s
+	V_remainderf
+	V_roundf
 	V_sincosf
 	V_sind
 	V_sinf
@@ -67,6 +68,7 @@
  A^_]
  A^_^
  A_A\[
+ A_A\^
  A_A\_
  A_A\_][
  A_A]A\
@@ -111,10 +113,8 @@
  next: %p, parent: %p
  noexcept
  out {
- t?Hc
  tDE3
  volatile
-!	V_stricmp_fast
 !(m_bAnimated && m_bManualAnimFrame)
 !4G(H
 !4G(L
@@ -140,6 +140,7 @@
 !m_bSetOrientation
 !m_bUseScalarForTextureCoordinate
 !m_bUseTexture
+"	V_stricmp_fast
 "Position within sphere random" no longer supports the "randomly distribute to highest supplied Control Point" feature
 "Remap control point orientation to rotation" does something approaching sanity for the cases I looked at.  If we have cases where this isn't appropriate, we can split out the behavior.
 "Remap control point orientation to rotation" rewritten to make more sense.
@@ -237,25 +238,30 @@ $x?"TA?
 ',=?k
 (	u#L9|
 ( m_nTextureType == SPRITECARD_TEXTURE_NORMALMAP || m_nTextureType == SPRITECARD_TEXTURE_ANIMMOTIONVEC || m_nTextureType == SPRITECARD_TEXTURE_6POINT_XYZ_A || m_nTextureType == SPRITECARD_TEXTURE_6POINT_NEGXYZ_E )
-(%'w%
-(%:q+
-(%FZ&
+(%"uB
+(%Ha/
 (%d,%d)
-(-8mB
+(%ng9
+(%v%+
+(%x`/
+(-PkB
+(-bI+
+(-zs.
 (4$fE
-(56z3
-(5T$B
-(5]">
-(=*->
-(=*@>
-(=6B>
-(=Vf%
-(=a6>
+(5k.=
+(=/l>
+(=<3>
+(=GQ-
+(=N-B
+(=On>
+(=dZ/
+(=k'>
 (A]A\_[
 (A^A]A\_
 (A^A]A\_^[
 (A^A]_^
 (A^_^[
+(A^_^]
 (A_A\
 (A_A\^[
 (A_A]A\_
@@ -271,46 +277,37 @@ $x?"TA?
 (D$0D
 (D$0H
 (D$0f
-(D$@@
-(D$@@2
-(D$@A
 (D$@D
 (D$@E
 (D$@E2
 (D$@H
 (D$@Hc
 (D$@L
-(D$@f
-(D$P@
 (D$PA
 (D$PD
-(D$PE2
 (D$PH
 (D$PI
 (D$PL
 (D$PM
+(D$Pf
+(D$`A
 (D$`D
 (D$`E
 (D$`E2
 (D$`H
+(D$`Ic
 (D$`L
-(D$p@
-(D$p@2
-(D$pA
+(D$`fA
 (D$pD
 (D$pE
 (D$pE2
 (D$pH
 (D$pL
 (D$pf
-(E @2
-(E0@2
 (E8(t
-(EpE2
 (L$ A
 (L$ D
 (L$ H
-(L$ L
 (L$0D
 (L$0H
 (L$0K
@@ -319,22 +316,18 @@ $x?"TA?
 (L$@D
 (L$@H
 (L$@L
-(L$PA
+(L$@f
 (L$PD
-(L$PE2
-(L$PI
-(L$PL
 (L$`A
 (L$`D
+(L$`H
 (L$`f
 (L$pA
 (L$pD
-(L$pE
 (L$pH
 (Lc)H
 (M Hc
 (M Ic
-(M0Ic
 (M@Ic
 (None)
 (T$ A
@@ -348,39 +341,40 @@ $x?"TA?
 (T$@E
 (T$@E2
 (T$@H
-(T$@Lc
-(T$PA
 (T$PD
+(T$PL
+(T$PMc
 (T$`A
 (T$`D
 (T$`E
-(T$`H
 (T$pA
 (T$pD
-(T$pf
+(T$pH
 (T?j?Y
 (YA1H
 (\$ A
 (\$ D
 (\$ H
-(\$ L
 (\$ f
 (\$0A
 (\$0D
 (\$0H
 (\$0Hc
+(\$0I
+(\$@@2
 (\$@A
 (\$@D
 (\$@H
+(\$@L
 (\$PA
 (\$PD
 (\$PE
 (\$PH
-(\$PL
 (\$PM
 (\$`A
 (\$`D
 (\$`H
+(\$`L
 (\$`fE
 (\$`t
 (\$pA
@@ -390,37 +384,35 @@ $x?"TA?
 (d$ D
 (d$ H
 (d$ I
-(d$0A
 (d$0D
 (d$0H
-(d$0f
 (d$@D
 (d$@H
-(d$@K
+(d$PA
 (d$PD
 (d$PE
 (d$`A
 (d$`D
-(d$`H
 (d$`L
+(d$pD
 (d$pE
-(d$pL
+(e E2
 (f*^[0
 (knNH
 (l$ D
 (l$ r
 (l$0A
 (l$0D
-(l$0H
-(l$0L
+(l$0fD
+(l$@A
 (l$@D
 (l$@H
 (l$@I
 (l$PD
 (l$PH
+(l$PL
 (l$`A
 (l$`H
-(l$pA
 (l$pD
 (l$pH
 (null)
@@ -435,27 +427,34 @@ $x?"TA?
 (t$0E3
 (t$0H
 (t$0L
+(t$0fA
 (t$0u
 (t$@A
 (t$@D
 (t$@H
 (t$@I
+(t$@I;
 (t$@L
 (t$@f
 (t$@fD
-(t$@tP
 (t$PD
 (t$PE
 (t$PH
 (t$PL
 (t$PM
+(t$Pf
 (t$`D
+(t$`E
 (t$`H
 (t$`L
+(t$`f
+(t$`tA
+(t$pA
 (t$pD
 (t$pH
 (t$pI
 (t$pL
+(|$ A
 (|$ D
 (|$ E
 (|$ H
@@ -478,14 +477,15 @@ $x?"TA?
 (|$PE
 (|$PH
 (|$PI
-(|$PI;
-(|$PfA
 (|$`A
 (|$`D
+(|$`E
+(|$`E2
 (|$`H
 (|$`I
 (|$`L
 (|$`M
+(|$pA
 (|$pD
 (|$pH
 (|$pL
@@ -506,11 +506,14 @@ $x?"TA?
 )D$0D
 )D$0H
 )D$0L
+)D$0f
+)D$@3
 )D$@A
 )D$@B
 )D$@D
 )D$@H
 )D$@I
+)D$@f
 )D$@u@H
 )D$PA
 )D$PB
@@ -523,34 +526,44 @@ $x?"TA?
 )D$`B
 )D$`D
 )D$`E
+)D$`E2
+)D$`H
+)D$`I
 )D$`L
+)D$`f
+)D$p@2
 )D$pC
 )D$pD
 )D$pE
+)D$pH
+)D$pf
 )D$pfff
+)E E2
+)E Hc
+)EPfff
 )EpD;
 )L$ D
 )L$ E
 )L$0A
 )L$0D
 )L$0E
+)L$0F
 )L$0I;
 )L$0L
 )L$0Lcu
+)L$@A
 )L$@D
 )L$@E
 )L$@H
 )L$PA
 )L$PD
+)L$PE
 )L$PH
-)L$`A
 )L$`A9wx
 )L$`D
 )L$`E
 )L$pD
-)L$pE
 )L$pH
-)M@fD
 )T$ A
 )T$ D
 )T$ E
@@ -559,22 +572,20 @@ $x?"TA?
 )T$0E
 )T$@A
 )T$@D
-)T$@E
 )T$@f
 )T$PA
 )T$PD
-)T$PE
 )T$Pf
 )T$`A
 )T$`D
 )T$`E
 )T$`L
+)T$`s
 )T$pD
 )T$pE
 )U`fD
 )YA1H
 )\$ D
-)\$0D
 )\$0E
 )\$@A
 )\$@D
@@ -582,20 +593,21 @@ $x?"TA?
 )\$@H
 )\$PA
 )\$PD
+)\$PE
 )\$PH
 )\$Pu
 )\$`D
 )\$`H
 )\$`L
-)\$`s
+)\$`u
+)\$`v
 )\$pD
 )\$pE
-)\$pH
-)\$pI
 )\ZEo^m/
 )d$ f
 )d$0D
 )d$0E
+)d$@A
 )d$@D
 )d$@E
 )d$@I
@@ -606,24 +618,29 @@ $x?"TA?
 )d$PH
 )d$PI
 )d$`D
+)d$`fD
+)d$pA
 )d$pD
 )ePfD
+)e`fD
 )l$ D
 )l$ E
 )l$ L
+)l$ f
 )l$0D
 )l$0E
 )l$0H
+)l$0f
 )l$@D
 )l$@E
 )l$@L
 )l$PD
 )l$PE
 )l$PfD
-)l$`A
 )l$`D
 )l$pA
 )l$pD
+)l$pE
 )l$pI
 )t$ 2
 )t$ A
@@ -648,12 +665,12 @@ $x?"TA?
 )t$@I
 )t$@Ic
 )t$@L
+)t$@f
 )t$PA
 )t$PD
 )t$PH
 )t$PL
 )t$Pt
-)t$`A
 )t$`D
 )t$`E
 )t$`H
@@ -667,9 +684,9 @@ $x?"TA?
 )t$pE
 )t$pH
 )t$pL
-)t$pfff
 )u"D8)t
 )|$ D
+)|$ E
 )|$ H
 )|$ K
 )|$ uBH
@@ -699,8 +716,8 @@ $x?"TA?
 )|$pD
 )|$pE
 )|$pH
+)|$pL
 )|B?d!
-)}PfD
 *;Eot	;Ew
 *<alA?
 *StO9>T
@@ -709,7 +726,6 @@ $x?"TA?
 +Base Properties
 +Collection Options
 +Color and alpha adjustments
-+D$TA;
 +L$DA
 +M<7>
 +Material
@@ -754,7 +770,6 @@ $x?"TA?
 -sse4
 -tools
 -vulkan_disable_particle_descriptor_set
-.	V_tanf
 ..om?
 .00cfg
 .1 .95
@@ -1719,10 +1734,11 @@ $x?"TA?
 .D$4z
 .D$8z
 .D$DzFuD
-.D$PH
 .D$Tz
 .D$Tz#u!
 .D$Xz
+.D$dz
+.D$hz
 .GPu	
 .Gpz(u&
 .L$Hz5u3
@@ -1730,8 +1746,6 @@ $x?"TA?
 .O z(u&
 .T$@zWuU
 .T$Pz,u*
-.\$Tz
-.\$Xz
 ._$z u
 .data
 .data$r
@@ -1768,6 +1782,7 @@ $x?"TA?
 .xJ>Hf
 .xdata
 .xdata$x
+/	V_tanf
 /2GG>!B
 />58d%
 /A0vs
@@ -1780,9 +1795,7 @@ $x?"TA?
 /CPs 
 /YA1H
 /YA1M
-/[TUJ'
 /wPsMD
-/z-&]
 /{PsWH
 /{Pv"
 0 0 0
@@ -1842,6 +1855,7 @@ $x?"TA?
 1<.	/>:
 1A26b
 1D Luminance to Color Lookup
+1hMBE
 1wsHp
 2	0!&
 210429000000Z
@@ -1849,7 +1863,7 @@ $x?"TA?
 220323000000Z
 220801000000Z
 230714000000Z
-230815165951Z0/
+230830001208Z0/
 241009235959Z0a1
 2D Orient
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
@@ -1875,12 +1889,12 @@ $x?"TA?
 47L9d$ t
 4HA;x
 4http://crl3.digicert.com/DigiCertAssuredIDRootCA.crl0
-5?<unimplemented>
 5?t$7?
 5FjiT
 5YA1H
 5http://cacerts.digicert.com/DigiCertTrustedRootG4.crt0C
 6*f(_
+6DAx/#2
 6I]Dc
 6OB,n_
 6YA1H
@@ -1892,6 +1906,7 @@ $x?"TA?
 8/t[H
 80tWD
 8?u$H
+8@%Cr
 8@t?E3
 8@tTH
 8@tvD
@@ -1903,7 +1918,6 @@ $x?"TA?
 8A\_^]
 8A]^][
 8A^A]_^
-8A^^][
 8A_A]_^
 8A_A^
 8A_A^A]A\_^[]
@@ -1914,6 +1928,7 @@ $x?"TA?
 8Qit5H
 8XugH
 8YA1H
+8]xt	
 8_^][
 8ke?;
 9	tYH
@@ -1926,8 +1941,6 @@ $x?"TA?
 9>~@H
 9?uR3
 9@u6H
-9D$Tt#H
-9D$Tu
 9L$HD
 9YA1i
 9Z0~(L
@@ -1935,6 +1948,7 @@ $x?"TA?
 9Z`~(L
 9Zx~.L
 9\$hu
+9\$pu
 9] ~WH
 9^@~)H
 9^t~#
@@ -1954,7 +1968,6 @@ $x?"TA?
 9t$Hu
 9t$Pu	
 9t$hu
-9ub6R
 9zt~ffff
 9{(~)L
 9{@~)L
@@ -1966,9 +1979,10 @@ $x?"TA?
 9|$Pt
 9|$Xu
 9|$hu
+9|$pu
 9|$xu
 9~P~$3
-:!-,.
+:!U`0
 :!l$`0
 :!t$p0Ic
 :$t>H
@@ -1999,7 +2013,6 @@ $x?"TA?
 ;l$P|"H
 ;s,}xf
 ;uHVL
-;wt}{
 <	u2H
 <	u\L
 <	w	@
@@ -2026,11 +2039,13 @@ $x?"TA?
 <elt type not set>
 <empty member name>
 <htl<jt\<lt4<tt$<wt
+<nL4=nL4=nL4=nL4=
 <no failure reason set>
 <none>
 <pointer>
 <table: %u members>
 <undefined>
+<unimplemented>
 <unknown KV3 basic type '%s' (%d)>
 <unknown>
 <utK@:
@@ -2178,6 +2193,7 @@ $x?"TA?
 ?RemoveAt@CBufferString@@QEAAPEBDHH@Z
 ?Resize@CVariableBitStringBase@@QEAAXH@Z
 ?SaveKV3@@YA_NAEBUKV3ID_t@@0PEBVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@I@Z
+?SaveKV3Text_NoHeader@@YA_NPEBVKeyValues3@@PEAVCUtlString@@PEAVCBufferString@@I@Z
 ?Set@CUtlString@@QEAAXPEBD@Z
 ?SetCopy@CStrAutoEncode@@QEAAXPEBDH@Z
 ?SetDirect@CUtlString@@QEAAXPEBDH@Z
@@ -2215,16 +2231,13 @@ $x?"TA?
 @84)u
 @84/u
 @84:u
-@85:&
 @8<+u
-@8=90
 @8>u^H
 @8IcO(L
 @8j(t
 @8k(t
 @8l$(
 @8t$Ht
-@8u8t
 @8w$t
 @8z$u
 @8z%u
@@ -2253,8 +2266,10 @@ $x?"TA?
 @A_A^]
 @A_A^^
 @A_A^_
+@A_A^_^]
 @A_][
 @A_^]
+@D9t$pu
 @HcAp3
 @PD;@T|.F
 @SATAVH
@@ -2269,9 +2284,7 @@ $x?"TA?
 @SUVATAWH
 @SUVAUH
 @SUVAVAWH
-@SUVAVH
 @SUVWATAUAVAWH
-@SUVWATAUAVH
 @SUVWATAVAWH
 @SUVWAUAVAWH
 @SUVWAVH
@@ -2283,6 +2296,7 @@ $x?"TA?
 @SVATAWH
 @SVAUH
 @SVAVH
+@SVAWH
 @SVWATAUAVAWH
 @SVWATAWH
 @SVWATH
@@ -2311,13 +2325,13 @@ $x?"TA?
 @USVWATAVAWH
 @USVWATH
 @USVWAUAVAWH
+@USVWAUH
 @USVWAVAWH
 @USVWAVH
 @USVWAWH
 @USVWH
 @USWATAUAVAWH
 @USWATH
-@USWAUAVH
 @USWH
 @UVATAUH
 @UVAUH
@@ -2367,7 +2381,7 @@ A)}PA
 A+P@H
 A03>A|
 A2Bv$
-A33GA33GA33GA33GA
+A86uEI
 A88t69
 A89tZ9
 A8HcI0L
@@ -2375,8 +2389,8 @@ A8x,t
 A8}(u
 A9,A$
 A9<Fu
-A9ux~
 A9v0t
+A9}x~
 A:8ucI
 A;Bx}~H
 A;Exr
@@ -2422,7 +2436,6 @@ A]A\_^[
 A]A\_^[]
 A]A\_^]
 A]^[]
-A]_[]
 A]_^[]
 A^A\[]
 A^A\]
@@ -2433,6 +2446,7 @@ A^A\_^[
 A^A\_^]
 A^A\_^][
 A^A]A\
+A^A]A\^]
 A^A]A\_^
 A^A]A\_^[]
 A^A]A\_^][
@@ -2441,20 +2455,21 @@ A^A]][
 A^A]^[]
 A^A]^]
 A^A]^][
-A^A]_[]
+A^A]_^[]
 A^A]_^]
 A^A]_^][
 A^^[]
+A^_[]
 A^_^[
 A^_^[]
 A^_^]
 A^_^][
 A_A\^[]
 A_A\_
+A_A\_[]
 A_A\_]
 A_A]A\
 A_A]A\[
-A_A]A\^[]
 A_A]A\^]
 A_A]A\_[
 A_A]A\_[]
@@ -2469,7 +2484,6 @@ A_A]_^[
 A_A]_^[]
 A_A]_^]
 A_A^A\
-A_A^A\^[]
 A_A^A\^]
 A_A^A\_
 A_A^A\_]
@@ -2500,6 +2514,7 @@ A_A^_]
 A_A^_^[]
 A_A^_^]
 A_A^_^][
+A__^[]
 A__^]
 A__^][
 Abort
@@ -2534,6 +2549,7 @@ Alpha fade out random
 Alpha fade out simple
 Alpha with RGB as Alpha
 Always Enabled
+Am_bUseShadowFastPath
 Amount of simulation time that can elapse before new systems start falling back to cheaper versions
 Anchor point source
 And R%d <- R%d && R%d
@@ -2554,6 +2570,7 @@ April
 Arc Duration Maximum
 Arc Speed
 AreFileApisANSI
+AssertTrue
 AssetBrowse( vpost, *showassetpreview )
 AssetBrowse( vtex, *showassetpreview )
 AssetBrowserSystem_001
@@ -2837,6 +2854,10 @@ CPulseRuntimeMethodArg
 CPulseTestFuncs_DerivedDomain
 CPulseTestFuncs_DerivedDomain!GetCursorValueA
 CPulseTestFuncs_DerivedDomain!SetCursorValueA
+CPulseTestScriptLib
+CPulseTestScriptLib!AssertTrue
+CPulseTestScriptLib!IndicateTestFailure
+CPulseTestScriptLib!RegisterTestCheckpoint
 CPulseTurtleGraphicsCursor
 CPulseTurtleGraphicsCursor!Move
 CPulseTurtleGraphicsCursor!PenDown
@@ -3314,6 +3335,7 @@ Clamp vector
 ClampFloat
 ClampInt
 ClassDataOffset
+ClientToolsInfo_001
 CloseHandle
 Closed loop
 ClosestPointTestType_t
@@ -3462,7 +3484,6 @@ D$ m(
 D$ mvs
 D$ nR
 D$ nl
-D$ p/
 D$ p9
 D$ t(R
 D$ w	
@@ -3538,7 +3559,6 @@ D$0[I
 D$0`<	
 D$0b-
 D$0er
-D$0fA
 D$0fC;
 D$0fD
 D$0fH
@@ -3549,8 +3569,8 @@ D$0k>
 D$0m(
 D$0mvs
 D$0nR
-D$0p/
 D$0t(R
+D$0vpN	M
 D$0w	
 D$0w( 
 D$0x%
@@ -3575,6 +3595,7 @@ D$8Lc
 D$8fA
 D$8fff
 D$8t3
+D$8tD
 D$8tO
 D$8tdL
 D$8u6A
@@ -3585,7 +3606,6 @@ D$@E8~8
 D$@H+
 D$@H;
 D$@H;F
-D$@H=
 D$@Hc
 D$@I	
 D$@Lc
@@ -3597,11 +3617,11 @@ D$@x{
 D$BfD
 D$DE3
 D$DHc
-D$DIc
 D$DLc&
 D$HA;
 D$HBE
 D$HD8
+D$HD9
 D$HD;
 D$HE3
 D$HH;
@@ -3613,19 +3633,19 @@ D$HLcD$@Hc
 D$HfA
 D$HfH
 D$HfI
-D$Ht%H
 D$HtOH
 D$Hu)A
 D$Hv4
 D$LD;
+D$P@2
 D$P@8
 D$PD8
 D$PD80t
-D$PE2
 D$PE3
 D$PH+
 D$PH;
 D$PH=
+D$PHc
 D$PHcGHH;
 D$PI;
 D$PL;
@@ -3635,20 +3655,21 @@ D$PfD
 D$Pm(
 D$Pu!M
 D$THc
+D$Tt+A
 D$X;u
 D$XA8
 D$XA;
-D$XD8
-D$XD;t$P
+D$XD;t$T
 D$XE3
 D$XHc
 D$XI	
 D$XIc
 D$XM+
-D$Xt"H
+D$Xt 
+D$Xt:
+D$XtH
 D$XtUD
 D$XtvE
-D$Xv 
 D$\D9Edv
 D$\D;Edr
 D$\E;
@@ -3663,11 +3684,7 @@ D$`Lc
 D$`Mc
 D$`fA
 D$`fD
-D$`ff
-D$`t+A
-D$dD;T$x
 D$dD;U
-D$dfA
 D$dfD
 D$hD8
 D$hD80t
@@ -3685,60 +3702,63 @@ D$l;E
 D$lD;
 D$lLc
 D$lfA
-D$pD80t
 D$pD;
 D$pE3
 D$pH=
 D$pHc
 D$pfA
-D$pfff
 D$tA;Et
 D$xD80t
 D$xE3
 D$xHc
-D$|E3
-D$|Hc
 D$|f#
 D)e(u
 D)u(u
 D)v(u
 D)~(u
 D+A@H
-D+d$pD
 D8(tLH
 D8)u#L
-D8-\GN
 D81uUL9r
+D840u
 D88tS3
-D8=}E)
 D8L$0u`
 D8L$`u8
 D8[(u
 D8c=t@H
 D8cHu
 D8cet<H
-D8d$xt
 D8f*t
 D8q(u
 D8t$(
 D8t$Xt
 D8t$ht
-D8yHt
 D8|$"t
 D9	~8L
-D9%Vm
+D9-~	L
 D9Ct~)Hc
 D9Edv
 D9Jt~2
 D9`(toHc
+D9d$pu
 D9e(D
+D9e0u	
+D9ePu	
 D9l$P
 D9l$PMc
+D9l$pu
+D9m u	
+D9m0u	
+D9mPu	
 D9nt|
-D9t$P
+D9t$pu
 D9u(D
+D9uPu	
 D9v(D
 D9|$Hu
+D9|$pu
+D9} u	
+D9}Pu	
 D9~(D
 D9~tt
 D9~t~#A
@@ -3772,9 +3792,8 @@ D;sHu
 D;st|
 D;t$ 
 D;xE3
-D;}H}R
-D;}p}d
-D;}p}x
+D;}x}U
+D<hD9
 DATAH
 DD$lHc
 DETAIL_2_COMBO_ADD
@@ -3875,7 +3894,6 @@ E+A@H
 E0HcH
 E0Lc`
 E8)tEI
-E8>uJI
 E8q(u
 E94$t
 E9ft~
@@ -3890,9 +3908,10 @@ E;t$x
 E;u$t>H
 E;|$<
 E>nEA
+ED$dE3
+ED$dLc
 ED$lM
 ED$tM
-ED$xE3
 EDHcD
 EH*?H
 EHHcI
@@ -3904,8 +3923,10 @@ EQ_STRING
 ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: SweepRenderer::render_slices got into an infinite loop!
+ET$DE3
+ET$DIc
+ET$DLc
 EXPORTSYSTEM_INTERFACE_VERSION_001
-EXfA;
 E\$0H
 EconItemToolModel_001
 Ed$$H
@@ -3961,6 +3982,7 @@ F A8u
 F E;~
 F"5PH
 F"5PL
+F(A;pt
 F>qUxv
 FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
@@ -4057,7 +4079,7 @@ Force Cropping Off
 Force Cropping On
 Force Scale
 Force based on distance from plane
-FpD8%
+FpD8%c
 Frames Measured: %d
 FreeEnvironmentStringsW
 FreeLibrary
@@ -4068,13 +4090,13 @@ Function "%s" not found while loading particle system
 Function is disabled
 G t<H
 G(9B(
-G(E;xt
 GD$(H
 GD$8H
 GD$HA
 GD$XH
 GD$`H
 GET_VAR
+GL$(L
 GL$8H
 GL$HA
 GL$HH
@@ -4169,13 +4191,13 @@ Gt$8I
 Gt$HI
 Gt$XH
 Gx8CVu53
+G{,CEoM
 G|$8H
 G|$HH
 H	L$0L;
 H	MhH;
-H UATAUAVAWH
 H UAUAVAWH
-H USVWATAUH
+H USVWATAUAVH
 H!D$ I
 H!T$0D
 H!|$ H
@@ -4183,36 +4205,34 @@ H#D$hH
 H#T$pH;T$p
 H&]oH
 H*0"ZOW
-H+D$ A
-H+D$(
-H+L$ H
 H-^Eu
 H9(t8
-H9-3k"
-H9-E`%
-H9-P_%
-H9-R|F
-H9-jOF
-H95,2!
-H95B0!
-H95L !
-H95h1!
+H9-E}F
+H9-HOH
+H9-T_%
+H9-e^%
+H95"/!
+H95>TH
+H95H*H
+H95H0!
+H95X\H
+H95iUH
+H95n1!
+H95}TH
 H97t	H
 H97u+A
 H99tjH
-H9=	B#
-H9=(A#
-H9=1X$
-H9=9Q!
-H9=:O:
-H9==J#
-H9=A%!
-H9=HQ"
-H9=Z\:
-H9=`$!
-H9=iK#
-H9=sA#
-H9=|A
+H9=!$!
+H9=.l
+H9=9J#
+H9=@#!
+H9=Au
+H9=C@#
+H9=Ky"
+H9=XI#
+H9=_"!
+H9=b?#
+H9=wH#
 H9C`t
 H9D$Pu>I
 H9E0t
@@ -4286,9 +4306,9 @@ HcD$(Ic
 HcD$0
 HcD$@
 HcD$@I
-HcD$d
 HcD$l
 HcD$p
+HcD$t
 HcD$x
 HcD$xA
 HcD$xH
@@ -4320,10 +4340,9 @@ HcO8Hc
 HcOHH;
 HcQ<H
 HcRtH
-HcT$0
 HcT$0H
+HcT$8
 HcT$8A
-HcT$xH
 HcU_I
 HcU`H
 HcUdHc
@@ -4341,11 +4360,11 @@ Hc^dA
 Hc^hA
 Hc^lA
 Hc^|A
+HchXH
 HciXH
 Hcl$`H
 Hcp(H
 Hct$0H
-Hct$HI
 Hcu`M
 HcyHH
 HcyXL
@@ -4362,7 +4381,6 @@ HostStateMgr001
 How aggressive the switch to fallbacks will be depending on how far over the cl_particle_sim_fallback_threshold_ms the sim time is.  Higher numbers are more aggressive.
 Hybrid Box/Capsule
 I cannot be refracted through refracting objects like water
-I(f2rH
 I+4$H
 I9>t	I
 I9\$Hu
@@ -4400,7 +4418,7 @@ Ic/A;o
 Ic/Hc
 IcD$0
 IcE0H
-IcF(H
+IcG(H
 IcH|H
 IcK0L
 IcT$ I
@@ -4431,6 +4449,9 @@ Implicit: pruned particles %u
 Implicit: verts per cell
 ImplicitVertex_t
 IndexTriVertexBufferLayout
+Indicate that a checkpoint has been reached.
+IndicateTestFailure
+Indicates a test failure if Value is false.
 IndirectDrawArgs
 Infinite Zoom Scale
 InflowA
@@ -4524,7 +4545,6 @@ L!|$(L!
 L$ !|$(
 L$ ATH
 L$ AUH
-L$ AVH
 L$ AWH
 L$ E3
 L$ E;Ht
@@ -4544,7 +4564,7 @@ L$ SVWAVH
 L$ SWH
 L$ UATAUAVAWH
 L$ UH
-L$ USVATAVAWH
+L$ USVAUAVAWH
 L$ USVWAUAVAWH
 L$ USWH
 L$ UVWATAUAVAWH
@@ -4553,6 +4573,7 @@ L$ VWATAUAVAW
 L$ VWATAUAWH
 L$ VWAVH
 L$ WH
+L$ ff
 L$ fff
 L$ |+L;
 L$&8\$&t,8Y
@@ -4586,7 +4607,6 @@ L$<E3
 L$<t$H
 L$@;|
 L$@A9MP
-L$@D;
 L$@E)}P
 L$@E+
 L$@E3
@@ -4598,10 +4618,9 @@ L$@fD;
 L$@uU
 L$DHc
 L$HfH
+L$P@2
 L$PA8
 L$PA;Mt
-L$PD8uHt
-L$PE9}t
 L$PH3
 L$PHc
 L$PIk
@@ -4610,15 +4629,15 @@ L$Pt0
 L$Pu"
 L$T+M
 L$X+L$d
+L$X+M
 L$X9~t
 L$XD;
 L$XD;Nt
 L$XE3
-L$XE8
-L$\+L$|
 L$\+M
 L$`+L$p
 L$`;M
+L$`@8
 L$`Hc
 L$`Lc
 L$dA;
@@ -4626,29 +4645,26 @@ L$h;M
 L$hA;
 L$hD;
 L$l9]
-L$lA9t$t
 L$lA;
 L$lA;L$t
 L$lD;
+L$lE9t$t
 L$pD!l$x
 L$pD9M
 L$pD;
-L$pHc
 L$pIc
 L$pfH
 L$pff
 L$t;]
 L$xD;
 L80Ic
-L9%LHF
-L9%nZF
-L9-^A"
+L95+JF
+L95iGF
 L97t	H
 L97t{L
 L9:t[
-L9=$t%
-L9=ou%
-L9=us%
+L9=!t%
+L9=uu%
 L9?t	H
 L9?tb
 L9K(u
@@ -4658,7 +4674,9 @@ L9d$Ht
 L9g(u.H
 L9n tXH
 L9t$ t
+L9t$(t
 L9t$0t
+L9t$8t
 L9t$@t
 L9vPteL9v`t_L9vhtYH
 L9|$ t
@@ -4704,6 +4722,7 @@ LcK`%
 LcKpH
 LcL$0H
 LcL$@H
+LcL$HH
 LcL$PH
 LcO H
 LcO8H
@@ -4714,10 +4733,11 @@ Lc`(M
 LcaXM
 Lcc`D;cp
 LceXA
+LcewE3
 LcgtM
+LchpeH
 Lcl$xfff
 LcmoI
-LcmwE3
 Lcp(M
 LcpXM
 LcqXM
@@ -4783,10 +4803,8 @@ Lumens
 Lumens Per Meter
 Luminance
 M HcG
-M)t+E
 M9/tA
 M9<$t;
-M9t+E
 MANUAL_ANIMATION_FRAME
 MATCHFRAMEWORK_001
 MATERIAL_PROXY_STATUS_EFFECT
@@ -4808,7 +4826,6 @@ MISSING_PARENT_KILL
 MISSING_PARENT_SAME_INDEX
 MIXED_RESOLUTION_CLEAR
 MIsBoxedIntegerType
-MIt+E
 MM/dd/yy
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MODEL_RENDER_HELPER_PTR
@@ -4861,6 +4878,7 @@ MVectorIsCoordinate
 MVectorIsSometimesCoordinate
 Made disabling operators + children actually fully work.
 Manual Animation Frame
+Manual Snapshot Index
 MapListService_001
 March
 Material
@@ -4981,6 +4999,7 @@ Named Values
 Named model body part random
 Named model mesh group random
 Named model sequence random
+NavGameTest001
 NavSystem001
 Neg R%d <- -R%d
 Negate
@@ -5063,8 +5082,7 @@ Output maximum
 Output minimum
 Output vector
 Overlay
-P 9=x
-P(H+D$(
+P 9=(
 P(tOL
 P8H=vmdlt
 P8H=vpcf
@@ -5252,6 +5270,7 @@ PA_A^_^]
 PA_^]
 PA__]
 PAq=?Mp#
+PE94$
 PET_GROUND_GRID
 PET_GROUND_NONE
 PET_GROUND_PLANE
@@ -5383,6 +5402,7 @@ P`LcE
 PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
+Param
 Parent Map: %s
 Parent Particle Index
 Particle Alpha & Alpha Reference
@@ -5589,6 +5609,7 @@ Pz}b!
 Q5rHg,>
 QAngle
 QD$`H
+QOCNR
 Qkkbal
 Quadratic/Linear Bias
 Quadrilaterals
@@ -5598,6 +5619,7 @@ QueryPerformanceCounter
 Qx;Q||)
 Qy]nH
 Qy]nL
+R 9=~
 R%d->%s
 R1h58
 R?vlD>
@@ -5655,6 +5677,7 @@ Refraction
 RegisterConCommand: Unknown error registering con command "%s"!
 RegisterConVar: Unknown error registering convar "%s"!
 RegisterStringToken
+RegisterTestCheckpoint
 Reinitialize on endcap scalar random
 Relative probability
 Release
@@ -5757,7 +5780,7 @@ Render tonemap controller
 RenderDevice003
 RenderDeviceMgr001
 RenderHardwareConfig002
-RenderOps_Init(11895): 
+RenderOps_Init(11903): 
 RenderService_001
 RenderUtils_001
 Renderer Modifiers
@@ -5957,7 +5980,7 @@ SequencePicker( 1 )
 SequencePicker( 2 )
 SequenceWeightedList_t
 SerializedEntitiesVersion001
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 Set Alpha
 Set CP offset to CP percentage between two control points
 Set CP orientation to CP direction
@@ -5999,7 +6022,7 @@ Set control point to HMD
 Set control point to cp velocity
 Set control point to hand
 Set control point to impact point
-Set control point to particles' center
+Set control point to particle bbox center
 Set control point to player
 Set control point to random position
 Set control point to time-of-day value
@@ -6127,7 +6150,6 @@ SystemOrigin
 SystemSize
 SystemStepSize
 Systems Measured: %d
-T	V_vsnprintf
 T$ ;H
 T$ A;T$$|1
 T$ D+
@@ -6135,6 +6157,7 @@ T$ E3
 T$ H;
 T$ Hc
 T$ Ic
+T$ fA
 T$ fD
 T$$t?
 T$(E3
@@ -6152,7 +6175,6 @@ T$8E+
 T$8E3
 T$8Hc
 T$8HcD$0L
-T$@A+
 T$@D9
 T$@E3
 T$@Hc
@@ -6172,14 +6194,15 @@ T$PH3
 T$PHc
 T$PI	
 T$PLc
-T$Pz$u"
 T$X+U
 T$XE3
 T$XI	
 T$\+U
 T$`+T$p
 T$`E3
+T$`Hc
 T$`ff
+T$`z$u"
 T$dD;]
 T$hE3
 T$hHc
@@ -6189,10 +6212,13 @@ T$lD;]
 T$pA;
 T$pE#
 T$pE3
+T$x9u
 T$xHc
 T$xM;
 T$|fff
-T%gW/
+T%W}/
+T-o,-
+T50,-
 T80Ic
 T>M-+?#gy?
 T>gaW?:]f?AHV>'
@@ -6205,7 +6231,6 @@ TINT_RGB
 TPRGD
 TRAIL_LENGTH
 TUUUU
-T\$0E
 Take radius into account
 Target color control point number
 Target density
@@ -6224,6 +6249,7 @@ TestClock_ExplicitStepped
 TestDomain
 TestDomain_Derived
 TestScriptMgr001
+Testing script helpers.
 Texel Alpha & Alpha Reference
 Texel Alpha & Particle Alpha & Alpha Reference
 TextLayout_001
@@ -6274,18 +6300,16 @@ Triangles
 Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference specific type.
 TryAcquireSRWLockExclusive
-Tt$`tAE
 Tuesday
 Turbulent force
 Turtle Graphics Domain
 TurtleGraphics
 Twist amount (-1..1)
 Twist around axis
+U	V_vsnprintf
 U f9]"u
-U,t)H
 UA>N0Wl
 UATAUAVAWH
-UATAUH
 UATAVAWH
 UATAVH
 UATAWH
@@ -6299,7 +6323,6 @@ USATAVH
 USAUAWH
 USAVH
 USAWH
-USVATAUAWI
 USVATAVH
 USVATAWH
 USVAUAVAWH
@@ -6312,18 +6335,23 @@ USVWATAUH
 USVWATAVAWH
 USVWATAVH
 USVWATH
+USVWAUAVH
 USVWAUAWH
 USVWAUH
 USVWAVAWH
 USVWAVH
+USVWAWH
 USVWH
 USVWI
 USWATAUAVAWH
 USWATAUAWH
 USWATAUH
+USWATAWH
+USWATH
 USWAUAWH
 USWAUH
 USWAVAWH
+USWAVH
 UUUU3
 UUUU3333
 UUUUUU
@@ -6332,6 +6360,7 @@ UV Distortion
 UV Distortion Infinite Zoom
 UV Offset
 UV Scale
+UVATAUAVH
 UVATAUAWH
 UVATAUH
 UVATAVAWH
@@ -6386,6 +6415,7 @@ Use parent density instead of ours
 Use random seeds in debug
 Use scalar attribute for texture coordinate
 Use sequential CP pairs between start and end point
+Used to flag a test as having failed.
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
 UtlMemory_FailedAllocation
@@ -6537,6 +6567,7 @@ Visualization Ring
 Visualization Sphere Solid
 Visualization Sphere Wireframe
 Vrad3_001
+W=.y)
 WARNING: Discarding existing in-progress particle performance request.
 WARNING: Particle system '%s' was not precached correctly. Performing blocking load....
 WARNING: Particle system '%s' with missing path was not found in existing particle system list.
@@ -6582,85 +6613,109 @@ X axis scaling scalar field
 X offset of center point
 X to the Y power
 X!t5~
-X-]b3
-X5.vB
+X%38+
+X5(:5
+X5<'?
+X5=tB
+X5EU4
+X=$s)
+X=F/)
+X=fb+
 X?+5[>,
 XA^]H
 XA^_^[
 XA_A^A\]
 XA_A^A]A\_^][
 XA_A^][
+XD$0A
+XD$@%
 XD$Pt
-XD$hf
+XD$`tD
+XD$pf
+XE`fA
 XL$ t
+XL$DA
+XL$PA
+XL$`D
 XL$`E
 XL$pD
 XT$DA
+XT$HA
 XT$PA
-XT$PH
 XY velocity only
-X\$HA
 X\$hL
 Xa fD
-Xd$PA
+Xd$@%
+Xd$@fA
 Xl$8D
-Xt$`tD
+Xl$PH
+Xm@Lc
 X|$PA
 X|$PD
+X|$PH
+X|$`t
 Y Axis
 Y Dimension Count
 Y Dimension Spacing
 Y axis scaling scalar field
 Y offset of center point
 Y u!H
-Y-SH!
-Y5+\3
-Y5Bi4
-Y5ZS5
-Y5eX9
+Y%)u8
+Y%:o 
+Y-<h9
+Y-fe"
+Y5.P9
+Y5K93
+Y5^N-
+Y5f>5
+Y5iK4
+Y5nH-
 Y9"SD
+Y=LP9
+Y=TX-
 Y>kX>M
-YD$0H
 YD$@D
 YD$@f
 YD$HH
 YD$XA
-YD$`A
 YD$`D
+YD$pA
+YD$pH
 YHD9Y@~@E
 YL$ A
+YL$ E
 YL$0A
 YL$@A
 YL$PE
 YL$PH
-YL$XH
+YL$hH
 YQ<u;
 YRdHc
 YT$ A
 YT$ D
 YT$(D
-YT$@D
 YT$TL
 YT$pD
-Y\$0E
-Y\$@A
 Y\$HA
-Y\$`A
 Y\$`H
 Yd$ A
-Yd$@A
+Yd$0f
+Yd$PA
 Yield, Resume=%s
 Yl$ B
 Yl$PA
 Yl$pD
-Yt$ H
+Ym0Lc
+Yo tA
 Yt$0I
 Yt$PD
-Yt$`A
-Yw tA
+Yt$pA
+YupfA
+Y|$0A
 Y|$@B
 Y|$PA
 Y|$PD
+Y|$pA
 Y}(Hc
 Z Axis
 Z Dimension Count
@@ -6695,15 +6750,16 @@ Zod(^?
 \$ UVW
 \$ UVWAT
 \$ UVWATAUAVAWH
+\$ UVWAVAWH
 \$ UVWH
 \$ VATAVH
+\$ VATAWH
 \$ VAVAWH
 \$ VH
 \$ VWATAUAVH
 \$ VWATH
 \$ VWAWH
 \$ WATAVH
-\$ WATAWH
 \$ WH
 \$ fI
 \$ t'
@@ -6738,11 +6794,9 @@ Zod(^?
 \$@E;
 \$@H;
 \$@L;
-\$@L;A
 \$@f;P
 \$@fD
 \$@fE
-\$@tZH
 \$@~RH
 \$D+]
 \$DE3
@@ -6750,11 +6804,11 @@ Zod(^?
 \$HE3
 \$HfE
 \$PE3
-\$PHc
 \$PI+
 \$PM;
 \$PfA
 \$PfD9
+\$PuEH
 \$X@83u
 \$XE3
 \$XIc
@@ -6767,46 +6821,46 @@ Zod(^?
 \$lt3A8^
 \$pE3
 \$pfD
-\5NX9
-\=lX9
+\$puZL
+\=5P9
 \C Hc
+\D$ fD
 \D$(L
 \D$DA
 \D$HA
 \D$hA
 \D$tD
 \G Hc
+\L$ D
 \L$8f
 \L$HD
+\L$PA
 \L$PD
 \L$TL
 \T$DD
 \T$PD
-\T$|Hc
-\\$HA
 \\$TD
 \\$pH
-\d$DA
+\d$@A
+\d$TA
+\d$XA
 \l$DH
-\l$HD
-\l$hD
-\l$hL
-\t$XA
+\t$hA
+\t$hL
 \t$pA
 \t$pD
 \t3D8T$(t
-\|$TA
+\|$PA
 \|$TE
+\|$XE
 ])6M>&
 ]0|EH
-]53M3
-]5X_*
-]5yd-
-]=DU7
+]5)*-
+]5S*3
+]=t?7
 ]>)2X
 ]J<0"0i3
 ]Lu*E;|$
-]`tPH
 ]hHcu`H
 ^<V7w
 ^@I9^(I
@@ -6919,11 +6973,11 @@ _procedural_particle_snapshot.vsnap
 `vtordispex{
 `vtordisp{
 `zIuGB
-a	Warning
 a7hIw
 abcdefghijklmnopqrstuvwxyz
 absolute value
 accelerate position
+accept decals
 active_frame
 activity
 activity override
@@ -6983,10 +7037,12 @@ avg_num_tests
 avg_num_traces
 avg_render
 avg_sim
+b	Warning
 b>mUf
 b?,eY>
 b?/n3>j
 b?^Cy
+bValue
 bad address
 bad array new length
 bad exception
@@ -7191,16 +7247,14 @@ d$ D!
 d$ E3
 d$ Mcy
 d$ UAVAWH
-d$ uVH
 d$(E3
 d$(Lc
 d$(fA;
 d$0D;!
-d$8Hc
 d$8L+
 d$@D8
 d$@D;
-d$@tN
+d$@tZH
 d$HI;
 d$HLcd$@
 d$HtT
@@ -7215,16 +7269,17 @@ d$PIc
 d$PLc#E+
 d$XA+
 d$XIc
+d$XtZ
 d$`E;
+d$`fD
 d$dD;d$ltY
 d$dE3
 d$hD9
 d$hLcf
-d$htY
 d$xD9e
 d$xE3
 d$xLc
-d$xt?L
+d$xtGL
 d?000000`?
 dampen gravity/buoyancy near water plane
 dampen on only one side of plane
@@ -7384,7 +7439,6 @@ fD9dD u
 fD9dD u1
 fD9dD uA
 fD9dD uO
-fD9eX
 fD9t$b
 fD9z8
 fD;G"w{L
@@ -7484,7 +7538,6 @@ generic-type-
 get closest point on closest hitbox
 gfffA
 gfffffffH
-giP9giP9giP9giP9
 global center point
 global normal
 global origin
@@ -7656,12 +7709,14 @@ iu+-,
 j>>A?1
 j?V()
 j?{$*
+jD8=,f
 jj@0HK4
 k L9~ t
 k0L9~0t
 k0i0$
 k?!@&>
 k@L9~@t
+kD8=*f
 kHL9~Ht
 kL@8o(u
 kill newest instead of oldest
@@ -7686,6 +7741,7 @@ l$ VWAWH
 l$ WATAWH
 l$ WH
 l$(E3
+l$(L9v
 l$(ff
 l$(t2H
 l$0E3
@@ -7696,7 +7752,6 @@ l$0Lc)
 l$0fD
 l$0tjH
 l$0u!H
-l$4wAD
 l$8D9nt
 l$8E3
 l$8Hk
@@ -7714,8 +7769,8 @@ l$@u!H
 l$@uAA
 l$HA_A^A]A\_^
 l$HD8
+l$HHc
 l$HI;
-l$HLk
 l$PE3
 l$PH9{pt}E
 l$PH9~pt}E
@@ -7954,6 +8009,7 @@ m_OutputConnections
 m_OutputIndex
 m_Outputs
 m_Param
+m_ParamType
 m_ParentMapName
 m_PathParameters
 m_PathParams
@@ -8004,6 +8060,7 @@ m_b3D
 m_bAbsVal
 m_bAbsValInv
 m_bAccelerate
+m_bAcceptsDecals
 m_bAccountForRadius
 m_bActiveRange
 m_bAdaptiveThreshold
@@ -8296,7 +8353,6 @@ m_bUseQuat
 m_bUseRandomCPs
 m_bUseRawMeshGroup
 m_bUseScalarForTextureCoordinate
-m_bUseShadowFastPath
 m_bUseTexture
 m_bUseVelocity
 m_bUseVerticalVelocity
@@ -9059,6 +9115,7 @@ m_nLocalCP
 m_nLocalSpaceCP
 m_nLocalSpaceControlPoint
 m_nManualFrameField
+m_nManualSnapshotIndex
 m_nManualTField
 m_nMapType
 m_nMaterialControlPoint
@@ -9181,7 +9238,6 @@ m_nShaderType
 m_nShaderType != SPRITECARD_SHADER_CUSTOM
 m_nSizeCullBloat
 m_nSkin
-m_nSkinCP
 m_nSkipRenderControlPoint
 m_nSnapShotIncrement
 m_nSnapShotStartPoint
@@ -9564,8 +9620,8 @@ nParam
 nSwitchValue
 nTries < 10000000
 nValue
+nW4fD
 n]?iJ
-n^0fA
 names
 nan(ind)
 nan(snan)
@@ -9574,7 +9630,7 @@ need dictionary
 network down
 network reset
 network unreachable
-nf,fE
+ng,fE
 ngZ8H
 ngZ8L
 no buffer space
@@ -9630,9 +9686,16 @@ nullptr
 num to emit
 num_particles
 o L9s t
+o$$fD
+o%]9I
 o(L9d$Ht
 o(L9s(t
+o-u9I
 o0L9s0t
+o5h9I
+o5s}+
+o<j=s
+o=[9I
 oD$ H
 oD$ f
 oD$0f
@@ -9789,9 +9852,11 @@ pA_A^A]A\_^[
 pA_A^^
 pA_^]
 pA__^][
+pCheckpointName
 pClass
 pD$0Uf
 pD$@UfA
+pDescription
 pMessage
 pName
 pParam
@@ -9906,7 +9971,9 @@ protocol not supported
 proxy type
 public: 
 public_output::%s
+public_output::%s::%s
 pulse_runtime_lib
+pulse_system
 purecall
 pvec_color_black
 pvec_color_white
@@ -10155,11 +10222,11 @@ simulation timescale
 size at which to fade away
 size at which to start fading
 skin number
-skin override CP
 skinning
 slack
 snapshot control point for count
 snapshot control point number
+soi9X
 sort override position CP
 sort particles (DEPRECATED - USE RENDERER OPTION)
 sound
@@ -10255,7 +10322,7 @@ t	Hcp
 t	f9A
 t D8h
 t!fff
-t#D8%
+t#D8%$
 t$ ATAVAWH
 t$ AUAVAWH
 t$ AVH
@@ -10310,6 +10377,7 @@ t$@9{t
 t$@;t$X
 t$@A;
 t$@E3
+t$@H;K
 t$@Hc+;k
 t$@Lc7D;w
 t$@Lcs
@@ -10337,6 +10405,7 @@ t$XE3
 t$XI;
 t$XfI
 t$`9kX~/H
+t$`9st
 t$`E3
 t$`Ic
 t$`Ik
@@ -10346,103 +10415,103 @@ t$`fD
 t$dIc
 t$h9k@~-H
 t$hI9
-t$htSHc
+t$hL;
+t$htKI
 t$p9k(~'H
 t$p@8
 t$pE3
 t$pHc
 t$pLcutM
+t$pu-M
 t$puEH
 t$xA;
-t$xfA
+t$xD9
 t$xt*3
-t$xtKI
 t%D8h
 t&A88t
 t'<Zt
 t'HcW
+t)D9} u	
 t)IcV
 t*IcH
 t,fff
 t-Lck
 t.D8o
-t0L9%
-t0L9%YHF
-t0L9%{ZF
-t0L95
+t0L9%	
+t0L9%+
+t0L9%N
+t0L95vGF
 t1Hc}
 t1LcI
-t2H95u
-t2L9=
+t2H95e\H
+t2L9=.t%
 t3H9-
-t3H9-A
-t3H9-R`%
-t3H9-e
-t3H9-wOF
+t3H9-'
+t3H9-R}F
+t3H9-UOH
+t3H9-a_%
 t3L9%
-t3L9%B
+t3L9%"UD
+t3L9%S
 t3L95
-t3L95!
 t3L9=
 t4D8e
 t4L;Cht#M
 t4L;sht#M
 t6H9-
-t6H9-)
+t6H9-!
+t6H9-`
 t6H95
-t6H95[
-t6H9=>X$
+t6H95KTH
+t6H9=
+t7D9t$pu
 t7HcP
-t8H9=K
-t8L95
+t8H9=;l
+t8L958JF
 t8L9=
-t8L9="v%
-t8L9=1t%
-t8L9=|u%
 t=E9g
 t>@8}
 t>vTU>
 t?H9-
-t?H9-*
-t?H9-@k"
-t?H9-]_%
-t?H9-_|F
+t?H9-Z
+t?H9-r^%
+t?H9-y
 t?H95
-t?H953
-t?H9592!
-t?H95O
-t?H95O0!
-t?H95Y !
-t?H95e
-t?H95u1!
+t?H95//!
+t?H959
+t?H95U*H
+t?H95U0!
+t?H95u
+t?H95vUH
+t?H95{1!
 t?H9=
-t?H9="$!
-t?H9=+K#
-t?H9=/
-t?H9=5A#
-t?H9=FQ!
-t?H9=GO:
-t?H9=JJ#
-t?H9=N
-t?H9=N%!
-t?H9=UQ"
-t?H9=X
-t?H9=a
-t?H9=c
-t?H9=g\:
-t?H9=m$!
-t?H9=v
-t?H9=vK#
-t?H9=z
+t?H9=&P!
+t?H9='w:
+t?H9=.
+t?H9=.$!
+t?H9=8
+t?H9=A
+t?H9=FJ#
+t?H9=G
+t?H9=M#!
+t?H9=P@#
+t?H9=V
+t?H9=Xy"
+t?H9=Z
+t?H9=eI#
+t?H9=l"!
+t?H9=o?#
+t?H9=u
+t?H9=y
 t?HcS
 t?L9%
-t?L9%b
-t?L9%u
+t?L9%%
+t?L9%B
 t?L9-
-t?L9-kA"
 t?L95
 tA@87t<H
 tA@8u
+tAH95
 tBLcE
 tD@87t?H
 tEH92t@
@@ -10543,16 +10612,17 @@ twIcF
 twist axis
 tyfD;
 t{D8=
-t{D8=<C)
-t|D8=
+t{D8=|C)
+t|D8="E)
+t};wt}x
 t~D8u
 u	D8#|
 u	D;>
 u#L9|
 u$D8r(t
 u%@8j(t
+u*HcE
 u,!T$(H!T$ 
-u1HcE
 u1fD9
 u3HcH<H
 u4I9}(
@@ -10561,7 +10631,7 @@ u<Ic{
 u<g~l<it[<ntP<ot,<pt
 u?D9~
 uED8r(t
-uO]O<I
+uPD9t$tuIH
 uPHcEHLk
 uTM9<$tN
 uint16
@@ -10577,7 +10647,8 @@ unknown header flags set
 unrecognized line %s in .OBJ file %s
 unsigned 
 unused
-upHc@`
+uofff
+uqHcH`
 use Movement Basic for Local Gravity & Buoyancy Scale
 use bones instead of hitboxes
 use continuous emission
@@ -10648,7 +10719,7 @@ volatile
 volume field
 volume scale
 voting took %? secs
-vpcf57
+vpcf58
 vpcfE
 vpcfE3
 vpcfH
@@ -10697,8 +10768,8 @@ x AVH
 x AVHcA
 x UATAUAVAWH
 x UAVAWH
-x";Q`}
 x#;QH}
+x#;Q`}
 x)fff
 x8D;r
 x<H9{0
@@ -10716,20 +10787,24 @@ xfA;B0}`H
 x}fD;@
 y\PD>!
 z"u A
-z%u#D
+z%u#E
 z*u(E
 z*u(H
+z/u-E
 z2u0H
 z3u1A
-z4u2A
+z4u2E
+z9u7A
 z>u<A
 z?Y4]>
-zAu?D
-zD8=5
+zCuAE
+zD8=Ug
 zHuFE
-zRuPA
+zMuKE
+zRuPE
 zY;>u:m	
 zYuWL
+z_aTG
 zbuf%1d%1d%1d.png
 zeroth_moment
 zpunD
@@ -10809,8 +10884,9 @@ zpunD
 |$@u)
 |$DE3
 |$DLc
+|$DtO
 |$HE3
-|$Ht"H
+|$HtY
 |$LA+
 |$PD;
 |$PE3
@@ -10825,20 +10901,20 @@ zpunD
 |$XH+
 |$XHcU
 |$XM;
+|$\ff
+|$\fff
 |$`E3
 |$`H9{pt}E
 |$`Mc
-|$h;D$0
 |$hE3
-|$hH+
+|$hH;
 |$hLc
 |$hff
-|$ht@
 |$p+x
 |$pE3
 |$pH;
-|$pHc
 |$pM;
+|$pt5
 |$tD;
 |$tHc
 |$xt{D

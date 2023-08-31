@@ -30,6 +30,7 @@
 	extension
 	g_BitBuf_BitWriteMasks
 	g_VProfCurrentProfile
+	g_bUpdateStringTokenDatabase
 	g_pMemAlloc
 	game_data
 	gc_app_id
@@ -250,7 +251,6 @@
  update {  } 
  { ... };
  } from:
-!	V_stricmp_fast
 !#GameUI_Disconnect_ConnectionLost
 !#GameUI_Disconnect_HLTVRestricted
 !#GameUI_Disconnect_LoopDeactivate
@@ -282,6 +282,7 @@
 !k_EGCToGCMsgMasterStartupComplete
 !k_ESOMsg_CacheSubscriptionRefresh
 !m_bNeedsSort
+"	V_stricmp_fast
 " because it is missing required fields: 
 " conflicts with field "
 " conflicts with the existing symbol "
@@ -368,6 +369,7 @@
 ##GameUI_Disconnect_BadRelayPassword
 ##GameUI_Disconnect_ReliableOverflow
 ##GameUI_Disconnect_SnapshotOverflow
+#&me1{
 #CWorkshop_AddSpecialPayment_Request
 #GameUI_ClientConsistencyFail
 #GameUI_ClientDifferentMap
@@ -617,7 +619,6 @@ $tI[A:%u:%u:%u]
 (]	.(0
 (_^][
 (cannot determine missing fields for lite message)
-(da7(
 (f*^[0
 (k_ECommunityItemAttribute_StorePackageID
 (merge 
@@ -727,7 +728,6 @@ $tI[A:%u:%u:%u]
 -------     ----------------
 -BH>t
 -CCommunity_GetGamePersonalDataEntries_Request
--F{$D
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
 -NETWORK_DISCONNECT_KICKED_COMPETITIVECOOLDOWN
 -NETWORK_DISCONNECT_LOCALPROBLEM_NETWORKCONFIG
@@ -1259,7 +1259,6 @@ $tI[A:%u:%u:%u]
 1#INF
 1#QNAN
 1#SNAN
-1*s|`
 130801120000Z
 16777215"R
 16777215B$
@@ -1297,7 +1296,7 @@ $tI[A:%u:%u:%u]
 220323000000Z
 220801000000Z
 230714000000Z
-230817180156Z0/
+230830000722Z0/
 241009235959Z0a1
 27.CProductInfo_SetRichPresenceLocalization_Request.Token"3
 27015,27016,27017,27018,27019,27020
@@ -1320,7 +1319,6 @@ $tI[A:%u:%u:%u]
 360428235959Z0i1
 370322235959Z0c1
 380115120000Z0b1
-39'F=%
 3<$u?A
 3>N;kU
 3>fvw
@@ -1587,6 +1585,7 @@ $tI[A:%u:%u:%u]
 ?SpinLockForWrite@CThreadSpinRWLock@@AEAAXPEBDHI@Z
 ?Start@CThread@@UEAA_NIW4ThreadPriorityEnum_t@@@Z
 ?TY,>5
+?ToLowerFast@CBufferString@@QEAAXH@Z
 ?ToString@netadr_t@@QEBAPEBD_N@Z
 ?ToString@netadr_t@@QEBAXPEADI_N@Z
 ?TryLock@CThreadMutex@@QEAA_NPEBDH@Z
@@ -1620,7 +1619,7 @@ $tI[A:%u:%u:%u]
 @8i(u
 @8j(t
 @8k(t
-@8t$Pt
+@8t$`t
 @8w$t
 @8y*uS@8y+u:H
 @8z$u
@@ -1654,7 +1653,7 @@ $tI[A:%u:%u:%u]
 @A_A^_^]
 @HHcB$;B(u
 @HPX&I
-@HPX`hv
+@HPX`hvp
 @PHcB(;B,u
 @SATAUAVAWH
 @SATAUAWH
@@ -1722,6 +1721,7 @@ $tI[A:%u:%u:%u]
 @UVWAVH
 @UVWAWH
 @UVWH
+@UWATH
 @UWAVAWH
 @UWAVH
 @UWAWH
@@ -2243,6 +2243,7 @@ ChHcG0H
 ClearField
 Client::CmdKeyValues
 Client::ResendGameDetailsRequest
+ClientToolsInfo_001
 CloseHandle
 Comma delimited list of ip:port of servers used to search for dedicated servers instead of searching for public servers.
 Command::%s
@@ -2426,6 +2427,7 @@ D8t$ht
 D8x"uJB
 D8{8u+H
 D8|$`t
+D9%Jp
 D9@(|
 D9AHu
 D9H }
@@ -2751,6 +2753,7 @@ GCConnectionStatus_NO_STEAM
 GCHost
 GCSDK::GetPchTempTextBuffer
 GD$HH
+GD$xAi
 GD$xH
 GHL9d
 GHfD9x
@@ -2881,6 +2884,7 @@ GetUserDefaultLocaleName
 GpH;CPv
 Group
 Groups are not supported in proto3 syntax.
+G|$xAi
 H 8YKt
 H 8YKt	
 H ;K w
@@ -2943,8 +2947,8 @@ H9i s
 H9o u$H
 H9p r
 H9q s
-H9t$0t
-H9t$8t
+H9t$@t
+H9t$Ht
 H9x s
 H9{ uiH
 H;B r
@@ -3283,6 +3287,7 @@ L$(H3
 L$(Hc
 L$(fH
 L$0;\$8
+L$0@80t
 L$0D+C
 L$0D9a
 L$0D;A
@@ -3588,6 +3593,7 @@ NOTIFY_USER_SESSIONS
 NOTIFY_VAC_ACTION
 NO_SIDE_EFFECTS
 NamePart
+NavGameTest001
 NavSystem001
 Near/game:ark
 Near/members:numPlayers
@@ -3732,6 +3738,7 @@ QueryParam
 QueryPerformanceCounter
 QueueConnect
 RANDOM
+RBS=t
 RaiseException
 RandomFloat
 RandomInt
@@ -3743,6 +3750,7 @@ Received server_pre_shutdown notification - server is shutting down...
 ReconnectGameInterface
 RegisterConCommand: Unknown error registering con command "%s"!
 RegisterConVar: Unknown error registering convar "%s"!
+RegisterStringToken
 Release
 ReleaseMessage
 ReleaseSRWLockExclusive
@@ -3856,7 +3864,7 @@ Server/ping
 Server/reservationid
 Server/server
 Server/xuid
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 ServiceDescriptorProto
 ServiceOptions
 SessionSearch
@@ -3977,7 +3985,6 @@ System
 System data:
 System/dependentlobby
 System:dependentlobby
-T	V_vsnprintf
 T$ D8t$(
 T$ D8|$(
 T$ E2
@@ -4099,6 +4106,8 @@ Trying to send message type %d before GC connection established.  This is guaran
 Tuesday
 Type appears to be in generated pool but wasn't 
 Type is already registered: 
+U	V_vsnprintf
+U,KG2H
 UA>N0Wl
 UATAUAVAWH
 UATAWH
@@ -4262,7 +4271,6 @@ XA^_][
 XA_A^A]A\_^][
 Y0HcR
 Y9"SD
-Y>LB+
 Y>kX>M
 YD$@f
 Z\>z8
@@ -4276,7 +4284,6 @@ Zod(^?
 [M:%u:%u:%u]
 [MM] Joining session %llx, %d search results remaining...
 [MM] Server responded '%s', dist %d
-[O0Ydn1
 [P:%u:%u]
 [T:%u:%u]
 [U:%u:%u]
@@ -4284,7 +4291,6 @@ Zod(^?
 [aOni*{
 [c:%u:%u]
 [g:%u:%u]
-[gkT2
 [i:%u:%u]
 [lazy = true] can only be specified for submessage fields.
 [packed = true] can only be specified for repeated primitive fields.
@@ -4443,7 +4449,6 @@ _remote_xuidsrc
 `vector vbase copy constructor iterator'
 `vftable'
 `virtual displacement map'
-a	Warning
 a7hIw
 abcdefghijklmnopqrstuvwxyz
 absolute_timeout
@@ -4488,6 +4493,7 @@ associated_workshop_files
 atan2
 attributes
 auto_close_session
+b	Warning
 b?^Cy
 bad address
 bad allocation
@@ -4606,6 +4612,7 @@ custom_bot_difficulty
 custommatch
 cvars
 cyber_cafe
+c~=:^+
 d$ D!
 d$ E3
 d$ UAVAWH
@@ -4900,6 +4907,7 @@ http://ocsp.digicert.com0C
 http://ocsp.digicert.com0X
 http://ocsp.digicert.com0\
 http://www.digicert.com/CPS0
+i&Ue5
 iController
 id_verified
 idempotency_level
@@ -5435,7 +5443,6 @@ owner dead
 owner_id
 owner_soid
 o|$0f
-p	_V_FileBase
 p UATAUAVAWH
 p*W4H
 p08@H^
@@ -5526,6 +5533,7 @@ purchase_result_detail
 purchase_type
 purecall
 py_generic_services
+q	_V_FileBase
 q fff
 q(fff
 qS>g?h3
@@ -5539,7 +5547,6 @@ r!fff
 r"fff
 r7f;\$|
 r:f;\$|
-rDO@A
 rKf;\$t
 rNf;\$t
 r_f;\$l
@@ -6022,7 +6029,7 @@ voice_show_mute
 voice_test_log_send
 voice_unmute
 v}`[>
-w D85
+w D85m
 w HcG8
 w!fA;
 w(Hco0L
@@ -6057,6 +6064,7 @@ x AVHcA
 x UATAUAVAWH
 x UAVAWH
 x#D;Bh}
+x$Si`z
 x0H+x
 xA_A]A\^[]
 xA_A^A]A\_^[]
@@ -6076,10 +6084,10 @@ yielding
 yielding_jobs
 youblocked
 yxxxxxxxH
-z	_V_StringAfterPrefix
 z :"U
 zDInterval between datacenter stats updates.
 zY;>u:m	
+{	_V_StringAfterPrefix
 { AUAVAWH
 { AVH
 { D9s

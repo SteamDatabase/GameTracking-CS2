@@ -149,7 +149,7 @@
 		{
 			"version"	"2"
 		}
-		"snd_steamaudio_enable_custom_hrtf"					"1"
+		"snd_steamaudio_enable_custom_hrtf"					"0"
 		"snd_steamaudio_enable_perspective_correction"		"1"
 		"snd_steamaudio_perspective_correction_factor"		"1.0"
 		"snd_steamaudio_normalize_default_hrtf_volume"		"1"
@@ -173,6 +173,11 @@
 	//	// See csgo_imported's gameinfo.gi
 	//	"DeprecatedBehaviorVersionsAllowed"	"0"
 	//}
+
+	GMS
+	{
+		"Advertise"			"1"
+	}
 	
 	GameInstructor
 	{
