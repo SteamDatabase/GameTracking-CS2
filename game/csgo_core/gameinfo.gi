@@ -12,6 +12,7 @@
 	SupportsXbox360 0
 	SupportsDX8	0
 	tonemapping 1 // Show tonemapping ui in tools mode
+	configconflictresolutiondialog 0
 	GameData	"csgo.fgd"
 
 	hidden_maps
@@ -445,6 +446,8 @@
 		"IndexBufferPoolSizeMB"						"32"
 		"LowLatency"								"1"
 		"MinDXLevel"								"110" // DX 11.0 is the minimum
+		"MinStreamingPoolSizeMB"					"500"
+		"MinStreamingPoolSizeMBTools"				"2048"
 	}
 
 	Manifest
