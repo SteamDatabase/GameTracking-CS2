@@ -1,4 +1,4 @@
-## Game Tracker: CSGO
+## Game Tracker: Counter-Strike 2
 
 Tracking things, so you don't have to.
 
