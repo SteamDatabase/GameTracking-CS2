@@ -175,7 +175,7 @@
 		"snd_delay_sound_ms_max"	"40"
 		
 		"cl_disconnect_voice_fade"	"-1.0"
-		"cl_disconnect_soundevent"	"Music.StopAllExceptMusic"
+		"cl_disconnect_soundevent"	"StopSoundEvents.StopAllExceptMusic"
 		
 		// Physics specific customization
 		"phys_use_position_based_toi_test" "1"
