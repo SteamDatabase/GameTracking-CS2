@@ -210,7 +210,20 @@ message OperationalStatisticsPacket {
 	repeated .OperationalStatisticElement values = 3;
 }
 
+message OperationalVarValue {
+	optional string name = 1;
+	optional int32 ivalue = 2;
+	optional float fvalue = 3;
+	optional bytes svalue = 4;
+}
+
 message PlayerRankingInfo {
+	message PerMapRank {
+		optional uint32 map_id = 1;
+		optional uint32 rank_id = 2;
+		optional uint32 wins = 3;
+	}
+
 	optional uint32 account_id = 1;
 	optional uint32 rank_id = 2;
 	optional uint32 wins = 3;
@@ -222,6 +235,7 @@ message PlayerRankingInfo {
 	optional uint32 rank_if_win = 10;
 	optional uint32 rank_if_lose = 11;
 	optional uint32 rank_if_tie = 12;
+	repeated .PlayerRankingInfo.PerMapRank per_map_rank = 13;
 	optional uint32 leaderboard_name_status = 14;
 }
 
@@ -511,6 +525,7 @@ message CMsgGCCStrike15_v2_MatchmakingGC2ServerReserve {
 	optional .CPreMatchInfoData pre_match_data = 15;
 	optional uint32 rtime32_event_start = 16;
 	optional uint32 tv_control = 17;
+	repeated .OperationalVarValue op_var_values = 19;
 }
 
 message CMsgGCCStrike15_v2_MatchmakingServerReservationResponse {

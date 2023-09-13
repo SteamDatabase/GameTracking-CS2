@@ -60,32 +60,6 @@
 		"sv_minrate"	"98304"
 		"sv_maxunlag"	"0.200"
 
-		"cl_interp_ratio"
-		{
-			"min"		"1"
-			"default"	"1"
-			"max"		"2"
-		}
-		"cl_interp"
-		{
-			"min"		"0"
-			"default"	"0.046875"
-			"max"		"0.1"
-		}
-		"sv_client_min_interp_ratio"
-		{
-			"min"		"-1"
-			"default"	"1"
-			"max"		"2"
-		}
-		"sv_client_max_interp_ratio"
-		{
-			"min"		"1"
-			"default"	"2"
-			"max"		"5"
-		}
-		// Don't set tick-rate related values here, as those should now all come from ENGINE_FIXED_TICK_INTERVAL
-
 		// GOTV controls
 		"tv_secret_code"		"0"
 		"tv_relay_secret_code"	"0"
