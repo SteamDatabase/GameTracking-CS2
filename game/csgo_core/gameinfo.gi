@@ -148,28 +148,29 @@
 			"FakeReorderPct"	"0"
 			"FakeReorderDelay"	"0"
 
-			"TimeTable"
-			{
-				// Begin lag at 10:10:00 AM local time
-				"101000"
-				{
-					"FakeLag"	"50"
-				}
-				// Back to zero lag at 11:00:00 AM local time
-				"110000"
-				{
-				}
-				// Begin lag at 3:10:00 PM local time
-				"151000"
-				{
-					"FakeLag"	"50"
-				}
-				// Back to zero lag at 5:00:00 PM local time
-				"170000"
-				{
-				}
-
-			}
+// We're shipping tomorrow. Disable fake lag for now  -McJohn
+//			"TimeTable"
+//			{
+//				// Begin lag at 10:10:00 AM local time
+//				"101000"
+//				{
+//					"FakeLag"	"50"
+//				}
+//				// Back to zero lag at 11:00:00 AM local time
+//				"110000"
+//				{
+//				}
+//				// Begin lag at 3:10:00 PM local time
+//				"151000"
+//				{
+//					"FakeLag"	"50"
+//				}
+//				// Back to zero lag at 5:00:00 PM local time
+//				"170000"
+//				{
+//				}
+//
+//			}
 		}
 	}
 
@@ -363,6 +364,29 @@
 			PreMergeSmallRegionsSizeThreshold "20.0"
 		}
 
+		SteamAudio
+		{
+			Probes
+			{
+				GridSpacing			"3.0"
+				HeightAboveFloor	"1.5"
+			}
+			Reverb
+			{
+				NumRays				"32768"
+				NumBounces			"64"
+				IRDuration			"1.0"
+				AmbisonicsOrder		"1"
+			}
+			Pathing
+			{
+				NumVisSamples		"1"
+				ProbeVisRadius		"0.0"
+				ProbeVisThreshold	"0.5"
+				ProbePathRange		"1000.0"
+			}
+		}
+
 		TextureCompiler
 		{
 			//Compressor              "lz4"
@@ -370,6 +394,8 @@
 			//Compressor              "kraken" 
 			CompressMipsOnDisk      "1"
 			CompressMinRatio        "95"
+			AllowNP2Textures		"1"
+			AllowPanoramaMipGeneration	"1"
 		}
 	}
 

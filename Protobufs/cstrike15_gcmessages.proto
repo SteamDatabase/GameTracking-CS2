@@ -102,6 +102,7 @@ enum ECsgoGCMsg {
 	k_EMsgGCCStrike15_v2_PrivateQueues = 9214;
 	k_EMsgGCCStrike15_v2_MatchListTournamentOperatorMgmt = 9215;
 	k_EMsgGCCStrike15_v2_SetPlayerLeaderboardSafeName = 9218;
+	k_EMsgGCCStrike15_v2_ClientRedeemFreeReward = 9219;
 }
 
 enum ECsgoSteamUserStat {
@@ -437,6 +438,7 @@ message CMsgGCCStrike15_v2_MatchmakingClient2ServerPing {
 	repeated .DataCenterPing data_center_pings = 4;
 	optional uint32 max_ping = 5;
 	optional fixed32 test_token = 6;
+	optional bytes search_key = 7;
 }
 
 message CMsgGCCStrike15_v2_MatchmakingGC2ClientUpdate {
@@ -745,6 +747,12 @@ message CMsgGCCstrike15_v2_ClientRedeemMissionReward {
 	optional uint32 expected_cost = 4;
 }
 
+message CMsgGCCstrike15_v2_ClientRedeemFreeReward {
+	optional uint32 generation_time = 1;
+	optional uint32 redeemable_balance = 2;
+	repeated uint64 items = 3;
+}
+
 message CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded {
 	repeated .XpProgressData xp_progress_data = 1;
 	optional uint32 account_id = 2;
@@ -752,6 +760,7 @@ message CMsgGCCstrike15_v2_GC2ServerNotifyXPRewarded {
 	optional uint32 current_level = 4;
 	optional uint32 upgraded_defidx = 5;
 	optional uint32 operation_points_awarded = 6;
+	optional uint32 free_rewards = 7;
 }
 
 message CMsgGCCStrike15_ClientDeepStats {
@@ -1076,6 +1085,12 @@ message CSOEconCoupon {
 	optional uint32 entryid = 1 [(key_field) = true];
 	optional uint32 defidx = 2;
 	optional fixed32 expiration_date = 3;
+}
+
+message CSOAccountItemPersonalStore {
+	optional uint32 generation_time = 1 [(key_field) = true];
+	optional uint32 redeemable_balance = 2;
+	repeated uint64 items = 3;
 }
 
 message CSOQuestProgress {

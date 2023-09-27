@@ -41,6 +41,7 @@
 	Engine2
 	{
 		"DepotBuildDateTimeInTitleBar" "1"
+		"InitFilterTextEarly" "1"
 	}
 	
 	pulse
@@ -144,10 +145,20 @@
 		"snd_steamaudio_normalize_default_hrtf_volume"		"1"
 		"snd_steamaudio_default_hrtf_volume_gain"			"0.0"
 		"snd_steamaudio_max_hrtf_normalization_gain_db"		"6.0"
+		"snd_steamaudio_enable_pathing"						"1"
+		"snd_steamaudio_source_pathing_debug"				"0"
 
 		// Need much tighter sound clock sync
 		"snd_delay_sound_ms_max"	"40"
 		
+		//don't let people miss with speaker config settings.
+		"speaker_config"
+		{
+			"min"		"-1"
+			"default"	"-1"
+			"max"		"-1"
+		}
+
 		"cl_disconnect_voice_fade"	"-1.0"
 		"cl_disconnect_soundevent"	"StopSoundEvents.StopAllExceptMusic"
 		
