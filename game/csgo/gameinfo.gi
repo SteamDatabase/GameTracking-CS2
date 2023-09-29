@@ -10,6 +10,7 @@
 
 	game 		"Counter-Strike 2"
 	title 		"Counter-Strike 2"
+	title_pw	"E58F8DE68190E7B2BEE88BB1EFBC9AE585A8E79083E694BBE58ABF"
 	
 	LayeredOnMod	csgo_imported // Inherits the gameinfo.gi data from csgo_imported (which itself inherits from csgo_core)
 
