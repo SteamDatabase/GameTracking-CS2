@@ -44,6 +44,7 @@
 		"DepotBuildDateTimeInTitleBar" "1"
 		"InitFilterTextEarly" "1"
 		"CNPW"	"CD535060BE7CF1821AFF685103743B65BF52"
+		"LvConfig"	"0"
 	}
 	
 	pulse
