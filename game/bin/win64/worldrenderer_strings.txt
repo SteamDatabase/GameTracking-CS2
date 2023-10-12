@@ -39,7 +39,6 @@
  A^^]
  A^_]
  A_A\[
- A_A\^
  A_A\_
  A_A\_^[H
  A_A^A\
@@ -77,7 +76,6 @@
 !>6'Y
 !hn7!
 "e?<<<<<<l?
-#9.jETa
 #\$`D
 #t'fA
 $A;\$
@@ -108,6 +106,7 @@ $Ib?s
 %s: %s
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
+%s: Invalid lock state %d
 %s: invalid nBeforeIndex %d
 %s: invalid nSize %d
 %s== World '%s' Entity Lump '%s': %d entities ==
@@ -536,7 +535,6 @@ $Ib?s
 /L$Dr
 /M9 t*M
 /\$Dr
-/u)sr
 0 0 0
 0 0 0 0
 0 0 0 255
@@ -546,7 +544,6 @@ $Ib?s
 0><[cZUg^>
 0A\_^
 0A]A\^
-0A]^[
 0A]_^][
 0A^^]
 0A^_^
@@ -561,7 +558,7 @@ $Ib?s
 0A_A^_
 0A_A^_^]
 0A_][
-0A__[
+0A_^[
 0H9t$8tZH
 0L9uPt
 0X8b?~
@@ -579,7 +576,7 @@ $Ib?s
 220323000000Z
 220801000000Z
 230714000000Z
-231005224952Z0/
+231011211512Z0/
 241009235959Z0a1
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA0
@@ -651,12 +648,11 @@ $Ib?s
 :>)*	v
 :>t6k'
 :vmatt
-;=<>	
+;=\5	
 ;H9>&X
 ;I9}(tiH
 ;YA1D
 ;\$0|
-;_TtH
 <	u2H
 <	u8H
 <	u\L
@@ -689,7 +685,6 @@ $Ib?s
 =%H5<mN
 ==MQ?
 =SHX?
-=\|BO
 =imb;D
 =rIQU
 >%H5<mN
@@ -706,11 +701,14 @@ $Ib?s
 ?8bunz8
 ?:kP<
 ??0CThreadMutex@@QEAA@PEBD@Z
+??0CThreadRWLock_FastRead@@QEAA@XZ
 ??0CUtlBuffer@@QEAA@HHH@Z
 ??0CUtlBuffer@@QEAA@PEBXHH@Z
 ??0CUtlMemoryBlockAllocator@@QEAA@HIW4RawAllocatorType_t@@@Z
 ??0CUtlSymbolTable@@QEAA@HH_N@Z
+??1CThreadEvent@@QEAA@XZ
 ??1CThreadMutex@@QEAA@XZ
+??1CThreadSemaphore@@QEAA@XZ
 ??1CUtlMemoryBlockAllocator@@QEAA@XZ
 ??1CUtlSymbolTable@@QEAA@XZ
 ??4CUtlBinaryBlock@@QEAAAEAV0@$$QEAV0@@Z
@@ -731,6 +729,7 @@ $Ib?s
 ?Concat@CBufferString@@QEAAPEBDPEBD0ZZ
 ?Construct@CSplitString@@AEAAXPEBDPEAPEBDH_N@Z
 ?E=$% B
+?EncounteredComplexReadLockOperation@CThreadRWLock_FastRead@@IEAA_NI_NPEBDH@Z
 ?EnsureCapacity@CUtlBuffer@@QEAAXH@Z
 ?ExtractFileBase@CBufferString@@QEAAPEBDPEBD_N@Z
 ?ExtractFilePath@CBufferString@@QEAAPEBDPEBD_N@Z
@@ -746,6 +745,7 @@ $Ib?s
 ?GetInt@KeyValues@@QEBAHPEBDH@Z
 ?GetString@CUtlBuffer@@QEAAXPEAVCBufferString@@@Z
 ?GetString@KeyValues@@QEAAPEBDPEBD0PEAD_K@Z
+?HaveWriteLock_BlockReadsNow@CThreadRWLock_FastRead@@QEAAX_N@Z
 ?Insert@CBufferString@@QEAAPEBDHPEBDH_N@Z
 ?IsEqual_FastCaseInsensitive@CUtlString@@QEBA_NPEBD@Z
 ?LoadKV3@@YA_NPEAVCKeyValues3Context@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBD@Z
@@ -781,7 +781,11 @@ $Ib?s
 ?TrimTail@CBufferString@@QEAAPEBDPEBD@Z
 ?UUUUUU
 ?Unlock@CThreadMutex@@QEAAXPEBDH@Z
+?UnlockReadAccounting@CThreadRWLock_FastRead@@IEAAXPEBDHI@Z
+?UnlockWrite@CThreadRWLock_FastRead@@QEAAXPEBDH@Z
+?UnlockWrite_LockForRead@CThreadRWLock_FastRead@@QEAA?AW4RWLockTranstionResult_t@@PEBDH@Z
 ?V_stristr_fast@@YAPEBDPEBD0@Z
+?Wait@CThreadSyncObject@@QEAA_NI@Z
 ?YA1A
 ?f`Y4
 ?kxG2)
@@ -810,8 +814,6 @@ $Ib?s
 @A^A]A\_^
 @A^_]
 @A^_^
-@A_A]_
-@A_A]_H
 @A_A^A\
 @A_A^A\_]
 @A_A^A\_^
@@ -822,6 +824,7 @@ $Ib?s
 @A_A^_
 @A_A^_^]
 @A_][
+@A__[
 @A__[H
 @SATAWH
 @SATH
@@ -841,6 +844,7 @@ $Ib?s
 @SUWH
 @SVATAUAVH
 @SVAVH
+@SVAWH
 @SVWATAUAVAWH
 @SVWATAVH
 @SVWATAWH
@@ -886,10 +890,8 @@ $Ib?s
 @VWAVH
 @VWAWH
 @WATAUAWH
-@WATAUH
 @WATH
 @WAUAVH
-@WAUAWH
 @WAUH
 @WAVAWH
 @WAVH
@@ -940,13 +942,13 @@ A]_[]
 A]_^]
 A^A\[]
 A^A\_^[
+A^A\_^[]
 A^A]A\
 A^A]A\_^[]
 A^A][
 A^A]^[]
 A^A]_[]
 A^A]_^[]
-A^A]_^]
 A^^[]
 A^_[]
 A^_^[]
@@ -1047,6 +1049,7 @@ C:\buildworker\csgo_rel_win64\build\_build_\worldrenderer\_vpc_worldrenderer\def
 C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp
 C:\buildworker\csgo_rel_win64\build\src\entity2\entitykeyvalues.cpp
 C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp
+C:\buildworker\csgo_rel_win64\build\src\public\tier0\threadtoolstypes.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\tslist.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\utlsymboltablelarge.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\utltshash.h
@@ -1085,6 +1088,8 @@ CScriptComponent
 CScriptComponent::Storage_t
 CScriptComponentReferenced
 CScriptComponentReferencedPtr
+CSemiAutoRWLockT<class CThreadRWLock_FastRead>::LockForRead
+CSemiAutoRWLockT<class CThreadRWLock_FastRead>::Unlock
 CStrongHandle
 CStrongHandleCopyable
 CTSListBase: Misaligned list
@@ -1307,8 +1312,6 @@ D98t5
 D9d$0twD
 D9d+ |GH
 D9l$`
-D9sTtT
-D9sTtnH
 D9t; |GH
 D9|$ 
 D9|$hu
@@ -1462,7 +1465,7 @@ GT$8H
 GT$8L
 GT$HA
 GT$xE3
-GX tI9
+GX tM9
 G\$(L
 G\$8H
 G\$HA
@@ -1558,13 +1561,15 @@ H+\$p
 H-^Eu
 H9(t8
 H9+t	H
-H9-#c
-H9-4=
+H9-&F
+H9-CZ
+H9-qF
 H97u+A
 H99tjH
-H9=-[	
-H9=E@
-H9=i9
+H9=&7
+H9=L:
+H9=MR	
+H9=e7
 H9D$0
 H9D$`
 H9L$0t
@@ -1576,7 +1581,7 @@ H9|$8t
 H9|$@t
 H9|$ht
 H9|$pt
-H;L$p
+H;L$H
 H;XXs
 H;xXu5
 HA]A\
@@ -1622,6 +1627,7 @@ Hd A;4$
 HelpSystem_001
 Hitbox indexing is incorrect for set %s, hitbox %s. Hitboxes will not be setup properly.
 HostStateMgr001
+I)R"u
 I+4$H
 I9.t	I
 I9^PI
@@ -1757,14 +1763,17 @@ L$xf;
 L$x|IH
 L+t$8
 L9#t	H
-L9%<W
-L9%FV
-L9=3e
-L9=5g
-L9=8Z
-L9=Dl
-L9=Qo
-L9=e]
+L9%/O
+L9%\N
+L9%fM
+L9=$e
+L9=&f
+L9=9R
+L9=S\
+L9=U^
+L9=XQ
+L9=dc
+L9=qf
 L9t$8t
 L9uPt
 L9wPt
@@ -1890,7 +1899,7 @@ November
 NumCols() <= V_ARRAYSIZE( s_DummyRow )
 O8HcB
 O8HcY
-O=5>	
+O=U5	
 OBJECT_TYPE_BLOCK_LIGHT
 OBJECT_TYPE_DECAL
 OBJECT_TYPE_DISABLED_IN_LOW_QUALITY
@@ -1917,8 +1926,6 @@ OutputDebugStringW
 P D9}P
 P>q_Y~
 PA\][
-PA]A\_
-PA]A\_H
 PA^A]A\][
 PA^^]
 PA^_]
@@ -2026,7 +2033,6 @@ RtlUnwind
 RtlUnwindEx
 RtlVirtualUnwind
 RxHcD
-S!	pd
 S0Q0O
 S>$hkDh$h>[2
 SATAUH
@@ -2041,7 +2047,6 @@ SUVWAVH
 SUVWH
 SUWAVH
 SVAUAVAWH
-SVAUH
 SVWATAUAVAWH
 SVWATAUAWH
 SVWAVH
@@ -2134,6 +2139,7 @@ TryAcquireSRWLockExclusive
 Trying to find a flex controller (%s) that doesn't actually exist in the model.
 Tuesday
 TypeManager
+U1Uf)I
 U4fD;
 UA>N0Wl
 UATAUAVAWH
@@ -2147,6 +2153,7 @@ USAVI
 USVWATAUAVAWH
 USVWATAUAVH
 USVWATAVAWH
+USVWATAVH
 USVWATI
 USVWAVH
 USVWH
@@ -2214,6 +2221,7 @@ VScriptManager010
 VStringTokenSystem001
 VT$PD
 VUUUH
+VV`^OI
 VWATAVAW
 VWATAVAWH
 VWATH
@@ -2314,6 +2322,7 @@ Y u!H
 Y9"SD
 Y>kX>M
 YD$@f
+Z5mzh)
 Z\>z8
 ZdN=Y
 Zod(^?
@@ -2329,7 +2338,6 @@ Zod(^?
 [fE;A
 \!4A#
 \$ SUATAUAVH
-\$ UVWAUAVH
 \$ UVWAVAWH
 \$ UVWH
 \$ VWATAUAVH
@@ -2649,7 +2657,6 @@ js_raw_args
 js_value
 k0i0$
 kL@8o(u
-kS\Qd,
 keyValues3Data
 kv 0x%p AddRef refcount == %d
 kv 0x%p Release refcount == %d
@@ -2660,9 +2667,7 @@ l$ HcA
 l$ Lc2E
 l$ V3
 l$ VATAVH
-l$ VATAWH
 l$ VH
-l$ VWATAUAWH
 l$ VWATAVAWH
 l$ VWAUAVAWH
 l$ VWAVH
@@ -2680,7 +2685,6 @@ l$8E3
 l$8Hk
 l$@E3
 l$@Hc
-l$@Lc
 l$@u!H
 l$HA_A^A]A\_^
 l$HHc
@@ -3115,7 +3119,7 @@ t*IcH
 t-Lck
 t/L9-S
 t0H95
-t0H9=
+t0H9=x
 t0L9%
 t0L9-
 t0L9-5
@@ -3125,54 +3129,56 @@ t2L9%
 t3@8>t.
 t3H9-
 t3H9- 
-t3H9-0c
-t3H9-s
-t3H9=L
+t3H9-PZ
+t3H9-Q
+t3H9=
 t3L9%
-t3L9%a
-t3L9-
+t3L9% l
+t3L9-[
 t3L95
 t3L9=
-t3L9=Bg
-t3L9=r]
-t4H9=,
+t3L9=b^
+t4H9=L
 t4L9-A
 t4L9=
 t4L9=I
 t5Ich
 t6H9-
-t6H9-A=
 t6H958
-t6H9=
-t6H9=R@
+t6H9=37
+t6H9=Y:
+t6H9=r7
 t6L9%
-t6L9%5
-t6L9%X
-t6L9%l
+t6L9%<O
+t6L9%U
 t6L95
 t6L9=
-t6L9=&[
-t6L9=@e
-t6L9=EZ
-t6L9=Ql
-t6L9=e
+t6L9=&Q
+t6L9=1e
+t6L9=FR
+t6L9=`\
+t6L9=eQ
+t6L9=qc
+t6L9=u
+t6L9=~
 t6fE94
 t7H95
 t7H95x
 t7HcP
 t8L95
 t8L95&\
-t9L9%IW
-t9L9%SV
-t;H95;
+t9L9%iN
+t9L9%sM
+t;H95[
 t?H9-
+t?H9-3F
+t?H9-~F
 t?H95
 t?H95?
 t?H9=
-t?H9=v9
 t?HcS
-t?L9=
-t?L9=^o
+t?L9=3f
+t?L9=~f
 t@9+u,9s
 tD;*~aHc
 tE@8}
@@ -3202,9 +3208,6 @@ tvD9~
 twIcF
 twfE;
 t}fff
-u	9CT
-u	9sT
-u	;_T
 u!@85M
 u"D;{
 u$D8r(t
@@ -3232,7 +3235,6 @@ unknown error
 unknown exception
 unknown_variant_type
 unsigned
-upA;^Ttj
 utKf;
 utlstringtoken
 uzKs@>
@@ -3264,7 +3266,6 @@ vvisH
 vwnod
 vwrld
 v}`[>
-wU6"/
 wXIcE03
 world renderer - 
 world_dump_loaded_worlds
@@ -3325,6 +3326,7 @@ zY;>u:m
 |$(D;
 |$(E3
 |$09|$@|LH
+|$0E3
 |$0H9{
 |$0Lc
 |$0Lc?H
@@ -3380,7 +3382,6 @@ zY;>u:m
 ~ $s%r
 ~ D;c
 ~(D;c
-~+GrT
 ~,*u<I
 ~,*uEI
 ~.E9yH

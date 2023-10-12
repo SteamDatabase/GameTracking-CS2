@@ -469,7 +469,7 @@
 		//"AlwaysPreloadTexturesInGame"				"1"
 		//"MaxPreloadTextureResolution"				"256"
 		"GraphicsPipelineLibrary"					"1"
-		"IndexBufferPoolSizeMB"						"32"
+		"IndexBufferPoolSizeMB"						"64"
 		"LowLatency"								"1"
 		"MinDXLevel"								"110" // DX 11.0 is the minimum
 		"MinStreamingPoolSizeMB"					"500"
