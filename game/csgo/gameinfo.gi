@@ -179,7 +179,8 @@
 
 	GMS
 	{
-		"Advertise"			"1"
+		"Advertise"										"1"
+		"RequireLoginForDedicatedServers"				"1"
 	}
 	
 	GameInstructor
