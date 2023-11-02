@@ -6,19 +6,19 @@
 
 @BaseClass base(Targetname, Parentname) tags( Lighting ) = light_base
 [
-	enabled(boolean) : "Enabled" : 1
+	enabled(boolean) [ group = "Direct Light" ] : "Enabled" : 1
 
-	color(color255) : "Color" : "255 255 255"
-	brightness(float) : "Brightness" : "1.0"
+	color(color255) [ group = "Direct Light" ] : "Color" : "255 255 255"
+	brightness(float) [ group = "Direct Light" ] : "Brightness" : "1.0"
 	range(float) { min="0" } : "Range" : "512" : "Distance range for light. 0=infinite"
 
 	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "1" : "Whether this light casts shadow" =
 	[
-		"0" : "No"
-		"1" : "Yes"
-		"2" : "Baked Only"
+		"1" : "Dynamic & Baked"
+		"2" : "Baked"
+		"0" : "None"		
 	]
-	nearclipplane(float) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Near Clip Plane" : 1 : "Distance for near clip plane for shadow map"	
+
 	shadowpriority(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Priority" : "-1" : "Priority for the lights shadowmap" =
 	[
 		"100" : "Highest"
@@ -45,6 +45,26 @@
 	output OnUser4(void) : "Fired in response to FireUser4 input."
 	output OnKilled(void) : "Fired when the entity is killed and removed from the game."
 
+	// 
+	// fademindist(float) [ group="Fade Distance" ] : "Start Fade Dist" : -250 : "Distance at which the light starts to fade (<0 = use fademaxdist)."
+	// fademaxdist(float) [ group="Fade Distance" ] : "End Fade Dist" : 1250 : "Maximum distance at which the light is visible (0 = don't fade out)."
+
+	// Specular
+	rendertocubemaps(boolean) [ group="Specular" ] : "Render to Cubemaps" : 1 : "If disabled, direct lighting will not render into cubemaps. Not that this only works when Direct Lighting Type is set to Stationary or Dynamic."
+
+	// This seems obsolete
+	// priority(integer) [ group="Render Properties" ] : "Priority" : 0 : "When the number of visible lights exceeds the rendering budget, higher priority lights are chosen for rendering first."
+
+	input SetLightEnabled(void) : "Sets whether the light is enabled (takes parameter of 0 or 1)"
+	input TurnOn(void) : "Turn the light on."
+	input TurnOff(void) : "Turn the light off."
+	input Toggle(void) : "Toggle the light on/off."
+	input SetLightColor(vector) : "Set light color"
+	input SetLightBrightness(float) : "Set light brightness"
+	input SetAppearance(integer) : "Set appearance 0=Normal 1=Flicker A, 2=Slow, strong pulse 3=Candle A ..."
+	input SetCustomAppearance(string) : "Set a custom pattern of light brightness for this light. Pattern format is a string of characters, where 'a' is total darkness, 'z' fully bright. i.e. 'aaggnnttzz' would be a steppy fade in from dark to light."
+	
+	// Style
 	style(Choices) [ group="Style" ] : "Appearance" : 0 =
 	[
 		0 : "Normal"
@@ -62,54 +82,39 @@
 	]
 	pattern(string) [ group="Style" ]: "Custom Appearance" : "" : "Set a custom pattern of light brightness for this light. Pattern format is a string of characters, where 'a' is total darkness, 'z' fully bright. i.e. 'aaggnnttzz' would be a steppy fade in from dark to light."
 
-	fademindist(float) [ group="Fade Distance" ] : "Start Fade Dist" : -250 : "Distance at which the light starts to fade (<0 = use fademaxdist)."
-	fademaxdist(float) [ group="Fade Distance" ] : "End Fade Dist" : 1250 : "Maximum distance at which the light is visible (0 = don't fade out)."
-
-	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"
-	priority(integer) [ group="Render Properties" ] : "Priority" : 0 : "When the number of visible lights exceeds the rendering budget, higher priority lights are chosen for rendering first."
-	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Semicolon-delimited list of light groups to affect"
-
-	input SetLightEnabled(void) : "Sets whether the light is enabled (takes parameter of 0 or 1)"
-	input TurnOn(void) : "Turn the light on."
-	input TurnOff(void) : "Turn the light off."
-	input Toggle(void) : "Toggle the light on/off."
-	input SetLightColor(vector) : "Set light color"
-	input SetLightBrightness(float) : "Set light brightness"
-	input SetAppearance(integer) : "Set appearance 0=Normal 1=Flicker A, 2=Slow, strong pulse 3=Candle A ..."
-	input SetCustomAppearance(string) : "Set a custom pattern of light brightness for this light. Pattern format is a string of characters, where 'a' is total darkness, 'z' fully bright. i.e. 'aaggnnttzz' would be a steppy fade in from dark to light."
 ]
 
 // An extra base class containing light parameters from the early days of Source 2 that not all mods want to support
 @BaseClass = light_base_legacy_params
 [
-	bouncescale(float) : "Indirect Light Multiplier" : "1.0"
-	renderdiffuse(boolean) : "Render Diffuse" : "1" : ""
-
-	renderspecular(choices) : "Render Specular" : "1" : "" =
-	[
-		"0" : "Off"
-		"1" : "On"
-		"2" : "Bake into cubemaps"
-	]
-
-	rendertransmissive(choices) : "Render Transmissive" : "1" : "" =
-	[
-		"0" : "Off"
-		"1" : "On"
-	]
-
-	directlight(choices) : "Direct Lighting" : "2" : "How direct lighting should be represented" =
+	// Direct Light
+	directlight(choices) [ group="Direct Light" ] : "Direct Lighting Type" : "2" : "How direct lighting should be represented" =
 	[
 		"0" : "None"
 		"1" : "Baked"
-		"2" : "Per-Pixel"
+		"2" : "Stationary"
 	]
 
-	indirectlight(choices) : "Indirect Lighting" : "1" : "How indirect lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-	]
+	// This seems obsolete
+	// renderdiffuse(boolean) [ group="Direct Light" ] : "Render Diffuse" : "1" : "Disable direct lighting, rendering only indirect light in the lightmapper"
+
+	// Indirect Light
+	bouncescale(float) [ group="Direct Light" ] : "Indirect Light Multiplier" : "1.0"	
+
+	// Transmissive - seems obsolete
+	// renderspecular(choices) [ group="Specular" ] : "Render Specular" : "1" : "" =
+	// [
+	// 	"0" : "Off"
+	// 	"1" : "On"
+	// 	"2" : "Bake into cubemaps"
+	// ]
+
+	// Transmissive - seems obsolete
+	// rendertransmissive(choices) [ group="Transmissive" ] : "Render Transmissive" : "1" : "" =
+	// [
+	// 	"0" : "Off"
+	// 	"1" : "On"
+	// ]
 ]
 
 
@@ -147,37 +152,37 @@
 	"4. Adjust angle and brightness of the sunlight as you see fit"
 
 [
-	angulardiameter(float) { min="0.1" } : "Sun Spread Angle" : "1.0" : "The angular extent of the sun for casting soft shadows. Higher numbers are more diffuse. 1 is a good starting value."
-
-	numcascades(integer) [ group = "Shadows" ] : "Cascade Count" : 3 : "Number of shadow cascades to use."
-	shadowcascadedistance0(float) { group = "Shadows" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } }: "Cascade Distance 0" : "0.0"
-	shadowcascadedistance1(float) { group = "Shadows" enabled={ variable="numcascades" values=[     "2", "3", "4"] } }: "Cascade Distance 1" : "0.0"
-	shadowcascadedistance2(float) { group = "Shadows" enabled={ variable="numcascades" values=[          "3", "4"] } }: "Cascade Distance 2" : "0.0"
-	shadowcascadedistance3(float) { group = "Shadows" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Distance 3" : "0.0"
-	shadowcascaderesolution0(integer) { group = "Shadows" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } } : "Cascade Resolution 0" : 0
-	shadowcascaderesolution1(integer) { group = "Shadows" enabled={ variable="numcascades" values=[     "2", "3", "4"] } } : "Cascade Resolution 1" : 0
-	shadowcascaderesolution2(integer) { group = "Shadows" enabled={ variable="numcascades" values=[          "3", "4"] } } : "Cascade Resolution 2" : 0
-	shadowcascaderesolution3(integer) { group = "Shadows" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Resolution 3" : 0
-
-	cascadecrossfade(float) { min="0" max=".3" group="Shadows" enabled={ variable="numcascades" values=[ "2", "3", "4" ] } } : "Cascade Cross Fade Size" : ".1" : "Size of the region at the edge of the cascade that will be crossfaded to the next (to hide resolution changes)"
-	cascadedistancefade(float) { group="Shadows" } : "Cascade Distance Fade Out Size" : ".05" : "Size of the region where shadows are faded out at the end of the cascades"
-
-	cascaderenderstaticobj(int) { group="Shadows" enabled={ variable="baked_light_indexing" value="1" } } : "Render Static Objects To Cascades" : "-1" : "Renders static objects to cascades <= this cascade when using mixed shadows (Stationary / Indexed lights)"
-
-	skycolor(color255) { group = "Sky" enabled={ variable="skytexture" values=[""] } } : "Sky Color" : "255 255 255"
-	skyintensity(float) { group = "Sky" enabled={ variable="skytexture" values=[""] } } : "Sky Intensity" : "1.0"
-	skytexture(target_destination) [ group = "Sky" ] : "Sky IBL Source" : "" : "env_sky entity, lat-long/h-cross/v-cross skybox image, or sky material to use for sky IBL"
-	skytexturescale(float) [ group = "Sky" ] : "Sky IBL Scale" : "1.0" : "Scale value for IBL intensity fine-tuning"
+	// Sky
+	skycolor(color255) { group = "Sky" enabled={ variable="skytexture" values=[""] } } : "Simple Sky Color" : "255 255 255" : "Uses a flat color for the sky lighting. Can be a good starting point but you can get much higher quality lighting by using an IBL/env_sky."
+	skyintensity(float) { group = "Sky" enabled={ variable="skytexture" values=[""] } } : "Simple Sky Intensity" : "1.0" : "Scales the intensity of the Simple Sky Color." 
+	skytexture(target_destination) [ group = "Sky" ] : "IBL Sky Source" : "" : "Here you can assign any env_sky entity for sky lighting. env_sky supports HDR/EXR high dynamic range lat-long/h-cross/v-cross skybox images is recommended for sky lighting for the best quality results. If you want to use a custom env_sky that is explicitly for sky lighting, you can use an env_sky with 'Start Disabled'."
+	skytexturescale(float) [ group = "Sky" ] : "IBL Sky Scale" : "1.0" : "Scale value for IBL intensity fine-tuning"
+	skybouncescale(float) [ group = "Sky" ] : "Sky Indirect Light Multiplier" : "1.0"	
 	skyambientbounce(color255alpha) [ group = "Sky" ] : "Sky Ground Albedo" : "0 0 0" : "This is the color of the virtual ground plane used for skybox IBL / color ambient lighting"
-	sunlightminbrightness(float) [ group = "Sky" ] : "Sun Light Minimum Brightness Threshold" : "32" : "Brightness beyond which pixels in the Sky IBL Source are considered to be coming from the sun"
-	skydirectlight(choices) [ group = "Sky" ] : "Sky Direct Light" : "1" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-	]
-	skybouncescale(float) [ group = "Sky" ] : "Sky Bounce Light Multiplier" : "1.0"
-	brightnessscale(float) { group="Render Properties" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount" 
-	
+	sunlightminbrightness(float) [ group = "Sky" ] : "IBL Sky Minimum Brightness Threshold" : "32" : "This can be used to prevent the sun in your env_sky/IBL from casting light into your scene, so you can instead use a light_environment; This sets a brightness threshold beyond which light from the IBL is clamped."
+
+	// Render Properties
+	brightnessscale(float) { group="Render Properties" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount, used for scripting direct light behaviour. NOTE: Only works on lights with Direct Lighting type set to Dynamic or Stationary." 
+
+	// Shadows	
+	angulardiameter(float) { group = "Shadows" min="0.1" } : "Shadow Softness / Sun Spread Angle" : "1.0" : "Defines the shadow softness. Higher numbers produce more diffuse/softer shadows. 1 is a good starting value."
+
+	// Cascade Shadow Maps
+	nearclipplane(float) { group="Cascade Shadow Maps" enabled={ variable="castshadows" value="1" } } : "Shadow Near Clip Plane" : 1 : "Distance for near clip plane for shadow map"		
+	numcascades(integer) [ group = "Cascade Shadow Maps" ] : "Cascade Count" : 3 : "Number of shadow cascades to use."
+	shadowcascadedistance0(float) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } }: "Cascade Distance 0" : "0.0"
+	shadowcascadedistance1(float) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=[     "2", "3", "4"] } }: "Cascade Distance 1" : "0.0"
+	shadowcascadedistance2(float) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=[          "3", "4"] } }: "Cascade Distance 2" : "0.0"
+	shadowcascadedistance3(float) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Distance 3" : "0.0"
+	shadowcascaderesolution0(integer) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } } : "Cascade Resolution 0" : 0
+	shadowcascaderesolution1(integer) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=[     "2", "3", "4"] } } : "Cascade Resolution 1" : 0
+	shadowcascaderesolution2(integer) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=[          "3", "4"] } } : "Cascade Resolution 2" : 0
+	shadowcascaderesolution3(integer) { group = "Cascade Shadow Maps" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Resolution 3" : 0
+	cascadecrossfade(float) { min="0" max=".3" group="Cascade Shadow Maps" enabled={ variable="numcascades" values=[ "2", "3", "4" ] } } : "Cascade Cross Fade Size" : ".1" : "Size of the region at the edge of the cascade that will be crossfaded to the next (to hide resolution changes)"
+	cascadedistancefade(float) { group="Cascade Shadow Maps" } : "Cascade Distance Fade Out Size" : ".05" : "Size of the region where shadows are faded out at the end of the cascades"
+	cascaderenderstaticobj(int) { group="Cascade Shadow Maps" enabled={ variable="baked_light_indexing" value="1" } } : "Render Static Objects To Cascades" : "-1" : "Renders static objects to cascades <= this cascade when using mixed shadows (Stationary / Indexed lights)"
+
+	// Ambient Occlusion
 	ambient_occlusion(boolean) [ group = "Ambient Occlusion" ] : "Ambient Occlusion" : "0"
 	max_occlusion_distance(float) [ group = "Ambient Occlusion" ] : "Ambient Occlusion Max Distance" : "16.0"
 	fully_occluded_fraction(float) [ group = "Ambient Occlusion" ] : "Ambient Occlusion Fully Occluded Fraction" : "1.0"

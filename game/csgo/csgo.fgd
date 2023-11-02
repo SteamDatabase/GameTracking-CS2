@@ -58,9 +58,54 @@
 //Exclude this since we want to remove some defunct parameters. Only way to do this currently is to exclude and redefine
 @exclude env_sky 
 @exclude func_illusionary
-
-
-
+@exclude light_ortho
+@exclude light_spot
+@exclude light_omni
+@exclude light_dynamic
+@exclude beam_spotlight
+@exclude color_correction
+@exclude env_beam
+@exclude env_beverage
+@exclude env_cubemap
+@exclude env_funnel
+@exclude env_instructor_vr_hint
+@exclude env_laser
+@exclude env_lightglow
+@exclude env_projectedtexture
+@exclude env_rotorshooter
+@exclude env_rotorwash_emitter
+@exclude env_screenoverlay
+@exclude env_smokestack
+@exclude env_smoketrail
+@exclude env_sprite
+@exclude env_splash
+@exclude env_sprite_oriented
+@exclude env_sun
+@exclude env_texturetoggle
+@exclude env_tonemap_controller
+@exclude env_volumetric_fog_controller
+@exclude env_volumetric_fog_volume
+@exclude env_wind_clientside
+@exclude func_fish_pool
+@exclude func_instance
+@exclude func_orator
+@exclude haptic_relay
+@exclude info_ladder_dismount
+@exclude info_landmark
+@exclude info_lighting
+@exclude info_world_layer
+@exclude postprocess_controller
+@exclude color_correction_volume
+@exclude env_bubbles
+@exclude fog_volume
+@exclude func_detail_blocker
+@exclude func_precipitation
+@exclude func_precipitation_blocker
+@exclude func_reflective_glass
+@exclude func_shatterglass
+@exclude func_wall
+@exclude func_wall_toggle
+@exclude trigger_tonemap
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -75,6 +120,23 @@
 	}
 = info_player_start :
 [
+]
+
+@OverrideClass base(Targetname, Parentname) tags( Lighting ) = light_base
+[
+	// Remove these until we have a need for them to avoid cluttering up the UI for light ents
+	nearclipplane(remove_key)
+	fademindist(remove_key) 
+	fademaxdist(remove_key) 
+	range(remove_key) 
+]
+
+@OverrideClass = light_base_legacy_params
+[
+//	rendertransmissive(remove_key)
+//	renderspecular(remove_key)
+//	renderdiffuse(remove_key)
+//	indirectlight(remove_key)
 ]
 
 @PointClass   editormodel("models/editor/camera.vmdl", fixedbounds) = csm_fov_override :
@@ -140,6 +202,60 @@
 
 //-------------------------------------------------------------------------
 //
+// Weapons
+//-------------------------------------------------------------------------
+//
+
+@PointClass base(Weapon) studio("weapons/models/ak47/weapon_rif_ak47.vmdl") = weapon_ak47 : "AK-47" []
+@PointClass base(Weapon) studio("weapons/models/aug/weapon_rif_aug.vmdl") = weapon_aug : "AUG" []
+@PointClass base(Weapon) studio("weapons/models/awp/weapon_snip_awp.vmdl") = weapon_awp : "AWP" []
+@PointClass base(Weapon) studio("weapons/models/bizon/weapon_smg_bizon.vmdl") = weapon_bizon : "PP-Bizon" []
+@PointClass base(Weapon) studio("weapons/models/cz75a/weapon_pist_cz75a.vmdl") = weapon_cz75a : "CZ75a" []
+@PointClass base(Weapon) studio("weapons/models/deagle/weapon_pist_deagle.vmdl") = weapon_deagle : "Desert Eagle" []
+@PointClass base(Weapon) studio("weapons/models/defuser/weapon_defuser.vmdl") = item_defuser : "Defuse Kit" []
+@PointClass base(Weapon) studio("weapons/models/elite/weapon_pist_elite.vmdl") = weapon_elite : "Dual Berettas" []
+@PointClass base(Weapon) studio("weapons/models/famas/weapon_rif_famas.vmdl") = weapon_famas : "FAMAS" []
+@PointClass base(Weapon) studio("weapons/models/fiveseven/weapon_pist_fiveseven.vmdl") = weapon_fiveseven : "Five-SeveN" []
+@PointClass base(Weapon) studio("weapons/models/g3sg1/weapon_snip_g3sg1.vmdl") = weapon_g3sg1 : "G3SG1 Sniper" []
+@PointClass base(Weapon) studio("weapons/models/galilar/weapon_rif_galilar.vmdl") = weapon_galilar : "Galil AR" []
+@PointClass base(Weapon) studio("weapons/models/glock18/weapon_pist_glock18.vmdl") = weapon_glock : "Glock-18" []
+@PointClass base(Weapon) studio("weapons/models/hkp2000/weapon_pist_hkp2000.vmdl") = weapon_hkp2000 : "P2000" []
+@PointClass base(Weapon) studio("weapons/models/healthshot/weapon_healthshot.vmdl") = weapon_healthshot : "Medi-Shot" []
+@PointClass base(Weapon) studio("weapons/models/knife/knife_default_t/weapon_knife.vmdl") = weapon_knife : "Knife" []
+@PointClass base(Weapon) studio("weapons/models/m249/weapon_mach_m249.vmdl") = weapon_m249 : "M249 Para" []
+@PointClass base(Weapon) studio("weapons/models/m4a4/weapon_rif_m4a4.vmdl") = weapon_m4a1 : "M4A4" []
+@PointClass base(Weapon) studio("weapons/models/m4a1_silencer/weapon_rif_m4a1_silencer.vmdl") = weapon_m4a1_silencer : "M4A1 Silenced" []
+@PointClass base(Weapon) studio("weapons/models/mac10/weapon_smg_mac10.vmdl") = weapon_mac10 : "MAC-10" []
+@PointClass base(Weapon) studio("weapons/models/mag7/weapon_shot_mag7.vmdl") = weapon_mag7 : "MAG-7" []
+@PointClass base(Weapon) studio("weapons/models/mp5sd/weapon_smg_mp5sd.vmdl") = weapon_mp5sd : "MP5-SD" []
+@PointClass base(Weapon) studio("weapons/models/mp7/weapon_smg_mp7.vmdl") = weapon_mp7 : "MP7" []
+@PointClass base(Weapon) studio("weapons/models/mp9/weapon_smg_mp9.vmdl") = weapon_mp9 : "MP9" []
+@PointClass base(Weapon) studio("weapons/models/negev/weapon_mach_negev.vmdl") = weapon_negev : "Negev" []
+@PointClass base(Weapon) studio("weapons/models/nova/weapon_shot_nova.vmdl") = weapon_nova : "Nova" []
+@PointClass base(Weapon) studio("weapons/models/p90/weapon_smg_p90.vmdl") = weapon_p90 : "P90" []
+@PointClass base(Weapon) studio("weapons/models/p250/weapon_pist_p250.vmdl") = weapon_p250 : "P250" []
+@PointClass base(Weapon) studio("weapons/models/revolver/weapon_pist_revolver.vmdl") = weapon_revolver : "Revolver " []
+@PointClass base(Weapon) studio("weapons/models/sawedoff/weapon_shot_sawedoff.vmdl") = weapon_sawedoff : "Sawed-Off" []
+@PointClass base(Weapon) studio("weapons/models/scar20/weapon_snip_scar20.vmdl") = weapon_scar20 : "Scar20" []
+@PointClass base(Weapon) studio("weapons/models/sg556/weapon_rif_sg556.vmdl") = weapon_sg556 : "SG 553" []
+@PointClass base(Weapon) studio("weapons/models/ssg08/weapon_snip_ssg08.vmdl") = weapon_ssg08 : "SSG 08" []
+@PointClass base(Weapon) studio("weapons/models/tec9/weapon_pist_tec9.vmdl") = weapon_tec9 : "Tec-9" []
+@PointClass base(Weapon) studio("weapons/models/ump45/weapon_smg_ump45.vmdl") = weapon_ump45 : "UMP-45" []
+@PointClass base(Weapon) studio("weapons/models/usp_silencer/weapon_pist_usp_silencer.vmdl") = weapon_usp_silencer : "USP Silenced" []
+@PointClass base(Weapon) studio("weapons/models/xm1014/weapon_shot_xm1014.vmdl") = weapon_xm1014 : "XM1014" []
+@PointClass base(Weapon) studio("weapons/models/taser/weapon_pist_taser.vmdl") = weapon_taser : "weapon_taser" []
+
+@PointClass base(Weapon) studio("weapons/models/c4/weapon_c4.vmdl") = weapon_c4 : "C4 Bomb" []
+
+@PointClass base(Weapon) studio("weapons/models/grenade/flashbang/weapon_flashbang.vmdl") = weapon_flashbang : "Flashbang" []
+@PointClass base(Weapon) studio("weapons/models/grenade/decoy/weapon_decoy.vmdl") = weapon_decoy : "Decoy Grenade" []
+@PointClass base(Weapon) studio("weapons/models/grenade/hegrenade/weapon_hegrenade.vmdl") = weapon_hegrenade : "HE Grenade" []
+@PointClass base(Weapon) studio("weapons/models/grenade/molotov/weapon_molotov.vmdl") = weapon_molotov : "Molotov" []
+@PointClass base(Weapon) studio("weapons/models/grenade/incendiary/weapon_incendiarygrenade.vmdl") = weapon_incgrenade : "Incendiary Grenade" []
+@PointClass base(Weapon) studio("weapons/models/grenade/sensorgrenade/weapon_sensorgrenade.vmdl") = weapon_tagrenade : "TAGrenade" []
+@PointClass base(Weapon) studio("weapons/models/grenade/smokegrenade/weapon_smokegrenade.vmdl") = weapon_smokegrenade : "Smoke Grenade" []
+//-------------------------------------------------------------------------
+//
 // Point Classes
 //
 //-------------------------------------------------------------------------
@@ -156,29 +272,27 @@
 	metadata
 	{
 		entity_tool_name = "Cubemap fog"
-		entity_tool_tip = "Specifies fog based on an image."
+		entity_tool_tip = "Specifies fog based on an env_sky or skybox material."
 		entity_tool_group = "Fog & Sky"
 	}
 = env_cubemap_fog  
 [
-	cubemapfogsource(Choices) : "Cubemap Source" : "1" : "Which field to use to select the cubemap and its parameters." =
+	cubemapfogsource(Choices) [ group = "Fog Cubemap" ] : "Cubemap Source" : "1" : "Which field to use to select the cubemap and its parameters." =
 	[
-//		0 : "Cubemap From Texture"
 		1 : "Cubemap From Env_Sky"
 		2 : "Cubemap From Material"
 	]
-//	cubemapfogtexture(resource:texture) { group="Cubemap Source" enabled={ variable="cubemapfogsource" value="0" } } : "Cubemap Texture" : "materials/skybox/tests/src/light_test_sky_sunset.vtex"
-	cubemapfogskyentity(target_destination) { group="Env_Sky Target" enabled={ variable="cubemapfogsource" value="1" } } : "Env_Sky"
-	cubemapfogskymaterial(resource:material) { group="Cubemap Material" enabled={ variable="cubemapfogsource" value="2" } } :  "Cubemap / Sky Material"
-	cubemapfoglodbiase(float) : "Cubemap Blur / Mip Bias (0-1)" : "0.5" : "Adjust how blurry the cubemap should be. Lower values are more blurry (0-1) "
+	cubemapfogskyentity(target_destination) { group="Fog Cubemap" enabled={ variable="cubemapfogsource" value="1" } } : "Env_Sky Target"
+	cubemapfogskymaterial(resource:material) { group="Fog Cubemap" enabled={ variable="cubemapfogsource" value="2" } } :  "Sky Material"
+	cubemapfoglodbiase(float) [ group = "Fog Cubemap" ] : "Cubemap Blur / Mip Bias (0-1)" : "0.5" : "Adjust how blurry the cubemap should be. Lower values are more blurry (0-1) "
 	cubemapfogstartdistance(float) [ group = "Fog Distance" ] : "Fog Start Distance" : "0.0"
-	cubemapfogenddistance(float) [ group = "Fog Distance" ] : "Fog End Distance" : "6000.0"
-	cubemapfogfalloffexponent(float) [ group = "Fog Distance" ] : "Distance Falloff Exponent" : "1.0" : "Exponent for distance falloff. For example, 2.0 = proportional to square of distance"
+	cubemapfogenddistance(float) [ group = "Fog Distance" ] : "Fog End Distance" : "4000.0"
+	cubemapfogfalloffexponent(float) [ group = "Fog Distance" ] : "Distance Falloff Exponent" : "2.0" : "Exponent for distance falloff. For example, 2.0 = proportional to square of distance"
+	cubemapfogmaxopacity(float) [ group = "Fog Distance" ] : "Maximum Fog Opacity (0-1)" : "1.0" : "Set the maximum opacity of the cubemap fog. (0-1)"
 	cubemapheightfog(boolean) [ group = "Fog Height" ] : "Height Fog Enabled?" : 1
-	cubemapfogheightstart(float) [ group = "Fog Height" ] : "Height Fog Start" : "2000.0"
-	cubemapfogheightend(float) [ group = "Fog Height" ] : "Height Fog End" : "2000.0"
-	cubemapfogheightexponent(float) [ group = "Fog Height" ] : "Height Fog Exponent" : "1.0"
-	cubemapfogmaxopacity(float) : "Maximum Fog Opacity (0-1)" : "1.0" : "Set the maximum opacity of the cubemap fog. (0-1)"
+	cubemapfogheightstart(float) [ group = "Fog Height" ] : "Height Fog Start" : "0.0"
+	cubemapfogheightend(float) [ group = "Fog Height" ] : "Height Fog End" : "4000.0"
+	cubemapfogheightexponent(float) [ group = "Fog Height" ] : "Height Fog Exponent" : "2.0" : "Exponent for distance falloff. For example, 2.0 = proportional to square of distance"
 ]
 
 @PointClass  base(Targetname, EnableDisable) tags( Lighting )
@@ -193,18 +307,25 @@
 	}
 = env_gradient_fog
 [
-	fogstart(float) : "Fog Start Distance" : "0.0"
-	fogend(float) : "Fog End Distance" : "4000.0"
-	heightfog(boolean) : "Height Fog Enabled?" : 1
-	fogstartheight(float) : "Fog Start Height" : "0.0"
-	fogendheight(float) : "Fog End Height" : "200.0"
-	fogmaxopacity(float) : "Fog Maximum Opacity" : "0.5" : "Set the maximum opacity at the base of the gradient fog."
-	fogcolor(color255) : "Fog Color (R G B)" : "255 255 255" : "Set the gradient fog color."
-	fogstrength(float) : "Fog Color Multiplier" : "1.0" : "For color values above 255"
-	fogfalloffexponent(float) : "Distance Falloff Exponent" : "2.0" : "Exponent for distance falloff."
-	fogverticalexponent(float) : "Vertical Falloff Exponent" : "1.0" : "Exponent for vertical falloff."
-	fadetime(float) : "Fade Time" : "1.0" : "How much time it takes to fade in new values."
-	farz(float) : "Far Z Clip Plane" : "-1.0"
+	// Fog Color
+	fogcolor(color255) [ group = "Fog Color" ] : "Fog Color" : "255 255 255" : "Set the gradient fog color."
+	fogstrength(float) [ group = "Fog Color" ] : "Fog Color Multiplier" : "1.0" : "For HDR color values"	
+	fogmaxopacity(float) [ group = "Fog Color" ] : "Fog Maximum Opacity" : "1.0" : "Set the maximum opacity of the gradient fog."
+
+	// Fog Distance
+	fogstart(float) [ group = "Fog Distance" ] : "Fog Start Distance" : "0.0"
+	fogend(float) [ group = "Fog Distance" ] : "Fog End Distance" : "4000.0"
+	fogfalloffexponent(float) [ group = "Fog Distance" ] : "Distance Falloff Exponent" : "2.0" : "Exponent for distance falloff."
+
+	// Fog Height
+	heightfog(boolean) [ group = "Fog Height" ] : "Height Fog Enabled?" : 1
+	fogstartheight(float) [ group = "Fog Height" ] : "Fog Start Height" : "0.0"
+	fogendheight(float) [ group = "Fog Height" ] : "Fog End Height" : "4000.0"
+	fogverticalexponent(float) [ group = "Fog Height" ] : "Height Falloff Exponent" : "2.0" : "Exponent for height falloff."
+
+	// Render Properties
+	fadetime(float) [ group = "Render Properties" ] : "Fade Time" : "1.0" : "How much time it takes to fade in new values."
+	farz(float) [ group = "Render Properties" ] : "Far Z Clip Plane" : "-1.0" : "Controls the Far Z distance clipping plane, beyond which geometry will be culled."
 
 	input SetFogStartDistance(float) : "Set Fog Start Distance"
 	input SetFogEndDistance(float) : "Set Fog End Distance"
@@ -655,30 +776,15 @@
 		1 : "Yes"
 	]
 
-    castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "1" : "Whether this light casts shadow" =
-	[
-		"0" : "No"
-		"1" : "Yes"
-		"2" : "Baked Only"
-	]	
-	directlight(choices) : "Sun Direct Lighting" : "1" : "How the sun's direct lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-		"2" : "Per-Pixel"
-	]
-	indirectlight(choices) : "Sun Bounce Lighting" : "1" : "How the sun's bounced lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-	]	
+
 
 	// NOTE - this currently has no effect for light_environment, TODO add this to lighting so we can have 
 	// reduced CSM distances and still keep the shadow from the sun/light_environment
-	baked_light_indexing(boolean) : "Baked Shadowing (Stationary Light)" : "1" : "Allows shadowing to be baked if light is baked (light cannot be moved)." 
+	baked_light_indexing(boolean) [ group = "Shadows" ] : "Stationary Light Shadows" : "1" : "Allows mixed dynamic cascade shadow maps with Baked shadows." 
 	
 	// These are controlled instead by ConVars in settings in CSGO that vary based on global shadow settings, 
 	// so don't expose it to artists since it won't work
+	nearclipplane(remove_key)	
 	numcascades(remove_key)
 	shadowcascaderesolution0(remove_key)
 	shadowcascaderesolution1(remove_key)
@@ -689,105 +795,18 @@
 	shadowcascadedistance2(remove_key)
 	shadowcascadedistance3(remove_key)
 	cascaderenderstaticobj(remove_key)
+	cascadecrossfade(remove_key)
+	cascadedistancefade(remove_key)
 
+	// These don't really need to be exposed, defauls work fine 99% of time
+	sunlightminbrightness(remove_key) 
+	ambient_occlusion(remove_key)
+	max_occlusion_distance(remove_key)
+	fully_occluded_fraction(remove_key)
+	occlusion_exponent(remove_key)
 	// Hacks
-	minroughness(float) { group="Hacks" min="0.0" max="1.0" } : "Min Roughness" : "0" : "Fake soft lighting to simulate a cloudy sky"
-]
-
-@OverrideClass = light_spot
-[
-	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-    castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "1" : "Whether this light casts shadow" =
-	[
-		"0" : "No"
-		"1" : "Yes"
-		"2" : "Baked Only"
-	]
-	directlight(choices) : "Direct Lighting" : "1" : "How direct lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-		"2" : "Per-Pixel"
-	]
-	indirectlight(choices) : "Indirect Lighting" : "1" : "How indirect lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-	]	
-	renderspecular(choices) : "Render Specular" : "1" : "" =
-	[
-		"0" : "Off"
-		"1" : "On"
-		"2" : "Bake into cubemaps"
-	]	
-	baked_light_indexing(boolean) : "Baked Shadowing (Stationary Light)" : "0" : "Allows shadowing to be baked if light is baked (light cannot be moved)." 
-]
-
-@OverrideClass = light_ortho
-[
-	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-    castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
-	[
-		"0" : "No"
-		"1" : "Yes"
-		"2" : "Baked Only"
-	]	
-	directlight(choices) : "Direct Lighting" : "1" : "How direct lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-		"2" : "Per-Pixel"
-	]
-	indirectlight(choices) : "Indirect Lighting" : "1" : "How indirect lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-	]	
-	baked_light_indexing(boolean) : "Baked Shadowing (Stationary Light)" : "0" : "Allows shadowing to be baked if light is baked (light cannot be moved)." 
-]
-
-@OverrideClass = light_omni
-[
-	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-    castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
-	[
-		"0" : "No"
-		"1" : "Yes"
-		"2" : "Baked Only"
-	]
-	directlight(choices) : "Direct Lighting" : "1" : "How direct lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-		"2" : "Per-Pixel"
-	]
-	indirectlight(choices) : "Indirect Lighting" : "1" : "How indirect lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Baked"
-	]	
-	renderspecular(choices) : "Render Specular" : "1" : "" =
-	[
-		"0" : "Off"
-		"1" : "On"
-		"2" : "Bake into cubemaps"
-	]
-	baked_light_indexing(boolean) : "Baked Shadowing (Stationary Light)" : "0" : "Allows shadowing to be baked if light is baked (light cannot be moved)." 
+	minroughness(float) { group="Specular" min="0.0" max="1.0" } : "Specular Softness" : "0" : "USE WITH CAUTION: Artificially softens direct specular (not cubemaps) to simulate cheap, soft area lights. Note: Direct Lighting must be set to Stationary or Dynamic for this to have an effect."
+	
 ]
 
 @OverrideClass = light_barn
@@ -801,10 +820,10 @@
     castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
-		"1" : "Yes"
+		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
-	directlight(choices) : "Direct Lighting" : "1" : "How direct lighting should be represented" =
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
 	[
 		// Ordered by expensiveness
 		"0" : "None"
@@ -812,6 +831,9 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	fog(remove_key)
+	fogstrength(remove_key)
+	fogshadows(remove_key)
 ]
 
 @OverrideClass = light_rect
@@ -825,10 +847,10 @@
     castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
-		"1" : "Yes"
+		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
-	directlight(choices) : "Direct Lighting" : "1" : "How direct lighting should be represented" =
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
 	[
 		// Ordered by expensiveness
 		"0" : "None"
@@ -836,6 +858,9 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	fog(remove_key)
+	fogstrength(remove_key)
+	fogshadows(remove_key)
 ]
 
 @OverrideClass = light_omni2
@@ -849,10 +874,10 @@
 	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
-		"1" : "Yes"
+		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
-	directlight(choices) : "Direct Lighting" : "1" : "How direct lighting should be represented" =
+	directlight(choices) { group="Direct Light" }: "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
 	[
 		// Ordered by expensiveness
 		"0" : "None"
@@ -860,6 +885,26 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	fog(remove_key)
+	fogstrength(remove_key)
+	fogshadows(remove_key)	
+]
+
+@OverrideClass = sky_camera
+[
+	clip_3D_skybox_near_to_world_far(remove_key)
+	clip_3D_skybox_near_to_world_far_offset(remove_key)
+	SkyboxSlot(remove_key)
+	fogenable(remove_key)
+	fogblend(remove_key)
+	use_angles(remove_key)
+	fogcolor(remove_key)
+	fogcolor2(remove_key)
+	fogdir(remove_key)
+	fogstart(remove_key)
+	fogend(remove_key)
+	fogmaxdensity(remove_key)
+	HDRColorScale(remove_key)
 ]
 
 @OverrideClass
@@ -880,6 +925,20 @@
 	edge_fade_dists(vector) : "Edge Fade Dist" : "0 0 0"
 ]
 
+@OverrideClass = BaseLightProbeVolume
+[
+	lightprobetexture(remove_key)
+	light_probe_volume_from_cubemap(remove_key) 
+	moveable(remove_key) 
+	storage(remove_key) 
+]
+
+@OverrideClass = BaseCubemap
+[
+	moveable(remove_key) 
+	bakenearz(remove_key)
+]
+
 @OverrideClass 
 	metadata
 	{
@@ -895,7 +954,7 @@
 		1 : "Yes"
 	]
 
-	voxel_size(choices) : "Voxel Size" : "48.0" : "" = 
+	voxel_size(choices) [ group="Lightprobes" ] : "Voxel Size" : "48.0" : "" = 
 	[
 		"6.0" : "Very Very High Resolution"
 		"12.0" : "Very High Resolution"
@@ -1030,10 +1089,6 @@
 	spawnAutomatically(boolean) : "Spawn Automatically" : 0 : 
 ]
 
-@PointClass base(GameEntity)  = env_detail_controller : "Detail Fade NOT USED."
-[
-]
-
 @PointClass base(GameEntity)  = info_paradrop_denial : "Paradrop denial area."
 [
 	radius(float) : "Denial Radius" : 200 : 
@@ -1119,9 +1174,11 @@
 
 @OverrideClass = prop_static
 [
-	emissive(boolean) { group = "Render Properties" } : "Emissive Lighting" : 0 : "Allow this prop to emit lighting for raytraced lighting"
+	renderwithdynamic(remove_key)
+	fademindist(remove_key)
+	fademaxdist(remove_key)
+	renderamt(remove_key)
 ]
-
 
 @PointClass base(Targetname,Angles) = info_map_parameters :
 	"Map parameters. Used to set which teams can buys, and the C4 bomb detonation radius."
@@ -1366,4 +1423,21 @@
 @PointClass = cs_minimap_boundary:
 	"One of two corners needed to define the minimap boundaries (extend to support multilevel maps)."
 [
+]
+
+@PointClass base(Targetname) = game_money : 
+	"An entity that awards money to a specific team." 
+[
+	Money(integer)		: "Amount of money to add (+/-)" : 1000
+	AwardText(string)	: "Award Text" : : "The text that will print in the chat next to the award amount.  Will look like this:	'1000: <Award Text>'"
+	
+	// Inputs
+	input SetMoneyAmount(void) : "Set the money value that will be awarded. (without awarding it)"
+	input AddTeamMoneyTerrorist(void) : "Add money to players on team TERRORIST."
+	input AddTeamMoneyCT(void) : "Add money to players on team COUNTER TERRORIST."
+	input AddMoneyPlayer(void) : "Add money directly to the player activating this entity. (no chat description)"
+	input SpendMoneyFromPlayer(void) : "If the player has [money amount] or more, take [money amount] away."
+	
+	output OnMoneySpent(void) : "Fires when input SpendMoneyFromPlayer succeeded."
+	output OnMoneySpentFail(void) : "Fires when input SpendMoneyFromPlayer failed. (Player didn't have enough money)"
 ]

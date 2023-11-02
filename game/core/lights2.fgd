@@ -35,17 +35,20 @@
 	}
 = light_barn : "A cinematic barn door style light"
 [
-	enabled(boolean) : "Enabled" : 1 // Toggle any component of the light that is dynamic - direct, fog, eventually bounce
-	colormode(choices) : "Color Mode" : "0" : "How to calculate the light's color" =
+	// Light Units
+	brightness_units(choices) { group="Light Units" } : "Units" : "1" : "Brightness Units" =
 	[
-		"0" : "Color"
-		"1" : "Color Temperature"
+		"1" : "Lumens"
+		"0" : "EV"
+		"3" : "Legacy"
 	]
-	color(color255) { enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
-	colortemperature(float) { min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
-	brightness_lumens(float) { min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "224" : "Brightness in lumens"
+	brightness(float) { group="Light Units" min="-4.0" max="8.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Brightness (EV)"
+	brightness_legacy(float) { group="Light Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
 
-	directlight(choices) : "Direct Lighting" : "3" : "How direct lighting should be represented" =
+
+	// Direct Lighting
+	enabled(boolean) { group="Direct Light" } : "Enabled" : 1 // Toggle any component of the light that is dynamic - direct, fog, eventually bounce
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "3" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
 	[
 		// Ordered by expensiveness
 		"0" : "None"
@@ -53,70 +56,62 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "0" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]
+	color(color255) { group="Direct Light" enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
+	colortemperature(float) { group="Direct Light" min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
+	brightness_lumens(float) { group="Direct Light" min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "224" : "Brightness in lumens. (See Light Units group for alternative units of measurement)."
 
-	luminaire_shape(choices) { group="Luminaire" }: "Area Light" : "1" : "Shape of the area light" =
+	range(float) { group="Direct Light" min="2.0" } : "Range" : "256.0" : "Clamps the distance that a light can reach."
+	skirt(float) { group="Direct Light" min="0.0" max="1.0" } : "Far Falloff" : "0.1" : "Controls the light falloff based on the set Range."
+	skirt_near(float) { group="Direct Light" min="0.0" max="1.0" } : "Near Falloff" : "0.05" : "Controls the light falloff from the light source."
+
+	// Bounce
+	bouncelight(choices) { group="Indirect Light" } : "Indirect Light Type" : "1" : "How Indirect (bounce) light should be represented" =
+	[
+		"0" : "None"
+		"1" : "Static"
+	]
+	bouncescale(float) { group="Indirect Light" } : "Indirect Light Multiplier" : "1.0" : "Increases the intensity of a lights' Indirect (bounce) light"
+
+	// Light Source / Area Light Settings
+	luminaire_shape(choices) { group="Light Source" }: "Light Source Type" : "1" : "Point or area light shapes. Point produces sharp shadows whereas Disk and Rectangle are area lights, with shadow softness/falloff influenced by the Area Light Size/Width." =
 	[
 		"0" : "Point"
-		"1" : "Disk"
-		"2" : "Rectangle"
+		"1" : "Disk (Area Light)"
+		"2" : "Rectangle (Area Light)"
 	]
-	luminaire_size(float) { group="Luminaire" min="0.0" max="90.0" } : "Area Light Size" : "4" : "Area light size, in degrees subtended by a point 100 units away from the near plane."
-	luminaire_anisotropy(float) { group="Luminaire" min="-1" max="1" } : "Area Light Anisotropy" : "0" : "Area light shape anisotropy"
+	luminaire_size(float) { group="Light Source" min="0.0" max="90.0" } : "Area Light Size" : "4" : "Light source area size, this affects how light/shadows are diffused as they falloff from the light source - Larger sizes produce softer lighting. NOTE: Light Source Type: Point ignores this setting as it is not an area light"
+	luminaire_anisotropy(float) { group="Light Source" min="-1" max="1" } : "Area Light Width" : "0" : "Scales the light source shape non-uniformly in x/y. NOTE: Light Source Type: Point ignores this setting as it is not an area light"
 
-	// Units
-	brightness_units(choices) { group="Units" } : "Units" : "1" : "Brightness Units" =
-	[
-		"1" : "Lumens"
-		"0" : "EV"
-		"3" : "Legacy"
-	]
-	brightness(float) { group="Units" min="-4.0" max="8.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Brightness (EV)"
-	brightness_legacy(float) { group="Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
-
-	// Style
-	light_style( vdata_choice:scripts/light_styles.vdata ) { group="Style" } : "Style" : "" : "Light Style"
-	light_style_radiance_var(string) { group="Style" } : "Radiance RGB Material Variable" : "" : "Emissive RGB color for a light's material on appropriately sized geometry."
-	light_style_var(string) { group="Style" } : "Style RGB Material Variable" : "" : "Light style multiplier ignoring the light's actual color"
-	light_style_output_event0(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 0" : "" : "Name of the event that triggers the OnStyleEvent0 output."
-	light_style_output_event1(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 1" : "" : "Name of the event that triggers the OnStyleEvent1 output."
-	light_style_output_event2(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 2" : "" : "Name of the event that triggers the OnStyleEvent2 output."
-	light_style_output_event3(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 3" : "" : "Name of the event that triggers the OnStyleEvent3 output."
-	light_style_target0(target_destination) { group="Style" } : "Style Target 0" : "" : "Apply light style to a particular entity's materials."
-	light_style_target1(target_destination) { group="Style" } : "Style Target 1" : "" : "Apply light style to a particular entity's materials."
-	light_style_target2(target_destination) { group="Style" } : "Style Target 2" : "" : "Apply light style to a particular entity's materials."
-	light_style_target3(target_destination) { group="Style" } : "Style Target 3" : "" : "Apply light style to a particular entity's materials."
+	// Light Shape
+	size_params(vector) { group="Light Shape" } : "Aperture Size(x,y,angle)" : "16.0 16.0 0.0625" : "Controls the size & shape of the barn light's aperture, allowing for emulation of many different light types."
+	shape(float) { group="Light Shape" min="0.0" max="1.0" } : "Aperture Shape" : "1" : "Blends between a circular or rectangular aperture"
+	soft_x(float) { group="Light Shape" min="0.0" max="1.0" } : "Aperture Softness X" : "0.25"
+	soft_y(float) { group="Light Shape" min="0.0" max="1.0" } : "Aperture Softness Y" : "0.25"
+	shear(vector2d) { group="Light Shape" } : "Angle Shear" : "0.0 0.0" : "Skews the light angle in x/y."
 
 	// Cookie
-	lightcookie(resource:vtex) { group="Cookie" initial_filter_string="materials/effects/lightcookies/" } : "Cookie" : ""
-	shape(float) { group="Cookie" min="0.0" max="1.0" } : "Shape" : "1"
-	soft_x(float) { group="Cookie" min="0.0" max="1.0" } : "Softness X" : "0.25"
-	soft_y(float) { group="Cookie" min="0.0" max="1.0" } : "Softness Y" : "0.25"
+	lightcookie(resource:vtex) { group="Cookie" initial_filter_string="materials/effects/lightcookies/" } : "Cookie" : "" : "Choose a light cookie texture (.vtex) to represent your light shape."
 
-	// Shape
-	skirt(float) { group="Shape" min="0.0" max="1.0" } : "Far Skirt" : "0.1"
-	skirt_near(float) { group="Shape" min="0.0" max="1.0" } : "Near Skirt" : "0.05"
-	size_params(vector) { group="Shape" } : "Size" : "16.0 16.0 0.0625"
-	range(float) { group="Shape" min="2.0" } : "Range" : "256.0"
-	shear(vector2d) { group="Shape" } : "Shear" : "0.0 0.0"
-
-	// Render
-	rendertocubemaps(boolean) { group="Render" } : "Render to Cubemaps" : 1 : "If true, illumination from this light renders into baked cube maps."
-	bakespeculartocubemaps(choices) { group="Render" enabled={ variable="directlight" value="1" } } : "Bake Specular to Cubemaps" : 0 : "Bake specular into cubemaps." =
+	// Specular
+	bakespeculartocubemaps(choices) { group="Specular" enabled={ variable="directlight" value="1" } } : "Bake Specular to Cubemaps" : 0 : "Bake specular into cubemaps. Only works when Direct Lighting Type is set to Baked." =
 	[
 		"0" : "None"
 		"2" : "Disk"
 		"1" : "Rectangle"
 	]
-	bakespeculartocubemaps_size(vector) { group="Render" } : "Bake Specular to Cubemaps Size" : "6.0 6.0 0.0"
-	brightnessscale(float) { group="Render" } : "Brightness Scale" : "1.0" : "Scale Brightness by this amount" 
-	fade_size_start(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Fade Out Start Size" : ".05" : "Screen size where the light will begin fading out" 
-	fade_size_end(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Fade Out End Size" : ".025" : "Screen size where the light will be fully faded out" 
+	bakespeculartocubemaps_size(vector) { group="Specular" } : "Bake Specular to Cubemaps Size" : "6.0 6.0 0.0" : 
+	minroughness(float) { group="Specular" min="0.0" max="1.0" } : "Specular Softness" : "0" : "USE WITH CAUTION: Artificially softens direct specular (not cubemaps) to simulate cheap, soft area lights. Note: Direct Lighting must be set to Stationary or Dynamic for this to have an effect."
 
 	// Shadows
 	castshadows(choices) { group="Shadows" } : "Cast Shadows" : "1" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
-		"1" : "Yes"
+		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
 	shadowmapsize(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Map Resolution" : "-1" =
@@ -143,16 +138,24 @@
 	shadowfade_size_start(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out Start Size" : ".10" : "Screen size where the shadows will begin fading out"
 	shadowfade_size_end(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out End Size" : ".05" : "Screen size where the shadows will be fully faded out"
 
-	// Bounce
-	bouncelight(choices) { group="Bounce" } : "Bounce Light" : "1" : "How bounced lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Static"
-	]
-	bouncescale(float) { group="Bounce" } : "Bounce Light Multiplier" : "1.0"
+	// Render
+	rendertocubemaps(boolean) { group="Render" } : "Render Light in Cubemaps" : 1 : "If true, illumination from this light renders into baked cube maps."
+	brightnessscale(float) { group="Render" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount, used for scripting direct light behaviour. NOTE: Only works on lights with Direct Lighting type set to Dynamic or Stationary." 
+	fade_size_start(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Light Fade Out Start Size" : ".05" : "Screen size where the light will begin fading out" 
+	fade_size_end(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Light Fade Out End Size" : ".025" : "Screen size where the light will be fully faded out" 
+
+	// Style
+	light_style( vdata_choice:scripts/light_styles.vdata ) { group="Style" } : "Style" : "" : "Light Style"
+	light_style_output_event0(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 0" : "" : "Name of the event that triggers the OnStyleEvent0 output."
+	light_style_output_event1(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 1" : "" : "Name of the event that triggers the OnStyleEvent1 output."
+	light_style_output_event2(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 2" : "" : "Name of the event that triggers the OnStyleEvent2 output."
+	light_style_output_event3(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 3" : "" : "Name of the event that triggers the OnStyleEvent3 output."
+	light_style_target0(target_destination) { group="Style" } : "Style Target 0" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target1(target_destination) { group="Style" } : "Style Target 1" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target2(target_destination) { group="Style" } : "Style Target 2" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target3(target_destination) { group="Style" } : "Style Target 3" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
 
 	// Hacks
-	minroughness(float) { group="Hacks" min="0.0" max="1.0" } : "Min Roughness" : "0" : "Hack for fill lights or cheap fake soft area lights"
 
 	// Fog
 	fog(choices) { group="Volumetric" } : "Volumetric Lighting" : "0" : "How volumetric light should be represented" =
@@ -183,33 +186,8 @@
 	}
 = light_rect : "A rectangular or disk shaped light"
 [
-	enabled(boolean) : "Enabled" : 1 // Toggle any component of the light that is dynamic - direct, fog, eventually bounce
-	colormode(choices) : "Color Mode" : "0" : "How to calculate the light's color" =
-	[
-		"0" : "Color"
-		"1" : "Color Temperature"
-	]
-	color(color255) { enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
-	colortemperature(float) { min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
-	brightness_lumens(float) { min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "250" : "Brightness in lumens"
-
-	shape(choices) : "Shape" : "0" : "Shape of the light" =
-	[
-		"0" : "Rectangle"
-		"1" : "Disk"
-	]
-
-	directlight(choices) : "Direct Lighting" : "3" : "How direct lighting should be represented" =
-	[
-		// Ordered by expensiveness
-		"0" : "None"
-		"1" : "Static"
-		"3" : "Stationary"
-		"2" : "Dynamic"
-	]
-
 	// Units
-	brightness_units(choices) { group="Units" } : "Units" : "1" : "Brightness Units" =
+	brightness_units(choices) { group="Light Units" } : "Units" : "1" : "Brightness Units" =
 	[
 		"1" : "Lumens"
 		"4" : "Candelas"
@@ -217,42 +195,57 @@
 		"0" : "EV"
 		"3" : "Legacy"
 	]
-	brightness_candelas(float) { group="Units" enabled={ variable="brightness_units" value="4" } } : "Candelas" : "80" : "Brightness in candelas"
-	brightness_nits(float) { group="Units" enabled={ variable="brightness_units" value="2" } } : "Nits" : "120" : "Brightness in nits"
-	brightness(float) { group="Units" min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
-	brightness_legacy(float) { group="Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
+	brightness_candelas(float) { group="Light Units" enabled={ variable="brightness_units" value="4" } } : "Candelas" : "80" : "Brightness in candelas"
+	brightness_nits(float) { group="Light Units" enabled={ variable="brightness_units" value="2" } } : "Nits" : "120" : "Brightness in nits"
+	brightness(float) { group="Light Units" min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
+	brightness_legacy(float) { group="Light Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
 
-	// Style
-	light_style( vdata_choice:scripts/light_styles.vdata ) { group="Style" } : "Style" : "" : "Light Style"
-	light_style_radiance_var(string) { group="Style" } : "Radiance RGB Material Variable" : "" : "Emissive RGB color for a light's material on appropriately sized geometry."
-	light_style_var(string) { group="Style" } : "Style RGB Material Variable" : "" : "Light style multiplier ignoring the light's actual color"
-	light_style_output_event0(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 0" : "" : "Name of the event that triggers the OnStyleEvent0 output."
-	light_style_output_event1(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 1" : "" : "Name of the event that triggers the OnStyleEvent1 output."
-	light_style_output_event2(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 2" : "" : "Name of the event that triggers the OnStyleEvent2 output."
-	light_style_output_event3(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 3" : "" : "Name of the event that triggers the OnStyleEvent3 output."
-	light_style_target0(target_destination) { group="Style" } : "Style Target 0" : "" : "Apply light style to a particular entity's materials."
-	light_style_target1(target_destination) { group="Style" } : "Style Target 1" : "" : "Apply light style to a particular entity's materials."
-	light_style_target2(target_destination) { group="Style" } : "Style Target 2" : "" : "Apply light style to a particular entity's materials."
-	light_style_target3(target_destination) { group="Style" } : "Style Target 3" : "" : "Apply light style to a particular entity's materials."
+	// Direct Lighting
+	enabled(boolean) { group="Direct Light" } : "Enabled" : 1 // Toggle any component of the light that is dynamic - direct, fog, eventually bounce
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "3" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
+	[
+		// Ordered by expensiveness
+		"0" : "None"
+		"1" : "Static"
+		"3" : "Stationary"
+		"2" : "Dynamic"
+	]
+	colormode(choices)  { group="Direct Light" } : "Color Mode" : "0" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]
+	color(color255) { group="Direct Light" enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
+	colortemperature(float) { group="Direct Light" min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
+	brightness_lumens(float) { group="Direct Light" min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "250" : "Brightness in lumens. (See Light Units group for alternative units of measurement)."
+	range(float) { group="Direct Light" min="2.0" } : "Range" : "256.0"
+	skirt(float) { group="Direct Light" min="0.0" max="1.0" } : "Falloff" : "0.1" : "Light Falloff based on set range."
+
+	// Bounce
+	bouncelight(choices) { group="Indirect Light" } : "Indirect Light Type" : "1" : "How indirect (bounce) light should be represented" =
+	[
+		"0" : "None"
+		"1" : "Static"
+	]
+	bouncescale(float) { group="Indirect Light" } : "Indirect Light Multiplier" : "1.0" : "Increases the intensity of a lights' Indirect (bounce) light"
 
 	// Shape
-	skirt(float) { group="Shape" min="0.0" max="1.0" } : "Skirt" : "0.1"
-	size_params(vector) { group="Shape" } : "Size" : "16.0 16.0 0.15"
-	range(float) { group="Shape" min="2.0" } : "Range" : "256.0"
+	shape(choices) { group="Light Shape" } : "Light Shape" : "0" : "Shape of the light" =
+	[
+		"0" : "Rectangle"
+		"1" : "Disk"
+	]	
+	size_params(vector) { group="Light Shape" } : "Light Size" : "16.0 16.0 0.15" : "Note: Larger sizes produce more diffuse light/shadows."
 
-	// Render
-	showlight(boolean) { group="Render" } : "Render Light Geometry" : 0 : "Render the light geometry"
-	rendertocubemaps(boolean) { group="Render" } : "Render to Cubemaps" : 1 : "If true, illumination from this light renders into baked cube maps."
-	bakespeculartocubemaps(boolean) { group="Render" enabled={ variable="directlight" value="1" } } : "Bake Specular to Cubemaps" : 0 : "Bake specular into cubemaps."
-	brightnessscale(float) { group="Render" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount" 
-	fade_size_start(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Fade Out Start Size" : ".05" : "Screen size where the light will begin fading out" 
-	fade_size_end(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Fade Out End Size" : ".025" : "Screen size where the light will be fully faded out" 
+	// Specular
+	bakespeculartocubemaps(boolean) { group="Specular" enabled={ variable="directlight" value="1" } } : "Bake Specular to Cubemaps" : 0 : "Bake specular into cubemaps. Only works when Direct Lighting Type is set to Baked."
+	minroughness(float) { group="Specular" min="0.0" max="1.0" } : "Specular Softness" : "0" : "Artificially softens direct specular (not cubemaps) to simulate cheap, soft area lights. Note: Direct Lighting must be set to Stationary or Dynamic for this to have an effect."
 
 	// Shadows
 	castshadows(choices) { group="Shadows" } : "Cast Shadows" : "1" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
-		"1" : "Yes"
+		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
 	shadowmapsize(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Map Resolution" : "-1" =
@@ -279,16 +272,23 @@
 	shadowfade_size_start(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out Start Size" : ".10" : "Screen size where the shadows will begin fading out"
 	shadowfade_size_end(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out End Size" : ".05" : "Screen size where the shadows will be fully faded out"
 
-	// Bonce
-	bouncelight(choices) { group="Bounce" } : "Bounce Light" : "1" : "How bounced lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Static"
-	]
-	bouncescale(float) { group="Bounce" } : "Bounce Light Multiplier" : "1.0"
+	// Render
+	showlight(boolean) { group="Render" } : "Render Light Geometry" : 0 : "Render the light geometry in the world"
+	rendertocubemaps(boolean) { group="Render" } : "Render Light in Cubemaps" : 1 : "If true, illumination from this light renders into baked cube maps."
+	brightnessscale(float) { group="Render" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount, used for scripting direct light behaviour. NOTE: Only works on lights with Direct Lighting type set to Dynamic or Stationary." 
+	fade_size_start(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Light Fade Out Start Size" : ".05" : "Screen size where the light will begin fading out" 
+	fade_size_end(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Light Fade Out End Size" : ".025" : "Screen size where the light will be fully faded out" 
 
-	// Hacks
-	minroughness(float) { group="Hacks" min="0.0" max="1.0" } : "Min Roughness" : "0" : "Hack for fill lights or cheap fake soft area lights"
+	// Style
+	light_style( vdata_choice:scripts/light_styles.vdata ) { group="Style" } : "Style" : "" : "Light Style"
+	light_style_output_event0(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 0" : "" : "Name of the event that triggers the OnStyleEvent0 output."
+	light_style_output_event1(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 1" : "" : "Name of the event that triggers the OnStyleEvent1 output."
+	light_style_output_event2(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 2" : "" : "Name of the event that triggers the OnStyleEvent2 output."
+	light_style_output_event3(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 3" : "" : "Name of the event that triggers the OnStyleEvent3 output."
+	light_style_target0(target_destination) { group="Style" } : "Style Target 0" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target1(target_destination) { group="Style" } : "Style Target 1" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target2(target_destination) { group="Style" } : "Style Target 2" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target3(target_destination) { group="Style" } : "Style Target 3" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
 
 	// Fog
 	fog(choices) { group="Volumetric" } : "Volumetric Lighting" : "0" : "How volumetric light should be represented" =
@@ -325,36 +325,8 @@
 	}
 = light_omni2 : "A sphere or tube shaped light"
 [
-	enabled(boolean) : "Enabled" : 1 // Toggle any component of the light that is dynamic - direct, fog, eventually bounce
-	colormode(choices) : "Color Mode" : "0" : "How to calculate the light's color" =
-	[
-		"0" : "Color"
-		"1" : "Color Temperature"
-	]
-	color(color255) { enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
-	colortemperature(float) { min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
-	brightness_lumens(float) { min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "1000" : "Brightness in lumens"
-
-	shape(choices) : "Shape" : "3" : "Shape of the light" =
-	[
-		"3" : "Point"
-		"0" : "Sphere"
-		"1" : "Tube"
-		"2" : "Tube with end caps"
-	]
-
-	directlight(choices) : "Direct Lighting" : "3" : "How direct lighting should be represented" =
-	[
-		// Ordered by expensiveness
-		"0" : "None"
-		"1" : "Static"
-		"3" : "Stationary"
-		"2" : "Dynamic"
-	]
-	lightcookie(resource:vtex) { group="Cookie" initial_filter_string="materials/effects/lightcookies/" } : "Cookie" : ""
-
-	// Units
-	brightness_units(choices) { group="Units" } : "Units" : "1" : "Brightness Units" =
+	// Light Units
+	brightness_units(choices) { group="Light Units" } : "Units" : "1" : "Brightness Units" =
 	[
 		"1" : "Lumens"
 		"4" : "Candelas"
@@ -362,44 +334,65 @@
 		"0" : "EV"
 		"3" : "Legacy"
 	]
-	brightness_candelas(float) { group="Units" enabled={ variable="brightness_units" value="4" } } : "Candelas" : "80" : "Brightness in candelas"
-	brightness_nits(float) { group="Units" enabled={ variable="brightness_units" value="2" } } : "Nits" : "9816" : "Brightness in nits"
-	brightness(float) { group="Units" min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
-	brightness_legacy(float) { group="Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
+	brightness_candelas(float) { group="Light Units" enabled={ variable="brightness_units" value="4" } } : "Candelas" : "80" : "Brightness in candelas"
+	brightness_nits(float) { group="Light Units" enabled={ variable="brightness_units" value="2" } } : "Nits" : "9816" : "Brightness in nits"
+	brightness(float) { group="Light Units" min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
+	brightness_legacy(float) { group="Light Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
 
-	// Style
-	light_style( vdata_choice:scripts/light_styles.vdata ) { group="Style" } : "Style" : "" : "Light Style"
-	light_style_radiance_var(string) { group="Style" } : "Radiance RGB Material Variable" : "" : "Emissive RGB color for a light's material on appropriately sized geometry."
-	light_style_var(string) { group="Style" } : "Style RGB Material Variable" : "" : "Light style multiplier ignoring the light's actual color"
-	light_style_output_event0(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 0" : "" : "Name of the event that triggers the OnStyleEvent0 output."
-	light_style_output_event1(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 1" : "" : "Name of the event that triggers the OnStyleEvent1 output."
-	light_style_output_event2(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 2" : "" : "Name of the event that triggers the OnStyleEvent2 output."
-	light_style_output_event3(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 3" : "" : "Name of the event that triggers the OnStyleEvent3 output."
-	light_style_target0(target_destination) { group="Style" } : "Style Target 0" : "" : "Apply light style to a particular entity's materials."
-	light_style_target1(target_destination) { group="Style" } : "Style Target 1" : "" : "Apply light style to a particular entity's materials."
-	light_style_target2(target_destination) { group="Style" } : "Style Target 2" : "" : "Apply light style to a particular entity's materials."
-	light_style_target3(target_destination) { group="Style" } : "Style Target 3" : "" : "Apply light style to a particular entity's materials."
+	// Direct Lighting
+	enabled(boolean) { group="Direct Light" } : "Enabled" : 1 // Toggle any component of the light that is dynamic - direct, fog, eventually bounce
+	directlight(choices) { group="Direct Light" } : "Direct Lighting Type" : "3" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
+	[
+		// Ordered by expensiveness
+		"0" : "None"
+		"1" : "Static"
+		"3" : "Stationary"
+		"2" : "Dynamic"
+	]
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "0" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]
+	color(color255) { group="Direct Light" enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255" 
+	colortemperature(float) { group="Direct Light" min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
+	brightness_lumens(float) { group="Direct Light" min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "1000" : "Brightness in lumens. (See Light Units group for alternative units of measurement)."
+	range(float) { group="Direct Light" min="2.0" } : "Range" : "256.0" : "Clamps the distance that a light can reach."
+	skirt(float) { group="Direct Light" min="0.0" max="1.0" } : "Falloff" : "0.1" : "Controls the light falloff based on the set Range."
+	
+	// Bounce
+	bouncelight(choices) { group="Indirect Light" } : "Indirect Light Type" : "1" : "How Indirect (bounce) light should be represented." =
+	[
+		"0" : "None"
+		"1" : "Static"
+	]
+	bouncescale(float) { group="Indirect Light" } : "Indirect Light Multiplier" : "1.0" : "Increases the intensity of a lights' Indirect (bounce) light."
 
 	// Shape
-	skirt(float) { group="Shape" min="0.0" max="1.0" } : "Skirt" : "0.1"
-	size_params(vector) { group="Shape" } : "Size" : "2.0 24.0 0.15"
-	range(float) { group="Shape" min="2.0" } : "Range" : "256.0"
-	outer_angle(float) { group="Shape" min="1.0" max="180.0" } : "Outer Angle" : "180.0"
-	inner_angle(float) { group="Shape" min="1.0" max="180.0" } : "Inner Angle" : "180.0"
+	shape(choices) { group="Light Shape" } : "Shape" : "3" : "Shape of the light" =
+	[
+		"3" : "Point"
+		"0" : "Sphere"
+		"1" : "Tube"
+		"2" : "Tube with end caps"
+	]
+	size_params(vector) { group="Light Shape" } : "Size" : "2.0 24.0 0.15"
 
-	// Render
-	showlight(boolean) { group="Render" } : "Render Light Geometry" : 0 : "Render the light geometry"
-	rendertocubemaps(boolean) { group="Render" } : "Render to Cubemaps" : 1 : "If true, illumination from this light renders into baked cube maps."
-	bakespeculartocubemaps(boolean) { group="Render" enabled={ variable="directlight" value="1" } } : "Bake Specular to Cubemaps" : 0 : "Bake specular into cubemaps."
-	brightnessscale(float) { group="Render" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount" 
-	fade_size_start(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Fade Out Start Size" : ".05" : "Screen size where the light will begin fading out" 
-	fade_size_end(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Fade Out End Size" : ".025" : "Screen size where the light will be fully faded out" 
+	outer_angle(float) { group="Light Shape" min="1.0" max="180.0" } : "Outer Angle" : "180.0" : "Used to creat hemispherical light shapes."
+	inner_angle(float) { group="Light Shape" min="1.0" max="180.0" } : "Inner Angle" : "180.0" : "Used to creat hemispherical light shapes."
+	
+	// Light Cookie
+	lightcookie(resource:vtex) { group="Cookie" initial_filter_string="materials/effects/lightcookies/" } : "Cookie" : "" : "Choose a light cookie texture (.vtex) to represent your light shape."
+
+	// Specular 
+	bakespeculartocubemaps(boolean) { group="Specular" enabled={ variable="directlight" value="1" } } : "Bake Specular to Cubemaps" : 0 : "Bake specular into cubemaps. Only works when Direct Lighting Type is set to Baked."
+	minroughness(float) { group="Specular" min="0.0" max="1.0" } : "Specular Softness" : "0" : "USE WITH CAUTION: Artificially softens direct specular (not cubemaps) to simulate cheap, soft area lights. Note: Direct Lighting must be set to Stationary or Dynamic for this to have an effect."
 
 	// Shadows
 	castshadows(choices) { group="Shadows" } : "Cast Shadows" : "1" : "Whether this light casts shadow" =
 	[
 		"0" : "No"
-		"1" : "Yes"
+		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
 	shadowmapsize(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Map Resolution" : "-1" =
@@ -426,16 +419,23 @@
 	shadowfade_size_start(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out Start Size" : ".10" : "Screen size where the shadows will begin fading out"
 	shadowfade_size_end(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out End Size" : ".05" : "Screen size where the shadows will be fully faded out"
 
-	// Bonce
-	bouncelight(choices) { group="Bounce" } : "Bounce Light" : "1" : "How bounced lighting should be represented" =
-	[
-		"0" : "None"
-		"1" : "Static"
-	]
-	bouncescale(float) { group="Bounce" } : "Bounce Light Multiplier" : "1.0"
+	// Render
+	brightnessscale(float) { group="Render" } : "Brightness Scale" : "1.0" : "Scale brightness by this amount, used for scripting direct light behaviour. NOTE: Only works on lights with Direct Lighting type set to Dynamic or Stationary." 
+	rendertocubemaps(boolean) { group="Render" } : "Render Light in Cubemaps" : 1 : "If true, illumination from this light renders into baked cube maps."	
+	showlight(boolean) { group="Render" } : "Render Light Geometry" : 0 : "Render the light geometry in the world"
+	fade_size_start(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Light Fade Out Start Size" : ".05" : "Screen size where the light will begin fading out" 
+	fade_size_end(float) { group="Render" min="0.0" max="1.0" enabled={ variable="directlight" values=["2", "3"] } } : "Light Fade Out End Size" : ".025" : "Screen size where the light will be fully faded out" 
 
-	// Hacks
-	minroughness(float) { group="Hacks" min="0.0" max="1.0" } : "Min Roughness" : "0" : "Hack for fill lights or cheap fake soft area lights"
+	// Style
+	light_style( vdata_choice:scripts/light_styles.vdata ) { group="Style" } : "Style" : "" : "Light Style"
+	light_style_output_event0(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 0" : "" : "Name of the event that triggers the OnStyleEvent0 output."
+	light_style_output_event1(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 1" : "" : "Name of the event that triggers the OnStyleEvent1 output."
+	light_style_output_event2(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 2" : "" : "Name of the event that triggers the OnStyleEvent2 output."
+	light_style_output_event3(vdata_choice:scripts/light_style_event_types.vdata) { group="Style" } : "Style Output Event 3" : "" : "Name of the event that triggers the OnStyleEvent3 output."
+	light_style_target0(target_destination) { group="Style" } : "Style Target 0" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target1(target_destination) { group="Style" } : "Style Target 1" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target2(target_destination) { group="Style" } : "Style Target 2" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
+	light_style_target3(target_destination) { group="Style" } : "Style Target 3" : "" : "Sets $light_emissive for use in material expressions. The emissive geometry's surface area should be approximately equal to the area light's surface area."
 
 	// Fog
 	fog(choices) { group="Volumetric" } : "Volumetric Lighting" : "0" : "How volumetric light should be represented" =

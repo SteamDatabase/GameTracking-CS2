@@ -161,6 +161,12 @@
 			"default"	"-1"
 			"max"		"-1"
 		}
+		"voice_threshold"
+		{
+			"min"		"0"
+			"default"	"0"
+			"max"		"0"
+		}
 
 		"cl_disconnect_voice_fade"	"-1.0"
 		"cl_disconnect_soundevent"	"StopSoundEvents.StopAllExceptMusic"
@@ -222,5 +228,8 @@
 			"include"       "postprocess"
 			"include"       "addoninfo.txt"
 		} 
+		"AllowAddonDownload" "1"
+		"AllowAddonDownloadForDemos" "1"
+		"DisableAddonValidationForDemos" "1"
 	}
 }
