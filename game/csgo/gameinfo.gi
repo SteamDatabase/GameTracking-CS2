@@ -221,6 +221,8 @@
 			"include"       "materials"
 			"include"       "models"
 			"include"       "panorama/images/overheadmaps"
+			"include"       "particles"
+			"include"       "resource/overviews"
 			"include"       "scripts/vscripts"
 			"include"       "sounds"
 			"include"       "soundevents"

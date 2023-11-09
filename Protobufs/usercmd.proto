@@ -13,6 +13,12 @@ message CSubtickMoveStep {
 }
 
 message CBaseUserCmdPB {
+	enum EPredictionReason {
+		k_eNone = 0;
+		k_eNormal = 1;
+		k_eForSubtickFrame = 2;
+	}
+
 	optional int32 command_number = 1;
 	optional int32 tick_count = 2;
 	optional .CInButtonStatePB buttons_pb = 3;
@@ -31,6 +37,8 @@ message CBaseUserCmdPB {
 	optional bytes move_crc = 19;
 	optional uint32 consumed_server_angle_changes = 20;
 	optional int32 cmd_flags = 21;
+	optional .CBaseUserCmdPB.EPredictionReason last_prediction_reason = 22 [default = k_eNone];
+	optional .CBaseUserCmdPB.EPredictionReason next_prediction_reason = 23 [default = k_eNone];
 }
 
 message CUserCmdBasePB {
