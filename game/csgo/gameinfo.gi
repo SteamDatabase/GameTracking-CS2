@@ -52,6 +52,17 @@
 		"pulse_enabled"					"1"
 	}
 
+	DelayedConCommands
+	{
+		"connect_lobby" "1"
+		"connect" "1"
+		"playcast" "1"
+		"csgo_econ_action_preview" "1"
+		"csgo_download_match" "1"
+		"playdemo" "1"
+		"gcconnect" "1"
+	}
+
 	ConVars
 	{
 		// Bandwidth control default: 300,000 Bps
