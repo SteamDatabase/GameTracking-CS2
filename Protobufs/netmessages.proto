@@ -185,9 +185,6 @@ message CCLCMsg_ServerStatus {
 	optional bool simplified = 1;
 }
 
-message CCLCMsg_ServerPing {
-}
-
 message CCLCMsg_RequestPause {
 	optional .RequestPause_t pause_type = 1 [default = RP_PAUSE];
 	optional int32 pause_group = 2;
@@ -531,10 +528,12 @@ message CMsgServerNetworkStats {
 	message Player {
 		optional uint64 steamid = 1;
 		optional string remote_addr = 2;
-		optional int32 ping_stddev_ms = 3;
 		optional int32 ping_avg_ms = 4;
 		optional float packet_loss_pct = 5;
 		optional bool is_bot = 6;
+		optional float loss_in = 7;
+		optional float loss_out = 8;
+		optional int32 engine_latency_ms = 9;
 	}
 
 	optional bool dedicated = 1;
@@ -549,8 +548,8 @@ message CMsgServerNetworkStats {
 	optional int32 num_tv_relays = 11;
 	optional float fps = 12;
 	repeated .CMsgServerNetworkStats.Port ports = 17;
-	optional float avg_latency_out = 18;
-	optional float avg_latency_in = 19;
+	optional float avg_ping_ms = 18;
+	optional float avg_engine_latency_out = 19;
 	optional float avg_packets_out = 20;
 	optional float avg_packets_in = 21;
 	optional float avg_loss_out = 22;

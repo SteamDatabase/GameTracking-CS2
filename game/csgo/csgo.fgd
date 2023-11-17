@@ -759,6 +759,11 @@
 [
 ]
 
+@SolidClass base(Trigger) = trigger_hostage_reset:  
+	"A trigger volume that resets the hostage by teleporting it back into the playable area."
+[
+]
+
 @OverrideClass
 	metadata
 	{
@@ -862,8 +867,8 @@
 		// Ordered by expensiveness
 		"0" : "None"
 		"1" : "Static"
-		"3" : "Stationary"
-		"2" : "Dynamic"
+		// "3" : "Stationary"
+		// "2" : "Dynamic"
 	]
 	fog(remove_key)
 	fogstrength(remove_key)
@@ -878,13 +883,13 @@
 		1 : "Yes"
 	]
 
-	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow" =
+	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "2" : "Whether this light casts shadow. " =
 	[
 		"0" : "No"
 		"1" : "Baked & Dynamic"
 		"2" : "Baked Only"
 	]
-	directlight(choices) { group="Direct Light" }: "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive)" =
+	directlight(choices) { group="Direct Light" }: "Direct Lighting Type" : "1" : "How direct lighting should be represented: Static=Fully baked into lightmap (cheapest), Stationary=Dynamic direct light with baked shadows, Dynamic=Fully dynamic (Most expensive). NOTE: Stationary and Dynamic omni2's take up 6 dynamic shadow slots, and will likely not cast shadows if you have CSM shadows enabled in a light_environment." =
 	[
 		// Ordered by expensiveness
 		"0" : "None"
@@ -1101,11 +1106,33 @@
 	radius(float) : "Denial Radius" : 200 : 
 ]
 
-@PointClass base(GameEntity)  = logic_eventlistener : "Event listener."
+//-------------------------------------------------------------------------
+// Used to listen to events caled from code
+//-------------------------------------------------------------------------
+
+@PointClass base(Targetname) = logic_eventlistener :
+	"An entity that can listen to events fired from code and fire " +
+	"and output when it happens."
 [
-	EventName(string) : "Event Name" :  :  
-	IsEnabled(boolean) : "Is Enabled" : 0 : 
-	TeamNum(int) : "Team" : -1 : 
+	EventName(string) : "Event Name" : "" : "The name of the event that you want to listen for."
+	IsEnabled(choices) : "Start Enabled" : 1 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	TeamNum(choices) : "Team Number" : -1 : "If set, will only fire its output if the event is generated from someone of the specified team." =
+	[
+		-1 : "Don't care"
+		2 : "Terrorists"
+		3 : "Counter-Terrorists"
+	]
+		
+	// Inputs
+	input Enable(void) : "Enable the logic_eventlistener."
+	input Disable(void) : "Disable the logic_eventlistener."
+	
+	// Outputs
+	output OnEventFired(void)  : "Fired when the event has been detected."
 ]
 
 //-------------------------------------------------------------------------

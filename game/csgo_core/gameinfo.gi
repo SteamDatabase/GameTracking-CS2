@@ -194,6 +194,7 @@
 		"GpuLightBinnerSupportViewModelCascade" "1"
 		"DefaultShadowTextureWidth" "4096"
 		"DefaultShadowTextureHeight" "4096"
+	//	"ShadowTextureImageFormat_D16" "1"
 		"PointLightShadowsEnabled" "1"
 		"Tonemapping"	"1"
 		"NonTexturedGradientFog" "1"
