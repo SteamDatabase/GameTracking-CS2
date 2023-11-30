@@ -136,6 +136,11 @@
 		"MSAADefaultNonVR"	"4" 
 		"DefensiveConCommands"	"1"
 		"PauseSinglePlayerOnGameOverlay" "1"
+		"PauseOnCtrlConsole" "0" // Src2 issues a 'setpause' on holding down CTRL + toggleconsole key, disable this for CS2.
+		"RestrictConsoleCloseKey" "`"	// This setting stipulates that if the binding for toggleconsole is set to anything other
+										// than the default KEY_BACKQUOTE, then it only works for opening the console, not closing.
+										// ESC can always be used to close the console regardless of this setting.
+										// This matches csgo src1 behaviour.
 	}
 
 	NetworkSystem
