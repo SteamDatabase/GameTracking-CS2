@@ -90,6 +90,8 @@
 			"cables.vfx" "128 64 64"
 			"spritecard.vfx" "240 240 0"
 		}
+
+		"ErrorMaterialIsFatalError"	"1"
 	}
 
 	MaterialEditor
