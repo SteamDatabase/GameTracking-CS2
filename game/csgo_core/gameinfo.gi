@@ -104,6 +104,7 @@
 	{
 		"UsesSvg" "1"
 		"AllowGlobalPanelContext" "1"
+		"AllowCustomGameUI" 0
 	}
 
 	Engine2
