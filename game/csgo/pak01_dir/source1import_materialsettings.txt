@@ -1,0 +1,63 @@
+// contains tweakables for generation of roughness/metalness s2 textures from source 1 material import
+// since s1 does not use roughness/metalness, etc but has specular/env masks and material parameters, these s1 material 
+// params are used to generate the s2 roughness/metalness textures. 
+// 
+// Summary of s1 material params affecting roughness:
+// 
+
+Settings
+{
+	//
+	// Roughness Generation
+	//
+
+	// These are used to remap generated roughness values from 0..1 to a tighter range, reducing the impact of the most extreme roughness values, but resulting in a slightly less contrasty roughness
+	"RoughnessMin" "0.05"			// default 0.0
+	"RoughnessMax" "0.9"			// default 1.0
+
+	// Determine how phong exponent values are used in the roughness calcs, high exponent values indicate high smoothness (low roughness), and the converse also hold.
+	// Though exponent is only one of the contributing factors, these settings allow some manipulation in how exponent contributes.
+	"ExponentMax" "128.0"   		// default 128.0 // input exponent values above this are clamped, exponents at or above this are considered to contribute shiny = 1 (roughness = 0) for their contribution to shininess
+	"ExponentRebasedMin" "0.25" 	// default 0.0
+
+	// boost (or reduce) the texture mask, only used by non-trivial smoothness generation using a mask texture, generally materials using $phong 1
+	"TextureMaskScale" "1.05"		// default 1.0
+	"TextureMaskBias"  "0.05"		// default 0.0
+
+	// It's common practice (Lagarde) to define roughness = (1-smoothness)^2, since we generate a smoothness value first from material masks & params we expose this too (0 or 1)
+	"SquareRoughness" "1"			// default 1			
+
+	//
+	// Reflectance
+	//
+
+	// It's common to use IOR (Index of Refraction), as a way of indicating the reflectance property of a material (this is also the shader parameter)
+	// derived using S1 fresnel parameters and the S1 shader used, these values can change the range to which the s1 parameters map to IOR
+	// A commong default range for di-electrics is 2%-4% (0.02..0.04) reflectance which translates to 1.33..1.5 IOR.
+	// Default range of IOR in S2 is 1..2 (reflectance 0%..11%), but noted that no real world value has IOR 0%..2%, and gemstones materials that tend to be have IOR > 11%
+	// Some other real world values can be found here https://en.wikipedia.org/wiki/List_of_refractive_indices
+	"IORMin" "1.33"					// default 1.33 (2% reflectance)
+	"IORMax" "1.5"					// default 1.5 (4% reflectance)
+	"IORCharacterMin" "1.33"		// default 1.33
+	"IORCharacterMax" "2.0"			// default 2.0 (11% reflectance)
+
+	//
+	// Metalness
+	//
+
+	"MetalnessMin" "0.0"			// default 0.0
+	"MetalnessMax" "1.0"			// default 1.0
+
+	"MetalnessWeaponScale" "1.0"	// default 1.0
+	"MetalnessWeaponBias"  "0.0"	// default 0.0
+
+	// if string match with input texture namethen we'll use the metalnessweaponmin/max ranges by default
+	"MetalWeaponAdd" "knife_"
+	"MetalWeaponAdd" "pist_"
+	"MetalWeaponAdd" "rif_"
+	"MetalWeaponAdd" "smg_"
+	"MetalWeaponAdd" "shot_"
+	"MetalWeaponAdd" "snip_"
+	"MetalWeaponAdd" "eq_"
+	"MetalWeaponAdd" "metal"
+}

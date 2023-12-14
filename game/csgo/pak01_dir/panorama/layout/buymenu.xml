@@ -1,0 +1,105 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
+		<include src="s2r://panorama/styles/buymenu.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/buymenu.vjs_c" />
+		<include src="s2r://panorama/scripts/common/characteranims.vts_c" />
+		<include src="s2r://panorama/scripts/common/iteminfo.vts_c" />
+		<include src="s2r://panorama/scripts/mock_adapter.vts_c" />
+	</scripts>
+	<snippets>
+		<snippet name="ItemCategory">
+			<Panel class="buymenu__category__column">
+				<Panel class="buymenu__category__column__header">
+					<Label class="buymenu__category__column__keylabel keybind" text="{s:buymenu-category-key}" />
+					<Label class="buymenu__category__column__label" text="{s:buymenu-category}" />
+				</Panel>
+				<Panel id="ItemButtons" class="buymenu__category__itembuttons" />
+			</Panel>
+		</snippet>
+		<snippet name="ItemPanel">
+			<Panel class="button-container">
+				<Label id="" text="#BuyMenu_NewUserExperience_Recommended" class="nux Hidden" />
+				<Button id="BuyButton" class="buywheel-wedge">
+					<Label class="buywheel-button__key keybind" id="WedgeKeybinding" text="X" />
+					<Label id="ItemName" class="buywheel-item__name hud-colorize-wash" />
+					<Image id="ItemIcon" class="buywheel-item__icon hud-colorize-wash" />
+					<Label id="ItemPrice" class="buywheel-item__price hud-colorize-wash" />
+					<Label id="ItemCurValue" text="{d:current-value}" class="buywheel-item__cur-value hud-colorize-wash" />
+				</Button>
+				<Button id="SellbackButton" class="sellback-button">
+					<TooltipPanel tooltip="#BuyMenu_Sellback">
+						<Image src="s2r://panorama/images/icons/ui/undo.vsvg" />
+					</TooltipPanel>
+				</Button>
+				<Panel id="TeammateInventory" class="teammate-inventory-container" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet-player-pip">
+			<Panel class="player-pip" />
+		</snippet>
+	</snippets>
+	<CSGOBuyMenu class="buymenu">
+		<Panel class="buymenu__fullscreen">
+			<MapPlayerPreviewPanel id="id-buymenu-agent" class="buymenu-agent" map="ui/buy_menu" camera="cam_buymenu" require-composition-layer="true" playermodel="" playername="vanity_character" animgraphcharactermode="buy-menu" player="true" mouse_rotate="false" sync_spawn_addons="true" game-background="true" pin-fov="vertical" />
+			<Panel class="full-width full-height debug" hittest="false" hittestchildren="false">
+				<CSGOHudWeaponSelection id="EmbeddedHudWeaponSelection" neverfade="true" neverselected="true" class="embedded-weapons-overview" />
+			</Panel>
+			<Panel class="buymenu-money">
+				<CSGOMoneyPanel id="BuyMenuMoney" class="" />
+			</Panel>
+			<Panel class="buymenu__contents">
+				<Panel class="buymenu-left">
+					<Panel class="buymenu-info">
+						<CSGOMoneyPanel id="buymenu-info-money" class="" hittest="false" />
+						<Panel class="buymenu-timeleft">
+							<Label class="buymenu-timeleft-title" text="#BuyMenu_TimerText" />
+							<CountdownTimer id="Countdown" output_milliseconds="false" class="buymenu-timeleft-timer">
+								<Label text="{t:d:duration}" />
+							</CountdownTimer>
+						</Panel>
+					</Panel>
+					<Panel class="buymenu-body">
+						<Image class="buy-wheel-background" />
+						<Panel class="buymenu__categories__container">
+							<Panel id="CategoryContainer1" class="buymenu-category ccequip" />
+							<Panel id="CategoryContainer2" class="buymenu-category ccpistols" />
+							<Panel id="CategoryContainer3" class="buymenu-category ccmidtier" />
+							<Panel id="CategoryContainer4" class="buymenu-category ccrifles" />
+							<Panel id="CategoryContainer5" class="buymenu-category ccgrenades" />
+						</Panel>
+					</Panel>
+					<Panel class="buymenu__purchase-failure-container">
+						<Label id="PurchaseFailureLabel" class="buymenu__purchase-failure" />
+						<Label id="BuyForTeammateHintLabel" class="buymenu__purchase-failure buymenu__purchase-failure--teammate Hidden" text="#BuyMenu_BuyForTeammate_hint" />
+					</Panel>
+				</Panel>
+				<Panel class="buymenu-right">
+					<ItemPreviewPanel id="hack" class="hidden" />
+					<Panel id="ItemDesc" class="buymenu-item-info Hidden">
+						<Label id="WeaponNameAndRarity" class="buymenu-item-info__name" text="{s:item-name}" />
+						<Label class="buymenu-item-info__desc" text="{s:item-desc}" html="true" />
+					</Panel>
+					<Panel class="vline" />
+				</Panel>
+			</Panel>
+			<Panel id="BuyMenuNavBar" class="buymenu-navbar  hud-colorize-wash">
+				<Panel class="vertical-center left-right-flow horizontal-align-right">
+					<Label id="BuyForTeammateLabel" class="buymenu__for-teammate" text="#BuyMenu_BuyForTeammate" />
+					<Button class="PopupButton" onactivate="GameInterfaceAPI.ConsoleCommand( &apos;rebuy&apos; )">
+						<Label text="#BuyMenu_Buyprev" />
+					</Button>
+					<Button class="PopupButton" onactivate="GameInterfaceAPI.ConsoleCommand( &apos;autobuy&apos; )">
+						<Label text="#BuyMenu_Autobuy" />
+					</Button>
+					<Button class="PopupButton" onactivate="$.DispatchEvent( &apos;BuyMenu_Back&apos; );">
+						<Label text="#BuyMenu_Back" />
+					</Button>
+				</Panel>
+			</Panel>
+		</Panel>
+	</CSGOBuyMenu>
+</root>

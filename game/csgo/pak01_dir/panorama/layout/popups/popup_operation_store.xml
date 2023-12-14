@@ -1,0 +1,131 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/mainmenu.vcss_c" />
+		<include src="s2r://panorama/styles/operation/operation_shared.vcss_c" />
+		<include src="s2r://panorama/styles/operation/operation_main.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_operation_store.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_capability_shared.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/operation/operation_util.vjs_c" />
+		<include src="s2r://panorama/scripts/popups/popup_operation_store.vjs_c" />
+		<include src="s2r://panorama/scripts/common/iteminfo.vts_c" />
+	</scripts>
+	<snippets>
+		<snippet name="store-row">
+			<Panel class="popup-operation-store-row">
+				<Label class="popup-operation-store-row__text popup-operation-store-row__text_stars1" html="true" text="#op_stars_item_short_name1" />
+				<Label class="popup-operation-store-row__text popup-operation-store-row__text_stars_many" html="true" text="#op_stars_item_short_name" />
+				<Panel class="popup-operation-store-row__price">
+					<Panel class="popup-operation-store-row__price-container">
+						<Label class="popup-operation-store-row__price__originalprice fixed-width" text="{s:store-item-original-price}" />
+						<Label class="popup-operation-store-row__text fixed-width" text="{s:store-item-sale-price}" />
+					</Panel>
+					<Label class="popup-operation-store-row__price__discount" text="{s:store-item-discount}" />
+				</Panel>
+				<Panel class="popup-operation-store-row__quantity">
+					<Panel class="horizontal-center left-right-flow">
+						<Label class="popup-operation-store-row__text quantity-count stratum-regular-mono" html="true" text="{d:store-item-quantity}" />
+						<Panel class="top-bottom-flow">
+							<TextButton id="popup-operation-store-count-increment" class="popup-operation-store-row__quantity__btn" text="+" />
+							<TextButton id="popup-operation-store-count-decrement" class="popup-operation-store-row__quantity__btn" text="-" />
+						</Panel>
+					</Panel>
+				</Panel>
+				<Label class="popup-operation-store-row__text" html="true" text="{s:store-item-stars-quantity}" />
+				<Label class="popup-operation-store-row__text" html="true" text="{s:store-item-purchase-price}" />
+			</Panel>
+		</snippet>
+	</snippets>
+	<PopupCustomLayout class="PopupPanel Capability Hidden" useglobalcontext="true" popupbackground="blur" oncancel="CapabilityOperationStore.ClosePopup();" onload="CapabilityOperationStore.Init();">
+		<Panel id="NameableSpinner" class="Spinner vertical-center horizontal-center hidden" />
+		<Panel class="mainmenu-content__container popup-operation-store" hittest="true">
+			<Panel class="full-width height-fit-children top-bottom-flow">
+				<Panel class="popup-operation-store__top">
+					<Label class="popup-operation-store-title" text="#op_store_title" />
+					<Panel class="popup-operation-store-progress">
+						<Panel class="top-bottom-flow popup-operation-store-progress-panel--current">
+							<Label class="op-main-progress__title" html="true" text="#op_store_current_stars" />
+							<Panel class="op-main__progress">
+								<Image class="op-main-topbar__icon" src="s2r://panorama/images/icons/ui/icon_star_empty.vsvg" textureheight="96" texturewidth="-1" />
+								<Label class="op-main__progress__label-count stratum-font" html="true" text="{d:total_stars}" />
+							</Panel>
+						</Panel>
+						<Image id="id-operation-store-progress-after-arrow" class="popup-operation-store-progress__arrow" src="s2r://panorama/images/icons/ui/expand.vsvg" textureheight="32" texturewidth="-1" />
+						<Panel id="id-operation-store-progress-after-container" class="top-bottom-flow popup-operation-store-progress-panel">
+							<Label class="op-main-progress__title" html="true" text="#op_store_after_purchase" />
+							<Panel class="op-main__progress after-purchase">
+								<Image class="op-main-topbar__icon" src="s2r://panorama/images/icons/ui/icon_star_empty.vsvg" textureheight="96" texturewidth="-1" />
+								<Label id="id-operation-store-progress-after" class="op-main__progress__label-count stratum-font" html="true" text="{d:after_purchase_stars}" />
+							</Panel>
+						</Panel>
+					</Panel>
+					<Panel class="top-bottom-flow popup-operation-store-progress-apply-panel">
+						<Label id="id-operation-store-apply_title" class="popup-operation-store-progress__title text-uppercase" html="true" text="#op_store_apply_stars" />
+						<Label id="id-operation-store-apply_desc" class="popup-operation-store-subtitle" html="true" text="#op_store_apply_stars_desc" />
+						<Label id="id-operation-store-apply_warning" class="popup-operation-store-subtitle Disabled" html="true" text="#op_store_apply_stars_warning" />
+						<Panel class="horizontal-center vertical-center full-width">
+							<Panel id="id-operation-store-apply-new-stars" class="left-right-flow vertical-center">
+								<Panel class="top-bottom-flow vertical-center left-right-padding">
+									<Label id="id-operation-store-apply_type_desc" class="popup-operation-store-subtitle" html="true" text="#op_store_new_stars" />
+									<Label class="op-main__progress__label-count op-main__progress__label-count--light stratum-font " html="true" text="{s:store-item-stars-total}" />
+								</Panel>
+							</Panel>
+							<Label id="id-operation-store-apply_plus_sign" class="op-main__progress__label-count stratum-font left-right-padding" html="true" text="+" />
+							<Panel class="popup-operation-store-progress-panel--current">
+								<Panel class="op-main__progress">
+									<Image class="op-main__progress__glow" src="s2r://panorama/images/ui_textures/glow_radial_png.vtex" />
+									<Image class="op-main__progress__glow op-main__progress__glow--dir" src="s2r://panorama/images/ui_textures/glow_radial_png.vtex" />
+									<Image class="op-main__progress__image" src="s2r://panorama/images/icons/ui/icon_star_empty.vsvg" textureheight="256" texturewidth="-1" />
+									<Label id="id-operation-store-progress-apply" class="op-main__progress__label-count stratum-font" html="true" text="{d:total_stars}" />
+								</Panel>
+							</Panel>
+						</Panel>
+					</Panel>
+				</Panel>
+				<Label class="popup-operation-store-progress__title popup-operation-store-progress__title--desc" html="true" text="#op_store_how_many_stars" />
+				<Panel class="popup-operation-store-content">
+					<Panel id="popup-operation-store-content-nav" class="popup-operation-store-content__nav hide">
+						<RadioButton data-rank="2" id="popup-operation-store-rank-2" class="popup-operation-store-content__nav__btn" disabled="true">
+							<Panel class="popup-operation-store-content__nav__btn--bronze" />
+							<Image src="s2r://panorama/images/econ/status_icons/operation_9_bronze_png.vtex" />
+						</RadioButton>
+						<RadioButton data-rank="3" id="popup-operation-store-rank-3" class="popup-operation-store-content__nav__btn" disabled="true">
+							<Panel class="popup-operation-store-content__nav__btn--silver" />
+							<Image src="s2r://panorama/images/econ/status_icons/operation_9_silver_png.vtex" />
+						</RadioButton>
+						<RadioButton data-rank="4" id="popup-operation-store-rank-4" class="popup-operation-store-content__nav__btn" disabled="true">
+							<Panel class="popup-operation-store-content__nav__btn--gold" />
+							<Image src="s2r://panorama/images/econ/status_icons/operation_9_gold_png.vtex" />
+						</RadioButton>
+					</Panel>
+					<Panel id="popup-operation-store-rows-container" class="popup-operation-store-rows-container">
+						<Panel class="popup-operation-store-row popup-operation-store-row--title">
+							<Label class="popup-operation-store-row__text popup-operation-store-row__text--title" html="true" text="#op_store_column_title_bundle" />
+							<Label class="popup-operation-store-row__text popup-operation-store-row__text--title" html="true" text="#op_store_column_title_price" />
+							<Label class="popup-operation-store-row__text popup-operation-store-row__text--title" html="true" text="#op_store_column_title_quantity" />
+							<Label class="popup-operation-store-row__text popup-operation-store-row__text--title" html="true" text="#op_store_column_title_total_stars" />
+							<Label class="popup-operation-store-row__text popup-operation-store-row__text--title" html="true" text="#op_store_column_title_total_price" />
+						</Panel>
+						<Panel id="popup-operation-store-rows" class="top-bottom-flow" />
+						<Panel class="popup-operation-store-row horizontal-align-right">
+							<Label class="popup-operation-store-row__text bold" html="true" text="{s:store-item-stars-total}" />
+							<Label class="popup-operation-store-row__text bold" html="true" text="{s:store-item-price-total}" />
+						</Panel>
+					</Panel>
+				</Panel>
+				<Panel class="popup-operation-store-actions-Row">
+					<Label id="AsyncItemWorkDesc" html="true" class="popup-capability__purchase__text stratum-font" text="" />
+					<Panel id="op-Store-spinner" class="Spinner vertical-center horizontal-center hidden" />
+					<Panel class="spacer" />
+					<TextButton id="AsyncItemWorkAcceptConfirm" html="true" class="PopupButton Positive" text="#op_store_purchase_stars" />
+					<TextButton id="AsyncItemWorkUseItem" html="true" class="PopupButton Positive hidden" text="#op_store_apply" />
+					<TextButton id="" html="true" class="PopupButton" onactivate="CapabilityOperationStore.ClosePopup();" text="#GameUI_Close" />
+				</Panel>
+			</Panel>
+		</Panel>
+	</PopupCustomLayout>
+</root>

@@ -1,0 +1,43 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	// memorize noises happening right now
+	type = "decorator_sensor"
+	shape =
+	{
+		type = "sensor_shape_sphere"
+		radius = 3000
+	}
+	entity_type_filter = "NOISE"
+	output = "Hearing"
+	priority = 1
+	child =
+	{
+		type = "decorator_picker_weight_as_distance"
+		input = "Hearing"
+		child =
+		{
+			type = "decorator_picker_random_by_distance"
+			distance_min = 800
+			distance_max = 3000
+			input = "Hearing"
+			child =
+			{
+				type = "decorator_picker_dedup"
+				input = "Hearing"
+				against = "LongTermMemory"
+				distance_threshold = 100
+				child =
+				{
+					type = "decorator_set_reaction_time"
+					input = "Hearing"
+					child =
+					{
+						type = "decorator_memory"
+						input = "Hearing"
+						output = "LongTermMemory"
+					}
+				}
+			}
+		}
+	}
+}

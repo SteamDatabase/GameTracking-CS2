@@ -1,0 +1,47 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/gamestyles.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+	</styles>
+	<script><![CDATA[
+		var onOpenServerBrowser = function ()
+		{
+			updateNeverShowAgainSetting();
+			if ( MyPersonaAPI.GetLauncherType() === "perfectworld" )
+			{
+				SteamOverlayAPI.OpenURL( 'https://csgo.wanmei.com/communityserver' );
+			}
+			else
+			{
+				SteamOverlayAPI.OpenUrlInOverlayOrExternalBrowser( 'steam://open/servers' );
+			}
+			$.DispatchEvent( 'UIPopupButtonClicked', '' );
+		}
+
+		var closeServerBrowserPopUp = function ()
+		{
+			updateNeverShowAgainSetting();
+			$.DispatchEvent( 'UIPopupButtonClicked', '' );
+		}
+
+		var updateNeverShowAgainSetting = function ()
+		{
+			var elToggle = $.GetContextPanel().FindChildInLayoutFile( 'NeverShowToggle' );
+
+			if( elToggle.checked )
+				GameInterfaceAPI.SetSettingString( 'player_nevershow_communityservermessage', '1' );
+		}
+	]]></script>
+	<PopupCustomLayout class="PopupPanel Hidden" popupbackground="dim" onload="">
+		<Label class="PopupTitle" text="#SFUI_MainMenu_ServerBrowserWarning_Title" />
+		<Label class="PopupMessage" text="#SFUI_MainMenu_ServerBrowserWarning_Text2" />
+		<Panel class="PopupButtonRow">
+			<ToggleButton id="NeverShowToggle" class="PopupButton">
+				<Label class="" text="#SFUI_MainMenu_ServerBrowserWarning_NeverShow" />
+			</ToggleButton>
+			<TextButton class="PopupButton" text="#OK" onactivate="onOpenServerBrowser()" />
+			<TextButton class="PopupButton" text="#Cancel_Button" onactivate="closeServerBrowserPopUp()" />
+		</Panel>
+	</PopupCustomLayout>
+</root>

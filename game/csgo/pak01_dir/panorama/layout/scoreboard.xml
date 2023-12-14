@@ -1,0 +1,688 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
+		<include src="s2r://panorama/styles/scoreboard.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/common/formattext.vts_c" />
+		<include src="s2r://panorama/scripts/common/gamerules_constants.vts_c" />
+		<include src="s2r://panorama/scripts/mock_adapter.vts_c" />
+		<include src="s2r://panorama/scripts/rating_emblem.vts_c" />
+		<include src="s2r://panorama/scripts/match_stakes.vts_c" />
+		<include src="s2r://panorama/scripts/scoreboard.vts_c" />
+	</scripts>
+	<snippets>
+		<snippet name="snippet_sb-label-set-container">
+			<Panel class="sb-row__set-container">
+				<Panel id="id-sb-row__sets" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_sb-meta">
+			<Panel class="sb-meta">
+				<Panel class="top-bottom-flow full-width">
+					<Panel class="full-width bottom-divider meta-row">
+						<Image id="id-sb-meta__mode__image" textureheight="36" texturewidth="-1" src="s2r://panorama/images/icons/ui/casual.vsvg" />
+						<Label id="id-sb-meta__labels__mode-map" class="stratum-regular-condensed" text="" />
+						<Panel class="time_container">
+							<CSGOGameTimeLabel class="time_container__time" time-type="map-elapsed" text="{s:s_gametime_time}" />
+						</Panel>
+					</Panel>
+					<Panel class="full-width meta-row">
+						<Panel id="id-sb-meta__musickit" class="hidden">
+							<Image id="id-sb-meta__musickit-image" />
+							<Label id="id-sb-meta__musickit-name" class="stratum-regular-condensed" />
+							<Button id="id-sb-meta__musickit-unborrow" class="hidden vertical-center" onactivate="$.DispatchEvent(&apos;Scoreboard_UnborrowMusicKit&apos;);">
+								<TooltipPanel tooltip="#tooltip_stopborrowmusickit" style="tooltip-position: bottom;">
+									<Image src="s2r://panorama/images/icons/ui/no_musickit.vsvg" />
+								</TooltipPanel>
+							</Button>
+						</Panel>
+						<Label id="id-sb-meta__labels__server-viewers" class="stratum-regular-mono" text="{s:server_name}{s:hltv_viewers}" />
+						<Panel id="id-sb-meta__button-panel" class="hidden">
+							<Panel class="sb-meta__button-panel__group">
+								<TooltipPanel tooltip="#scoreboard_cyclestats_button_tooltip">
+									<Button id="id-sb-meta__cycle" class="sb-meta__button-panel__btn hidden" onactivate="$.DispatchEvent(&apos;Scoreboard_CycleStats&apos;);">
+										<Image src="s2r://panorama/images/icons/ui/stats.vsvg" textureheight="20" texturewidth="-1" />
+									</Button>
+								</TooltipPanel>
+							</Panel>
+							<Panel class="sb-meta__button-panel__group">
+								<TooltipPanel tooltip="#scoreboard_mutevoice_button_tooltip">
+									<Button id="id-sb-meta__mutevoice" class="sb-meta__button-panel__btn" onactivate="$.DispatchEvent(&apos;Scoreboard_MuteVoice&apos;);">
+										<Image id="id-sb-meta__mutevoice__image" src="" textureheight="20" texturewidth="-1" />
+									</Button>
+								</TooltipPanel>
+							</Panel>
+							<Panel class="sb-meta__button-panel__group">
+								<TooltipPanel tooltip="#scoreboard_blockugc_button_tooltip">
+									<Button id="id-sb-meta__blockugc" class="sb-meta__button-panel__btn" onactivate="$.DispatchEvent(&apos;Scoreboard_BlockUgc&apos;);">
+										<Image id="id-sb-meta__blockugc__image" src="" textureheight="20" texturewidth="-1" />
+									</Button>
+								</TooltipPanel>
+							</Panel>
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard--no-teams">
+			<Panel class="sb-main">
+				<Frame snippet="snippet_sb-meta" />
+				<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover" />
+				<Panel class="sb-team__data sb-team__data--ANY" cachepaintcmdlist="true">
+					<Panel id="players-table-ANY" class="sb-players-table" />
+				</Panel>
+				<Panel id="id-sb-team--Spectator" class="sb-team sb-team--Spectator" cachepaintcmdlist="true">
+					<Panel class="sb-team__data sb-team__data--Spectator">
+						<Panel id="players-table-Spectator" class="sb-players-table" />
+					</Panel>
+				</Panel>
+				<Frame snippet="snippet_sb-footer" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard--cooperative">
+			<Panel class="sb-main">
+				<Frame snippet="snippet_sb-meta" />
+				<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover" />
+				<Panel class="sb-team__data sb-team__data--ANY" cachepaintcmdlist="true">
+					<Panel id="players-table-ANY" class="sb-players-table" />
+				</Panel>
+				<Panel id="CoopStats" class="sb-coop-mission-info">
+					<Panel class="coop-mission-instructions">
+						<Label html="true" text="#Quest_Guardian_Desc_op09" />
+					</Panel>
+					<Panel class="coop-mission-stats">
+						<Label class="stats-header-previous" text="#SFUI_CoopSB_Rating_Prev" />
+						<Label class="stats-header-endgame" text="#SFUI_CoopSB_Rating" />
+						<Panel class="sb-coop-stats__row oddrow">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="#SFUI_Scoreboard_Coop_MissionCompletion" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="10,000" />
+						</Panel>
+						<Panel class="sb-coop-stats__row evenrow">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname1}" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="{d:statval1}%" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore1}" />
+						</Panel>
+						<Panel class="sb-coop-stats__row oddrow">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname2}" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="{d:statval2}%" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore2}" />
+						</Panel>
+						<Panel class="sb-coop-stats__row evenrow">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname0}" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="{s:statval0}%" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="-{d:statscore0}" />
+						</Panel>
+						<Panel class="sb-coop-stats__row oddrow">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname3}" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="{d:statval3}" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore3}" />
+						</Panel>
+						<Panel class="sb-coop-stats__row evenrow">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:bonusname0}" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:bonusscore0}" />
+						</Panel>
+						<Panel class="sb-coop-stats__row sb-coop-stats__total">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="#SFUI_CoopSB_Total" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:total_score}" />
+						</Panel>
+					</Panel>
+				</Panel>
+				<Frame snippet="snippet_sb-footer" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard--coopmission">
+			<Panel class="sb-main">
+				<Frame snippet="snippet_sb-meta" />
+				<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover" />
+				<Panel class="sb-team__data sb-team__data--ANY" cachepaintcmdlist="true">
+					<Panel id="players-table-ANY" class="sb-players-table" />
+				</Panel>
+				<Panel id="CoopStats" class="sb-coop-mission-info">
+					<Panel class="coop-mission-instructions">
+						<Label id="MissionDescriptionLabel" html="true" text="#Quest_op09_coopmission" />
+					</Panel>
+					<Panel class="coop-mission-stats">
+						<Label class="stats-header-previous stratum-regular-condensed" text="#SFUI_CoopSB_Rating_Prev" />
+						<Label class="stats-header-endgame stratum-regular-condensed" text="#SFUI_CoopSB_Rating" />
+						<Panel class="left-right-flow full-width">
+							<Panel class="coop-mission-stats-left">
+								<Panel class="sb-coop-stats__row oddrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname0}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="{t:d:statval0}" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore0}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row evenrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname1}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="{d:statval1}%" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore1}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row oddrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname2}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="{d:statval2}%" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore2}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row evenrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:statname3}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="{d:statval3}" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:statscore3}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="" />
+								</Panel>
+								<Panel class="sb-coop-stats__row">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="#SFUI_CoopSB_Total" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:score}" />
+								</Panel>
+							</Panel>
+							<Panel class="coop-mission-stats-right">
+								<Panel class="sb-coop-stats__row oddrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:bonusname0}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:bonusscore0}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row evenrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:bonusname1}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:bonusscore1}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row oddrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:bonusname2}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:bonusscore2}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row evenrow">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="{s:bonusname3}" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:bonusscore3}" />
+								</Panel>
+								<Panel class="sb-coop-stats__row">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="" />
+								</Panel>
+								<Panel class="sb-coop-stats__row">
+									<Label class="sb-coop-stat-name stratum-regular-condensed" text="#SFUI_CoopSB_Total" />
+									<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+									<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:bonus_score}" />
+								</Panel>
+							</Panel>
+						</Panel>
+						<Panel class="sb-coop-stats__row sb-coop-stats__total">
+							<Label class="sb-coop-stat-name stratum-regular-condensed" text="#SFUI_CoopSB_FinalScore" />
+							<Label class="sb-coop-stat-value stratum-regular-mono" text="" />
+							<Label class="sb-coop-stat-score stratum-regular-mono" text="{d:total_score}" />
+						</Panel>
+					</Panel>
+				</Panel>
+				<Frame snippet="snippet_sb-footer" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__classic-teams--CT">
+			<Panel class="top-bottom-flow">
+				<Panel id="id-sb-label-container">
+					<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover" />
+					<Panel id="id-sb-players-table__labels-row--spacer" />
+				</Panel>
+				<Panel id="id-sb-team--CT" class="sb-team sb-team--CT" cachepaintcmdlist="true">
+					<Panel class="sb-team__data sb-team__data--CT">
+						<Panel id="players-table-CT" class="sb-players-table" />
+					</Panel>
+					<Panel class="sb-team__info sb-team-logo-background--CT sb-color--CT">
+						<Panel id="id-sb-team__info--ct" class="sb-team__info__score">
+							<Label text="{d:sb_team_score--CT}" class="stratum-bold-mono" />
+						</Panel>
+						<Label class="sb-team__info__name stratum-regular-condensed" text="{s:sb_team_name--CT}" />
+						<Label class="sb-team__info__number stratum-regular-condensed" text="#Scoreboard_Players_CT" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__classic-teams--TERRORIST">
+			<Panel>
+				<Panel id="id-sb-team--TERRORIST" class="sb-team sb-team--TERRORIST" cachepaintcmdlist="true">
+					<Panel class="sb-team__data sb-team__data--TERRORIST">
+						<Panel id="players-table-TERRORIST" class="sb-players-table" />
+					</Panel>
+					<Panel class="sb-team__info sb-team-logo-background--TERRORIST sb-color--TERRORIST">
+						<Panel id="id-sb-team__info--t" class="sb-team__info__score">
+							<Label text="{d:sb_team_score--TERRORIST}" class="stratum-bold-mono" />
+						</Panel>
+						<Label class="sb-team__info__name stratum-regular-condensed" text="{s:sb_team_name--TERRORIST}" />
+						<Label class="sb-team__info__number stratum-regular-condensed" text="#Scoreboard_Players_TERRORIST" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__classic-timeline--half-time-scores">
+			<Panel class="sb-timeline">
+				<Frame snippet="snippet_scoreboard-classic__half-time-scores" />
+				<Panel style="width: fill-parent-flow( 1.0 );">
+					<Label id="id-sb-timeline__round-label" class="sb-timeline__round-label hidden" text="#scoreboard_timeline_ot" hittest="false" />
+					<Panel hittest="true" id="id-sb-timeline__segments" class="sb-timeline__segments" onmouseover="$.DispatchEvent(&apos;Scoreboard_Casualties_OnMouseOver&apos;)" onmouseout="$.DispatchEvent(&apos;Scoreboard_Casualties_OnMouseOut&apos;)" />
+				</Panel>
+				<Frame snippet="snippet_scoreboard-classic__round-loss-bonus-money" id="id-sb-timeline__round-loss-bonus-money" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__classic-timeline--no-half-time-scores">
+			<Panel class="sb-timeline">
+				<Frame snippet="snippet_scoreboard-classic__no-half-time-scores" />
+				<Panel style="width:100%;">
+					<Panel hittest="true" id="id-sb-timeline__segments" class="sb-timeline__segments" onmouseover="$.DispatchEvent(&apos;Scoreboard_Casualties_OnMouseOver&apos;)" onmouseout="$.DispatchEvent(&apos;Scoreboard_Casualties_OnMouseOut&apos;)" />
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__classic-spacer">
+			<Panel class="sb-timeline" />
+		</snippet>
+		<snippet name="snippet_scoreboard__classic-teams--Spectator">
+			<Panel>
+				<Panel id="id-sb-team--Spectator" class="sb-team sb-team--Spectator" cachepaintcmdlist="true">
+					<Panel class="sb-team__data sb-team__data--Spectator">
+						<Panel id="players-table-Spectator" class="sb-players-table" />
+					</Panel>
+					<Panel class="sb-team__info" />
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_sb-footer">
+			<Panel class="sb-footer-panel">
+				<Panel id="spec-button-group" class="sb-spectator-control-panel">
+					<Button id="spec-button1" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent(&apos;Scoreboard_ToggleSetCasterIsCameraman&apos;);" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;spec-button1&apos;, &apos;#CSGO_Scoreboard_CastButton_Camera_Tooltip&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+						<Image src="s2r://panorama/images/icons/ui/camera.vsvg" />
+					</Button>
+					<Button id="spec-button2" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent(&apos;Scoreboard_ToggleSetCasterIsHeard&apos;);" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;spec-button2&apos;, &apos;#CSGO_Scoreboard_CastButton_Voice_Tooltip&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+						<Image src="s2r://panorama/images/icons/ui/unmuted.vsvg" />
+					</Button>
+					<Button id="spec-button3" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent(&apos;Scoreboard_ToggleSetCasterControlsXray&apos;);" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;spec-button3&apos;, &apos;#CSGO_Scoreboard_CastButton_XRay_Tooltip&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+						<Image src="s2r://panorama/images/icons/ui/ct_silhouette.vsvg" />
+					</Button>
+					<Button id="spec-button4" class="IconButton sb-spectator-control-button" onactivate="$.DispatchEvent(&apos;Scoreboard_ToggleSetCasterControlsUI&apos;);" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;spec-button4&apos;, &apos;#CSGO_Scoreboard_CastButton_UI_Tooltip&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+						<Image src="s2r://panorama/images/icons/ui/menu.vsvg" />
+					</Button>
+				</Panel>
+				<Button id="id-sb-footer-server-website" class="PopupButton hidden" onactivate="MatchStatsAPI.GetServerWebsiteURL( true );">
+					<Label html="true" class="stratum-light" text="#CSGO_Watch_ServerWebsite" />
+					<Image src="s2r://panorama/images/icons/ui/link.vsvg" />
+				</Button>
+				<Label id="id-sb-mouse-instructions" class="stratum-bold" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic--with-timeline--half-times">
+			<Panel class="sb-main">
+				<Frame snippet="snippet_sb-meta" />
+				<Frame snippet="snippet_scoreboard__classic-teams--CT" />
+				<Frame snippet="snippet_scoreboard__classic-timeline--half-time-scores" />
+				<Frame snippet="snippet_scoreboard__classic-teams--TERRORIST" />
+				<Frame snippet="snippet_scoreboard__classic-teams--Spectator" />
+				<Frame snippet="snippet_sb-footer" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic--with-timeline--no-half-times">
+			<Panel class="sb-main">
+				<Frame snippet="snippet_sb-meta" />
+				<Frame snippet="snippet_scoreboard__classic-teams--CT" />
+				<Frame snippet="snippet_scoreboard__classic-timeline--no-half-time-scores" />
+				<Frame snippet="snippet_scoreboard__classic-teams--TERRORIST" />
+				<Frame snippet="snippet_scoreboard__classic-teams--Spectator" />
+				<Frame snippet="snippet_sb-footer" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic--no-timeline">
+			<Panel class="sb-main">
+				<Frame snippet="snippet_sb-meta" />
+				<Frame snippet="snippet_scoreboard__classic-teams--CT" />
+				<Frame snippet="snippet_scoreboard__classic-spacer" />
+				<Frame snippet="snippet_scoreboard__classic-teams--TERRORIST" />
+				<Frame snippet="snippet_scoreboard__classic-teams--Spectator" />
+				<Frame snippet="snippet_sb-footer" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__round-loss-bonus-money">
+			<Panel class="sb-timeline__round-loss-bonus-money hidden">
+				<Panel class="sb-timeline__score">
+					<Panel class="center sb-team--CT" hittest="true" onmouseover="$.DispatchEvent(&apos;Scoreboard_RoundLossBonusMoney_OnMouseOver_CT&apos;)" onmouseout="$.DispatchEvent(&apos;Scoreboard_RoundLossBonusMoney_OnMouseOut_CT&apos;)">
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__CT1" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__CT2" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__CT3" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__CT4" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+					</Panel>
+					<Label text="#Scoreboard_lossmoneybonus" class="sb-timeline__phase-label stratum-regular-condensed" />
+					<Panel class="center sb-team--TERRORIST" hittest="true" onmouseover="$.DispatchEvent(&apos;Scoreboard_RoundLossBonusMoney_OnMouseOver_TERRORIST&apos;)" onmouseout="$.DispatchEvent(&apos;Scoreboard_RoundLossBonusMoney_OnMouseOut_TERRORIST&apos;)">
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__TERRORIST1" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__TERRORIST2" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__TERRORIST3" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image class="sb-team-tint sb-timeline__round-loss-bonus-money__TERRORIST4" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__half-time-scores">
+			<Panel class="sb-timeline__half-time-scores">
+				<Panel id="id-sb-timeline__score_1h" class="sb-timeline__score">
+					<Panel id="id-sb-timeline__score__ct" class="center sb-color--CT">
+						<Label class="sb-timeline__score__label stratum-regular" text="{d:sb_team_score_2--CT}" />
+					</Panel>
+					<Label text="#gamephase_2_short" class="sb-timeline__phase-label stratum-regular-condensed" />
+					<Panel id="id-sb-timeline__score__t" class="center sb-color--TERRORIST">
+						<Label class="sb-timeline__score__label stratum-regular-mono" text="{d:sb_team_score_2--TERRORIST}" />
+					</Panel>
+				</Panel>
+				<Panel id="id-sb-timeline__score_2h" class="sb-timeline__score">
+					<Panel id="id-sb-timeline__score__ct" class="center sb-color--CT">
+						<Label class="sb-timeline__score__label stratum-regular" text="{d:sb_team_score_3--CT}" />
+					</Panel>
+					<Label text="#gamephase_3_short" class="sb-timeline__phase-label stratum-regular-condensed" />
+					<Panel id="id-sb-timeline__score__t" class="center sb-color--TERRORIST">
+						<Label class="sb-timeline__score__label stratum-regular-mono" text="{d:sb_team_score_3--TERRORIST}" />
+					</Panel>
+				</Panel>
+				<Panel id="id-sb-timeline__score_ot" class="sb-timeline__score fade hidden">
+					<Panel id="id-sb-timeline__score__ct" class="center sb-color--CT">
+						<Label class="sb-timeline__score__label" text="{d:sb_team_score_ot--CT}" />
+					</Panel>
+					<Label text="#gamephase_ot_short" class="sb-timeline__phase-label" />
+					<Panel id="id-sb-timeline__score__t" class="center sb-color--TERRORIST">
+						<Label class="sb-timeline__score__label" text="{d:sb_team_score_ot--TERRORIST}" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__no-half-time-scores">
+			<Panel>
+				<Panel class="sb-timeline__bumper" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__timeline__segment">
+			<Panel class="sb-timeline__segment">
+				<Panel id="id-sb-timeline__round-container" class="sb-timeline__round-container" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__timeline__segment__round">
+			<Panel class="sb-timeline__segment__round">
+				<Panel class="sb-timeline__segment__round__symbols">
+					<Panel id="id-sb-timeline__segment__round--top" class="sb-timeline__segment__round__team sb-timeline__segment__round__team--top" />
+					<Panel id="id-sb-timeline__segment__round__tick" class="sb-timeline__segment__round__tick" />
+					<Panel id="id-sb-timeline__segment__round--bot" class="sb-timeline__segment__round__team sb-timeline__segment__round__team--bot" />
+				</Panel>
+				<Label id="id-sb-timeline__segment__round__tick__label" class="sb-timeline__segment__round__tick__label stratum-regular-condensed" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__timeline__segment__round__data">
+			<Panel>
+				<Image id="result" class="sb-timeline__segment__round__result" scaling="stretch-to-fit-y-preserve-aspect" />
+				<Panel style="flow-children:none;">
+					<Panel id="casualties" data-casualty-mouse-over-toggle-transparency="true" class="sb-timeline__segment__round__casualties transparent">
+						<Image id="casualty-1" class="hidden" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image id="casualty-2" class="hidden" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image id="casualty-3" class="hidden" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image id="casualty-4" class="hidden" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+						<Image id="casualty-5" class="hidden" src="s2r://panorama/images/icons/ui/dash-bold.vsvg" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="stat--STATUS">
+			<Panel data-stat="status" class="spectator-hidden">
+				<Image id="image" class="sb-team-tint" scaling="stretch-to-fit-y-preserve-aspect" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--PING">
+			<Panel data-stat="ping">
+				<Label id="label" class="stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--RANK">
+			<Panel data-stat="rank" class="spectator-hidden">
+				<Image id="image" class="" scaling="stretch-to-fit-y-preserve-aspect" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--AVATAR">
+			<Panel data-stat="avatar">
+				<CSGOAvatarImage id="image" scaling="stretch-to-fit-y-preserve-aspect">
+					<Image id="player-color" class="sb-row__cell--avatar__playercolor hidden avatar-team-color" />
+				</CSGOAvatarImage>
+				<Image id="mute-image" class="sb-row__cell--avatar__muted hidden" src="s2r://panorama/images/icons/ui/muted.vsvg" scaling="stretch-to-fit-y-preserve-aspect" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--NAME-W-COMMENDS">
+			<Panel data-stat="name">
+				<Label id="name" html="true" class="sb-team-tint stratum-medium" text="{g:player_name:player_slot}" />
+				<Panel id="id-sb-name__nameicons" class="spectator-hidden">
+					<Frame id="jsRatingEmblem" api="gamestate" src="s2r://panorama/layout/rating_emblem.vxml_c" />
+					<Image id="id-sb-name__commendations__leader" class="hidden sb-team-tint" src="s2r://panorama/images/icons/ui/leader.vsvg" />
+					<Image id="id-sb-name__commendations__teacher" class="hidden sb-team-tint" src="s2r://panorama/images/icons/ui/teacher.vsvg" />
+					<Image id="id-sb-name__commendations__friendly" class="hidden sb-team-tint" src="s2r://panorama/images/icons/ui/smile.vsvg" />
+					<Image id="id-sb-name__musickit" class="hidden sb-team-tint" src="s2r://panorama/images/icons/ui/music_kit.vsvg" />
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="stat--NAME-PREMIER">
+			<Panel data-stat="name">
+				<Label id="name" html="true" class="sb-team-tint stratum-medium" text="{g:player_name:player_slot}" />
+				<Panel id="id-sb-name__nameicons" class="spectator-hidden">
+					<Image id="id-sb-name__musickit" class="hidden sb-team-tint" src="s2r://panorama/images/icons/ui/music_kit.vsvg" />
+					<Frame id="jsRatingEmblem" src="s2r://panorama/layout/rating_emblem.vxml_c" />
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="stat--NAME">
+			<Panel data-stat="name">
+				<Label id="name" html="true" class="sb-team-tint stratum-medium" text="{g:player_name:player_slot}" />
+				<Panel id="id-sb-name__nameicons" class="spectator-hidden">
+					<Image id="id-sb-name__musickit" class="hidden sb-team-tint" src="s2r://panorama/images/icons/ui/music_kit.vsvg" />
+					<Frame id="jsRatingEmblem" api="gamestate" src="s2r://panorama/layout/rating_emblem.vxml_c" />
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="stat--FLAIR">
+			<Panel data-stat="flair" class="spectator-hidden">
+				<Image id="image" class="" scaling="stretch-to-fit-y-preserve-aspect" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--MONEY">
+			<Panel data-stat="money" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" text="#Scoreboard_money_val" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--KILLS">
+			<Panel data-stat="kills" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--ASSISTS">
+			<Panel data-stat="assists" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--DEATHS">
+			<Panel data-stat="deaths" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--MVPS">
+			<Panel data-stat="mvps" class="spectator-hidden">
+				<Image id="star-image" class="sb-row__cell--mvps__star sb-team-tint hidden" src="s2r://panorama/images/icons/ui/star.vsvg" scaling="stretch-to-fit-y-preserve-aspect" />
+				<Label id="star-count" class="sb-row__cell--mvps__count sb-team-tint hidden stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--HSP">
+			<Panel data-stat="hsp" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--KDR">
+			<Panel data-stat="kdr" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--ADR">
+			<Panel data-stat="adr" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--UTILITYDAMAGE">
+			<Panel data-stat="utilitydamage" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--ENEMIESFLASHED">
+			<Panel data-stat="enemiesflashed" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--SCORE">
+			<Panel data-stat="score" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="stat--DAMAGE">
+			<Panel data-stat="damage" class="spectator-hidden">
+				<Label id="label" class="sb-team-tint stratum-regular-mono" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__row--premier">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME-PREMIER" />
+				<Frame snippet="stat--MONEY" data-set="0" />
+				<Frame snippet="stat--KILLS" data-set="0" />
+				<Frame snippet="stat--DEATHS" data-set="0" />
+				<Frame snippet="stat--ASSISTS" data-set="0" />
+				<Frame snippet="stat--HSP" data-set="0" />
+				<Frame snippet="stat--MVPS" data-set="1" />
+				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+				<Frame snippet="stat--KDR" data-set="1" />
+				<Frame snippet="stat--ADR" data-set="1" />
+				<Frame snippet="stat--DAMAGE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__row--comp">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+				<Frame snippet="stat--MONEY" data-set="0" />
+				<Frame snippet="stat--KILLS" data-set="0" />
+				<Frame snippet="stat--DEATHS" data-set="0" />
+				<Frame snippet="stat--ASSISTS" data-set="0" />
+				<Frame snippet="stat--HSP" data-set="0" />
+				<Frame snippet="stat--MVPS" data-set="1" />
+				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+				<Frame snippet="stat--KDR" data-set="1" />
+				<Frame snippet="stat--ADR" data-set="1" />
+				<Frame snippet="stat--DAMAGE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__row--wingman">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+				<Frame snippet="stat--MONEY" data-set="0" />
+				<Frame snippet="stat--KILLS" data-set="0" />
+				<Frame snippet="stat--DEATHS" data-set="0" />
+				<Frame snippet="stat--ASSISTS" data-set="0" />
+				<Frame snippet="stat--MVPS" data-set="0" />
+				<Frame snippet="stat--HSP" data-set="1" />
+				<Frame snippet="stat--KDR" data-set="1" />
+				<Frame snippet="stat--ADR" data-set="1" />
+				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+				<Frame snippet="stat--SCORE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard-classic__row--casual">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+				<Frame snippet="stat--MONEY" data-set="0" />
+				<Frame snippet="stat--KILLS" data-set="0" />
+				<Frame snippet="stat--DEATHS" data-set="0" />
+				<Frame snippet="stat--ASSISTS" data-set="0" />
+				<Frame snippet="stat--MVPS" data-set="0" />
+				<Frame snippet="stat--HSP" data-set="1" />
+				<Frame snippet="stat--KDR" data-set="1" />
+				<Frame snippet="stat--ADR" data-set="1" />
+				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+				<Frame snippet="stat--SCORE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__row--flyingscoutsman">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+				<Frame snippet="stat--KILLS" />
+				<Frame snippet="stat--DEATHS" />
+				<Frame snippet="stat--ASSISTS" />
+				<Frame snippet="stat--HSP" />
+				<Frame snippet="stat--KDR" />
+				<Frame snippet="stat--ADR" />
+				<Frame snippet="stat--MVPS" />
+				<Frame snippet="stat--SCORE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__row--cooperative">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+				<Frame snippet="stat--MONEY" />
+				<Frame snippet="stat--KILLS" />
+				<Frame snippet="stat--DEATHS" />
+				<Frame snippet="stat--ASSISTS" />
+				<Frame snippet="stat--SCORE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__row--deathmatch">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--STATUS" />
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+				<Frame snippet="stat--KILLS" />
+				<Frame snippet="stat--DEATHS" />
+				<Frame snippet="stat--ASSISTS" />
+				<Frame snippet="stat--KDR" />
+				<Frame snippet="stat--HSP" />
+				<Frame snippet="stat--DAMAGE" />
+				<Frame snippet="stat--SCORE" />
+			</Panel>
+		</snippet>
+		<snippet name="snippet_scoreboard__row--training">
+			<Panel class="sb-row" cachepaintcmdlist="true">
+				<Frame snippet="stat--PING" />
+				<Frame snippet="stat--FLAIR" />
+				<Frame snippet="stat--AVATAR" />
+				<Frame snippet="stat--NAME" />
+			</Panel>
+		</snippet>
+	</snippets>
+	<CSGOScoreboard useglobalcontext="true" />
+</root>

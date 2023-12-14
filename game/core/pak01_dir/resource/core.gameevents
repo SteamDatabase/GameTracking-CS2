@@ -1,0 +1,641 @@
+//=========== (C) Copyright Valve, L.L.C. All rights reserved. ===========
+//
+// The copyright to the contents herein is the property of Valve, L.L.C.
+// The contents may be used and/or copied only with the written permission of
+// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
+// the agreement/contract under which the contents have been supplied.
+//=============================================================================
+
+// No spaces in event names, max length 32
+// All strings are case sensitive
+// total game event byte length must be < 1024
+//
+// valid data key types are:
+//   none   : value is not networked
+//   string : a zero terminated string
+//   bool   : unsigned int, 1 bit
+//   byte   : unsigned int, 8 bit
+//   short  : signed int, 16 bit
+//   long   : signed int, 32 bit
+//   float  : float, 32 bit
+//   local : any data, dont network this field
+//
+// following keys names are reserved:
+//   local      : if set to 1, event is not networked to clients
+//   reliable   : if set to 0, event is networked unreliable
+
+"core game events"
+{
+//////////////////////////////////////////////////////////////////////
+// Server events
+//////////////////////////////////////////////////////////////////////
+
+	"server_spawn"				// send once a server starts
+	{
+		"hostname"	"string"	// public host name
+		"address"	"string"	// hostame, IP or DNS name	
+		"port"		"short"		// server port
+		"game"		"string"	// game dir 
+		"mapname"	"string"	// map name
+		"addonname" "string"    // addon name
+		"maxplayers"	"long"		// max players
+		"os"		"string"	// WIN32, LINUX
+		"dedicated"	"bool"		// true if dedicated server
+		"password"	"bool"		// true if password protected
+	}
+
+	"server_pre_shutdown" 		// server is about to be shut down	
+	{
+		"reason"	"string"	// reason why server is about to be shut down
+	}
+
+	"server_shutdown" 			// server shut down	
+	{
+		"reason"	"string"	// reason why server was shut down
+	}
+
+	"server_message"			// a generic server message
+	{
+		"text"		"string"	// the message text
+	}
+
+	"server_cvar" 				// a server console var has changed
+	{
+		"cvarname"	"string"	// cvar name, eg "mp_roundtime"		
+		"cvarvalue"	"string"	// new cvar value
+	}
+
+	"player_activate"
+	{
+		"userid"	"player_controller"		// user ID on server
+	}
+
+	"player_connect_full"			// player has sent final message in the connection sequence
+	{
+		"userid"	"player_controller"		// user ID on server (unique on server)
+	}
+
+	"player_full_update"
+	{
+		"userid"	"player_controller"		// user ID on server
+		"count"		"short"		// Number of this full update
+	}
+
+	"player_connect"			// a new client connected
+	{
+		"name"		"string"	// player name		
+		"userid"	"player_controller"		// user ID on server (unique on server)
+		"networkid" "string"	// player network (i.e steam) id
+		"xuid"		"uint64"	// steam id
+		"address"	"string"	// ip:port
+		"bot"		 "bool"
+	}
+
+	"player_disconnect"			// a client was disconnected
+	{
+		"userid"	"player_controller"		// user ID on server
+		"reason"	"short"		// see networkdisconnect enum protobuf
+		"name"		"string"	// player name
+		"networkid"	"string"	// player network (i.e steam) id
+		"xuid"		"uint64"	// steam id
+		"PlayerID"	"short"
+	}
+
+	"player_info"				// a player changed his name
+	{
+		"name"			"string"	// player name		
+		"userid"		"player_controller"		// user ID on server (unique on server)
+		"steamid"		"uint64"	// player network (i.e steam) id
+		"bot"			"bool"		// true if player is a AI bot
+	}
+
+	"player_spawn"				// player spawned in game
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	// player change his team
+	// you can receive this on the client before the local player has updated the team field locally
+	"player_team"				
+	{
+		"userid"	"player_controller_and_pawn"
+		"team"		"byte"		// team id
+		"oldteam" "byte"		// old team id
+		"disconnect" "bool"	// team change because player disconnects
+		"silent" "bool"
+		"name"	"string"
+		"isbot"	"bool"
+	}
+
+	// sent only on the client for the local player - happens only after a local players pawn team variable has been updated
+	"local_player_team"
+	{
+	}
+
+	// sent only on the client for the local player - happens only after the local players controller team variable has been updated
+	"local_player_controller_team"
+	{
+	}
+	
+
+	"player_changename"
+	{
+		"userid"	"player_controller"		// user ID on server
+		"oldname"	"string"	// players old (current) name
+		"newname"	"string"	// players new name
+	}
+
+	"player_hurt"
+	{
+		"userid"	"player_controller_and_pawn"  	// player who was hurt
+		"attacker"	"player_controller_and_pawn" 	// player who attacked
+		"health"	"byte"		// remaining health points
+	}
+
+	"player_chat"				// a public player chat
+	{
+		"teamonly"	"bool"		// true if team only chat
+		"userid" 	"player_controller"		// chatting player 
+		"playerid"	"short"		// chatting player ID 
+		"text" 	 	"string"	// chat text
+	}
+
+	"local_player_pawn_changed"
+	{
+	}
+
+	"teamplay_broadcast_audio"	// emits a sound to everyone on a team
+	{
+		"team"	"byte"			// unique team id
+		"sound"	"string"		// name of the sound to emit
+	}
+
+	"finale_start"
+	{
+		"rushes"		"short"
+	}
+
+	"player_stats_updated"
+	{
+		"forceupload"	"bool"
+	}
+
+	"user_data_downloaded"				// fired when achievements/stats are downloaded from Steam or XBox Live
+	{
+	}
+
+	"ragdoll_dissolved"
+	{
+		"entindex"	"long"
+	}
+
+	"team_info"				// info about team
+	{
+		"teamid"	"byte"		// unique team id
+		"teamname"	"string"	// team name eg "Team Blue"
+	}
+	
+	"team_score"				// team score changed
+	{
+		"teamid"	"byte"		// team id
+		"score"		"short"		// total team score
+	}
+
+//////////////////////////////////////////////////////////////////////
+// HLTV specific events
+//////////////////////////////////////////////////////////////////////
+
+	"hltv_cameraman"			// a spectator/player is a cameraman
+	{
+		"userid"		"player_controller"			// camera man entity index
+	}
+
+	"hltv_chase"					// shot of a single entity
+	{
+		"target1"		"player_controller"		// primary traget index 
+		"target2"		"player_controller"		// secondary traget index or 0
+		"distance"	"short"		// camera distance
+		"theta"			"short"		// view angle horizontal 
+		"phi"				"short"		// view angle vertical
+		"inertia"		"byte"		// camera inertia
+		"ineye"			"byte"		// diretcor suggests to show ineye
+	}
+
+	"hltv_rank_camera"			// a camera ranking
+	{
+		"index"		"byte"			// fixed camera index
+		"rank"		"float"			// ranking, how interesting is this camera view
+		"target"	"player_controller"	// best/closest target entity
+	}
+
+	"hltv_rank_entity"			// an entity ranking
+	{
+		"userid"	"player_controller"	// player slot
+		"rank"		"float"			// ranking, how interesting is this entity to view
+		"target"	"player_controller"	// best/closest target entity
+	}
+
+	"hltv_fixed"				// show from fixed view
+	{
+		"posx"		"long"		// camera position in world
+		"posy"		"long"		
+		"posz"		"long"		
+		"theta"		"short"		// camera angles
+		"phi"			"short"		
+		"offset"	"short"
+		"fov"			"float"
+		"target"	"player_controller"		// follow this player
+	}
+
+	"hltv_message"	// a HLTV message send by moderators
+	{
+		"text"	"string"
+	}
+	
+	"hltv_status"				// general HLTV status
+	{
+		"clients"	"long"		// number of HLTV spectators
+		"slots"		"long"		// number of HLTV slots
+		"proxies"	"short"		// number of HLTV proxies
+		"master"	"string"	// disptach master IP:port
+	}
+
+	"hltv_title"
+	{
+		"text"	"string"
+	}
+
+	"hltv_chat"	// a HLTV chat msg sent by spectators
+	{
+		"text"		"string"
+		"steamID"	"uint64"	// steam id
+	}
+
+	"hltv_versioninfo"
+	{
+		"version"		"long"
+	}
+
+	"hltv_replay"
+	{
+		"delay"		"long"	   // number of seconds in killer replay delay
+		"reason"	"long"	   // reason for replay	(ReplayEventType_t)
+	}
+
+	"hltv_replay_status"
+	{
+		"reason"	"long"		// reason for hltv replay status change ()
+	}
+
+	"demo_start"
+	{
+		"local"					"1"
+		"dota_combatlog_list"	"local"	// CSVCMsgList_GameEvents that are combat log events
+		"dota_hero_chase_list"	"local"	// CSVCMsgList_GameEvents
+		"dota_pick_hero_list"	"local"	// CSVCMsgList_GameEvents
+	}
+
+	"demo_stop"
+	{
+
+	}
+
+	"demo_skip"
+	{
+		"local"					"1"
+		"playback_tick"			"long"	// current playback tick
+		"skipto_tick"			"long"	// tick we're going to
+		"user_message_list"		"local"	// CSVCMsgList_UserMessages
+		"dota_hero_chase_list"	"local"	// CSVCMsgList_GameEvents
+	}
+
+	"map_shutdown"
+	{
+	}
+
+	"map_transition"
+	{
+	}
+
+	"hostname_changed"
+	{
+		"hostname"		"string"
+	}
+
+	"difficulty_changed"
+	{
+		"newDifficulty"	"short"
+		"oldDifficulty"	"short"
+		"strDifficulty" "string" // new difficulty as string
+	}
+
+	"game_message"				// a message send by game logic to everyone
+	{
+		"target"	"byte"		// 0 = console, 1 = HUD
+		"text"		"string"	// the message text
+	}
+
+	"game_newmap"				// send when new map is completely loaded
+	{
+		"mapname"		"string"	// map name
+		"transition"	"bool"		// true if this is a transition from one map to another
+	}
+
+	"round_start"
+	{
+		"timelimit"	"long"		// round time limit in seconds
+		"fraglimit"	"long"		// frag limit in seconds
+		"objective"	"string"	// round objective
+	}
+	
+	"round_end"
+	{
+		"winner"	"byte"		// winner team/user i
+		"reason"	"byte"		// reson why team won
+		"message"	"string"	// end round message 
+		"time"		"float"
+	}
+	
+	"round_start_pre_entity"
+	{
+	}
+
+	"round_start_post_nav"
+	{
+	}
+
+	"round_freeze_end"
+	{
+	}
+
+	"teamplay_round_start"			// round restart
+	{
+		"full_reset"	"bool"		// is this a full reset of the map
+	}
+
+	"player_death"				// a game event, name may be 32 charaters long
+	{
+		"userid"		"player_controller_and_pawn"   	// user ID who died				
+		"attacker"		"player_controller_and_pawn"	 	// user ID who killed
+	}
+
+	"player_footstep"
+	{
+		"userid"	"player_pawn"
+	}
+
+	"player_hintmessage"
+	{
+		"hintmessage"	"string"	// localizable string of a hint
+	}
+
+	"break_breakable"
+	{
+		"entindex"	"long"
+		"userid"	"player_pawn"
+		"material"	"byte"	// BREAK_GLASS, BREAK_WOOD, etc
+	}
+
+	"broken_breakable"
+	{
+		"entindex"	"long"
+		"userid"	"player_pawn"
+		"material"	"byte"	// BREAK_GLASS, BREAK_WOOD, etc
+	}
+
+	"break_prop"
+	{
+		"entindex"			"long"
+		"userid"		"player_pawn"
+		"player_held"		"bool"
+		"player_thrown"		"bool"
+		"player_dropped"	"bool"
+	}
+
+	"entity_killed"
+	{
+		"entindex_killed" 	"long"
+		"entindex_attacker"	"long"
+		"entindex_inflictor"	"long"
+		"damagebits"		"long"
+	}
+	
+	"door_close"
+	{
+		"userid"		"player_pawn"	// Who closed the door
+		"checkpoint"		"bool"	// Is the door a checkpoint door
+	}
+
+// Client side VoteController talking to HUD
+	"vote_started"
+	{
+		"issue"			"string"
+		"param1"		"string"
+		"votedata"		"string"
+		"team"			"byte"
+		"initiator"		"long" // entity id of the player who initiated the vote
+		"reliable"		"1"		// this event is reliable
+	}
+	
+	"vote_failed"
+	{
+		"team"			"byte"
+		"reliable"		"1"		// this event is reliable
+	}
+
+	"vote_passed"
+	{
+		"details"		"string"
+		"param1"		"string"
+		"team"			"byte"
+		"reliable"		"1"		// this event is reliable
+	}
+
+	"vote_changed"
+	{
+		"yesVotes"		"byte"
+		"noVotes"		"byte"
+		"potentialVotes"	"byte"
+	}
+
+	"vote_cast_yes"
+	{
+		"team"			"byte"
+		"entityid"		"long"	// entity id of the voter
+	}
+
+	"vote_cast_no"
+	{
+		"team"			"byte"
+		"entityid"		"long"	// entity id of the voter
+	}
+
+	"achievement_event"
+	{
+		"achievement_name"	"string"	// non-localized name of achievement
+		"cur_val"		"short"		// # of steps toward achievement
+		"max_val"		"short"		// total # of steps in achievement
+	}
+
+	"achievement_earned"
+	{
+		"player"	"player_controller"		// entindex of the player
+		"achievement"	"short"		// achievement ID
+	}
+
+	// Used for a notification message when an achievement fails to write
+	"achievement_write_failed"
+	{
+	}	
+
+	"bonus_updated"
+	{
+		"numadvanced"	"short"
+		"numbronze"	"short"
+		"numsilver"	"short"
+		"numgold"	"short"
+	}
+
+	"spec_target_updated"
+	{
+		"userid"	"player_controller_and_pawn"	// spectating player
+		"target"	"ehandle"		// ehandle of the target
+	}
+
+	"spec_mode_updated"
+	{
+		"userid"	"player_controller_and_pawn"	// spectating player
+	}
+
+	"entity_visible"
+	{
+		"userid"	"player_controller"		// The player who sees the entity
+		"subject"	"long"		// Entindex of the entity they see
+		"classname"	"string"	// Classname of the entity they see
+		"entityname" "string"	// name of the entity they see
+	}
+
+	"gameinstructor_draw"
+	{
+	}
+	
+	"gameinstructor_nodraw"
+	{
+	}
+
+	"flare_ignite_npc"
+	{
+		"entindex"		"long"		// entity ignited
+	}
+
+	"helicopter_grenade_punt_miss"
+	{
+	}
+
+	"physgun_pickup"
+	{
+		"target"		"ehandle"		// entity picked up
+	}
+
+//////////////////////////////////////////////////////////////////////
+// Economy events
+//////////////////////////////////////////////////////////////////////
+	
+	"inventory_updated"
+	{
+		"itemdef"	"short"
+		"itemid"	"long"
+	}
+	"cart_updated"
+	{
+	}
+	"store_pricesheet_updated"
+	{
+	}
+	"item_schema_initialized"
+	{
+	}
+	"drop_rate_modified"
+	{
+	}
+	"event_ticket_modified"
+	{
+	}
+	"gc_connected"
+	{
+	}
+	
+//////////////////////////////////////////////////////////////////////
+// Instructor / Hint Events
+//////////////////////////////////////////////////////////////////////
+	"instructor_start_lesson"
+	{
+		"userid"						"player_controller"		// The player who this lesson is intended for
+		"hint_name"					"string"	// Name of the lesson to start.  Must match instructor_lesson.txt
+		"hint_target"				"long"		// entity id that the hint should display at. Leave empty if controller target
+
+		"vr_movement_type"			"byte"
+		"vr_single_controller"		"bool"
+		"vr_controller_type"		"byte"
+	}
+
+	"instructor_close_lesson"
+	{
+		"userid"						"player_controller"		// The player who this lesson is intended for	
+		"hint_name"					"string"	// Name of the lesson to start.  Must match instructor_lesson.txt
+	}
+
+	"instructor_server_hint_create" //create a hint using data supplied entirely by the server/map. Intended for hints to smooth playtests before content is ready to make the hint unneccessary. NOT INTENDED AS A SHIPPABLE CRUTCH
+	{
+		"userid"					"player_controller"		// user ID of the player that triggered the hint
+		"hint_entindex"				"long"		// entity id of the env_instructor_hint that fired the event
+
+		"hint_name"					"string"	// what to name the hint. For referencing it again later (e.g. a kill command for the hint instead of a timeout)
+		"hint_replace_key"			"string"	// type name so that messages of the same type will replace each other
+		"hint_target"				"long"		// entity id that the hint should display at
+		"hint_activator_userid"		"player_controller"		// playerslot of the activator
+		"hint_timeout"				"short"	 	// how long in seconds until the hint automatically times out, 0 = never
+		"hint_icon_onscreen"		"string"	// the hint icon to use when the hint is onscreen. e.g. "icon_alert_red"
+		"hint_icon_offscreen"		"string"	// the hint icon to use when the hint is offscreen. e.g. "icon_alert"
+		"hint_caption"				"string"	// the hint caption. e.g. "#ThisIsDangerous"
+		"hint_activator_caption"	"string"	// the hint caption that only the activator sees e.g. "#YouPushedItGood"
+		"hint_color"				"string"	// the hint color in "r,g,b" format where each component is 0-255
+		"hint_icon_offset"			"float"		// how far on the z axis to offset the hint from entity origin
+		"hint_range"				"float"		// range before the hint is culled
+		"hint_flags"				"long"		// hint flags
+		"hint_binding"				"string"	// bindings to use when use_binding is the onscreen icon
+		"hint_allow_nodraw_target"	"bool"		// if false, the hint will dissappear if the target entity is invisible
+		"hint_nooffscreen"			"bool"		// if true, the hint will not show when outside the player view
+		"hint_forcecaption"			"bool"		// if true, the hint caption will show even if the hint is occluded
+		"hint_local_player_only"	"bool"		// if true, only the local player will see the hint
+		"hint_start_sound"		"string"		// Game sound to play
+
+		"hint_layoutfile"			"string"	// Path for Panorama layout file
+		"hint_vr_panel_type"		"short"		// Attachment type for the Panorama panel
+		"hint_vr_height_offset"		"float"		// Height offset for attached panels
+		"hint_vr_offset_x"		"float"			// offset for attached panels
+		"hint_vr_offset_y"		"float"			// offset for attached panels
+		"hint_vr_offset_z"		"float"			// offset for attached panels
+	}
+
+	"instructor_server_hint_stop" //destroys a server/map created hint
+	{
+		"hint_name"					"string"	// The hint to stop. Will stop ALL hints with this name
+		"hint_entindex"				"long"		// entity id of the env_instructor_hint that fired the event
+	}
+
+	"set_instructor_group_enabled"
+	{
+		"group"		"string"
+		"enabled"	"short"
+	}
+
+	"clientside_lesson_closed"
+	{
+		"lesson_name"		"string"
+	}
+
+	"dynamic_shadow_light_changed"
+	{
+	}
+}

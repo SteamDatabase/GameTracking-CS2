@@ -1,0 +1,90 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
+		<include src="s2r://panorama/styles/mainmenu.vcss_c" />
+		<include src="s2r://panorama/styles/mainmenu_play.vcss_c" />
+		<include src="s2r://panorama/styles/stats/playerstats.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/common/dateutil.vts_c" />
+		<include src="s2r://panorama/scripts/common/icon.vts_c" />
+		<include src="s2r://panorama/scripts/common/iteminfo.vts_c" />
+		<include src="s2r://panorama/scripts/common/scheduler.vts_c" />
+		<include src="s2r://panorama/scripts/avatar.vts_c" />
+		<include src="s2r://panorama/scripts/digitpanel.vts_c" />
+		<include src="s2r://panorama/scripts/common/formattext.vts_c" />
+		<include src="s2r://panorama/scripts/stats/playerstats_matchlister.vjs_c" />
+		<include src="s2r://panorama/scripts/stats/playerstats.vjs_c" />
+		<include src="s2r://panorama/scripts/stats/fakestats.vjs_c" />
+	</scripts>
+	<Panel class="mainmenu-content__container" acceptsinput="true" acceptsfocus="true" hittest="false" useglobalcontext="true">
+		<Panel id="statspage" class="top-bottom-flow full-width full-height" hittest="false">
+			<Panel class="content-navbar content-navbar--title">
+				<Panel class="left-right-flow vertical-center">
+					<Image src="s2r://panorama/images/icons/ui/stats_logo.vsvg" texturewidth="72" textureheight="-1" class="content-navbar__logo" />
+					<Panel class="left-right-flow vertical-center">
+						<Panel class="left-right-flow">
+							<Label id="" class="content-navbar__title" text="#SFUI_MainMenu_Stats" />
+							<Panel class="horizontal-align-right vertical-center left-right-padding left-right-flow">
+								<Button id="id-manage-subscription" class="content-navbar__manage-btn hide" onactivate="MyPersonaAPI.ActionManageRecurringSubscription();">
+									<Image class="content-navbar__manage-btn__icon" texturewidth="14" textureheight="-1" src="s2r://panorama/images/icons/ui/link.vsvg" />
+									<Label class="content-navbar__manage-btn__label" text="#playerstats_link" />
+								</Button>
+								<TextButton id="id-get-subscription" html="false" class="content-navbar__subscribe-btn hide" onactivate="$.DispatchEvent( &apos;OpenSubscriptionUpsell&apos; );" text="#playerstats_link_get" />
+							</Panel>
+						</Panel>
+						<Label id="id-subscription-status-desc" class="subscription-status__label--small" text="#playerstats_subscription_not_enrolled" html="true" />
+					</Panel>
+				</Panel>
+			</Panel>
+			<Panel class="content-navbar content-navbar--dropdown" style="background-color:contentPanelBackground;" hittest="false">
+				<Panel class="vertical-center left-right-flow">
+					<DropDown class="PopupButton" id="id-playerstats__range" menuclass="DropDownMenu Width-300" oninputsubmit="playerstats.OnTimeRangeChanged()">
+						<Label text="#playerstats_past_14" group="playerstats-range" id="14d" value="14" />
+						<Label text="#playerstats_past_30" group="playerstats-range" id="30d" value="30" />
+						<Label text="#playerstats_past_90" group="playerstats-range" id="90d" value="90" />
+						<Label text="#playerstats_alltime" group="playerstats-range" id="alltime" value="-1" />
+					</DropDown>
+					<DropDown class="PopupButton" id="id-playerstats__mode" menuclass="DropDownMenu Width-300">
+						<Label text="#playerstats_mode_comp_all" group="playerstats-mode" id="mode_id_11" value="240" class="DropDownChild playerstats_mode_label_primary" />
+						<Label text="#playerstats_mode_comp_capt" group="playerstats-mode" id="mode_id_12" value="16" class="DropDownChild playerstats_mode_label_primary" />
+						<Label text="#playerstats_mode_comp_active" group="playerstats-mode" id="mode_id_13" value="32" class="DropDownChild playerstats_mode_label_primary" />
+						<Label text="" group="playerstats-mode" disabled="true" class="DropDownChild playerstats_mode_label_primary_section" />
+						<Label text="#playerstats_mode_2v2_all" group="playerstats-mode" id="mode_id_16" value="12288" class="DropDownChild playerstats_mode_label_primary" />
+						<Label text="#playerstats_mode_2v2_active" group="playerstats-mode" id="mode_id_17" value="4096" class="DropDownChild playerstats_mode_label_primary" />
+						<Label text="#playerstats_mode_2v2_other" group="playerstats-mode" id="mode_id_18" value="8192" class="DropDownChild playerstats_mode_label_primary" />
+					</DropDown>
+				</Panel>
+				<Panel id="PageSpinner" class="incomplete-notice vertical-center horizontal-align-left">
+					<Panel class="Spinner" />
+				</Panel>
+			</Panel>
+			<Panel class="full-width full-height" style="background-color:contentPanelBackground;">
+				<Panel class="full-width full-height top-bottom-flow stats_width horizontal-center">
+					<Panel class="playerstats__row--top left-right-flow rotatein" introorder="1">
+						<Panel class="top-bottom-flow playerstats__topleft">
+							<Frame id="PlayerStatsRecordFrame" src="s2r://panorama/layout/stats/playerstats_record.vxml_c" class="horizontal-align-left" />
+							<CSGOStatsProgressGraph id="id-playerstats__linegraph" class="playerstats__linegraph-container" days="14" gamemode="8" />
+						</Panel>
+						<Panel class="playerstats__topright full-height">
+							<Frame id="PlayerStatsMatchHistory" src="s2r://panorama/layout/stats/playerstats_matchlister.vxml_c" class="playerstats__matchlister-container" />
+						</Panel>
+					</Panel>
+					<Panel class="playerstats__row--bottom rotatein full-width full-height" introorder="2">
+						<Panel class="horizontal-center left-right-flow  full-width full-height">
+							<MapSpiderGraph id="id-playerstats__web-maps" class="width-fill-parent-flow" days="14" gamemode="8" />
+							<WeaponSpiderGraph id="id-playerstats__web-weapons" class="width-fill-parent-flow full-height" days="14" gamemode="8" />
+							<HeatMap id="id-playerstats__heatmap" class="width-fill-parent-flow" days="14" gamemode="8" />
+						</Panel>
+					</Panel>
+				</Panel>
+				<Panel id="NoDataNotice" class="playerstats__nodata_notice left-right-flow">
+					<Image src="s2r://panorama/images/icons/ui/info.vsvg" class="" />
+					<Label text="#playerstats_no_data" />
+				</Panel>
+				<Panel id="NoDataBlocker" class="full-width full-height" acceptsinput="true" />
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

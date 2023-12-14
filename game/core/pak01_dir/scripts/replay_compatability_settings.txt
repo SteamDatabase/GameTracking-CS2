@@ -1,0 +1,74 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	// during CNetworkGameClientBase::LinkClasses() if we can't look up a server class name we check here for a fixed up name in case the top level entity
+	// class was renamed (e.g., CBasePlayer was renamed to CBasePlayerPawn in the game code)
+	m_RenamedSerializers =
+	[
+		{ m_OldName = "CBasePlayer"			m_NewName = "CBasePlayerPawn" },
+		{ m_OldName = "CBaseAnimating"		m_NewName = "CBaseAnimatingActivity" },
+	]
+	
+	// during CFlattenedSerializer::MatchToSerializerTypesMatch, we check the innermost typename and if they don't match trivially
+	// we allow the following pairs to be considered matches (e.g., if demo was recorded before GameTime_t was introduced then the
+	// timestamp uses a float32 -- we allow that to match as a GameTime_t in the new codebase
+	m_RenamedTypes =
+	[
+		{ m_OldName =  "CHandle< CBasePlayer >"					m_NewName = "CHandle< C_BasePlayerPawn >" },
+		{ m_OldName =  "int32"									m_NewName = "item_definition_index_t" },
+		{ m_OldName =  "CUtlVector< CHandle< CBasePlayer > >"	m_NewName = "C_NetworkUtlVectorBase< CHandle< CBasePlayerController > >" },
+		{ m_OldName =  "int16"									m_NewName = "AttachmentHandle_t" },
+		{ m_OldName =  "int32"									m_NewName = "AttachmentHandle_t" },
+
+		{ m_OldName =  "uint32"									m_NewName = "int32" }, // C_PointCommentaryNode::m_iNodeNumber changed to this
+
+		{ m_OldName =  "float32"								m_NewName = "GameTime_t" },
+		{ m_OldName =  "int32"									m_NewName = "GameTick_t" },
+
+		{ m_OldName =  "CBasePlayer"							m_NewName = "CBasePlayerController" },
+		{ m_OldName =  "CUtlStringToken"						m_NewName = "WorldGroupId_t" },
+
+		{ m_OldName =  "CBaseAnimating"							m_NewName = "CBaseAnimatingActivity" },
+
+		{ m_OldName = "int32"									m_NewName = "PlayerID_t" },
+
+		{ m_OldName = "uint16"									m_NewName = "attrib_definition_index_t" },
+	]
+
+	// in CFlattenedSerializer::InitFakeField, we allow for some deleted types to maintain compatibility
+	// note "CHandle<" is a special case, any type starting with that always matches to uint32 (ehandles)
+	// this allows us to decode from wire with appropriate decoder
+	m_FieldTypeAliases =
+	[
+		{ m_OldName =  "CHandle<"						m_NewName = "uint32" m_bMatchStartOfTypeOnly=true },
+		{ m_OldName =  "CUtlStringToken"				m_NewName = "uint32" },
+		{ m_OldName =  "gender_t"						m_NewName = "uint8" },
+		{ m_OldName =  "PrecipitationType_t"			m_NewName = "int32" },
+		{ m_OldName =  "CNetworkedQuantizedFloat"		m_NewName = "float32" },
+		{ m_OldName =  "CGameSceneNodeHandle"			m_NewName = "uint64" },
+		{ m_OldName =  "HSequence"						m_NewName = "int32" },
+		{ m_OldName =  "PoseController_FModType_t"		m_NewName = "uint32" },
+	]
+
+	// in CFlattenedSerializer::InitFakeFieldFlattenedSerializer, some fields (e.g. entity components) are accessed
+	// via a pointer but don't have the '*' character which we generally use as a hint for that
+	m_PointerFieldTypes =
+	[
+		{ m_Name = "CBodyComponent" },
+		{ m_Name = "CBodyComponentPoint" },
+		{ m_Name = "CBodyComponentBaseAnimating" },
+		{ m_Name = "C_BodyComponentBaseAnimating" },
+		{ m_Name = "CBodyComponentBaseAnimatingOverlay" },
+		{ m_Name = "C_BodyComponentBaseAnimatingOverlay" },
+		{ m_Name = "CBodyComponentBaseModelEntity" },
+		{ m_Name = "CPhysicsComponent" },
+		{ m_Name = "CRenderComponent" },
+	]
+
+	// as of 10/2023 we now include the serializer name for each field that doesn't use the "default" serializer
+	// this is because things like m_flSimulationTime (a float32) is actually networked as an int32 "tick count" and so 
+	// we need to know how to have a fake field inserted for demo playback be able to use the same serializer name
+	m_UserDefinedSerializerLookup = 
+	[
+		{ m_FieldName = "m_flSimulationTime" m_SerializerName = "simulationTimeSerializer" },
+	]
+}

@@ -1,0 +1,43 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "decorator_picker_reaction_time"
+	input = "ShortTermAttackMemory"
+	output = "Enemy"
+	child =
+	{
+		type = "decorator_ranker_dist"
+		input = "Enemy"
+		child =
+		{
+			type = "decorator_picker_max_score"
+			input = "Enemy"
+			child =
+			{
+				type = "condition_is_empty"
+				input = "Enemy"
+				negated = 1
+				child =
+				{
+					type = "decorator_tag_entity"
+					input = "Enemy"
+					output = "EngagedEntities"
+					operation_type = "BT_DECORATOR_TAG_ENTITY_CLEAR"
+					child =
+					{
+						type = "decorator_tag_threshold"
+						entity_input = "Enemy"
+						tagged_entities_input = "EngagedEntities"
+						amount = 2
+						check_type = "BT_DECORATOR_TAG_THRESHOLD_AT_LEAST"
+						child =
+						{
+							type = "subtree"
+							file = "scripts/ai/practice/modules/bt_pickup_hostage.kv3"
+							name = "PickUpHostage"
+						}
+					}
+				}
+			}
+		}
+	}
+}

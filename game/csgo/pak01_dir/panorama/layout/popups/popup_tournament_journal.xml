@@ -1,0 +1,145 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/gamestyles.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_capability_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_tournament_journal.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/popups/popup_tournament_journal.vjs_c" />
+		<include src="s2r://panorama/scripts/generated/items_event_current_generated_store.vts_c" />
+		<include src="s2r://panorama/scripts/common/iteminfo.vts_c" />
+	</scripts>
+	<snippets>
+		<snippet name="tournament-challenge">
+			<Button class="tournament-journal__challenge">
+				<Panel class="tournament-journal__challenge__icon-container">
+					<Image id="id-tournament-journal__challenge__icon" class="tournament-journal__challenge__icon" src="s2r://panorama/images/icons/ui/watch.vsvg" textureheight="16" texturewidth="-1" />
+				</Panel>
+				<Label id="id-tournament-journal__challenge__name" class="tournament-journal__challenge__name stratum-font" text="#tournament_coin_desc" />
+				<Panel class="tournament-journal__challenge__spacer" />
+			</Button>
+		</snippet>
+	</snippets>
+	<PopupCustomLayout class="PopupPanel tournament-journal Hidden" useglobalcontext="true" popupbackground="blur" oncancel="TournamentJournal.ClosePopup();" onload="TournamentJournal.Init()">
+		<Panel class="tournament-journal-content" useglobalcontext="true">
+			<CSGOBlurTarget id="id-tournament-journal-container" class="tournament-journal-container" blurrects="id-steam-block id-graffiti-block id-winners-block id-tournament-journal-challenges-section id-redeem-block" />
+			<Panel class="tournament-journal-container">
+				<Panel id="id-tournament-journal-title-bar" class="tournament-journal__titlebar">
+					<Panel class="top-bottom-flow vertical-center horizontal-center">
+						<Label id="id-tournament-journal-title" class="tournament-journal__titlebar__title stratum-font horizontal-center" text="" />
+						<Label id="id-tournament-journal-subtitle" class="tournament-journal__titlebar__subtitle horizontal-center" text="#tournament_coin_desc" />
+					</Panel>
+				</Panel>
+				<Panel class="horizontal-center">
+					<ItemPreviewPanel id="id-tournament-journal-model" class="tournament-journal__model" manifest="resource/ui/econ/itemmodelpanelcharweaponinspect.res" item="models/inventory_items/5_year_coin.mdl" mouse_rotate="true" sound="weapon" />
+					<Panel class="top-bottom-flow horizontal-center">
+						<Panel id="id-challenges-block" class="tournament-journal__section">
+							<Panel class="left-right-flow">
+								<Panel id="id-tournament-journal-challenges-section" class="tournament-journal__column">
+									<Panel class="tournament-journal__info-block">
+										<Panel class="right-margin-medium">
+											<Image id="id-tournament-coin-levelbanner-bg" class="horizontal-center" src="s2r://panorama/images/icons/ui/banner-bg.vsvg" textureheight="48" texturewidth="-1" />
+											<Label class="tournament-journal__titlebar__title count stratum-font" text="{d:challenges_complete}" />
+										</Panel>
+										<Panel class="top-bottom-flow vertical-center">
+											<Label class="tournament-journal__info-block__title stratum-font" text="#tournament_coin_completed_challenges" />
+											<Label id="id-tournament-journal-remaining" class="tournament-journal__info-block__subtitle" html="true" text="#tournament_coin_remaining_challenges" />
+										</Panel>
+									</Panel>
+									<Panel id="id-tournament-journal__challenges-list" class="tournament-journal__challenges-list" />
+								</Panel>
+								<Panel id="id-redeem-block" class="tournament-journal__column tournament-journal__column--redeem">
+									<Panel class="fill-parent-flow-height full-width">
+										<Panel id="id-tournament-redeem-block" class="tournament-journal__info-block">
+											<Panel class="vertical-center">
+												<ItemImage id="id-tournament-ticket-icon" class="horizontal-center" src="s2r://panorama/images/econ/status_icons/starladder_pickem_2019_pass_charge_png.vtex" scaling="stretch-to-fit-y-preserve-aspect" />
+											</Panel>
+											<Panel class="top-bottom-flow vertical-center">
+												<Panel class="left-right-flow">
+													<Label id="id-tournament-journal-souvenir-earned-value" class="tournament-journal__info-block__title stratum-font" text="{d:redeems_earned}" />
+													<Label id="id-tournament-journal-souvenir-earned" class="tournament-journal__info-block__title stratum-font" text="#tournament_coin_earned_souvenir" />
+												</Panel>
+												<Label id="id-tournament-journal-info-block-subtitle" class="tournament-journal__info-block__subtitle" html="true" text="#tournament_coin_redeem_souvenir" />
+											</Panel>
+											<ItemImage id="id-tournament-ticket-icon" class="horizontal-center" src="s2r://panorama/images/econ/status_icons/starladder_pickem_2019_pass_charge_png.vtex" scaling="stretch-to-fit-y-preserve-aspect" />
+										</Panel>
+									</Panel>
+									<Panel class="tournament-journal__info-block__buttons-row">
+										<TextButton id="id-get-charges-btn" class="tournament-journal-button" text="#tournament_coin_get_tokens" />
+										<Button id="id-tournament-journal-redeem-btn" class="tournament-journal-button" onactivate="TournamentJournal.OnActivateRedeem();">
+											<Label id="id-tournament-journal-redeem-btn-label" html="true" text="#tournament_coin_redeem_action" />
+										</Button>
+										<TextButton id="id-activate-charges-btn" class="tournament-journal-button" html="true" onmouseover="UiToolkitAPI.ShowTextTooltip(&apos;id-activate-charges-btn&apos;, &apos;#tournament_activate_tokens_tooltip&apos;);" onmouseout="UiToolkitAPI.HideTextTooltip();" />
+										<Panel id="id-activate-spinner" class="Spinner horizontal-center vertical-center hidden" />
+									</Panel>
+								</Panel>
+							</Panel>
+						</Panel>
+						<Panel id="id-bottom-block" class="tournament-journal__section tournament-journal__section--bottom-block">
+							<Panel id="id-winners-block" class="tournament-journal__column horizontal-center hide">
+								<Panel class="tournament-journal__info-block">
+									<Panel class="right-margin-medium">
+										<ItemPreviewPanel id="id-tournament-journal-trophy" class="tournament-journal__model trophy" manifest="resource/ui/econ/itemmodelpanelcharweaponinspect.res" item="models/inventory_items/trophy_majors.mdl" mouse_rotate="true" sound="" />
+										<ItemImage id="tournament-journal-winners-img" class="horizontal-center vertical-center" src="" textureheight="112" texturewidth="-1" />
+									</Panel>
+									<Panel class="top-bottom-flow vertical-center horizontal-center">
+										<Label id="tournament-journal-winners-title" class="tournament-journal__titlebar__title stratum-font" text="" />
+										<Label id="tournament-journal-winners-desc" class="tournament-journal__info-block__title stratum-font" html="true" text="" />
+									</Panel>
+								</Panel>
+							</Panel>
+							<Panel class="horizontal-center left-right-flow">
+								<Panel id="id-steam-block" class="tournament-journal__column">
+									<Panel class="fill-parent-flow-height full-width">
+										<Panel class="tournament-journal__info-block">
+											<Image id="" class="tournament-journal__info-steamtv-icon" src="s2r://panorama/images/browser/steamtv.vsvg" textureheight="28" texturewidth="-1" />
+											<Panel class="top-bottom-flow vertical-center horizontal-center">
+												<Label class="tournament-journal__info-block__title stratum-font" text="#tournament_coin_team_flair" />
+												<Label class="tournament-journal__info-block__subtitle" html="true" text="#tournament_coin_team_flair_desc" />
+											</Panel>
+										</Panel>
+									</Panel>
+									<Panel class="tournament-journal__info-block__buttons-row">
+										<Button id="id-tournament-journal-watch-stream" class="tournament-journal-button">
+											<Label id="" text="#WatchMenu_Watch" />
+										</Button>
+									</Panel>
+								</Panel>
+								<Panel id="id-graffiti-block" class="tournament-journal__column">
+									<Panel class="tournament-journal__info-block">
+										<Panel class="right-margin-medium">
+											<ItemImage id="id-tournament-journal-spray" class="horizontal-center" src="" />
+										</Panel>
+										<Panel class="top-bottom-flow vertical-center horizontal-center">
+											<Label class="tournament-journal__info-block__title stratum-font" text="#tournament_coin_team_graffiti" />
+											<Label class="tournament-journal__info-block__subtitle" html="true" text="#tournament_coin_select_team_graffiti" />
+										</Panel>
+									</Panel>
+									<Panel class="tournament-journal__info-block__buttons-row">
+										<Button id="id-tournament-journal-selectspray-btn" class="tournament-journal-button">
+											<Label id="" text="#tooltip_navbar_switch_teams" />
+										</Button>
+									</Panel>
+								</Panel>
+							</Panel>
+						</Panel>
+					</Panel>
+				</Panel>
+				<Panel class="fill-parent-flow-height horizontal-center">
+					<Panel id="id-tournament-journal-items" class="tournament-journal__challenge__items-row" />
+				</Panel>
+				<Panel class="popup-capability__button-row no-border">
+					<Panel class="full-width">
+						<Panel class="left-right-flow horizontal-align-right">
+							<TextButton id="id-tournament-journal-active" class="Positive PopupButton" text="#SFUI_ConfirmBtn_ActivatePassNow" />
+							<TextButton id="id-tournament-journal-faq" class="PopupButton" text="#Workshop_Preview_FAQ" />
+							<TextButton class="PopupButton" text="#GameUI_Close" onactivate="$.DispatchEvent( &apos;UIPopupButtonClicked&apos;, &apos;&apos; )" />
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+	</PopupCustomLayout>
+</root>

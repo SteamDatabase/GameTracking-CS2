@@ -1,0 +1,164 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	type = "selector"
+	children =
+	[
+		{
+			type = "condition_is_empty"
+			global = 1
+			input = "DontPlantBomb"
+			child =
+			{
+				type = "condition_owns_item"
+				item = "weapon_c4"
+				child =
+				{
+					type = "sequencer"
+					children =
+					[
+						{
+							type = "action_equip_weapon"
+							weapon = "BEST"
+						},
+						{
+							type = "selector"
+							children =
+							[
+								{
+									type = "sequencer"
+									children =
+									[
+										{
+											type = "condition_is_equal"
+											source = "@mp_plant_c4_anywhere"
+											destination = 1
+										},
+										{
+											type = "action_choose_guardian_bomb_plant_location"
+											output = "TargetArea"
+										}
+									]
+								},
+								{
+									type = "sequencer"
+									children =
+									[
+										{
+											type = "decorator_random_int"
+											min = 0
+											max = 1
+											output = "BombSiteIndex"
+											child =
+											{
+												type = "action_choose_bomb_site_area"
+												input = "BombSiteIndex"
+												output = "BombSiteArea"
+											}
+										},
+										{
+											type = "action_choose_random_waypoint"
+											input = "BombSiteArea"
+											output = "TargetArea"
+										}
+									]
+								}
+							]
+						},
+						{
+							type = "action_move_to"
+							destination = "TargetArea"
+							movement_type = "BT_ACTION_MOVETO_RUN"
+							route_type = "BT_ACTION_MOVETO_FASTEST_ROUTE"
+							hiding_spot = "HidingSpot"
+							threat = "NearestThreatMemory"
+						},
+						{
+							type = "selector"
+							children =
+							[
+								{
+									type = "condition_is_equal"
+									source = "@mp_plant_c4_anywhere"
+									destination = 1
+								},
+								{
+									type = "condition_is_at_bomb_site"
+								}
+							]
+						},
+						{
+							type = "action_equip_item"
+							item = "weapon_c4"
+						},
+						{
+							type = "action_wait"
+							wait_time_min = 1
+							wait_time_max = 1
+						},
+						{
+							type = "parallel"
+							children =
+							[
+								{
+									type = "decorator_maybe"
+									chance = 0.5
+									child =
+									{
+										type = "decorator_succeed"
+										child =
+										{
+											type = "condition_is_equal"
+											source = "NumberOfAliveTerrorists"
+											destination = 1
+											child =
+											{
+												type = "sequencer"
+												children =
+												[
+													{
+														type = "action_wait"
+														wait_time_min = 0.2
+														wait_time_max = 0.3
+													},
+													{
+														type = "action_set_global_flag"
+														name = "'DontPlantBomb'"
+														expiration_time_min = 3
+														expiration_time_max = 5
+													}
+												]
+											}
+										}
+									}
+								},
+								{
+									type = "decorator_repeat"
+									child =
+									{
+										type = "action_pull_trigger"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			type = "condition_is_empty"
+			global = 1
+			negated = 1
+			input = "DontPlantBomb"
+			child =
+			{
+				type = "decorator_repeat"
+				child =
+				{
+					type = "subtree"
+					file = "scripts/ai/modules/bt_look_around.kv3"
+					name = "LookAround"
+				}
+			}
+		}
+	]
+}

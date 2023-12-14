@@ -1,0 +1,157 @@
+// example_start_oneshot_import_test
+"example_start_oneshot_import_test"
+{
+	"public"
+	{
+		"operator"		"util_null"
+		"operator_variables"
+		{
+			"start"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"volume_min"
+			{
+				"data_type"		"float"
+				"value"		"0.900000"
+			}
+			"volume_max"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"pitch_min"
+			{
+				"data_type"		"float"
+				"value"		"0.500000"
+			}
+			"pitch_max"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"vsnd_files"
+			{
+				"data_type"		"vsnd"
+				"soundevent_data"		"true"
+				"value"		"sounds/common/null.vsnd"
+			}
+		}
+	}
+	"core_start_oneshot_import_test_op"
+	{
+		"operator"		"sos_import_stack"
+		"import_stack"		"core_start_oneshot"
+		"operator_variables"
+		{
+			"start"
+			{
+				"value"		"@public.start"
+			}
+			"volume_min"
+			{
+				"value"		"@public.volume_min"
+			}
+			"volume_max"
+			{
+				"value"		"@public.volume_max"
+			}
+			"pitch_min"
+			{
+				"value"		"@public.pitch_min"
+			}
+			"pitch_max"
+			{
+				"value"		"@public.pitch_max"
+			}
+			"vsnd_files"
+			{
+				"value"		"@public.vsnd_files"
+			}
+		}
+	}
+	"_system_properties"
+	{
+		"display_game"		"diagnostics"
+		"display_group"		"advanced"
+	}
+}
+
+// example_timetriggered_simple_oneshot
+"example_timetriggered_simple_oneshot"
+{
+	"public"
+	{
+		"operator"		"util_null"
+		"operator_variables"
+		{
+			"time"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"start_time"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"unstopped"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"volume"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"vsnd_files"
+			{
+				"data_type"		"vsnd"
+				"soundevent_data"		"true"
+				"value"		"sounds/common/null.vsnd"
+			}
+		}
+	}
+	"time_greater_than_position"
+	{
+		"operator"		"math_float"
+		"apply"		"greater_than"
+		"input1"		"@public.time"
+		"input2"		"@public.start_time"
+	}
+	"start"
+	{
+		"operator"		"math_float"
+		"apply"		"min"
+		"input1"		"@public.unstopped"
+		"input2"		"@time_greater_than_position.output"
+	}
+	"core_simple_oneshot"
+	{
+		"operator"		"sos_import_stack"
+		"import_stack"		"core_start_simple_oneshot"
+		"operator_variables"
+		{
+			"start"
+			{
+				"value"		"@start.output"
+			}
+			"volume"
+			{
+				"value"		"1.000000"
+			}
+			"vsnd_files"
+			{
+				"value"		"@public.vsnd_files"
+			}
+		}
+	}
+	"_system_properties"
+	{
+		"display_game"		"diagnostics"
+		"display_group"		"advanced"
+	}
+}
+

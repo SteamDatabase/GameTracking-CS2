@@ -1,0 +1,126 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/gamestyles.vcss_c" />
+		<include src="s2r://panorama/styles/mainmenu.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_generic.vcss_c" />
+		<include src="s2r://panorama/styles/operation/operation_shared.vcss_c" />
+		<include src="s2r://panorama/styles/operation/operation_store.vcss_c" />
+		<include src="s2r://panorama/styles/operation/operation_store_inspect.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/common/iteminfo.vts_c" />
+		<include src="s2r://panorama/scripts/common/formattext.vts_c" />
+		<include src="s2r://panorama/scripts/common/flip_panel_anim.vts_c" />
+		<include src="s2r://panorama/scripts/operation/operation_util.vjs_c" />
+		<include src="s2r://panorama/scripts/operation/operation_store_inspect.vjs_c" />
+		<include src="s2r://panorama/scripts/common/tint_spray_icon.vts_c" />
+		<include src="s2r://panorama/scripts/common/characteranims.vts_c" />
+	</scripts>
+	<snippets>
+		<snippet name="snippet-cheer-btn">
+			<ToggleButton class="op-store-inspect__char-cheer-btn IconButton" onactivate="CharacterButtons.PlayCheer();" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;PlayCheer&apos;, &apos;#tooltip_character_cheer&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+				<Image class="" src="s2r://panorama/images/icons/ui/cheer.vsvg" />
+			</ToggleButton>
+		</snippet>
+		<snippet name="snippet-tray-btn">
+			<RadioButton class="op-store-inspect-rewards-tray-btn">
+				<ItemImage id="id-op-store-inspect-rewards-tray-image" class="op-store-inspect-rewards-tray-image" src="s2r://panorama/images/icons/ui/cheer.vsvg" scaling="stretch-to-fit-preserve-aspect" />
+				<Panel id="id-store-inspect-rewards-tray-rarity" class="op-store-inspect__char-rarity" hittest="false" />
+			</RadioButton>
+		</snippet>
+		<snippet name="snippet-tray-group">
+			<Panel class="op-store-inspect-rewards-tray-group" />
+		</snippet>
+		<snippet name="snippet-model-char">
+			<ItemPreviewPanel manifest="resource/ui/econ/itemmodelpanelcharweaponinspect.res" item="characters/models/ctm_sas.vmdl" animgraphcharactermode="inventory-inspect" mouse_rotate="true" class="op-store-inspect__char-model" enable_floorshadow="true" force-no-composition-layer="true" hittest="false">
+				<Button id="id-op-store-inspect-char-button" class="op-store-inspect__char-btn" />
+				<Panel class="op-store-inspect__char-info-container" hittest="false">
+					<Panel id="id-op-store-char-small-btn-container" class="op-store-inspect__char-small-btn-container">
+						<Button id="op-store-inspect-zoom-out" class="IconButton">
+							<Image src="s2r://panorama/images/icons/ui/zoom_out.vsvg" />
+						</Button>
+						<Button id="id-op-store-inspect__char-cheer" class="IconButton">
+							<Image src="s2r://panorama/images/icons/ui/cheer.vsvg" />
+						</Button>
+					</Panel>
+					<Panel class="left-right-flow horizontal-center" hittest="false">
+						<Panel id="id-store-inspect-item-rarity" class="op-store-inspect__char-rarity" hittest="false" />
+						<Label id="id-store-inspect-item-name" class="op-store-inspect__char-info-name stratum-font" hittest="false" html="true" text="Name of Persony long" />
+					</Panel>
+				</Panel>
+			</ItemPreviewPanel>
+		</snippet>
+		<snippet name="snippet-model-item">
+			<ItemPreviewPanel manifest="resource/ui/econ/itemmodelpanelcharweaponinspect.res" item="" mouse_rotate="true" class="full-width full-height" enable_floorshadow="true" hittest="true">
+				<Panel class="op-store-inspect-name" hittest="false">
+					<Panel id="id-store-inspect-item-rarity" class="op-store-inspect__char-rarity" hittest="false" />
+					<Label id="id-store-inspect-item-name" class="op-store-inspect__char-info-name stratum-font" hittest="false" html="true" text="" />
+				</Panel>
+			</ItemPreviewPanel>
+		</snippet>
+	</snippets>
+	<Panel class="PopupPanel op-store-inspect Hidden" defaultfocus="" popupbackground="dim" onload="OperationStoreInspect.Init();" oncancel="OperationStoreInspect.OnCancel();">
+		<Panel class="full-width full-height" hittest="false">
+			<Panel id="id-store-inspect-movie" class="op-main-movie dark" hittest="false" />
+			<Panel id="id-store-inspect-loading" class="vertical-center horizontal-center top-bottom-flow">
+				<Panel id="Spinner" class="Spinner SpinnerVisible" />
+				<Label class="stratum-font fontSize-l" html="true" text="#op_get_reward_loading" />
+			</Panel>
+			<Panel id="id-store-inspect-container" class="full-width full-height" hittest="false">
+				<Panel class="op-store-inspect-title-container">
+					<ItemImage id="id-op-inspect-title-icon" class="op-store-inspect-title__image" scaling="stretch-to-fit-preserve-aspect" src="" />
+					<Label id="id-op-inspect-title" class="op-store-inspect-title__label stratum-font fontSize-l" text="Name Of Collection" />
+				</Panel>
+				<Panel id="id-op-store-inspect-floor" class="op-store-inspect-floor" hittest="false" />
+				<Panel id="id-op-inspect-all-models-container" class="full-width full-height">
+					<Button id="id-op-inspect-all-models-container-group-expanded" class="op-store-inspect-rewards-tray-container op-store-inspect-rewards-tray-container--groups-expanded" onactivate="OperationStoreInspect.RemoveGroupExpandedPanel();" />
+					<Panel id="id-op-inspect-rewards-tray-container" class="op-store-inspect-rewards-tray-container" hittest="false" />
+					<Panel id="id-op-inspect-models-container" class="op-inspect-model-container" hittest="false" />
+				</Panel>
+				<Panel class="op-store-inspect-actions-bar">
+					<Panel class="top-bottom-flow horizontal-center">
+						<Panel id="id-op-inspect-shop-balance-panel" class="left-right-flow horizontal-align-left margin bottom-margin">
+							<Panel class="left-right-flow horizontal-align-right">
+								<Panel class="op-store-shop-balance-container op-store-shop-balance-container--inspect">
+									<Label class="op-store-shop-balance__text stratum-font fontSize-m" text="#op_stars_earned" html="true" />
+									<Image class="op-store-shop-balance__icon" src="s2r://panorama/images/icons/ui/icon_star_multi.vsvg" scaling="stretch-to-fit-preserve-aspect" texturewidth="22" textureheight="-1" />
+								</Panel>
+							</Panel>
+							<Button id="id-op-store-inspect-get-more-points-btn" class="op-inspect-get-more-points" hittestchildren="false">
+								<TextButton id="id-op-store-inspect-get-more-points-btn_label" class="medium-font" text="#op_pass_upsell" html="true" />
+							</Button>
+						</Panel>
+						<Panel id="id-op-inspect-shop-get-reward" class="left-right-flow horizontal-align-left">
+							<Panel class="op-store-shop-balance-container op-store-shop-balance-container--inspect">
+								<Label id="id-op-store-inspect-get-reward-text" class="op-store-progress__pass-upsell__desc stratum-font fontSize-l" text="" html="true" />
+							</Panel>
+							<Button id="id-op-store-inspect-get-reward-btn" class="op-store-inspect-purchase-container" hittestchildren="false">
+								<Panel class="op-store-inspect-purchase__text-icon">
+									<TextButton id="id-op-store-inspect-get-reward-btn_label" class="" text="#op_stars_use_confirm" html="true" />
+									<Image class="op-store-shop-balance__icon-inspect" src="s2r://panorama/images/icons/ui/icon_star_multi.vsvg" scaling="stretch-to-fit-preserve-aspect" texturewidth="22" textureheight="-1" />
+								</Panel>
+							</Button>
+						</Panel>
+					</Panel>
+					<Button id="id-op-inspect-shop-get-reward-btn_cancel" class="PopupButton horizontal-align-right right-margin-32 vertical-align-bottom">
+						<Label text="#SFUI_Back" html="true" onactivate="$.DispatchEvent( &apos;UIPopupButtonClicked&apos;, &apos;&apos; );" />
+					</Button>
+					<Panel id="id-op-inspect-shop-get-confirm" class="top-bottom-flow right-margin-32 hide horizontal-center">
+						<Panel class="left-right-flow">
+							<Panel class="op-store-shop-balance-container">
+								<Label class="op-store-shop-balance__text stratum-font fontSize-l" text="#op_stars_use_confirm" html="true" />
+								<Image class="op-store-shop-balance__icon" src="s2r://panorama/images/icons/ui/icon_star_multi.vsvg" scaling="stretch-to-fit-preserve-aspect" texturewidth="22" textureheight="-1" />
+								<Label id="id-op-inspect-shop-get-confirm-desc-label" class="op-store-shop-balance__text stratum-font fontSize-l" text="#op_stars_use_confirm_item" html="true" />
+							</Panel>
+							<TextButton id="id-op-inspect-shop-get-confirm-btn_label" class="op-store-progress__pass-upsell__text-btn large-font" text="#op_get_reward_confirm" html="true" />
+							<TextButton id="id-op-inspect-shop-get-confirm-btn_cancel" class="op-store-progress__pass-upsell__text-btn cancel-btn large-font" text="#Cancel_Button" html="true" />
+						</Panel>
+						<Label id="id-op-inspect-shop-get-confirm-flags-notice-2" class="op-store-shop-balance__text op-store-shop-getreward-flags-disclaimer hide stratum-font fontSize-l" text="#op_stars_use_flags_notice_2" html="true" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

@@ -1,0 +1,173 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
+		<include src="s2r://panorama/styles/friendslist.vcss_c" />
+		<include src="s2r://panorama/styles/playercard.vcss_c" />
+		<include src="s2r://panorama/styles/friendtile.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/rating_emblem.vts_c" />
+		<include src="s2r://panorama/scripts/common/commonutil.vts_c" />
+		<include src="s2r://panorama/scripts/common/sessionutil.vts_c" />
+		<include src="s2r://panorama/scripts/common/collapse.vts_c" />
+		<include src="s2r://panorama/scripts/friendtile.vjs_c" />
+		<include src="s2r://panorama/scripts/friendlobby.vts_c" />
+		<include src="s2r://panorama/scripts/advertising_toggle.vjs_c" />
+		<include src="s2r://panorama/scripts/friend_advertise_tile.vjs_c" />
+		<include src="s2r://panorama/scripts/friendslist.vjs_c" />
+		<include src="s2r://panorama/scripts/common/teamcolor.vts_c" />
+		<include src="s2r://panorama/scripts/avatar.vts_c" />
+		<include src="s2r://panorama/scripts/party.vjs_c" />
+	</scripts>
+	<snippets>
+		<snippet name="NoData">
+			<Panel class="friendslist-nodata">
+				<Image class="friendslist-nodata__image" src="s2r://panorama/images/icons/ui/info.vsvg" texturewidth="32" textureheight="32" />
+				<Panel class="friendslist-nodata-text">
+					<Label id="JsFriendsNoDataTitle" class="stratum-font friendslist-nodata-text__title" text="{s:no_data_title}" />
+					<Label id="JsFriendsNoDataDesc" class="friendslist-nodata-text__body" text="{s:no_data_body}" />
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="PartyMember">
+			<Panel class="friendtile friendtile--party" acceptsfocus="true">
+				<Button id="PartyMemberBtn" class="friendtile-contents">
+					<Panel class="friendtile__status">
+						<Label id="JsFriendName" class="friendtile__text__title" text="" />
+						<Panel class="left-right-flow top-padding">
+							<Image id="PartyRank" class="right-padding" textureheight="16" texturewidth="-1" src="s2r://panorama/images/icons/skillgroups/skillgroup10.vsvg" />
+							<Image id="PartyPrime" class="" textureheight="16" texturewidth="-1" src="s2r://panorama/images/icons/ui/prime.vsvg" />
+						</Panel>
+					</Panel>
+				</Button>
+			</Panel>
+		</snippet>
+		<snippet name="broadcast-gamemode-active">
+			<Panel class="vertical-center horizontal-center">
+				<Panel class="friendslist-accordian__broadcast-searching" />
+				<Panel class="friendslist-accordian__broadcast-searching-outer" />
+			</Panel>
+		</snippet>
+	</snippets>
+	<Panel class="friendslist" acceptsfocus="true" useglobalcontext="true">
+		<Panel id="PartyList" class="party-list hidden">
+			<Panel id="MatchStatusBackground" class="party-list__bg" />
+			<Panel class="top-bottom-flow full-width">
+				<Panel id="PartyListHeader" class="left-right-flow full-width">
+					<Panel id="PartyTitleAlert" class="party-player-count">
+						<Image class="friendslist-accordian__section__header__icon" src="s2r://panorama/images/icons/ui/lobby.vsvg" />
+						<Label id="PartyTitleAlertText" class="party-status-members-count" text="" />
+					</Panel>
+					<Panel class="left-right-padding left-right-flow vertical-center horizontal-align-right" hittest="false">
+						<Button id="MatchStatusInfo" class="IconButton horizontal-align-right" style="tooltip-position: left;" onactivate="$.DispatchEvent( &apos;OpenPlayMenu&apos; );">
+							<Image src="s2r://panorama/images/icons/ui/info.vsvg" />
+						</Button>
+						<Button id="PartyCancelBtn" class="IconButton horizontal-align-right" style="tooltip-position: bottom;" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;PartyCancelBtn&apos;, &apos;#tooltip_canelsearch&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="LobbyAPI.StopMatchmaking(); $.DispatchEvent( &apos;CSGOPlaySoundEffect&apos;, &apos;UIPanorama.generic_button_press&apos;, &apos;MOUSE&apos; );">
+							<Image src="s2r://panorama/images/icons/ui/cancel.vsvg" />
+						</Button>
+						<Button id="PartyLeaveBtn" class="IconButton horizontal-align-right" style="tooltip-position: bottom;" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;PartyLeaveBtn&apos;, &apos;#tooltip_leave_lobby&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+							<Image src="s2r://panorama/images/icons/ui/leave.vsvg" />
+						</Button>
+					</Panel>
+				</Panel>
+				<Panel class="party-contents">
+					<Frame id="MatchStatusContainer" class="matchmaking-status-container" src="s2r://panorama/layout/matchmaking_status.vxml_c" />
+					<Panel id="PartyMembers" class="full-width top-bottom-flow" />
+				</Panel>
+			</Panel>
+		</Panel>
+		<Panel id="JsIncomingInvites" class="friendslist-incominginvites hidden">
+			<Panel id="JsIncomingInviteContainer" class="friendslist-incominginvites-container" />
+		</Panel>
+		<Panel id="id-friendslist-accordian" class="friendslist-accordian">
+			<RadioButton id="id-friendslist-section-friends" class="friendslist-accordian__section hide-notification" group="friends_accordian" onactivate="friendsList.OnSectionPressed(&apos;id-friendslist-section-friends&apos;)">
+				<Panel class="friendslist-accordian__section__header">
+					<Panel class="friendslist-accordian__section__header__icon__container">
+						<Image class="friendslist-accordian__section__header__icon" src="s2r://panorama/images/icons/ui/player.vsvg" />
+						<Frame id="id-friendslist-counter" class="text-only" src="s2r://panorama/layout/btn_alert.vxml_c" />
+					</Panel>
+					<Label class="stratum-bold-condensed fontSize-ml text-letterspace-2px fontcolor-basetext left-margin-none" text="#SFUI_Lobby_FriendsListerTitle" />
+					<Button id="AddFriendBtn" class="IconButton horizontal-align-right" style="tooltip-position: bottom;" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;AddFriendBtn&apos;, &apos;#AddFriend_tooltip&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="friendsList.OnAddFriend();">
+						<Image src="s2r://panorama/images/icons/ui/addplayer.vsvg" />
+					</Button>
+				</Panel>
+				<Panel id="id-friendslist-section-list" class="friendslist-accordian__section__list friendslist-accordian__section__header--bg">
+					<Frame id="id-friendslist-nodata" snippet="NoData" />
+					<Panel id="id-friendslist-section-list-contents" class="friendslist-accordian__section__list__contents" />
+				</Panel>
+			</RadioButton>
+			<RadioButton id="id-friendslist-section-broadcast" class="friendslist-accordian__section hide-notification" group="friends_accordian" onactivate="friendsList.OnSectionPressed(&apos;id-friendslist-section-broadcast&apos;)">
+				<Panel class="friendslist-accordian__section__header">
+					<Panel class="friendslist-accordian__section__header__icon__container">
+						<Frame id="id-friendslist-section-broadcast-icon" class="text-only" src="s2r://panorama/layout/advertising_icon.vxml_c" />
+						<Frame id="id-friendslist-counter" class="text-only" src="s2r://panorama/layout/btn_alert.vxml_c" />
+					</Panel>
+					<Label class="stratum-bold-condensed fontSize-ml text-letterspace-2px fontcolor-basetext left-margin-none friendslist-accordian__broadcast-transition" text="#SFUI_Lobby_StatusLookingToPlay" />
+				</Panel>
+				<Panel id="id-friendslist-section-list" class="friendslist-accordian__section__list friendslist-accordian__section__header--bg">
+					<Panel id="JsFriendsListSettingsControls" class="full-width top-bottom-flow">
+						<Panel id="id-friendslist-broadcast-toggle-container" class="friendslist-accordian__broadcast-toggle" hittest="false">
+							<Frame id="id-friendslist-broadcast-toggle" class="left-margin vertical-center" src="s2r://panorama/layout/slider_toggle.vxml_c" />
+						</Panel>
+						<Panel id="JsFriendsListSettings" class="friendslist-navbar friendslist-navbar--tab-settings expand">
+							<Panel id="JsFriendsListSettingsBtns" class="horizontal-align-left vertical-center left-right-flow">
+								<RadioButton id="JsFriendsList-lobbies-toolbar-button-competitive" group="JsFriendsList-lobbies-toolbar-button-modegroup" data-type="competitive" class="IconButton friendslist-navbar-lobby-button" onactivate="friendsList.SetLobbiesTabListFilters( &apos;competitive&apos; );" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;JsFriendsList-lobbies-toolbar-button-competitive&apos;, &apos;#SFUI_GameMode_competitive&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+									<Image src="s2r://panorama/images/icons/ui/competitive.vsvg" />
+									<Frame class="friendslist-accordian__broadcast-searching-container" snippet="broadcast-gamemode-active" />
+								</RadioButton>
+								<RadioButton id="JsFriendsList-lobbies-toolbar-button-scrimcomp2v2" group="JsFriendsList-lobbies-toolbar-button-modegroup" data-type="scrimcomp2v2" class="IconButton friendslist-navbar-lobby-button visible-if-not-limitedbeta" onactivate="friendsList.SetLobbiesTabListFilters( &apos;scrimcomp2v2&apos; );" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;JsFriendsList-lobbies-toolbar-button-scrimcomp2v2&apos;, &apos;#SFUI_GameMode_scrimcomp2v2&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+									<Image src="s2r://panorama/images/icons/ui/scrimcomp2v2.vsvg" />
+									<Frame class="friendslist-accordian__broadcast-searching-container" snippet="broadcast-gamemode-active" />
+								</RadioButton>
+								<RadioButton id="JsFriendsList-lobbies-toolbar-button-cooperative" data-type="cooperative" group="JsFriendsList-lobbies-toolbar-button-modegroup" class="IconButton friendslist-navbar-lobby-button visible-if-not-limitedbeta" onactivate="friendsList.SetLobbiesTabListFilters( &apos;cooperative&apos; );" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;JsFriendsList-lobbies-toolbar-button-cooperative&apos;, &apos;#SFUI_GameMode_cooperative&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+									<Image src="s2r://panorama/images/icons/ui/cooperative.vsvg" />
+									<Frame class="friendslist-accordian__broadcast-searching-container" snippet="broadcast-gamemode-active" />
+								</RadioButton>
+								<Panel class="friendslist-navbar-spacer-fit-width" />
+								<Button id="JsFriendsList-lobbies-toolbar-button-refresh" class="IconButton" onactivate="friendsList.RefreshLobbyListings();" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;JsFriendsList-lobbies-toolbar-button-refresh&apos;, &apos;#GameUI_Refresh&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();">
+									<Image src="s2r://panorama/images/icons/ui/refresh.vsvg" />
+									<Frame class="friendslist-accordian__broadcast-searching-container" snippet="broadcast-gamemode-active" />
+								</Button>
+							</Panel>
+						</Panel>
+						<Panel id="JsFriendsListLobbyLoadingBar" class="friendslist-loadingbar">
+							<Panel id="JsFriendsListLobbyLoadingBarInner" class="friendslist-loadingbar__inner" />
+						</Panel>
+					</Panel>
+					<Frame id="id-friendslist-nodata" snippet="NoData" />
+					<Panel id="id-friendslist-section-list-contents" class="full-width top-bottom-flow vscroll" />
+				</Panel>
+			</RadioButton>
+			<RadioButton id="id-friendslist-section-recent" class="friendslist-accordian__section hide-notification" group="friends_accordian" onactivate="friendsList.OnSectionPressed(&apos;id-friendslist-section-recent&apos;)">
+				<Panel class="friendslist-accordian__section__header">
+					<Panel class="friendslist-accordian__section__header__icon__container">
+						<Image class="friendslist-accordian__section__header__icon" src="s2r://panorama/images/icons/ui/recent.vsvg" />
+						<Frame id="id-friendslist-counter" class="text-only" src="s2r://panorama/layout/btn_alert.vxml_c" />
+					</Panel>
+					<Label class="stratum-bold-condensed fontSize-ml text-letterspace-2px fontcolor-basetext left-margin-none" text="#SFUI_Friends_Recent" />
+				</Panel>
+				<Panel id="id-friendslist-section-list" class="friendslist-accordian__section__list friendslist-accordian__section__header--bg">
+					<Frame id="id-friendslist-nodata" snippet="NoData" />
+					<Panel id="JsFriendsListRecentsLoadingBar" class="friendslist-loadingbar hidden">
+						<Panel id="JsFriendsListRecentsLoadingBarInner" class="friendslist-loadingbar__inner" />
+					</Panel>
+					<Panel id="id-friendslist-section-list-contents" class="full-width top-bottom-flow vscroll" />
+				</Panel>
+			</RadioButton>
+			<RadioButton id="id-friendslist-section-invite" class="friendslist-accordian__section friendslist-accordian__section--noborder hide-notification" group="friends_accordian" onactivate="friendsList.OnSectionPressed(&apos;id-friendslist-section-invite&apos;)">
+				<Panel class="friendslist-accordian__section__header">
+					<Panel class="friendslist-accordian__section__header__icon__container">
+						<Image class="friendslist-accordian__section__header__icon" src="s2r://panorama/images/icons/ui/invite.vsvg" />
+						<Frame id="id-friendslist-counter" src="s2r://panorama/layout/btn_alert.vxml_c" />
+					</Panel>
+					<Label class="stratum-bold-condensed fontSize-ml text-letterspace-2px fontcolor-basetext left-margin-none" text="#SFUI_Friends_Requests" />
+				</Panel>
+				<Panel id="id-friendslist-section-list" class="friendslist-accordian__section__list friendslist-accordian__section__header--bg">
+					<Frame id="id-friendslist-nodata" snippet="NoData" />
+					<Panel id="id-friendslist-section-list-contents" class="full-width top-bottom-flow vscroll" />
+				</Panel>
+			</RadioButton>
+		</Panel>
+	</Panel>
+</root>

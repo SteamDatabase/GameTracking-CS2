@@ -1,0 +1,1009 @@
+//=========== (C) Copyright Valve, L.L.C. All rights reserved. ===========
+//
+// The copyright to the contents herein is the property of Valve, L.L.C.
+// The contents may be used and/or copied only with the written permission of
+// Valve, L.L.C., or in accordance with the terms and conditions stipulated in
+// the agreement/contract under which the contents have been supplied.
+//=============================================================================
+
+// No spaces in event names, max length 32
+// All strings are case sensitive
+// total game event byte length must be < 1024
+//
+// valid data key types are:
+//   none   : value is not networked
+//   string : a zero terminated string
+//   bool   : unsigned int, 1 bit
+//   byte   : unsigned int, 8 bit
+//   short  : signed int, 16 bit
+//   long   : signed int, 32 bit
+//   float  : float, 32 bit
+
+"cstrikeevents"
+{
+	"player_death"				// a game event, name may be 32 characters long
+	{
+		// this extents the original player_death by a new fields
+		"userid"		"player_controller_and_pawn"   	// user who died			
+		"attacker"		"player_controller_and_pawn" 	// player who killed
+		"assister"		"player_controller_and_pawn"	// player who assisted in the kill
+		"assistedflash"		"bool"		// assister helped with a flash
+		"weapon"		"string" 	// weapon name killer used 
+		"weapon_itemid"	"string"	// inventory item id of weapon killer used
+		"weapon_fauxitemid"	"string"	// faux item id of weapon killer used
+		"weapon_originalowner_xuid"	"string"
+		"headshot"		"bool"		// singals a headshot
+		"dominated"		"short"		// did killer dominate victim with this kill
+		"revenge"		"short"		// did killer get revenge on victim with this kill
+		"wipe"			"short"		// is the kill resulting in squad wipe
+		"penetrated"	"short"	// number of objects shot penetrated before killing target
+		"noreplay"		"bool"  // if replay data is unavailable, this will be present and set to false
+		"noscope"		"bool"  // kill happened without a scope, used for death notice icon
+		"thrusmoke"		"bool"  // hitscan weapon went through smoke grenade
+		"attackerblind"	"bool"  // attacker was blind from flashbang
+		"distance"		"float" // distance to victim in meters
+		"dmg_health"	"short"	// damage done to health
+		"dmg_armor"	"byte"		// damage done to armor
+		"hitgroup"	"byte"		// hitgroup that was damaged
+	}
+
+	"other_death"
+	{
+		"otherid"		"short"   	// other entity ID who died			
+		"othertype"		"string"   	// other entity type
+		"attacker"		"short"	 	// user ID who killed
+		"weapon"		"string" 	// weapon name killer used 
+		"weapon_itemid"	"string"	// inventory item id of weapon killer used
+		"weapon_fauxitemid"	"string"	// faux item id of weapon killer used
+		"weapon_originalowner_xuid"	"string"
+		"headshot"		"bool"		// singals a headshot
+		"penetrated"	"short"	// number of objects shot penetrated before killing target
+		"noscope"		"bool"  // kill happened without a scope, used for death notice icon
+		"thrusmoke"		"bool"  // hitscan weapon went through smoke grenade
+		"attackerblind"	"bool"  // attacker was blind from flashbang
+	}
+
+	"player_hurt"
+	{
+		"userid"	"player_controller_and_pawn"  	// player index who was hurt
+		"attacker"	"player_controller_and_pawn" 	// player index who attacked
+		"health"	"byte"		// remaining health points
+		"armor"		"byte"		// remaining armor points
+		"weapon"	"string"	// weapon name attacker used, if not the world
+		"dmg_health"	"short"	// damage done to health
+		"dmg_armor"	"byte"		// damage done to armor
+		"hitgroup"	"byte"		// hitgroup that was damaged
+	}
+
+	"item_purchase"
+	{
+		"userid"	"player_controller"
+		"team"		"short"
+		"loadout"	"short"
+		"weapon"	"string"
+	}	
+
+	"bomb_beginplant"
+	{
+		"userid"	"player_controller_and_pawn"		// player who is planting the bomb
+		"site"		"short"		// bombsite index
+	}
+
+	"bomb_abortplant"
+	{
+		"userid"	"player_controller_and_pawn"		// player who is planting the bomb
+		"site"		"short"		// bombsite index
+	}
+
+	"bomb_planted"
+	{
+		"userid"	"player_controller_and_pawn"		// player who planted the bomb
+		"site"		"short"		// bombsite index
+	}
+	
+	"bomb_defused"
+	{
+		"userid"	"player_controller_and_pawn"		// player who defused the bomb
+		"site"		"short"		// bombsite index
+	}
+	
+	"bomb_exploded"
+	{
+		"userid"	"player_controller_and_pawn"		// player who planted the bomb
+		"site"		"short"		// bombsite index
+	}
+	
+	"bomb_dropped"
+	{
+		"userid"	"player_controller_and_pawn"		// player who dropped the bomb
+		"entindex"	"long"
+	}
+	
+	"bomb_pickup"
+	{
+		"userid"	"player_pawn"	// player pawn who picked up the bomb
+	}
+
+	"defuser_dropped"
+	{
+		"entityid"	"long"		// defuser's entity ID
+	}
+	
+	"defuser_pickup"
+	{
+		"entityid"	"long"		// defuser's entity ID
+		"userid"	"player_controller_and_pawn"		// player who picked up the defuser
+	}
+	
+	"announce_phase_end"
+	{
+	}
+	
+	"cs_intermission"
+	{
+	}
+
+	"bomb_begindefuse"
+	{
+		"userid"	"player_controller_and_pawn"		// player who is defusing
+		"haskit"	"bool"
+	}
+
+	"bomb_abortdefuse"
+	{
+		"userid"	"player_controller_and_pawn"		// player who was defusing
+	}
+
+	"hostage_follows"
+	{
+		"userid"	"player_controller_and_pawn"		// player who touched the hostage
+		"hostage"	"short"		// hostage entity index
+	}
+	
+	"hostage_hurt"
+	{
+		"userid"	"player_controller_and_pawn"		// player who hurt the hostage
+		"hostage"	"short"		// hostage entity index
+	}
+	
+	"hostage_killed"
+	{				
+		"userid"	"player_controller_and_pawn"	// player who killed the hostage
+		"hostage"	"short"				// hostage entity index
+	}
+	
+	"hostage_rescued"
+	{
+		"userid"	"player_controller_and_pawn"		// player who rescued the hostage
+		"hostage"	"short"		// hostage entity index
+		"site"		"short"		// rescue site index
+	}
+
+	"hostage_stops_following"
+	{
+		"userid"	"player_controller_and_pawn"		// player who rescued the hostage
+		"hostage"	"short"		// hostage entity index
+	}
+
+	"hostage_rescued_all"
+	{
+	}
+
+	"hostage_call_for_help"
+	{
+		"hostage"	"short"		// hostage entity index
+	}
+	
+	"vip_escaped"
+	{
+		"userid"	"player_controller"		// player who was the VIP
+	}
+
+	"vip_killed"
+	{
+		"userid"		"player_controller"		// player who was the VIP
+		"attacker"	"player_controller"	 	// user ID who killed the VIP
+	}
+
+	"player_radio"
+	{
+		"userid"	"player_controller_and_pawn"
+		"slot"		"short"
+	}
+
+	"bomb_beep"
+	{
+		"entindex"	"long"		// c4 entity
+	}
+
+	"weapon_fire"
+	{
+		"userid"	"player_controller_and_pawn"
+		"weapon"	"string" 	// weapon name used
+		"silenced"	"bool"		// is weapon silenced
+	}
+
+	"weapon_fire_on_empty"
+	{
+		"userid"	"player_controller_and_pawn"
+		"weapon"	"string" 	// weapon name used
+	}
+
+	"grenade_thrown"
+	{
+		"userid"	"player_controller_and_pawn"
+		"weapon"	"string" 	// weapon name used
+	}
+
+	"weapon_outofammo"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	"weapon_reload"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	"weapon_zoom"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	"silencer_detach"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+	
+	"inspect_weapon"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+	
+	// exists for the game instructor to let it know when the player zoomed in with a regular rifle
+	// different from the above weapon_zoom because we don't use this event to notify bots
+	"weapon_zoom_rifle"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	"player_spawned"
+	{
+		"userid"	"player_controller_and_pawn"
+		"inrestart" "bool"		// true if restart is pending
+	}
+
+	"item_pickup"
+	{
+		"userid"	"player_controller"
+		"item"		"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
+		"silent"	"bool"
+		"defindex"	"long"
+	}
+	
+	"item_pickup_slerp"
+	{
+		"userid" "player_controller"
+		"index" "short"
+		"behavior" "short"
+	}
+
+	"item_pickup_failed"
+	{
+		"userid"	"player_controller"
+		"item"		"string"
+		"reason"	"short"
+		"limit"		"short"
+	}
+
+	"item_remove"
+	{
+		"userid"	"player_controller"
+		"item"		"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
+		"defindex"	"long"
+	}
+
+	"ammo_pickup"
+	{
+		"userid"	"player_controller"
+		"item"		"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
+		"index"		"long"		// the weapon entindex
+	}
+
+	"item_equip"
+	{
+		"userid"		"player_controller"
+		"item"			"string"	// either a weapon such as 'tmp' or 'hegrenade', or an item such as 'nvgs'
+		"defindex"		"long"
+		"canzoom"		"bool"
+		"hassilencer"	"bool"
+		"issilenced"	"bool"
+		"hastracers"	"bool"
+		"weptype"		"short"
+				//WEAPONTYPE_UNKNOWN		=	-1
+				//WEAPONTYPE_KNIFE			=	0	
+				//WEAPONTYPE_PISTOL			=	1
+				//WEAPONTYPE_SUBMACHINEGUN	=	2
+				//WEAPONTYPE_RIFLE			=	3
+				//WEAPONTYPE_SHOTGUN		=	4
+				//WEAPONTYPE_SNIPER_RIFLE	=	5
+				//WEAPONTYPE_MACHINEGUN		=	6
+				//WEAPONTYPE_C4				=	7
+				//WEAPONTYPE_GRENADE		=	8
+				//
+		"ispainted"	"bool"
+	}
+
+	"enter_buyzone"
+	{
+		"userid"	"player_controller"
+		"canbuy"	"bool"
+	}
+
+	"exit_buyzone"
+	{
+		"userid"	"player_controller"
+		"canbuy"	"bool"
+	}
+
+	"buytime_ended"
+	{
+	}
+
+	"enter_bombzone"
+	{
+		"userid"	"player_controller"
+		"hasbomb"	"bool"
+		"isplanted"	"bool"
+	}
+
+	"exit_bombzone"
+	{
+		"userid"	"player_controller"
+		"hasbomb"	"bool"
+		"isplanted"	"bool"
+	}
+
+	"enter_rescue_zone"
+	{
+		"userid"	"player_controller"
+	}
+
+	"exit_rescue_zone"
+	{
+		"userid"	"player_controller"
+	}
+
+	"silencer_off"
+	{
+		"userid"	"player_controller"
+	}
+
+	"silencer_on"
+	{
+		"userid"	"player_controller"
+	}
+
+	"buymenu_open"
+	{
+	}
+
+	"buymenu_close"
+	{
+		"userid"		"player_controller"
+	}
+
+	"round_prestart"			// sent before all other round restart actions
+	{
+	}
+	
+	"round_poststart"			// sent after all other round restart actions
+	{
+	}
+	
+	"round_end"
+	{
+		"winner"	"byte"		// winner team/user i
+		"reason"	"byte"		// reson why team won
+		"message"	"string"	// end round message 
+		"legacy"	"byte"		// server-generated legacy value
+		"player_count"	"short"		// total number of players alive at the end of round, used for statistics gathering, computed on the server in the event client is in replay when receiving this message
+		"nomusic"	"byte"		// if set, don't play round end music, because action is still on-going
+	}
+
+	"grenade_bounce"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	"hegrenade_detonate"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"flashbang_detonate"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"smokegrenade_detonate"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"smokegrenade_expired"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"molotov_detonate"
+	{
+		"userid"	"player_controller_and_pawn"
+        "x"        "float"
+        "y"        "float"
+        "z"        "float"
+	}
+
+	"decoy_detonate"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+	
+	"decoy_started"
+	{
+		"userid"	"player_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"tagrenade_detonate"
+	{
+		"userid"	"player_controller"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"inferno_startburn"
+	{
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"inferno_expire"
+	{
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"inferno_extinguish"
+	{
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}	
+	
+	"decoy_firing"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"        "float"
+		"y"        "float"
+		"z"        "float"
+	}
+
+	"bullet_impact"
+	{
+		"userid"	"player_controller_and_pawn"
+		"x"		"float"
+		"y"		"float"
+		"z"		"float"
+	}
+
+	"player_footstep"
+	{
+		"userid"	"player_controller_and_pawn"
+	}
+
+	"player_jump"
+	{
+		"userid"	"player_controller"
+	}
+
+	"player_blind"
+	{
+		"userid"	"player_controller"
+		"attacker"		"player_controller"	 	// user ID who threw the flash 
+		"entityid"		"short"		// the flashbang going off
+		"blind_duration"	"float"
+	}
+
+	"player_falldamage"
+	{
+		"userid"	"player_controller_and_pawn"
+		"damage"	"float"
+	}
+
+	"door_moving"
+	{
+		"userid"		"player_controller_and_pawn"
+		"entindex"	"long"
+	}
+	
+	"mb_input_lock_success"
+	{
+	}
+	
+	"mb_input_lock_cancel"
+	{
+	}
+
+	"nav_blocked"
+	{
+		"area"		"long"
+		"blocked"	"bool"
+	}
+
+	"nav_generate"
+	{
+	}
+	
+	"achievement_info_loaded"
+	{
+	}
+
+	"spec_mode_updated"
+	{
+		"userid"	"player_controller"		// entindex of the player
+	}
+	
+	"hltv_changed_mode"
+	{
+		"oldmode"		"long"
+		"newmode"		"long"
+		"obs_target"	"long"
+	}
+
+	"cs_game_disconnected"
+	{
+	}
+
+	"cs_round_final_beep"
+	{
+	}
+
+	"cs_round_start_beep"
+	{
+	}
+	
+	"cs_win_panel_round"
+	{
+		"show_timer_defend"	"bool"
+		"show_timer_attack"	"bool"
+		"timer_time"		"short"
+		
+		"final_event"		"byte"		//define in cs_gamerules.h
+		
+		"funfact_token"		"string"
+		"funfact_player"	"player_controller"
+		"funfact_data1"		"long"
+		"funfact_data2"		"long"
+		"funfact_data3"		"long"
+	}
+	
+	"cs_win_panel_match"			
+	{
+	}
+	
+	"cs_match_end_restart"
+	{
+	}
+	"cs_pre_restart"
+	{
+	}
+	
+	"show_deathpanel"
+	{
+		"victim"	"player_controller_and_pawn"		// endindex of the one who was killed
+		"killer"	"ehandle"		// entindex of the killer entity
+		"killer_controller"	"player_controller"
+		"hits_taken"	"short"
+		"damage_taken"	"short"
+		"hits_given"	"short"
+		"damage_given"	"short"
+	}
+
+	"hide_deathpanel"
+	{
+	}
+	
+	"player_avenged_teammate"
+	{
+		"avenger_id"		"player_controller"
+		"avenged_player_id"	"player_controller"
+	}
+
+	
+	"achievement_earned_local"
+	{		
+		"achievement"			"short"		// achievement ID
+		"splitscreenplayer"		"short"		// splitscreen ID
+	}
+
+	"repost_xbox_achievements"
+	{
+		"splitscreenplayer"		"short"		// splitscreen ID
+	}
+	
+	"match_end_conditions"
+	{
+		"frags"			"long"
+		"max_rounds"	"long"
+		"win_rounds"	"long"
+		"time"			"long"
+	}
+	
+	"round_mvp"
+	{
+		"userid"		"player_controller"
+		"reason"		"short"
+		"value"			"long"
+		"musickitmvps"	"long"
+		"nomusic"	"byte"
+		"musickitid"	"long"
+	}
+
+	"show_survival_respawn_status"
+	{
+		"loc_token" 	"string"
+		"duration"		"long"
+		"userid"		"player_controller_and_pawn"
+	}
+
+	"client_disconnect"
+	{
+	}
+	
+	"gg_killed_enemy"
+	{
+		"victimid"	"player_controller"   	// user ID who died				
+		"attackerid"	"player_controller"	 	// user ID who killed
+		"dominated"	"short"		// did killer dominate victim with this kill
+		"revenge"	"short"		// did killer get revenge on victim with this kill
+		"bonus"	"bool"		// did killer kill with a bonus weapon?
+	}
+
+	"switch_team"
+	{
+		"numPlayers"	"short"	// number of active players on both T and CT
+		"numSpectators"	"short"	// number of spectators
+		"avg_rank"		 "short" // average rank of human players
+		"numTSlotsFree"	 "short"
+		"numCTSlotsFree" "short"
+	}
+	
+	"write_profile_data"
+	{
+	}
+
+	// fired when a player runs out of time in trial mode
+	"trial_time_expired"
+	{
+		"userid"		"player_controller"		// player whose time has expired
+	}
+
+	// Fired when it's time to update matchmaking data at the end of a round.
+	"update_matchmaking_stats"
+	{
+	}
+
+	"player_reset_vote"
+	{
+		"userid"	"player_controller"
+		"vote"		"bool"
+	}
+
+	"enable_restart_voting"
+	{		
+		"enable"	"bool"
+	}
+
+	"sfuievent"
+	{
+		"action" "string"
+		"data" "string"
+		"slot" "byte"
+	}
+
+	"start_vote"
+	{
+		"userid"	"player_controller"
+		"type" "byte"
+		"vote_parameter" "short"
+	}
+
+	"player_given_c4"
+	{
+		"userid"	"player_controller"	 	// user ID who received the c4
+	}
+
+	"tr_player_flashbanged"
+	{
+		"userid"	"player_controller"	 	// user ID of the player banged
+	}
+
+	// not used yet because this relied on vgui panels, scaleform isn't supported yet
+	//"tr_highlight_ammo"
+	//{
+	//	"userid"	"player_controller"	 	// user ID of the player
+	//}
+
+	"tr_mark_complete"
+	{
+		"complete" "short"
+	}
+
+	"tr_mark_best_time"
+	{
+		"time"		"long"
+	}
+
+	"tr_exit_hint_trigger"
+	{
+	}
+
+	"bot_takeover"
+	{
+		"userid"	"player_controller_and_pawn"
+		"botid"		"player_controller"
+		"p"			"float"
+		"y"			"float"
+		"r"			"float"
+	}
+	
+	"tr_show_finish_msgbox"
+	{
+	}
+
+	"tr_show_exit_msgbox"
+	{
+	}
+
+	"jointeam_failed"
+	{
+		"userid"	"player_controller"
+		"reason"	"byte"		// 0 = team_full
+	}
+
+	"teamchange_pending"
+	{
+		"userid"	"player_controller"
+		"toteam"    "byte"
+	}
+	
+	"material_default_complete"
+	{
+	}
+
+	"cs_prev_next_spectator"
+	{
+		"next" "bool"
+	}
+
+	"nextlevel_changed"				// a game event, name may be 32 characters long
+	{
+		"nextlevel"		"string"
+		"mapgroup"		"string"
+		"skirmishmode"	"string"
+	}
+
+	"seasoncoin_levelup"
+	{
+		"userid"	"player_controller"
+		"category"	"short"
+		"rank"		"short"
+	}
+
+	"tournament_reward"
+	{
+		"defindex"		"long"
+		"totalrewards"	"long"
+		"accountid"		"long"
+	}
+	"start_halftime"
+	{
+	}
+
+	"ammo_refill"
+	{
+		"userid"	"player_controller"
+		"success"	"bool"
+	}
+
+	"parachute_pickup"
+	{
+		"userid"		"player_controller"
+	}
+
+	"parachute_deploy"
+	{
+		"userid"		"player_controller"
+	}
+
+	"dronegun_attack"
+	{
+		"userid"		"player_controller"
+	}
+
+	"drone_dispatched"
+	{
+		"userid"		"player_controller"
+		"priority"		"short"
+		"drone_dispatched"	"short"
+	}
+
+	"loot_crate_visible"
+	{
+		"userid"		"player_controller"		// player entindex
+		"subject"		"short"		// crate entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+
+	"loot_crate_opened"
+	{
+		"userid"		"player_controller"		// player entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+
+	"open_crate_instr"
+	{
+		"userid"		"player_controller"		// player entindex
+		"subject"		"short"		// crate entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+
+	"smoke_beacon_paradrop"
+	{
+		"userid"		"player_controller"
+		"paradrop"		"short"
+	}
+
+	"survival_paradrop_spawn"
+	{
+		"entityid"		"short"
+	}
+
+	"survival_paradrop_break"
+	{
+		"entityid"		"short"
+	}
+
+	"drone_cargo_detached"
+	{
+		"userid"		"player_controller"
+		"cargo"			"short"
+		"delivered"		"bool"
+	}
+	
+	"drone_above_roof"
+	{
+		"userid"		"player_controller"
+		"cargo"			"short"
+	}
+	
+	"choppers_incoming_warning"
+	{
+		"global" "bool"
+	}
+
+	"firstbombs_incoming_warning"
+	{
+		"global" "bool"
+	}
+
+	"dz_item_interaction"
+	{
+		"userid"		"player_controller"		// player entindex
+		"subject"		"short"		// crate entindex
+		"type"			"string"	// type of crate (metal, wood, or paradrop)
+	}
+	
+	"survival_teammate_respawn"
+	{
+		"userid"		"player_controller"
+	}
+	
+	"survival_no_respawns_warning"
+	{
+		"userid"		"player_controller"
+	}
+	
+	"survival_no_respawns_final"
+	{
+		"userid"		"player_controller"
+	}
+
+	"player_ping"
+	{
+		"userid"	"player_controller_and_pawn"
+		"entityid"	"short"
+		"x"		"float"
+		"y"		"float"
+		"z"		"float"
+		"urgent"	"bool"
+	}
+
+	"player_ping_stop"
+	{
+		"entityid"	"short"
+	}	
+
+	"player_sound"
+	{
+		"userid"	"player_controller_and_pawn"
+		"radius"	"int"
+		"duration"	"float"
+		"step"		"bool"
+	}
+	
+	"guardian_wave_restart"
+	{
+	}
+
+	"team_intro_start"
+	{
+	}
+
+	"team_intro_end"
+	{
+	}
+
+	"bullet_flight_resolution"
+	{
+		"userid"	"player_controller_and_pawn"
+		"pos_x"		"short"
+		"pos_y"		"short"
+		"pos_z"		"short"
+		"ang_x"		"short"
+		"ang_y"		"short"
+		"ang_z"		"short"
+		"start_x"	"short"
+		"start_y"	"short"
+		"start_z"	"short"
+	}
+
+	"game_phase_changed"
+	{
+		"new_phase" "short"
+	}
+}
+
+

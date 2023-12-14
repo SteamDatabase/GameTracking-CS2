@@ -1,0 +1,53 @@
+<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_tournament_pickban.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/popups/popup_tournament_pickban.vjs_c" />
+	</scripts>
+	<snippets>
+		<snippet name="PickBanOptionSnippet">
+			<Panel class="pickban__option">
+				<Panel class="pickban__select">
+					<Image id="TeamLogo" class="pickban__team_logo" texturewidth="-1" textureheight="60" src="s2r://panorama/images/tournaments/teams/nologo.vsvg" />
+					<Panel class="pickban__draft_info">
+						<DropDown class="PopupButton PickBanDraftPickingOnly" id="PickDropdown" menuclass="DropDownMenu Width-300" />
+						<Button class="PopupButton PickBanDraftPickingOnly" id="ConfirmBtn">
+							<Label id="ConfirmBtnLabel" />
+						</Button>
+						<Label id="InfoLabel" class="pickban__draft_info_text" html="true" />
+					</Panel>
+					<Panel id="SelectedInfo" class="pickban__selected_info">
+						<Panel class="pickban_unselected">
+							<Label class="pickban__unselected_text" text="?" />
+						</Panel>
+						<Image id="SelectedImage" class="pickban__selected_image" />
+					</Panel>
+				</Panel>
+				<Panel class="pickban__wait PickBanDraftWaitingOnly">
+					<Panel class="Spinner pickban__wait_spinner" />
+					<Label id="WaitLabel" class="pickban__wait_text" text="#SFUI_Tournament_Wait" />
+				</Panel>
+			</Panel>
+		</snippet>
+	</snippets>
+	<PopupCustomLayout class="PopupPanel Hidden tournament_popup" useglobalcontext="true" popupbackground="dim" onload="PopupTournamentPickBan.Init();" oncancel="PopupTournamentPickBan.OnCancel();">
+		<Label class="PopupTitle" text="#SFUI_Tournament_Draft_Title" />
+		<Panel id="InitialPick" class="PickBanInitialPickOnly">
+			<Label id="InitialPickText" class="pickban__initial_pick_text" />
+		</Panel>
+		<Panel id="InitialWait" class="PickBanInitialWaitOnly horizontal-center" style="flow-children:down;">
+			<Label id="InitialWaitText" class="horizontal-center" text="#SFUI_Tournament_Wait" />
+			<Panel id="Spinner" class="Spinner horizontal-center" />
+		</Panel>
+		<Panel id="DraftContainer" class="PickBanDraftOnly pickban__draft_container" />
+		<Panel class="PopupButtonRow">
+			<TextButton class="PopupButton PickBanInitialPickOnly" text="#SFUI_Tournament_VetoFirst" onactivate="MatchDraftAPI.UploadFirstVetoTeamID( MatchDraftAPI.GetTeamID( 1 ) );" />
+			<TextButton class="PopupButton PickBanInitialPickOnly" text="#SFUI_Tournament_PickFirst" onactivate="MatchDraftAPI.UploadFirstVetoTeamID( MyPersonaAPI.GetMyOfficialTeamID() );" />
+			<TextButton class="PopupButton PickBanDraftOnly" text="#UI_Cancel" onactivate="PopupTournamentPickBan.OnCancel();" />
+		</Panel>
+	</PopupCustomLayout>
+</root>

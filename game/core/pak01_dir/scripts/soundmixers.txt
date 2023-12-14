@@ -1,0 +1,749 @@
+// Halflife 2 custom sound mixers.
+// These Sound Mixers are referenced by name from Soundscapes, and are used to provide
+// custom volume control over various sound categories, called 'mix groups'
+
+// "GROUPRULES" specifies the rules for inclusion of a sound in a mix group.
+// Rules are checked sequentially (from top to bottom). All fields must match
+// in a row in order for a sound to match the group.  A sound my be included 
+// in up to 8 mix groups.
+
+// LIMITS: 
+//		up to 64 unique mix groups
+//		up to 76 group rules entries
+//		up to 32 sound mixers
+//		all strings are limited to 31 characters!
+
+// NOTE2: at runtime, you can display the classname of the sound source by
+// setting snd_showclassname 1 in the console.
+
+// NOTE3: main character dialog during critical scenes is ducked using a separate code path which, when
+// active, temporarilly disables mixer ducking (prevent double ducking).  
+// Lower priority sounds are ducked by higher priority sounds, if "is ducked" is enabled. 
+// Only sounds with "causes ducking" enabled can cause a lower priority sound to be ducked.
+
+// ALL parameters up to "priority" are "rules" determining a sounds inclusion in the group.
+
+"MixGroups"
+{
+// NOTE: order these from least general to most general
+
+//							directory or .wav	classname																Causes  Duck to  Ducker
+//	group name				name substring		substring	chan			sndlvl_min	sndlvl_max	priority Is Ducked	Ducking	Percent	 Threshold
+//  ---------				------------------	---------	-----------		----------	----------	-------- --------	-------	-------	 ---------
+
+	
+	"LOUD"		            "LOUD"				""			""				""			""			"50"		"0"		"0"		"100"	"40"
+
+	"survivalAwards"		"ui/Survival"				""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"L4D"					"ui/gamestartup"				""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"UI"					"ui/"				""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"commentary"			"commentary/"				""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"voip"					"?VoiceSfx"				""			""				""			""			"50"		"0"		"0"		"100"	"40"
+
+
+
+// survivors
+// note: put local (more specific) before global
+
+	// "chopperPilot"         "npc/chopper_pilot"     ""               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "planePilot"           "npc/planepilot"     ""               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "soldier"              "npc/soldier"     ""               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "boatman"              "npc/boatman"     ""               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "churchguy"            "npc/churchguy"     ""               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+
+
+	"localSurvivor50CalFire"  "50cal_shoot"           "localPlayer"               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorGrenadeFire"  "grenadefire"           "localPlayer"               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorGunFire"  "gunfire"           "localPlayer"               ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorGunOther" "gunother"          "localPlayer"               ""			""		    ""	        "75"		"0"     "0"		"100"	"40"
+	"localSurvivorVO"       "player/survivor/voice" "localPlayer"           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorHitInt"  "player/survivor/hit/int" "localPlayer"             ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorHit"      "player/survivor/hit" "localPlayer"             ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorSplat"    "player/survivor/splat" "localPlayer"           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorSwing"    "player/survivor/swing" "localPlayer"           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorHeal"     "player/survivor/heal" "localPlayer"            ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	"localSurvivorFeet"     "footsteps/survivor" "localPlayer"              ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+
+	"globalSurvivorGunFire" "gunfire"           ""          ""				""		    ""			"65"		"0"     "0"		"100"	"40"
+	"globalSurvivorGunOther" "gunother"          ""          ""				""		    ""			"75"		"0"     "0"		"100"	"40"
+	"globalSurvivorVO"      "player/survivor/voice" ""           ""				""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "globalSurvivorHit"      "player/survivor/hit" ""           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "globalSurvivorSplat"    "player/survivor/splat" ""           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "globalSurvivorSwing"    "player/survivor/swing" ""           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "globalSurvivorHeal"    "player/survivor/heal" ""           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+	// "globalSurvivorFeet"    "footsteps/survivor" ""           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+    "globalSurvivorFeet"    "survivor" ""           ""			""		    ""			"75"		"0"     "0"		"100"	"40"
+
+
+// 16
+// common infected
+	"localInfectedFeetWalk"		"player/footsteps/infected/walk" "localplayer"	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"localInfectedFeetRun"		"player/footsteps/infected/run" "localplayer"	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"InfectedFeetWalk"		"player/footsteps/infected/walk" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"InfectedFeetRun"		"player/footsteps/infected/run" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"InfectedIdle"          "npc/infected/idle"	""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "InfectedAlert"         "npc/infected/alert" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"InfectedRageAt"        "npc/infected/action/rageat" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"InfectedAction"        "npc/infected/action" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+	"InfectedGore"          "npc/infected/gore" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "InfectedHit"           "npc/infected/hit" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "InfectedMiss"          "npc/infected/miss" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+	"Infected"              "npc/infected/" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// tank
+
+	"TankVOAttack"          "tank/voice/attack" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankVOIdle"            "tank/voice/idle"   ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankVODie"             "tank/voice/die"     ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankVOGrowl"           "tank/voice/growl"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankVOYell"            "tank/voice/yell"   ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankVOPain"            "tank/voice/pain"   ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankHit"               "tank/hit"         ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankAttack"            "tank/Attack"      ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"TankFall"              "body/tank/"      ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "TankFeet"              "footsteps/tank/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "TankBoulders"          "concrete_impact_hard" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+//33
+// witch
+	// "WitchVOIdle"           "npc/witch/voice/idle/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "WitchVOWarn"           "npc/witch/voice/warn/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "WitchVOAttack"         "npc/witch/voice/attack/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "WitchVORetreat"        "npc/witch/voice/retreat/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "WitchVODie"            "npc/witch/voice/die/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "WitchHit"              "npc/witch/hit/"    ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "WitchFeet"                "footsteps/witch/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "Witch"                    "npc/witch/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// PZWarnings
+	"PZVOWarn"              "voice/warn/"         ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZVODeath"              "voice/death/"         ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+
+// boomer
+	"PZBoomerVOIdle"        "player/Boomer/voice/idle"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZBoomerVOAction"      "player/Boomer/voice/action"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZBoomerVOAttack"      "player/Boomer/voice/attack"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZBoomerVOAlert"       "player/Boomer/voice/alert"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZBoomerHit"           "player/Boomer/hit/"    ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "PZBoomerFeet"          "footsteps/Boomer/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "PZBoomerFall"          "player/Boomer/fall/" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "PZBoomerVomit"         "player/Boomer/voice/vomit/" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+    "PZBoomerExplode"       "player/Boomer/explode/" ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+// 48
+// smoker
+	// "PZSmokerVOIdle"        "player/Smoker/voice/idle"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerVOAttack"      "player/Smoker/voice/attack"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerVOAlert"       "player/Smoker/voice/alert"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerVODie"         "player/Smoker/voice/die"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerVO"            "player/Smoker/voice/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerAttack"        "player/Smoker/attack"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerHit"           "player/Smoker/hit"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerMiss"          "player/Smoker/miss"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZSmokerDeath"          "player/Smoker/death"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "SmokerFeet"          "footsteps/smoker"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZSmoker"              "player/Smoker/"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+
+// hunter
+	"PZHunterVOIdle"        "player/Hunter/voice/idle"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHunterVOAttack"      "player/Hunter/voice/attack"  ""   ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHunterVOMiss"        "player/Hunter/voice/miss" ""      ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHunterVODie"         "player/Hunter/voice/death" ""      ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHunterVO"            "player/Hunter/voice" ""      ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHunterAttack"        "player/Hunter/attack"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHunterHit"           "player/Hunter/hit"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+	// "PZHunterMiss"          "player/Hunter/miss"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZHunterInfo"          "player/Hunter/info"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZHunterFeet"           "footsteps/smoker"  ""	            ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// Charger
+	"PZChargerVOAttack"      "player/Charger/voice/attack"  ""   ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZChargerVO"            "player/Charger/voice"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZChargerHit"           "player/Charger/hit"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZChargerFeet"          "player/footsteps/Charger"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZCharger"              "player/Charger"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// Spitter
+	"PZSpitter"              "player/spitter"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// Jockey
+	"PZJockey"              "player/jockey"  ""	        ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// 62
+// Player Zombie
+	// "PZVOIdle"              "player/PZ/voice/idle"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZVOAttack"            "player/PZ/voice/attack"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZVOHurt"              "player/PZ/voice/hurt"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZVODie"               "player/PZ/voice/die"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZVOHit"               "player/PZ/voice/hit"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZVOMiss"              "player/PZ/voice/miss"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZVOFall"              "player/PZ/voice/fall"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZHit"               "player/PZ/hit"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZMiss"              "player/PZ/miss"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	// "PZFall"              "player/PZ/fall"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+	"PZ"                    "player/PZ/"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+
+	"Feet"	                "player/footsteps"  ""	    ""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// 71
+	// "Weapons"	            "Weapons"           ""	        ""				""		    ""			"75"		"0"     "0"		"100"	"40"
+// music
+	"pzAttackMusic"	        "music/pzattack/"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10"
+	"safeMusic"	            "music/safe/"		""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"mobRulesMusic"         "music/terror/MobRules"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10"
+	"zombatMusic3"          "music/zombat/danger/"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10"
+	"zombatMusic2"          "music/zombat/slayer/"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10"
+	"zombatMusic"           "music/zombat/"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10"
+	"stMusic"               "music/stmusic/"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10" 
+	"cpMusic"               "music/cpmusic/"     ""          ""              ""          ""          "60"        "0"     "0"     "100"    "10" 
+	"glimpseMusic"			"music/glimpse"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"contagionMusic"		"music/contagion"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"theEndMusic"		    "music/the_end"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"bankMusic"		        "music/tank"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"undeathMusic"		    "music/undeath"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"unaliveMusic"		    "music/unalive"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"bitchRageMusic"		"music/witch/WitchEncroacher"      ""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"bitchMusic"		    "music/witch"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"terrorMusic"		    "music/terror"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"mobMusic"		        "music/mob"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+    "bloodMusic"		    "music/blood"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"localHitMusic"	        "music/tags"			"localPlayer"			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"hitMusic"	            "music/tags"		""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"bacteriaMusic"	        "music/bacteria"		""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"zombieChoirMusic"	    "music/zombieChoir"		""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"flumusic"				"music/flu"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"scavengeMusic"			"music/scavenge"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+
+	"Music"					"music/"			""			""				""			""			"25"		"0"		"0"		"75"	"40"
+
+//96
+// catchall local player
+	"localPlayer"			""		            "localPlayer"	""	        ""			""			"50"		"0"		"0"		"100"	"40"
+	"npc_whitaker"	       "npc/whitaker"   ""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"npc_soldier"			"npc/soldier"	    ""			""              ""			""			"45"        "0"		"0"		"10"	"40"
+	"npc"	                "npc"   ""			""				""			""			"25"		"0"		"0"		"75"	"40"
+
+	"animation"	            "animation"   ""			""				""			""			"25"		"0"		"0"		"75"	"40"
+
+// 100
+
+	"shellTink"	            "weapons/fx/tink"   ""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"shellRicochet"	        "weapons/fx/ric"   ""			""				""			""			"25"		"0"		"0"		"75"	"40"
+	"bullethitFlesh"        "flesh_impact_bullet" ""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"bullethit"				"impact_bullet"		""			""				""			""			"50"		"0"		"0"		"100"	"40"
+
+	"bulletmiss"			"nearmiss"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+
+	"molotov"			    "molotov"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+
+	"Explosions"			"explo"				""			""				"120"		""			"50"		"0"		"0"		"100"	"40"
+
+	"Player"				"player/"			"Player"	""				""			""			"50"		"0"		"0"		"100"	"40"
+
+	"thunder_close"         "rainscapes/thunder_close"		    ""			""              ""			""			"45"        "0"		"0"		"10"	"40"
+ 		
+	"Rain"				    "rainscapes/rain"		    ""			""              ""			""			"45"        "0"		"0"		"10"	"40"
+
+	"alarms"				"ambient/alarms"		    ""			""              ""			""			"45"        "0"		"0"		"10"	"40"
+	"Ambient"				"ambient"		    ""			""              ""			""			"45"        "0"		"0"		"10"	"40"
+
+	"liftSqueek"			"plats/squeekmove1"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"Doors"					"doors/"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"Buttons"				"buttons/"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"Items"					"items/"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"Beams"					"beams/"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"CarAlarm"				"vehicles/car_alarm"			""			""				""			""			"20"		"0"		"0"		"68"	"40"
+	"helicopter"            "vehicles/helicopter" ""			""				""			""			"20"		"0"		"0"		"68"	"40"
+	"boat"                  "vehicles/boat" ""			""				""			""			"20"		"0"		"0"		"68"	"40"
+	"Vehicles"				"vehicles/"			""			""				""			""			"20"		"0"		"0"		"68"	"40"
+
+// 118
+	"PhysicsBody"			"physics/body"      ""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"Physics"				"physics/"			""			""				""			""			"50"		"0"		"0"		"100"	"40"
+	"Weapons"				"weapon"			""			""				"110"		""			"50"		"0"		"0"		"100"	"40"
+
+	// "Quiet"					""					""			""				"0"			"70"		"50"		"0"		"0"		"100"	"40"
+	// "Medium"				""					""			""				"71"		"90"		"50"		"0"		"0"		"100"	"40"
+	// "Loud"					""					""			""				"91"		"100"		"50"		"0"		"0"		"100"	"40"
+	// "VeryLoud"				""					""			""				"101"		"149"		"50"		"0"		"0"		"100"	"40"
+	// "SuperLoud"				""					""			""				"150"		""			"50"		"0"		"0"		"100"	"40"
+
+// 121
+	"All"					""					""			""				""			""			"50"		"0"		"0"		"100"	"40"
+}
+
+
+//----------------------------------------------------------------
+// Sound Mixers, referenced in Soundscapes via "SOUNDMIXER" "name"
+// New Sound Mixers may be created by level designers or sound engineer.
+//----------------------------------------------------------------
+
+// This is the default mix for the game.
+// The mix value of a sound will be set to the value referenced by the 
+// least general group found that includes the sound. (top to bottom search of grouprules)
+
+"SoundMixers"
+{
+	
+
+	"Default_Mix"
+	{
+
+//	group name				  vol     level    dsp
+//  --------				 -----    -----   ------
+		"LOUD"                "3.0"    "1.0"    "1.0"
+		"survivalAwards"      "1.0"    "1.0"    "1.0"
+		"UI"                  "0.7"    "1.0"    "0.0"
+		"L4D"                 "0.32"    "1.0"    "0.0"
+		"commentary"          "1.0"    "1.0"    "0.0"
+		"voip"                "1.0"    "1.0"    "0.0"
+
+		// "chopperPilot"        "1.0"    "1.0"    "0.5"
+		// "planePilot"          "1.0"    "1.2"    "0.5"
+		// "soldier"             "1.0"    "1.2"    "0.7"
+		// "boatman"             "1.0"    "1.2"    "0.6"
+		// "churchguy"           "1.0"    "1.2"    "0.5"
+
+// survivors
+// local player
+		"localSurvivor50CalFire"  "1.0"    "1.0"    "0.4"
+		"localSurvivorGrenadeFire"   "1.0"    "1.0"    "0.4"
+		"localSurvivorGunFire"   "0.6"    "1.0"    "0.4"
+		"localSurvivorGunOther"  "0.6"	  "1.0"    "0.6"
+		"localSurvivorVO"	 	 "0.87"	  "1.7"    "0.4" "0.1"
+		"localSurvivorHitInt"    "1.0"    "1.0"    "1.0"
+		"localSurvivorSplat"     "0.8"    "1.0"    "1.0"
+		"localSurvivorHit"       "1.0"    "1.0"    "1.0"
+		"localSurvivorSwing"     "0.6"    "1.0"    "0.3"
+		"localSurvivorHeal"      "0.5"	  "1.0"    "0.5"
+		"localSurvivorFeet"      "0.6"	  "1.0"    "0.7"
+										                
+// 	other players					                
+		"globalSurvivorGunFire"  "0.6"	  "1.0"    "1.0"
+		"globalSurvivorGunOther" "0.55"	  "1.0"    "1.0"
+		"globalSurvivorVO"	     "1.2"	  "1.35"    "0.45" "0.35"
+		// "globalSurvivorHit"      "0.7"	  "1.0"    "1.0"
+		// "globalSurvivorSplat"    "0.7"	  "1.0"    "1.0"
+		// "globalSurvivorSwing"    "0.7"	  "1.0"    "1.0"
+		// "globalSurvivorHeal"     "0.7"	  "1.0"    "1.0"
+		// "globalSurvivorFeet"     "0.7"	  "1.0"    "1.0"
+
+		"globalSurvivor"     "0.7"	  "1.0"    "1.0"
+
+
+									                
+// Music							                
+		"pzAttackMusic"			 "1.0"	  "1.0"    "1.0"
+		"mobRulesMusic"			 "0.8"	  "1.0"    "1.0"
+		"zombatMusic"			 "0.56"	  "1.0"    "1.0"
+		"zombatMusic2"			 "0.6"	  "1.0"    "1.0"
+		"zombatMusic3"			 "1.0"	  "1.0"    "1.0"
+		"stMusic"			     "0.4"	  "1.0"    "1.0"
+		"cpMusic"			     "0.35"	  "1.0"    "1.0"
+		"glimpseMusic"			 "0.7"	  "1.0"    "1.0"
+		"contagionMusic"		 "0.6"	  "1.0"    "1.0"
+		"theEndMusic"		     "0.7"	  "1.0"    "1.0"
+		"bankMusic"		         "0.84"	  "1.0"    "1.0"
+		"undeathMusic"		     "0.9"	  "1.0"    "1.0"
+		"unaliveMusic"		     "1.0"	  "1.0"    "0.0"
+		"bitchRageMusic"	     "0.7"	  "1.0"    "1.0"
+		"bitchMusic"		     "0.83"	  "1.0"    "1.0"
+		"terrorMusic"		     "0.8"	  "1.0"    "1.0"
+		"mobMusic"		         "0.98"	  "1.0"    "1.0"
+ 		"bloodMusic"		     "0.7"	  "1.0"    "1.0"
+ 	    "localHitMusic"		     "0.0"	  "1.0"    "0.0"
+		"hitMusic"		         "1.0"	  "1.0"    "1.0"
+		"bacteriaMusic"		     "0.95"	  "1.0"    "1.0"
+		"zombieChoirMusic"		 "0.85"	  "1.0"    "1.0"
+		"safeMusic"		         "1.0"	  "1.0"    "1.0"
+ 		"flumusic"		         "2.0"	  "1.0"    "1.0"
+ 		"scavengeMusic"		     "2.0"	  "1.0"    "1.0"
+		"Music"		             "0.7"	  "1.0"    "1.0"
+									                
+// common infected
+	    "localInfectedFeetWalk"       "0.15"    "0.85"    "1.0"
+	    "localInfectedFeetRun"       "0.15"    "0.85"    "1.0"					                
+	    "InfectedFeetWalk"       "0.6"    "0.85"    "1.0"
+	    "InfectedFeetRun"        "1.0"	  "1.0"    "1.0"
+	    "InfectedIdle"           "0.89"	  "1.0"    "1.0"
+	    // "InfectedAlert"          "0.7"	  "1.0"    "1.0"
+	    "InfectedRageAt"         "0.98"	  "1.0"    "1.0"
+	    "InfectedAction"         "0.86"	  "1.0"    "1.0"
+	    "InfectedGore"           "0.64"	  "1.0"    "1.0"
+	    // "InfectedHit"            "0.7"	  "1.0"    "1.0"
+	    // "InfectedMiss"           "0.7"	  "1.0"    "1.0"
+
+	    "Infected"               "0.78"	  "1.0"    "1.0"
+									                
+// Tank								                
+		"TankVOAttack"           "0.95"	  "1.0"    "1.0"
+		"TankVOIdle"             "0.75"	  "1.0"    "1.0"
+		"TankVODie"              "0.9"	  "1.0"    "1.0"
+		"TankVOGrowl"            "0.8"	  "1.0"    "1.0"
+		"TankVOYell"             "1.0"	  "1.0"    "1.0"
+		"TankVOPain"             "1.0"	  "1.0"    "1.0"
+		"TankHit"                "0.8"	  "1.0"    "1.0"
+		"TankBoulders"           "1.0"	  "1.0"    "1.0"
+		"TankAttack"             "0.9"	  "1.0"    "1.0"
+		"TankFall"               "0.7"	  "1.0"    "1.0"
+		"TankFeet"               "0.85"	  "1.0"    "1.0"
+									                
+// Witch							                
+		// "WitchVOIdle"             "0.8"	  "1.0"    "1.0"
+		// "WitchVOWarn"             "0.8"	  "1.0"    "1.0"
+		// "WitchVOAttack"           "0.8"	  "1.0"    "1.0"
+		// "WitchVORetreat"          "0.8"	  "1.0"    "1.0"
+		// "WitchVODie"              "0.8"	  "1.0"    "1.0"
+		// "WitchHit"                "0.8"   "1.0"    "1.0"
+		"WitchFeet"               "0.7"	  "1.0"    "1.0"
+		"Witch"                   "0.88"	  "1.0"    "1.0"
+
+			
+// PZ warnings						                
+		"PZVOWarn"                 "1.0"	  "1.0"    "1.0"
+		"PZVODeath"                "1.0"	  "1.0"    "1.0"
+
+// Boomer							                
+		"PZBoomerVOIdle"            "0.9"	  "1.0"    "1.0"
+		"PZBoomerVOAction"          "0.85"	  "1.0"    "1.0"
+		"PZBoomerVOAttack"          "0.9"	  "1.0"    "1.0"
+		"PZBoomerVOAlert"           "0.85"	  "1.0"    "1.0"
+		"PZBoomerHit"               "0.7"     "1.0"    "1.0"
+	    "PZBoomerFeet"              "0.8"	  "1.0"    "1.0"
+	    "PZBoomerFall"              "0.7"     "1.0"    "1.0"
+	    "PZBoomerVomit"             "1.0"     "1.0"    "1.0"
+	    "PZBoomerExplode"           "1.0"	  "1.0"    "1.0"
+									                
+// smoker							                
+		// "PZSmokerVOIdle"            "0.9"	  "1.0"    "1.0"
+		// "PZSmokerVOAttack"          "1.0"	  "1.0"    "1.0"
+		// "PZSmokerVODie"             "1.0"     "1.0"    "1.0"
+		// "PZSmokerVOAlert"           "1.0"     "1.0"    "1.0"
+		// "PZSmokerVO"                "1.0"     "1.0"    "1.0"
+		// "PZSmokerAttack"            "1.0"	  "1.0"    "1.0"
+		// "PZSmokerHit"               "0.9"	  "1.0"    "1.0"
+		// "PZSmokerMiss"              "0.9"	  "1.0"    "1.0"
+		// "PZSmokerDeath"             "1.0"	  "1.0"    "1.0"
+		// "PZSmokerFeet"              "0.9"	  "1.0"    "1.0"
+		"PZSmoker"                "1.0"     "1.0"    "1.0"
+									                
+// hunter							                
+		"PZHunterVOIdle"            "0.75"	  "1.0"    "1.0"
+		"PZHunterVOAttack"          "1.0"	  "1.0"    "1.0"
+		"PZHunterVOMiss"            "0.8"	  "1.0"    "1.0"
+		"PZHunterVODie"             "1.0"	  "1.0"    "1.0"
+		"PZHunterVO"                "0.8"	  "1.0"    "1.0"
+		"PZHunterAttack"            "0.8"	  "1.0"    "1.0"
+		"PZHunterHit"               "0.8"	  "1.0"    "1.0"
+
+// charger
+		"PZChargerVOAttack"        "1.75"	  "1.0"    "1.0"
+		"PZChargerVO"              "0.95"	  "1.0"    "1.0"
+		"PZChargerHit"              "1.0"	  "1.0"    "1.0"
+		"PZChargerFeet"             "1.0"	  "1.0"    "1.0"
+		"PZCharger"                 "0.87"	  "1.0"    "1.0"
+
+
+// spitter
+		"PZSpitter"                 "0.7"	  "1.0"    "1.0"
+
+// jockey
+		"PZJockey"                 "0.89"	  "1.0"    "1.0"
+
+// Player Zombie
+		// "PZVOIdle"                "0.7"   "1.0"    "1.0"
+		// "PZVOAttack"              "0.7"	  "1.0"    "1.0"
+		// "PZVOHurt"                "0.7"	  "1.0"    "1.0"
+		// "PZVODie"                 "0.7"	  "1.0"    "1.0"
+		// "PZVOHit"                 "0.7"	  "1.0"    "1.0"
+		// "PZVOMiss"                "0.7"	  "1.0"    "1.0"
+		// "PZVOFall"                "0.7"	  "1.0"    "1.0"
+		"PZHit"                   "0.7"	  "1.0"    "1.0"
+		// "PZMiss"                  "0.7"	  "1.0"    "1.0"
+		// "PZFall"                  "0.7"	  "1.0"    "1.0"
+		"PZ"                      "0.7"	  "1.0"    "1.0"
+			
+									                
+//catchall player, not for now		                
+		"Feet"                   "0.7"	  "1.0"    "1.0"
+		"localPlayer"		     "0.7"	  "1.0"    "0.5"
+		"npc_whitaker"           "2.0"	  "1.0"    "1.0"
+		"npc_soldier"            "1.14"	  "1.0"    "1.0"						                
+		"npc"		             "0.85"	  "1.0"    "1.0"									                
+
+		"animation"				 "3.0"	  "1.0"    "1.0"
+									                
+// weapons
+		"shellTink"				 "0.85"	  "1.0"    "1.0"
+		"shellRicochet"	         "0.75"	  "1.0"    "1.0"
+		"bullethit"				 "0.85"	  "1.0"    "1.0"
+		"bulletmiss"			 "0.7"	  "1.0"    "1.0"
+		"Explosions"			 "1.0"	  "1.0"    "1.0"
+										                
+		"molotov"			     "0.95"	  "1.0"    "1.0"
+										                
+		"bullethitFlesh"         "0.7"	  "1.0"    "1.0"
+										                
+		"Player"				 "0.7"	  "1.0"    "1.0"
+										                
+		"liftSqueek"            "1.0"  	  "1.0"    "1.0"
+		"Doors"					"0.7"  	  "1.0"    "1.0"
+		"Buttons"				"0.7"  	  "1.0"    "1.0"
+		"Items"					"0.7"  	  "1.0"    "1.0"
+		"Beams"					"0.7"  	  "1.0"    "1.0"
+		"CarAlarm"				"0.9"	  "1.0"    "1.0"
+		"helicopter"			"0.84"    "1.0"    "1.0"
+		"boat"			        "1.0"     "1.0"    "1.0"
+		"Vehicles"				"0.95"  	  "1.0"    "1.0"
+									                
+		"PhysicsBody"			"0.9"	  "1.0"    "1.0"
+		"Physics"				"0.8"	  "1.0"    "1.0"
+		"alarms"                "1.0"	  "1.0"    "1.0"
+		"thunder_close"         "2.0"	  "1.0"    "1.0"
+		"Rain"                  "1.0"	  "1.0"    "1.0" "0.0" "0.0"
+		"Ambient"               "0.55"	  "1.0"    "1.0"
+		"Weapons"				"0.7"  	  "1.0"    "1.0"
+									                
+		// "Quiet"					"0.7"  	  "1.0"    "1.0"
+		// "Medium"				"0.7"  	  "1.0"    "1.0"
+		// "Loud"					"0.7"  	  "1.0"    "1.0"
+		// "VeryLoud"				"0.7"  	  "1.0"    "1.0"
+		// "SuperLoud"				"0.7"	  "1.0"    "1.0"
+		"All"					"0.7"	  "1.0"    "1.0"
+
+	}
+}
+
+"MixLayers"
+{
+
+	// smoker and hunter attack specific mix
+	"pzAttackLayer"
+	{
+		"pzAttackMusic"  "1.0" "1.0" "1.0" "0.2" "0.0"
+		"PZHit"  "1.0" "1.0" "1.0" "0.1" "0.0"
+		"PZHunterVOAttack"  "1.0" "1.0" "1.0" "0.4" "0.0"
+		"PZJockey"  "1.0" "1.0" "1.0" "0.6" "0.0"
+		"PzSmoker"  "1.0" "1.0" "1.0" "0.3" "0.0"
+		"fluMusic"  "0.5" "1.0" "1.0" "0.0" "0.0"
+		"PZChargerVOAttack" "1.0" "1.0" "1.0" "0.3" "0.0"
+//		"PZChargerVO"              "0.98"	  "1.0"    "1.0"
+		"PZChargerHit" "1.0" "1.0" "1.0" "0.25" "0.0"
+	}
+
+	// turn down the mob when too many, too close (dynamic)
+    "mobBeatingLayer"
+	{
+		"infected"  "0.0" "1.0" "1.0" "0.0" "0.0"
+		"localSurvivorHitInt"  "0.0" "1.0" "1.0" "0.0" "0.0"
+    }
+
+	// mob rules music (dynamic)
+	"mobRulesLayer"
+	{
+		"mobRulesMusic"  "0.0" "1.0" "1.0" "0.0" "0.0"
+    }
+
+	// combat music (dynamic)
+	"zombatMusicLayer"
+	{
+		"zombatMusic"  "1.0" "1.0" "1.0" "0.0" "0.0"
+    }
+
+	// combat music (dynamic)
+	"zombatMusic2Layer"
+	{
+		"zombatMusic2"  "0.0" "1.0" "1.0" "0.0" "0.0"
+    }
+
+	// combat music (dynamic)
+	"zombatMusic3Layer"
+	{
+		"zombatMusic3"  "0.0" "1.0" "1.0" "0.0" "0.0"
+    }
+
+	// too close to witch music (dynamic)
+	"witchRageLayer"
+	{
+		"bitchRageMusic"  "0.0" "0.5" "1.0" "0.0" "0.0"
+    }
+
+	// entering checkpoint specific mix
+	"safeRoomLayer"
+	{
+		"safeMusic"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"localSurvivorVO"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"globalSurvivorVO"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"UI"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"voip"  "1.0" "1.0" "1.0" "1.0" "0.0"
+	}
+
+	// credit music
+	"unaliveLayer"
+	{
+		"unaliveMusic"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		// "animation"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"UI"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"voip"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		"survivalAwards"  "1.0" "1.0" "1.0" "1.0" "0.0"
+		// "animation"  "1.0" "1.0" "1.0" "1.0" "0.0"
+	}
+
+    // pop out PZ warnings via ducking
+	"PZVOWarnLayer"
+	{
+		"PZVOWarn"  "1.0" "1.0" "1.0" "0.4" "0.0"
+		"bankMusic"  "1.0" "1.0" "1.0" "0.4" "0.0"
+		"bitchMusic"  "1.0" "1.0" "1.0" "0.4" "0.0"
+	}
+    // pop out PZ warnings via ducking
+	"chargerAttackLayer"
+	{
+		"PZChargerFeet" "4.0" "1.0" "1.0" "0.0" "0.0"
+	}
+
+	// // mute ambience when in battle
+	// "muteAmbientLayer"
+	// {
+		// "Ambient"  "0.0" "1.0" "1.0" "0.0" "0.0"
+	// }
+
+    // soloing commentary
+	"commentaryLayer"
+	{
+		"commentary"  "1.0" "1.0" "1.0" "0.9" "0.0"
+	}
+
+    // death music specific mix
+	"undeathLayer"
+	{
+		"undeathMusic"  "1.0" "1.0" "1.0" "0.9" "0.0"
+
+		// add all other solo'd layers and mute them	
+		"pzAttackMusic"  "0.7" "1.0" "1.0" "0.0" "0.0"
+		"PZHit"  "0.8" "1.0" "1.0" "0.0" "0.0"
+		"PZHunterVOAttack"  "0.6" "1.0" "1.0" "0.0" "0.0"
+		"Smoker"  "0.6" "1.0" "1.0" "0.0" "0.0"
+		"PZVOWarn"  "0.6" "1.0" "1.0" "0.0" "0.0"
+		"bankMusic"  "0.6" "1.0" "1.0" "0.0" "0.0"
+		"boat"  "0.4" "1.0" "1.0" "0.0" "0.0"
+		"voip"  "1.0" "1.0" "1.0" "0.9" "0.0"
+	}
+
+    // mix layer for adrenaline
+	"adrenalineLayer"
+	{
+	    "InfectedFeetWalk"       "3" "1.0" "3.0" "0.36" "0.0"
+	    "InfectedFeetRun"        "3" "1.0" "3.0" "0.36" "0.0"
+	    "InfectedIdle"           "3" "1.0" "3.0" "0.36" "0.0"
+	    "InfectedRageAt"         "3" "1.0" "3.0" "0.36" "0.0"
+	    "InfectedAction"         "3" "1.0" "3.0" "0.36" "0.0"
+	    "Infected"               "3" "1.0" "3.0" "0.36" "0.0"
+			
+
+		"TankFeet"               "2.0" "1.0" "1.0" "0.36" "0.0"
+								 
+// Witch						 
+		"WitchFeet"              "2" "1.0" "1.0" "0.36" "0.0"
+		"Witch"                  "2" "1.0" "1.0" "0.36" "0.0"
+
+			
+// PZ warnings					 
+		"PZVOWarn"               "2" "1.0" "1.0" "0.36" "0.0"
+		"PZVODeath"              "2" "1.0" "1.0" "0.36" "0.0"
+
+// Boomer						 
+		"PZBoomerVOIdle"         "2" "1.0" "1.0" "0.36" "0.0"
+		"PZBoomerVOAction"       "2" "1.0" "1.0" "0.36" "0.0"
+		"PZBoomerVOAlert"        "2" "1.0" "1.0" "0.36" "0.0"
+	    "PZBoomerFeet"           "2" "1.0" "1.0" "0.36" "0.0"
+	    "PZBoomerVomit"          "2" "1.0" "1.0" "0.36" "0.0"
+								 
+// smoker						 
+		"PZSmoker"               "2" "1.0" "1.0" "0.36" "0.0"
+								 
+// hunter						 
+		"PZHunterVOIdle"         "2" "1.0" "1.0" "0.36" "0.0"
+		"PZHunterVOAttack"       "2" "1.0" "1.0" "0.36" "0.0"
+		"PZHunterVOMiss"         "2" "1.0" "1.0" "0.36" "0.0"
+		"PZHunterVODie"          "2" "1.0" "1.0" "0.36" "0.0"
+		"PZHunterVO"             "2" "1.0" "1.0" "0.36" "0.0"
+		"PZHunterAttack"         "2" "1.0" "1.0" "0.36" "0.0"
+		"PZHunterHit"            "2" "1.0" "1.0" "0.36" "0.0"
+
+// charger
+		"PZChargerVOAttack"      "2" "1.0" "1.0" "0.36" "0.0"
+		"PZChargerVO"            "2" "1.0" "1.0" "0.36" "0.0"
+		"PZChargerHit"           "2" "1.0" "1.0" "0.36" "0.0"
+		"PZChargerFeet"          "2" "1.0" "1.0" "0.36" "0.0"
+		"PZCharger"              "2" "1.0" "1.0" "0.36" "0.0"
+
+// spitter
+		"PZSpitter"              "2" "1.0" "1.0" "0.36" "0.0"
+
+// jockey
+		"PZJockey"               "2" "1.0" "1.0" "0.36" "0.0"
+
+	}
+
+
+    // handle flu (in game music)
+	// "gunFireLayer"
+	// {
+		// "localSurvivorGunFire" "0.85" "1.0" "1.0" "0.0" "0.0"
+	// }
+
+    // handle flu (in game music)
+	"fluMusicLayer"
+	{
+		"zombatMusic"			 "0.0" "1.0" "1.0" "0.0" "0.0"
+		"zombatMusic2"			 "0.0" "1.0" "1.0" "0.0" "0.0"
+		"zombatMusic3"			 "0.0" "1.0" "1.0" "0.0" "0.0"
+		"glimpseMusic"			 "0.0" "1.0" "1.0" "0.0" "0.0"
+		"contagionMusic"		 "0.0" "1.0" "1.0" "0.0" "0.0"
+	}
+    // controls the slow increase in rain
+	"rainLayer"
+	{
+		"Rain"  "0.0" "1.0" "1.0" "0.0" "0.0"
+	}
+	"stormLayer"
+	{
+		"Rain"  "0.0" "1.0" "1.0" "0.0" "0.0"
+	}
+	"voipLayer"
+	{
+		"voip" "0.3"    "1.0"    "0.0" "0.0" "0.0"
+		"bankMusic"  "1.5" "1.0" "1.0" "0.0" "0.0"
+
+	}
+}
+
+
+// Triggers
+//
+// NOTE: you can't mute a group that is a trigger in the triggered layer
+//
+//  mixlayer,           trigger,    threshold,   mixamount  attack  release
+"LayerTriggers"
+{
+	
+	"pzAttackLayer"	"pzAttackMusic"                   "0.0"       "1.0"      "0.0"   "0.0"
+	"safeRoomLayer"	"safeMusic"                       "0.0"       "1.0"      "2.0"   "0.0"
+	"unaliveLayer"	"unaliveMusic"                    "0.0"       "1.0"      "1.0"   "0.0"
+ 	"PZVOWarnLayer"	"PZVOWarn"                        "0.0"       "1.0"      "0.0"   "0.0"
+ 	"commentaryLayer"	"commentary"                  "0.0"       "1.0"      "0.0"   "1.0"
+ 	"undeathLayer"	    "undeathMusic"                "0.0"       "1.0"      "1.0"   "3.0"
+
+	"fluMusicLayer" "fluMusic"                        "0.0"       "1.0"      "0.0"   "1.0"
+
+	"chargerAttackLayer" "PZChargerVOAttack"          "0.0"       "1.0"      "0.0"   "0.4"
+
+    // "gunFireLayer" "localSurvivorGunFire"               "0.0"       "1.0"      "1.05"   "0.0"
+
+}
