@@ -172,18 +172,20 @@
 			"default"	"-1"
 			"max"		"-1"
 		}
-		"voice_threshold"
-		{
-			"min"		"0"
-			"default"	"0"
-			"max"		"0"
-		}
 
 		"cl_disconnect_voice_fade"	"-1.0"
 		"cl_disconnect_soundevent"	"StopSoundEvents.StopAllExceptMusic"
 		
 		// Physics specific customization
 		"phys_use_position_based_toi_test" "1"
+
+		// VOIP Settings.
+		"voice_threshold"
+		{
+			"min"		"0"
+			"default"	"0"
+			"max"		"0"
+		}
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 
@@ -205,6 +207,38 @@
 		"SaveToSteamStats" "1"
 	}
 
+	SupportedLanguages
+	{
+		"brazilian" "3"
+		"bulgarian" "3"
+		"czech" "3"
+		"danish" "3"
+		"dutch" "3"
+		"english" "3"
+		"finnish" "3"
+		"french" "3"
+		"german" "3"
+		"greek" "3"
+		"hungarian" "3"
+		"italian" "3"
+		"japanese" "3"
+		"koreana" "3"
+		"latam" "3"
+		"norwegian" "3"
+		"polish" "3"
+		"portuguese" "3"
+		"romanian" "3"
+		"russian" "3"
+		"schinese" "3"
+		"spanish" "3"
+		"swedish" "3"
+		"tchinese" "3"
+		"thai" "3"
+		"turkish" "3"
+		"ukrainian" "3"
+		"vietnamese" "3"
+	}
+	
 	CS2WorkshopManager
 	{
 		"RequiredTag" "CS2"
