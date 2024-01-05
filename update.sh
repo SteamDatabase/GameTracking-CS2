@@ -23,9 +23,14 @@ do
 	|| echo "Decompiler failed"
 done <   <(find . -type f -name "pak01_dir.vpk" -print0)
 
+while IFS= read -r -d '' file
+do
+	sed -i '/\/\/# sourceMappingURL=/d' "$file"
+done <   <(find . -type f -name "*.js" -print0)
+
 ProcessToolAssetInfo
 FixUCS2
 
-CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')" "$1"
+#CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')" "$1"
 
 echo "Done"
