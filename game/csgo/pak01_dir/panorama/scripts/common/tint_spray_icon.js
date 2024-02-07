@@ -1,8 +1,10 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
-var TintSprayIcon = (function () {
-    const _Tint = function (itemId, elImage) {
-        if (InventoryAPI.DoesItemMatchDefinitionByName(itemId, 'spraypaint') || InventoryAPI.DoesItemMatchDefinitionByName(itemId, 'spray')) {
+/// <reference path="iteminfo.ts" />
+var TintSprayIcon;
+(function (TintSprayIcon) {
+    function CheckIsSprayAndTint(itemId, elImage) {
+        if (ItemInfo.IsSprayPaint(itemId) || ItemInfo.IsSpraySealed(itemId)) {
             const colorTint = InventoryAPI.GetSprayTintColorCode(itemId);
             if (colorTint) {
                 elImage.style.washColor = colorTint.toString();
@@ -14,8 +16,6 @@ var TintSprayIcon = (function () {
         else {
             elImage.style.washColor = 'none';
         }
-    };
-    return {
-        CheckIsSprayAndTint: _Tint
-    };
-})();
+    }
+    TintSprayIcon.CheckIsSprayAndTint = CheckIsSprayAndTint;
+})(TintSprayIcon || (TintSprayIcon = {}));

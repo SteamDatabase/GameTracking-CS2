@@ -52,19 +52,8 @@ function OnPopupCustomLayoutMatchAccept() {
     var popup = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_accept_match.xml', 'map_and_isreconnect=de_dust2,false&ping=155&location=China, Tianjin');
     $.DispatchEvent("ShowAcceptPopup", popup);
 }
-function OnPopupCustomLayoutWeaponUpdate() {
-    ClearPopupsText();
-    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_weapon_update.xml', "23");
-}
 function OnPopupCustomLayoutPremierPickBan() {
     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_premier_pick_ban.xml', "none");
-}
-function OnPopupCustomLayoutOpFull() {
-    ClearPopupsText();
-    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_operation_launch.xml', 'none');
-}
-function OnPopupCustomLayoutSurvivalEndOfMatch() {
-    var elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/survival/survival_endofmatch.xml', 'usefakedata=true');
 }
 function OnPopupCustomLayoutXpGrant() {
     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_acknowledge_xpgrant.xml', 'none');

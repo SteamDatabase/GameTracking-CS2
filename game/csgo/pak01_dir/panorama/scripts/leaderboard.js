@@ -2,6 +2,7 @@
 /// <reference path="csgo.d.ts" />
 /// <reference path="rating_emblem.ts" />
 /// <reference path="common/teamcolor.ts" />
+/// <reference path="honor_icon.ts" />
 const regionToRegionName = {
     'namc': 'NorthAmerica',
     'samc': 'SouthAmerica',
@@ -56,7 +57,7 @@ var Leaderboard;
         }
     }
     Leaderboard.UnregisterEventHandlers = UnregisterEventHandlers;
-    function Init() {
+    function _Init() {
         _msg('init');
         m_lbType = $.GetContextPanel().GetAttributeString('lbtype', '');
         RegisterEventHandlers();
@@ -75,12 +76,19 @@ var Leaderboard;
         }
         _ShowGlobalRank();
     }
-    Leaderboard.Init = Init;
-    ;
+    function _SetHonorIcon(elPanel, xuid) {
+        const honorIconOptions = {
+            honor_icon_frame_panel: elPanel.FindChildTraverse('jsHonorIcon'),
+            xuid: xuid,
+            do_fx: true,
+            xptrail_value: PartyListAPI.GetFriendXpTrailLevel(xuid),
+            prime_value: PartyListAPI.GetFriendPrimeEligible(xuid)
+        };
+        HonorIcon.SetOptions(honorIconOptions);
+    }
     function _SetTitle() {
         $.GetContextPanel().SetDialogVariable('leaderboard-title', $.Localize('#leaderboard_title_' + String(m_lbType)));
     }
-    ;
     function _InitSeasonDropdown() {
         let elSeasonDropdown = $('#jsNavSeason');
         elSeasonDropdown.visible = true;
@@ -214,11 +222,8 @@ var Leaderboard;
             function onMouseOver(id, tooltipText) {
                 UiToolkitAPI.ShowTextTooltip(id, tooltipText);
             }
-            ;
             elNameButton.SetPanelEvent('onmouseover', onMouseOver.bind(elNameButton, elNameButton.id, tooltipText));
-            elNameButton.SetPanelEvent('onmouseout', function () {
-                UiToolkitAPI.HideTextTooltip();
-            });
+            elNameButton.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
         }
         else if (needsName) {
             buttonText = $.Localize('#leaderboard_namelock_button_needsname');
@@ -236,10 +241,10 @@ var Leaderboard;
         _InitSeasonDropdown();
         _InitLocationDropdown();
     }
-    let _ShowGlobalRank = function () {
+    function _ShowGlobalRank() {
         let showRank = $.GetContextPanel().GetAttributeString('showglobaloverride', 'true');
         $.GetContextPanel().SetHasClass('hide-global-rank', showRank === 'false');
-    };
+    }
     function _UpdateGoToMeButton() {
         let lb = m_leaderboardName;
         let arrLBsOfInterest = LeaderboardsAPI.GetPremierLeaderboardsOfInterest();
@@ -287,7 +292,6 @@ var Leaderboard;
         }
     }
     Leaderboard.UpdateLeaderboardList = UpdateLeaderboardList;
-    ;
     function _AddPlayer(elEntry, oPlayer, index) {
         elEntry.SetDialogVariable('player-rank', '');
         elEntry.SetDialogVariable('player-name', '');
@@ -300,22 +304,21 @@ var Leaderboard;
         elAvatar.visible = false;
         if (oPlayer) {
             function _AddOpenPlayerCardAction(elPanel, xuid) {
-                let openCard = function (xuid) {
+                function openCard() {
                     if (xuid && (xuid !== 0)) {
                         $.DispatchEvent('SidebarContextMenuActive', true);
-                        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, function () {
-                            $.DispatchEvent('SidebarContextMenuActive', false);
-                        });
+                        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, () => $.DispatchEvent('SidebarContextMenuActive', false));
                         contextMenuPanel.AddClass("ContextMenu_NoArrow");
                     }
-                };
-                elPanel.SetPanelEvent("onactivate", openCard.bind(undefined, xuid));
-                elPanel.SetPanelEvent("oncontextmenu", openCard.bind(undefined, xuid));
+                }
+                elPanel.SetPanelEvent("onactivate", openCard);
+                elPanel.SetPanelEvent("oncontextmenu", openCard);
             }
             elEntry.enabled = true;
             if (m_lbType === 'party' && oPlayer.XUID) {
                 elAvatar.PopulateFromSteamID(oPlayer.XUID);
                 elAvatar.visible = true;
+                _SetHonorIcon(elEntry, oPlayer.XUID);
             }
             else {
                 elAvatar.visible = false;
@@ -385,11 +388,9 @@ var Leaderboard;
         function OnMouseOver(xuid) {
             $.DispatchEvent('LeaderboardHoverPlayer', xuid);
         }
-        ;
         function OnMouseOut() {
             $.DispatchEvent('LeaderboardHoverPlayer', '');
         }
-        ;
         let elList = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-entries');
         if (LobbyAPI.IsSessionActive()) {
             let members = LobbyAPI.GetSessionSettings().members;
@@ -406,8 +407,8 @@ var Leaderboard;
                     oPlayer.XUID = xuid;
                 }
                 if (PartyListAPI.GetFriendCompetitiveRankType(xuid) === "Premier") {
-                    var partyScore = PartyListAPI.GetFriendCompetitiveRank(xuid);
-                    var partyWins = PartyListAPI.GetFriendCompetitiveWins(xuid);
+                    let partyScore = PartyListAPI.GetFriendCompetitiveRank(xuid);
+                    let partyWins = PartyListAPI.GetFriendCompetitiveWins(xuid);
                     if (partyScore || partyWins) {
                         oPlayer.score = PartyListAPI.GetFriendCompetitiveRank(xuid);
                         oPlayer.matchesWon = PartyListAPI.GetFriendCompetitiveWins(xuid);
@@ -417,7 +418,7 @@ var Leaderboard;
                 }
                 return oPlayer;
             }
-            elList.SetLoadListItemFunction(function (parent, nPanelIdx, reusePanel) {
+            elList.SetLoadListItemFunction((parent, nPanelIdx, reusePanel) => {
                 let oPlayer = GetPartyLBRow(nPanelIdx);
                 if (!reusePanel || reusePanel.IsValid()) {
                     reusePanel = $.CreatePanel("Button", elList, oPlayer ? oPlayer.XUID : '');
@@ -445,13 +446,11 @@ var Leaderboard;
         }
     }
     Leaderboard.ReadyForDisplay = ReadyForDisplay;
-    ;
     function UnReadyForDisplay() {
         _msg("UnReadyForDisplay");
         UnregisterEventHandlers();
     }
     Leaderboard.UnReadyForDisplay = UnReadyForDisplay;
-    ;
     function _UpdateName(xuid) {
         let elList = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-entries');
         let elEntry = elList.FindChildInLayoutFile(xuid);
@@ -459,7 +458,6 @@ var Leaderboard;
             elEntry.SetDialogVariable('player-name', FriendsListAPI.GetFriendName(xuid));
         }
     }
-    ;
     function _NameLockPopup() {
         UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_leaderboard_namelock.xml');
     }
@@ -475,7 +473,7 @@ var Leaderboard;
         let nPlayers = LeaderboardsAPI.GetCount(m_leaderboardName);
         _msg(nPlayers + ' accounts found.');
         const elList = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-entries');
-        elList.SetLoadListItemFunction(function (parent, nPanelIdx, reusePanel) {
+        elList.SetLoadListItemFunction((parent, nPanelIdx, reusePanel) => {
             let oPlayer = LeaderboardsAPI.GetEntryDetailsObjectByIndex(m_leaderboardName, nPanelIdx);
             if (!reusePanel || !reusePanel.IsValid()) {
                 reusePanel = $.CreatePanel("Button", elList, oPlayer ? oPlayer.XUID : '');
@@ -488,7 +486,6 @@ var Leaderboard;
         elList.UpdateListItems(nPlayers);
         $.DispatchEvent('ScrollToDelayLoadListItem', elList, 0, 'topleft', true);
     }
-    ;
     function OnLeaderboardStateChange(type) {
         _msg('OnLeaderboardStateChange');
         _msg('leaderboard status: received');
@@ -503,7 +500,6 @@ var Leaderboard;
         }
     }
     Leaderboard.OnLeaderboardStateChange = OnLeaderboardStateChange;
-    ;
     function OnLeaderboardChange() {
         _UpdateLeaderboardName();
         UpdateLeaderboardList();
@@ -520,9 +516,9 @@ var Leaderboard;
         $.DispatchEvent('ScrollToDelayLoadListItem', elList, 0, 'topleft', true);
     }
     Leaderboard.GoToTop = GoToTop;
+    {
+        $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), Leaderboard.ReadyForDisplay);
+        $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), Leaderboard.UnReadyForDisplay);
+        _Init();
+    }
 })(Leaderboard || (Leaderboard = {}));
-(function () {
-    $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), Leaderboard.ReadyForDisplay);
-    $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), Leaderboard.UnReadyForDisplay);
-    Leaderboard.Init();
-})();

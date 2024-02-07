@@ -5,7 +5,8 @@
 /// <reference path="../common/formattext.ts" />
 /// <reference path="../common/scheduler.ts" />
 /// <reference path="../common/teamcolor.ts" />
-var HudWinPanel = (function () {
+var HudWinPanel;
+(function (HudWinPanel) {
     let _m_elCanvas;
     let _m_elPlotContainer;
     let _m_canvasHeightInPixels;
@@ -32,11 +33,9 @@ var HudWinPanel = (function () {
         _m_bInit = true;
     }
     function _SetMVPFlairImage(xuid) {
-        const flairDefIdx = FriendsListAPI.GetFriendDisplayItemDefFeatured(xuid);
-        const flairItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(flairDefIdx, 0);
-        const imagePath = InventoryAPI.GetItemInventoryImage(flairItemId);
+        const imagePath = InventoryAPI.GetFlairItemImage(xuid);
         const elBgImage = $.GetContextPanel().FindChildInLayoutFile('MedalBackground');
-        elBgImage.style.backgroundImage = (imagePath) ? 'url("file://{images}' + imagePath + '_large.png")' : 'none';
+        elBgImage.style.backgroundImage = (imagePath) ? 'url("file://{images}' + imagePath + '.png")' : 'none';
         elBgImage.style.backgroundPosition = '50% 50%';
         elBgImage.style.backgroundSize = 'cover';
         elBgImage.style.backgroundRepeat = 'no-repeat';
@@ -138,47 +137,37 @@ var HudWinPanel = (function () {
         const freezetime = Number(GameInterfaceAPI.GetSettingString('mp_freezetime'));
         const roundRestartDelay = Number(GameInterfaceAPI.GetSettingString('mp_round_restart_delay'));
         const shutdownDelay = roundRestartDelay + freezetime - 1;
-        Scheduler.Schedule(shutdownDelay, function () {
+        Scheduler.Schedule(shutdownDelay, () => {
             _m_ListeningForGameEvents = false;
             _m_bCanvasIsReady = false;
         });
     }
     function _ExtractTimelineEvents(arrEvents) {
         const arrResults = [];
-        arrEvents.forEach(function (oEvent, index) {
+        for (let oEvent of arrEvents) {
             const oVictimData = oEvent['victim_data'];
             const isLivingPlayer = oVictimData && !oVictimData['is_dead'];
             if (!isLivingPlayer)
                 arrResults.push(oEvent);
-        });
-        return arrResults;
-    }
-    function _ExtractTPersonalDamageEvents(arrEvents) {
-        const arrResults = [];
-        arrEvents.forEach(function (oEvent, index) {
-            const oVictimData = oEvent['victim_data'];
-            const isLivingPlayer = oVictimData && !oVictimData['is_dead'];
-            const oDamage = _FindDamageDataForPlayer(oEvent, _m_localXuid);
-            if (isLivingPlayer && oDamage)
-                arrResults.push(oEvent);
-        });
+        }
         return arrResults;
     }
     function _ExtractLivingEnemies(arrEvents) {
         const arrResults = [];
-        arrEvents.forEach(function (oEvent, index) {
+        for (let oEvent of arrEvents) {
             const oVictimData = oEvent['victim_data'];
             const isLivingPlayer = oVictimData && !oVictimData['is_dead'];
             const localTeam = GameStateAPI.GetAssociatedTeamNumber(_m_localXuid);
             const isEnemy = oVictimData && oVictimData['team_number'] != localTeam && (localTeam == 2 || localTeam == 3);
             if (isLivingPlayer && isEnemy)
                 arrResults.push(oEvent);
-        });
+        }
         return arrResults;
     }
     function _ProcessTimelineEvents(arrEvents, points, plotPoints, nStartingOdds) {
         let loopingSfxHandle = null;
-        arrEvents.forEach(function (oEvent, index) {
+        for (let index = 0; index < arrEvents.length; ++index) {
+            const oEvent = arrEvents[index];
             const x = index + 1;
             const y = _ConvertToLocalOdds(oEvent['terrorist_odds']);
             const point = [x, y];
@@ -199,14 +188,15 @@ var HudWinPanel = (function () {
                     UiToolkitAPI.StopSoundEvent(loopingSfxHandle, 0.1);
                 loopingSfxHandle = UiToolkitAPI.PlaySoundEvent(sfx);
             });
-        });
-        Scheduler.Schedule(_m_arrTimelineEvents.length * _m_timeslice, function () {
+        }
+        Scheduler.Schedule(_m_arrTimelineEvents.length * _m_timeslice, () => {
             if (loopingSfxHandle)
                 UiToolkitAPI.StopSoundEvent(loopingSfxHandle, 0.1);
         });
     }
     function _ProcessDamageEvents(arrEvents, startX) {
-        arrEvents.forEach(function (oEvent, index) {
+        for (let index = 0; index < arrEvents.length; ++index) {
+            const oEvent = arrEvents[index];
             const x = startX + index + 1;
             const y = 50;
             const plotPoint = _TransformPointIntoCanvasSpace([x, y]);
@@ -215,14 +205,14 @@ var HudWinPanel = (function () {
                 _AddDamageToDamagePanel(oEvent, plotPoint);
                 _DecoratePoint(oEvent, plotPoint);
             });
-        });
+        }
     }
     function _Colorize() {
         const bCT = _m_winningTeam == 3;
-        $.GetContextPanel().FindChildrenWithClassTraverse('team-colorize').forEach(el => {
+        for (let el of $.GetContextPanel().FindChildrenWithClassTraverse('team-colorize')) {
             el.SetHasClass('color-ct', bCT);
             el.SetHasClass('color-t', !bCT);
-        });
+        }
     }
     function _FindDamageDataForPlayer(oEvent, xuid) {
         const oDamageData = oEvent.all_damage_data;
@@ -405,20 +395,6 @@ var HudWinPanel = (function () {
         const B = (1 - frac) * (238 - 139) + 139;
         return 'rgb(' + R + "," + G + "," + B + ")";
     }
-    function _RemapToRedGreenRGB(val, min, max) {
-        const frac = Math.min(1, Math.max(0, (val - min) / (max - min)));
-        return 'rgb(' + (1 - frac) * 255 + "," + frac * 255 + "," + '0' + ")";
-        let rgb = 'rgb(200,200,200)';
-        if (val >= 20)
-            rgb = 'rgb(0,255,0)';
-        else if (val > 0)
-            rgb = 'rgb(100,255,0)';
-        else if (val < -20)
-            rgb = 'rgb(255,0,0)';
-        else if (val < 0)
-            rgb = 'rgb(255,100,0)';
-        return rgb;
-    }
     function _Reset() {
         const localTeamNumber = GameStateAPI.GetAssociatedTeamNumber(_m_localXuid);
         const bUseInEye = GameStateAPI.IsDemoOrHltv() || (localTeamNumber != 2 && localTeamNumber != 3);
@@ -441,20 +417,8 @@ var HudWinPanel = (function () {
         }
         _Colorize();
     }
-    function _OnShow() {
+    {
+        $.RegisterEventHandler('HudWinPanel_MVP', $.GetContextPanel(), _SetMVPFlairImage);
+        _Init();
     }
-    function _OnHide() {
-    }
-    return {
-        Init: _Init,
-        SetMVPFlairImage: _SetMVPFlairImage,
-        OnShow: _OnShow,
-        OnHide: _OnHide
-    };
-})();
-(function () {
-    $.RegisterEventHandler('HudWinPanel_MVP', $.GetContextPanel(), HudWinPanel.SetMVPFlairImage);
-    $.RegisterEventHandler('HudWinPanel_Show', $.GetContextPanel(), HudWinPanel.OnShow);
-    $.RegisterEventHandler('HudWinPanel_Hide', $.GetContextPanel(), HudWinPanel.OnHide);
-    HudWinPanel.Init();
-})();
+})(HudWinPanel || (HudWinPanel = {}));

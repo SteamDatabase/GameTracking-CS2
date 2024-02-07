@@ -23,7 +23,7 @@ var RankUpRedemptionStore;
         m_profileUpdateHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', OnInventoryUpdated);
         m_profileCustomizationHandler = $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_ItemCustomizationNotification', OnItemCustomization);
         $.GetContextPanel().RegisterForReadyEvents(true);
-        $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), function () {
+        $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), () => {
             _msg("READY FOR DISPLAY");
             _UpdateStoreState();
             CheckForPopulateItems(true);
@@ -34,7 +34,7 @@ var RankUpRedemptionStore;
                 m_profileCustomizationHandler = $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_ItemCustomizationNotification', OnItemCustomization);
             }
         });
-        $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), function () {
+        $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), () => {
             _msg("UN-READY FOR DISPLAY");
             if (m_schTimer) {
                 $.CancelScheduled(m_schTimer);
@@ -50,7 +50,6 @@ var RankUpRedemptionStore;
             }
         });
     }
-    RankUpRedemptionStore.RegisterForInventoryUpdate = RegisterForInventoryUpdate;
     ;
     function CheckForPopulateItems(bFirstTime = false, claimedItemId = '') {
         const objStore = InventoryAPI.GetCacheTypeElementJSOByIndex("PersonalStore", 0);
@@ -63,7 +62,6 @@ var RankUpRedemptionStore;
             PopulateItems(bFirstTime, claimedItemId);
         }
     }
-    RankUpRedemptionStore.CheckForPopulateItems = CheckForPopulateItems;
     function _CreateItemPanel(itemId, index, bFirstTime, claimedItemId = '') {
         let bNoDropsEarned = itemId === '-';
         if (itemId !== '-' && (!InventoryAPI.IsItemInfoValid(itemId) || !InventoryAPI.IsValidItemID(itemId))) {
@@ -109,7 +107,7 @@ var RankUpRedemptionStore;
             elGhostItem.SetPanelEvent('onactivate', () => _OnItemSelected(elGhostItem));
             const elInspect = elGhostItem.FindChildTraverse('id-itemtile-store-inspect-btn');
             elInspect.SetPanelEvent('onactivate', () => {
-                if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !ItemInfo.IsTool(itemId)) {
+                if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !InventoryAPI.IsTool(itemId)) {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + itemId +
                         '&' + 'extrapopupfullscreenstyle=solidbkgnd' +
                         '&' + 'asyncworkitemwarning=no' +
@@ -159,7 +157,6 @@ var RankUpRedemptionStore;
             }
         });
     }
-    RankUpRedemptionStore.PopulateItems = PopulateItems;
     function _UpdateTime() {
         let secRemaining = StoreAPI.GetSecondsUntilXpRollover();
         $.GetContextPanel().SetDialogVariable('time-to-week-rollover', (secRemaining > 0) ? FormatText.SecondsToSignificantTimeString(secRemaining) : '');
@@ -206,11 +203,11 @@ var RankUpRedemptionStore;
     function _GetSelectedItems() {
         let arrItems = [];
         const elItemContainer = $.GetContextPanel().FindChildTraverse('jsRrsItemContainer');
-        elItemContainer.Children().forEach(function (panel) {
+        for (let panel of elItemContainer.Children()) {
             if (panel.BHasClass('selected')) {
                 arrItems.push(panel.Data().itemid);
             }
-        });
+        }
         return arrItems;
     }
     function _OnItemSelected(elPanel) {
@@ -238,14 +235,14 @@ var RankUpRedemptionStore;
             }
         }
         nSelected = _GetSelectedItems().length;
-        elItemContainer.Children().forEach(function (element) {
+        for (let element of elItemContainer.Children()) {
             if (!elPanel.BHasClass('selected') && nSelected >= m_redeemableBalance) {
                 if (element.BHasClass('selected')) {
                     element.TriggerClass('pulse-me');
                     $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.buymenu_failure', 'MOUSE');
                 }
             }
-        });
+        }
     }
     function _CloseStore(bHasStore) {
         _EnableDisableStorePanels(false);
@@ -271,19 +268,19 @@ var RankUpRedemptionStore;
             elPanel.enabled = enableStore;
         });
         const elItemContainer = $.GetContextPanel().FindChildTraverse('jsRrsItemContainer');
-        elItemContainer.Children().forEach(function (panel) {
+        for (let panel of elItemContainer.Children()) {
             panel.hittest = enableStore;
             panel.hittestchildren = enableStore;
-        });
+        }
     }
     function _PulseItems() {
         const elItemContainer = $.GetContextPanel().FindChildTraverse('jsRrsItemContainer');
-        elItemContainer.Children().forEach(function (panel) {
+        for (let panel of elItemContainer.Children()) {
             if (!panel.BHasClass('item-claimed')) {
                 panel.TriggerClass('pulse-me');
                 $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.buymenu_failure', 'MOUSE');
             }
-        });
+        }
     }
     function OnRedeem() {
         if (_GetSelectedItems().length === 0) {
@@ -321,8 +318,8 @@ var RankUpRedemptionStore;
             $.GetContextPanel().SetDialogVariable('frame-desc-text', $.Localize('#rankup_redemption_store_rollover_wait', $.GetContextPanel()));
         }
     }
+    {
+        $.GetContextPanel().RegisterForReadyEvents(true);
+        RegisterForInventoryUpdate();
+    }
 })(RankUpRedemptionStore || (RankUpRedemptionStore = {}));
-(function () {
-    $.GetContextPanel().RegisterForReadyEvents(true);
-    RankUpRedemptionStore.RegisterForInventoryUpdate();
-})();

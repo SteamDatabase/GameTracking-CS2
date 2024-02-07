@@ -95,6 +95,14 @@
 	
 	generictype(string) : "Generic Hint" : "" : "String identifying what the hint type is, if generic."
 
+	priority(choices): "Priority" : 0 : "Relative importance of this hint. Will factor into how NPCs will choose a hint." =
+	[
+		0: "Low"
+		1: "Medium"
+		2: "High"
+		3: "Critical"
+	]
+
 	animgraph_entry_cmd(string) : "Animgraph Entry Command" : "" : "Animgraph command that NPCs using this hint should apply to their animgraph when they start using it."
 	animgraph_entry_tag(string) : "Animgraph Entry Finish Tag" : "" : "The name of the Animgraph tag that will be fired when the NPC has finished playing the animgraph entry."
 	animgraph_exit_cmd(string) : "Animgraph Exit Command" : "" : "Animgraph command that NPCs using this hint should apply to their animgraph when they want to stop using it."
@@ -270,20 +278,6 @@
 		16384 : "Ignore player push (dont give way to player)" : 0
 	]
 
-	//initialidle(string) [ group="NPC Properties" ] : "Initial Idle Activity" :: "Activity the NPC should use to idle until becomes alert"
-	sleepstate(choices) [ group="NPC Properties" ] : "Sleep State" : 0 : "Holds the NPC in stasis until specified condition. See also 'Wake Radius' and 'Wake Squad'." =
-	[
-		0 : "None"
-		1 : "Waiting for threat"
-		2 : "Waiting for PVS"
-		3 : "Waiting for input, ignore PVS"
-		4 : "Auto PVS"
-		5 : "Auto PVS after PVS"
-	]
-
-	wakeradius(float) [ group="NPC Properties" ] : "Wake Radius" : 0 : "Auto-wake if player within this distance"
-	wakesquad(boolean) [ group="NPC Properties" ] : "Wake Squad" : 0 : "Wake all of the NPCs squadmates if the NPC is woken"
-
 	enemyfilter(target_destination) [ group="NPC Properties" ] : "Enemy Filter" : "" : "Filter by which to filter potential enemies"
 
 	ignoreunseenenemies(boolean) [ group="NPC Properties" ] : "Ignore unseen enemies" : 0 : "Prefer visible enemies, regardless of distance or relationship priority"
@@ -314,8 +308,6 @@
 	output OnDamagedByPlayer(void) : "Fired when this NPC is hurt by a player."
 	output OnDamagedByPlayerSquad(void) : "Fired when this NPC is hurt by a player OR by one of the player's squadmates."
 	output OnDenyCommanderUse(void) : "Fired when this NPC has refused to join the player's squad."
-	output OnSleep(void) : "Fired when this NPC enters a sleep state."
-	output OnWake(void) : "Fired when this NPC comes out of a sleep state."
 	output OnPlayerUse(void) : "Fired when a player +Uses this npc."
 	output OnUse(void) : "Fired when ANYTHING calls Use on this npc (such as other NPCs)."
 
@@ -333,7 +325,6 @@
 	input Extinguish(void) : "Extinguish ourself if we're on fire"
 	input Break(void) : "Break, smash into pieces"
 	input SetSquad(string) : "Set the name of this NPC's squad. It will be removed from any existing squad automatically. Leaving the parameter blank will remove the NPC from any existing squad."
-	input Wake(void) : "Wakes up the NPC if it is sleeping."
 	input ForgetEntity(string) : "Clears out the NPC's knowledge of a named entity."
 	input GagEnable(void) : "Turn on the NPC Gag flag. NPC won't speak outside of choreographed scenes."
 	input GagDisable(void) : "Turn off the NPC Gag flag."
@@ -388,7 +379,9 @@
 		0 : "Default"
 		1 : "No hull check"
 	]
-	
+
+	ZeroPitchAndRoll(boolean) : "Zero Pitch and Roll on Spawn" : 1 : "Should we only orient the NPC using the YAW of the destination or spawner, or should we allow any angle?"
+		
 	// Outputs
 	output OnSpawnNPC(string) : "Fired when an NPC is spawned. The activator is the NPC, and the string is the name of the NPC." 
 	output OnAllSpawned(void) : "Fired when the spawned is exhausted (all children have been spawned)."
@@ -438,7 +431,7 @@
 	input Stop(void) : "Tell the driver to stop driving."
 ]
 
-@PointClass base(Targetname, Parentname) tags( Info ) drawangles() iconsprite("editor/info_npc_spawn_destination.vmat") = info_npc_spawn_destination : 
+@PointClass base(Targetname, Parentname) tags( Info ) drawangles{} iconsprite("editor/info_npc_spawn_destination.vmat") = info_npc_spawn_destination : 
 	"NPC Spawn Destination. (Consult npc_template_maker help for more info)"
 [
 	ReuseDelay(float) : "Reuse Delay" : 1 : "After an NPC is spawned at this destination, the delay before this destination is eligible for selection again."
@@ -654,27 +647,6 @@
 	
 ]
 
-
-//@PointClass base(LeadGoalBase) tags( AI ) iconsprite("editor/ai_goal_lead.vmat") = ai_goal_lead_weapon : 
-//	"AI Goal Lead (Weapon). A version of the ai_goal_lead entity that requires the player to have the specified weapon before the Actor(s) will lead the player to their target."
-//[
-//	WeaponName(choices) : "Weapon" : "weapon_bugbait" =
-//	[
-//		"weapon_bugbait" : "Bugbait"
-//		"weapon_smg1" : "SMG1"
-//		"weapon_ar2"  : "AR2"
-//	]
-//
-//	MissingWeaponConceptModifier(string) : "Missing weapon concept modifier"
-//	
-//	SearchType(choices) : "Search Type" : 0 : "How to search for the entities using the targetname." = 
-//	[
-//		0 : "Entity Name"
-//		1 : "Classname"
-//	] 
-//]
-
-
 @BaseClass base(AIGoalBase) = FollowGoal
 [
 	actor(target_name_or_class) : "Actor(s) to affect"
@@ -832,17 +804,6 @@
 	output OnQueueMoved(float) : "Fired when the queue moves. Outputs the number of NPCs left in the queue."
 	output OnNPCStartedLeavingQueue(string) : "Fired when the NPC at the head of the queue starts to leave. The activator is the NPC, and the string is the name of the NPC."
 	output OnNPCLeftQueue(string) : "Fired when the NPC at the head of the queue leaves. The activator is the NPC, and the string is the name of the NPC."
-]
-
-
-@PointClass base(Targetname) tags( AI ) size(-8 -8 -8, 8 8 8) = ai_changetarget : "Change Target"
-[
-	target(target_destination) : "Target entity" : : "Name of entity whose target will be changed."
-	m_iszNewTarget(string) : "New Target"
-
-	// Inputs
-	input Kill( void ) : "Removes this entity from the world"
-	input Activate( void ) : "Changes the entities target"
 ]
 
 
@@ -1023,11 +984,9 @@
 	"Manages a choreographed scene of one or more actors."
 
 [
-	// vcd_def( scene ) { asset_specific_keys_destination="vcd_keys" }
-	// vcd_keys(kv3) <-- populated based on whatever 'vcd_def' needs
-
 	// Keys
 	SceneFile(scene) { asset_specific_keys_destination="vcd_keys" } : "Scene file"
+	// vcd_keys( string ) <-- populated based on whatever 'SceneFile' needs
 
 	// Links
 	target1(target_destination) : "Target 1"
@@ -1169,7 +1128,12 @@
 ]
 
 
-@PointClass base( BaseNPCMaker) tags( Logic ) iconsprite("editor/npc_maker.vmat") = npc_template_maker : 
+@PointClass base( BaseNPCMaker) tags( Logic ) iconsprite("editor/npc_maker.vmat")
+	metadata
+	{
+		create_entity_lump_mode = "TemplateMaker"
+	}
+= npc_template_maker : 
 	"An entity that creates NPCs. The NPCs it creates are clones of a template NPC. NPCs are spawned around this maker's origin, or at specified destination points."
 [
 	spawnflags(Flags) = 

@@ -309,7 +309,7 @@ var OperationMain = ( function()
 	                       
 	var _SetUpFlipAnimForProgressBar = function()
 	{
-		_m_oProgressFlipModule = new FlipPanelAnimation.Constructor( {
+		_m_oProgressFlipModule = new FlipPanelAnimation( {
 			controlBtnPrev: _m_cp.FindChildInLayoutFile( 'id-op-progress-prev' ),
 			controlBtnNext: _m_cp.FindChildInLayoutFile( 'id-op-progress-next' ),
 			animPanelA: _m_cp.FindChildInLayoutFile( 'id-op-progressbar-1' ),
@@ -727,7 +727,7 @@ var OperationMain = ( function()
 		}
 		else
 		{
-			var count = ItemInfo.GetLootListCount( rewardId );
+			var count = InventoryAPI.GetLootListItemsCount( rewardId );
 			
 			if ( !count )
 			{
@@ -737,7 +737,7 @@ var OperationMain = ( function()
 			{
 				for ( var i = 0; i < count; i++ )
 				{
-					itemsList.push( ItemInfo.GetLootListItemByIndex( rewardId , i ) );
+					itemsList.push( InventoryAPI.GetLootListItemIdByIndex( rewardId , i ) );
 				}
 			}
 
@@ -781,7 +781,7 @@ var OperationMain = ( function()
 
 		_m_cp.SetDialogVariable(
 			'reward_name',
-			ItemInfo.GetName(
+			InventoryAPI.GetItemName(
 				rewardId
 			));
 
@@ -880,7 +880,7 @@ var OperationMain = ( function()
 
 			var rarityColor = ( itemId === '0' && bIsCase ) ?
 				'#ffd700' :
-				ItemInfo.GetRarityColor( itemId );
+				InventoryAPI.GetItemRarityColor( itemId );
 		
 			if ( ItemInfo.IsWeapon( itemId ) )
 			{
@@ -929,7 +929,7 @@ var OperationMain = ( function()
 
 	var _SetUpFlipAnimForInspect = function()
 	{	 	
-		_m_oNamesFlipModuleInspect = new FlipPanelAnimation.Constructor( {
+		_m_oNamesFlipModuleInspect = new FlipPanelAnimation( {
 			controlBtnPrev: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-prev' ),
 			controlBtnNext: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-next' ),
 			animPanelA: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-name-1' ),
@@ -961,7 +961,7 @@ var OperationMain = ( function()
 			{
 				displayItemId = bIsCase ? activeTileId : oData.oCallbackData.items[ oData.activeIndex ];
 				NextPanel.GetParent().visible = true;
-				NextPanel.SetDialogVariable( 'reward_item_name', ItemInfo.GetName( displayItemId ));
+				NextPanel.SetDialogVariable( 'reward_item_name', InventoryAPI.GetItemName( displayItemId ));
 	
 				var aPips = _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-rarity' ).Children();
 				if( aPips.length > 0 )
@@ -1084,12 +1084,12 @@ var OperationMain = ( function()
 		var count = 0;
 		if( !islootlistItem )
 		{
-			count = ItemInfo.GetLootListCount( id );
+			count = InventoryAPI.GetLootListItemsCount( id );
 		}
 
 		if ( count > 0 || islootlistItem )
 		{
-			var lootListItem = islootlistItem ? id : ItemInfo.GetLootListItemByIndex( id, 0 );
+			var lootListItem = islootlistItem ? id : InventoryAPI.GetLootListItemIdByIndex( id, 0 );
 			if( ItemInfo.IsWeapon( lootListItem ) )
 			{
 				elTile.SetPanelEvent( 'onmouseover', _CacheWeapon.bind( undefined, lootListItem ) );

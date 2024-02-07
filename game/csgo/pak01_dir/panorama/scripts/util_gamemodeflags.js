@@ -1,6 +1,7 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
-var GameModeFlags = (function () {
+var GameModeFlags;
+(function (GameModeFlags) {
     const k_gamemodeflags = {
         competitive: {
             name: 'competitive',
@@ -23,11 +24,12 @@ var GameModeFlags = (function () {
             user_visible_flags: true
         }
     };
-    function _GetIcon(mode, flags) {
+    function GetIcon(mode, flags) {
         const iconIndex = k_gamemodeflags[mode].flags.indexOf(flags);
         return k_gamemodeflags[mode].icons[iconIndex];
     }
-    function _GetOptionsString(mode) {
+    GameModeFlags.GetIcon = GetIcon;
+    function GetOptionsString(mode) {
         let s = '';
         const arr = k_gamemodeflags[mode].flags;
         for (let i = 0; i < arr.length; ++i) {
@@ -35,27 +37,22 @@ var GameModeFlags = (function () {
         }
         return s;
     }
-    function _AreFlagsValid(mode, flags) {
+    GameModeFlags.GetOptionsString = GetOptionsString;
+    function AreFlagsValid(mode, flags) {
         const arrPossibleFlags = k_gamemodeflags[mode].flags;
         return (arrPossibleFlags.indexOf(flags) != -1);
     }
-    function _DoesModeUseFlags(mode) {
+    GameModeFlags.AreFlagsValid = AreFlagsValid;
+    function DoesModeUseFlags(mode) {
         return k_gamemodeflags.hasOwnProperty(mode);
     }
-    function _DoesModeShowUserVisibleFlags(mode) {
+    GameModeFlags.DoesModeUseFlags = DoesModeUseFlags;
+    function DoesModeShowUserVisibleFlags(mode) {
         return (k_gamemodeflags.hasOwnProperty(mode)) ? k_gamemodeflags[mode].user_visible_flags : false;
     }
-    function _GetFlags() {
+    GameModeFlags.DoesModeShowUserVisibleFlags = DoesModeShowUserVisibleFlags;
+    function GetFlags() {
         return k_gamemodeflags;
     }
-    return {
-        GetOptionsString: _GetOptionsString,
-        GetIcon: _GetIcon,
-        AreFlagsValid: _AreFlagsValid,
-        DoesModeUseFlags: _DoesModeUseFlags,
-        DoesModeShowUserVisibleFlags: _DoesModeShowUserVisibleFlags,
-        GetFlags: _GetFlags
-    };
-})();
-(function () {
-})();
+    GameModeFlags.GetFlags = GetFlags;
+})(GameModeFlags || (GameModeFlags = {}));

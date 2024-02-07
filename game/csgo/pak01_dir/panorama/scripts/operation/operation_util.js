@@ -273,7 +273,7 @@ var OperationUtil = ( function () {
 
 	var _GetLootListForReward = function( rewardId )
 	{
-		var count = ItemInfo.GetLootListCount( rewardId );
+		var count = InventoryAPI.GetLootListItemsCount( rewardId );
 		var itemsList = [];
 		if ( !count )
 		{
@@ -288,8 +288,8 @@ var OperationUtil = ( function () {
 				                                                              
 				                            
 				  
-				var itemId = ItemInfo.GetLootListItemByIndex( rewardId, i );
-				if ( InventoryAPI.DoesItemMatchDefinitionByName( itemId, 'spraypaint' ) || InventoryAPI.DoesItemMatchDefinitionByName( itemId, 'spray' ) )
+				var itemId = InventoryAPI.GetLootListItemIdByIndex( rewardId, i );
+				if ( ItemInfo.IsSprayPaint( itemId ) || ItemInfo.IsSpraySealed( itemId ) )
 				{
 					itemId = InventoryAPI.GenerateSprayTintedItemID( itemId );
 				}

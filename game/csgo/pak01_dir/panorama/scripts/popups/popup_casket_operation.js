@@ -57,7 +57,7 @@ var ConfigurePopupFromItemsList = function( itemidsList )
 
 	                                 
 	elItem.FindChildInLayoutFile( 'ItemImage' ).itemid = itemid;
-	elItem.FindChildInLayoutFile( 'JsRarity' ).style.backgroundColor = ItemInfo.GetRarityColor( itemid );
+	elItem.FindChildInLayoutFile( 'JsRarity' ).style.backgroundColor = InventoryAPI.GetItemRarityColor( itemid );
 	ItemInfo.GetFormattedName( itemid ).SetOnLabel( elItem.FindChildInLayoutFile( 'JsItemName' ) );
 
                              

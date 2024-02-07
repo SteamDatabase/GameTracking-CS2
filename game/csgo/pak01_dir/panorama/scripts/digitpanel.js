@@ -1,7 +1,8 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
-var DigitPanelFactory = (function () {
-    function _MakeDigitPanel(elParent, nDigits, suffix = undefined, duration = 0.5, digitStringToken = "#digitpanel_digits", timingFunc = 'cubic-bezier( 0.9, 0.01, 0.1, 1 )') {
+var DigitPanelFactory;
+(function (DigitPanelFactory) {
+    function MakeDigitPanel(elParent, nDigits, suffix = undefined, duration = 0.5, digitStringToken = "#digitpanel_digits", timingFunc = 'cubic-bezier( 0.9, 0.01, 0.1, 1 )') {
         elParent.RemoveAndDeleteChildren();
         const elContainer = $.CreatePanel('Panel', elParent, 'DigitPanel');
         elContainer.m_nDigits = nDigits;
@@ -16,9 +17,10 @@ var DigitPanelFactory = (function () {
         _MakeDigitPanelContents(elContainer);
         return elContainer;
     }
+    DigitPanelFactory.MakeDigitPanel = MakeDigitPanel;
     function _UpdateSuffix(elContainer) {
         if (elContainer.m_suffix != undefined) {
-            var elSuffixLabel = elContainer.FindChildTraverse('DigitPanel-Suffix');
+            let elSuffixLabel = elContainer.FindChildTraverse('DigitPanel-Suffix');
             if (!elSuffixLabel) {
                 elSuffixLabel = $.CreatePanel('Label', elContainer, 'DigitPanel-Suffix');
                 elSuffixLabel.style.marginLeft = '2px';
@@ -78,7 +80,7 @@ var DigitPanelFactory = (function () {
             elContainer.style.width = width + 'px';
         }
     }
-    function _SetDigitPanelString(elParent, string, bInstant = false) {
+    function SetDigitPanelString(elParent, string, bInstant = false) {
         if (!elParent || !elParent.IsValid())
             return;
         const elContainer = elParent.FindChildTraverse('DigitPanel');
@@ -92,7 +94,7 @@ var DigitPanelFactory = (function () {
         if (elContainer.GetChildCount() === 0) {
             elContainer.m_pendingSetStringHandle = $.Schedule(0.1, () => {
                 elContainer.m_pendingSetStringHandle = null;
-                _SetDigitPanelString(elParent, string, bInstant);
+                SetDigitPanelString(elParent, string, bInstant);
             });
             elContainer.m_bPendingSetStringInstant = bInstant;
             return;
@@ -125,8 +127,5 @@ var DigitPanelFactory = (function () {
         }
         _UpdateSuffix(elContainer);
     }
-    return {
-        MakeDigitPanel: _MakeDigitPanel,
-        SetDigitPanelString: _SetDigitPanelString,
-    };
-})();
+    DigitPanelFactory.SetDigitPanelString = SetDigitPanelString;
+})(DigitPanelFactory || (DigitPanelFactory = {}));

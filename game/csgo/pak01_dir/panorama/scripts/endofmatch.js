@@ -90,12 +90,13 @@ var EndOfMatch;
         _m_cP.FindChildrenWithClassTraverse("timer").forEach(el => el.active = false);
         var elNavBar = _m_cP.FindChildTraverse("id-content-navbar__tabs");
         elNavBar.RemoveAndDeleteChildren();
-        _m_cP.FindChildrenWithClassTraverse("eom-panel").forEach(function (elPanel, i) {
+        _m_cP.FindChildrenWithClassTraverse("eom-panel").forEach((elPanel, i) => {
             var elRBtn = $.CreatePanel("RadioButton", elNavBar, "rb--" + elPanel.id);
             elRBtn.BLoadLayoutSnippet("snippet_navbar-button");
             elRBtn.AddClass("navbar-button");
             elRBtn.AddClass("appear");
-            elRBtn.SetPanelEvent('onactivate', _NavigateToTab.bind(undefined, elPanel.id));
+            let tabName = elPanel.id;
+            elRBtn.SetPanelEvent('onactivate', () => _NavigateToTab(tabName));
             elRBtn.FindChildTraverse("id-navbar-button__label").text = $.Localize("#" + elPanel.id);
         });
     }
@@ -148,13 +149,13 @@ var EndOfMatch;
     }
     function StartDisplayTimer(time) {
         var elProgBar = _m_cP.FindChildTraverse("id-display-timer-progress-bar");
-        $.Schedule(0.0, function () {
+        $.Schedule(0.0, () => {
             if (elProgBar && elProgBar.IsValid()) {
                 elProgBar.style.transitionDuration = "0s";
                 elProgBar.style.width = '0%';
             }
         });
-        $.Schedule(0.0, function () {
+        $.Schedule(0.0, () => {
             if (elProgBar && elProgBar.IsValid()) {
                 elProgBar.style.transitionDuration = time + "s";
                 elProgBar.style.width = '100%';
@@ -192,5 +193,3 @@ var EndOfMatch;
         _m_cP.SetWantsCamera(false);
     }
 })(EndOfMatch || (EndOfMatch = {}));
-(function () {
-})();

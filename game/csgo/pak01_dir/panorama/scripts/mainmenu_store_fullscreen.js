@@ -16,32 +16,32 @@ var MainMenuStore;
         if (!ConnectedToGcCheck()) {
             return;
         }
-        _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', MainMenuStore.ShowPrimePanelOnHomePage);
-        if (_m_activePanelId === '' || !_m_activePanelId) {
-            StoreItems.MakeStoreItemList();
-            SetDefaultTab();
-        }
-        else if (StoreItems.GetStoreItems().coupon && StoreItems.GetStoreItems().coupon.length < 1) {
+        _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', ShowPrimePanelOnHomePage);
+        if (_m_activePanelId === '' ||
+            !_m_activePanelId ||
+            (StoreItems.GetStoreItems().coupon && StoreItems.GetStoreItems().coupon.length < 1)) {
             StoreItems.MakeStoreItemList();
         }
         ShowPrimePanelOnHomePage();
         MakeTabsBtnsFromStoreData();
-        NavigateToTab(_m_activePanelId);
+        let openToSection = _m_cp.GetAttributeString('set-active-section', '');
+        if (_m_activePanelId === '' || !_m_activePanelId || openToSection !== '') {
+            SetDefaultTab(openToSection);
+        }
+        else {
+            NavigateToTab(_m_activePanelId);
+        }
         AccountWalletUpdated();
     }
-    MainMenuStore.ReadyForDisplay = ReadyForDisplay;
     function UnreadyForDisplay() {
         if (_m_inventoryUpdatedHandler) {
             $.UnregisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', _m_inventoryUpdatedHandler);
             _m_inventoryUpdatedHandler = null;
         }
     }
-    MainMenuStore.UnreadyForDisplay = UnreadyForDisplay;
     function ConnectedToGcCheck() {
         if (!MyPersonaAPI.IsInventoryValid() || !MyPersonaAPI.IsConnectedToGC()) {
-            UiToolkitAPI.ShowGenericPopupOk($.Localize('#SFUI_SteamConnectionErrorTitle'), $.Localize('#SFUI_Steam_Error_LinkUnexpected'), '', function () {
-                $.DispatchEvent('HideContentPanel');
-            });
+            UiToolkitAPI.ShowGenericPopupOk($.Localize('#SFUI_SteamConnectionErrorTitle'), $.Localize('#SFUI_Steam_Error_LinkUnexpected'), '', () => $.DispatchEvent('HideContentPanel'));
             return false;
         }
         return true;
@@ -55,9 +55,15 @@ var MainMenuStore;
         }
         $.GetContextPanel().FindChildInLayoutFile('id-rewards-background').SetHasClass('hidden', !bHasPrime);
     }
-    MainMenuStore.ShowPrimePanelOnHomePage = ShowPrimePanelOnHomePage;
-    function SetDefaultTab() {
-        let navBtn = _m_cp.FindChildInLayoutFile('id-store-nav-home');
+    function SetDefaultTab(openToSection) {
+        let navBtn = null;
+        if (openToSection !== '') {
+            navBtn = _m_cp.FindChildInLayoutFile(openToSection);
+            _m_cp.SetAttributeString('set-active-section', '');
+        }
+        else if (_m_activePanelId === '' || !_m_activePanelId) {
+            navBtn = _m_cp.FindChildInLayoutFile('id-store-nav-home');
+        }
         $.DispatchEvent("Activated", navBtn, "mouse");
         navBtn.checked = true;
     }
@@ -82,7 +88,6 @@ var MainMenuStore;
         }
     }
     MainMenuStore.NavigateToTab = NavigateToTab;
-    ;
     function UpdateItemsInHomeSection(catagory, parentId, numItemsToShow) {
         let elPanel = _m_cp.FindChildInLayoutFile(parentId);
         let elParent = _m_cp.FindChildInLayoutFile('id-store-home-section-' + catagory);
@@ -108,7 +113,7 @@ var MainMenuStore;
     function MakeTabsBtnsFromStoreData() {
         let elParent = _m_cp.FindChildInLayoutFile('id-store-lister-tabs');
         let oItemsByCategory = StoreItems.GetStoreItems();
-        Object.entries(oItemsByCategory).forEach(([key, value]) => {
+        for (let [key, value] of Object.entries(oItemsByCategory)) {
             let panelIdString = 'id-store-nav-' + key;
             let elButton = elParent.FindChildInLayoutFile(panelIdString);
             if (value.length > 0 && !elButton) {
@@ -117,17 +122,16 @@ var MainMenuStore;
                     class: 'content-navbar__tabs__btn'
                 });
                 let btnString = key === 'tournament' ?
-                    // @ts-ignore 
                     $.Localize('#store_nav_' + key + '_' + g_ActiveTournamentInfo.eventid) :
                     $.Localize('#store_nav_' + key);
                 $.CreatePanel('Label', elButton, '', {
                     text: btnString
                 });
                 elButton.SetPanelEvent('onactivate', () => {
-                    MainMenuStore.NavigateToTab(_m_pagePrefix + key, key);
+                    NavigateToTab(_m_pagePrefix + key, key);
                 });
             }
-        });
+        }
     }
     function MakePageFromStoreData(typeKey) {
         let panelIdString = _m_pagePrefix + typeKey;
@@ -144,11 +148,10 @@ var MainMenuStore;
             UpdateDynamicLister(elPanel, typeKey);
         }
     }
-    MainMenuStore.MakePageFromStoreData = MakePageFromStoreData;
     function UpdateDynamicLister(elList, typeKey) {
         let oItemsByCategory = StoreItems.GetStoreItems();
         let aItemsList = oItemsByCategory[typeKey];
-        elList.SetLoadListItemFunction(function (parent, nPanelIdx, reusePanel) {
+        elList.SetLoadListItemFunction((parent, nPanelIdx, reusePanel) => {
             if (!reusePanel || !reusePanel.IsValid()) {
                 reusePanel = $.CreatePanel("Button", elList, aItemsList[nPanelIdx].id);
                 reusePanel.BLoadLayout('file://{resources}/layout/itemtile_store.xml', false, false);
@@ -184,14 +187,12 @@ var MainMenuStore;
             elBalance.RemoveClass('hidden');
         }
     }
-    MainMenuStore.AccountWalletUpdated = AccountWalletUpdated;
-    ;
+    {
+        ReadyForDisplay();
+        let elJsStore = $('#JsMainMenuStore');
+        $.RegisterEventHandler('ReadyForDisplay', elJsStore, ReadyForDisplay);
+        $.RegisterEventHandler('UnreadyForDisplay', elJsStore, UnreadyForDisplay);
+        $.RegisterForUnhandledEvent('PanoramaComponent_Store_AccountWalletUpdated', AccountWalletUpdated);
+        $.RegisterForUnhandledEvent('PanoramaComponent_Store_PriceSheetChanged', ReadyForDisplay);
+    }
 })(MainMenuStore || (MainMenuStore = {}));
-(function () {
-    MainMenuStore.ReadyForDisplay();
-    let elJsStore = $('#JsMainMenuStore');
-    $.RegisterEventHandler('ReadyForDisplay', elJsStore, MainMenuStore.ReadyForDisplay);
-    $.RegisterEventHandler('UnreadyForDisplay', elJsStore, MainMenuStore.UnreadyForDisplay);
-    $.RegisterForUnhandledEvent('PanoramaComponent_Store_AccountWalletUpdated', MainMenuStore.AccountWalletUpdated);
-    $.RegisterForUnhandledEvent('PanoramaComponent_Store_PriceSheetChanged', MainMenuStore.ReadyForDisplay);
-})();

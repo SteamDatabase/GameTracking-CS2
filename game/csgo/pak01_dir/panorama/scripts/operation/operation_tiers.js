@@ -270,7 +270,7 @@ var OperationTiers = ( function()
             _CreateItemImage( list.itemIds[ 0 ], imageIdx, 'Panel', elContainer );
             elContainer.SetPanelEvent( 'onactivate', OnActivateRadioButton.bind( undefined, list.itemIds[ 0 ], list.type, rewardRowData, null ) );
             
-            var lootlistItemId = ( InventoryAPI.GetLootListItemsCount( list.itemIds[ 0 ] ) > 0 ) ? ItemInfo.GetLootListItemByIndex( list.itemIds[ 0 ], 0 ) : null;
+            var lootlistItemId = ( InventoryAPI.GetLootListItemsCount( list.itemIds[ 0 ] ) > 0 ) ? InventoryAPI.GetLootListItemIdByIndex( list.itemIds[ 0 ], 0 ) : null;
             if ( lootlistItemId )
             {
                 _CacheItemOnMouseOver( elContainer, lootlistItemId );
@@ -303,7 +303,7 @@ var OperationTiers = ( function()
                 elItem.SetPanelEvent( 'onactivate', OnActivateRadioButton.bind( undefined, itemid, list.type, rewardRowData, elContainer ) );
 
 				                                                                                        
-				var lootlistItemId = ( InventoryAPI.GetLootListItemsCount( itemid ) > 0 ) ? ItemInfo.GetLootListItemByIndex( itemid, 0 ) : null;
+				var lootlistItemId = ( InventoryAPI.GetLootListItemsCount( itemid ) > 0 ) ? InventoryAPI.GetLootListItemIdByIndex( itemid, 0 ) : null;
 				if ( lootlistItemId )
 				{
 					_CacheItemOnMouseOver( elItem, lootlistItemId );
@@ -604,12 +604,12 @@ var OperationInspect = ( function()
         m_inspectPanel.SetHasClass( 'free', type === 'free' );
         m_inspectPanel.SetHasClass( 'unlocked', rowData.isUnlocked === true );
 
-        var aLetters = ItemInfo.GetName( rewardId ).split( '' );
+        var aLetters = InventoryAPI.GetItemName( rewardId ).split( '' );
         _FillLabelAsTypeWriter( aLetters, m_inspectPanel.FindChildInLayoutFile( 'id-tiers-inspect-name' ), 0.02, true );
 
-                                                            
+                                                                
 
-        var count = ItemInfo.GetLootListCount( rewardId );
+        var count = InventoryAPI.GetLootListItemsCount( rewardId );
         var itemsList = [];
         if ( !count )
         {
@@ -619,7 +619,7 @@ var OperationInspect = ( function()
         {
             for ( var i = 0; i < count; i++ )
             {
-                itemsList.push( ItemInfo.GetLootListItemByIndex( rewardId, i ) );
+                itemsList.push( InventoryAPI.GetLootListItemIdByIndex( rewardId, i ) );
             }
         }
 
@@ -656,7 +656,7 @@ var OperationInspect = ( function()
 
             var rarityColor = ( itemId === '0' && bIscase ) ?
                 '#ffd700' :
-                ItemInfo.GetRarityColor( itemId );
+                InventoryAPI.GetItemRarityColor( itemId );
         
             if ( ItemInfo.IsWeapon( itemId ) )
             {
@@ -743,7 +743,7 @@ var OperationInspect = ( function()
         var elImage = m_inspectPanel.FindChildInLayoutFile( 'id-tiers-inspect-image' );
         var elParent = elImage.GetParent();
         elImage.SetHasClass( 'popup-decodable-wash-color-unusual-bg', false );
-        elParent.SetDialogVariable( 'item_name', ItemInfo.GetName( itemId ) );
+        elParent.SetDialogVariable( 'item_name', InventoryAPI.GetItemName( itemId ) );
 
         elModel.visible = false; 
         elImage.visible = false;

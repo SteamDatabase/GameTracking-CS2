@@ -12,7 +12,8 @@
 	title 		"Counter-Strike 2"
 	title_pw	"E58F8DE68190E7B2BEE88BB1EFBC9AE585A8E79083E694BBE58ABF"
 	
-	LayeredOnMod	csgo_imported // Inherits the gameinfo.gi data from csgo_imported (which itself inherits from csgo_core)
+	LayeredOnMod	csgo_imported
+	SatelliteDir	csgo_gc
 
 	FileSystem
 	{
@@ -74,6 +75,8 @@
 		}
 		"sv_minrate"	"98304"
 		"sv_maxunlag"	"0.200"
+
+		"cl_interp_ratio" "0"
 
 		// GOTV controls
 		"tv_secret_code"		"0"
@@ -158,13 +161,19 @@
 		"snd_steamaudio_perspective_correction_factor"		"1.0"
 		"snd_steamaudio_normalize_default_hrtf_volume"		"1"
 		"snd_steamaudio_default_hrtf_volume_gain"			"0.0"
+		"snd_hrtf_distance_behind"							"50"
+		"snd_hrtf_perspective_distance_behind"				"50"
 		"snd_steamaudio_max_hrtf_normalization_gain_db"		"6.0"
 		"snd_steamaudio_enable_pathing"						"1"
 		"snd_steamaudio_source_pathing_debug"				"0"
 
+		"snd_event_browser_default_stack"			"csgo_mega"
+		"snd_event_browser_default_vsnd_field"		"public.vsnd_files_track_01"
+
+
 		// Need much tighter sound clock sync
 		"snd_delay_sound_ms_max"	"40"
-		
+
 		//don't let people miss with speaker config settings.
 		"speaker_config"
 		{
@@ -180,12 +189,15 @@
 		"phys_use_position_based_toi_test" "1"
 
 		// VOIP Settings.
+		"voice_in_process"	"1"
 		"voice_threshold"
 		{
-			"min"		"0"
-			"default"	"0"
-			"max"		"0"
+			"version" "2"
 		}
+
+		"sv_long_frame_ms" "15"
+		"cq_buffer_bloat_msecs_max" "64"
+		"cq_buffer_bloat_msecs" "64"
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 
@@ -266,6 +278,7 @@
 			"include"       "materials"
 			"include"       "models"
 			"include"       "panorama/images/overheadmaps"
+			"include"       "panorama/images/map_icons"
 			"include"       "particles"
 			"include"       "resource/overviews"
 			"include"       "scripts/vscripts"

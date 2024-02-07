@@ -6,21 +6,17 @@
 /// <reference path="endofmatch.ts" />
 var EOM_Skillgroup;
 (function (EOM_Skillgroup) {
-    var _m_pauseBeforeEnd = 1.5;
-    var _m_cP = $.GetContextPanel();
-    function _msg(msg) {
-    }
+    let _m_pauseBeforeEnd = 1.5;
+    let _m_cP = $.GetContextPanel();
     _m_cP.Data().m_retries = 0;
     function _DisplayMe() {
         if (!_m_cP || !_m_cP.IsValid())
             return false;
         _Reset();
-        if (!MockAdapter.bSkillgroupDataReady(_m_cP)) {
+        if (!MockAdapter.bSkillgroupDataReady(_m_cP))
             return false;
-        }
-        if (MyPersonaAPI.GetElevatedState() !== 'elevated') {
+        if (MyPersonaAPI.GetElevatedState() !== 'elevated')
             return false;
-        }
         let oSkillgroupData = MockAdapter.SkillgroupDataJSO(_m_cP);
         let localPlayerUpdate = oSkillgroupData[MockAdapter.GetLocalPlayerXuid()];
         if (!localPlayerUpdate)
@@ -112,7 +108,7 @@ var EOM_Skillgroup;
     }
     ;
     function _LoadAndShowNewRankReveal(oData) {
-        $.Schedule(1, _RevealNewIcon.bind(undefined, oData));
+        $.Schedule(1, () => _RevealNewIcon(oData));
     }
     function _RevealNewIcon(oData) {
         if (!_m_cP || !_m_cP.IsValid())
@@ -122,12 +118,12 @@ var EOM_Skillgroup;
             _m_cP.FindChildInLayoutFile('id-eom-skillgroup-emblem').AddClass("uprank-anim");
             _m_cP.SetDialogVariable('rank-info', oData.new_rating_info);
             let elParticleFlare = _m_cP.FindChildInLayoutFile('id-eom-skillgroup-emblem--new__pfx--above');
-            let aParticleSettings = GetSkillGroupSettings(oData.new_rating, oData.mode);
+            let aParticleSettings = RankSkillgroupParticles.GetSkillGroupSettings(oData.new_rating, oData.mode);
             elParticleFlare.SetParticleNameAndRefresh(aParticleSettings.particleName);
             elParticleFlare.SetControlPoint(aParticleSettings.cpNumber, aParticleSettings.cpValue[0], aParticleSettings.cpValue[1], 1);
             elParticleFlare.StartParticles();
             let elParticleAmb = _m_cP.FindChildInLayoutFile('id-eom-skillgroup-emblem--new__pfx--below');
-            let aParticleAmbSettings = GetSkillGroupAmbientSettings(oData.new_rating, oData.mode);
+            let aParticleAmbSettings = RankSkillgroupParticles.GetSkillGroupAmbientSettings(oData.new_rating, oData.mode);
             elParticleAmb.SetParticleNameAndRefresh(aParticleAmbSettings.particleName);
             elParticleAmb.SetControlPoint(aParticleAmbSettings.cpNumber, aParticleAmbSettings.cpValue[0], aParticleAmbSettings.cpValue[1], 1);
             elParticleAmb.StartParticles();
@@ -184,12 +180,12 @@ var EOM_Skillgroup;
             elImage.RemoveClass('hidden');
             elImage.SetImage(oData.old_image);
             let elParticleFlare = _m_cP.FindChildInLayoutFile('id-eom-skillgroup--current__pfx--above');
-            let aParticleSettings = GetSkillGroupSettings(oData.old_rating, oData.mode);
+            let aParticleSettings = RankSkillgroupParticles.GetSkillGroupSettings(oData.old_rating, oData.mode);
             elParticleFlare.SetParticleNameAndRefresh(aParticleSettings.particleName);
             elParticleFlare.SetControlPoint(aParticleSettings.cpNumber, aParticleSettings.cpValue[0], aParticleSettings.cpValue[1], 0);
             elParticleFlare.StartParticles();
             let elParticleAmb = _m_cP.FindChildInLayoutFile('id-eom-skillgroup--current__pfx--below');
-            let aParticleAmbSettings = GetSkillGroupAmbientSettings(oData.old_rating, oData.mode);
+            let aParticleAmbSettings = RankSkillgroupParticles.GetSkillGroupAmbientSettings(oData.old_rating, oData.mode);
             elParticleAmb.SetParticleNameAndRefresh(aParticleAmbSettings.particleName);
             elParticleAmb.SetControlPoint(aParticleAmbSettings.cpNumber, aParticleAmbSettings.cpValue[0], aParticleAmbSettings.cpValue[1], 0);
             elParticleAmb.StartParticles();
@@ -304,22 +300,16 @@ var EOM_Skillgroup;
             return;
         }
     }
-    EOM_Skillgroup.Start = Start;
     function _End() {
         EndOfMatch.ShowNextPanel();
     }
     function Shutdown() {
     }
-    EOM_Skillgroup.Shutdown = Shutdown;
-    function name() {
-        return 'eom-skillgroup';
+    {
+        EndOfMatch.RegisterPanelObject({
+            name: 'eom-skillgroup',
+            Start: Start,
+            Shutdown: Shutdown
+        });
     }
-    EOM_Skillgroup.name = name;
 })(EOM_Skillgroup || (EOM_Skillgroup = {}));
-(function () {
-    EndOfMatch.RegisterPanelObject({
-        name: 'eom-skillgroup',
-        Start: EOM_Skillgroup.Start,
-        Shutdown: EOM_Skillgroup.Shutdown
-    });
-})();

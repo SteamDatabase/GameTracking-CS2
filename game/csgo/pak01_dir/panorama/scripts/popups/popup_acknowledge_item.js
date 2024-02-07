@@ -4,18 +4,16 @@
 /// <reference path="popup_capability_can_sticker.ts" />
 var AcknowledgeItems;
 (function (AcknowledgeItems_1) {
-    let m_isCapabliltyPopupOpen = false;
     let m_elEquipBtn = $('#EquipItemBtn');
     let m_focusedItemId = '';
     function OnLoad() {
-        $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', AcknowledgeItems.Init);
-        $.RegisterEventHandler("SetCarouselSelectedChild", $.GetContextPanel(), AcknowledgeItems.CarouselUpdated);
-        $.RegisterForUnhandledEvent('CSGOShowMainMenu', AcknowledgeItems.OnMainMenuShow);
+        $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', Init);
+        $.RegisterEventHandler("SetCarouselSelectedChild", $.GetContextPanel(), CarouselUpdated);
+        $.RegisterForUnhandledEvent('CSGOShowMainMenu', Init);
         $.RegisterForUnhandledEvent('PopulateLoadingScreen', AcknowledgeItems.AcknowledgeAllItems.OnCloseEvents);
         Init();
     }
     AcknowledgeItems_1.OnLoad = OnLoad;
-    ;
     function Init() {
         const items = GetItems();
         if (items.length < 1) {
@@ -49,8 +47,6 @@ var AcknowledgeItems;
         });
         $.Schedule(1, SetFocusForNavButton);
     }
-    AcknowledgeItems_1.Init = Init;
-    ;
     function SetFocusForNavButton() {
         let elParent = $.GetContextPanel().FindChildInLayoutFile('AcknowledgeItemsCarouselNav');
         elParent.FindChildInLayoutFile('NextItemButton').SetPanelEvent('onmouseover', () => {
@@ -60,13 +56,12 @@ var AcknowledgeItems;
             elParent.FindChildInLayoutFile('PreviousItemButton').SetFocus();
         });
     }
-    ;
     function MakeItemPanel(item, index, numItems, elParent) {
         const elItemTile = $.CreatePanel('Panel', elParent, item.id);
         elItemTile.BLoadLayoutSnippet('Item');
         const modelPath = ShowModelOrItem(elItemTile, item.id, item.type);
         ResizeForVerticalItem(elItemTile, item.id);
-        const rarityColor = ItemInfo.GetRarityColor(item.id);
+        const rarityColor = InventoryAPI.GetItemRarityColor(item.id);
         SetTitle(elItemTile, item, rarityColor);
         SetParticlesBg(elItemTile, rarityColor, modelPath, item.id);
         ColorRarityBar(elItemTile, rarityColor);
@@ -76,25 +71,21 @@ var AcknowledgeItems;
         ItemCount(elItemTile, index, numItems);
         elParent.Data().itemId = item.id;
     }
-    ;
     function ShowModelOrItem(elItemTile, id, type = "") {
-        var elItemModelImagePanel = elItemTile.FindChildInLayoutFile('PopUpInspectModelOrImage');
+        let elItemModelImagePanel = elItemTile.FindChildInLayoutFile('PopUpInspectModelOrImage');
         elItemModelImagePanel.Data().useAcknowledge = !(ItemInfo.IsSprayPaint(id) || ItemInfo.IsSpraySealed(id));
         return InspectModelImage.Init(elItemModelImagePanel, id);
     }
-    ;
     function ResizeForVerticalItem(elItemTile, id) {
         if (ItemInfo.IsCharacter(id)) {
-            var elPanel = elItemTile.FindChildInLayoutFile('AcknowledgeItemContainer');
+            let elPanel = elItemTile.FindChildInLayoutFile('AcknowledgeItemContainer');
             elPanel.AddClass('popup-acknowledge__item__model--vertical');
         }
     }
-    ;
     function SetItemName(elItemTile, id) {
         const elLabel = elItemTile.FindChildInLayoutFile('AcknowledgeItemLabel');
-        elLabel.text = ItemInfo.GetName(id);
+        elLabel.text = InventoryAPI.GetItemName(id);
     }
-    ;
     function SetTitle(elItemTile, item, rarityColor) {
         const isOperationReward = item.pickuptype === 'quest_reward';
         const defName = InventoryAPI.GetItemDefinitionName(item.id);
@@ -108,12 +99,8 @@ var AcknowledgeItems;
             const typeWithoutParams = (idxOfExtraParams > 0) ? titleSuffex.substring(0, idxOfExtraParams) : titleSuffex;
             elTitle.text = $.Localize('#popup_title_' + typeWithoutParams);
         }
-        if (isOperationReward) {
-            const tier = ItemInfo.GetRewardTier(item.id);
-        }
         elTitle.style.washColor = rarityColor;
     }
-    ;
     function SetParticlesBg(elItemTile, rarityColor, modelPath, itemId) {
         const oColor = HexColorToRgb(rarityColor);
         let elParticlePanel = elItemTile.FindChildInLayoutFile('popup-acknowledge__item__particle');
@@ -126,19 +113,16 @@ var AcknowledgeItems;
         }
         elParticlePanel.StopParticlesImmediately(false);
     }
-    ;
     function HexColorToRgb(hex) {
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
         const b = parseInt(hex.slice(5, 7), 16);
         return { r, g, b };
     }
-    ;
     function ColorRarityBar(elItemTile, rarityColor) {
         const elBar = elItemTile.FindChildInLayoutFile('AcknowledgeBar');
         elBar.style.washColor = rarityColor;
     }
-    ;
     function ShowGiftPanel(elItemTile, id) {
         const elPanel = elItemTile.FindChildInLayoutFile('AcknowledgeItemGift');
         const gifterId = ItemInfo.GetGifter(id);
@@ -147,19 +131,6 @@ var AcknowledgeItems;
         elLabel.SetDialogVariable('name', FriendsListAPI.GetFriendName(gifterId));
         elLabel.text = $.Localize('#acknowledge_gifter', elLabel);
     }
-    ;
-    function ShowQuestPanel(elItemTile, id) {
-        const elPanel = elItemTile.FindChildInLayoutFile('AcknowledgeItemQuest');
-        elPanel.SetHasClass('hidden', 'quest_reward' !== ItemInfo.GetItemPickUpMethod(id));
-        const nTierReward = ItemInfo.GetRewardTier(id);
-        const bPremium = ItemInfo.BIsRewardPremium(id);
-        elPanel.SetHasClass("tier-reward", nTierReward > 0);
-        elPanel.SetHasClass("premium", bPremium);
-        if (nTierReward > 0) {
-            elPanel.SetDialogVariableInt("tier_num", nTierReward);
-        }
-    }
-    ;
     function ShowSetPanel(elItemTile, id) {
         const elPanel = elItemTile.FindChildInLayoutFile('AcknowledgeItemSet');
         const strSetName = InventoryAPI.GetTag(id, 'ItemSet');
@@ -178,7 +149,6 @@ var AcknowledgeItems;
         elImage.SetImage('file://{images}/econ/set_icons/' + strSetName + '_small.png');
         elPanel.SetHasClass('hide', false);
     }
-    ;
     function ItemCount(elItemTile, index, numItems) {
         const elCountLabel = elItemTile.FindChildInLayoutFile('AcknowledgeItemCount');
         if (numItems < 2) {
@@ -188,13 +158,12 @@ var AcknowledgeItems;
         elCountLabel.visible = true;
         elCountLabel.text = (index + 1) + ' / ' + numItems;
     }
-    ;
     function GetItems() {
         const newItems = [];
         const itemCount = InventoryAPI.GetUnacknowledgeItemsCount();
         for (let i = 0; i < itemCount; i++) {
             const itemId = InventoryAPI.GetUnacknowledgeItemByIndex(i);
-            const pickUpType = ItemInfo.GetItemPickUpMethod(itemId);
+            const pickUpType = InventoryAPI.GetItemPickupMethod(itemId);
             if (ItemstoAcknowlegeRightAway(itemId))
                 InventoryAPI.AcknowledgeNewItembyItemID(itemId);
             else
@@ -209,13 +178,9 @@ var AcknowledgeItems;
         return rewardItems.concat(otherItems);
     }
     AcknowledgeItems_1.GetItems = GetItems;
-    ;
     function GetItemsByType(afilters, bShouldAcknowledgeItems) {
         const aItems = GetItems();
-        const filterByDefNames = function (oItem) {
-            return afilters.includes(ItemInfo.GetItemDefinitionName(oItem.id));
-        };
-        const alist = aItems.filter(filterByDefNames);
+        const alist = aItems.filter(oItem => afilters.includes(InventoryAPI.GetItemDefinitionName(oItem.id)));
         if (bShouldAcknowledgeItems) {
             AcknowledgeAllItems.SetItemsToSaveAsNew(alist);
             AcknowledgeAllItems.AcknowledgeItems();
@@ -223,7 +188,6 @@ var AcknowledgeItems;
         return alist.map(item => item.id);
     }
     AcknowledgeItems_1.GetItemsByType = GetItemsByType;
-    ;
     function GetUpdatedItem() {
         const itemidExplicitAcknowledge = $.GetContextPanel().GetAttributeString("ackitemid", '');
         if (itemidExplicitAcknowledge === '')
@@ -233,36 +197,24 @@ var AcknowledgeItems;
             type: $.GetContextPanel().GetAttributeString("acktype", '')
         };
     }
-    ;
     function ItemstoAcknowlegeRightAway(id) {
         const itemType = InventoryAPI.GetItemTypeFromEnum(id);
         return itemType === 'quest' || itemType === 'coupon_crate' || itemType === 'campaign';
     }
-    ;
-    function SetIsCapabilityPopUpOpen(isOpen) {
-        m_isCapabliltyPopupOpen = isOpen;
-    }
-    AcknowledgeItems_1.SetIsCapabilityPopUpOpen = SetIsCapabilityPopUpOpen;
-    ;
     function CarouselUpdated(elPanel) {
         $.Schedule(.15, () => {
             if (elPanel && elPanel.IsValid())
                 ShowHideOpenItemInLayoutBtn(elPanel.Data().itemId);
         });
     }
-    AcknowledgeItems_1.CarouselUpdated = CarouselUpdated;
     function ShowHideOpenItemInLayoutBtn(itemId) {
         m_focusedItemId = itemId;
         let category = InventoryAPI.GetLoadoutCategory(itemId);
-        var isHidden = (ItemInfo.ItemHasCapability(itemId, 'decodable') || category == undefined || category == '' || category == null) ? true : false;
+        let isHidden = !category || ItemInfo.ItemHasCapability(itemId, 'decodable');
         if (m_elEquipBtn) {
             m_elEquipBtn.SetHasClass('hide', isHidden);
         }
     }
-    function OnMainMenuShow() {
-        AcknowledgeItems.Init();
-    }
-    AcknowledgeItems_1.OnMainMenuShow = OnMainMenuShow;
     let AcknowledgeAllItems;
     (function (AcknowledgeAllItems) {
         let itemsToSave = [];
@@ -270,10 +222,9 @@ var AcknowledgeItems;
             itemsToSave = items;
         }
         AcknowledgeAllItems.SetItemsToSaveAsNew = SetItemsToSaveAsNew;
-        ;
         function AcknowledgeItems() {
-            itemsToSave.forEach(function (item) {
-                InventoryAPI.SetItemSessionPropertyValue(item.id, 'item_pickup_method', ItemInfo.GetItemPickUpMethod(item.id));
+            for (let item of itemsToSave) {
+                InventoryAPI.SetItemSessionPropertyValue(item.id, 'item_pickup_method', InventoryAPI.GetItemPickupMethod(item.id));
                 if (item.type === 'acknowledge') {
                     InventoryAPI.SetItemSessionPropertyValue(item.id, 'recent', '1');
                     InventoryAPI.AcknowledgeNewItembyItemID(item.id);
@@ -282,10 +233,9 @@ var AcknowledgeItems;
                     InventoryAPI.SetItemSessionPropertyValue(item.id, 'updated', '1');
                     $.DispatchEvent('RefreshActiveInventoryList');
                 }
-            });
+            }
         }
         AcknowledgeAllItems.AcknowledgeItems = AcknowledgeItems;
-        ;
         function OnActivate() {
             AcknowledgeItems();
             InventoryAPI.AcknowledgeNewBaseItems();
@@ -296,7 +246,6 @@ var AcknowledgeItems;
             OnCloseEvents();
         }
         AcknowledgeAllItems.OnActivate = OnActivate;
-        ;
         function OnCloseEvents() {
             $.DispatchEvent('UIPopupButtonClicked', '');
             $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_new_item_accept', 'MOUSE');
@@ -304,5 +253,3 @@ var AcknowledgeItems;
         AcknowledgeAllItems.OnCloseEvents = OnCloseEvents;
     })(AcknowledgeAllItems = AcknowledgeItems_1.AcknowledgeAllItems || (AcknowledgeItems_1.AcknowledgeAllItems = {}));
 })(AcknowledgeItems || (AcknowledgeItems = {}));
-(function () {
-})();

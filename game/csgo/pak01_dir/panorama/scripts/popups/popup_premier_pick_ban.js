@@ -6,13 +6,11 @@
 /// <reference path="../common/teamcolor.ts" />
 /// <reference path="../common/iteminfo.ts" />
 /// <reference path="../rating_emblem.ts" />
-/// <reference path="../avatar.ts" />_m_elPickBanPanel
+/// <reference path="../avatar.ts" />
 var PremierPickBan;
 (function (PremierPickBan) {
-    let bStartTimer = false;
     let _m_nPhase = 0;
     let _m_pickedMapReveal = false;
-    const TEAM_SPECTATOR = 1;
     const TEAM_TERRORIST = 2;
     const TEAM_CT = 3;
     const _m_aTeams = ['3', '2'];
@@ -32,7 +30,7 @@ var PremierPickBan;
             $.RegisterEventHandler("CanvasReady", spiderGraph, DrawSpiderGraph);
         }
         let reflection = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-reflection');
-        $.Schedule(1.1, function () { reflection.SetImageFromPanel(_m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-phasebar-container'), false); });
+        $.Schedule(1.1, () => reflection.SetImageFromPanel(_m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-phasebar-container'), false));
     }
     PremierPickBan.Init = Init;
     function Show() {
@@ -40,9 +38,9 @@ var PremierPickBan;
     }
     function SetDefaultTimerValue() {
         let aChildren = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-phasebar-container').Children();
-        aChildren.forEach(phase => {
+        for (let phase of aChildren) {
             phase.SetDialogVariable('section-time', '');
-        });
+        }
     }
     function OnDraftUpdate() {
         let bNewPhase = _m_nPhase !== MatchDraftAPI.GetPregamePhase();
@@ -91,14 +89,14 @@ var PremierPickBan;
     }
     function UpdatePhaseProgressBar() {
         let aChildren = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-phasebar-container').Children();
-        aChildren.forEach(phase => {
+        for (let phase of aChildren) {
             let nPhaseBarIndex = parseInt(phase.GetAttributeString('data-phase', ''));
             phase.SetDialogVariable('section-label', $.Localize('#matchdraft_phase_' + nPhaseBarIndex));
             phase.SetHasClass('premier-pickban__progress--ban', IsBanPhase() && nPhaseBarIndex === _m_nPhase);
             phase.SetHasClass('premier-pickban__progress--pick', !IsBanPhase() && nPhaseBarIndex === _m_nPhase);
             phase.SetHasClass('premier-pickban__progress--pre', nPhaseBarIndex > _m_nPhase);
             phase.SetHasClass('premier-pickban__progress--post', nPhaseBarIndex < _m_nPhase);
-        });
+        }
     }
     function IsBanPhase() {
         return _m_nPhase > 1 && _m_nPhase < 5;
@@ -159,8 +157,6 @@ var PremierPickBan;
     }
     function UpdateTitleText(bNewPhase) {
         let isWaiting = MatchDraftAPI.GetPregameTeamToActNow() !== MatchDraftAPI.GetPregameMyTeam() || _m_nPhase < 2;
-        let sTitleText = isWaiting ? ('#matchdraft_phase_action_wait_' + _m_nPhase) :
-            ('#matchdraft_phase_action_' + _m_nPhase);
         let elTitle = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-title-phase');
         _m_elPickBanPanel.SetHasClass('your-turn', !isWaiting);
         _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-title-spinner').SetHasClass('hide', !isWaiting);
@@ -276,14 +272,14 @@ var PremierPickBan;
         else {
             elMapBtn.checked = false;
             let aBtns = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-btns-container').Children();
-            aBtns.forEach(function (btn) {
+            for (let btn of aBtns) {
                 if (btn.id.indexOf('ref') === -1) {
                     let childBtn = btn.FindChild('id-pickban-btn');
                     if (childBtn.IsSelected() && childBtn.enabled) {
                         btn.TriggerClass('map-draft-phase-button--pulse');
                     }
                 }
-            });
+            }
             $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.buymenu_failure', 'MOUSE');
         }
     }
@@ -422,7 +418,6 @@ var PremierPickBan;
     function UpdateCharacterModels(team, slot) {
         let elCharPanel = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-agent-' + team);
         let charId = LoadoutAPI.GetItemID(team, 'customplayer');
-        let glovesId = LoadoutAPI.GetItemID(team, 'clothing_hands');
         let weaponId = LoadoutAPI.GetItemID(team, slot);
         const settings = ItemInfo.GetOrUpdateVanityCharacterSettings(charId);
         settings.panel = elCharPanel;
@@ -442,19 +437,19 @@ var PremierPickBan;
             if (thisTeamID != teamID)
                 continue;
             nCount++;
-            mapList.forEach(mapName => {
+            for (let mapName of mapList) {
                 let myWinCount = Number(Math.floor(playerWindowStats[mapName] || 0));
                 let teamWinCount = Number(Math.floor(averageWindowStats[mapName] || 0));
                 averageWindowStats[mapName] = myWinCount + teamWinCount;
-            });
+            }
         }
         return averageWindowStats;
     }
     function DrawSpiderGraph() {
         let rankWindowStats_T = ComputeAverageWindowStatsForTeam(TEAM_TERRORIST);
-        let rankWindowShape_T = Object.keys(rankWindowStats_T).map((mapName) => { return Number(rankWindowStats_T[mapName] | 0); });
+        let rankWindowShape_T = Object.keys(rankWindowStats_T).map(mapName => Number(rankWindowStats_T[mapName] | 0));
         let rankWindowStats_CT = ComputeAverageWindowStatsForTeam(TEAM_CT);
-        let rankWindowShape_CT = Object.keys(rankWindowStats_T).map((mapName) => { return Number(rankWindowStats_CT[mapName] | 0); });
+        let rankWindowShape_CT = Object.keys(rankWindowStats_T).map(mapName => Number(rankWindowStats_CT[mapName] | 0));
         let maxWinsInASingleMap = (Math.max(...rankWindowShape_T, ...rankWindowShape_CT, 3));
         const spiderGraph = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-spider-graph');
         DrawBackground(spiderGraph, maxWinsInASingleMap);
@@ -544,7 +539,7 @@ var PremierPickBan;
                         xuid: aTestids[i],
                         nParty: aTestGroups[i],
                         idx: i,
-                        isClient: aTestids[i] === clientXuid ? true : false
+                        isClient: aTestids[i] === clientXuid
                     };
                     aPlayers.push(player);
                 }
@@ -555,7 +550,7 @@ var PremierPickBan;
                         xuid: MatchDraftAPI.GetPregamePlayerXuid(i),
                         nParty: MatchDraftAPI.GetPregamePlayerParty(i),
                         idx: i,
-                        isClient: MatchDraftAPI.GetPregamePlayerXuid(i) === clientXuid ? true : false
+                        isClient: MatchDraftAPI.GetPregamePlayerXuid(i) === clientXuid
                     };
                     aPlayers.push(player);
                 }
@@ -564,7 +559,7 @@ var PremierPickBan;
         if (aPlayers.length < 1) {
             return;
         }
-        let indexClient = aPlayers.findIndex(object => { return object.isClient === true; });
+        let indexClient = aPlayers.findIndex(object => object.isClient);
         for (let i = 0; i < aPlayers.length; i++) {
             AddPlayerToGroup(aPlayers[i], indexClient);
         }
@@ -591,7 +586,7 @@ var PremierPickBan;
         }
     }
     function AddPartyBoundryLines(elParent) {
-        elParent.Children().forEach(party => {
+        for (let party of elParent.Children()) {
             let aPartyMembers = party.Children();
             if (aPartyMembers.length > 1) {
                 aPartyMembers.forEach((element, index) => {
@@ -609,7 +604,7 @@ var PremierPickBan;
             else if (aPartyMembers.length === 1) {
                 aPartyMembers[0].FindChild('id-avatar-party-line')?.AddClass('premier-pickban__map-avatars__party-line-empty');
             }
-        });
+        }
     }
     function UpdateName(xuid) {
         let elList = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-team-teammates');

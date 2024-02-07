@@ -1,118 +1,61 @@
-'use strict';
-
-var Crafting = ( function ()
-{
-    var _Init = function()
-    {
+"use strict";
+/// <reference path="csgo.d.ts" />
+var Crafting;
+(function (Crafting) {
+    function _Init() {
         _AddSort();
-    }    
-
-    var _AddSort = function()
-	{
-		var elDropdown = $.GetContextPanel().FindChildInLayoutFile( 'CraftingSortDropdown' );
-		var count = InventoryAPI.GetSortMethodsCount();
-
-		for ( var i = 0; i < count; i++ ) 
-		{
-			var sort = InventoryAPI.GetSortMethodByIndex( i );
-			var newEntry = $.CreatePanel( 'Label', elDropdown, sort, {
-				class: 'DropDownMenu'
-			} );
-
-			newEntry.text = $.Localize( '#' + sort );
-			elDropdown.AddOption( newEntry );
-		}
-
-		                        
-		elDropdown.SetSelected( InventoryAPI.GetSortMethodByIndex( 1 ) );
-	};
-
-    var _UpdateButtons = function ()
-    {
-        var elTradeUpConfirmBtn = $.GetContextPanel().FindChildTraverse( 'TradeUpConfirmBtn' );
+    }
+    function _AddSort() {
+        let elDropdown = $.GetContextPanel().FindChildInLayoutFile('CraftingSortDropdown');
+        let count = InventoryAPI.GetSortMethodsCount();
+        for (let i = 0; i < count; i++) {
+            let sort = InventoryAPI.GetSortMethodByIndex(i);
+            let newEntry = $.CreatePanel('Label', elDropdown, sort, {
+                class: 'DropDownMenu'
+            });
+            newEntry.text = $.Localize('#' + sort);
+            elDropdown.AddOption(newEntry);
+        }
+        elDropdown.SetSelected(InventoryAPI.GetSortMethodByIndex(1));
+    }
+    function UpdateButtons() {
+        let elTradeUpConfirmBtn = $.GetContextPanel().FindChildTraverse('TradeUpConfirmBtn');
         elTradeUpConfirmBtn.enabled = InventoryAPI.IsCraftReady();
-        if ( !elTradeUpConfirmBtn.enabled )
-        {
+        if (!elTradeUpConfirmBtn.enabled) {
             elTradeUpConfirmBtn.checked = false;
-        }    
-
-        var elClearIngredientsBtn = $.GetContextPanel().FindChildTraverse( 'ClearIngredientsBtn' );
+        }
+        let elClearIngredientsBtn = $.GetContextPanel().FindChildTraverse('ClearIngredientsBtn');
         elClearIngredientsBtn.enabled = InventoryAPI.GetCraftIngredientCount() > 0;
-
-        var elCraftItemBtn = $.GetContextPanel().FindChildTraverse( 'CraftItemBtn' );
+        let elCraftItemBtn = $.GetContextPanel().FindChildTraverse('CraftItemBtn');
         elCraftItemBtn.enabled = elTradeUpConfirmBtn.checked;
     }
-
-    var _UpdateItemList = function()
-    {
-                                                                  
-                                                                                            
-                                                                        
-        var elDropdown = $.GetContextPanel().FindChildInLayoutFile( 'CraftingSortDropdown' );
-		var sortType = elDropdown.GetSelected().id;
-
-        $.DispatchEvent( 'SetInventoryFilter',
-            $( '#Crafting-Items' ),
-            'inv_group_equipment',
-            'any',
-            'any',
-            sortType,
-            'recipe',                                 
-            ''               
-        );
+    Crafting.UpdateButtons = UpdateButtons;
+    function UpdateItemList() {
+        let elDropdown = $.GetContextPanel().FindChildInLayoutFile('CraftingSortDropdown');
+        let sortType = elDropdown.GetSelected().id;
+        $.DispatchEvent('SetInventoryFilter', $('#Crafting-Items'), 'inv_group_equipment', 'any', 'any', sortType, 'recipe', '');
     }
-
-    var _UpdateCraftingPanelDisplay = function()
-	{
-        _UpdateButtons();
-
-		                          
+    Crafting.UpdateItemList = UpdateItemList;
+    function _UpdateCraftingPanelDisplay() {
+        UpdateButtons();
         {
-            _UpdateItemList();
-
-			$.DispatchEvent( 'SetInventoryFilter',
-				$( '#Crafting-Ingredients' ),
-				'inv_group_equipment',
-				'any',
-				'any',
-				'',
-				'ingredient',                            
-				''               
-			);
+            UpdateItemList();
+            $.DispatchEvent('SetInventoryFilter', $('#Crafting-Ingredients'), 'inv_group_equipment', 'any', 'any', '', 'ingredient', '');
         }
-        
-                       
-         {
-            function _UpdateItemCount( ItemListName, LabelName )
-            {
-                var elItemList = $.GetContextPanel().FindChildTraverse( ItemListName );
-                var elLabel = $.GetContextPanel().FindChildTraverse( LabelName );
-                elLabel.SetDialogVariableInt( 'count', elItemList.count );
+        {
+            function _UpdateItemCount(ItemListName, LabelName) {
+                let elItemList = $.GetContextPanel().FindChildTraverse(ItemListName);
+                let elLabel = $.GetContextPanel().FindChildTraverse(LabelName);
+                elLabel.SetDialogVariableInt('count', elItemList.count);
             }
-
-            _UpdateItemCount( 'Crafting-Items', 'CraftingItemsText' );
-            _UpdateItemCount( 'Crafting-Ingredients', 'CraftingIngredientsText' );
+            _UpdateItemCount('Crafting-Items', 'CraftingItemsText');
+            _UpdateItemCount('Crafting-Ingredients', 'CraftingIngredientsText');
         }
     }
-
-                          
-    return {
-        Init: _Init,
-        UpdateCraftingPanelDisplay: _UpdateCraftingPanelDisplay,
-        UpdateButtons: _UpdateButtons,
-        UpdateItemList: _UpdateItemList
-    };
-
-} )();
-
-                                                                                                    
-                                           
-                                                                                                    
-(function ()
-{
-    Crafting.Init();
-    
-    $.RegisterForUnhandledEvent( 'UpdateTradeUpPanel', Crafting.UpdateCraftingPanelDisplay );
-    $.RegisterForUnhandledEvent( 'PanoramaComponent_Inventory_CraftIngredientAdded', Crafting.UpdateCraftingPanelDisplay );
-	$.RegisterForUnhandledEvent( 'PanoramaComponent_Inventory_CraftIngredientRemoved', Crafting.UpdateCraftingPanelDisplay );
-})();
+    {
+        _Init();
+        $.RegisterForUnhandledEvent('UpdateTradeUpPanel', _UpdateCraftingPanelDisplay);
+        $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_CraftIngredientAdded', _UpdateCraftingPanelDisplay);
+        $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_CraftIngredientRemoved', _UpdateCraftingPanelDisplay);
+    }
+})(Crafting || (Crafting = {}));

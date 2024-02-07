@@ -251,7 +251,7 @@ var StarsShoppingCart = ( function()
 
 			var fauxItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex( element, 0 );
 			var starsCount = InventoryAPI.GetItemAttributeValue( fauxItemId, 'upgrade level' );
-			var discount = ItemInfo.GetStoreSalePercentReduction( fauxItemId, 1 );
+			var discount = StoreAPI.GetStoreItemPercentReduction( fauxItemId, 1 );
 			elRow.Data().itemid = fauxItemId;
 			elRow.Data().quantity = 0;
 			elRow.Data().starsCount = starsCount;
@@ -269,7 +269,7 @@ var StarsShoppingCart = ( function()
 
 			elRow.SetHasClass( 'quantity-count1', starsCount === 1 );
 			elRow.SetDialogVariable( 'quantity_name', starsCount );
-			elRow.SetDialogVariable( 'store-item-name', ItemInfo.GetName( fauxItemId ) );
+			elRow.SetDialogVariable( 'store-item-name', InventoryAPI.GetItemName( fauxItemId ) );
 			elRow.SetDialogVariable( 'store-item-sale-price', ItemInfo.GetStoreSalePrice( fauxItemId, 1 ) );
 			elRow.SetDialogVariableInt( 'store-item-quantity', elRow.Data().quantity );
 
@@ -447,7 +447,7 @@ var StarsShoppingCart = ( function()
 		}
 		else if ( workType == 'purchase' )
 		{
-			ItemInfo.ItemPurchase( m_aCartItemIds.join( ',' ) );
+			StoreAPI.StoreItemPurchase( m_aCartItemIds.join( ',' ) );
 		}
 	};
 
@@ -466,12 +466,8 @@ var StarsShoppingCart = ( function()
 			$.Localize( '#SFUI_SteamConnectionErrorTitle' ),
 			$.Localize( '#SFUI_InvError_Item_Not_Given' ),
 			'',
-			function()
-			{
-			},
-			function()
-			{
-			}
+			() => {},
+			() => {}
 		);
 	};
 
@@ -498,10 +494,10 @@ var StarsShoppingCart = ( function()
 		var aDefNames = [];
 		unique.forEach( function( item, idx )
 		{
-			aDefNames.push( ItemInfo.GetItemDefinitionName( item ) );
+			aDefNames.push( InventoryAPI.GetItemDefinitionName( item ) );
 		} );
 		
-		if ( aDefNames.includes( ItemInfo.GetItemDefinitionName( ItemId ) ) )
+		if ( aDefNames.includes( InventoryAPI.GetItemDefinitionName( ItemId ) ) )
 		{
 			                
 			_ResetTimeouthandle();

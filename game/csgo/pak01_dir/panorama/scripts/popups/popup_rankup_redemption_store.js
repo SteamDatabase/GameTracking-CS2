@@ -2,12 +2,6 @@
 /// <reference path="..\csgo.d.ts" />
 var PopupRankUpRedemptionStore;
 (function (PopupRankUpRedemptionStore) {
-    function _msg(text) {
-    }
-    function Init() {
-        _msg('Init');
-    }
-    PopupRankUpRedemptionStore.Init = Init;
     function OnClose() {
         const callbackHandle = $.GetContextPanel().GetAttributeInt("callback", -1);
         if (callbackHandle != -1) {
@@ -18,6 +12,3 @@ var PopupRankUpRedemptionStore;
     }
     PopupRankUpRedemptionStore.OnClose = OnClose;
 })(PopupRankUpRedemptionStore || (PopupRankUpRedemptionStore = {}));
-;
-(function () {
-})();

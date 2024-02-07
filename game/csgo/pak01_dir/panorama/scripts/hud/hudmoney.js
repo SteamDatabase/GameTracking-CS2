@@ -1,7 +1,8 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../digitpanel.ts" />
-var MoneyPanel = (function () {
+var MoneyPanel;
+(function (MoneyPanel) {
     $.RegisterEventHandler('UpdateHudMoney', $.GetContextPanel(), _UpdateMoney);
     function _UpdateMoney(amt, bInstant = false) {
         const elContainer = $('#jsRotaryMoney');
@@ -11,9 +12,4 @@ var MoneyPanel = (function () {
             DigitPanelFactory.SetDigitPanelString(elContainer, '$' + amt, bInstant);
         }
     }
-    return {
-        UpdateMoney: _UpdateMoney,
-    };
-})();
-(function () {
-})();
+})(MoneyPanel || (MoneyPanel = {}));

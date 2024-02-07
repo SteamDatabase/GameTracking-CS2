@@ -4,8 +4,6 @@
 /// <reference path="common/formattext.ts"/>
 var PremierMapWinRecord;
 (function (PremierMapWinRecord) {
-    function _msg(msg) {
-    }
     const m_numMaps = 7;
     const spiderGraph = $('#jsMapWinsSpiderGraph');
     var m_LobbyPlayerUpdatedEventHandler;
@@ -20,7 +18,6 @@ var PremierMapWinRecord;
             $.Schedule(0.1, Init);
         }
     }
-    PremierMapWinRecord.Init = Init;
     function RegisterEventHandlers() {
         if (!m_bEventsRegistered) {
             m_LobbyPlayerUpdatedEventHandler = $.RegisterForUnhandledEvent("PanoramaComponent_Lobby_PlayerUpdated", Draw);
@@ -31,7 +28,6 @@ var PremierMapWinRecord;
             m_bEventsRegistered = true;
         }
     }
-    PremierMapWinRecord.RegisterEventHandlers = RegisterEventHandlers;
     function UnregisterEventHandlers() {
         if (m_bEventsRegistered) {
             $.UnregisterForUnhandledEvent('PanoramaComponent_Lobby_PlayerUpdated', m_LobbyPlayerUpdatedEventHandler);
@@ -39,13 +35,11 @@ var PremierMapWinRecord;
             m_bEventsRegistered = false;
         }
     }
-    PremierMapWinRecord.UnregisterEventHandlers = UnregisterEventHandlers;
     function Draw() {
         _DrawParty();
         _MakeMapPanels();
     }
     PremierMapWinRecord.Draw = Draw;
-    ;
     function _HighlightPlayer(xuid) {
         _DrawParty(xuid);
     }
@@ -156,7 +150,7 @@ var PremierMapWinRecord;
             elMap.SetPositionInPixels(vPos.x, vPos.y, 0);
         }
     }
+    {
+        Init();
+    }
 })(PremierMapWinRecord || (PremierMapWinRecord = {}));
-(function () {
-    PremierMapWinRecord.Init();
-})();

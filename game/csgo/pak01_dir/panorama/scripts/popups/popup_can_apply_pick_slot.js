@@ -3,10 +3,14 @@
 /// <reference path="../inspect.ts" />
 /// <reference path="../common/iteminfo.ts" />
 /// <reference path="../popups/popup_capability_can_sticker.ts" />
-var CanApplyPickSlot = (function () {
+/// <reference path="../popups/popup_can_apply_header.ts" />
+var CanApplyPickSlot;
+(function (CanApplyPickSlot) {
     let m_elItemToApply;
-    const _Init = function (oSettings) {
-        oSettings.infoPanel.RemoveClass('hidden');
+    let m_infoPanel;
+    function Init(oSettings) {
+        m_infoPanel = oSettings.infoPanel;
+        ShowHideInfoPanel(false);
         if (oSettings.isRemove) {
             _ShowItemIconsToRemove(oSettings);
         }
@@ -14,9 +18,37 @@ var CanApplyPickSlot = (function () {
             _AddItemImage(oSettings, oSettings.toolId);
             m_elItemToApply = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons').Children()[0];
         }
+        _ShowHideStickerApplyHints(oSettings);
         _BtnActions(oSettings);
-    };
-    const _ShowItemIconsToRemove = function (oSettings) {
+    }
+    CanApplyPickSlot.Init = Init;
+    function UpdateSelectedRemoveForSticker(slotIndex) {
+        let elContainer = m_infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
+        elContainer.Children().forEach(element => {
+            element.SetHasClass('is_sticker_remove_unselected', element.Data().slot !== slotIndex);
+            element.SetHasClass('is_sticker_remove_selected', element.Data().slot === slotIndex);
+            if (element.Data().slot === slotIndex) {
+                element.TriggerClass('popup-can-apply-item-image--anim');
+            }
+        });
+    }
+    CanApplyPickSlot.UpdateSelectedRemoveForSticker = UpdateSelectedRemoveForSticker;
+    function _ShowHideStickerApplyHints(oSettings) {
+        m_infoPanel.SetHasClass('show-sticker-apply-hints', !oSettings.isRemove && oSettings.type === "sticker");
+        m_infoPanel.SetHasClass('show-sticker-remove-hints', oSettings.isRemove && oSettings.type === "sticker");
+    }
+    function ShowHideInfoPanel(bHide) {
+        m_infoPanel.SetHasClass('hidden', bHide);
+    }
+    CanApplyPickSlot.ShowHideInfoPanel = ShowHideInfoPanel;
+    function IsContinueEnabled() {
+        if (m_infoPanel.FindChildInLayoutFile('CanApplyContinue')) {
+            return m_infoPanel.FindChildInLayoutFile('CanApplyContinue').enabled;
+        }
+        return false;
+    }
+    CanApplyPickSlot.IsContinueEnabled = IsContinueEnabled;
+    function _ShowItemIconsToRemove(oSettings) {
         let slotCount = InventoryAPI.GetItemStickerSlotCount(oSettings.itemId);
         let elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
         elContainer.RemoveAndDeleteChildren();
@@ -27,90 +59,131 @@ var CanApplyPickSlot = (function () {
                 elPatch.Data().slot = i;
                 elPatch.BLoadLayoutSnippet('RemoveBtn');
                 let elImage = elPatch.FindChildInLayoutFile('RemoveImage');
-                elImage.SetImage('file://{images}' + imagePath + '_large.png');
-                elPatch.SetPanelEvent('onactivate', oSettings.funcOnSelectForRemove.bind(undefined, i));
+                elImage.SetImage('file://{images}' + imagePath + '.png');
+                if (oSettings.worktype === 'remove_patch') {
+                    elPatch.SetPanelEvent('onactivate', () => oSettings.funcOnSelectForRemove(i));
+                }
+                elPatch.SetHasClass('is_sticker_remove_unselected', oSettings.worktype === 'remove_sticker');
+                elPatch.enabled = oSettings.worktype === 'remove_patch';
             }
         }
-    };
-    const _AddItemImage = function (oSettings, itemid) {
+    }
+    function _AddItemImage(oSettings, itemid) {
         let elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
         let aItems;
         aItems = itemid.split(',');
-        aItems.forEach(itemId => {
+        for (let itemId of aItems) {
             let elImage = elContainer.FindChildInLayoutFile(itemId);
             if (!elImage) {
                 let elImage = $.CreatePanel('ItemImage', elContainer, itemId);
                 elImage.itemid = Number(itemId);
                 elImage.AddClass('popup-can-apply-item-image');
             }
-        });
-    };
-    const _BtnActions = function (oSettings) {
+        }
+    }
+    function _BtnActions(oSettings) {
         let slotsCount = oSettings.isRemove ? InventoryAPI.GetItemStickerSlotCount(oSettings.itemId) : CanApplySlotInfo.GetEmptySlotList().length;
         let elContinueBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyContinue');
         let elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
+        let elCancelBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyCancel');
         if (elContinueBtn)
             elContinueBtn.SetHasClass('hidden', oSettings.isRemove);
         if (elNextSlotBtn) {
-            elNextSlotBtn.enabled = !(oSettings.isRemove || slotsCount == 1);
+            elNextSlotBtn.enabled = !(oSettings.isRemove);
             elNextSlotBtn.SetHasClass('hidden', oSettings.isRemove);
+        }
+        if (elCancelBtn) {
+            elCancelBtn.SetHasClass('hidden', true);
+            elCancelBtn.SetPanelEvent('onactivate', () => _OnCancel(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings));
         }
         if (oSettings.isRemove) {
             return;
         }
         if (slotsCount >= 1) {
             if (elContinueBtn)
-                elContinueBtn.SetPanelEvent('onactivate', () => _OnContinue(elContinueBtn, oSettings));
+                elContinueBtn.SetPanelEvent('onactivate', () => _OnContinue(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings));
             if (elNextSlotBtn)
                 elNextSlotBtn.SetPanelEvent('onactivate', () => _NextSlot(elContinueBtn, oSettings));
         }
-    };
-    const _DisableBtns = function (elPanel) {
+        if (oSettings.type === 'sticker') {
+            elContinueBtn.enabled = false;
+            $.Schedule(3.0, () => elContinueBtn.enabled = true);
+        }
+    }
+    function DisableBtns(elPanel) {
         elPanel.FindChildInLayoutFile('CanApplyContinue').enabled = false;
         ;
         elPanel.FindChildInLayoutFile('CanApplyNextPos').enabled = false;
-    };
-    const _OnContinue = function (elContinueBtn, oSettings) {
+        elPanel.FindChildInLayoutFile('CanApplyCancel').enabled = false;
+    }
+    CanApplyPickSlot.DisableBtns = DisableBtns;
+    function _OnContinue(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings) {
         oSettings.funcOnConfirm();
-        elContinueBtn.enabled = false;
         m_elItemToApply.ToggleClass('popup-can-apply-item-image--anim');
-    };
-    const _NextSlot = function (elContinueBtn, oSettings) {
+        elCancelBtn.SetHasClass('hidden', false);
+        elNextSlotBtn.SetHasClass('hidden', true);
+        elContinueBtn.enabled = false;
+        InspectAsyncActionBar.ZoomCamera(true);
+    }
+    function _OnCancel(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings) {
+        oSettings.funcOnCancel();
+        elContinueBtn.enabled = true;
+        elNextSlotBtn.enabled = true;
+        elNextSlotBtn.SetHasClass('hidden', false);
+        elCancelBtn.SetHasClass('hidden', true);
+    }
+    function _NextSlot(elContinueBtn, oSettings) {
+        let delayTime = oSettings.type === 'sticker' ? 0 : 1;
         CanApplySlotInfo.IncrementIndex();
         oSettings.funcOnNext(oSettings.toolId, CanApplySlotInfo.GetSelectedEmptySlot());
         let elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
         elNextSlotBtn.enabled = false;
-        $.Schedule(1, () => {
+        $.Schedule(delayTime, () => {
             if (elNextSlotBtn && elNextSlotBtn.IsValid()) {
                 elNextSlotBtn.enabled = true;
             }
         });
         elContinueBtn.enabled = true;
-    };
-    const _SelectFirstRemoveItem = function () {
+    }
+    function PanCamera(btnId) {
+        let btnPanLeft = m_infoPanel.FindChildInLayoutFile('InspectPanLeft');
+        let btnPanRight = m_infoPanel.FindChildInLayoutFile('InspectPanRight');
+        btnPanLeft.enabled = btnPanLeft.id === btnId ? false : true;
+        btnPanRight.enabled = btnPanRight.id === btnId ? false : true;
+        InspectModelImage.PanCamera(btnId === 'InspectPanLeft');
+    }
+    CanApplyPickSlot.PanCamera = PanCamera;
+    function ShowHidePanBtns(bShow) {
+        let btnPanRight = m_infoPanel.FindChildInLayoutFile('InspectPanRight');
+        let btnPanLeft = m_infoPanel.FindChildInLayoutFile('InspectPanLeft');
+        btnPanRight.SetHasClass('hidden', !bShow);
+        btnPanLeft.SetHasClass('hidden', !bShow);
+        btnPanRight.enabled = bShow ? false : false;
+        btnPanLeft.enabled = bShow ? true : false;
+    }
+    CanApplyPickSlot.ShowHidePanBtns = ShowHidePanBtns;
+    function SelectFirstRemoveItem() {
         let elContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
         if (elContainer.Children()[0] !== undefined && elContainer.Children()[0].IsValid()) {
             $.DispatchEvent("Activated", elContainer.Children()[0], "mouse");
         }
-    };
-    return {
-        Init: _Init,
-        DisableBtns: _DisableBtns,
-        SelectFirstRemoveItem: _SelectFirstRemoveItem,
-        ShowItemIconsToRemove: _ShowItemIconsToRemove
-    };
-})();
-var CanApplySlotInfo = (function () {
+    }
+    CanApplyPickSlot.SelectFirstRemoveItem = SelectFirstRemoveItem;
+})(CanApplyPickSlot || (CanApplyPickSlot = {}));
+var CanApplySlotInfo;
+(function (CanApplySlotInfo) {
     let m_emptySlotList = [];
     let m_slotIndex = 0;
-    const _ResetSlotIndex = function () {
+    function ResetSlotIndex() {
         m_slotIndex = 0;
         m_emptySlotList = [];
-    };
-    const _UpdateEmptySlotList = function (itemId) {
+    }
+    CanApplySlotInfo.ResetSlotIndex = ResetSlotIndex;
+    function UpdateEmptySlotList(itemId) {
         m_emptySlotList = _GetEmptySlots(_GetSlotInfo(itemId));
-    };
-    const _GetSlotInfo = function (itemId) {
+    }
+    CanApplySlotInfo.UpdateEmptySlotList = UpdateEmptySlotList;
+    function _GetSlotInfo(itemId) {
         let aSlotInfoList = [];
         let slotsCount = InventoryAPI.GetItemStickerSlotCount(itemId);
         for (let i = 0; i < slotsCount; i++) {
@@ -118,45 +191,33 @@ var CanApplySlotInfo = (function () {
             aSlotInfoList.push({ index: i, path: !ImagePath ? 'empty' : ImagePath });
         }
         return aSlotInfoList;
-    };
-    const _GetEmptySlots = function (slotInfoList) {
-        return slotInfoList.filter(function (slot) {
-            if (slot.path === 'empty')
-                return true;
-        });
-    };
-    const _GetSelectedEmptySlot = function () {
+    }
+    function _GetEmptySlots(slotInfoList) {
+        return slotInfoList.filter(slot => slot.path === 'empty');
+    }
+    function GetSelectedEmptySlot() {
         let emptySlotCount = m_emptySlotList.length;
         if (emptySlotCount === 0) {
             return 0;
         }
         let activeIndex = (m_slotIndex % emptySlotCount);
         return m_emptySlotList[activeIndex].index;
-    };
-    const _GetSelectedRemoveSlot = function () {
+    }
+    CanApplySlotInfo.GetSelectedEmptySlot = GetSelectedEmptySlot;
+    function GetSelectedRemoveSlot() {
         let elContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
         if (elContainer.IsValid() && elContainer.Children().length > 0) {
             let aSelected = elContainer.Children().filter(entry => (entry.checked === true));
             return aSelected.length > 0 ? aSelected[0].Data().slot : 0;
         }
-        return;
-    };
-    const _IncrementIndex = function () {
+    }
+    CanApplySlotInfo.GetSelectedRemoveSlot = GetSelectedRemoveSlot;
+    function IncrementIndex() {
         m_slotIndex++;
-    };
-    const _GetIndex = function () {
-        return m_slotIndex;
-    };
-    const _GetEmptySlotList = function () {
+    }
+    CanApplySlotInfo.IncrementIndex = IncrementIndex;
+    function GetEmptySlotList() {
         return m_emptySlotList;
-    };
-    return {
-        UpdateEmptySlotList: _UpdateEmptySlotList,
-        GetEmptySlotList: _GetEmptySlotList,
-        GetSelectedEmptySlot: _GetSelectedEmptySlot,
-        GetSelectedRemoveSlot: _GetSelectedRemoveSlot,
-        IncrementIndex: _IncrementIndex,
-        GetIndex: _GetIndex,
-        ResetSlotIndex: _ResetSlotIndex
-    };
-})();
+    }
+    CanApplySlotInfo.GetEmptySlotList = GetEmptySlotList;
+})(CanApplySlotInfo || (CanApplySlotInfo = {}));

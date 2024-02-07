@@ -34,7 +34,7 @@ var MainMenuStoreTileLinked = ( function()
 		else if ( elItem.Data().oData.usetinynames )
 			strItemName = $.Localize( InventoryAPI.GetRawDefinitionKey(LootListItemID, 'item_name') + '_tinyname' );
 		else
-			strItemName = ItemInfo.GetName( LootListItemID );
+			strItemName = InventoryAPI.GetItemName( LootListItemID );
 		
 		if ( elItem.Data().oData.usegroupname )
 		{
@@ -51,7 +51,7 @@ var MainMenuStoreTileLinked = ( function()
 
 		var elSale = elItem.FindChildInLayoutFile( 'StoreItemSalePrice' );
 		var elPrecent = elItem.FindChildInLayoutFile( 'StoreItemPercent' );
-		var reduction = ItemInfo.GetStoreSalePercentReduction( itemId, 1 );
+		var reduction = StoreAPI.GetStoreItemPercentReduction( itemId, 1 );
 
 		  
 		                 

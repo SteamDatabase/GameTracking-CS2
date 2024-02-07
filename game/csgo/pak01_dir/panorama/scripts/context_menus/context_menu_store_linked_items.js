@@ -4,10 +4,10 @@ var StoreLinkedItems;
 (function (StoreLinkedItems) {
     function Init() {
         const itemId = $.GetContextPanel().GetAttributeString("itemids", "");
-        const isNotReleased = $.GetContextPanel().GetAttributeString("is-not-released", "") !== "true" ? false : true;
+        const isNotReleased = $.GetContextPanel().GetAttributeString("is-not-released", "") === "true";
         const aItemIds = itemId.split(',');
         let elItem = null;
-        for (var i = 0; i < aItemIds.length; i++) {
+        for (let i = 0; i < aItemIds.length; i++) {
             elItem = $.CreatePanel("Button", $.GetContextPanel().FindChildInLayoutFile('id-store-linked-items-images'), aItemIds[i]);
             elItem.BLoadLayout('file://{resources}/layout/itemtile_store.xml', false, false);
             let oItemData = {
@@ -17,11 +17,11 @@ var StoreLinkedItems;
             };
             ItemTileStore.Init(elItem, oItemData);
         }
-        _ShowWarningText();
+        ShowWarningText();
     }
     StoreLinkedItems.Init = Init;
-    function _ShowWarningText() {
-        var warningText = $.GetContextPanel().GetAttributeString("linkedWarning", "");
+    function ShowWarningText() {
+        let warningText = $.GetContextPanel().GetAttributeString("linkedWarning", "");
         if (warningText) {
             $.GetContextPanel().SetHasClass('hidewarning', false);
             $.GetContextPanel().SetDialogVariable('warning', $.Localize(warningText));

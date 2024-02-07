@@ -1,7 +1,8 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
 /// <reference path="avatar.ts" />
-const MapDraft = (function () {
+var MapDraft;
+(function (MapDraft) {
     const _m_cp = $.GetContextPanel();
     let _m_nPhase = 0;
     let _m_hDenyInputToGame = null;
@@ -64,9 +65,9 @@ const MapDraft = (function () {
         _UpdateActionText();
         _UpdatePhaseProgressBar();
     }
-    const _UpdatePhaseProgressBar = function () {
+    function _UpdatePhaseProgressBar() {
         const aChildren = _m_cp.FindChildInLayoutFile('id-map-draft-phasebar-container').Children();
-        aChildren.forEach(phase => {
+        for (let phase of aChildren) {
             const nPhaseBarIndex = parseInt(phase.GetAttributeString('data-phase', ''));
             phase.SetHasClass('map-draft-phasebar--ban', !_m_isThisPhasePick && nPhaseBarIndex === _m_nPhase);
             phase.SetHasClass('map-draft-phasebar--pick', _m_isThisPhasePick && nPhaseBarIndex === _m_nPhase);
@@ -77,9 +78,9 @@ const MapDraft = (function () {
                 const nTimeRemaining = MatchDraftAPI.GetIngamePhaseSecondsRemaining() || 0;
                 phase.FindChildInLayoutFile('id-map-draft-phase-timer').timeleft = nTimeRemaining;
             }
-        });
-    };
-    const _UpdateButtonsRow = function () {
+        }
+    }
+    function _UpdateButtonsRow() {
         let elContainer = _m_rowsContainer.FindChildInLayoutFile(_m_rowPhaseName + _m_nPhase);
         if (!elContainer) {
             elContainer = $.CreatePanel('Panel', _m_rowsContainer, _m_rowPhaseName + _m_nPhase);
@@ -92,19 +93,19 @@ const MapDraft = (function () {
         elContainer.hittest = true;
         elContainer.hittestchildren = true;
         return elContainer;
-    };
-    const _HideFinishedPhaseRows = function () {
+    }
+    function _HideFinishedPhaseRows() {
         const aRows = _m_rowsContainer.Children();
-        aRows.forEach(function (row) {
+        for (let row of aRows) {
             if (row.Data().phase !== _m_nPhase) {
                 row.RemoveClass('map-draft-phase-buttons-container--show');
                 row.AddClass('map-draft-phase-buttons-container--hide');
                 row.hittest = false;
                 row.hittestchildren = false;
             }
-        });
-    };
-    const _MakeVoteButtons = function (elContainer) {
+        }
+    }
+    function _MakeVoteButtons(elContainer) {
         if (_m_nPhase === 1) {
             _m_isThisPhasePick = true;
             const nYourTeam = GameStateAPI.GetPlayerTeamNumber(MyPersonaAPI.GetXuid());
@@ -176,8 +177,8 @@ const MapDraft = (function () {
                 }
             }
         }
-    };
-    const _MakeButton = function (elContainer, oBtnData) {
+    }
+    function _MakeButton(elContainer, oBtnData) {
         let elButton = elContainer.FindChildInLayoutFile(oBtnData.id);
         if (!elButton) {
             elButton = $.CreatePanel('Button', elContainer, oBtnData.id);
@@ -191,7 +192,7 @@ const MapDraft = (function () {
             const elStatusText = elButton.FindChildInLayoutFile('draft-phase-button-statustext');
             elStatusText.text = $.Localize(oBtnData.statustext);
             elButton.SetPanelEvent('onactivate', () => _OnActivateVoteTile(elContainer, oBtnData));
-            elButton.SetPanelEvent('onmouseover', function () {
+            elButton.SetPanelEvent('onmouseover', () => {
                 if (elButton.enabled) {
                     _PlaySoundEffect('UIPanorama.mainmenu_rollover');
                 }
@@ -220,8 +221,8 @@ const MapDraft = (function () {
         for (let i = 0; i < aVotedXuids.length; i++) {
             _MakeAvatar(aVotedXuids[i], elAvatarsContainer);
         }
-    };
-    const _OnActivateVoteTile = function (elContainer, oBtnData) {
+    }
+    function _OnActivateVoteTile(elContainer, oBtnData) {
         const aCurrentVotes = _GetCurrentVotes();
         const matchingVoteSlot = aCurrentVotes.indexOf(oBtnData.voteid);
         if (matchingVoteSlot !== -1) {
@@ -241,32 +242,32 @@ const MapDraft = (function () {
             _PlaySoundEffect('buymenu_purchase');
         }
         else {
-            aBtns.forEach(function (btn) {
+            for (let btn of aBtns) {
                 if (btn.BHasClass('map-draft-phase-button--selected')) {
                     btn.RemoveClass('map-draft-phase-button--pulse');
                     btn.AddClass('map-draft-phase-button--pulse');
                 }
-            });
+            }
             _PlaySoundEffect('buymenu_failure');
         }
-    };
-    const _GetCurrentVotes = function () {
+    }
+    function _GetCurrentVotes() {
         const aCurrentVotes = [];
         for (let i = 0; i < _GetNumVoteSlots(); i++) {
             const voteId = MatchDraftAPI.GetIngameMyVoteInSlot(i) || "empty";
             aCurrentVotes.push(voteId);
         }
         return aCurrentVotes;
-    };
-    const _GetFirstFreeVoteSlot = function (aCurrentVotes) {
+    }
+    function _GetFirstFreeVoteSlot(aCurrentVotes) {
         for (let i = 0; i < aCurrentVotes.length; i++) {
             if (aCurrentVotes[i] === 'empty') {
                 return i;
             }
         }
         return null;
-    };
-    const _GetNumVoteSlots = function () {
+    }
+    function _GetNumVoteSlots() {
         if (_m_nPhase === 1 || _m_nPhase === 5) {
             return 1;
         }
@@ -280,8 +281,8 @@ const MapDraft = (function () {
             return 1;
         }
         return 0.;
-    };
-    const _UpdateActionText = function () {
+    }
+    function _UpdateActionText() {
         const isWaiting = MatchDraftAPI.GetIngameTeamToActNow() !== GameStateAPI.GetPlayerTeamNumber(MyPersonaAPI.GetXuid());
         _m_cp.FindChildInLayoutFile('id-map-draft-phase-info').SetHasClass('map-draft-phase-info--hidden', isWaiting);
         _m_cp.FindChildInLayoutFile('id-map-draft-phase-waiting').SetHasClass('map-draft-phase-info--hidden', !isWaiting);
@@ -293,8 +294,8 @@ const MapDraft = (function () {
         const nPickedMaps = elContainer.Children().filter(btn => btn.BHasClass('map-draft-phase-button--selected'));
         _m_cp.SetDialogVariableInt('maps', nPickedMaps.length);
         _m_phaseTitleText.text = $.Localize('#matchdraft_phase_action_' + _m_nPhase, _m_cp);
-    };
-    const _MakeLargeMap = function (elContainer, style) {
+    }
+    function _MakeLargeMap(elContainer, style) {
         const aMapIds = MatchDraftAPI.GetIngameMapIdsList().split(',');
         const mapPickId = aMapIds.filter(id => MatchDraftAPI.GetIngameMapIdState(parseInt(id)) === 'pick')[0];
         const mapName = DeepStatsAPI.MapIDToString(parseInt(mapPickId));
@@ -320,7 +321,7 @@ const MapDraft = (function () {
             elContainer.FindChildInLayoutFile('id-map-draft-starting-team-icon').SetImage("file://{images}/icons/" + teamLogo);
             elContainer.SetDialogVariable('teamname', $.Localize(startingTeam));
         }
-    };
+    }
     function _PopulatePlayerList() {
         const yourXuid = MyPersonaAPI.GetXuid();
         const oPlayerList = GameStateAPI.GetPlayerDataJSO();
@@ -346,17 +347,7 @@ const MapDraft = (function () {
             }
         }
     }
-    const _CleanUpAvatars = function (xuids, elTeammates) {
-        const listOfTeammatesPanels = elTeammates.Children();
-        listOfTeammatesPanels.forEach(function (element) {
-            if (xuids.indexOf(element.id) === -1 ||
-                !GameStateAPI.IsPlayerConnected(element.id)) {
-                element.AddClass('hidden');
-            }
-        });
-        elTeammates.RemoveAndDeleteChildren();
-    };
-    const _MakeAvatar = function (xuid, elTeammates, bisTeamLister = false) {
+    function _MakeAvatar(xuid, elTeammates, bisTeamLister = false) {
         if (xuid === "0")
             return;
         if (xuid) {
@@ -381,41 +372,30 @@ const MapDraft = (function () {
             }
             elAvatar.SetDialogVariable('teammate_name', FriendsListAPI.GetFriendName(xuid));
         }
-    };
-    const _AddOpenPlayerCardAction = function (elAvatar, xuid) {
-        const openCard = function (xuid) {
+    }
+    function _AddOpenPlayerCardAction(elAvatar, xuid) {
+        elAvatar.SetPanelEvent("onactivate", () => {
             $.DispatchEvent('SidebarContextMenuActive', true);
             if (xuid !== "0") {
-                const contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, function () {
-                    $.DispatchEvent('SidebarContextMenuActive', false);
-                });
+                const contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, () => $.DispatchEvent('SidebarContextMenuActive', false));
                 contextMenuPanel.AddClass("ContextMenu_NoArrow");
             }
-        };
-        elAvatar.SetPanelEvent("onactivate", () => openCard(xuid));
-    };
+        });
+    }
     const m_eventHandles = [];
     function _OnReadyForDisplay() {
         m_eventHandles.push(['PanoramaComponent_IngameDraft_DraftUpdate', $.RegisterForUnhandledEvent('PanoramaComponent_IngameDraft_DraftUpdate', _Update)]);
         m_eventHandles.push(['UnloadLoadingScreenAndReinit', $.RegisterForUnhandledEvent('UnloadLoadingScreenAndReinit', _Update)]);
         m_eventHandles.push(['PlayerTeamChanged', $.RegisterForUnhandledEvent('PlayerTeamChanged', _PopulatePlayerList)]);
     }
-    ;
     function _OnUnreadyForDisplay() {
         while (m_eventHandles.length > 0) {
             const h = m_eventHandles.pop();
             $.UnregisterForUnhandledEvent(h[0], h[1]);
         }
     }
-    ;
-    return {
-        Update: _Update,
-        PopulatePlayerList: _PopulatePlayerList,
-        OnReadyForDisplay: _OnReadyForDisplay,
-        OnUnreadyForDisplay: _OnUnreadyForDisplay,
-    };
-})();
-(function () {
-    $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), MapDraft.OnReadyForDisplay);
-    $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), MapDraft.OnUnreadyForDisplay);
-})();
+    {
+        $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), _OnReadyForDisplay);
+        $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), _OnUnreadyForDisplay);
+    }
+})(MapDraft || (MapDraft = {}));

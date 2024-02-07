@@ -1,48 +1,23 @@
-'use strict';
-
-var PopupPrimeStatus = ( function ()
-{
-	var m_bIsPerfectWorld = ( ( MyPersonaAPI.GetLauncherType() === "perfectworld" ) && !GameInterfaceAPI.HasCommandLineParm( '-perfectworld' ) ) ? true : false;
-	var m_btnPurchase = $( '#PurchaseButton' );
-
-	var _Init = function ()
-	{
-		_SetStatusPanel( MyPersonaAPI.GetElevatedState() );
-	}
-
-	function _SetStatusPanel( strState )
-	{
-		                                                       
-		                                                        
-		                                                                                                                                         
-		    
-		   	                                                                                                                                                                                 
-		    
-
-		if( strState !== "elevated" )
-		{
-			m_btnPurchase.visible = true;
-			PrimeButtonAction.SetUpPurchaseBtn( m_btnPurchase );
-
-			return;
-		}
-
-		m_btnPurchase.visible= false;
-	}
-
-	function _UpdateEleveatedStatusPanel()
-	{
-		_SetStatusPanel( MyPersonaAPI.GetElevatedState() );
-	}
-
-	return {
-		Init						: _Init,
-		UpdateEleveatedStatusPanel	:_UpdateEleveatedStatusPanel
-	}
-
-})();
-
-(function()
-{
-	$.RegisterForUnhandledEvent( "PanoramaComponent_MyPersona_ElevatedStateUpdate", PopupPrimeStatus.UpdateEleveatedStatusPanel );
-})();
+"use strict";
+/// <reference path="../csgo.d.ts" />
+/// <reference path="../common/prime_button_action.ts" />
+var PopupPrimeStatus;
+(function (PopupPrimeStatus) {
+    let m_btnPurchase = $('#PurchaseButton');
+    function Init() {
+        _SetStatusPanel(MyPersonaAPI.GetElevatedState());
+    }
+    PopupPrimeStatus.Init = Init;
+    function _SetStatusPanel(strState) {
+        if (strState !== "elevated") {
+            m_btnPurchase.visible = true;
+            PrimeButtonAction.SetUpPurchaseBtn(m_btnPurchase);
+            return;
+        }
+        m_btnPurchase.visible = false;
+    }
+    function _UpdateEleveatedStatusPanel() {
+        _SetStatusPanel(MyPersonaAPI.GetElevatedState());
+    }
+    $.RegisterForUnhandledEvent("PanoramaComponent_MyPersona_ElevatedStateUpdate", _UpdateEleveatedStatusPanel);
+})(PopupPrimeStatus || (PopupPrimeStatus = {}));

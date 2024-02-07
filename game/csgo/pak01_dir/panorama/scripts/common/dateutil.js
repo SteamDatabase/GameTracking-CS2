@@ -1,7 +1,8 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
-var DateUtil = (function () {
-    function _PopulateDateFormatStrings(panel, date) {
+var DateUtil;
+(function (DateUtil) {
+    function PopulateDateFormatStrings(panel, date) {
         panel.SetDialogVariableInt('M', date.getMonth() + 1);
         const monthPaddedNumber = ('0' + (date.getMonth() + 1)).slice(-2);
         panel.SetDialogVariable('MM', monthPaddedNumber);
@@ -13,7 +14,5 @@ var DateUtil = (function () {
         panel.SetDialogVariable('ddd', $.Localize('#LOC_Date_DayShort' + date.getDay()));
         panel.SetDialogVariable('dddd', $.Localize('#LOC_Date_Day' + date.getDay()));
     }
-    return {
-        PopulateDateFormatStrings: _PopulateDateFormatStrings
-    };
-})();
+    DateUtil.PopulateDateFormatStrings = PopulateDateFormatStrings;
+})(DateUtil || (DateUtil = {}));

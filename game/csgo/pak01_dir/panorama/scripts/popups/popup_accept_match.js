@@ -7,7 +7,8 @@
 /// <reference path="../common/teamcolor.ts" />
 /// <reference path="../rating_emblem.ts" />
 /// <reference path="../avatar.ts" />
-const PopupAcceptMatch = (function () {
+var PopupAcceptMatch;
+(function (PopupAcceptMatch) {
     let m_hasPressedAccept = false;
     let m_numPlayersReady = 0;
     let m_numTotalClientsInReservation = 0;
@@ -19,7 +20,7 @@ const PopupAcceptMatch = (function () {
     let m_lobbySettings = null;
     const m_elTimer = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchCountdown');
     let m_jsTimerUpdateHandle = false;
-    const _Init = function () {
+    function Init() {
         const elPlayerSlots = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchSlots');
         elPlayerSlots.RemoveAndDeleteChildren();
         const settings = $.GetContextPanel().GetAttributeString('map_and_isreconnect', '');
@@ -52,7 +53,8 @@ const PopupAcceptMatch = (function () {
             m_jsTimerUpdateHandle = $.Schedule(4.5, _OnNqmmAutoReadyUp);
         }
         _PopulatePlayerList();
-    };
+    }
+    PopupAcceptMatch.Init = Init;
     function _PopulatePlayerList() {
         let numPlayers = LobbyAPI.GetConfirmedMatchPlayerCount();
         if (!numPlayers || numPlayers <= 2)
@@ -77,7 +79,7 @@ const PopupAcceptMatch = (function () {
             _MakeAvatar(xuid, elTeammates, true);
         }
     }
-    const _MakeAvatar = function (xuid, elTeammates, bisTeamLister = false) {
+    function _MakeAvatar(xuid, elTeammates, bisTeamLister = false) {
         const panelType = bisTeamLister ? 'Button' : 'Panel';
         const elAvatar = $.CreatePanel(panelType, elTeammates, xuid);
         elAvatar.BLoadLayoutSnippet('SmallAvatar');
@@ -89,8 +91,8 @@ const PopupAcceptMatch = (function () {
         elTeamColor.visible = false;
         const strName = FriendsListAPI.GetFriendName(xuid);
         elAvatar.SetDialogVariable('teammate_name', strName);
-    };
-    const _AddOpenPlayerCardAction = function (elAvatar, xuid) {
+    }
+    function _AddOpenPlayerCardAction(elAvatar, xuid) {
         elAvatar.SetPanelEvent("onactivate", () => {
             $.DispatchEvent('SidebarContextMenuActive', true);
             if (xuid !== "0") {
@@ -98,13 +100,13 @@ const PopupAcceptMatch = (function () {
                 contextMenuPanel.AddClass("ContextMenu_NoArrow");
             }
         });
-    };
-    const _UpdateGameServerUi = function () {
+    }
+    function _UpdateGameServerUi() {
         const elGameServer = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchGameServer');
         elGameServer.SetHasClass('hidden', m_hasPressedAccept || m_isReconnect || m_isNqmmAnnouncementOnly ||
             !(m_gsLocation && m_gsPing));
-    };
-    const _UpdateUiState = function () {
+    }
+    function _UpdateUiState() {
         _UpdateGameServerUi();
         const btnAccept = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchBtn');
         const elPlayerSlots = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchSlots');
@@ -123,17 +125,17 @@ const PopupAcceptMatch = (function () {
         m_elTimer.GetChild(0).text = "0:" + ((m_numSecondsRemaining < 10) ? "0" : "") + m_numSecondsRemaining;
         m_elTimer.SetHasClass("hidden", bHideTimer || (m_numSecondsRemaining <= 0));
         CancelTimerSound();
-    };
-    const CancelTimerSound = function () {
+    }
+    function CancelTimerSound() {
         if (m_jsTimerUpdateHandle) {
             $.CancelScheduled(m_jsTimerUpdateHandle);
             m_jsTimerUpdateHandle = false;
         }
-    };
-    const _UpdateTimeRemainingSeconds = function () {
+    }
+    function _UpdateTimeRemainingSeconds() {
         m_numSecondsRemaining = LobbyAPI.GetReadyTimeRemainingSeconds();
-    };
-    const _OnTimerUpdate = function () {
+    }
+    function _OnTimerUpdate() {
         m_jsTimerUpdateHandle = false;
         _UpdateTimeRemainingSeconds();
         _UpdateUiState();
@@ -146,8 +148,8 @@ const PopupAcceptMatch = (function () {
             }
             m_jsTimerUpdateHandle = $.Schedule(1.0, _OnTimerUpdate);
         }
-    };
-    const _FriendsListNameChanged = function (xuid) {
+    }
+    function _FriendsListNameChanged(xuid) {
         if (!xuid)
             return;
         const elNameLabel = $.GetContextPanel().FindChildTraverse('xuid');
@@ -155,8 +157,8 @@ const PopupAcceptMatch = (function () {
             return;
         const strName = FriendsListAPI.GetFriendName(xuid);
         elNameLabel.SetDialogVariable('teammate_name', strName);
-    };
-    const _ReadyForMatch = function (shouldShow, playersReadyCount, numTotalClientsInReservation) {
+    }
+    function _ReadyForMatch(shouldShow, playersReadyCount, numTotalClientsInReservation) {
         if (!shouldShow) {
             if (m_jsTimerUpdateHandle) {
                 $.CancelScheduled(m_jsTimerUpdateHandle);
@@ -178,8 +180,8 @@ const PopupAcceptMatch = (function () {
         _UpdateTimeRemainingSeconds();
         _UpdateUiState();
         m_jsTimerUpdateHandle = $.Schedule(1.0, _OnTimerUpdate);
-    };
-    const _UpdatePlayerSlots = function (elPlayerSlots) {
+    }
+    function _UpdatePlayerSlots(elPlayerSlots) {
         for (let i = 0; i < m_numTotalClientsInReservation; i++) {
             let Slot = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchSlot' + i);
             if (!Slot) {
@@ -192,24 +194,27 @@ const PopupAcceptMatch = (function () {
         labelPlayersAccepted.SetDialogVariableInt('accepted', m_numPlayersReady);
         labelPlayersAccepted.SetDialogVariableInt('slots', m_numTotalClientsInReservation);
         labelPlayersAccepted.text = $.Localize('#match_ready_players_accepted', labelPlayersAccepted);
-    };
-    const _SetMatchData = function (map) {
+    }
+    function _SetMatchData(map) {
         if (!m_lobbySettings || !m_lobbySettings.game)
             return;
+        let gameMode = m_lobbySettings.game.mode;
+        if (gameMode === "skirmish")
+            gameMode = "gungameprogressive";
         const labelData = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchModeMap');
         let strLocalize = '#match_ready_match_data';
-        labelData.SetDialogVariable('mode', $.Localize('#SFUI_GameMode_' + m_lobbySettings.game.mode));
+        labelData.SetDialogVariable('mode', $.Localize('#SFUI_GameMode_' + gameMode));
         const flags = parseInt(m_lobbySettings.game.gamemodeflags);
-        if (GameModeFlags.DoesModeUseFlags(m_lobbySettings.game.mode) && flags &&
-            GameModeFlags.DoesModeShowUserVisibleFlags(m_lobbySettings.game.mode)) {
-            labelData.SetDialogVariable('modifier', $.Localize('#play_setting_gamemodeflags_' + m_lobbySettings.game.mode + '_' + flags));
+        if (GameModeFlags.DoesModeUseFlags(gameMode) && flags &&
+            GameModeFlags.DoesModeShowUserVisibleFlags(gameMode)) {
+            labelData.SetDialogVariable('modifier', $.Localize('#play_setting_gamemodeflags_' + gameMode + '_' + flags));
             strLocalize = '#match_ready_match_data_modifier';
         }
-        if (MyPersonaAPI.GetElevatedState() === 'elevated' && SessionUtil.DoesGameModeHavePrimeQueue(m_lobbySettings.game.mode) && ((m_lobbySettings.game.prime !== 1) || !SessionUtil.AreLobbyPlayersPrime())) {
+        if (MyPersonaAPI.GetElevatedState() === 'elevated' && SessionUtil.DoesGameModeHavePrimeQueue(gameMode) && ((m_lobbySettings.game.prime !== 1) || !SessionUtil.AreLobbyPlayersPrime())) {
             $.GetContextPanel().FindChildInLayoutFile('AcceptMatchWarning').RemoveClass('hidden');
         }
         labelData.SetDialogVariable('map', $.Localize('#SFUI_Map_' + map));
-        if ((m_lobbySettings.game.mode === 'competitive') && (map === 'lobby_mapveto')) {
+        if ((gameMode === 'competitive') && (map === 'lobby_mapveto')) {
             $('#AcceptMatchModeIcon').SetImage("file://{images}/icons/ui/competitive_teams.svg");
             if (m_lobbySettings.options && m_lobbySettings.options.challengekey) {
                 strLocalize = '#match_ready_match_data_map';
@@ -219,34 +224,27 @@ const PopupAcceptMatch = (function () {
         labelData.text = $.Localize(strLocalize, labelData);
         const imgMap = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchMapImage');
         imgMap.style.backgroundImage = 'url("file://{images}/map_icons/screenshots/360p/' + map + '.png")';
-    };
-    const _OnNqmmAutoReadyUp = function () {
+    }
+    function _OnNqmmAutoReadyUp() {
         m_jsTimerUpdateHandle = false;
         LobbyAPI.SetLocalPlayerReady('deferred');
         $.DispatchEvent("CloseAcceptPopup");
         $.DispatchEvent('UIPopupButtonClicked', '');
-    };
-    const _OnAcceptMatchPressed = function () {
+    }
+    function OnAcceptMatchPressed() {
         m_hasPressedAccept = true;
         $.DispatchEvent('CSGOPlaySoundEffectMuteBypass', 'popup_accept_match_person', 'MOUSE', 1.0);
         LobbyAPI.SetLocalPlayerReady('accept');
-    };
-    const _ShowPreMatchInterface = function () {
+    }
+    PopupAcceptMatch.OnAcceptMatchPressed = OnAcceptMatchPressed;
+    function ShowPreMatchInterface() {
         PremierPickBan.Init();
         $.GetContextPanel().FindChildInLayoutFile('id-accept-match').AddClass('hide');
         CancelTimerSound();
-    };
-    return {
-        Init: _Init,
-        ReadyForMatch: _ReadyForMatch,
-        FriendsListNameChanged: _FriendsListNameChanged,
-        OnAcceptMatchPressed: _OnAcceptMatchPressed,
-        ShowPreMatchInterface: _ShowPreMatchInterface
-    };
-})();
-(function () {
-    $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', PopupAcceptMatch.FriendsListNameChanged);
-    $.RegisterForUnhandledEvent('PanoramaComponent_Lobby_ReadyUpForMatch', PopupAcceptMatch.ReadyForMatch);
-    $.RegisterForUnhandledEvent('MatchAssistedAccept', PopupAcceptMatch.OnAcceptMatchPressed);
-    $.RegisterForUnhandledEvent('PanoramaComponent_Lobby_ShowPreMatchInterface', PopupAcceptMatch.ShowPreMatchInterface);
-})();
+    }
+    PopupAcceptMatch.ShowPreMatchInterface = ShowPreMatchInterface;
+    $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', _FriendsListNameChanged);
+    $.RegisterForUnhandledEvent('PanoramaComponent_Lobby_ReadyUpForMatch', _ReadyForMatch);
+    $.RegisterForUnhandledEvent('MatchAssistedAccept', OnAcceptMatchPressed);
+    $.RegisterForUnhandledEvent('PanoramaComponent_Lobby_ShowPreMatchInterface', ShowPreMatchInterface);
+})(PopupAcceptMatch || (PopupAcceptMatch = {}));

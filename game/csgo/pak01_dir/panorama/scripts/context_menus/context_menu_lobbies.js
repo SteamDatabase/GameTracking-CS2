@@ -6,7 +6,7 @@ var ContextMenuLobbies;
     let m_elNewestLobby = null;
     let m_btnGoToNew = $.GetContextPanel().FindChildInLayoutFile('id-context-menu-lobbies-new-btn');
     let m_bSeenNewestLobby = false;
-    function Init(elTile) {
+    function Init() {
         let numInvites = PartyBrowserAPI.GetInvitesCount();
         $.GetContextPanel().SetDialogVariableInt('lobby_count', numInvites);
         let elInviteContainer = $.GetContextPanel().FindChildInLayoutFile('id-context-menu-lobbies');
@@ -19,15 +19,15 @@ var ContextMenuLobbies;
             let xuid = PartyBrowserAPI.GetInviteXuidByIndex(i);
             xuidsFromUpdate.push(xuid);
         }
-        _DeleteTilesNotInUpdate(elInviteContainer, xuidsFromUpdate);
+        DeleteTilesNotInUpdate(elInviteContainer, xuidsFromUpdate);
         xuidsFromUpdate.reverse();
         for (let i = 0; i < xuidsFromUpdate.length; i++) {
             let xuid = xuidsFromUpdate[i];
             let elTile = elInviteContainer.FindChildTraverse(xuid);
             if (!elTile)
-                _AddTile(elInviteContainer, xuid, i);
+                AddTile(elInviteContainer, xuid, i);
             else
-                _UpdateTilePosition(elInviteContainer, elTile, xuid, i);
+                UpdateTilePosition(elInviteContainer, elTile, i);
         }
         let elLastItem = elInviteContainer.Children()[elInviteContainer.Children().length - 1];
         if (elLastItem && elLastItem.IsValid()) {
@@ -39,13 +39,12 @@ var ContextMenuLobbies;
                 m_bSeenNewestLobby = false;
             }
         }
-        ShowHideNewLobbiesBtn(elInviteContainer);
-        // @ts-ignore 
+        ShowHideNewLobbiesBtn();
         elInviteContainer.SetSendScrollPositionChangedEvents(true);
     }
     ContextMenuLobbies.Init = Init;
     ;
-    function _DeleteTilesNotInUpdate(elList, xuidsFromUpdate) {
+    function DeleteTilesNotInUpdate(elList, xuidsFromUpdate) {
         let children = elList.Children();
         let sectionChildrenCount = children.length;
         for (let i = 0; i < sectionChildrenCount; i++) {
@@ -55,20 +54,20 @@ var ContextMenuLobbies;
         }
     }
     ;
-    function _UpdateTilePosition(elList, elTile, xuid, index) {
+    function UpdateTilePosition(elList, elTile, index) {
         let children = elList.Children();
         if (children[index])
             elList.MoveChildBefore(elTile, children[index]);
         friendLobby.Init(elTile);
     }
     ;
-    function ShowHideNewLobbiesBtn(elInviteContainer) {
+    function ShowHideNewLobbiesBtn() {
         $.Schedule(1, () => {
             if (!m_elNewestLobby || !m_elNewestLobby.IsValid()) {
                 m_btnGoToNew.SetHasClass('hide', true);
                 return;
             }
-            if (m_elNewestLobby.BCanSeeInParentScroll() && !m_bSeenNewestLobby) {
+            else if (m_elNewestLobby.BCanSeeInParentScroll() && !m_bSeenNewestLobby) {
                 m_btnGoToNew.SetHasClass('hide', true);
                 m_bSeenNewestLobby = true;
             }
@@ -78,34 +77,30 @@ var ContextMenuLobbies;
         });
     }
     ContextMenuLobbies.ShowHideNewLobbiesBtn = ShowHideNewLobbiesBtn;
-    function _AddTile(elList, xuid, index) {
+    function AddTile(elList, xuid, index) {
         let elTile = $.CreatePanel("Panel", elList, xuid);
         elTile.SetAttributeString('xuid', xuid);
         elTile.BLoadLayout('file://{resources}/layout/friendlobby.xml', false, false);
-        _AddTransitionEndEventHandler(elTile);
+        AddTransitionEndEventHandler(elTile);
         elTile.SetAttributeString('showinpopup', 'true');
         friendLobby.Init(elTile);
         elTile.RemoveClass('hidden');
-        // @ts-ignore 
-        elTile.ListenForScrollIntoView = true;
-        $.RegisterEventHandler('ScrolledIntoView', elTile, () => {
-        });
-        $.Schedule(1, () => {
-        });
-        return elTile;
+        $.RegisterEventHandler('ScrolledIntoView', elTile, () => { });
+        $.Schedule(1, () => { });
     }
     ;
-    function _AddTransitionEndEventHandler(elTile) {
-        const fnOnPropertyTransitionEndEvent = function (panelName, propertyName) {
+    function AddTransitionEndEventHandler(elTile) {
+        $.RegisterEventHandler('PropertyTransitionEnd', elTile, fnOnPropertyTransitionEndEvent);
+        function fnOnPropertyTransitionEndEvent(panelName, propertyName) {
             if (elTile.id === panelName && propertyName === 'opacity') {
                 if (elTile.visible === true && elTile.BIsTransparent()) {
-                    elTile.DeleteAsync(.0);
+                    elTile.DeleteAsync(0.0);
                     return true;
                 }
             }
             return false;
-        };
-        $.RegisterEventHandler('PropertyTransitionEnd', elTile, fnOnPropertyTransitionEndEvent);
+        }
+        ;
     }
     ;
     function OnPressGotoNew() {
@@ -113,12 +108,11 @@ var ContextMenuLobbies;
         elPanel.ScrollToBottom();
     }
     ContextMenuLobbies.OnPressGotoNew = OnPressGotoNew;
+    {
+        $.RegisterForUnhandledEvent('PanoramaComponent_PartyBrowser_InviteConsumed', Init);
+        $.RegisterForUnhandledEvent('PanoramaComponent_PartyBrowser_InviteReceived', Init);
+        let elLister = $.GetContextPanel().FindChildInLayoutFile('id-context-menu-lobbies');
+        elLister.SetSendScrollPositionChangedEvents(true);
+        $.RegisterEventHandler('ScrollPositionChanged', elLister, ShowHideNewLobbiesBtn);
+    }
 })(ContextMenuLobbies || (ContextMenuLobbies = {}));
-(function () {
-    $.RegisterForUnhandledEvent('PanoramaComponent_PartyBrowser_InviteConsumed', ContextMenuLobbies.Init);
-    $.RegisterForUnhandledEvent('PanoramaComponent_PartyBrowser_InviteReceived', ContextMenuLobbies.Init);
-    let elLister = $.GetContextPanel().FindChildInLayoutFile('id-context-menu-lobbies');
-    //@ts-ignore
-    elLister.SetSendScrollPositionChangedEvents(true);
-    $.RegisterEventHandler('ScrollPositionChanged', elLister, ContextMenuLobbies.ShowHideNewLobbiesBtn);
-})();

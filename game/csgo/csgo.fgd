@@ -163,6 +163,32 @@
 		"16384" : "16384"
 	]
 	lightmap_queries(boolean) : "Lightmap Queries" : "1" : "Generates data which can be used to lookup lightmap UVs at a given position, useful for high-fidelity illumination of bullet decals on lightmapped geometry."
+
+	steamaudio_reverb_rebake_option(choices) [ group="Steam Audio Reverb Settings" ]: "Rebake Option" : "1" : "<b>Cleanup</b>: Reverb bake is disabled. Baked data will be cleaned up during map compile in Hammer or mapbuilder.<br /><b>Manual</b>: Reverb needs to be baked manually. Baked data is added or updated during map compile in Hammer but untouched by mapbuilder.<br /><b>Auto</b>: Reverb is baked automatically during map compile. Baked data is added or updated during map compile in Hammer or mapbuilder." =
+	[
+		"0" : "Cleanup"
+		"1" : "Manual"
+		"2" : "Auto"
+	]
+	steamaudio_reverb_grid_spacing(float) [ group="Steam Audio Reverb Settings" ]: "Grid Spacing" : "6" : "The horizontal distance (in meters) between adjacent probes."
+	steamaudio_reverb_height_above_floor(float) [ group="Steam Audio Reverb Settings" ]: "Height Above Floor" : "1.5" : "The height (in meters) above the floor at which probes should be placed.."
+	steamaudio_reverb_rays(integer) [ group="Steam Audio Reverb Settings" ]: "Baking Rays" : "32768" : "The number of rays traced from the listener when baking reflections or reverb. Increasing this value results in more accurate reflections, at the cost of increased bake times."
+	steamaudio_reverb_bounces(integer) [ group="Steam Audio Reverb Settings" ]: "Baking Bounces" : "32" : "The number of times each ray traced from the listener is reflected when baking reflections or reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased bake times."
+	steamaudio_reverb_ir_duration(float) [ group="Steam Audio Reverb Settings" ]: "Baking Duration" : "1.0" : "The duration (in seconds) of the IRs generated when baking reflections or reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased disk space usage."
+	steamaudio_reverb_ambisonic_order(integer) [ group="Steam Audio Reverb Settings" ]: "Baking Ambisonic Order" : "1" : "The Ambisonic order of the IRs generated when baking reflections or reverb. Increasing this value results in more accurate directional variation of reflected sound, at the cost of increased disk space usage."
+
+	steamaudio_pathing_rebake_option(choices) [ group="Steam Audio Pathing Settings" ]: "Rebake Option" : "1" : "<b>Cleanup</b>: Pathing bake is disabled. Baked data will be cleaned up during map compile in Hammer or mapbuilder.<br /><b>Manual</b>: Pathing needs to be baked manually. Baked data is added or updated during map compile in Hammer but untouched by mapbuilder.<br /><b>Auto</b>: Pathing is baked automatically during map compile. Baked data is added or updated during map compile in Hammer or mapbuilder." =
+	[
+		"0" : "Cleanup"
+		"1" : "Manual"
+		"2" : "Auto"
+	]
+	steamaudio_pathing_grid_spacing(float) [ group="Steam Audio Pathing Settings" ]: "Grid Spacing" : "6" : "The horizontal distance (in meters) between adjacent probes."
+	steamaudio_pathing_height_above_floor(float) [ group="Steam Audio Pathing Settings" ]: "Height Above Floor" : "1.5" : "The height (in meters) above the floor at which probes should be placed.."
+	steamaudio_pathing_visibility_samples(integer) [ group="Steam Audio Pathing Settings" ]: "Baking Visibilty Samples" : "1" : "Number of point samples to use around each probe when testing whether one probe can see another. To determine if two probes are mutually visible, rays are traced from each point sample of the first probe, to every other point sample of the second probe. Increasing this value prevents paths from being considered occluded by small objects, at the cost of increased bake times."
+	steamaudio_pathing_visibility_radius(float) [ group="Steam Audio Pathing Settings" ]: "Baking Visibility Radius" : "0.0" : "When testing for mutual visibility between a pair of probes, each probe is treated as a sphere of this radius (in meters), and point samples are generated within this sphere."
+	steamaudio_pathing_visibility_threshold(float) [ group="Steam Audio Pathing Settings" ]: "Baking Visibility Threshold" : "0.1" : "When tracing rays to test for mutual visibility between a pair of probes, the fraction of rays that are unoccluded must be greater than this threshold for the pair of probes to be considered mutually visible."
+	steamaudio_pathing_visibility_pathrange(float) [ group="Steam Audio Pathing Settings" ]: "Baking Path Range" : "100.0" : "If the distance (in meters) between two probes is greater than this value, the probes are considered to not have any path between them. Increasing this value allows sound to propagate over greater distances, at the cost of increased bake times and memory usage."
 ]
 
 @BaseClass = Angles
@@ -1316,7 +1342,7 @@
 	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local( movedir ) = func_conveyor : 
+@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local{ angles_key = "movedir" } = func_conveyor : 
 	"A brush entity with a moving surface that moves linearly in a given direction"
 [
 	conveyor_models(target_destination) : "Models" : "" : "Name of the conveyor models that will animate along with the conveyor."

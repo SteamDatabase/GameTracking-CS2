@@ -4,10 +4,9 @@
 /// <reference path="common/sessionutil.ts" />
 /// <reference path="mock_adapter.ts" />
 /// <reference path="rating_emblem.ts" />
+/// <reference path="honor_icon.ts" />
 var VanityPlayerInfo;
 (function (VanityPlayerInfo) {
-    function _msg(text) {
-    }
     function CreateOrUpdateVanityInfoPanel(elParent = null, oSettings = null) {
         if (!elParent) {
             elParent = $.GetContextPanel();
@@ -24,14 +23,13 @@ var VanityPlayerInfo;
         _SetAvatar(newPanel, oSettings.xuid);
         _SetRank(newPanel, oSettings.xuid, oSettings.isLocalPlayer);
         _SetSkillGroup(newPanel, oSettings.xuid, oSettings.isLocalPlayer);
-        _SetPrime(newPanel, oSettings.xuid, oSettings.isLocalPlayer);
+        _SetHonorIcon(newPanel, oSettings.xuid);
         _AddOpenPlayerCardAction(newPanel.FindChildInLayoutFile('vanity-info-container'), oSettings.xuid);
         _SetLobbyLeader(newPanel, oSettings.xuid);
         _ShowSettingsBtn(newPanel, oSettings.xuid);
         return newPanel;
     }
     VanityPlayerInfo.CreateOrUpdateVanityInfoPanel = CreateOrUpdateVanityInfoPanel;
-    ;
     function DeleteVanityInfoPanel(elParent, index) {
         const idPrefix = "id-player-vanity-info-" + index;
         const elPanel = elParent.FindChildInLayoutFile(idPrefix);
@@ -40,12 +38,10 @@ var VanityPlayerInfo;
         }
     }
     VanityPlayerInfo.DeleteVanityInfoPanel = DeleteVanityInfoPanel;
-    ;
     function _RoundToPixel(context, value, axis) {
         const scale = axis === "x" ? context.actualuiscale_x : context.actualuiscale_y;
         return Math.round(value * scale) / scale;
     }
-    ;
     function SetVanityInfoPanelPos(elParent, index, oPos, OnlyXOrY) {
         const idPrefix = "id-player-vanity-info-" + index;
         const elPanel = elParent.FindChildInLayoutFile(idPrefix);
@@ -64,14 +60,12 @@ var VanityPlayerInfo;
         }
     }
     VanityPlayerInfo.SetVanityInfoPanelPos = SetVanityInfoPanelPos;
-    ;
     function _SetName(newPanel, xuid) {
         const name = MockAdapter.IsFakePlayer(xuid)
             ? MockAdapter.GetPlayerName(xuid)
             : FriendsListAPI.GetFriendName(xuid);
         newPanel.SetDialogVariable('player_name', name);
     }
-    ;
     function _SetAvatar(newPanel, xuid) {
         const elParent = newPanel.FindChildInLayoutFile('vanity-avatar-container');
         let elAvatar = elParent.FindChildInLayoutFile('JsPlayerVanityAvatar-' + xuid);
@@ -88,9 +82,7 @@ var VanityPlayerInfo;
             elAvatarImage.PopulateFromPlayerSlot(MockAdapter.GetPlayerSlot(xuid));
         }
     }
-    ;
     function _SetRank(newPanel, xuid, isLocalPlayer) {
-        const elRankText = newPanel.FindChildInLayoutFile('vanity-rank-name');
         const elRankIcon = newPanel.FindChildInLayoutFile('vanity-xp-icon');
         const elXpBarInner = newPanel.FindChildInLayoutFile('vanity-xp-bar-inner');
         if (!isLocalPlayer || !MyPersonaAPI.IsInventoryValid()) {
@@ -106,7 +98,8 @@ var VanityPlayerInfo;
             return;
         }
         const bHasRankToFreezeButNoPrestige = (!_IsPlayerPrime(xuid) && _HasXpProgressToFreeze()) ? true : false;
-        const currentPoints = FriendsListAPI.GetFriendXp(xuid), pointsPerLevel = MyPersonaAPI.GetXpPerLevel();
+        const currentPoints = FriendsListAPI.GetFriendXp(xuid);
+        const pointsPerLevel = MyPersonaAPI.GetXpPerLevel();
         if (bHasRankToFreezeButNoPrestige) {
             elXpBarInner.GetParent().visible = false;
         }
@@ -118,24 +111,6 @@ var VanityPlayerInfo;
         elRankIcon.SetImage('file://{images}/icons/xp/level' + currentLvl + '.png');
         newPanel.RemoveClass('no-valid-xp');
     }
-    ;
-    function _SetRankFromParty(newPanel, elRankText, elRankIcon, elXpBarInner, xuid) {
-        const rankLvl = PartyListAPI.GetFriendLevel(xuid);
-        const xpPoints = PartyListAPI.GetFriendXp(xuid);
-        const pointsPerLevel = MyPersonaAPI.GetXpPerLevel();
-        if (!rankLvl) {
-            newPanel.AddClass('no-valid-xp');
-            return;
-        }
-        const percentComplete = (xpPoints / pointsPerLevel) * 100;
-        elXpBarInner.style.width = percentComplete + '%';
-        elXpBarInner.GetParent().visible = true;
-        elRankIcon.SetImage('file://{images}/icons/xp/level' + rankLvl + '.png');
-        elRankText.SetDialogVariable('name', $.Localize('#SFUI_XP_RankName_' + rankLvl));
-        elRankText.SetDialogVariableInt('level', rankLvl);
-        newPanel.RemoveClass('no-valid-xp');
-    }
-    ;
     function _SetSkillGroup(newPanel, xuid, isLocalPlayer) {
         let options = {
             root_panel: newPanel,
@@ -147,49 +122,45 @@ var VanityPlayerInfo;
         if (isLocalPlayer && !PartyListAPI.IsPartySessionActive()) {
             options.api = 'mypersona';
         }
-        let haveRating = RatingEmblem.SetXuid(options);
+        RatingEmblem.SetXuid(options);
         newPanel.SetDialogVariable('rating-text', RatingEmblem.GetRatingDesc(newPanel));
     }
-    ;
-    function _SetPrime(elPanel, xuid, isLocalPlayer) {
-        const elPrime = elPanel.FindChildInLayoutFile('vanity-prime-icon');
-        elPrime.visible = isLocalPlayer ? _IsPlayerPrime(xuid) : PartyListAPI.GetFriendPrimeEligible(xuid);
+    function _SetHonorIcon(elPanel, xuid) {
+        const honorIconOptions = {
+            honor_icon_frame_panel: elPanel.FindChildTraverse('jsHonorIcon'),
+            debug_xuid: xuid,
+            do_fx: true,
+            xptrail_value: PartyListAPI.GetFriendXpTrailLevel(xuid),
+            prime_value: PartyListAPI.GetFriendPrimeEligible(xuid)
+        };
+        HonorIcon.SetOptions(honorIconOptions);
     }
-    ;
     function UpdateVoiceIcon(elAvatar, xuid) {
         Avatar.UpdateTalkingState(elAvatar, xuid);
     }
     VanityPlayerInfo.UpdateVoiceIcon = UpdateVoiceIcon;
-    ;
     function _HasXpProgressToFreeze() {
         return MyPersonaAPI.HasPrestige() || (MyPersonaAPI.GetCurrentLevel() > 2);
     }
-    ;
     function _IsPlayerPrime(xuid) {
         return FriendsListAPI.GetFriendPrimeEligible(xuid);
     }
-    ;
     function _SetLobbyLeader(elPanel, xuid) {
         elPanel.SetHasClass('is-not-leader', LobbyAPI.GetHostSteamID() !== xuid);
     }
-    ;
     function _ShowSettingsBtn(elPanel, xuid) {
         elPanel.SetHasClass("show-controls", MyPersonaAPI.GetXuid() === xuid);
     }
     function _AddOpenPlayerCardAction(elPanel, xuid) {
-        function openCard(xuid) {
+        elPanel.SetPanelEvent("onactivate", () => {
             if (xuid !== "0") {
-                const contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, function () {
-                });
+                const contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, () => { });
                 contextMenuPanel.AddClass("ContextMenu_NoArrow");
             }
+        });
+    }
+    {
+        if ($.DbgIsReloadingScript()) {
         }
-        ;
-        elPanel.SetPanelEvent("onactivate", openCard.bind(undefined, xuid));
     }
-    ;
 })(VanityPlayerInfo || (VanityPlayerInfo = {}));
-(function () {
-    if ($.DbgIsReloadingScript()) {
-    }
-})();

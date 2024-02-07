@@ -904,8 +904,7 @@
 	box_outer_mins(vector) : "Box Outer Mins" : "-64 -64 -64"
 	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"	
 ]
-
-@PointClass base( Targetname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_inner_mins, box_inner_maxs ) box_oriented( box_outer_mins, box_outer_maxs ) = snd_opvar_set_obb :
+@PointClass base( Targetname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented{ box_min = "box_inner_mins" box_max = "box_inner_maxs" draw_unselected_box = false} box_oriented{ box_min = "box_outer_mins" box_max = "box_outer_maxs" draw_unselected_box = false} = snd_opvar_set_obb :
 [
 ]
 
@@ -914,17 +913,16 @@
 	pathCornerEntityName(target_destination) : "Path Corner Starting Entity" : "" : "The name of the entity that is at the start of the path"
 ]
 
+@BaseClass = SndOpvarSetPointAutoRoomBase
+[ 
+	size(float) : "Size (radius)" : "25.0" : "Size of the room to analyze"
+	height_tolerance(float) : "Height Tolerance (units)" : "50.0" : "If the player's height and the raycast height are within this many units, the difference is ignored when performing distance calculations"
+]
 
-//@BaseClass = SndOpvarSetPointAutoRoomBase
-//[ 
-	//size(float) : "Size (radius)" : "25.0" : "Size of the room to analyze"
-	//height_tolerance(float) : "Height Tolerance (units)" : "50.0" : "If the player's height and the raycast height are within this many units, the difference is ignored when performing distance calculations"
-//]
-
-//@PointClass base( Targetname, SndOpvarSetPointAutoRoomBase, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) sphere(size, 250, 101, 252)= snd_opvar_set_auto_room :
-	//"Analyzes a mostly enclosed space and defines walls and doorways within that space. Sets an opvar value on a library stack based on distance from the doorways"
-//[
-//]
+@PointClass base( Targetname, SndOpvarSetPointAutoRoomBase, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) sphere(size, 250, 101, 252)= snd_opvar_set_auto_room :
+	"Analyzes a mostly enclosed space and defines walls and doorways within that space. Sets an opvar value on a library stack based on distance from the doorways"
+[
+]
 
 @PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
 [
@@ -1936,6 +1934,7 @@
 		16: "Ropes" : 0		// shakes ropes too.
 		32: "DON'T shake view (for shaking ropes or physics only)" : 0
 		64: "DON'T Rumble Controller" : 0
+		256: "Water" : 0	// shake water too.
 	]
 
 	limittoentity(target_destination) : "Limit to entity" : "" : "Limit the shake to entity or entities matching the name or class name."
@@ -2455,7 +2454,7 @@
 
 // A decal to be applied to a prop or the world using specified origin and orientation and radius, uses an orientation angle and a radius to determine
 //  ray to cast for projection
-@PointClass base(Targetname) tags( Overlay ) decal() drawangles() editormodel("models/editor/axis_helper_thick.vmdl") = info_projecteddecal : 
+@PointClass base(Targetname) tags( Overlay ) decal() drawangles{} editormodel("models/editor/axis_helper_thick.vmdl") = info_projecteddecal : 
 	"An entity that projects a decal onto the world (or props). If the decal has no target name, it will immediately apply itself when "+
 	"the level is loaded. If it has a name specified, it won't apply until it receives the 'Activate' input."
 [
@@ -2851,7 +2850,7 @@
 	]
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local( movedir ) = func_movelinear :
+@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local{ angles_key = "movedir" } = func_movelinear :
 	"A brush entity that moves linearly along a given distance, in a given direction."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the brushes will move, when told to."
@@ -2910,6 +2909,7 @@
 		512: "Large Sound Radius" : 1
 		1024: "Client-side Animation" : 0
 		2048: "Unblockable by Player" : 0
+		4096: "Rotate in world space" : 0
 	]
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	dmg(integer) : "Blocking Damage" : 0 : "Damage done to any entity that blocks the rotation, per frame."
@@ -2921,7 +2921,7 @@
 	]
 
 	// Inputs
-	input SetSpeed(integer) : "Set the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards."
+	input SetSpeed(float) : "Set the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards."
 	input SnapToStartPos(void) : "Snap to the initial position and stop moving."
 	input Start(void) : "Start the rotator rotating."
 	input Stop(void) : "Stop the rotator from rotating."
@@ -2931,6 +2931,12 @@
 	input StartBackward(void) : "Start the rotator rotating backward at maximum speed."
 	input Toggle(void) : "Toggle the rotator between rotating and not rotating."
 	input Reverse(void) : "Reverse the direction of rotation of the rotator, preserving the current speed."
+	input EnableAccelDecel(void) : "Enables the acceleration and deceleration of this rotator"
+	input DisableAccelDecel(void) : "Disables the acceleration and deceleration of this rotator (instantly starts/stops)"
+	
+	output OnStopped(void) : "Fired this brush has stopped moving."
+	output OnStarted(void) : "Fired this brush has started moving"
+	output OnReachedStart(void) : "Fired this brush has stopped moving."
 ]
 
 @SolidClass base(Targetname, Parentname, RenderFields, BasePlat, Shadow) = func_platrot : 
@@ -3066,7 +3072,7 @@
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
-@SolidClass base(BaseFuncButton) drawangles_local( movedir ) = func_button : 
+@SolidClass base(BaseFuncButton) drawangles_local{ angles_key = "movedir" } = func_button : 
 	"A brush entity that's designed to be used for a player-useable button. When used by the player, it moves to a pressed position."
 [
 	lip(integer) : "Lip" : 0 : "The amount, in inches, of the button to leave sticking out of the wall it recedes into when pressed. Negative values make the button recede even further into the wall."
@@ -3088,7 +3094,7 @@
 	]
 ]
 
-@SolidClass base(BaseFuncButton) drawangles_local( movedir ) = func_physical_button : 
+@SolidClass base(BaseFuncButton) drawangles_local{ angles_key = "movedir" } = func_physical_button : 
 	"A brush entity that's designed to be used for a rotating player-useable button. When used by the player, it rotates to a pressed position."
 [
 	spawnflags(flags) =
@@ -3254,7 +3260,7 @@
 	input SetSpeed(float) : "Set the door speed."
 ]
 
-@SolidClass base(Door) drawangles_local( movedir ) = func_door : 
+@SolidClass base(Door) drawangles_local{ angles_key = "movedir" } = func_door : 
 	"A brush entity for use as a player-useable door."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the door will move, when it opens."
@@ -4183,6 +4189,10 @@
 	selected_line( 255 255 255, targetname, Template63 )
 	selected_line( 255 255 255, targetname, Template64 )
 	iconsprite("editor/point_template.vmat")
+	metadata
+	{
+		create_entity_lump_mode = "PointTemplate"
+	}
 = point_template : 
 	"Turns an entity, or set of entities, into a single template that can be instanced anywhere, and multiple times. "+
 	"If there are interdependencies (entity I/O, hierarchy, or other name references) between the entities "+
@@ -4481,6 +4491,10 @@
 [
 ]
 
+@FilterClass base(BaseFilter) iconsprite("editor/filter_class.vmat") = filter_modifier : "A filter that filters entities by active modifiers applied to them"
+[
+	filtermodifier(string) : "Modifier Name" : : "The name of the modifier to filter entities by"
+]
 
 //-------------------------------------------------------------------------
 //
@@ -4960,7 +4974,7 @@
 [
 	addlength(float) : "Additional Length" : "0" : "Add (or subtract) this amount to the rest length of the rope."
 	minlength(float) : "Minimum Length" : "0" : "If the constraint is not rigid, this is the minimum length it can be."
-	attachpoint(vecline) : "Attached object 2 point" : "The position the rope attaches to object 2"
+	attachpoint(vecline) : "Attached object 2 point" : "0 0 0" : "The position the rope attaches to object 2"
 	enablecollision(boolean) : "Enable Collision" : "0" : "Constraints disable collision between the attached entities. In some rare cases we want to enable this collision."
 	spawnflags(flags) =
 	[
@@ -5271,10 +5285,17 @@
 		1: "Yes"
 	]
 
-	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
 	use_animgraph(boolean) { enabled={ function="ModelHasAnimGraph" } } : "Use Animgraph" : 1 : "Allow the model to use its animgraph it has one. If the model has no animgraph this setting has no effect and is disabled"
 
-	AnimationLoopMode(choices) : "Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
+	StartingAnim(sequence) { enabled={ function="NotUsingAnimGraph" } is_preview_animation=true preview_animation_priority = 2 } : "Starting Animation" : "" : "The name of a starting animation that this prop will start with when it spawns. After completion, it will switch to the Idle sequence, if it is specified. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	StartingAnimationLoopMode(choices) : "Start Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
+	[
+		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
+		"ANIM_LOOP_MODE_LOOPING" : "Loop"
+	]
+
+	IdleAnim(sequence) { enabled={ function="NotUsingAnimGraph" } is_preview_animation=true } : "Idle Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	IdleAnimationLoopMode(choices) : "Idle Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
 	[
 		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
 		"ANIM_LOOP_MODE_LOOPING" : "Loop"
@@ -5284,19 +5305,15 @@
 
 	LagCompensate(boolean) : "Lag Compensation" : 0 : "Enable to lag compensate this prop, should be use very sparingly!"
 	AnimateOnServer(boolean) : "Animate on server in multiplayer" : 0 : "Enable this to animate on the server in multiplayer games, such as for props with triggers parented to attachment points. Use sparingly as there is a performance cost."
-	ScriptedMovement(boolean) : "Scripted Movement" : 0 : "Set this to allow vscript code to move the prop via SetVelocity() calls."
-	
-	velocity(vector) : "Initial Velocity" : : "Only used if Scripted Movement is set, sets an initial linear velocity for the entity."
-	avelocity(vector) : "Initial Rotational Velocity" : : "Only used if Scripted Movement is set, sets an initial rotational velocity for the entity."
 
 	// Inputs
 	input SetAnimationLooping(string)			: "Force the prop to play an animation and force it to loop. The parameter should be the name of the animation."
 	input SetAnimationNoResetLooping(string)	: "Force the prop to play an animation and force it to loop unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetDefaultAnimationLooping(string)	: "Set the Default Animation to the one specified in the parameter and force it to loop."
+	input SetIdleAnimationLooping(string)		: "Changes the Idle Animation to the one specified in the parameter and force it to loop."
 
 	input SetAnimationNotLooping(string)		: "Force the prop to play an animation and force it to not loop. The parameter should be the name of the animation."
 	input SetAnimationNoResetNotLooping(string) : "Force the prop to play an animation and force it to not loop unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetDefaultAnimationNotLooping(string) : "Set the Default Animation to the one specified in the parameter and force it to not loop."
+	input SetIdleAnimationNotLooping(string)	: "Changes the Idle Animation to the one specified in the parameter and force it to not loop."
 
 	input SetPlaybackRate(float) : "Set the playback rate for the animation."
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
@@ -5478,6 +5495,8 @@
 	input EnableMotion(void) : "Enable physics motion/collision response."
 	input DisableMotion(void) : "Disable physics motion/collision response."
 	input DisableFloating(void) : "Disable fluid/floating simulation to reduce cost."
+	input EnableGravity(void) : "Enable gravity on physics object"
+	input DisableGravity(void) : "Disable gravity on physics object"
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input physdamagescale(float) : "Set the Physics Impact Damage Scale for this character. NOTE: 0 means this feature is disabled for backwards compatibility."
 	input EnableDamageForces(void) : "Damaging the entity applies physics forces to it."
@@ -6086,7 +6105,7 @@
 	movementsound(sound) : "Vehicle Movement Sound" : "vehicles/tank_treads_loop1.wav"
 ]
 
-@PointClass base(Targetname, Parentname) cylinder(255 255 255, targetname, target, radius, targetname, targetname, radius) drawangles() line(255 255 255, targetname, target, targetname, targetname) color(255 192 0) size(16 16 16) = path_track : 
+@PointClass base(Targetname, Parentname) cylinder(255 255 255, targetname, target, radius, targetname, targetname, radius) drawangles{} line(255 255 255, targetname, target, targetname, targetname) color(255 192 0) size(16 16 16) = path_track : 
 	"An entity used to build paths for other entities to follow. Each path_track is a node on the path, each holding the name of the next path_track in the path."
 [
 	spawnflags(Flags) =
@@ -6328,7 +6347,7 @@
 	output OnEndLook(void) : "Fired when the player was looking and unlooked while still touching."
 ]
 
-@SolidClass base(Trigger) drawangles_local( pushdir )= trigger_push : 
+@SolidClass base(Trigger) drawangles_local{ angles_key = "pushdir" } = trigger_push : 
 	"A trigger volume that pushes entities that touch it."
 [
 	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0" : "Angles indicating the direction to push touched entities."
@@ -6340,7 +6359,6 @@
 	]
 
 	speed(integer) : "Speed of Push" : 40 : "The speed at which to push entities away, in inches / second."
-	alternateticksfix(float) : "Scale force for alternate ticks" : "0" : "If nonzero, scale the force by this amount when running with alternate ticks. This fixes problems with an overly large force due to the longer frametime on when running with sv_alternateticks 1."
 
 	triggeronstarttouch(boolean) : "Trigger on Start Touch" : 0 : "Trigger on start touch instead of on touch."
 	
@@ -6966,7 +6984,7 @@
 	editor_only(boolean) : "Editor only" : 1
 ]
 
-@PointClass base(Targetname) size(16 16 16) line(255 255 255, targetname, target) drawangles() color(247 181 82) = path_corner : "Generic path point"
+@PointClass base(Targetname) size(16 16 16) line(255 255 255, targetname, target) drawangles{} color(247 181 82) = path_corner : "Generic path point"
 [
 	spawnflags(Flags) =
 	[

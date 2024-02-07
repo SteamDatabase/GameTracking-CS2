@@ -23,12 +23,8 @@ var PopupWorkshopModeSelect;
         _InitModes(modes);
     }
     PopupWorkshopModeSelect.Init = Init;
-    ;
-    function _InitAllModes() {
-        _InitModes(['casual', 'competitive', 'scrimcomp2v2', 'deathmatch', 'coopmission', 'flyingscoutsman', 'retakes', 'custom']);
-    }
     function _InitModes(modes) {
-        m_elButtons.forEach(function (elButton) { elButton.DeleteAsync(0.0); });
+        m_elButtons.forEach(elButton => elButton.DeleteAsync(0.0));
         m_elButtons = [];
         for (let i = 0; i < modes.length; ++i) {
             let strMode = modes[i];
@@ -51,7 +47,7 @@ var PopupWorkshopModeSelect;
             strGameMode = singleModeOverride;
         }
         else {
-            let elSelectedButton = m_elButtons.find(function (elButton) { return elButton.checked; });
+            let elSelectedButton = m_elButtons.find(elButton => elButton.checked);
             if (elSelectedButton)
                 strGameMode = elSelectedButton.GetAttributeString('data-mode', strGameMode);
         }
@@ -76,11 +72,9 @@ var PopupWorkshopModeSelect;
             }
         };
         if (nSkirmishId !== 0) {
-            // @ts-ignore 
             settings.update.Game.skirmishmode = nSkirmishId;
         }
         else {
-            // @ts-ignore 
             settings.delete = {
                 Game: {
                     skirmishmode: '#empty#'

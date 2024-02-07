@@ -54,7 +54,7 @@
 	input ForceReturnToAIAbility( string ) : "Return the ability on the NPC to the AI's control (i.e. AI will decide whether or not the ability is enabled or disabled)"
 	input RemoveAbility( string ) : "Removes an ability to the NPC"
 	input DisableAllAbilities( boolean ) : "Disable all abilities on the NPC. Parameter: 0 - Do not disable all abilities, 1 - Do disable all abilities"
-	input SetForceWalkRun(integer) : "Force this NPC to walk or run. Parameter: 0 - Return to AI, 1 - Force Walk, 2 - Force Run."
+	input SetMovementGaitOverride(string) : "Force this NPC to use a specified movement gait. Empty string cancels the override; otherwise use 'Walk', 'Jog', 'Run', or 'Sprint'."
 	input SetForceAim(integer) : "Force this NPC to aim or not aim. Parameter: 0 - Return to AI, 1 - Force Aiming, 2 - Force Not Aiming. Note that an NPC forced to Not Aim may be non-functional in combat."
 	input StartActBusy(string) : "Force an NPC to go into an Act Busy. The parameter is the act busy entry name found in actbusy.vdata"
 	input StopActBusy(void) : "Force an NPC to exit a performing Act Busy."
@@ -331,7 +331,7 @@
 	]
 	m_iszNextScript(target_destination) : "Next Script" : : "The name of the script to run immediately after this script completes. The NPC will not return to AI between the two scripts."
 	m_bIgnoreGravity(boolean) : "Ignore Gravity on NPC during script" : 0 : "If this is set to 'Yes', the NPC will not be subject to gravity while playing this script."
-
+	m_bIgnoreLookAt(boolean) : "Ignore look at targets during script" : 1 : "If this is set to 'Yes', the NPC will not look at the look at target when playing the script."
 	m_bDisableNPCCollisions(boolean) : "Disable NPC collisions during script" : 0 : "Useful for when NPCs playing scripts must interpenetrate while riding on trains, elevators, etc. This only disables collisions between the NPCs in the script and must be enabled on BOTH scripted_sequences."
 	m_bKeepAnimgraphLockedPost(boolean) : "Keep Animgraph Locked after script" : 0 : "If set, the animgraph will remain locked in the Direct Playback node after this sequence finishes. This is only useful if you have a 'Next Script' set, and you don't want the animgraph to return to Idle during the transition. Note that the 'Next Script' cannot require the NPC to animate/move to it, because the NPC will be unable to move while in the Direct Playback node. In that case, or if you have no 'Next Script' set, selecting this will simply cause the NPC to freeze after it finishes the sequence."
 
@@ -444,6 +444,8 @@
 = ai_scripted_idle :
 	"Forces an NPC to idle (optionally at a specified location), allowing you to control what will interrupt it."
 [
+	start_on_spawn(boolean) : "Start Idle on Spawn?" : "No" : "If checked, when this entity is spawned, it will start the idle on all eligible NPC(s)."
+	
 	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to idle."
 	m_iszTarget(target_destination) : "Target Destination" : "" : "An optional entity that marks the position at which the NPC should idle. If left blank, the NPC will idle where it currently is."
 
@@ -459,12 +461,12 @@
 		1 : "Yes"
 	]
 
-	interruptability(choices) : "Interruptability" : 0 : "Sets what kind of events can interrupt an NPC that's performing this idle. Note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
+	interruptability(choices) : "Interruptability" : "eGeneral" : "Sets what kind of events can interrupt an NPC that's performing this idle. Note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
 	[
-		0 : "Everything that usually interrupts AI"
-		3 : "Direct Combat (Seeing enemies, taking damage, etc)"
-		1 : "Only Taking Damage"
-		2 : "Nothing"
+		"eGeneral" : "Everything that usually interrupts AI"
+		"eCombat" : "Direct Combat (Seeing enemies, taking damage, etc)"
+		"eDamageOrDeath" : "Only Taking Damage"
+		"eDeath" : "Nothing"
 	]
 	
 	// Inputs
@@ -479,6 +481,8 @@
 @PointClass base(Targetname) tags( Choreo ) selected_line( 255 255 255, targetname, m_iszTarget ) selected_line( 255 255 255, targetname, m_iszNPC ) color(255 0 255)  iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
 	"Forces an NPC to move to a specified destination entity."
 [
+	start_on_spawn(boolean) : "Start MoveTo on Spawn?" : "No" : "If checked, when this entity is spawned, it will start all eligible NPC(s) moving to the target destination."
+	
 	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to move to the Target Destination."
 	m_iszTarget(target_destination) : "Target Destination" : "" : "The entity that marks the destination of this move-to."
 
@@ -506,15 +510,13 @@
 		1 : "Yes"
 	]
 
-	interruptability(choices) : "Interruptability" : 0 : "Sets what kind of events can interrupt an NPC that's performing this move to. Note that this only describes events that interrupt the moveto while it's working properly, not whether or not movement itself can fail. So even if this is set to 'Nothing', a moveto can still fail due to core movement failure (path failing / route blocked). Also, note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
+	interruptability(choices) : "Interruptability" : "eGeneral" : "Sets what kind of events can interrupt an NPC that's performing this move to. Note that this only describes events that interrupt the moveto while it's working properly, not whether or not movement itself can fail. So even if this is set to 'Nothing', a moveto can still fail due to core movement failure (path failing / route blocked). Also, note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
 	[
-		0 : "Everything that usually interrupts AI"
-		3 : "Direct Combat (Seeing enemies, taking damage, etc)"
-		1 : "Only Taking Damage"
-		2 : "Nothing"
+		"eGeneral" : "Everything that usually interrupts AI"
+		"eCombat" : "Direct Combat (Seeing enemies, taking damage, etc)"
+		"eDamageOrDeath" : "Only Taking Damage"
+		"eDeath" : "Nothing"
 	]
-
-	force_lookat_path(boolean) : "Force LookAt Path?" : "No" : "If yes, the NPC will be forced to keep looking in the direction its path during the moveto. "
 
 	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
 
@@ -526,12 +528,15 @@
 	// Outputs
 	output OnSucceeded(void) : "Fired when any target NPC finishes moving to the destination."
 	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
+	output OnCanceled(void) : "Fired when the target NPC was asked to stop."
 ]
 
 
 @PointClass base(Targetname) tags( Choreo ) color(255 0 255) iconsprite("editor/aiscripted_schedule") = ai_scripted_abilityusage :
 	"Forces an NPC to perform an ability at a specified target."
 [
+	start_on_spawn(boolean) : "Use Ability on Spawn?" : "No" : "If checked, when this entity is spawned, all eligible NPC(s) will use the ability."
+	
 	m_iszNPC(target_destination) : "Target NPC(s)" : "" : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to perform the ability at the Ability Target."
 	m_iszAbilityName(npc_ability_name) : "Ability Subclass to Perform" : "" : "Subclass of the ability that target NPC(s) should perform against the Ability Target."
 	m_iszTarget(target_destination) : "Ability Target" : "" : "The entity that marks the target of the ability."
@@ -582,4 +587,5 @@
 	// Outputs
 	output OnSucceeded(void) : "Fired when any target NPC finishes performing the ability."
 	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to perform the ability. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the ability."
+	output OnCanceled(void) : "Fired when the ability is aborted."
 ]

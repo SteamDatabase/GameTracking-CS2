@@ -10,8 +10,8 @@ var ParticleControls;
         return panel.type === "ParticleScenePanel";
     }
     function GetWorldExtendsFromCamFov(fov, xpos, ypos, zpos, pheight, pwidth) {
-        var height = Math.tan(fov * .5) * Math.sqrt((xpos * xpos) + (ypos * ypos) + (zpos * zpos));
-        var width = (pwidth / pheight) * height;
+        let height = Math.tan(fov * .5) * Math.sqrt((xpos * xpos) + (ypos * ypos) + (zpos * zpos));
+        let width = (pwidth / pheight) * height;
         return { height, width };
     }
     function StartAllChildrenParticles(elContainerPanel) {
@@ -52,7 +52,7 @@ var ParticleControls;
     }
     ParticleControls.SACVpcfParticleSystem = SACVpcfParticleSystem;
     function UpdateMainMenuTopBar(elPanel, curTabID) {
-        var g_RadioButtonIdLookup = {
+        let g_RadioButtonIdLookup = {
             JsInventory: "#MainMenuNavBarInventory",
             JsLoadout: "#MainMenuNavBarLoadout",
             JsPlay: "#MainMenuNavBarPlay",
@@ -71,7 +71,7 @@ var ParticleControls;
             return;
         }
         const elContainer = $("#MainMenuNavBarCenterContainer");
-        var curTabButton = $(g_RadioButtonIdLookup[curTabID]);
+        let curTabButton = $(g_RadioButtonIdLookup[curTabID]);
         const particleWidthInGameUnits = 32 * 35;
         if (curTabButton && elContainer) {
             const particlePanelScalar = particleWidthInGameUnits / elPanel.actuallayoutwidth;
@@ -105,7 +105,7 @@ var ParticleControls;
         const ButtonBg = myParent.FindChildrenWithClassTraverse('play-menu__playbtn__bg')[0];
         const buttonWidth = ButtonBg.actuallayoutwidth + 2;
         const lookat = [550, 0, 70];
-        var g_RadioButtonIdLookup = {
+        let g_RadioButtonIdLookup = {
             RmoveBtnEffects: "#PartyCancelBtn",
             StartMatchBtn: "#StartMatchBtn",
         };
@@ -114,7 +114,7 @@ var ParticleControls;
         if (g_RadioButtonIdLookup[curTabID] == "#StartMatchBtn") {
             const buttonHeight = ButtonBg.actuallayoutheight;
             const camOffsetFromLookat = [0, 330, 0];
-            var PanelWorldSize = GetWorldExtendsFromCamFov(120, camOffsetFromLookat[0], camOffsetFromLookat[1], camOffsetFromLookat[2], elPanel.actuallayoutheight, elPanel.actuallayoutwidth);
+            let PanelWorldSize = GetWorldExtendsFromCamFov(120, camOffsetFromLookat[0], camOffsetFromLookat[1], camOffsetFromLookat[2], elPanel.actuallayoutheight, elPanel.actuallayoutwidth);
             let gametoWorldScalar = (PanelWorldSize.width * 2) / elPanel.actuallayoutwidth;
             const Color = [15, 231, 15];
             elPanel.StartParticleSystem("particles/ui/ui_mainmenu_playaction_active.vpcf");

@@ -2,14 +2,16 @@
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../inspect.ts" />
 /// <reference path="../common/iteminfo.ts" />
-/// <reference path="../popups/popup_capability_can_patch.ts" />
-/// <reference path="../popups/popup_can_apply_pick_slot.ts" />
-var CapabilityCanApplyAction = (function () {
+/// <reference path="popup_capability_can_patch.ts" />
+/// <reference path="popup_can_apply_pick_slot.ts" />
+/// <reference path="popup_can_apply_header.ts" />
+var CapabilityCanApplyAction;
+(function (CapabilityCanApplyAction) {
     const m_cP = $.GetContextPanel();
     const m_elPreviewPanel = m_cP.FindChildInLayoutFile('CanApplyItemModel');
     let m_isRemove = false;
     let m_worktype = '';
-    function _Init() {
+    function Init() {
         m_cP.SetAttributeString('stickerApplyRemove', 'true');
         let itemId = '';
         let toolId = '';
@@ -18,7 +20,7 @@ var CapabilityCanApplyAction = (function () {
         if (m_isRemove) {
             itemId = m_cP.GetAttributeString("itemid", "(not found)");
             if (!itemId) {
-                _ClosePopUp();
+                ClosePopUp();
                 return;
             }
         }
@@ -34,12 +36,13 @@ var CapabilityCanApplyAction = (function () {
             itemId: itemId,
             toolId: toolId,
             isRemove: m_isRemove,
+            worktype: m_worktype,
             type: (m_worktype.indexOf('sticker') !== -1) ? 'sticker' : (m_worktype.indexOf('patch') !== -1) ? 'patch' : '',
             funcOnConfirm: _OnConfirmPressed,
             funcOnNext: _OnNextPressed,
+            funcOnCancel: _OnCancelPressed,
             funcOnSelectForRemove: _OnSelectForRemove
         };
-        // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
         CanApplyHeader.Init(oSettings);
         CanApplySlotInfo.ResetSlotIndex();
         CapabilityCanPatch.ResetPos();
@@ -53,69 +56,91 @@ var CapabilityCanApplyAction = (function () {
         }
         $.DispatchEvent('CapabilityPopupIsOpen', true);
     }
-    ;
-    const _OnConfirmPressed = function () {
+    CapabilityCanApplyAction.Init = Init;
+    function _OnConfirmPressed() {
         $.DispatchEvent('CSGOPlaySoundEffect', 'generic_button_press', 'MOUSE');
         _SetSelectedSlot(CanApplySlotInfo.GetSelectedEmptySlot());
         _UpdateEnableDisableOkBtn(true);
-    };
-    const _OnNextPressed = function (itemToApplyId, activeSlot) {
+        InspectAsyncActionBar.EnableDisableChangeSceneryBtn(false);
+    }
+    function _OnNextPressed(itemToApplyId, activeSlot) {
         _UpdateEnableDisableOkBtn(false);
         if (m_worktype === 'can_sticker') {
-            CapabilityCanSticker.PreviewStickerInSlot(itemToApplyId, activeSlot);
+            CapabilityCanSticker.NextStickerButtonPressed();
+            CapabilityCanSticker.ShowCancelBtn();
         }
         else if (m_worktype === 'can_patch') {
             $.Schedule(.25, () => CapabilityCanPatch.PreviewPatchOnChar(itemToApplyId, activeSlot));
         }
-    };
-    const _OnSelectForRemove = function (slotIndex) {
+    }
+    function _OnCancelPressed() {
+        _UpdateEnableDisableOkBtn(false);
+        InspectAsyncActionBar.EnableDisableChangeSceneryBtn(true);
+    }
+    function _StickerPlacementUpdated() {
+        let elParent = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot');
+        let elCancelBtn = elParent.FindChildInLayoutFile('CanApplyCancel');
+        if (elCancelBtn.visible)
+            $.DispatchEvent("Activated", elParent.FindChildInLayoutFile('CanApplyCancel'), "mouse");
+    }
+    function _OnSelectForRemove(slotIndex) {
         if (m_worktype === 'remove_sticker') {
-            CapabilityCanSticker.CameraAnim(slotIndex);
             _SetSelectedSlot(slotIndex);
+            CanApplyPickSlot.UpdateSelectedRemoveForSticker(slotIndex);
             _UpdateEnableDisableOkBtn(true);
-            CapabilityCanSticker.HighlightStickerBySlot(slotIndex);
         }
         else if (m_worktype === 'remove_patch') {
-            CapabilityCanPatch.CameraAnim(slotIndex);
             _SetSelectedSlot(slotIndex);
             _UpdateEnableDisableOkBtn(true);
+            CapabilityCanPatch.CameraAnim(slotIndex);
         }
-    };
-    const _UpdateEnableDisableOkBtn = function (bEnable) {
+    }
+    function _UpdateEnableDisableOkBtn(bEnable) {
         let elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
-        // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
         InspectAsyncActionBar.EnableDisableOkBtn(elAsyncActionBarPanel, bEnable);
-    };
-    const _SetSelectedSlot = function (slotIndex) {
+        return;
+    }
+    function _SetSelectedSlot(slotIndex) {
         m_cP.SetAttributeString('selectedItemToApplySlot', slotIndex.toString());
-    };
-    const _SetItemModel = function (toolId, itemId) {
+    }
+    function _UpdateInspectMap() {
+        InspectModelImage.SwitchMap(m_cP);
+        const strMsg = m_cP.GetAttributeString("toolid-and-itemid", "(not found)");
+        let idList = strMsg.split(',');
+        InspectAsyncActionBar.ZoomCamera(true);
+        _UpdateItemToApplyPreview(idList[0]);
+    }
+    function _SetItemModel(toolId, itemId) {
         if (!InventoryAPI.IsItemInfoValid(itemId))
             return;
         InspectModelImage.Init(m_elPreviewPanel, itemId, _GetSettingCallback);
         m_elPreviewPanel.Data().id = itemId;
         if (m_isRemove) {
-            $.Schedule(.1, () => CanApplyPickSlot.SelectFirstRemoveItem());
+            if (m_worktype === 'remove_patch') {
+                $.Schedule(.3, () => CanApplyPickSlot.SelectFirstRemoveItem());
+            }
         }
         else {
-            if (m_worktype === 'can_sticker') {
-                CapabilityCanSticker.PreviewStickerInSlot(toolId, CanApplySlotInfo.GetSelectedEmptySlot());
-            }
-            if (m_worktype === 'can_patch') {
-                $.Schedule(.25, () => CapabilityCanPatch.PreviewPatchOnChar(toolId, CanApplySlotInfo.GetSelectedEmptySlot()));
-            }
+            _UpdateItemToApplyPreview(toolId);
         }
-    };
-    const _SetUpAsyncActionBar = function (toolId, itemId) {
+    }
+    function _UpdateItemToApplyPreview(toolId) {
+        if (m_worktype === 'can_sticker') {
+            CapabilityCanSticker.PreviewStickerInSlot(toolId, CanApplySlotInfo.GetSelectedEmptySlot());
+        }
+        if (m_worktype === 'can_patch') {
+            $.Schedule(.3, () => CapabilityCanPatch.PreviewPatchOnChar(toolId, CanApplySlotInfo.GetSelectedEmptySlot()));
+        }
+    }
+    function _SetUpAsyncActionBar(toolId, itemId) {
         m_cP.SetAttributeString('toolid', toolId);
         const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
-        // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
         InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback, _AsyncActionPerformedCallback);
-    };
-    const _GetSettingCallback = function (settingname, defaultvalue) {
+    }
+    function _GetSettingCallback(settingname, defaultvalue) {
         return m_cP.GetAttributeString(settingname, defaultvalue);
-    };
-    const _AsyncActionPerformedCallback = function (itemid, toolid, slot) {
+    }
+    function _AsyncActionPerformedCallback(itemid, toolid, slot) {
         CanApplyPickSlot.DisableBtns(m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot'));
         if (m_worktype === 'remove_sticker') {
             CapabilityCanSticker.OnScratchSticker(itemid, slot);
@@ -129,121 +154,97 @@ var CapabilityCanApplyAction = (function () {
                 InventoryAPI.UseTool(toolid, itemid);
             }
         }
-    };
-    const _ClosePopUp = function () {
+    }
+    function ClosePopUp() {
         const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
         if (!elAsyncActionBarPanel.BHasClass('hidden')) {
-            // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
             InspectAsyncActionBar.OnEventToClose();
         }
-    };
-    return {
-        Init: _Init,
-        SetItemModel: _SetItemModel,
-        ClosePopUp: _ClosePopUp,
-    };
-})();
-var CapabilityCanSticker = (function () {
+    }
+    CapabilityCanApplyAction.ClosePopUp = ClosePopUp;
+    {
+        let _m_PanelRegisteredForEventsStickerApply;
+        if (!_m_PanelRegisteredForEventsStickerApply) {
+            _m_PanelRegisteredForEventsStickerApply = $.RegisterForUnhandledEvent('CSGOShowMainMenu', Init);
+            $.RegisterForUnhandledEvent("CSGOInspectBackgroundMapChanged", _UpdateInspectMap);
+            $.RegisterForUnhandledEvent("CS2StickerPreviewMoved", _StickerPlacementUpdated);
+            $.RegisterForUnhandledEvent("CS2StickerScrapeClickedStickerIndex", _OnSelectForRemove);
+            $.RegisterForUnhandledEvent('PopulateLoadingScreen', ClosePopUp);
+        }
+    }
+})(CapabilityCanApplyAction || (CapabilityCanApplyAction = {}));
+var CapabilityCanSticker;
+(function (CapabilityCanSticker) {
     let m_isFinalScratch = false;
     let m_firstCameraAnim = false;
     const m_cP = $.GetContextPanel();
     const m_elPreviewPanel = m_cP.FindChildInLayoutFile('CanApplyItemModel');
-    const m_weaponPosSettings = [
-        { weapontype: 'weapon_tec9', rotatation: -80, pitchAngle: 0, slot: 3 },
-        { weapontype: 'weapon_revolver', rotatation: 180, pitchAngle: 0, slot: 4 },
-        { weapontype: 'weapon_nova', rotatation: -80, pitchAngle: 0, slot: 0, camera: 'cam_weapon_nova_0' },
-        { weapontype: 'weapon_m249', rotatation: -80, pitchAngle: 0, slot: 3 }
-    ];
-    const _PreviewStickerInSlot = function (stickerId, slot) {
+    function NextStickerButtonPressed() {
+        let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
+        if (elPanel != null) {
+            $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
+            InventoryAPI.OnNextStickerButtonPressed(elPanel);
+        }
+    }
+    CapabilityCanSticker.NextStickerButtonPressed = NextStickerButtonPressed;
+    function PreviewStickerInSlot(stickerId, slot) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
         let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
         InventoryAPI.PreviewStickerInModelPanel(stickerId, slot, elPanel);
         InventoryAPI.PeelEffectStickerBySlot(slot);
-        _CameraAnim(slot);
-    };
-    const _CameraAnim = function (slot) {
-        const defName = ItemInfo.GetItemDefinitionName(m_elPreviewPanel.Data().id);
+    }
+    CapabilityCanSticker.PreviewStickerInSlot = PreviewStickerInSlot;
+    function CameraAnim(slot) {
         let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
-        let aPosSettings = m_weaponPosSettings.filter(entry => entry.weapontype === defName && entry.slot === slot);
-        if (aPosSettings.length > 0) {
-            elPanel.SetRotation(aPosSettings[0].rotatation, aPosSettings[0].pitchAngle, 1);
-            if (aPosSettings[0].hasOwnProperty('camera')) {
-                InspectModelImage.ResetCameraScheduleHandle();
-                InspectModelImage.SetItemCameraByWeaponType(m_elPreviewPanel.Data().id, elPanel, aPosSettings[0].camera, true);
-            }
+        if (!m_firstCameraAnim) {
+            m_firstCameraAnim = true;
+            return;
         }
-        else {
-            if (!m_firstCameraAnim) {
-                m_firstCameraAnim = true;
-                return;
-            }
-            InspectModelImage.SetItemCameraByWeaponType(m_elPreviewPanel.Data().id, elPanel, '', true);
-            elPanel.SetRotation(0, 0, 1);
-        }
-    };
-    const _OnRemoveSticker = function (slotIndex) {
-    };
-    const _OnScratchSticker = function (itemId, slotIndex) {
+        InspectModelImage.SetItemCameraByWeaponType(m_elPreviewPanel.Data().id, elPanel, true);
+        elPanel.SetRotation(0, 0, 1);
+    }
+    CapabilityCanSticker.CameraAnim = CameraAnim;
+    function OnScratchSticker(itemId, slotIndex) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_scratchOff', 'MOUSE');
         if (InventoryAPI.IsItemStickerAtExtremeWear(itemId, slotIndex)) {
             m_isFinalScratch = true;
-            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Sticker_Remove'), $.Localize('#SFUI_Sticker_Remove_Desc'), '', $.Localize('#SFUI_Sticker_Remove'), function () {
-                // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
+            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Sticker_Remove'), $.Localize('#SFUI_Sticker_Remove_Desc'), '', $.Localize('#SFUI_Sticker_Remove'), () => {
                 InspectAsyncActionBar.ResetTimeouthandle();
                 InventoryAPI.WearItemSticker(itemId, slotIndex);
-                // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
                 InspectAsyncActionBar.SetCallbackTimeout();
-            }, $.Localize('#UI_Cancel'), function () {
+            }, $.Localize('#UI_Cancel'), () => {
                 m_isFinalScratch = false;
-                // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
                 InspectAsyncActionBar.ResetTimeouthandle();
-                // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
                 InspectAsyncActionBar.OnCloseRemove();
             });
         }
         else {
-            _HighlightStickerBySlot(slotIndex);
+            HighlightStickerBySlot(slotIndex);
             InventoryAPI.WearItemSticker(itemId, slotIndex);
-            // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
             const panelsList = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons').Children();
             panelsList.forEach(element => element.enabled = false);
         }
-    };
-    const _HighlightStickerBySlot = function (slotIndex) {
+    }
+    CapabilityCanSticker.OnScratchSticker = OnScratchSticker;
+    function HighlightStickerBySlot(slotIndex) {
         InventoryAPI.HighlightStickerBySlot(slotIndex);
-    };
-    const _OnFinishedScratch = function () {
+    }
+    CapabilityCanSticker.HighlightStickerBySlot = HighlightStickerBySlot;
+    function OnFinishedScratch() {
         if (m_isFinalScratch || !m_cP) {
             return;
         }
-        // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
         InspectAsyncActionBar.ResetTimeouthandle();
-        // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
         InspectAsyncActionBar.OnCloseRemove();
         InspectModelImage.UpdateModelOnly(m_elPreviewPanel.Data().id);
-        _CameraAnim(CanApplySlotInfo.GetSelectedRemoveSlot());
-        // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
         const elStickersToRemove = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
-        if (elStickersToRemove) {
+        if (elStickersToRemove && m_cP.GetAttributeString("asyncworktype", "") === "remove_patch") {
             const panelsList = elStickersToRemove.Children();
-            panelsList.forEach(element => {
-                element.enabled = true;
-            });
-            // @ts-ignore remove after popup_inspect_async-bar.js is TypeScript
+            panelsList.forEach(element => element.enabled = true);
         }
-    };
-    return {
-        PreviewStickerInSlot: _PreviewStickerInSlot,
-        OnScratchSticker: _OnScratchSticker,
-        OnFinishedScratch: _OnFinishedScratch,
-        CameraAnim: _CameraAnim,
-        HighlightStickerBySlot: _HighlightStickerBySlot
-    };
-})();
-(function () {
-    var _m_PanelRegisteredForEventsStickerApply;
-    if (!_m_PanelRegisteredForEventsStickerApply) {
-        _m_PanelRegisteredForEventsStickerApply = $.RegisterForUnhandledEvent('CSGOShowMainMenu', CapabilityCanApplyAction.Init);
-        $.RegisterForUnhandledEvent('PopulateLoadingScreen', CapabilityCanApplyAction.ClosePopUp);
     }
-})();
+    CapabilityCanSticker.OnFinishedScratch = OnFinishedScratch;
+    function ShowCancelBtn() {
+    }
+    CapabilityCanSticker.ShowCancelBtn = ShowCancelBtn;
+})(CapabilityCanSticker || (CapabilityCanSticker = {}));

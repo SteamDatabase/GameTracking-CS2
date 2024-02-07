@@ -34,6 +34,7 @@ var LoadoutGrid;
         { slot: 'customplayer', category: 'customplayer' },
         { slot: 'clothing_hands', category: 'clothing' },
         { slot: 'melee', category: 'melee', equip_on_hover: true },
+        { slot: 'equipment2', category: 'equipment2', equip_on_hover: true },
         { slot: 'c4', category: 'c4', required_team: 't', equip_on_hover: true },
         { slot: 'musickit', category: 'musickit' },
         { slot: 'flair0', category: 'flair0' },
@@ -72,7 +73,6 @@ var LoadoutGrid;
             UpdateItemList();
         });
     }
-    LoadoutGrid.OnReadyForDisplay = OnReadyForDisplay;
     function OnUnreadyForDisplay() {
         if (m_equipSlotChangedHandler) {
             $.UnregisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', m_equipSlotChangedHandler);
@@ -88,11 +88,10 @@ var LoadoutGrid;
         }
         UiToolkitAPI.HideCustomLayoutTooltip('JsLoadoutItemTooltip');
     }
-    LoadoutGrid.OnUnreadyForDisplay = OnUnreadyForDisplay;
     function OnEquipSlotChanged(team, slot, oldItemId, newItemId, bNew) {
         if (team == 't' || team == 'ct') {
             FillOutGridItems(team);
-            if (['melee', 'secondary', 'smg', 'rifle', 'c4'].includes(InventoryAPI.GetLoadoutCategory(newItemId)))
+            if (['melee', 'secondary', 'smg', 'rifle', 'c4', 'equipment2'].includes(InventoryAPI.GetLoadoutCategory(newItemId)))
                 UpdateCharModel(team, newItemId);
             else
                 UpdateCharModel(team);
@@ -112,17 +111,19 @@ var LoadoutGrid;
         let elItemList = $('#id-loadout-item-list');
         elItemList.SetAttributeInt('DragScrollSpeedHorizontal', 0);
         elItemList.SetAttributeInt('DragScrollSpeedVertical', 0);
+        RegisterGridItemEvents('ct');
+        RegisterGridItemEvents('t');
     }
     function SetUpTeamSelectBtns() {
         let aSectionSuffexes = ['ct', 't'];
-        aSectionSuffexes.forEach(suffex => {
+        for (let suffex of aSectionSuffexes) {
             let elSection = $.GetContextPanel().FindChildInLayoutFile('id-loadout-grid-section-' + suffex);
             let elBtn = elSection.FindChildInLayoutFile('id-loadout-select-team-btn-' + suffex);
             elBtn.Data().team = suffex;
             ItemDragTargetEvents(elBtn);
             elBtn.SetPanelEvent('onactivate', ChangeSelectedTeam);
             elBtn.SetPanelEvent('onmouseover', () => { UiToolkitAPI.HideCustomLayoutTooltip('JsLoadoutItemTooltip'); });
-        });
+        }
     }
     function ChangeSelectedTeam() {
         let suffex = (m_selectedTeam == 't' ? 'ct' : 't');
@@ -164,7 +165,7 @@ var LoadoutGrid;
         const settings = ItemInfo.GetOrUpdateVanityCharacterSettings(charId);
         if (team == m_selectedTeam) {
             let selectedGroup = GetSelectedGroup();
-            if (['melee', 'secondary0'].includes(selectedGroup)) {
+            if (['melee', 'secondary0', 'c4', 'equipment2'].includes(selectedGroup)) {
                 weaponId = LoadoutAPI.GetItemID(team, selectedGroup);
             }
             else if (['secondary', 'smg', 'rifle'].includes(selectedGroup)) {
@@ -195,7 +196,7 @@ var LoadoutGrid;
     function FillOutGridItems(team) {
         let elSection = $.GetContextPanel().FindChildInLayoutFile('id-loadout-grid-section-' + team);
         let elGrid = elSection.FindChildInLayoutFile('id-loadout-grid-slots-' + team);
-        elGrid.Children().forEach(column => {
+        for (let column of elGrid.Children()) {
             let aPanels = column.Children().filter(panel => panel.GetAttributeString('data-slot', '') !== '');
             for (let i = 0; i < aPanels.length; i++) {
                 if (column.GetAttributeString('data-slot', '') === 'equipment' ||
@@ -206,18 +207,16 @@ var LoadoutGrid;
                     UpdateSlotItemImage(team, aPanels[i], false, true);
                     UpdateName(aPanels[i]);
                     UpdateMoney(aPanels[i], team);
-                    LoadoutSlotItemTileEvents(aPanels[i]);
-                    ItemDragTargetEvents(aPanels[i]);
                 }
             }
-        });
+        }
     }
     function FillOutRowItems(team) {
         let elSection = $.GetContextPanel().FindChildInLayoutFile('id-loadout-grid-section-' + team);
         let elRow = elSection.FindChildInLayoutFile('id-loadout-row-slots-' + team);
-        m_arrGenericCharacterGlobalSlots.forEach(entry => {
+        for (let entry of m_arrGenericCharacterGlobalSlots) {
             if (entry.required_team && entry.required_team !== team)
-                return;
+                continue;
             let panelId = 'id-loadout-row-slots-' + entry.slot + '-' + team;
             let elBtn = elRow.FindChild(panelId);
             if (!elBtn) {
@@ -252,7 +251,7 @@ var LoadoutGrid;
                 elBtn.ClearPanelEvent('onmouseout');
             }
             elBtn.SetPanelEvent('onactivate', () => OnActivateSideItem(slotName, team));
-        });
+        }
     }
     function UpdateSlotItemImage(team, elPanel, bUseIcon, bReplacable, bIsEquipment = false) {
         let slot = elPanel.GetAttributeString('data-slot', '');
@@ -297,14 +296,14 @@ var LoadoutGrid;
             if (!elContainer) {
                 elContainer = $.CreatePanel('Panel', elPanel, 'loudout-item-image-' + slot + '-shuffle', {});
             }
-            sShuffleIds.forEach(element => {
-                let elShufffleItem = $.CreatePanel('ItemImage', elContainer, 'loudout-item-image-' + slot, {
+            for (let element of sShuffleIds) {
+                $.CreatePanel('ItemImage', elContainer, 'loudout-item-image-' + slot, {
                     class: 'loadout-slot__image'
                 });
-            });
+            }
         }
         elPanel.Data().itemid = itemid;
-        var color = ItemInfo.GetRarityColor(itemid);
+        let color = InventoryAPI.GetItemRarityColor(itemid);
         if (elRarity) {
             elRarity.visible = color ? true : false;
             if (color)
@@ -312,12 +311,9 @@ var LoadoutGrid;
             return;
         }
     }
-    function ShuffleImages() {
-    }
     function TintSprayImage(itemImage, itemId) {
         TintSprayIcon.CheckIsSprayAndTint(itemId, itemImage);
     }
-    ;
     function UpdateName(elPanel) {
         let elName = elPanel.FindChild('id-loadout-item-name');
         if (!elName) {
@@ -391,9 +387,8 @@ var LoadoutGrid;
     }
     function OpenContextMenu(elPanel, filterValue) {
         UiToolkitAPI.HideCustomLayoutTooltip('JsLoadoutItemTooltip');
-        var filterForContextMenuEntries = '&populatefiltertext=' + filterValue;
-        var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + elPanel.Data().itemid + filterForContextMenuEntries, function () {
-        });
+        let filterForContextMenuEntries = '&populatefiltertext=' + filterValue;
+        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + elPanel.Data().itemid + filterForContextMenuEntries, () => { });
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
     function ItemDragTargetEvents(elPanel) {
@@ -405,7 +400,7 @@ var LoadoutGrid;
             elPanel.RemoveClass('loadout-drag-enter');
             m_mouseOverSlot = '';
         });
-        $.RegisterEventHandler('DragDrop', elPanel, function (dispayId, elDragImage) {
+        $.RegisterEventHandler('DragDrop', elPanel, (dispayId, elDragImage) => {
             OnDragDrop(elPanel, elDragImage);
         });
     }
@@ -448,7 +443,7 @@ var LoadoutGrid;
             if (newSlot === 'side_slots' && m_selectedTeam === elPanel.GetAttributeString('data-team', '')) {
                 let itemId = elDragImage.itemid;
                 let bShuffle = elDragImage.Data().bShuffle;
-                if (ItemInfo.ItemMatchDefName(itemId, 'spray')) {
+                if (ItemInfo.IsSpraySealed(itemId)) {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
                         '&' + 'asyncworktype=decodeable');
                 }
@@ -460,7 +455,7 @@ var LoadoutGrid;
                         let elRow = $.GetContextPanel().FindChildInLayoutFile('id-loadout-row-slots-' + m_selectedTeam);
                         let elItemPanel = elRow.FindChildInLayoutFile('id-loadout-row-slots-' + slot + '-' + m_selectedTeam);
                         let isSameId = elDragImage.itemid === elItemPanel.Data().itemid ? true : false;
-                        let equipSuccess = LoadoutAPI.EquipItemInSlot(team, itemId, slot);
+                        let equipSuccess = TryEquipItemInSlot(team, itemId, slot);
                         PlayDropSounds(equipSuccess, isSameId);
                         if (equipSuccess && bShuffle) {
                             LoadoutAPI.SetShuffleEnabled(team, slot, true);
@@ -477,7 +472,7 @@ var LoadoutGrid;
                     let itemDefIndex = InventoryAPI.GetItemDefinitionIndex(itemId);
                     let oldSlot = LoadoutAPI.GetSlotEquippedWithDefIndex(m_selectedTeam, itemDefIndex);
                     let isSameId = elDragImage.itemid === elPanel.Data().itemid ? true : false;
-                    let equipSuccess = LoadoutAPI.EquipItemInSlot(m_selectedTeam, itemId, newSlot);
+                    let equipSuccess = TryEquipItemInSlot(m_selectedTeam, itemId, newSlot);
                     PlayDropSounds(equipSuccess, isSameId);
                     if (equipSuccess && bShuffle) {
                         LoadoutAPI.SetShuffleEnabled(m_selectedTeam, newSlot, true);
@@ -522,10 +517,10 @@ var LoadoutGrid;
             }
         }
         let aSectionSuffexes = ['ct', 't'];
-        aSectionSuffexes.forEach(suffex => {
+        for (let suffex of aSectionSuffexes) {
             let elBtn = $.GetContextPanel().FindChildInLayoutFile('id-loadout-agent-' + suffex);
             elBtn.SetHasClass('loadout-valid-target', false);
-        });
+        }
         let elSection = $.GetContextPanel().FindChildInLayoutFile('id-loadout-grid-section-' + m_selectedTeam);
         let elGrid = elSection.FindChildInLayoutFile('id-loadout-grid-slots-' + m_selectedTeam);
         for (let columnId of m_aActiveUsedColumns) {
@@ -653,7 +648,6 @@ var LoadoutGrid;
     function ShowHideItemFilterText(bShow) {
         $.GetContextPanel().FindChildInLayoutFile('id-loadout-clear-filters-label').visible = bShow;
     }
-    ;
     function FilterByItemType(itemId, bToggle = false) {
         let group = InventoryAPI.GetRawDefinitionKey(itemId, 'flexible_loadout_group');
         let elGroupDropdown = $.GetContextPanel().FindChildInLayoutFile('id-loadout-filter-group');
@@ -671,7 +665,6 @@ var LoadoutGrid;
                 elItemDefDropdown.SetSelected(itemDefName);
         }
     }
-    LoadoutGrid.FilterByItemType = FilterByItemType;
     function ToggleGroupDropdown(group, bDisallowToggle = false) {
         let elGroupDropdown = $.GetContextPanel().FindChildInLayoutFile('id-loadout-filter-group');
         let elItemDefDropdown = $.GetContextPanel().FindChildInLayoutFile('id-loadout-filter-itemdef');
@@ -699,7 +692,6 @@ var LoadoutGrid;
             OnDragEnd(elDragImage);
         });
     }
-    LoadoutGrid.OnItemTileLoaded = OnItemTileLoaded;
     function ShowLoadoutForItem(itemId) {
         if (!DoesItemTeamMatchTeamRequired(m_selectedTeam, itemId)) {
             ChangeSelectedTeam();
@@ -711,7 +703,6 @@ var LoadoutGrid;
         ShowHideItemFilterText(true);
         FilterByItemType(itemId);
     }
-    LoadoutGrid.ShowLoadoutForItem = ShowLoadoutForItem;
     function ClearItemIdFilter() {
         m_filterItemId = m_filterItemId !== '' ? '' : '';
     }
@@ -803,11 +794,32 @@ var LoadoutGrid;
     function GetShuffleItems(team, slot) {
         return JSON.parse(LoadoutAPI.GetShuffleItems(team, slot));
     }
+    function RegisterGridItemEvents(team) {
+        let elSection = $.GetContextPanel().FindChildInLayoutFile('id-loadout-grid-section-' + team);
+        let elGrid = elSection.FindChildInLayoutFile('id-loadout-grid-slots-' + team);
+        for (let column of elGrid.Children()) {
+            let aPanels = column.Children().filter(panel => panel.GetAttributeString('data-slot', '') !== '');
+            for (let i = 0; i < aPanels.length; i++) {
+                if (column.GetAttributeString('data-slot', '') !== 'equipment' &&
+                    column.GetAttributeString('data-slot', '') !== 'grenade') {
+                    LoadoutSlotItemTileEvents(aPanels[i]);
+                    ItemDragTargetEvents(aPanels[i]);
+                }
+            }
+        }
+    }
+    function TryEquipItemInSlot(szTeam, szItemID, szSlot) {
+        let bSuccess = LoadoutAPI.EquipItemInSlot(szTeam, szItemID, szSlot);
+        if (!bSuccess && LoadoutAPI.CanEquipItemInSlot(szTeam, szItemID, szSlot)) {
+            UiToolkitAPI.ShowGenericPopupOk($.Localize('#LoadoutLockedPopupTitle'), $.Localize('#LoadoutLockedPopupText'), '', () => { });
+        }
+        return bSuccess;
+    }
+    {
+        $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), OnReadyForDisplay);
+        $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), OnUnreadyForDisplay);
+        $.RegisterForUnhandledEvent('LoadoutFilterByItemType', FilterByItemType);
+        $.RegisterEventHandler('CSGOInventoryItemLoaded', $.GetContextPanel(), OnItemTileLoaded);
+        $.RegisterForUnhandledEvent('ShowLoadoutForItem', ShowLoadoutForItem);
+    }
 })(LoadoutGrid || (LoadoutGrid = {}));
-(function () {
-    $.RegisterEventHandler('ReadyForDisplay', $.GetContextPanel(), LoadoutGrid.OnReadyForDisplay);
-    $.RegisterEventHandler('UnreadyForDisplay', $.GetContextPanel(), LoadoutGrid.OnUnreadyForDisplay);
-    $.RegisterForUnhandledEvent('LoadoutFilterByItemType', LoadoutGrid.FilterByItemType);
-    $.RegisterEventHandler('CSGOInventoryItemLoaded', $.GetContextPanel(), LoadoutGrid.OnItemTileLoaded);
-    $.RegisterForUnhandledEvent('ShowLoadoutForItem', LoadoutGrid.ShowLoadoutForItem);
-})();

@@ -815,7 +815,7 @@ var playerstats = ( function()
 				elWeaponPanel.SetDialogVariable( "score", weaponScore.score.toPrecision(3) );
 				elWeaponPanel.SetDialogVariable( "total", weaponScore.total );
 				var itemid = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex( weaponScore.weapon_id, 0 )
-				_CreateTooltip( elWeaponPanel, ItemInfo.GetName( itemid ));
+				_CreateTooltip( elWeaponPanel, InventoryAPI.GetItemName( itemid ));
 			});
       	}
 	}

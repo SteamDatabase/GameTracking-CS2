@@ -38,19 +38,16 @@ var friendLobby;
         let nameString = (lobbyType === 'invited') ? '#tooltip_friend_invited_you' : "#tooltip_lobby_leader_name";
         elTile.FindChildTraverse('JsFriendLobbyLeaderName').text = nameString;
         elTile.FindChildTraverse('JsFriendLobbyLeaderAvatar').PopulateFromSteamID(xuidLobbyLeader);
-        elTile.FindChildTraverse('JsFriendLobbyLeaderBtn').SetPanelEvent('onactivate', _OpenContextMenu.bind(undefined, xuidLobbyLeader));
+        elTile.FindChildTraverse('JsFriendLobbyLeaderBtn').SetPanelEvent('onactivate', () => _OpenContextMenu(xuidLobbyLeader));
     }
-    ;
     function _SetPrime(elTile) {
         let primeValue = PartyBrowserAPI.GetPartySessionSetting(_m_xuid, 'game/apr');
         elTile.FindChildTraverse('JsFriendLobbyPrime').visible = (primeValue && primeValue != '0') ? true : false;
     }
-    ;
     function _SetRegion(elTile) {
         let countryCode = PartyBrowserAPI.GetPartySessionSetting(_m_xuid, 'game/loc');
         CommonUtil.SetRegionOnLabel(countryCode, elTile);
     }
-    ;
     function _SetSkillGroup(elTile, gameMode) {
         let szSkillGroupType = "Competitive";
         if (gameMode === 'scrimcomp2v2') {
@@ -69,14 +66,12 @@ var friendLobby;
         };
         RatingEmblem.SetXuid(options);
     }
-    ;
     function _SetLobbySettings(elTile, gameMode) {
         let gameModeType = GameTypesAPI.GetGameModeType(gameMode);
         let gameModeDisplay = GameTypesAPI.GetGameModeAttribute(gameModeType, gameMode, 'nameID');
         elTile.SetDialogVariable('lobby-mode', $.Localize(gameModeDisplay));
         elTile.SetDialogVariable('lobby-maps', _GetMapNames(gameMode));
     }
-    ;
     function _GetMapNames(gameMode) {
         let mapGroups = PartyBrowserAPI.GetPartySessionSetting(_m_xuid, 'game/mapgroupname');
         if (mapGroups == 'workshop')
@@ -98,11 +93,9 @@ var friendLobby;
         }
         return mapsNiceNamesList.join(', ');
     }
-    ;
     function _SetLobbyPlayerSlots(elTile, gameMode, lobbyType) {
         if (lobbyType === 'nearby')
             return;
-        let count = PartyBrowserAPI.GetPartyMembersCount(_m_xuid);
         let numSlotsToShow = SessionUtil.GetMaxLobbySlotsForGameMode(gameMode) - 1;
         let elAvatarRow = elTile.FindChildTraverse('JsFriendLobbyAvatars');
         for (let i = 1; i <= numSlotsToShow; i++) {
@@ -119,7 +112,7 @@ var friendLobby;
             let elAvatar = playerSlot.FindChildTraverse('JsFriendAvatar');
             if (xuid) {
                 elAvatar.PopulateFromSteamID(xuid);
-                playerSlot.FindChild('JsFriendAvatarBtn').SetPanelEvent('onactivate', _OpenContextMenu.bind(undefined, xuid));
+                playerSlot.FindChild('JsFriendAvatarBtn').SetPanelEvent('onactivate', () => _OpenContextMenu(xuid));
                 elEmpty.visible = false;
                 elAvatar.visible = true;
             }
@@ -129,7 +122,6 @@ var friendLobby;
             }
         }
     }
-    ;
     function _SetUpJoinBtn(elTile, lobbyType) {
         let elJoinBtn = elTile.FindChildInLayoutFile('JsFriendLobbyJoinBtn');
         let clientInLobby = false;
@@ -146,19 +138,14 @@ var friendLobby;
             return;
         }
         elJoinBtn.RemoveClass('hidden');
-        var onMouseOver = function (id, tooltipText) {
-            UiToolkitAPI.ShowTextTooltip(id, tooltipText);
-        };
         let tooltipText = $.Localize((lobbyType === 'invited') ? '#tooltip_accept_invite' : '#tooltip_join_public_lobby');
-        elJoinBtn.SetPanelEvent('onmouseover', onMouseOver.bind(undefined, 'JsFriendLobbyJoinBtn', tooltipText));
-        elJoinBtn.SetPanelEvent('onmouseout', function () {
-            UiToolkitAPI.HideTextTooltip();
-        });
-        let onActivate = function (lobbyLeaderXuid) {
+        elJoinBtn.SetPanelEvent('onmouseover', () => UiToolkitAPI.ShowTextTooltip('JsFriendLobbyJoinBtn', tooltipText));
+        elJoinBtn.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
+        let lobbyLeaderXuid = _m_xuid;
+        elJoinBtn.SetPanelEvent('onactivate', () => {
             $.DispatchEvent('CSGOPlaySoundEffectMuteBypass', 'PanoramaUI.Lobby.Joined', 'MOUSE', 1.0);
             PartyBrowserAPI.ActionJoinParty(lobbyLeaderXuid);
-        };
-        elJoinBtn.SetPanelEvent('onactivate', onActivate.bind(undefined, _m_xuid));
+        });
     }
     function _SetGroupNameLink(elTile, lobbyType) {
         let elGroupLBtn = elTile.FindChildTraverse('JsFriendLobbyGroupBtn');
@@ -187,7 +174,6 @@ var friendLobby;
             elGroupLBtn.enabled = true;
         }
     }
-    ;
     function _SetDismissButton(elTile, lobbyType) {
         if (lobbyType === 'invited') {
             var elCloseButton = elTile.FindChildInLayoutFile('FriendLobbyCloseButton');
@@ -196,10 +182,10 @@ var friendLobby;
                 $.DispatchEvent('CSGOPlaySoundEffectMuteBypass', 'PanoramaUI.Lobby.Left', 'MOUSE', 1.0);
                 PartyBrowserAPI.ClearInvite(elTile.GetAttributeString('xuid', '(not found)'));
             });
-            elCloseButton.SetPanelEvent('onmouseover', function () {
+            elCloseButton.SetPanelEvent('onmouseover', () => {
                 UiToolkitAPI.ShowTextTooltip('FriendLobbyCloseButton', $.Localize('#tooltip_discard_invite'));
             });
-            elCloseButton.SetPanelEvent('onmouseout', function () {
+            elCloseButton.SetPanelEvent('onmouseout', () => {
                 UiToolkitAPI.HideTextTooltip();
             });
         }
@@ -216,10 +202,10 @@ var friendLobby;
             elAlert.SetDialogVariable("alert_value", $.Localize('#friends_lobby_count', elAlert));
         }
         let elBtn = elTile.FindChildInLayoutFile('JsFriendLobbySeeAllInvitesBtn');
-        elBtn.SetPanelEvent('onmouseover', function () {
+        elBtn.SetPanelEvent('onmouseover', () => {
             UiToolkitAPI.ShowTextTooltip('JsFriendLobbySeeAllInvitesBtn', $.Localize('#tooltip_lobby_count'));
         });
-        elBtn.SetPanelEvent('onmouseout', function () {
+        elBtn.SetPanelEvent('onmouseout', () => {
             UiToolkitAPI.HideTextTooltip();
         });
         elBtn.SetPanelEvent('onactivate', OpenLobbiesContextMenu);
@@ -228,9 +214,8 @@ var friendLobby;
         var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenu('', '', 'file://{resources}/layout/context_menus/context_menu_lobbies.xml');
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
-    ;
     function _GetClanLink(clanId) {
-        return function () {
+        return () => {
             let link = '';
             if (SteamOverlayAPI.GetAppID() == 710)
                 link = "http://beta.steamcommunity.com/gid/" + clanId;
@@ -239,13 +224,9 @@ var friendLobby;
             SteamOverlayAPI.OpenURL(link);
         };
     }
-    ;
     function _OpenContextMenu(xuid) {
         $.DispatchEvent('SidebarContextMenuActive', true);
-        var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, function () {
-            $.DispatchEvent('SidebarContextMenuActive', false);
-        });
+        var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid, () => $.DispatchEvent('SidebarContextMenuActive', false));
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
-    ;
 })(friendLobby || (friendLobby = {}));

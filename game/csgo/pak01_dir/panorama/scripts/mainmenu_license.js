@@ -7,9 +7,8 @@ var MainMenulicense;
     function Init() {
         CheckLicense();
     }
-    MainMenulicense.Init = Init;
     function CheckLicense() {
-        var restrictions = LicenseUtil.GetCurrentLicenseRestrictions();
+        let restrictions = LicenseUtil.GetCurrentLicenseRestrictions();
         if (restrictions) {
             _m_licensePanel.SetDialogVariable('restriction', $.Localize(restrictions.license_msg));
             _m_licensePanel.SetDialogVariable('restriction_act', $.Localize(restrictions.license_act));
@@ -18,13 +17,12 @@ var MainMenulicense;
         SetStyleOnRootPanel(restrictions);
     }
     function ActionBuyLicense() {
-        var restrictions = LicenseUtil.GetCurrentLicenseRestrictions();
+        let restrictions = LicenseUtil.GetCurrentLicenseRestrictions();
         LicenseUtil.BuyLicenseForRestrictions(restrictions);
     }
     MainMenulicense.ActionBuyLicense = ActionBuyLicense;
-    ;
     function SetStyleOnRootPanel(restrictions) {
-        var elMainMenuInput = _m_licensePanel;
+        let elMainMenuInput = _m_licensePanel;
         while (elMainMenuInput) {
             elMainMenuInput = elMainMenuInput.GetParent();
             if (elMainMenuInput.id === 'MainMenuInput')
@@ -34,9 +32,9 @@ var MainMenulicense;
             elMainMenuInput.SetHasClass('steam-license-restricted', restrictions !== false);
         }
     }
+    {
+        Init();
+        $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_GcLogonNotificationReceived', Init);
+        $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_UpdateConnectionToGC', Init);
+    }
 })(MainMenulicense || (MainMenulicense = {}));
-(function () {
-    MainMenulicense.Init();
-    $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_GcLogonNotificationReceived', MainMenulicense.Init);
-    $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_UpdateConnectionToGC', MainMenulicense.Init);
-})();

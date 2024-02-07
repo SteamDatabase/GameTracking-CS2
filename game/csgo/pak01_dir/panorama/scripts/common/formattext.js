@@ -11,21 +11,24 @@ var CFormattedText = class {
         FormatText.SetFormattedTextOnLabel(elLabel, this);
     }
 };
-var FormatText = (function () {
-    const _FormatPluralLoc = function (sLocToken, nQuantity, nPrecision = 0) {
+var FormatText;
+(function (FormatText) {
+    function FormatPluralLoc(sLocToken, nQuantity, nPrecision = 0) {
         let sText = $.Localize(sLocToken, nQuantity, nPrecision);
         return sText.replace(/%s1/g, nQuantity.toFixed(nPrecision));
-    };
-    const _SetFormattedTextOnLabel = function (elLabel, fmtText) {
-        _ClearFormattedTextFromLabel(elLabel);
+    }
+    FormatText.FormatPluralLoc = FormatPluralLoc;
+    function SetFormattedTextOnLabel(elLabel, fmtText) {
+        ClearFormattedTextFromLabel(elLabel);
         elLabel.text = fmtText.tag;
         elLabel.fmtTextVars = {};
         for (const varName in fmtText.vars) {
             elLabel.SetDialogVariable(varName, elLabel.html ? $.HTMLEscape(fmtText.vars[varName]) : fmtText.vars[varName]);
             elLabel.fmtTextVars[varName] = true;
         }
-    };
-    const _ClearFormattedTextFromLabel = function (elLabel) {
+    }
+    FormatText.SetFormattedTextOnLabel = SetFormattedTextOnLabel;
+    function ClearFormattedTextFromLabel(elLabel) {
         elLabel.text = '';
         if (!elLabel.fmtTextVars)
             return;
@@ -33,9 +36,9 @@ var FormatText = (function () {
             elLabel.SetDialogVariable(varName, '');
         }
         delete elLabel.fmtTextVars;
-    };
-    const _SecondsToDDHHMMSSWithSymbolSeperator = function (rawSeconds) {
-        const time = _ConvertSecondsToDaysHoursMinSec(rawSeconds);
+    }
+    function SecondsToDDHHMMSSWithSymbolSeperator(rawSeconds) {
+        const time = ConvertSecondsToDaysHoursMinSec(rawSeconds);
         const timeText = [];
         let returnRemaining = false;
         for (const key in time) {
@@ -48,42 +51,42 @@ var FormatText = (function () {
             }
         }
         return timeText.join(':');
-    };
-    const _SecondsToSignificantTimeString = function (rawSeconds) {
+    }
+    FormatText.SecondsToDDHHMMSSWithSymbolSeperator = SecondsToDDHHMMSSWithSymbolSeperator;
+    function SecondsToSignificantTimeString(rawSeconds) {
         rawSeconds = Math.floor(Number(rawSeconds));
         if (rawSeconds < 60)
-            return _FormatPluralLoc('#SFUI_Store_Timer_Min:p', 1);
-        const time = _ConvertSecondsToDaysHoursMinSec(rawSeconds);
-        let numComponentsReturned = 0;
-        let strResult = '';
-        for (const key in time) {
-            const value = time[key];
+            return FormatPluralLoc('#SFUI_Store_Timer_Min:p', 1);
+        const time = ConvertSecondsToDaysHoursMinSec(rawSeconds);
+        let timecomponents = ['days', 'hours', 'minutes', 'seconds'];
+        for (const idx in timecomponents) {
+            const key = timecomponents[idx];
+            let value = time[key];
             if (key == 'seconds')
                 break;
-            let bAppendThisComponent = false;
-            const bFinishedAfterThisComponent = (numComponentsReturned > 0);
-            if (value > 0) {
-                bAppendThisComponent = true;
+            if (value <= 0)
+                continue;
+            let lockey = '#SFUI_Store_Timer_Day:p';
+            if (key == 'days') {
+                if (time['hours'] > 16)
+                    ++value;
             }
-            if (bAppendThisComponent) {
-                if (bFinishedAfterThisComponent)
-                    strResult += ' ';
-                let lockey;
-                if (key == 'minutes')
-                    lockey = '#SFUI_Store_Timer_Min:p';
-                else if (key == 'hours')
-                    lockey = '#SFUI_Store_Timer_Hour:p';
-                else
-                    lockey = '#SFUI_Store_Timer_Day:p';
-                strResult += _FormatPluralLoc(lockey, value);
-                ++numComponentsReturned;
+            else if (key == 'hours') {
+                lockey = '#SFUI_Store_Timer_Hour:p';
+                if (time['minutes'] > 40)
+                    ++value;
             }
-            if (bFinishedAfterThisComponent)
-                break;
+            else if (key == 'minutes') {
+                lockey = '#SFUI_Store_Timer_Min:p';
+                if (time['seconds'] > 40)
+                    ++value;
+            }
+            return FormatPluralLoc(lockey, value);
         }
-        return strResult;
-    };
-    const _ConvertSecondsToDaysHoursMinSec = function (rawSeconds) {
+        return FormatPluralLoc('#SFUI_Store_Timer_Min:p', 1);
+    }
+    FormatText.SecondsToSignificantTimeString = SecondsToSignificantTimeString;
+    function ConvertSecondsToDaysHoursMinSec(rawSeconds) {
         rawSeconds = Number(rawSeconds);
         const time = {
             days: Math.floor(rawSeconds / 86400),
@@ -92,14 +95,15 @@ var FormatText = (function () {
             seconds: ((rawSeconds % 86400) % 3600) % 60
         };
         return time;
-    };
-    const _PadNumber = function (integer, digits, char = '0') {
+    }
+    function PadNumber(integer, digits, char = '0') {
         integer = integer.toString();
         while (integer.length < digits)
             integer = char + integer;
         return integer;
-    };
-    const _SplitAbbreviateNumber = function (number, fixed = 0) {
+    }
+    FormatText.PadNumber = PadNumber;
+    function SplitAbbreviateNumber(number, fixed = 0) {
         if (number < 0)
             return -1;
         let pow10 = Math.log10(number) | 0;
@@ -117,8 +121,9 @@ var FormatText = (function () {
         const decimals = scaledNumber < 10.0 ? 1 : 0;
         const finalNum = scaledNumber.toFixed(fixed).replace(/\.0+$/, '');
         return [finalNum, $.Localize(stringToken)];
-    };
-    const _AbbreviateNumber = function (number) {
+    }
+    FormatText.SplitAbbreviateNumber = SplitAbbreviateNumber;
+    function AbbreviateNumber(number) {
         if (number < 0)
             return -1;
         let pow10 = Math.log10(number) | 0;
@@ -141,28 +146,6 @@ var FormatText = (function () {
         $.GetContextPanel().SetDialogVariable('abbreviated_number', finalNum);
         const result = $.Localize(stringToken, $.GetContextPanel());
         return result;
-    };
-    function _CapitalizeFirstLetterOfEachWord(sentence) {
-        return sentence.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
     }
-    function _ForceSign(num) {
-        if (Number(num) >= 0)
-            return '+' + num;
-        else
-            return String(num);
-    }
-    return {
-        FormatPluralLoc: _FormatPluralLoc,
-        SetFormattedTextOnLabel: _SetFormattedTextOnLabel,
-        ClearFormattedTextFromLabel: _ClearFormattedTextFromLabel,
-        SecondsToDDHHMMSSWithSymbolSeperator: _SecondsToDDHHMMSSWithSymbolSeperator,
-        SecondsToSignificantTimeString: _SecondsToSignificantTimeString,
-        PadNumber: _PadNumber,
-        AbbreviateNumber: _AbbreviateNumber,
-        SplitAbbreviateNumber: _SplitAbbreviateNumber,
-        CapitalizeFirstLetterOfEachWord: _CapitalizeFirstLetterOfEachWord,
-        ForceSign: _ForceSign,
-    };
-})();
+    FormatText.AbbreviateNumber = AbbreviateNumber;
+})(FormatText || (FormatText = {}));

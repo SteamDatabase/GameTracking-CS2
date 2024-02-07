@@ -3,7 +3,7 @@
 	game 		"CSGO Core"
 	title 		"CSGO Core"
 	
-	type		singleplayer_only
+	type		multiplayer_only
 	nomodels 1
 	nohimodel 1
 	l4dcrosshair 1
@@ -102,7 +102,6 @@
 	
 	Panorama
 	{
-		"UsesSvg" "1"
 		"AllowGlobalPanelContext" "1"
 		"AllowCustomGameUI" 0
 	}
@@ -150,35 +149,31 @@
 	{
 		BetaUniverse
 		{
-			// Throughout the day our lag and loss default to zero except for specific forced test time slices
+			// No fake lag or loss temporarily, while I turn on the new clock sync and command pacing code
 			"FakeLag"			"0"
 			"FakeLoss"			"0"
 			"FakeReorderPct"	"0"
 			"FakeReorderDelay"	"0"
+			//"FakeLag"			"20"
+			//"FakeLoss"			".5"
+			//"FakeReorderPct"	"30"
+			//"FakeReorderDelay"	"2"
 
-// We're shipping tomorrow. Disable fake lag for now  -McJohn
-//			"TimeTable"
-//			{
-//				// Begin lag at 10:10:00 AM local time
-//				"101000"
-//				{
-//					"FakeLag"	"50"
-//				}
-//				// Back to zero lag at 11:00:00 AM local time
-//				"110000"
-//				{
-//				}
-//				// Begin lag at 3:10:00 PM local time
-//				"151000"
-//				{
-//					"FakeLag"	"50"
-//				}
-//				// Back to zero lag at 5:00:00 PM local time
-//				"170000"
-//				{
-//				}
-//
-//			}
+			"TimeTable"
+			{
+				// LAN conditions at noon local time
+				"120000"
+				{
+					"FakeLag"			"0"
+					"FakeLoss"			"0"
+					"FakeReorderPct"	"0"
+					"FakeReorderDelay"	"0"
+				}
+				// Back to more realistic internet conditions 2:45:00 PM local time
+				"144500"
+				{
+				}
+			}
 		}
 	}
 
@@ -229,8 +224,9 @@
 		}
 
 		"TransformTextureRowCount" "512"
-		"CMTAtlasWidth" "512"
-		"CMTAtlasHeight" "256"
+		"TransformTextureRowCountToolsMode" "4096"
+		"CMTAtlasWidth" "1024"
+		"CMTAtlasHeight" "512"
 		"CMTAtlasChunkSize" "128"
 
 		"DynamicDecalsUseShrinkWrap" "1"	// enable shrinkwrap optimization for dynamic decal materials using F_FASTAPPROX
@@ -307,6 +303,8 @@
 			"nav"		"1"	// Generate nav mesh data
 			"light"		"0"	// Using per-vertex indirect lighting baked from within hammer
 			"envmap"	"0"	// this is broken
+			"sareverb"	"1" // Bake Steam Audio reverb
+			"sapaths"	"1" // Bake Steam Audio pathing info
 		}
 
 		MeshCompiler
@@ -335,7 +333,7 @@
 
 		PhysicsBuilder
 		{
-			DefaultHammerMeshSimplification		"0.1"
+			DefaultHammerMeshSimplification		"0.0"
 		}
 
 		BakedLighting
@@ -343,6 +341,8 @@
 			Version 2
 			DisableCullingForShadows 1
 			MinSpecLightmapSize 4096
+            ImportanceVolumeTransitionRegion 120            // distance we transition from high to low resolution charts 
+                                                            // when a triangle is outside an importance volume
 			LPVAtlas 1
 			LPVOctree 0
 			LightmapChannels
@@ -375,24 +375,25 @@
 
 		SteamAudio
 		{
-			Probes
+			ReverbDefaults
 			{
 				GridSpacing			"3.0"
 				HeightAboveFloor	"1.5"
-			}
-			Reverb
-			{
+				RebakeOption		"1"						// 0: cleanup, 1: manual, 2: auto
 				NumRays				"32768"
 				NumBounces			"64"
 				IRDuration			"1.0"
 				AmbisonicsOrder		"1"
 			}
-			Pathing
+			PathingDefaults
 			{
+				GridSpacing			"3.0"
+				HeightAboveFloor	"1.5"
+				RebakeOption		"1"						// 0: cleanup, 1: manual, 2: auto
 				NumVisSamples		"1"
-				ProbeVisRadius		"0.0"
-				ProbeVisThreshold	"0.5"
-				ProbePathRange		"1000.0"
+				ProbeVisRadius		"0"
+				ProbeVisThreshold	"0.1"
+				ProbeVisPathRange	"1000.0"
 			}
 		}
 
@@ -405,6 +406,7 @@
 			CompressMinRatio        "95"
 			AllowNP2Textures		"1"
 			AllowPanoramaMipGeneration	"1"
+			PublicToolsDefaultMaxRes "2048"
 		}
 	}
 
@@ -462,7 +464,7 @@
 	ModelDoc
 	{
 		"models_gamedata"			"models_gamedata.fgd"
-		"features"					"modelconfig;animgraph;animgraph_compatibility_force;editorconfig;gamepreview"
+		"features"					"cs2;modelconfig;animgraph;animgraph_compatibility_force;editorconfig;gamepreview"
 		"firstpersoncamerapreview"	"1"
 	}
 
@@ -507,5 +509,10 @@
 	{
 		//OodleTexture    "0"
 		//OodleLZ         "0"
+	}
+
+	ConVars
+	{
+		"cl_usesocketsforloopback" "1"
 	}
 }

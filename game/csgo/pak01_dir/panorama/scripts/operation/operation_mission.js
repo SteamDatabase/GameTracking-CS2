@@ -448,7 +448,7 @@ var OperationMission = ( function()
 		if ( OperationUtil.IsMissionLockedBehindPremiumOperationPass( missionCardId, MissionItemID, nSeasonAccess ) )
 		{
 			var sFauxPassItemID = OperationUtil.GetPassFauxId();
-			var sOperationPassName = ItemInfo.GetName( sFauxPassItemID );
+			var sOperationPassName = InventoryAPI.GetItemName( sFauxPassItemID );
 
 			UiToolkitAPI.ShowGenericPopupYesNo( sOperationPassName,                                                           
 					"#op_mission_requires_premium_pass", "",
@@ -465,9 +465,6 @@ var OperationMission = ( function()
 			var bModeUnlocked = MyPersonaAPI.HasPrestige() || ( MyPersonaAPI.GetCurrentLevel() >= 2 );
 			if ( !bModeUnlocked )
 			{
-				                                                      
-				                                                               
-
 				UiToolkitAPI.ShowGenericPopupOk(
 					"#PlayMenu_unavailable_locked_mode_title",
 					"#PlayMenu_unavailable_newuser_2",

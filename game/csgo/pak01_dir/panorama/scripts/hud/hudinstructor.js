@@ -1,9 +1,10 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
-var instructorPanel = (function () {
-    const _ShowBinding = function (elLesson, hLocator, i) {
+var HudInstructor;
+(function (HudInstructor) {
+    function ShowBinding(elLesson, hLocator, i) {
         if (elLesson.BHasClass('hidden')) {
-            _HideBindings(elLesson);
+            HideBindings(elLesson);
             return;
         }
         let bindingTexture = 'icon_key_wide';
@@ -62,32 +63,28 @@ var instructorPanel = (function () {
                 if (iNext == elLesson.bindingCount) {
                     iNext = 0;
                 }
-                elLesson.animhandle = $.Schedule(.75, () => _ShowBinding(elLesson, hLocator, iNext));
+                elLesson.animhandle = $.Schedule(.75, () => ShowBinding(elLesson, hLocator, iNext));
             }
         }
-    };
-    const _HideBindings = function (elLesson) {
+    }
+    function HideBindings(elLesson) {
         if (elLesson.animhandle) {
             $.CancelScheduled(elLesson.animhandle);
             elLesson.animhandle = undefined;
         }
         elLesson.SetHasClass('ShowBindingText', false);
         elLesson.SwitchClass('BindingIcon', 'none');
-    };
-    const _OnShowBindingsEvent = function (elLesson, hLocator, bindingCount) {
-        _HideBindings(elLesson);
+    }
+    function OnShowBindingsEvent(elLesson, hLocator, bindingCount) {
+        HideBindings(elLesson);
         elLesson.bindingCount = bindingCount;
-        _ShowBinding(elLesson, hLocator, 0);
-    };
-    const _OnHideBindingsEvent = function (elLesson) {
-        _HideBindings(elLesson);
-    };
-    return {
-        OnShowBindingsEvent: _OnShowBindingsEvent,
-        OnHideBindingsEvent: _OnHideBindingsEvent
-    };
-})();
-(function () {
-    $.RegisterEventHandler('CSGOHudInstructorShowBindings', $.GetContextPanel(), instructorPanel.OnShowBindingsEvent);
-    $.RegisterEventHandler('CSGOHudInstructorHideBindings', $.GetContextPanel(), instructorPanel.OnHideBindingsEvent);
-})();
+        ShowBinding(elLesson, hLocator, 0);
+    }
+    function OnHideBindingsEvent(elLesson) {
+        HideBindings(elLesson);
+    }
+    {
+        $.RegisterEventHandler('CSGOHudInstructorShowBindings', $.GetContextPanel(), OnShowBindingsEvent);
+        $.RegisterEventHandler('CSGOHudInstructorHideBindings', $.GetContextPanel(), OnHideBindingsEvent);
+    }
+})(HudInstructor || (HudInstructor = {}));

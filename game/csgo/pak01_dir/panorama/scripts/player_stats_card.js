@@ -3,8 +3,9 @@
 /// <reference path="common/async.ts" />
 /// <reference path="rating_emblem.ts" />
 /// <reference path="mock_adapter.ts" />
-var playerStatsCard;
-(function (playerStatsCard) {
+/// <reference path="honor_icon.ts" />
+var PlayerStatsCard;
+(function (PlayerStatsCard) {
     const CARD_ID = 'card';
     function Init(elParent, xuid, index) {
         $.RegisterForUnhandledEvent("EndOfMatch_SkillGroupUpdated", _UpdateSkillGroup);
@@ -19,6 +20,9 @@ var playerStatsCard;
             case 'deathmatch':
                 snippet = 'snippet-banner-dm';
                 break;
+            case 'gungameprogressive':
+                snippet = "snippet-banner-ar";
+                break;
             default:
                 snippet = 'snippet-banner-classic';
                 break;
@@ -32,13 +36,14 @@ var playerStatsCard;
         let randX = Math.floor(Math.random() * (maxCoord - minCoord) + minCoord);
         let randY = Math.floor(Math.random() * (maxCoord - minCoord) + minCoord);
         elCardBG.style.backgroundPosition = randX + '% ' + randY + '%';
+        _SetHonorIcon(elCard, xuid);
         return elCard;
     }
-    playerStatsCard.Init = Init;
+    PlayerStatsCard.Init = Init;
     function GetCard(elParent) {
         return elParent.FindChildTraverse(CARD_ID);
     }
-    playerStatsCard.GetCard = GetCard;
+    PlayerStatsCard.GetCard = GetCard;
     function SetAccolade(elCard, accValue, accName, accPosition) {
         if (!isNaN(Number(accValue))) {
             accValue = String(Math.floor(Number(accValue)));
@@ -56,23 +61,14 @@ var playerStatsCard;
         elCard.SetDialogVariable('accolade-value', valueLocalized);
         elCard.SetHasClass('show-accolade', true);
     }
-    playerStatsCard.SetAccolade = SetAccolade;
+    PlayerStatsCard.SetAccolade = SetAccolade;
     function SetAvatar(elCard, xuid) {
         let elAvatarImage = elCard.FindChildTraverse('jsAvatar');
         elAvatarImage.PopulateFromPlayerSlot(MockAdapter.GetPlayerSlot(xuid));
         let team = MockAdapter.GetPlayerTeamName(xuid);
         elAvatarImage.SwitchClass('teamstyle', 'team--' + team);
     }
-    playerStatsCard.SetAvatar = SetAvatar;
-    function SetRank(elCard, xuid) {
-        let rankLvl = MockAdapter.GetPlayerXpLevel(xuid);
-        let elRankImage = elCard.FindChildTraverse('jsRankImage');
-        elRankImage.SetImage("file://{images}/icons/xp/level" + rankLvl + ".png");
-        elCard.SetDialogVariable('name', $.Localize('#SFUI_XP_RankName_' + rankLvl));
-        elCard.SetDialogVariableInt('level', rankLvl);
-        elCard.SetHasClass('show-rank', rankLvl >= 0);
-    }
-    playerStatsCard.SetRank = SetRank;
+    PlayerStatsCard.SetAvatar = SetAvatar;
     function SetFlair(elCard, xuid) {
         let flairItemId = InventoryAPI.GetFlairItemId(xuid);
         if (flairItemId === "0" || !flairItemId) {
@@ -86,10 +82,10 @@ var playerStatsCard;
         elFlairImage.SetImage('file://{images}' + imagePath + '_small.png');
         elCard.SetHasClass('show-flair', true);
     }
-    playerStatsCard.SetFlair = SetFlair;
+    PlayerStatsCard.SetFlair = SetFlair;
     function _UpdateSkillGroup(strSkillgroupData) {
         const oSkillgroupData = JSON.parse(strSkillgroupData);
-        Object.keys(oSkillgroupData).forEach(function (xuid, i) {
+        Object.keys(oSkillgroupData).forEach((xuid, i) => {
             const cardId = 'cardcontainer-' + xuid;
             const elCard = $.GetContextPanel().FindChildTraverse(cardId);
             if (elCard) {
@@ -132,18 +128,26 @@ var playerStatsCard;
             elCard.RemoveClass('show-skillgroup');
         }
     }
-    playerStatsCard.SetSkillGroup = SetSkillGroup;
+    PlayerStatsCard.SetSkillGroup = SetSkillGroup;
+    function _SetHonorIcon(elPanel, xuid) {
+        const honorIconOptions = {
+            honor_icon_frame_panel: elPanel.FindChildTraverse('jsHonorIcon'),
+            do_fx: true,
+            xptrail_value: GameStateAPI.GetPlayerXpTrailLevel(xuid)
+        };
+        HonorIcon.SetOptions(honorIconOptions);
+    }
     function SetStats(elCard, xuid, arrBestStats = null) {
         let oStats = MockAdapter.GetPlayerStatsJSO(xuid);
         let score = MockAdapter.GetPlayerScore(xuid);
         if (arrBestStats) {
-            arrBestStats.forEach(function (oBest) {
+            for (let oBest of arrBestStats) {
                 let stat = oBest.stat;
                 if (oStats[stat] > 0 && (!oBest.value || oStats[stat] > oBest.value)) {
                     oBest.value = oStats[stat];
                     oBest.elCard = elCard;
                 }
-            });
+            }
         }
         elCard.SetDialogVariableInt('playercardstats-kills', Number(oStats.kills));
         elCard.SetDialogVariableInt('playercardstats-deaths', Number(oStats.deaths));
@@ -153,18 +157,20 @@ var playerStatsCard;
         elCard.SetDialogVariableInt('playercardstats-ef', Number(oStats.enemiesflashed));
         elCard.SetDialogVariableInt('playercardstats-ud', Number(oStats.utilitydamage));
         elCard.SetDialogVariableInt('playercardstats-score', Number(score));
+        elCard.SetDialogVariableInt('playercardstats-gglevel', Number(Math.floor(score / 2)));
+        elCard.SetDialogVariableInt('playercardstats-knifekills', Number(oStats.knifekills));
         elCard.SetHasClass('show-stats', true);
     }
-    playerStatsCard.SetStats = SetStats;
+    PlayerStatsCard.SetStats = SetStats;
     function SetTeammateColor(elCard, xuid) {
-        elCard.FindChildrenWithClassTraverse('colorize-teammate-color').forEach(function (elPlayerColor) {
+        for (let elPlayerColor of elCard.FindChildrenWithClassTraverse('colorize-teammate-color')) {
             let teammateColor = MockAdapter.GetPlayerColor(xuid);
             let teamName = MockAdapter.GetPlayerTeamName(xuid);
             let teamColor = teammateColor ? teammateColor : teamName == 'CT' ? '#5ab8f4' : '#f0c941';
             elPlayerColor.style.washColor = (teamColor !== '') ? teamColor : 'black';
-        });
+        }
     }
-    playerStatsCard.SetTeammateColor = SetTeammateColor;
+    PlayerStatsCard.SetTeammateColor = SetTeammateColor;
     async function RevealStats(elCard) {
         const DELAY_DELTA = 0.1;
         for (const elPanel of elCard.FindChildrenWithClassTraverse('sliding-panel')) {
@@ -172,11 +178,9 @@ var playerStatsCard;
             elPanel.AddClass('slide');
         }
     }
-    playerStatsCard.RevealStats = RevealStats;
+    PlayerStatsCard.RevealStats = RevealStats;
     function HighlightStat(elCard, stat) {
         elCard.AddClass('highlight-' + stat);
     }
-    playerStatsCard.HighlightStat = HighlightStat;
-})(playerStatsCard || (playerStatsCard = {}));
-(function () {
-})();
+    PlayerStatsCard.HighlightStat = HighlightStat;
+})(PlayerStatsCard || (PlayerStatsCard = {}));

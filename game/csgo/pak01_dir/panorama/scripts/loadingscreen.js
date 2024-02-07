@@ -1,6 +1,7 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
-const LoadingScreen = (function () {
+var LoadingScreen;
+(function (LoadingScreen) {
     const cvars = ['mp_roundtime', 'mp_fraglimit', 'mp_maxrounds'];
     const cvalues = ['0', '0', '0'];
     const MAX_SLIDES = 10;
@@ -8,7 +9,6 @@ const LoadingScreen = (function () {
     let m_slideShowJob = null;
     let m_mapName = null;
     let m_numImageProcessed = 0;
-    let m_elCurrSlide = null;
     function _Init() {
         $('#ProgressBar').value = 0;
         $('#LoadingScreenMapName').text = "";
@@ -78,7 +78,6 @@ const LoadingScreen = (function () {
         if (m < 0)
             m = arrSlides.length - 1;
         if (arrSlides[n]) {
-            m_elCurrSlide = arrSlides[n];
             if (bFirst)
                 arrSlides[n].SwitchClass('viz', 'show-first');
             else
@@ -98,7 +97,9 @@ const LoadingScreen = (function () {
             m_slideShowJob = null;
         }
     }
-    function _OnMapLoadFinished() { _EndSlideShow(); }
+    function _OnMapLoadFinished() {
+        _EndSlideShow();
+    }
     function _UpdateLoadingScreenInfo(mapName, prettyMapName, prettyGameModeName, gameType, gameMode, descriptionText = '') {
         for (let j = 0; j < cvars.length; ++j) {
             const val = GameInterfaceAPI.GetSettingString(cvars[j]);
@@ -150,14 +151,9 @@ const LoadingScreen = (function () {
             elInfoBlock.AddClass('hidden');
         _InitSlideShow();
     }
-    return {
-        Init: _Init,
-        UpdateLoadingScreenInfo: _UpdateLoadingScreenInfo,
-        OnMapLoadFinished: _OnMapLoadFinished,
-    };
-})();
-(function () {
-    $.RegisterForUnhandledEvent('PopulateLoadingScreen', LoadingScreen.UpdateLoadingScreenInfo);
-    $.RegisterForUnhandledEvent('UnloadLoadingScreenAndReinit', LoadingScreen.Init);
-    $.RegisterForUnhandledEvent('JsOnMapLoadFinished', LoadingScreen.OnMapLoadFinished);
-})();
+    {
+        $.RegisterForUnhandledEvent('PopulateLoadingScreen', _UpdateLoadingScreenInfo);
+        $.RegisterForUnhandledEvent('UnloadLoadingScreenAndReinit', _Init);
+        $.RegisterForUnhandledEvent('JsOnMapLoadFinished', _OnMapLoadFinished);
+    }
+})(LoadingScreen || (LoadingScreen = {}));

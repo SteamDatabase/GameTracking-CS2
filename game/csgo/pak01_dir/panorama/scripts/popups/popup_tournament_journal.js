@@ -120,7 +120,7 @@ var TournamentJournal = ( function()
     {
         $.GetContextPanel().FindChildInLayoutFile( 'id-tournament-journal-title' ).text = !_IsValidJournalId( journalId ) ? 
             $.Localize('#CSGO_TournamentPass_stockh2021_store_title') : 
-            ItemInfo.GetName( journalId );
+            InventoryAPI.GetItemName( journalId );
     };
 
     var _SetSubtitle = function( journalId )

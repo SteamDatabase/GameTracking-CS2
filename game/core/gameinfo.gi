@@ -78,6 +78,15 @@
 		"Tools"			"Forward"
 		"EnvMapBake"	"Forward"
 	}
+	ResourceCompiler
+	{
+
+		SoundStackScripts
+		{
+			CompilerVersion "1"
+//			CompileForCompare "1"
+		}
+	}
 
 	ModelDoc
 	{

@@ -1,7 +1,8 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
-var LicenseUtil = (function () {
-    const _GetCurrentLicenseRestrictions = function () {
+var LicenseUtil;
+(function (LicenseUtil) {
+    function GetCurrentLicenseRestrictions() {
         let szButtonText = "#Store_Get_License";
         let szMessageText = "#SFUI_LoginLicenseAssist_NoOnlineLicense";
         switch (MyPersonaAPI.GetLicenseType()) {
@@ -26,8 +27,9 @@ var LicenseUtil = (function () {
             license_msg: szMessageText,
             license_act: szButtonText
         };
-    };
-    const _BuyLicenseForRestrictions = function (restrictions) {
+    }
+    LicenseUtil.GetCurrentLicenseRestrictions = GetCurrentLicenseRestrictions;
+    function BuyLicenseForRestrictions(restrictions) {
         if (restrictions && restrictions.license_act === "#Store_Register_License") {
             UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_license_register.xml', 'message=Store_Register_License' +
                 '&' + 'spinner=1');
@@ -35,15 +37,12 @@ var LicenseUtil = (function () {
         else {
             MyPersonaAPI.ActionBuyLicense();
         }
-    };
-    const _ShowLicenseRestrictions = function (restrictions) {
+    }
+    LicenseUtil.BuyLicenseForRestrictions = BuyLicenseForRestrictions;
+    function ShowLicenseRestrictions(restrictions) {
         if (restrictions !== false) {
-            UiToolkitAPI.ShowGenericPopupYesNo($.Localize(restrictions.license_act), $.Localize(restrictions.license_msg), '', _BuyLicenseForRestrictions.bind(null, restrictions), function () { });
+            UiToolkitAPI.ShowGenericPopupYesNo($.Localize(restrictions.license_act), $.Localize(restrictions.license_msg), '', () => BuyLicenseForRestrictions(restrictions), () => { });
         }
-    };
-    return {
-        GetCurrentLicenseRestrictions: _GetCurrentLicenseRestrictions,
-        BuyLicenseForRestrictions: _BuyLicenseForRestrictions,
-        ShowLicenseRestrictions: _ShowLicenseRestrictions
-    };
-})();
+    }
+    LicenseUtil.ShowLicenseRestrictions = ShowLicenseRestrictions;
+})(LicenseUtil || (LicenseUtil = {}));

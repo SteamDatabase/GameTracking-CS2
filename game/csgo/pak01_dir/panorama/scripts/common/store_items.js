@@ -28,31 +28,33 @@ var StoreItems;
         };
         let isPerfectWorld = (MyPersonaAPI.GetLauncherType() === "perfectworld");
         let strBannerEntryCustomFormatString;
-        for (var i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
             let ItemId = StoreAPI.GetBannerEntryDefIdx(i);
             let FauxItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(ItemId, 0);
             if (!isPerfectWorld &&
                 InventoryAPI.IsTool(FauxItemId) &&
-                (InventoryAPI.GetItemCapabilityByIndex(FauxItemId, 0) === 'decodable')) {
+                InventoryAPI.GetItemCapabilityByIndex(FauxItemId, 0) === 'decodable') {
                 m_oItemsByCategory.key.push({ id: FauxItemId });
             }
-            else if (StoreAPI.IsBannerEntryMarketLink(i) === true) {
+            else if (StoreAPI.IsBannerEntryMarketLink(i)) {
                 m_oItemsByCategory.market.push({ id: FauxItemId, isMarketItem: true });
             }
             else if ((strBannerEntryCustomFormatString = StoreAPI.GetBannerEntryCustomFormatString(i)).startsWith("coupon")) {
                 if (!AllowDisplayingItemInStore(FauxItemId))
                     continue;
+                let obj = { id: FauxItemId };
                 let sLinkedCoupon = StoreAPI.GetBannerEntryLinkedCoupon(i);
                 if (sLinkedCoupon) {
                     let LinkedItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(parseInt(sLinkedCoupon), 0);
-                    m_oItemsByCategory.coupon.push({ id: FauxItemId, linkedid: LinkedItemId });
+                    obj.linkedid = LinkedItemId;
                 }
-                else if (strBannerEntryCustomFormatString === "coupon_new") {
-                    m_oItemsByCategory.coupon.push({ id: FauxItemId, activationType: 'newstore', isNewRelease: true });
+                if (strBannerEntryCustomFormatString === "coupon_new") {
+                    obj.isNewRelease = true;
+                    if (!sLinkedCoupon) {
+                        obj.activationType = 'newstore';
+                    }
                 }
-                else {
-                    m_oItemsByCategory.coupon.push({ id: FauxItemId });
-                }
+                m_oItemsByCategory.coupon.push(obj);
             }
             else {
                 if (!AllowDisplayingItemInStore(FauxItemId))
@@ -64,16 +66,16 @@ var StoreItems;
     }
     StoreItems.MakeStoreItemList = MakeStoreItemList;
     function AllowDisplayingItemInStore(FauxItemId) {
-        var idToCheckForRestrictions = FauxItemId;
-        var bIsCouponCrate = InventoryAPI.IsCouponCrate(idToCheckForRestrictions);
-        if (bIsCouponCrate && ItemInfo.GetLootListCount(idToCheckForRestrictions) > 0) {
+        let idToCheckForRestrictions = FauxItemId;
+        let bIsCouponCrate = InventoryAPI.IsCouponCrate(idToCheckForRestrictions);
+        if (bIsCouponCrate && InventoryAPI.GetLootListItemsCount(idToCheckForRestrictions) > 0) {
             idToCheckForRestrictions = InventoryAPI.GetLootListItemIdByIndex(idToCheckForRestrictions, 0);
         }
-        var sDefinitionName = InventoryAPI.GetItemDefinitionName(idToCheckForRestrictions);
+        let sDefinitionName = InventoryAPI.GetItemDefinitionName(idToCheckForRestrictions);
         if (sDefinitionName === "crate_stattrak_swap_tool")
             return true;
-        var bIsDecodable = ItemInfo.ItemHasCapability(idToCheckForRestrictions, 'decodable');
-        var sRestriction = bIsDecodable ? InventoryAPI.GetDecodeableRestriction(idToCheckForRestrictions) : null;
+        let bIsDecodable = ItemInfo.ItemHasCapability(idToCheckForRestrictions, 'decodable');
+        let sRestriction = bIsDecodable ? InventoryAPI.GetDecodeableRestriction(idToCheckForRestrictions) : null;
         if (sRestriction === "restricted" || sRestriction === "xray") {
             return false;
         }
@@ -88,10 +90,10 @@ var StoreItems;
     }
     StoreItems.GetStoreItemData = GetStoreItemData;
     function GetTournamentItems() {
-        var sRestriction = InventoryAPI.GetDecodeableRestriction("capsule");
-        var bCanSellCapsules = (sRestriction !== "restricted" && sRestriction !== "xray");
+        let sRestriction = InventoryAPI.GetDecodeableRestriction("capsule");
+        let bCanSellCapsules = (sRestriction !== "restricted" && sRestriction !== "xray");
         for (let i = 0; i < g_ActiveTournamentStoreLayout.length; i++) {
-            if (!bCanSellCapsules && (i >= g_ActiveTournamentInfo.num_global_offerings)) {
+            if (!bCanSellCapsules && i >= g_ActiveTournamentInfo.num_global_offerings) {
                 return;
             }
             let bContainsJustChampions = (typeof g_ActiveTournamentStoreLayout[i][1] === 'string');
@@ -120,16 +122,15 @@ var StoreItems;
         }
     }
     function warningTextTournamentItems(isPurchaseable, itemid) {
-        return !isPurchaseable ?
-            '#tournament_items_not_released' : InventoryAPI.GetItemTypeFromEnum(itemid) === 'type_tool' ?
-            '#tournament_items_notice' : '';
+        return !isPurchaseable
+            ? '#tournament_items_not_released'
+            : InventoryAPI.GetItemTypeFromEnum(itemid) === 'type_tool' ? '#tournament_items_notice' : '';
     }
     function isPurchaseable(itemid) {
-        var schemaString = InventoryAPI.BuildItemSchemaDefJSON(itemid);
+        let schemaString = InventoryAPI.BuildItemSchemaDefJSON(itemid);
         if (!schemaString)
             return false;
-        var itemSchemaDef = JSON.parse(schemaString);
+        let itemSchemaDef = JSON.parse(schemaString);
         return itemSchemaDef["cannot_inspect"] === 1 ? false : true;
     }
-    ;
 })(StoreItems || (StoreItems = {}));

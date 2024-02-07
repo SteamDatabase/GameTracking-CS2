@@ -4,7 +4,8 @@
 /// <reference path="scoreboard.ts" />
 /// <reference path="player_stats_card.ts" />
 /// <reference path="mock_adapter.ts" />
-var EOM_Characters = (function () {
+var EOM_Characters;
+(function (EOM_Characters) {
     let _m_arrAllPlayersMatchDataJSO = [];
     let _m_localPlayer = null;
     let _m_teamToShow = null;
@@ -23,6 +24,7 @@ var EOM_Characters = (function () {
             case 'training':
             case 'deathmatch':
             case 'ffadm':
+            case 'gungameprogressive':
                 return 'snippet-eom-chars__layout--ffa';
             default:
                 return 'snippet-eom-chars__layout--classic';
@@ -49,6 +51,7 @@ var EOM_Characters = (function () {
         switch (mode) {
             case 'deathmatch':
             case 'ffadm':
+            case 'gungameprogressive':
                 {
                     let arrPlayerXuids = Scoreboard.GetFreeForAllTopThreePlayers();
                     if (MockAdapter.GetMockData() != undefined) {
@@ -114,6 +117,7 @@ var EOM_Characters = (function () {
                 return 2;
             case 'deathmatch':
             case 'ffadm':
+            case 'gungameprogressive':
                 return 3;
             case 'training':
                 return 1;
@@ -121,25 +125,7 @@ var EOM_Characters = (function () {
                 return 5;
         }
     }
-    function _ShouldDisplayCommendsInMode(mode) {
-        if (MyPersonaAPI.GetElevatedState() !== 'elevated') {
-            return false;
-        }
-        switch (mode) {
-            case 'scrimcomp2v2':
-            case 'competitive':
-            case 'casual':
-            case 'cooperative':
-            case 'teamdm':
-                return true;
-            case 'deathmatch':
-            case 'ffadm':
-            case 'training':
-            default:
-                return false;
-        }
-    }
-    function _GetModeForEndOfMatchPurposes() {
+    function GetModeForEndOfMatchPurposes() {
         let mode = MockAdapter.GetGameModeInternalName(false);
         if (mode == 'deathmatch') {
             if (GameInterfaceAPI.GetSettingString('mp_teammates_are_enemies') !== '0') {
@@ -151,31 +137,32 @@ var EOM_Characters = (function () {
         }
         return mode;
     }
-    function _ShowWinningTeam(mode) {
+    EOM_Characters.GetModeForEndOfMatchPurposes = GetModeForEndOfMatchPurposes;
+    function ShowWinningTeam(mode) {
         return false;
     }
-    let _DisplayMe = function () {
+    EOM_Characters.ShowWinningTeam = ShowWinningTeam;
+    function _DisplayMe() {
         let data = MockAdapter.GetAllPlayersMatchDataJSO();
         if (data && data.allplayerdata && data.allplayerdata.length > 0) {
             _m_arrAllPlayersMatchDataJSO = data.allplayerdata;
         }
         else {
-            // @ts-ignore Ignore until endofmatch.js is TypeScript
             EndOfMatch.ToggleBetweenScoreboardAndCharacters();
             return false;
         }
-        // @ts-ignore Ignore until endofmatch.js is TypeScript
         EndOfMatch.EnableToggleBetweenScoreboardAndCharacters();
         let localPlayerSet = _m_arrAllPlayersMatchDataJSO.filter(oPlayer => oPlayer['xuid'] == MockAdapter.GetLocalPlayerXuid());
         let localPlayer = (localPlayerSet.length > 0) ? localPlayerSet[0] : undefined;
+        let oMatchEndData = MockAdapter.GetMatchEndWinDataJSO();
         let teamNumToShow = 3;
-        let mode = _GetModeForEndOfMatchPurposes();
-        if (localPlayer && !_ShowWinningTeam(mode)) {
+        let losingTeamNum = oMatchEndData ? oMatchEndData.losing_team_number : 0;
+        let mode = GetModeForEndOfMatchPurposes();
+        if (localPlayer && !ShowWinningTeam(mode)) {
             _m_localPlayer = localPlayer;
             teamNumToShow = _m_localPlayer['teamnumber'];
         }
         else {
-            let oMatchEndData = MockAdapter.GetMatchEndWinDataJSO();
             if (oMatchEndData)
                 teamNumToShow = oMatchEndData['winning_team_number'];
             if (!teamNumToShow && localPlayer) {
@@ -192,12 +179,21 @@ var EOM_Characters = (function () {
         _SetupPanel(mode);
         let arrPlayerList = _CollectPlayersForMode(mode);
         arrPlayerList = _SortPlayers(mode, arrPlayerList);
-        let mapCheers = {};
+        let cheerSet = new Set();
+        let localPlayerCheer = '';
         if (_m_localPlayer) {
             let arrLocalPlayer = _m_localPlayer.hasOwnProperty('items') ? _m_localPlayer.items.filter(oItem => ItemInfo.IsCharacter(oItem.itemid)) : [];
             let localPlayerModel = arrLocalPlayer[0];
-            let localPlayerCheer = localPlayerModel ? ItemInfo.GetDefaultCheer(localPlayerModel['itemid']) : '';
-            mapCheers[localPlayerCheer] = 1;
+            if (localPlayerModel) {
+                if (_m_localPlayer['teamnumber'] == losingTeamNum) {
+                    if (GameInterfaceAPI.GetSettingString('eom_local_player_defeat_anim_enabled') !== '0')
+                        localPlayerCheer = ItemInfo.GetDefaultDefeat(localPlayerModel['itemid']);
+                }
+                else {
+                    localPlayerCheer = ItemInfo.GetDefaultCheer(localPlayerModel['itemid']);
+                }
+            }
+            cheerSet.add(localPlayerCheer);
         }
         let gapIndex = -1;
         if (mode == 'scrimcomp2v2' && arrPlayerList.length > 0) {
@@ -205,7 +201,7 @@ var EOM_Characters = (function () {
             gapIndex = arrPlayerList.findIndex(player => player.teamnumber != firstTeamNum);
         }
         $.GetContextPanel().SetPlayerCount(arrPlayerList.length + (gapIndex >= 0 ? 1 : 0));
-        arrPlayerList.forEach(function (oPlayer, index) {
+        arrPlayerList.forEach((oPlayer, index) => {
             if (oPlayer) {
                 if (index >= gapIndex && gapIndex >= 0)
                     index += 1;
@@ -217,7 +213,10 @@ var EOM_Characters = (function () {
                     let agentItem = oPlayer['items'].filter(oItem => ItemInfo.IsCharacter(oItem['itemid']))[0];
                     if (agentItem) {
                         sAgentItemId = agentItem['itemid'];
-                        cheer = ItemInfo.GetDefaultCheer(sAgentItemId);
+                        if (oPlayer.teamnumber == losingTeamNum)
+                            cheer = ItemInfo.GetDefaultDefeat(sAgentItemId);
+                        else
+                            cheer = ItemInfo.GetDefaultCheer(sAgentItemId);
                     }
                     let glovesItem = oPlayer['items'].filter(oItem => ItemInfo.IsGloves(oItem['itemid']))[0];
                     if (glovesItem) {
@@ -228,18 +227,19 @@ var EOM_Characters = (function () {
                         sWeaponItemId = weaponItem['itemid'];
                     }
                 }
-                if (oPlayer != _m_localPlayer &&
-                    mapCheers[cheer] == 1) {
+                if (oPlayer === _m_localPlayer)
+                    cheer = localPlayerCheer;
+                else if (cheerSet.has(cheer))
                     cheer = '';
-                }
-                mapCheers[cheer] = 1;
+                cheerSet.add(cheer);
                 let label = oPlayer['xuid'];
                 $.GetContextPanel().AddPlayer(index, label, sAgentItemId, sGlovesItemId, sWeaponItemId, cheer);
             }
         });
         _CreatePlayerStatCards(arrPlayerList, gapIndex, m_bNoGimmeAccolades);
         return true;
-    };
+    }
+    ;
     function _DisplayPlayerStatsCard(elCardContainer, index, nPlayerCount) {
         let elEndOfMatch = $.GetContextPanel();
         let w = elEndOfMatch.actuallayoutwidth;
@@ -251,9 +251,7 @@ var EOM_Characters = (function () {
             elCardContainer.style.x = charPos.x + 'px;';
             let elCard = elCardContainer.FindChildTraverse('card');
             elCardContainer.AddClass('reveal');
-            $.Schedule(0.3, function () {
-                playerStatsCard.RevealStats(elCard);
-            });
+            $.Schedule(0.3, () => PlayerStatsCard.RevealStats(elCard));
         }
         if (!$.GetContextPanel().BAscendantHasClass('scoreboard-visible')) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.stats_reveal', 'MOUSE');
@@ -270,9 +268,9 @@ var EOM_Characters = (function () {
         ];
         let nPlayerCount = arrPlayerList.length + (gapIndex >= 0 ? 1 : 0);
         let elRoot = $('#id-eom-characters-root');
-        arrPlayerList.forEach(function (oPlayer) {
+        for (let oPlayer of arrPlayerList) {
             if (!oPlayer)
-                return;
+                continue;
             let oTitle = oPlayer.nomination;
             let index = arrPlayerList.indexOf(oPlayer);
             if (index >= gapIndex && gapIndex >= 0)
@@ -282,28 +280,28 @@ var EOM_Characters = (function () {
                 let elCardContainer = $.CreatePanel('Panel', elRoot, 'cardcontainer-' + xuid);
                 elCardContainer.AddClass('player-stats-card-container');
                 elCardContainer.style.zIndex = (index * 10).toString();
-                let elCard = playerStatsCard.Init(elCardContainer, xuid, index);
+                let elCard = PlayerStatsCard.Init(elCardContainer, xuid, index);
                 let accName = GameStateAPI.GetAccoladeLocalizationString(Number(oTitle.eaccolade));
                 let showAccolade = !(bNoGimmes && accName.includes('gimme_'));
                 if (showAccolade) {
                     let accValue = oTitle.value.toString();
                     let accPosition = oTitle.position.toString();
-                    playerStatsCard.SetAccolade(elCard, accValue, accName, accPosition);
+                    PlayerStatsCard.SetAccolade(elCard, accValue, accName, accPosition);
                 }
-                playerStatsCard.SetStats(elCard, xuid, arrBestStats);
-                playerStatsCard.SetFlair(elCard, xuid);
-                playerStatsCard.SetSkillGroup(elCard, xuid);
-                playerStatsCard.SetAvatar(elCard, xuid);
-                playerStatsCard.SetTeammateColor(elCard, xuid);
+                PlayerStatsCard.SetStats(elCard, xuid, arrBestStats);
+                PlayerStatsCard.SetFlair(elCard, xuid);
+                PlayerStatsCard.SetSkillGroup(elCard, xuid);
+                PlayerStatsCard.SetAvatar(elCard, xuid);
+                PlayerStatsCard.SetTeammateColor(elCard, xuid);
                 $.Schedule(ACCOLADE_START_TIME + (index * DELAY_PER_PLAYER), _DisplayPlayerStatsCard.bind(undefined, elCardContainer, index, nPlayerCount));
             }
             else {
             }
-        });
-        arrBestStats.forEach(function (oBest) {
+        }
+        for (let oBest of arrBestStats) {
             if (oBest.elCard)
-                playerStatsCard.HighlightStat(oBest.elCard, oBest.stat);
-        });
+                PlayerStatsCard.HighlightStat(oBest.elCard, oBest.stat);
+        }
     }
     function _SortByTeamFn(a, b) {
         let team_a = Number(a['teamnumber']);
@@ -362,35 +360,30 @@ var EOM_Characters = (function () {
         return arrPlayerList;
     }
     function _RankRevealAll() {
-        let mode = _GetModeForEndOfMatchPurposes();
+        let mode = GetModeForEndOfMatchPurposes();
         let arrPlayerList = _CollectPlayersForMode(mode);
-        arrPlayerList.forEach(function (oPlayer) {
+        for (let oPlayer of arrPlayerList) {
             if (!oPlayer)
-                return;
+                continue;
             let xuid = oPlayer.xuid;
             let elCardContainer = $.GetContextPanel().FindChildTraverse('cardcontainer-' + xuid);
             if (elCardContainer) {
-                let elCard = playerStatsCard.GetCard(elCardContainer);
-                playerStatsCard.SetSkillGroup(elCard, xuid);
+                let elCard = PlayerStatsCard.GetCard(elCardContainer);
+                PlayerStatsCard.SetSkillGroup(elCard, xuid);
             }
-        });
+        }
     }
-    function _Start() {
+    function Start() {
         _DisplayMe();
         $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.gameover_show', 'MOUSE');
     }
-    function _Shutdown() {
+    EOM_Characters.Start = Start;
+    function Shutdown() {
         $('#id-eom-characters-root').FindChildrenWithClassTraverse('eom-chars__accolade').forEach(el => el.DeleteAsync(.0));
         $('#id-eom-characters-root').RemoveAndDeleteChildren();
     }
-    return {
-        Start: _Start,
-        Shutdown: _Shutdown,
-        GetModeForEndOfMatchPurposes: _GetModeForEndOfMatchPurposes,
-        ShowWinningTeam: _ShowWinningTeam,
-        RankRevealAll: _RankRevealAll,
-    };
-})();
-(function () {
-    $.RegisterForUnhandledEvent('GameState_RankRevealAll', EOM_Characters.RankRevealAll);
-})();
+    EOM_Characters.Shutdown = Shutdown;
+    {
+        $.RegisterForUnhandledEvent('GameState_RankRevealAll', _RankRevealAll);
+    }
+})(EOM_Characters || (EOM_Characters = {}));

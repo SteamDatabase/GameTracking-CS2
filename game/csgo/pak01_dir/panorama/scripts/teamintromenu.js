@@ -3,8 +3,9 @@
 /// <reference path="common/async.ts" />
 /// <reference path="mock_adapter.ts" />
 /// <reference path="match_stakes.ts" />
-var TeamIntroMenu = (function () {
-    const MAX_PLAYERS = 64;
+/// <reference path="honor_icon.ts" />
+var TeamIntroMenu;
+(function (TeamIntroMenu) {
     function _msg(msg) {
     }
     async function _StartTeamIntro() {
@@ -87,6 +88,21 @@ var TeamIntroMenu = (function () {
             }
         }, abortSignal);
     }
+    function _SetHonorIcon(elPanel, xuid, teamColor) {
+        const elHonorIconFrame = elPanel.FindChildTraverse('jsHonorIcon');
+        const honorIconOptions = {
+            honor_icon_frame_panel: elHonorIconFrame,
+            do_fx: true,
+            xptrail_value: GameStateAPI.GetPlayerXpTrailLevel(xuid)
+        };
+        HonorIcon.SetOptions(honorIconOptions);
+        if (teamColor) {
+            const elImage = elHonorIconFrame.FindChildTraverse('JsHonorIconImage');
+            if (elImage) {
+                elImage.style.washColor = teamColor;
+            }
+        }
+    }
     function _CreateTeammateInfo(sXuid, nOrdinal) {
         const elInfos = $("#TeamIntroTeammateInfos");
         const elInfo = $.CreatePanel("Panel", elInfos, nOrdinal.toString());
@@ -98,6 +114,7 @@ var TeamIntroMenu = (function () {
         const teamColor = GameStateAPI.GetPlayerColor(sXuid);
         if (teamColor)
             elName.style.washColor = teamColor;
+        _SetHonorIcon(elInfo, sXuid, teamColor);
         return elInfo;
     }
     function _SetupModels(nLocalTeam) {
@@ -147,10 +164,7 @@ var TeamIntroMenu = (function () {
                 break;
         }
     }
-    return {
-        StartTeamIntro: _StartTeamIntro
-    };
-})();
-(function () {
-    $.RegisterForUnhandledEvent("StartTeamIntro", TeamIntroMenu.StartTeamIntro);
-})();
+    {
+        $.RegisterForUnhandledEvent("StartTeamIntro", _StartTeamIntro);
+    }
+})(TeamIntroMenu || (TeamIntroMenu = {}));

@@ -321,27 +321,6 @@ var OperationStoreInspect = ( function()
 		return elThumbnail;
 	};
 
-	                                                 
-	    
-	   	                                                      
-
-	   	                                                   
-
-	   	                                          
-	   	 
-	   		                                                           
-	   		                                        
-	   		                                     
-
-	   		                            
-	   			                                                                                         
-	   			                                                                                                    
-	   			                                                                                                  
-	   			                                   
-	   		   
-	   	 
-	     
-
 	var _SetUpWeaponCaseModel = function()
 	{
 		var elModelPanel = _MakeModelPanel( _m_modelContainer );
@@ -440,7 +419,7 @@ var OperationStoreInspect = ( function()
 
 	var _UpdateItemRarityColor = function( elPanel, itemId )         
 	{
-		elPanel.style.washColor = ItemInfo.GetRarityColor( itemId );
+		elPanel.style.washColor = InventoryAPI.GetItemRarityColor( itemId );
 	};
 
 	var _OnItemCustomizationNotification = function( numericType, type, itemid )
@@ -462,7 +441,7 @@ var OperationStoreInspect = ( function()
 		                          
 		_m_cp.SetDialogVariableInt( "your_stars", OperationUtil.GetOperationInfo().nRedeemableBalance );
 		_m_cp.SetDialogVariable( "cost_stars", _m_rewardCost );
-		_m_cp.SetDialogVariable( "item_name", ItemInfo.GetName( _m_rewardId ));
+		_m_cp.SetDialogVariable( "item_name", InventoryAPI.GetItemName( _m_rewardId ));
 
 		if ( _m_rewardFlags )
 		{
@@ -575,8 +554,8 @@ var OperationStoreInspect = ( function()
 			
 			if( _m_recievedRewardId )
 			{
-				var isSticker = ItemInfo.ItemMatchDefName( _m_recievedRewardId, 'sticker' );
-				var isPatch = ItemInfo.ItemMatchDefName( _m_recievedRewardId, 'patch' );
+				var isSticker = ItemInfo.IsSticker( _m_recievedRewardId );
+				var isPatch = ItemInfo.IsPatch( _m_recievedRewardId );
 				var isSpraySealed = ItemInfo.IsSpraySealed( _m_recievedRewardId );
 
 				var showEquip = ( isSticker || isPatch || isSpraySealed ) ? 'false' : 'true';

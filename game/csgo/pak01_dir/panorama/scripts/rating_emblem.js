@@ -207,7 +207,7 @@ var RatingEmblem;
                 majorRating = arrRating[0];
                 minorRating = arrRating[1];
                 if (do_fx && rating) {
-                    ratingParticleControls.UpdateRatingEffects(elPremierRating, majorRating, minorRating.slice(-3), parseInt(arrRating[2]));
+                    RatingParticleControls.UpdateRatingEffects(elPremierRating, majorRating, minorRating.slice(-3), parseInt(arrRating[2]));
                 }
                 if (bFullDetails) {
                     if (rank && rank <= LeaderboardsAPI.GetPremierLeaderboardTopBestCount()) {
@@ -246,7 +246,7 @@ var RatingEmblem;
                         ratingDesc = $.Localize('#skillgroup_loading');
                     }
                     else if (bTooFewWins) {
-                        var winsneeded = (winsNeededForRank - wins);
+                        let winsneeded = (winsNeededForRank - wins);
                         root_panel.SetDialogVariableInt("winsneeded", winsneeded);
                         tooltipText = $.Localize('#tooltip_cs_rating_none', root_panel);
                         eomDescText = $.Localize('#cs_rating_wins_needed_verbose', root_panel);
@@ -340,8 +340,8 @@ var RatingEmblem;
     }
     RatingEmblem.SplitRating = SplitRating;
 })(RatingEmblem || (RatingEmblem = {}));
-var ratingParticleControls;
-(function (ratingParticleControls) {
+var RatingParticleControls;
+(function (RatingParticleControls) {
     function GetAllChildren(panel) {
         const children = panel.Children();
         return [...children, ...children.flatMap(GetAllChildren)];
@@ -349,7 +349,7 @@ var ratingParticleControls;
     function IsParticleScenePanel(panel) {
         return panel.type === "ParticleScenePanel";
     }
-    function colorConvert(tier) {
+    function ColorConvert(tier) {
         let rarityColors = [
             ["common", 176, 195, 217],
             ["uncommon", 94, 152, 217],
@@ -366,7 +366,7 @@ var ratingParticleControls;
         let B = rarityColors[tier][3];
         return { R, G, B };
     }
-    ratingParticleControls.colorConvert = colorConvert;
+    RatingParticleControls.ColorConvert = ColorConvert;
     function UpdateRatingEffects(panelId, MajorRating, MinorRating, matchType) {
         const AllPanels = GetAllChildren(panelId);
         let ratingEffect = [
@@ -375,7 +375,7 @@ var ratingParticleControls;
             "particles/ui/premier_ratings_relegation.vpcf"
         ];
         let tier = Math.floor(+MajorRating / 5.0);
-        var tierColor = colorConvert(tier);
+        let tierColor = ColorConvert(tier);
         for (const panel of AllPanels) {
             if (IsParticleScenePanel(panel)) {
                 if (+MajorRating > 0) {
@@ -389,5 +389,5 @@ var ratingParticleControls;
             }
         }
     }
-    ratingParticleControls.UpdateRatingEffects = UpdateRatingEffects;
-})(ratingParticleControls || (ratingParticleControls = {}));
+    RatingParticleControls.UpdateRatingEffects = UpdateRatingEffects;
+})(RatingParticleControls || (RatingParticleControls = {}));

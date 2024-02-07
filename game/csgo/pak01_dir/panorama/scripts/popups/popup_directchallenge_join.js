@@ -120,7 +120,7 @@ var DirectChallengeJoin = ( function ()
 			{
 				if ( !elTile.IsValid() )
 					return;
-				friendTile.Init( elTile );
+				FriendTile.Init( elTile );
 				elTile.RemoveClass( 'hidden' );
 			} );
 

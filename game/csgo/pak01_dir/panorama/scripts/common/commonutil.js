@@ -1,6 +1,7 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
-var CommonUtil = (function () {
+var CommonUtil;
+(function (CommonUtil) {
     const remap_lang_to_region = {
         af: 'za',
         ar: 'sa',
@@ -26,14 +27,15 @@ var CommonUtil = (function () {
         zh: 'cn',
         zu: 'za',
     };
-    function _SetRegionOnLabel(isoCode, elPanel, tooltip = true) {
+    function SetRegionOnLabel(isoCode, elPanel, tooltip = true) {
         let tooltipString = "";
         if (isoCode) {
             tooltipString = $.Localize("#SFUI_Country_" + isoCode.toUpperCase());
         }
-        _SetDataOnLabelInternal(isoCode, isoCode, tooltip ? tooltipString : "", elPanel, tooltipString ? false : true);
+        SetDataOnLabelInternal(isoCode, isoCode, tooltip ? tooltipString : "", elPanel, tooltipString ? false : true);
     }
-    function _SetLanguageOnLabel(isoCode, elPanel, tooltip = true) {
+    CommonUtil.SetRegionOnLabel = SetRegionOnLabel;
+    function SetLanguageOnLabel(isoCode, elPanel, tooltip = true) {
         let tooltipString = "";
         let imgCode = isoCode;
         if (isoCode) {
@@ -49,9 +51,10 @@ var CommonUtil = (function () {
                 imgCode = remap_lang_to_region[isoCode];
             }
         }
-        _SetDataOnLabelInternal(isoCode, imgCode, tooltip ? tooltipString : "", elPanel, tooltipString ? false : true);
+        SetDataOnLabelInternal(isoCode, imgCode, tooltip ? tooltipString : "", elPanel, tooltipString ? false : true);
     }
-    function _SetDataOnLabelInternal(isoCode, imgCode, tooltipString, elPanel, bWarningColor) {
+    CommonUtil.SetLanguageOnLabel = SetLanguageOnLabel;
+    function SetDataOnLabelInternal(isoCode, imgCode, tooltipString, elPanel, bWarningColor) {
         if (!elPanel)
             return;
         const elLabel = elPanel.FindChildTraverse('JsRegionLabel');
@@ -77,8 +80,4 @@ var CommonUtil = (function () {
             elLabel.SetHasClass('world-region-label--image', false);
         }
     }
-    return {
-        SetRegionOnLabel: _SetRegionOnLabel,
-        SetLanguageOnLabel: _SetLanguageOnLabel,
-    };
-})();
+})(CommonUtil || (CommonUtil = {}));

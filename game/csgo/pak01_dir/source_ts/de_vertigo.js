@@ -1,4 +1,4 @@
-import { Instance } from "domains/serverpointentity";
+import { Instance } from "serverpointentity";
 // This is the script to enable 2v2 entities when playing Wingman mode
 Instance.PublicMethod("CheckGameMode", () => {
     if (Instance.GameType() == 0 && Instance.GameMode() == 2) {

@@ -1,67 +1,43 @@
-'use strict';
-
-var InspectHeader = ( function()
-{
-	var m_isXrayMode = false;
-	
-	var _Init = function( elPanel, itemId, funcGetSettingCallback )
-	{
-		m_isXrayMode = ( funcGetSettingCallback( "isxraymode", "no" ) === 'yes' ) ? true : false; 
-		
-		if ( funcGetSettingCallback( 'inspectonly', 'false' ) === 'false' && !m_isXrayMode )
-			return;
-		
-		elPanel.RemoveClass( 'hidden' );
-		
-		_SetName( elPanel, itemId, funcGetSettingCallback );
-		_SetRarity( elPanel, itemId );
-		_SetCollectionInfo( elPanel, itemId );
-	};
-	
-	var _SetName = function( elPanel, ItemId, funcGetSettingCallback )
-	{
-		                                                                      
-		                                                                             
-		var strViewFunc = funcGetSettingCallback ? funcGetSettingCallback( 'viewfunc', '' ) : '';
-
-		if ( ItemInfo.ItemDefinitionNameSubstrMatch( ItemId, 'tournament_journal_' ) )
-			ItemId = ( strViewFunc === 'primary' ) ? ItemId : ItemInfo.GetFauxReplacementItemID( ItemId, 'graffiti' );
-
-		elPanel.FindChildInLayoutFile( 'InspectName' ).text = ItemInfo.GetName( ItemId );
-	};
-	
-	var _SetRarity = function( elPanel, itemId )
-	{
-		var rarityColor = ItemInfo.GetRarityColor( itemId );
-
-		if ( rarityColor )
-		{
-			elPanel.FindChildInLayoutFile( 'InspectBar' ).style.washColor = rarityColor;
-		}
-	};
-	
-	var _SetCollectionInfo = function( elPanel, itemId )
-	{
-		var setName = ItemInfo.GetSet( itemId );
-		var elImage = elPanel.FindChildInLayoutFile( 'InspectSetImage' );
-		var elLabel = elPanel.FindChildInLayoutFile( 'InspectCollection' );
-		
-		if ( setName === '' )
-		{
-			elImage.visible = false;
-			elLabel.visible = false;
-			return;
-		}
-
-		elLabel.text = $.Localize( '#CSGO_' + setName );
-		elLabel.visible = true;
-
-		elImage.SetImage( 'file://{images}/econ/set_icons/' + setName + '_small.png' );
-		elImage.visible = true;
-	};
-
-	return {
-		Init : _Init
-	}
-} )();
-
+"use strict";
+/// <reference path="../csgo.d.ts" />
+/// <reference path="../common/iteminfo.ts" />
+var InspectHeader;
+(function (InspectHeader) {
+    let m_isXrayMode = false;
+    function Init(elPanel, itemId, funcGetSettingCallback) {
+        m_isXrayMode = (funcGetSettingCallback("isxraymode", "no") === 'yes') ? true : false;
+        if (funcGetSettingCallback('inspectonly', 'false') === 'false' && !m_isXrayMode)
+            return;
+        elPanel.RemoveClass('hidden');
+        _SetName(elPanel, itemId, funcGetSettingCallback);
+        _SetRarity(elPanel, itemId);
+        _SetCollectionInfo(elPanel, itemId);
+    }
+    InspectHeader.Init = Init;
+    function _SetName(elPanel, ItemId, funcGetSettingCallback) {
+        let strViewFunc = funcGetSettingCallback ? funcGetSettingCallback('viewfunc', '') : '';
+        if (ItemInfo.ItemDefinitionNameSubstrMatch(ItemId, 'tournament_journal_'))
+            ItemId = (strViewFunc === 'primary') ? ItemId : ItemInfo.GetFauxReplacementItemID(ItemId, 'graffiti');
+        elPanel.FindChildInLayoutFile('InspectName').text = InventoryAPI.GetItemName(ItemId);
+    }
+    function _SetRarity(elPanel, itemId) {
+        let rarityColor = InventoryAPI.GetItemRarityColor(itemId);
+        if (rarityColor) {
+            elPanel.FindChildInLayoutFile('InspectBar').style.washColor = rarityColor;
+        }
+    }
+    function _SetCollectionInfo(elPanel, itemId) {
+        let setName = ItemInfo.GetSet(itemId);
+        let elImage = elPanel.FindChildInLayoutFile('InspectSetImage');
+        let elLabel = elPanel.FindChildInLayoutFile('InspectCollection');
+        if (setName === '') {
+            elImage.visible = false;
+            elLabel.visible = false;
+            return;
+        }
+        elLabel.text = $.Localize('#CSGO_' + setName);
+        elLabel.visible = true;
+        elImage.SetImage('file://{images}/econ/set_icons/' + setName + '_small.png');
+        elImage.visible = true;
+    }
+})(InspectHeader || (InspectHeader = {}));

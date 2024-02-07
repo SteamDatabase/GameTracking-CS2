@@ -14,6 +14,7 @@ var ItemTileStore;
         }
         elPanel.SetHasClass('no-drops-earned', false);
         SetDropItemStyle(elPanel, oItemData);
+        SetMainMenuItemStyle(elPanel, oItemData);
         SetItemImages(elPanel, oItemData);
         SetName(elPanel, oItemData);
         SetStatTrack(elPanel, oItemData.id);
@@ -21,7 +22,6 @@ var ItemTileStore;
         SetPrice(elPanel, oItemData);
         SetOnActivate(elPanel, oItemData);
         SetClaimed(elPanel, oItemData);
-        SetSelected(elPanel, oItemData);
         AddMouseOverEvents(elPanel, oItemData);
     }
     ItemTileStore.Init = Init;
@@ -30,7 +30,7 @@ var ItemTileStore;
         let elImage = elPanel.FindChildInLayoutFile('id-itemtile-store-image-main');
         elImage.itemid = displayId;
         TintSprayImage(elImage, displayId);
-        elImage = elPanel.FindChildInLayoutFile('id-itemtile-store-image-bg');
+        elImage = GetBackgroundImage(elPanel, oItemData);
         elImage.itemid = displayId;
         if (oItemData.hasOwnProperty('linkedid')) {
             displayId = GetDisplayItemId(oItemData, oItemData.linkedid);
@@ -39,6 +39,14 @@ var ItemTileStore;
         }
         elPanel.FindChildInLayoutFile('id-itemtile-store-image-linked').visible = oItemData.hasOwnProperty('linkedid');
         elPanel.SetHasClass('is-linked', oItemData.hasOwnProperty('linkedid'));
+    }
+    function GetBackgroundImage(elPanel, oItemData) {
+        if (oItemData.hasOwnProperty('isDisplayedInMainMenu')) {
+            return oItemData.isDisplayedInMainMenu ?
+                elPanel.FindChildInLayoutFile('id-itemtile-mainmenu-store-image-bg') :
+                elPanel.FindChildInLayoutFile('id-itemtile-store-image-bg');
+        }
+        return elPanel.FindChildInLayoutFile('id-itemtile-store-image-bg');
     }
     function TintSprayImage(elImage, ItemId) {
         TintSprayIcon.CheckIsSprayAndTint(ItemId, elImage);
@@ -54,7 +62,7 @@ var ItemTileStore;
             strItemName = $.Localize(InventoryAPI.GetRawDefinitionKey(oItemData.id, 'item_name') + '_tinyname');
         }
         else {
-            strItemName = ItemInfo.GetName(oItemData.linkedid ? oItemData.linkedid : oItemData.id);
+            strItemName = InventoryAPI.GetItemName(oItemData.linkedid ? oItemData.linkedid : oItemData.id);
         }
         elPanel.SetDialogVariable('item-name', strItemName);
     }
@@ -71,7 +79,7 @@ var ItemTileStore;
             elPanel.SetDialogVariable('sale-price', $.Localize('#op_reward_free'));
             return;
         }
-        let reduction = ItemInfo.GetStoreSalePercentReduction(oItemData.id);
+        let reduction = StoreAPI.GetStoreItemPercentReduction(oItemData.id);
         let isMarketItem = IsMarketItem(oItemData);
         elPanel.FindChildInLayoutFile('id-itemtile-store-price').SetHasClass('is-marketlink', isMarketItem);
         elPanel.FindChildInLayoutFile('id-itemtile-store-price').SetHasClass('has-reduction', reduction !== '' && reduction !== undefined && !isMarketItem);
@@ -100,13 +108,19 @@ var ItemTileStore;
             elPanel.SetHasClass('is-drop-item', false);
         }
     }
+    function SetMainMenuItemStyle(elPanel, oItemData) {
+        if (oItemData.hasOwnProperty('isDisplayedInMainMenu')) {
+            elPanel.SetHasClass('is-mainmenu-item', oItemData.isDisplayedInMainMenu);
+        }
+        else {
+            elPanel.SetHasClass('is-mainmenu-item', false);
+        }
+    }
     function SetClaimed(elPanel, oItemData) {
         if (oItemData.isDropItem) {
             const bIsFauxItem = InventoryAPI.IsFauxItemID(oItemData.id);
             elPanel.SetHasClass('item-claimed', bIsFauxItem);
         }
-    }
-    function SetSelected(elPanel, oItemData) {
     }
     function isNewRelease(oItemData) {
         if (oItemData.hasOwnProperty('isNewRelease')) {
@@ -146,7 +160,7 @@ var ItemTileStore;
                 displayItemId = InventoryAPI.GetLootListItemIdByIndex(oItemData.id, 0);
                 elPanel.SetPanelEvent('onactivate', ShowDecodePopup.bind(undefined, oItemData.id, displayItemId, isNew));
             }
-            else if (ItemInfo.GetLootListCount(oItemData.id) > 0) {
+            else if (InventoryAPI.GetLootListItemsCount(oItemData.id) > 0) {
                 elPanel.SetPanelEvent('onactivate', ShowDecodePopup.bind(undefined, oItemData.id, oItemData.id, isNew));
             }
             else {
@@ -177,7 +191,6 @@ var ItemTileStore;
             'storeitemid=' + id
             + strExtraSettings);
     }
-    ;
     function ShowInpsectPopup(id) {
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id
             + '&' +
@@ -187,7 +200,6 @@ var ItemTileStore;
             + '&' +
             'storeitemid=' + id);
     }
-    ;
     let jsTooltipDelayHandle = null;
     function AddMouseOverEvents(elPanel, oItemData) {
         const tooltipHotspot = elPanel.FindChildTraverse('tooltip-hotspot');
@@ -210,7 +222,6 @@ var ItemTileStore;
         }
         UiToolkitAPI.ShowCustomLayoutParametersTooltip(tooltipTargetPanelId, 'JsItemStoreTooltip', 'file://{resources}/layout/tooltips/tooltip_inventory_item.xml', 'itemid=' + itemId);
     }
-    ;
     function HideTooltip() {
         UiToolkitAPI.HideCustomLayoutTooltip('JsItemStoreTooltip');
         UiToolkitAPI.HideTextTooltip();
@@ -219,7 +230,4 @@ var ItemTileStore;
             jsTooltipDelayHandle = null;
         }
     }
-    ;
 })(ItemTileStore || (ItemTileStore = {}));
-(function () {
-})();

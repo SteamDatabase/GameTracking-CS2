@@ -131,10 +131,27 @@ var g_PromotedSettings = [
         start_date: new Date('October 11, 2023'),
         end_date: new Date('February 28, 2024')
     },
+    {
+        id: "FirstPersonTracers",
+        loc_name: "#Cstrike_FirstPersonTracers",
+        loc_desc: "#Cstrike_FirstPersonTracers_Desc",
+        section: "GameSettings",
+        start_date: new Date('January 19, 2024'),
+        end_date: new Date('February 28, 2024')
+    },
+    {
+        id: "ExtraBufffering",
+        loc_name: "#SFUI_Settings_Network_ExtraBuffering",
+        loc_desc: "#SFUI_Settings_Network_ExtraBuffering_Info",
+        section: "GameSettings",
+        start_date: new Date('February 6, 2024'),
+        end_date: new Date('April 28, 2024')
+    },
 ]
     .reverse();
-var PromotedSettingsUtil = (function () {
-    function _GetUnacknowledgedPromotedSettings() {
+var PromotedSettingsUtil;
+(function (PromotedSettingsUtil) {
+    function GetUnacknowledgedPromotedSettings() {
         const settingsInfo = GameInterfaceAPI.GetSettingString("cl_promoted_settings_acknowledged").split(':');
         const version = parseInt(settingsInfo.shift());
         const arrNewSettings = [];
@@ -152,11 +169,9 @@ var PromotedSettingsUtil = (function () {
         }
         return arrNewSettings;
     }
-    const hPromotedSettingsViewedEvt = $.RegisterForUnhandledEvent("MainMenu_PromotedSettingsViewed", function (id) {
+    PromotedSettingsUtil.GetUnacknowledgedPromotedSettings = GetUnacknowledgedPromotedSettings;
+    const hPromotedSettingsViewedEvt = $.RegisterForUnhandledEvent("MainMenu_PromotedSettingsViewed", () => {
         GameInterfaceAPI.SetSettingString("cl_promoted_settings_acknowledged", "" + g_PromotedSettingsVersion + ":" + Date.now());
         $.UnregisterForUnhandledEvent("MainMenu_PromotedSettingsViewed", hPromotedSettingsViewedEvt);
     });
-    return {
-        GetUnacknowledgedPromotedSettings: _GetUnacknowledgedPromotedSettings
-    };
-}());
+})(PromotedSettingsUtil || (PromotedSettingsUtil = {}));

@@ -32,5 +32,11 @@
 		// We allow deprecated behavior versions coming from csgo_imported, but we set
 		// this back to zero in the derived csgo gameinfo.gi.
 		"DeprecatedBehaviorVersionsAllowed"	"1"
+
+		SoundStackScripts
+		{
+			CompilerVersion "1"
+		//	CompileForCompare "1"
+		}
 	}
 }

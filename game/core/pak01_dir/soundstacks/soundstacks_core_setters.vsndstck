@@ -1,563 +1,772 @@
-// core_setter_stack_opvar
-"core_setter_stack_opvar"
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
 {
-	"public"
+	core_setter_stack_opvar = 
 	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"value"
+		operators = 
+		[
+			
 			{
-				"data_type"		"float"
-				"value"		"0"
-			}
-			"stack_name"
-			{
-				"data_type"		"string"
-				"value"		"core_global_opvars"
-			}
-			"operator_name"
-			{
-				"data_type"		"string"
-				"value"		"opvars"
-			}
-			"opvar_name"
-			{
-				"data_type"		"string"
-				"value"		"test"
-			}
-		}
-	}
-	"set_opvar_value"
-	{
-		"operator"		"opvar_set_float"
-		"execute_once"		"true"
-		"input"		"@public.value"
-		"input_index"		"0"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-		"input_use_namespace"		"false"
-	}
-}
-
-// core_setter_mixlayer_amount
-"core_setter_mixlayer_amount"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"mixlayer_name"
-			{
-				"data_type"		"string"
-			}
-			"value"
-			{
-				"data_type"		"float"
-				"value"		"0"
-			}
-		}
-	}
-	"set_mixlayer_amount"
-	{
-		"operator"		"soundmixer_set_mixlayer_amount"
-		"mixlayer"		"@public.mixlayer_name"
-		"input"		"@public.value"
-	}
-}
-
-// core_setter_AHR_base
-"core_setter_AHR_base"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"value"
-			{
-				"data_type"		"float"
-				"value"		"0.000000"
-			}
-			"start_value"
-			{
-				"data_type"		"float"
-				"value"		"0.000000"
-			}
-			"hold_time"
-			{
-				"data_type"		"float"
-				"value"		"0.000000"
-			}
-			"fade_in"
-			{
-				"data_type"		"float"
-				"value"		"0.000000"
-			}
-			"fade_out"
-			{
-				"data_type"		"float"
-				"value"		"0.000000"
-			}
-			"mult_value"
-			{
-				"data_type"		"bool"
-				"value"		"false"
-			}
-			"stop_after_hold"
-			{
-				"data_type"		"bool"
-				"value"		"true"
-			}
-		}
-	}
-	"get_event_info"
-	{
-		"operator"		"soundevent_get_info"
-	}
-	"total_hold_time"
-	{
-		"operator"		"math_float"
-		"execute_once"		"true"
-		"apply"		"add"
-		"input2"		"@public.hold_time"
-		"input1"		"@public.fade_in"
-	}
-	"stop_at_time"
-	{
-		"input_execute"		"@public.stop_after_hold"
-		"operator"		"soundevent_control"
-		"input_stop_at_time"		"@total_hold_time.output"
-	}
-	"switch_start_value"
-	{
-		"operator"		"ctrl_switch_float"
-		"input_switch"		"@public.mult_value"
-		"input1"		"@public.start_value"
-		"input2"		"1.0"
-	}
-	"fade_in"
-	{
-		"operator"		"math_remap_float"
-		"input"		"@get_event_info.output_elapsed_time"
-		"input_min"		"0.000000"
-		"input_max"		"@public.fade_in"
-		"input_map_min"		"@switch_start_value.output"
-		"input_map_max"		"@public.value"
-		"default_to_max"		"false"
-	}
-	"fade_out"
-	{
-		"operator"		"math_remap_float"
-		"input"		"@get_event_info.output_stop_elapsed_time"
-		"input_min"		"0.000000"
-		"input_max"		"@public.fade_out"
-		"input_map_min"		"@public.value"
-		"input_map_max"		"@switch_start_value.output"
-		"default_to_max"		"false"
-	}
-	"switch_mult_value"
-	{
-		"operator"		"ctrl_switch_float"
-		"input_switch"		"@public.mult_value"
-		"input1"		"1.0"
-		"input2"		"@public.start_value"
-	}
-	"fade_in_mult"
-	{
-		"operator"		"math_float"
-		"apply"		"mult"
-		"input1"		"@fade_in.output"
-		"input2"		"@switch_mult_value.output"
-	}
-	"fade_out_mult"
-	{
-		"operator"		"math_float"
-		"apply"		"mult"
-		"input1"		"@fade_out.output"
-		"input2"		"@switch_mult_value.output"
-	}
-	"unfinished"
-	{
-		"operator"		"math_float"
-		"execute_once"		"false"
-		"apply"		"less_than"
-		"input1"		"@get_event_info.output_stop_elapsed_time"
-		"input2"		"@public.fade_out"
-	}
-	"prevent_stop"
-	{
-		"operator"		"soundevent_control"
-		"input_execute"		"@unfinished.output"
-		"input_add_dependent"		"1.000000"
-	}
-}
-
-// core_setter_AHR_stack_opvar
-"core_setter_AHR_stack_opvar"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"import_public_opvars"		"core_setter_AHR_base"
-			"stack_name"
-			{
-				"data_type"		"string"
-				"value"		"core_global_opvars"
-			}
-			"operator_name"
-			{
-				"data_type"		"string"
-				"value"		"opvars"
-			}
-			"opvar_name"
-			{
-				"data_type"		"string"
-				"value"		"test"
-			}
-		}
-	}
-	"get_start_opvar"
-	{
-		"operator"		"opvar_get_float"
-		"execute_once"		"true"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-		"input_use_namespace"		"false"
-	}
-	"import_core_setter_AHR_base"
-	{
-		"operator"		"sos_import_stack"
-		"import_stack"		"core_setter_AHR_base"
-		"auto_connect_public_fields"		"true"
-		"operator_variables"
-		{
-			"start_value"
-			{
-				"value"		"@get_start_opvar.output"
-			}
-		}
-	}
-	"set_if_stopped"
-	{
-		"operator"		"opvar_set_float"
-		"input_execute"		"@import_core_setter_AHR_base::get_event_info.output_stopped"
-		"input"		"@import_core_setter_AHR_base::fade_out_mult.output"
-		"input_index"		"0"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-	}
-	"set_if_unstopped"
-	{
-		"operator"		"opvar_set_float"
-		"input_execute"		"@import_core_setter_AHR_base::get_event_info.output_unstopped"
-		"input"		"@import_core_setter_AHR_base::fade_in_mult.output"
-		"input_index"		"0"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-	}
-}
-
-// core_setter_AHR_mixlayer_amount
-"core_setter_AHR_mixlayer_amount"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"import_public_opvars"		"core_setter_AHR_base"
-			"mixlayer_name"
-			{
-				"data_type"		"string"
-				"value"		"core_global_opvars"
-			}
-		}
-	}
-	"get_mixlayer_amount"
-	{
-		"operator"		"soundmixer_get_mixlayer_amount"
-		"execute_once"		"true"
-		"mixlayer"		"@public.mixlayer_name"
-	}
-	"import_core_setter_AHR_base"
-	{
-		"operator"		"sos_import_stack"
-		"import_stack"		"core_setter_AHR_base"
-		"auto_connect_public_fields"		"true"
-		"operator_variables"
-		{
-			"start_value"
-			{
-				"value"		"@get_mixlayer_amount.output"
-			}
-		}
-	}
-	"set_if_stopped"
-	{
-		"operator"		"soundmixer_set_mixlayer_amount"
-		"input_execute"		"@import_core_setter_AHR_base::get_event_info.output_stopped"
-		"input"		"@import_core_setter_AHR_base::fade_out_mult.output"
-		"mixlayer"		"@public.mixlayer_name"
-	}
-	"set_if_unstopped"
-	{
-		"operator"		"soundmixer_set_mixlayer_amount"
-		"input_execute"		"@import_core_setter_AHR_base::get_event_info.output_unstopped"
-		"input"		"@import_core_setter_AHR_base::fade_in_mult.output"
-		"mixlayer"		"@public.mixlayer_name"
-	}
-}
-
-// core_setter_AHR_game_volume
-"core_setter_AHR_game_volume"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"import_public_opvars"		"core_setter_AHR_base"
-		}
-	}
-	"get_game_volume"
-	{
-		"operator"		"convar_get"
-		"execute_once"		"true"
-		"convar"		"snd_gain"
-	}
-	"import_core_setter_AHR_base"
-	{
-		"operator"		"sos_import_stack"
-		"import_stack"		"core_setter_AHR_base"
-		"auto_connect_public_fields"		"true"
-		"operator_variables"
-		{
-			"start_value"
-			{
-				"value"		"@get_game_volume.output"
-			}
-		}
-	}
-	"set_if_stopped"
-	{
-		"operator"		"convar_set"
-		"input_execute"		"@import_core_setter_AHR_base::get_event_info.output_stopped"
-		"convar"		"snd_gain"
-		"input"		"@import_core_setter_AHR_base::fade_out_mult.output"
-	}
-	"set_if_unstopped"
-	{
-		"operator"		"convar_set"
-		"input_execute"		"@import_core_setter_AHR_base::get_event_info.output_unstopped"
-		"convar"		"snd_gain"
-		"input"		"@import_core_setter_AHR_base::fade_in_mult.output"
-	}
-}
-
-// core_setter_curve_base
-"core_setter_curve_base"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"value_curve"
-			{
-				"data_type"		"float6"
-				"soundevent_data"		"true"
-				"value"
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
 				{
-					"value1"		"[ 0.00, 0.0, 1.083, 1.083, 2.0, 3.0 ]"
-					"value2"		"[ 1.0, 1.0, 0.227125, 0.227125, 2.0, 3.0 ]"
+					value = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+					stack_name = 
+					{
+						data_type = "string"
+						value = "core_global_opvars"
+					}
+					operator_name = 
+					{
+						data_type = "string"
+						value = "opvars"
+					}
+					opvar_name = 
+					{
+						data_type = "string"
+						value = "test"
+					}
 				}
-				"_system_properties"
+			},
+			
+			{
+				name = "set_opvar_value"
+				operator = "opvar_set_float"
+				execute_once = "true"
+				input = "@public.value"
+				input_index = "0"
+				input_stack_name = "@public.stack_name"
+				input_operator_name = "@public.operator_name"
+				input_field_name = "@public.opvar_name"
+				input_use_namespace = "false"
+			},
+		]
+	}
+	core_setter_mixlayer_amount = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
 				{
-					"display_group"		"advanced"
-					"display_edit_type"		"field_curve_2d_editor"
+					mixlayer_name = 
+					{
+						data_type = "string"
+						value = ""
+					}
+					value = 
+					{
+						data_type = "float"
+						value = "0"
+					}
 				}
-			}
-			"time"
+			},
+			
 			{
-				"data_type"		"float"
-				"value"		"0"
-			}
-			"stop_value"
+				name = "set_mixlayer_amount"
+				operator = "soundmixer_set_mixlayer_amount"
+				mixlayer = "@public.mixlayer_name"
+				input = "@public.value"
+			},
+		]
+	}
+	core_setter_mixgraph_input = 
+	{
+		operators = 
+		[
+			
 			{
-				"data_type"		"float"
-				"value"		"0"
-			}
-		}
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					mixgraph_input = 
+					{
+						data_type = "string"
+						value = ""
+					}
+					value = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "set_mixgraph_input"
+				operator = "vmix_mixgraph_input"
+				input = "@public.value"
+				input_name = "@public.mixgraph_input"
+			},
+		]
 	}
-	"get_event_info"
+	core_setter_AHR_base = 
 	{
-		"operator"		"soundevent_get_info"
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					value = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					start_value = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					hold_time = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					fade_in = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					fade_out = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					mult_value = 
+					{
+						data_type = "bool"
+						value = "false"
+					}
+					stop_after_hold = 
+					{
+						data_type = "bool"
+						value = "true"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "total_hold_time"
+				operator = "math_float"
+				execute_once = "true"
+				apply = "add"
+				input2 = "@public.hold_time"
+				input1 = "@public.fade_in"
+			},
+			
+			{
+				name = "stop_at_time"
+				input_execute = "@public.stop_after_hold"
+				operator = "soundevent_control"
+				input_stop_at_time = "@total_hold_time.output"
+			},
+			
+			{
+				name = "switch_start_value"
+				operator = "ctrl_switch_float"
+				input_switch = "@public.mult_value"
+				input1 = "@public.start_value"
+				input2 = "1.0"
+			},
+			
+			{
+				name = "fade_in"
+				operator = "math_remap_float"
+				input = "@get_event_info.output_elapsed_time"
+				input_min = "0.000000"
+				input_max = "@public.fade_in"
+				input_map_min = "@switch_start_value.output"
+				input_map_max = "@public.value"
+				default_to_max = "false"
+			},
+			
+			{
+				name = "fade_out"
+				operator = "math_remap_float"
+				input = "@get_event_info.output_stop_elapsed_time"
+				input_min = "0.000000"
+				input_max = "@public.fade_out"
+				input_map_min = "@public.value"
+				input_map_max = "@switch_start_value.output"
+				default_to_max = "false"
+			},
+			
+			{
+				name = "switch_mult_value"
+				operator = "ctrl_switch_float"
+				input_switch = "@public.mult_value"
+				input1 = "1.0"
+				input2 = "@public.start_value"
+			},
+			
+			{
+				name = "fade_in_mult"
+				operator = "math_float"
+				apply = "mult"
+				input1 = "@fade_in.output"
+				input2 = "@switch_mult_value.output"
+			},
+			
+			{
+				name = "fade_out_mult"
+				operator = "math_float"
+				apply = "mult"
+				input1 = "@fade_out.output"
+				input2 = "@switch_mult_value.output"
+			},
+			
+			{
+				name = "unfinished"
+				operator = "math_float"
+				execute_once = "false"
+				apply = "less_than"
+				input1 = "@get_event_info.output_stop_elapsed_time"
+				input2 = "@public.fade_out"
+			},
+			
+			{
+				name = "prevent_stop"
+				operator = "soundevent_control"
+				input_execute = "@unfinished.output"
+				input_add_dependent = "1.000000"
+			},
+		]
 	}
-	"time_not_elapsed"
+	core_setter_AHR_stack_opvar = 
 	{
-		"operator"		"math_float"
-		"input_execute"		"1"
-		"apply"		"less_than_or_equal"
-		"input1"		"@get_event_info.output_elapsed_time"
-		"input2"		"@public.time"
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_AHR_base"
+					stack_name = 
+					{
+						data_type = "string"
+						value = "core_global_opvars"
+					}
+					operator_name = 
+					{
+						data_type = "string"
+						value = "opvars"
+					}
+					opvar_name = 
+					{
+						data_type = "string"
+						value = "test"
+					}
+				}
+			},
+			
+			{
+				name = "get_start_opvar"
+				operator = "opvar_get_float"
+				execute_once = "true"
+				input_stack_name = "@public.stack_name"
+				input_operator_name = "@public.operator_name"
+				input_field_name = "@public.opvar_name"
+				input_use_namespace = "false"
+			},
+			
+			{
+				name = "import_core_setter_AHR_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_AHR_base"
+				auto_connect_public_fields = "true"
+				operator_variables = 
+				{
+					start_value = 
+					{
+						value = "@get_start_opvar.output"
+					}
+				}
+			},
+			
+			{
+				name = "set_if_stopped"
+				operator = "opvar_set_float"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_stopped"
+				input = "@import_core_setter_AHR_base::fade_out_mult.output"
+				input_index = "0"
+				input_stack_name = "@public.stack_name"
+				input_operator_name = "@public.operator_name"
+				input_field_name = "@public.opvar_name"
+			},
+			
+			{
+				name = "set_if_unstopped"
+				operator = "opvar_set_float"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_unstopped"
+				input = "@import_core_setter_AHR_base::fade_in_mult.output"
+				input_index = "0"
+				input_stack_name = "@public.stack_name"
+				input_operator_name = "@public.operator_name"
+				input_field_name = "@public.opvar_name"
+			},
+		]
 	}
-	"time_not_elapsed_and_unstopped"
+	core_setter_AHR_mixlayer_amount = 
 	{
-		"operator"		"math_float"
-		"input_execute"		"1"
-		"apply"		"min"
-		"input1"		"@time_not_elapsed.output"
-		"input2"		"@get_event_info.output_unstopped"
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_AHR_base"
+					mixlayer_name = 
+					{
+						data_type = "string"
+						value = "core_global_opvars"
+					}
+				}
+			},
+			
+			{
+				name = "get_mixlayer_amount"
+				operator = "soundmixer_get_mixlayer_amount"
+				execute_once = true
+				mixlayer = "@public.mixlayer_name"
+			},
+			
+			{
+				name = "import_core_setter_AHR_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_AHR_base"
+				auto_connect_public_fields = "true"
+				operator_variables = 
+				{
+					start_value = 
+					{
+						value = "@get_mixlayer_amount.output"
+					}
+				}
+			},
+			
+			{
+				name = "set_if_stopped"
+				operator = "soundmixer_set_mixlayer_amount"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_stopped"
+				input = "@import_core_setter_AHR_base::fade_out_mult.output"
+				mixlayer = "@public.mixlayer_name"
+			},
+			
+			{
+				name = "set_if_unstopped"
+				operator = "soundmixer_set_mixlayer_amount"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_unstopped"
+				input = "@import_core_setter_AHR_base::fade_in_mult.output"
+				mixlayer = "@public.mixlayer_name"
+			},
+		]
 	}
-	"time_elapsed_or_stopped"
+	core_setter_AHR_game_volume = 
 	{
-		"operator"		"math_float"
-		"input_execute"		"1"
-		"apply"		"sub"
-		"input2"		"@time_not_elapsed_and_unstopped.output"
-		"input1"		"1"
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_AHR_base"
+				}
+			},
+			
+			{
+				name = "get_game_volume"
+				operator = "convar_get"
+				execute_once = "true"
+				convar = "snd_gain"
+			},
+			
+			{
+				name = "import_core_setter_AHR_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_AHR_base"
+				auto_connect_public_fields = "true"
+				operator_variables = 
+				{
+					start_value = 
+					{
+						value = "@get_game_volume.output"
+					}
+				}
+			},
+			
+			{
+				name = "set_if_stopped"
+				operator = "convar_set"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_stopped"
+				convar = "snd_gain"
+				input = "@import_core_setter_AHR_base::fade_out_mult.output"
+			},
+			
+			{
+				name = "set_if_unstopped"
+				operator = "convar_set"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_unstopped"
+				convar = "snd_gain"
+				input = "@import_core_setter_AHR_base::fade_in_mult.output"
+			},
+		]
 	}
-	"value_curve"
+	core_setter_AHR_mixgraph_input = 
 	{
-		"operator"		"math_curve_2d"
-		"input"		"@get_event_info.output_elapsed_time"
-		"public_field_name"		"public.value_curve"
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_AHR_base"
+					mixgraph_input = 
+					{
+						data_type = "string"
+						value = ""
+					}
+				}
+			},
+			
+			{
+				name = "get_mixgraph_input"
+				operator = "vmix_mixgraph_input_get_float"
+				execute_once = "true"
+				input_name = "@public.mixgraph_input"
+			},
+			
+			{
+				name = "import_core_setter_AHR_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_AHR_base"
+				auto_connect_public_fields = "true"
+				operator_variables = 
+				{
+					start_value = 
+					{
+						value = "@get_mixgraph_input.output"
+					}
+				}
+			},
+			
+			{
+				name = "set_if_stopped"
+				operator = "vmix_mixgraph_input"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_stopped"
+				input = "@import_core_setter_AHR_base::fade_out_mult.output"
+				input_name = "@public.mixgraph_input"
+			},
+			
+			{
+				name = "set_if_unstopped"
+				operator = "vmix_mixgraph_input"
+				input_execute = "@import_core_setter_AHR_base::get_event_info.output_unstopped"
+				input = "@import_core_setter_AHR_base::fade_in_mult.output"
+				input_name = "@public.mixgraph_input"
+			},
+		]
 	}
-	"prevent_stop"
+	core_setter_curve_base = 
 	{
-		"operator"		"soundevent_control"
-		"input_execute"		"@time_not_elapsed_and_unstopped.output"
-		"input_add_dependent"		"1.000000"
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					value_curve = 
+					{
+						data_type = "float6"
+						soundevent_data = "true"
+						value = 
+						[
+							"[ 0.00, 0.0, 1.083, 1.083, 2.0, 3.0 ]",
+							"[ 1.0, 1.0, 0.227125, 0.227125, 2.0, 3.0 ]",
+						]
+						_system_properties = 
+						{
+							display_group = "advanced"
+							display_edit_type = "field_curve_2d_editor"
+						}
+					}
+					time = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+					stop_value = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "time_not_elapsed"
+				operator = "math_float"
+				input_execute = "1"
+				apply = "less_than_or_equal"
+				input1 = "@get_event_info.output_elapsed_time"
+				input2 = "@public.time"
+			},
+			
+			{
+				name = "time_not_elapsed_and_unstopped"
+				operator = "math_float"
+				input_execute = "1"
+				apply = "min"
+				input1 = "@time_not_elapsed.output"
+				input2 = "@get_event_info.output_unstopped"
+			},
+			
+			{
+				name = "time_elapsed_or_stopped"
+				operator = "math_float"
+				input_execute = "1"
+				apply = "sub"
+				input2 = "@time_not_elapsed_and_unstopped.output"
+				input1 = "1"
+			},
+			
+			{
+				name = "value_curve"
+				operator = "math_curve_2d"
+				input = "@get_event_info.output_elapsed_time"
+				public_field_name = "public.value_curve"
+			},
+			
+			{
+				name = "prevent_stop"
+				operator = "soundevent_control"
+				input_execute = "@time_not_elapsed_and_unstopped.output"
+				input_add_dependent = "1.000000"
+			},
+		]
+	}
+	core_setter_curve_stack_opvar = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_curve_base"
+					stack_name = 
+					{
+						data_type = "string"
+						value = "core_global_opvars"
+					}
+					operator_name = 
+					{
+						data_type = "string"
+						value = "opvars"
+					}
+					opvar_name = 
+					{
+						data_type = "string"
+						value = "test"
+					}
+				}
+			},
+			
+			{
+				name = "import_core_setter_curve_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_curve_base"
+				auto_connect_public_fields = "true"
+			},
+			
+			{
+				name = "set_if_stopped"
+				operator = "opvar_set_float"
+				input_execute = "@import_core_setter_curve_base::time_elapsed_or_stopped.output"
+				input = "@public.stop_value"
+				input_index = "0"
+				input_stack_name = "@public.stack_name"
+				input_operator_name = "@public.operator_name"
+				input_field_name = "@public.opvar_name"
+			},
+			
+			{
+				name = "set_if_unstopped"
+				operator = "opvar_set_float"
+				input_execute = "@import_core_setter_curve_base::time_not_elapsed_and_unstopped.output"
+				input = "@import_core_setter_curve_base::value_curve.output"
+				input_index = "0"
+				input_stack_name = "@public.stack_name"
+				input_operator_name = "@public.operator_name"
+				input_field_name = "@public.opvar_name"
+			},
+		]
+	}
+	core_setter_curve_mixlayer_amount = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_curve_base"
+					mixlayer_name = 
+					{
+						data_type = "string"
+						value = ""
+					}
+				}
+			},
+			
+			{
+				name = "import_core_setter_curve_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_curve_base"
+				auto_connect_public_fields = "true"
+			},
+			
+			{
+				name = "set_mixlayer_amount_unstopped"
+				operator = "soundmixer_set_mixlayer_amount"
+				input_execute = "@import_core_setter_curve_base::time_not_elapsed_and_unstopped.output"
+				mixlayer = "@public.mixlayer_name"
+				input = "@import_core_setter_curve_base::value_curve.output"
+			},
+			
+			{
+				name = "set_mixlayer_amount_stopped"
+				operator = "soundmixer_set_mixlayer_amount"
+				input_execute = "@import_core_setter_curve_base::time_elapsed_or_stopped.output"
+				mixlayer = "@public.mixlayer_name"
+				input = "@public.stop_value"
+			},
+		]
+	}
+	core_setter_curve_mixlayer_trigger_amount = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_curve_base"
+					mixer_mixgroup = 
+					{
+						data_type = "mixgroup"
+						value = "All"
+					}
+				}
+			},
+			
+			{
+				name = "import_core_setter_curve_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_curve_base"
+				auto_connect_public_fields = "true"
+			},
+			
+			{
+				name = "mixer"
+				operator = "soundmixer_get_mixgroup"
+				mixgroup = "@public.mixer_mixgroup"
+			},
+			
+			{
+				name = "set_trigger_amount_unstopped"
+				operator = "soundmixer_set_trigger"
+				input_execute = "@import_core_setter_curve_base::time_not_elapsed_and_unstopped.output"
+				input_trigger = "@import_core_setter_curve_base::value_curve.output"
+				input_mixgroups = "@mixer.output_mixgroups"
+			},
+			
+			{
+				name = "set_trigger_amount_stopped"
+				operator = "soundmixer_set_trigger"
+				input_execute = "@import_core_setter_curve_base::time_elapsed_or_stopped.output"
+				input_trigger = "@public.stop_value"
+				input_mixgroups = "@mixer.output_mixgroups"
+			},
+		]
+	}
+	core_setter_curve_mixgraph_input = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = "core_setter_curve_base"
+					mixgraph_input = 
+					{
+						data_type = "string"
+						value = ""
+					}
+				}
+			},
+			
+			{
+				name = "import_core_setter_curve_base"
+				operator = "sos_import_stack"
+				import_stack = "core_setter_curve_base"
+				auto_connect_public_fields = "true"
+			},
+			
+			{
+				name = "set_if_unstopped"
+				operator = "vmix_mixgraph_input"
+				input_execute = "@import_core_setter_curve_base::time_not_elapsed_and_unstopped.output"
+				input = "@import_core_setter_curve_base::value_curve.output"
+				input_name = "@public.mixgraph_input"
+			},
+			
+			{
+				name = "set_if_stopped"
+				operator = "vmix_mixgraph_input"
+				input_execute = "@import_core_setter_curve_base::time_elapsed_or_stopped.output"
+				input = "@public.stop_value"
+				input_name = "@public.mixgraph_input"
+			},
+		]
 	}
 }
-
-// core_setter_curve_stack_opvar
-"core_setter_curve_stack_opvar"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"import_public_opvars"		"core_setter_curve_base"
-			"stack_name"
-			{
-				"data_type"		"string"
-				"value"		"core_global_opvars"
-			}
-			"operator_name"
-			{
-				"data_type"		"string"
-				"value"		"opvars"
-			}
-			"opvar_name"
-			{
-				"data_type"		"string"
-				"value"		"test"
-			}
-		}
-	}
-	"import_core_setter_curve_base"
-	{
-		"operator"		"sos_import_stack"
-		"import_stack"		"core_setter_curve_base"
-		"auto_connect_public_fields"		"true"
-		"operator_variables"
-		{
-			"start_value"
-			{
-				"value"		"@get_game_volume.output"
-			}
-		}
-	}
-	"set_if_stopped"
-	{
-		"operator"		"opvar_set_float"
-		"input_execute"		"@import_core_setter_curve_base::time_elapsed_or_stopped.output"
-		"input"		"@public.stop_value"
-		"input_index"		"0"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-	}
-	"set_if_unstopped"
-	{
-		"operator"		"opvar_set_float"
-		"input_execute"		"@import_core_setter_curve_base::time_not_elapsed_and_unstopped.output"
-		"input"		"@import_core_setter_curve_base::value_curve.output"
-		"input_index"		"0"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-	}
-	"get_opvar"
-	{
-		"operator"		"opvar_get_float"
-		"execute_once"		"false"
-		"input_execute"		"1"
-		"input_index"		"0"
-		"input_stack_name"		"@public.stack_name"
-		"input_operator_name"		"@public.operator_name"
-		"input_field_name"		"@public.opvar_name"
-		"input_use_namespace"		"false"
-	}
-	"print_reset"
-	{
-		"operator"		"util_print_float"
-		"execute_once"		"false"
-		"input"		"@get_opvar.output"
-	}
-}
-
-// core_setter_curve_mixlayer_amount
-"core_setter_curve_mixlayer_amount"
-{
-	"public"
-	{
-		"operator"		"util_null"
-		"operator_variables"
-		{
-			"import_public_opvars"		"core_setter_curve_base"
-			"mixlayer_name"
-			{
-				"data_type"		"string"
-			}
-		}
-	}
-	"import_core_setter_curve_base"
-	{
-		"operator"		"sos_import_stack"
-		"import_stack"		"core_setter_curve_base"
-		"auto_connect_public_fields"		"true"
-		"operator_variables"
-		{
-			"start_value"
-			{
-				"value"		"@get_game_volume.output"
-			}
-		}
-	}
-	"set_mixlayer_amount_unstopped"
-	{
-		"operator"		"soundmixer_set_mixlayer_amount"
-		"input_execute"		"@import_core_setter_curve_base::time_not_elapsed_and_unstopped.output"
-		"mixlayer"		"@public.mixlayer_name"
-		"input"		"@import_core_setter_curve_base::value_curve.output"
-	}
-	"set_mixlayer_amount_stopped"
-	{
-		"operator"		"soundmixer_set_mixlayer_amount"
-		"input_execute"		"@import_core_setter_curve_base::time_elapsed_or_stopped.output"
-		"mixlayer"		"@public.mixlayer_name"
-		"input"		"@public.stop_value"
-	}
-}
-

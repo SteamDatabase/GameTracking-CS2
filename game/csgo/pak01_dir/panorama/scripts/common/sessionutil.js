@@ -1,21 +1,21 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
-var SessionUtil = (function () {
-    const _DoesGameModeHavePrimeQueue = function (gameModeSettingName) {
-        const bPrimeQueueSupported = (gameModeSettingName === 'competitive' || gameModeSettingName === 'scrimcomp2v2' || gameModeSettingName === 'survival');
-        return bPrimeQueueSupported;
-    };
-    const _GetMaxLobbySlotsForGameMode = function (gameMode) {
+var SessionUtil;
+(function (SessionUtil) {
+    function DoesGameModeHavePrimeQueue(gameModeSettingName) {
+        return gameModeSettingName === 'competitive' || gameModeSettingName === 'scrimcomp2v2';
+    }
+    SessionUtil.DoesGameModeHavePrimeQueue = DoesGameModeHavePrimeQueue;
+    function GetMaxLobbySlotsForGameMode(gameMode) {
         let numLobbySlots = 5;
         if (gameMode == "scrimcomp2v2" ||
             gameMode == "cooperative" ||
             gameMode == "coopmission")
             numLobbySlots = 2;
-        else if (gameMode === "survival")
-            numLobbySlots = 2;
         return numLobbySlots;
-    };
-    const _AreLobbyPlayersPrime = function () {
+    }
+    SessionUtil.GetMaxLobbySlotsForGameMode = GetMaxLobbySlotsForGameMode;
+    function AreLobbyPlayersPrime() {
         const playersCount = PartyListAPI.GetCount();
         for (let i = 0; i < playersCount; i++) {
             const xuid = PartyListAPI.GetXuidByIndex(i);
@@ -25,18 +25,10 @@ var SessionUtil = (function () {
             }
         }
         return true;
-    };
-    const _GetNumWinsNeededForRank = function (skillgroupType) {
-        if (skillgroupType.toLowerCase() === 'survival')
-            return 0;
-        if (skillgroupType.toLowerCase() === 'dangerzone')
-            return 0;
+    }
+    SessionUtil.AreLobbyPlayersPrime = AreLobbyPlayersPrime;
+    function GetNumWinsNeededForRank(skillgroupType) {
         return 10;
-    };
-    return {
-        DoesGameModeHavePrimeQueue: _DoesGameModeHavePrimeQueue,
-        GetMaxLobbySlotsForGameMode: _GetMaxLobbySlotsForGameMode,
-        AreLobbyPlayersPrime: _AreLobbyPlayersPrime,
-        GetNumWinsNeededForRank: _GetNumWinsNeededForRank
-    };
-})();
+    }
+    SessionUtil.GetNumWinsNeededForRank = GetNumWinsNeededForRank;
+})(SessionUtil || (SessionUtil = {}));

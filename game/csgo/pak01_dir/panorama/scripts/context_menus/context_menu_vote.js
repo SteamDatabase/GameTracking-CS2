@@ -13,8 +13,10 @@ var ItemContextMenu = ( function (){
 			p.FindChild( "Name" ).text = name;
 			p.SetPanelEvent( "onactivate", function () {
 				voteFunc();
-				$.DispatchEvent( 'UIPopupButtonClicked', '' );
-				$.DispatchEvent( 'CSGOMainMenuResumeGame' );
+				$.DispatchEvent('UIPopupButtonClicked', '');
+				                                                                                                                            
+				                                                                                                                      
+				$.DispatchEventAsync( 0.0, 'CSGOMainMenuResumeGame' );
 			});
 		}
 
@@ -86,7 +88,7 @@ var ItemContextMenu = ( function (){
 		{
 			GameInterfaceAPI.ConsoleCommand( 'callvote ' + voteCommand );
 			$.DispatchEvent( 'ContextMenuEvent', '' );
-			$.DispatchEvent( 'CSGOMainMenuResumeGame' );
+			$.DispatchEventAsync( 0.0, 'CSGOMainMenuResumeGame' );
 		};
 		this.enabled = true;
 	}

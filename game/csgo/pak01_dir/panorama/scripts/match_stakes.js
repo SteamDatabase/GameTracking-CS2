@@ -4,7 +4,7 @@
 /// <reference path="mock_adapter.ts" />
 var MatchStakes;
 (function (MatchStakes) {
-    var m_elMatchStakes = undefined;
+    let m_elMatchStakes = undefined;
     function _msg(msg) {
     }
     function _GetRootPanel() {
@@ -22,17 +22,6 @@ var MatchStakes;
         }
         return m_elMatchStakes;
     }
-    function ShowWithScoreboard(bShow = true) {
-        const type = MockAdapter.GetPlayerCompetitiveRankType(GameStateAPI.GetLocalPlayerXuid());
-        if (type !== 'Premier')
-            return;
-        let elMatchStakes = _GetMatchStakesPanel();
-        if (!elMatchStakes.Data().teamIntroInProgress) {
-            elMatchStakes.style.visibility = bShow ? 'visible' : 'collapse';
-            elMatchStakes.SetHasClass('scoreboard', bShow);
-        }
-    }
-    MatchStakes.ShowWithScoreboard = ShowWithScoreboard;
     function EndTeamIntro() {
         const type = MockAdapter.GetPlayerCompetitiveRankType(GameStateAPI.GetLocalPlayerXuid());
         if (type !== 'Premier')
@@ -73,7 +62,7 @@ var MatchStakes;
         let arrRating = RatingEmblem.SplitRating(rankStats.score);
         majorRating = arrRating[0];
         let tier = Math.floor(+majorRating / 5.0);
-        var tierColor = ratingParticleControls.colorConvert(tier);
+        let tierColor = RatingParticleControls.ColorConvert(tier);
         if (promotionState === 'relegation') {
             ParticleEffect = "particles/ui/premier_ratings_matchstakes_relegation.vpcf";
         }
@@ -112,5 +101,3 @@ var MatchStakes;
     }
     MatchStakes.StartTeamIntro = StartTeamIntro;
 })(MatchStakes || (MatchStakes = {}));
-(function () {
-})();

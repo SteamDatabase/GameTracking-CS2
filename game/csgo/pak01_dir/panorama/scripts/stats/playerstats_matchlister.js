@@ -13,21 +13,6 @@ var MatchLister = ( function ()
 		elPanel.AddClass( 'no-data' );
 		elPanel.AddClass( 'stats-loading' );
 		_PopulateDummy( elPanel );
-
-		                            
-		                                                                                
-		                      
-		    
-		   	                                   
-		   	                                                                                                           
-		   	                                                            
-		   	                           
-		   	                                                                                                              
-		   	                                                                              
-
-		   	                                                             
-		   	                                                             
-		    
 	}
 
 	function _GetDateKeyFromTimestamp ( timestamp )

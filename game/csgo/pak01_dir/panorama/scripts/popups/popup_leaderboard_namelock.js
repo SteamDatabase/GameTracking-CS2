@@ -10,7 +10,7 @@ var LeaderboardNameLock;
     function Submit() {
         let entry = $('#TextEntry').text;
         LeaderboardsAPI.SetLocalPlayerLeaderboardSafeName(entry);
-        m_timeoutHandler = $.Schedule(15, function () {
+        m_timeoutHandler = $.Schedule(15, () => {
             UiToolkitAPI.ShowGenericPopup('Generic', $.Localize('#leaderboard_namelock_submission_timeout'), '');
             $.DispatchEvent('UIPopupButtonClicked', '');
         });
@@ -18,13 +18,6 @@ var LeaderboardNameLock;
         $.GetContextPanel().AddClass('submitted');
     }
     LeaderboardNameLock.Submit = Submit;
-    function _Validate() {
-        if ($('#submit') === null)
-            return;
-        let entry = $('#TextEntry').text;
-        let bSuccess = LeaderboardsAPI.PrefilterLeaderboardSafeName(entry);
-        $.GetContextPanel().SetHasClass('results-panel-valid', bSuccess);
-    }
     function Cancel() {
         $.DispatchEvent('UIPopupButtonClicked', '');
     }
@@ -36,14 +29,13 @@ var LeaderboardNameLock;
         UiToolkitAPI.ShowGenericPopup('Generic', $.Localize('#leaderboard_namelock_submission_success'), '');
         $.DispatchEvent('UIPopupButtonClicked', '');
     }
-    LeaderboardNameLock.Success = Success;
     function OpenProfile() {
         SteamOverlayAPI.ShowUserProfilePage(MyPersonaAPI.GetXuid());
         $.DispatchEvent('ContextMenuEvent', '');
     }
     LeaderboardNameLock.OpenProfile = OpenProfile;
+    {
+        $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', Init);
+        $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_SetPlayerLeaderboardSafeName', Success);
+    }
 })(LeaderboardNameLock || (LeaderboardNameLock = {}));
-(function () {
-    $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', LeaderboardNameLock.Init);
-    $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_SetPlayerLeaderboardSafeName', LeaderboardNameLock.Success);
-})();

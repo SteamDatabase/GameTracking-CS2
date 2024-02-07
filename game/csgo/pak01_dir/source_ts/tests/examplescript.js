@@ -1,29 +1,28 @@
-import { Instance } from "domains/serverpointentity";
-// Domain.OnHook( "Input", ( sInput, value ) =>
-// {
-//     Domain.DebugLog( `Hello from TypeScript. (${sInput},${value})` );
-// } );
-Instance.Log("DOMAIN");
-Instance.Log(JSON.stringify(Object.keys(Instance)));
-Instance.Log(Instance.GameMode().toString());
-Instance.Log(Instance.GameType().toString());
-Instance.Log(Instance.EntFireBroadcast.length.toString());
+import { Instance } from "serverpointentity";
+// Run me with ent_create point_script { "script" "source_ts/tests//examplescript.vts" }
+Instance.Msg("DOMAIN");
+Instance.Msg(JSON.stringify(Object.keys(Instance)));
+Instance.Msg(Instance.GameMode().toString());
+Instance.Msg(Instance.GameType().toString());
+Instance.Msg(Instance.EntFireBroadcast.length.toString());
 Instance.InitialActivate(() => {
-    Instance.Log("InitialActivate");
+    Instance.Msg("InitialActivate");
     var pawn = Instance.GetPlayerPawn(0);
     if (pawn) {
-        Instance.Log("got pawn");
-        var controller = pawn.GetController();
+        Instance.Msg("got pawn");
+        var controller = pawn.GetOriginalController();
         if (controller) {
-            Instance.Log("got controller");
+            Instance.Msg("got controller");
             var score = controller.GetScore();
-            Instance.Log("score: " + score.toString());
+            Instance.Msg("score: " + score.toString());
+            var slot = controller.GetPlayerSlot();
+            Instance.Msg("slot: " + slot.toString());
         }
         else {
-            Instance.Log("no controller");
+            Instance.Msg("no controller");
         }
     }
     else {
-        Instance.Log("no pawn");
+        Instance.Msg("no pawn");
     }
 });
