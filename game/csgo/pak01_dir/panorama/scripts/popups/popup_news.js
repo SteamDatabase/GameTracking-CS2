@@ -24,7 +24,7 @@ var PopupNews;
                 link += '?';
             else
                 link += '&';
-            link += 'clientview=1';
+            link += 'is_embedded_in_client=1';
             elBlogHTML.SetURL(link);
         }
     }
@@ -33,6 +33,11 @@ var PopupNews;
         $.DispatchEvent('UIPopupButtonClicked', '');
     }
     PopupNews.Close = Close;
+    function _HTMLOpenPopupLink(elPanel, sLinkUrl) {
+        SteamOverlayAPI.OpenUrlInOverlayOrExternalBrowser(sLinkUrl);
+        $.DispatchEvent('UIPopupButtonClicked', '');
+        $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.mainmenu_press_home', 'MOUSE');
+    }
     function _HTMLFinishRequest() {
         $.Schedule(0.3, () => {
             let elHTML = $.GetContextPanel().FindChildTraverse('BlogHTML');
@@ -42,4 +47,5 @@ var PopupNews;
         });
     }
     $.RegisterEventHandler("HTMLFinishRequest", $.GetContextPanel(), _HTMLFinishRequest);
+    $.RegisterEventHandler("HTMLOpenPopupLink", $.GetContextPanel(), _HTMLOpenPopupLink);
 })(PopupNews || (PopupNews = {}));

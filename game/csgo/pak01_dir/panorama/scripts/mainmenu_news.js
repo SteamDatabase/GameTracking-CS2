@@ -19,17 +19,9 @@ var NewsPanel;
             let elEntry = $.CreatePanel('Panel', elLister, 'NewEntry' + i, {
                 acceptsinput: true
             });
-            let lastReadItem = GameInterfaceAPI.GetSettingString('ui_news_last_read_link');
-            let popupEnable = false;
-            if (!foundFirstNewsItem && !item.categories.includes('Minor') && popupEnable) {
+            if (!foundFirstNewsItem && !item.categories.includes('Minor')) {
                 foundFirstNewsItem = true;
                 elEntry.AddClass('new');
-                if (item.link != lastReadItem) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_news.xml', 'date=' + item.date + "&" +
-                        'title=' + item.title + "&" +
-                        'link=' + item.link);
-                }
-                GameInterfaceAPI.SetSettingString('ui_news_last_read_link', item.link);
             }
             elEntry.BLoadLayoutSnippet('featured-news-full-entry');
             let elImage = elEntry.FindChildInLayoutFile('NewsHeaderImage');

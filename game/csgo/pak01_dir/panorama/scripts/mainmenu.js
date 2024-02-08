@@ -4,6 +4,7 @@
 /// <reference path="common/licenseutil.ts" />
 /// <reference path="common/promoted_settings.ts" />
 /// <reference path="popups/popup_acknowledge_item.ts" />
+/// <reference path="new_news_entry_check.ts" />
 /// <reference path="inspect.ts" />
 /// <reference path="avatar.ts" />
 /// <reference path="vanity_player_info.ts" />
@@ -179,6 +180,7 @@ var MainMenu;
         m_backgroundMapSoundHandle = UiToolkitAPI.PlaySoundEvent(soundName);
     }
     function _RegisterOnShowEvents() {
+        NewNewsEntryCheck.RegisterForRssReceivedEvent();
         if (!_m_LobbyMatchmakingSessionUpdateEventHandler && !GameStateAPI.IsLocalPlayerPlayingMatch()) {
             _m_LobbyMatchmakingSessionUpdateEventHandler = $.RegisterForUnhandledEvent("PanoramaComponent_Lobby_MatchmakingSessionUpdate", _LobbyPlayerUpdated);
             _m_LobbyPlayerUpdatedEventHandler = $.RegisterForUnhandledEvent("PanoramaComponent_PartyList_RebuildPartyList", _LobbyPlayerUpdated);
@@ -299,6 +301,7 @@ var MainMenu;
         _StopFetchingTournamentData();
     }
     function _UnregisterShowEvents() {
+        NewNewsEntryCheck.UnRegisterForRssReceivedEvent();
         if (_m_LobbyMatchmakingSessionUpdateEventHandler) {
             $.UnregisterForUnhandledEvent("PanoramaComponent_Lobby_MatchmakingSessionUpdate", _m_LobbyMatchmakingSessionUpdateEventHandler);
             _m_LobbyMatchmakingSessionUpdateEventHandler = null;

@@ -60,15 +60,14 @@ const gArmsRaceCategories = [
 if (Instance.IsServer()) {
     const Server = Instance;
     let bFirstThink = true;
-    let bFirstThinkAfterConnected = false;
     const armsRaceSequence = [];
     initArmsRaceSequence();
     let nWinningPlayer = -1;
     let hKnifeTierMusicCue = null;
     let nCurrentLeader = null;
+    let nextThinkCallbacks = [];
     Server.OnRestartMatch(() => {
         bFirstThink = true;
-        bFirstThinkAfterConnected = false;
         initArmsRaceSequence();
         nWinningPlayer = -1;
         for (let i = 0; i < MAX_PLAYERS; ++i) {
@@ -98,19 +97,9 @@ if (Instance.IsServer()) {
             return;
         if (Server.IsFreezePeriod())
             return;
-        if (bFirstThinkAfterConnected) {
-            bFirstThinkAfterConnected = false;
-            for (let i = 0; i < MAX_PLAYERS; ++i) {
-                let controller = Server.GetPlayerController(i);
-                if (controller?.IsObserving()) {
-                    let observer = controller.GetObserver();
-                    let nObserverMode = observer.GetObserverMode();
-                    if (nObserverMode != OBS_MODE_CHASE && nObserverMode != OBS_MODE_IN_EYE)
-                        observer.SetObserverMode(OBS_MODE_CHASE);
-                }
-            }
-            Server.UnfreezePlayers();
-        }
+        for (const cb of nextThinkCallbacks)
+            cb();
+        nextThinkCallbacks.length = 0;
         if (Server.IsWarmupPeriod() && Server.GetGameTime() >= Server.GetWarmupPeriodEndTime() - 1) // This 1 second is to counter the fudging done in CCSGO_HudMatchAlerts::ShowWarmupAlertPanel
          {
             Server.FreezePlayers();
@@ -164,7 +153,18 @@ if (Instance.IsServer()) {
             else {
                 Server.BeginWarmupPeriod();
             }
-            bFirstThinkAfterConnected = true;
+            nextThinkCallbacks.push(() => {
+                for (let i = 0; i < MAX_PLAYERS; ++i) {
+                    let controller = Server.GetPlayerController(i);
+                    if (controller?.IsObserving()) {
+                        let observer = controller.GetObserver();
+                        let nObserverMode = observer.GetObserverMode();
+                        if (nObserverMode != OBS_MODE_CHASE && nObserverMode != OBS_MODE_IN_EYE)
+                            observer.SetObserverMode(OBS_MODE_CHASE);
+                    }
+                }
+                Server.UnfreezePlayers();
+            });
         }
         const player = controller.GetPlayer();
         if (player) {
@@ -186,10 +186,9 @@ if (Instance.IsServer()) {
         const scorerController = scorerPlayer?.GetOriginalController();
         if (victimPPlayer && victimController && scorerPlayer && scorerController) {
             if (mp_teammates_are_enemies() || scorerPlayer.GetTeamNumber() != victimPPlayer.GetTeamNumber()) {
-                const activeWeapon = scorerPlayer.GetActiveWeapon();
                 const nScorerProgress = getArmsRaceProgress(scorerController);
                 const nVictimProgress = getArmsRaceProgress(victimController);
-                if (activeWeapon && nScorerProgress < armsRaceSequence.length) {
+                if (nScorerProgress < armsRaceSequence.length) {
                     const weapon = takeDamageInfo.GetWeapon();
                     const weaponData = weapon?.GetData();
                     const weaponType = weaponData ? weaponData.GetType() : 19 /* ECSWeaponType.WEAPONTYPE_UNKNOWN */;
@@ -213,7 +212,8 @@ if (Instance.IsServer()) {
                                 nWinningPlayer = scorerController.GetPlayerSlot();
                             }
                             else {
-                                giveCorrectGun(scorerPlayer, bChangeWeapon);
+                                // Don't remove current gun immediately. There might be additional bullets to process (shotguns)
+                                nextThinkCallbacks.push(() => giveCorrectGun(scorerPlayer, bChangeWeapon));
                             }
                         }
                     }
