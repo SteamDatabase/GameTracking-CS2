@@ -148,6 +148,8 @@ var ItemInfo;
         }
         ;
         oSettings.loadoutSlot = GameInterfaceAPI.GetSettingString('ui_vanitysetting_loadoutslot_' + oSettings.team);
+        if (!JSON.parse(LoadoutAPI.GetLoadoutSlotNames(false)).includes(oSettings.loadoutSlot))
+            oSettings.loadoutSlot = '';
         oSettings.weaponItemId = LoadoutAPI.GetItemID(oSettings.team, oSettings.loadoutSlot);
         if (!ItemInfo.IsWeapon(oSettings.weaponItemId)) {
             const randomResult = RollRandomLoadoutSlotAndWeapon(oSettings.team);

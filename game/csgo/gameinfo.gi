@@ -48,6 +48,12 @@
 		"LvConfig"	"0"
 	}
 	
+	InputSystem
+	{
+		"ButtonCodeIsScanCode"		"1"
+		"LockButtonCodeIsScanCode"	"1"
+	}
+
 	pulse
 	{
 		"pulse_enabled"					"1"

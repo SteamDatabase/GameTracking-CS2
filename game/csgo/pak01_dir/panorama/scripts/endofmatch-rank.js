@@ -236,6 +236,8 @@ var EOM_Rank;
                 elParticleEffect.StartParticles();
             }, 3);
             _AnimSequenceNext(() => {
+                if (!_m_cP || !_m_cP.IsValid())
+                    return;
                 const xpToXpTrailEvent = xpTrailXpPosition > 5000 && xpTrailXpPosition <= 10000 ? xpTrailXpPosition - 5000 : -1;
                 _PlaceXpTrail(xpToXpTrailEvent);
             });

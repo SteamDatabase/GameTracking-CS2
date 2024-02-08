@@ -366,6 +366,7 @@ var InspectModelImage;
         };
         const panel = _LoadInspectMap(itemId, oSettings);
         _SetParticlesBg(panel);
+        _TransitionCamera(panel, 'gloves', true);
         return panel;
     }
     function _InitNametagScene(itemId) {
