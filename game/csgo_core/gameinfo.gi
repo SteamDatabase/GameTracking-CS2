@@ -103,6 +103,7 @@
 	Panorama
 	{
 		"AllowGlobalPanelContext" "1"
+		"HtmlUserAgent" "CSGO Client"
 		"AllowCustomGameUI" 0
 	}
 

@@ -53,6 +53,7 @@ var PopupAcceptMatch;
             m_jsTimerUpdateHandle = $.Schedule(4.5, _OnNqmmAutoReadyUp);
         }
         _PopulatePlayerList();
+        $.DispatchEvent('MuteStreamPanel');
     }
     PopupAcceptMatch.Init = Init;
     function _PopulatePlayerList() {

@@ -7,57 +7,69 @@
 		<include src="s2r://panorama/styles/mainmenu_stream.vcss_c" />
 	</styles>
 	<scripts>
-		<include src="s2r://panorama/scripts/mainmenu_stream.vjs_c" />
+		<include src="s2r://panorama/scripts/mainmenu_stream.vts_c" />
 	</scripts>
 	<snippets>
 		<snippet name="stream-panel">
-			<Panel class="width-fit-children height-fit-children top-bottom-flow">
-				<Panel class="news-panel-navbar">
-					<Label id="Title" class="news-panel-streamfeed-title" html="true" text="#CSGO_Watch_Info_live" />
-					<Panel class="content-navbar__extra-buttons">
-						<Button id="id-close-btn" class="IconButton">
-							<Image src="s2r://panorama/images/icons/ui/exit.vsvg" />
-						</Button>
-						<Button id="id-full-size-btn" class="IconButton">
-							<Image src="s2r://panorama/images/icons/ui/expand_stream.vsvg" />
-						</Button>
-						<Button id="id-minimize-btn" class="IconButton">
-							<Image src="s2r://panorama/images/icons/ui/minimize_stream.vsvg" />
-						</Button>
+			<Panel class="stream-container">
+				<Panel>
+					<HTML id="StreamHTML" acceptsinput="false" acceptsfocus="false" focusonhover="false" mousetracking="false" url="about:blank" hittest="false" />
+					<Panel class="steam-controls-container">
+						<Panel class="stream-actions-bar">
+							<Button id="id-close-btn" class="IconButton">
+								<Image src="s2r://panorama/images/icons/ui/exit.vsvg" />
+							</Button>
+							<Panel class="stream-actions-bar--right">
+								<Button id="id-popout-reset-btn" class="IconButton">
+									<Image src="s2r://panorama/images/icons/ui/popout_reset.vsvg" />
+								</Button>
+								<Button id="id-popout-btn" class="IconButton">
+									<Image src="s2r://panorama/images/icons/ui/popout.vsvg" />
+								</Button>
+								<Button id="id-full-size-btn" class="IconButton">
+									<Image src="s2r://panorama/images/icons/ui/expand_video.vsvg" />
+								</Button>
+								<Button id="id-minimize-btn" class="IconButton">
+									<Image src="s2r://panorama/images/icons/ui/shrink_video.vsvg" />
+								</Button>
+							</Panel>
+						</Panel>
+						<Panel id="NavBarWatchExternalExtraButtons" class="news-panel-streamfeed__navbar__btns">
+							<Button id="NavBarWatchExternalG" class="IconButton ExternalStreamButton" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XG&apos; );">
+								<Image class="WideLogoStreamGOTV" src="s2r://panorama/images/browser/streamcstv.vsvg" texturewidth="-1" textureheight="26" />
+							</Button>
+							<Button id="NavBarWatchExternalF" class="IconButton ExternalStreamButton TextFullbright visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XF&apos; );">
+								<Label html="true" text="#CSGO_Watch_External_FaceIT" />
+							</Button>
+							<Button id="NavBarWatchExternalA" class="IconButton ExternalStreamButton visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XA&apos; );">
+								<Image class="WideLogoBlastTV" src="s2r://panorama/images/tournaments/events/tournament_logo_18.vsvg" texturewidth="-1" textureheight="18" />
+							</Button>
+							<Button id="NavBarWatchExternalT" class="IconButton ExternalStreamButton visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XT&apos; );">
+								<Image class="WideLogoTwitchTV" src="s2r://panorama/images/browser/twitch.vsvg" texturewidth="-1" textureheight="18" />
+							</Button>
+							<Button id="NavBarWatchExternalS" class="IconButton ExternalStreamButton visible-if-not-perfectworld" onactivate="SteamOverlayAPI.OpenExternalBrowserURL( &apos;https://steam.tv&apos; );">
+								<Image class="WideLogoSteamTV" src="s2r://panorama/images/browser/steamtv.vsvg" texturewidth="-1" textureheight="18" />
+							</Button>
+							<Button id="NavBarWatchExternalB" class="IconButton ExternalStreamButton TextFullbright visible-if-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XB&apos; );">
+								<Label html="true" text="#CSGO_Watch_External_Bilibili" />
+							</Button>
+							<Button id="NavBarWatchExternalY" class="IconButton ExternalStreamButton TextFullbright visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XY&apos; );">
+								<Label html="true" text="#CSGO_Watch_External_YouTube" />
+							</Button>
+							<Button id="NavBarWatchExternal1btn" class="IconButton">
+								<Image src="s2r://panorama/images/icons/ui/link.vsvg" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser();" />
+							</Button>
+							<Label id="NavBarWatchExternal1txt" html="true" text="#CSGO_Watch_External_Stream" />
+						</Panel>
+						<Panel class="news-panel-streamfeed__navbar">
+							<Button id="StreamVolumeMute" class="IconButton">
+								<Image id="VolumeImage" src="s2r://panorama/images/icons/ui/unmuted.vsvg" />
+							</Button>
+							<Slider class="news-panel-streamfeed-volumeslider" direction="horizontal" id="VolumeSlider" />
+						</Panel>
 					</Panel>
 				</Panel>
-				<HTML id="StreamHTML" acceptsinput="false" acceptsfocus="false" focusonhover="false" url="about:blank" hittest="false" />
-				<Panel class="news-panel-streamfeed__navbar">
-					<Button id="StreamVolumeMute" class="IconButton">
-						<Image id="VolumeImage" src="s2r://panorama/images/icons/ui/unmuted.vsvg" />
-					</Button>
-					<Slider class="news-panel-streamfeed-volumeslider" direction="horizontal" id="VolumeSlider" />
-					<Panel class="news-panel-streamfeed-spacer" />
-					<Panel id="NavBarWatchExternalExtraButtons" class="content-navbar__extra-buttons">
-						<Button id="NavBarWatchExternalG" class="IconButton ExternalStreamButton" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XG&apos; );">
-							<Image class="WideLogoStreamGOTV" src="s2r://panorama/images/browser/streamgotv.vsvg" texturewidth="-1" textureheight="26" />
-						</Button>
-						<Button id="NavBarWatchExternalY" class="IconButton ExternalStreamButton TextFullbright visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XY&apos; );">
-							<Label html="true" text="#CSGO_Watch_External_YouTube" />
-						</Button>
-						<Button id="NavBarWatchExternalF" class="IconButton ExternalStreamButton TextFullbright visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XF&apos; );">
-							<Label html="true" text="#CSGO_Watch_External_FaceIT" />
-						</Button>
-						<Button id="NavBarWatchExternalT" class="IconButton ExternalStreamButton visible-if-not-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XT&apos; );">
-							<Image class="WideLogoTwitchTV" src="s2r://panorama/images/browser/twitch.vsvg" texturewidth="-1" textureheight="18" />
-						</Button>
-						<Button id="NavBarWatchExternalS" class="IconButton ExternalStreamButton visible-if-not-perfectworld" onactivate="SteamOverlayAPI.OpenExternalBrowserURL( &apos;https://steam.tv&apos; );">
-							<Image class="WideLogoSteamTV" src="s2r://panorama/images/browser/steamtv.vsvg" texturewidth="-1" textureheight="18" />
-						</Button>
-						<Button id="NavBarWatchExternalB" class="IconButton ExternalStreamButton TextFullbright visible-if-perfectworld" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser( &apos;XB&apos; );">
-							<Label html="true" text="#CSGO_Watch_External_Bilibili" />
-						</Button>
-						<Button id="NavBarWatchExternal1btn" class="IconButton">
-							<Image src="s2r://panorama/images/icons/ui/link.vsvg" onactivate="EmbeddedStreamAPI.OpenStreamInExternalBrowser();" />
-						</Button>
-						<Label id="NavBarWatchExternal1txt" html="true" text="#CSGO_Watch_External_Stream" />
-					</Panel>
-				</Panel>
+				<Label id="id-stream-title" class="stream-title-bar stratum-regular-condensed fontSize-m" text="{s:title}" />
 			</Panel>
 		</snippet>
 	</snippets>

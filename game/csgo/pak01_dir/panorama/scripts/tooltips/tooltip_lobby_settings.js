@@ -129,14 +129,15 @@ var TooltipLobby;
     }
     function _SetMode() {
         let elGameModeTitle = $.GetContextPanel().FindChildInLayoutFile('LobbyTooltipGameMode');
-        elGameModeTitle.FindChild('SettingText').text = $.Localize('#SFUI_GameMode' + m_GameSettings.mode);
+        elGameModeTitle.FindChild('SettingText').text = $.Localize('#SFUI_GameMode' + m_GameSettings.mode_ui);
         elGameModeTitle.FindChild('SettingImage').SetImage('file://{images}/icons/ui/' + m_GameSettings.mode + '.svg');
         elGameModeTitle.FindChild('SettingImage').SetHasClass('tint', m_GameSettings.mode !== "competitive");
     }
     function _SetMaps() {
         if (!m_GameSettings.mapgroupname)
             return;
-        let mapsList = m_GameSettings.mapgroupname.split(',');
+        let mapsList;
+        mapsList = m_GameSettings.mapgroupname.split(',');
         let elMapsSection = $.GetContextPanel().FindChildInLayoutFile('LobbyTooltipMapsList');
         elMapsSection.RemoveAndDeleteChildren();
         $.CreatePanel('Label', elMapsSection, 'LobbyMapsListTitle', {
@@ -146,13 +147,25 @@ var TooltipLobby;
         for (let element of mapsList) {
             let p = $.CreatePanel('Panel', elMapsSection, element);
             p.BLoadLayoutSnippet("SettingsEntry");
-            let strMapText = $.Localize(GameTypesAPI.GetMapGroupAttribute(element, 'nameID'));
+            let strMapText = '';
             if (element === 'mg_lobby_mapveto' && m_GameOptions && m_GameOptions.challengekey) {
                 strMapText = $.Localize("#SFUI_Lobby_LeaderMatchmaking_Type_PremierPrivateQueue");
             }
+            else if (m_GameSettings.mode === "skirmish") {
+                strMapText = $.Localize(GameTypesAPI.GetMapGroupAttribute('mg_' + m_GameSettings.map, 'nameID'));
+            }
+            else {
+                strMapText = $.Localize(GameTypesAPI.GetMapGroupAttribute(element, 'nameID'));
+            }
             p.FindChildInLayoutFile('SettingText').text = strMapText;
-            let maps = GameTypesAPI.GetMapGroupAttributeSubKeys(element, 'maps').split(',');
-            p.FindChildInLayoutFile('SettingImage').SetImage('file://{images}/map_icons/map_icon_' + maps[0] + '.svg');
+            let iconName;
+            if (m_GameSettings.mode === "skirmish") {
+                iconName = m_GameSettings.map;
+            }
+            else {
+                iconName = GameTypesAPI.GetMapGroupAttributeSubKeys(element, 'maps').split(',')[0];
+            }
+            p.FindChildInLayoutFile('SettingImage').SetImage('file://{images}/map_icons/map_icon_' + iconName + '.svg');
         }
     }
     $.RegisterForUnhandledEvent("PanoramaComponent_Lobby_MatchmakingSessionUpdate", Init);
