@@ -295,6 +295,7 @@ var RankUpRedemptionStore;
     }
     RankUpRedemptionStore.OnRedeem = OnRedeem;
     function _RedemptionTimedOut() {
+        m_timeoutScheduleHandle = null;
         UiToolkitAPI.ShowGenericPopup($.Localize('#rankup_redemption_store_timeout_title'), $.Localize('#rankup_redemption_store_timeout_desc'), '');
         _EnableStore();
     }
