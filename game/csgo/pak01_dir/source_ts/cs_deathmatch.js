@@ -22,9 +22,7 @@ const mp_dm_bonus_length_max = () => Instance.Get_mp_dm_bonus_length_max();
 const mp_dm_kill_base_score = () => Instance.Get_mp_dm_kill_base_score();
 const mp_dm_bonus_percent = () => Instance.Get_mp_dm_bonus_percent();
 const mp_dm_healthshot_killcount = () => Instance.Get_mp_dm_healthshot_killcount();
-// TODO: Expose enums to SourceTS
-const WEAPONTYPE_KNIFE = 0;
-const bonus_weapon_slots = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
+;
 const e_RoundEndReason = {
     Invalid_Round_End_Reason: -1,
     RoundEndReason_StillInProgress: 0,
@@ -52,9 +50,11 @@ const e_RoundEndReason = {
     Survival_Draw: 22,
     RoundEndReason_Count: 23
 };
+const bonus_weapon_slots = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
 let bFirstThink = true;
 let bFirstThinkAfterConnected = false;
 const mKillStreaks = new Map();
+const mTaserStreaks = new Map();
 if (Instance.IsServer()) {
     const Server = Instance;
     Server.OnThink(() => {
@@ -66,6 +66,7 @@ if (Instance.IsServer()) {
             Server.FreezePlayers();
             Server.BeginFreezePeriod();
             mKillStreaks.clear();
+            mTaserStreaks.clear();
         }
         if (Server.CheckGameOver())
             return;
@@ -153,7 +154,9 @@ if (Instance.IsServer()) {
         const victimPawn = Server.ToPlayer(victim);
         const scorerPawn = Server.ToPlayer(takeDamageInfo?.GetDeathScorer(victim));
         if (victimPawn) {
-            mKillStreaks.set(victimPawn.GetOriginalController().GetPlayerSlot(), 0);
+            const nVictimSlot = victimPawn.GetOriginalController().GetPlayerSlot();
+            mKillStreaks.set(nVictimSlot, 0);
+            mTaserStreaks.set(nVictimSlot, 0);
         }
         if (scorerPawn && victimPawn) {
             if (mp_teammates_are_enemies() || scorerPawn.GetTeamNumber() != victimPawn.GetTeamNumber()) {
@@ -173,6 +176,11 @@ if (Instance.IsServer()) {
                     const bonusWeaponData = scorerPawn.GetOriginalController()?.GetWeaponDataForLoadoutSlot(nBonusWeaponSlot);
                     if (bonusWeaponData && bonusWeaponData.GetName() === weaponData.GetName()) {
                         nBonus = GetBonusWeaponScore(nScore);
+                    }
+                    else if (weaponData.GetType() == 8 /* ECSWeaponType.WEAPONTYPE_TASER */) {
+                        const nTaserStreak = (mTaserStreaks.get(nScorerSlot) || 0) + 1;
+                        mTaserStreaks.set(nScorerSlot, nTaserStreak);
+                        nBonus = nScore * (nTaserStreak - 1);
                     }
                     Server.AddScoreDM(scorerPawn, victimPawn, nScore, nBonus);
                     const assisterPawn = Server.GetKillAssister(victimPawn, scorerPawn);
@@ -221,8 +229,11 @@ if (Instance.IsServer()) {
 }
 function GetBaseWeaponScore(nWeaponType, nWeaponPrice) {
     let nScore = mp_dm_kill_base_score();
-    if (nWeaponType === WEAPONTYPE_KNIFE) {
+    if (nWeaponType === 0 /* ECSWeaponType.WEAPONTYPE_KNIFE */) {
         nScore += 10;
+    }
+    else if (nWeaponType === 8 /* ECSWeaponType.WEAPONTYPE_TASER */) {
+        nScore += 5;
     }
     else if (nWeaponPrice < 1400) {
         nScore += 2;

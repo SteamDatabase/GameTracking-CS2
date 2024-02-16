@@ -105,7 +105,6 @@
 	val_float
 	val_short
 	vtune
-	v|/Oh
 	worldname
 	w|Hc
  	% t
@@ -154,6 +153,7 @@
     Render. . . . . . . . . :%s
     Server
     Server recv margin. . . :%s (cl_tickpacket_desired_queuelength = %g)
+    bind scancode%u%s "%s" // US English key name "%s"
     g_pMaterialSystem2->FrameUpdate()
     g_pMeshSystem->FrameUpdate()
     g_pRenderDevice->Present()
@@ -257,11 +257,12 @@
  ('" 
  (08@HPX`hpx
  (08@HPX`j
- (08@HPXb
+ (08@HPXb "!
  (08@HPZ
- (08@HR
+ (08@HR "!
  (08@J
- (0X`hpz
+ (08@J "!
+ (0X`hpz "!
  (IP "%s")
  (Texture)
  (You)
@@ -362,6 +363,7 @@
  A__]
  A__^
  A__^][
+ B_I&/
  Base Class Array'
  Base Class Descriptor at (
  C>TQ
@@ -577,6 +579,7 @@
 " which is a proto3 message type.
 " which is not defined or is not an extension of "
 " which is.
+"!.]$
 "".F	
 "#GameUI_Disconnect_DeltaEntMessage
 "#GameUI_Disconnect_HLTVUnavailable
@@ -667,6 +670,8 @@
 #AppFramework_InvalidLocalFiles
 #AppFramework_OutOfMemory
 #Bidirectional_Messages_LowFrequency
+#Engine_BindByKeyNameWarning
+#Engine_BindLayoutMismatchWarning
 #Engine_NotEnoughPhysicalMemory_Body
 #Engine_NotEnoughPhysicalMemory_Title
 #Engine_UnsupportedWindowsBody
@@ -873,6 +878,7 @@ $tI(knN
 %.2f. Set playcast URL %s
 %.2f. Waiting %.2f seconds
 %.3f min
+%.3f tick %d: CurPlat %.3fms - %.3fms CmdTime (%d) = %.2fms IntoTick.  +SlowFrame %.2f = %.2f.  +%.2fms RemBefore = %d ticks + %.1fms RemAfter.  RealFrameTime=%.1fms, LateSendBudget=%.1fms
 %.3f,%.3f,%.3f,%.3f,%s,%d,%d,%d
 %0.2f, %0.2f, %0.2f, %i, %0.2f, %0.2f, %0.2f, %0.2f, %0.2f, %0.2f
 %02i/%02i %02i:%02i:%02i 
@@ -960,7 +966,6 @@ $tI(knN
 %g %g %g
 %g %g %g %g
 %g (%g): AdvanceTime ticks this frame %d, sim remain: %g
-%g tick %d: SinceTickStart %.2fms + SlowFrame %.2f = %.2f, %d ticks + %.1fms
 %g: FilterTime took target %g as time base instead of actual %g, diff %g
 %i %-15s : 
 %i %i.%i.%i.%i : %.3f min
@@ -1027,6 +1032,7 @@ $tI(knN
 %s allocation count overflow( add %llu + current %llu > max %llu )
 %s appended
 %s client
+%s code, bind name '%s' (%u), scan code '%s' (%u)
 %s down %s impdown %s impup %s frac: %.2f (%d events)
 %s is not a valid demo file
 %s is too big.  Asks for %d user commands, but our history only holds %d
@@ -1218,6 +1224,7 @@ $tI(knN
 (*VERB) not recognized
 (*d/%
 (-AVX) 
+(-z.*
 (0`hpx
 (27>?<:20./-(
 (4%I!
@@ -1432,6 +1439,7 @@ $tI(knN
 (|$@H
 (|$@I
 (|$@u
+(|$PA
 (|$PH
 (|$PI
 (|$Pt&
@@ -1608,7 +1616,6 @@ $tI(knN
 )|$ t
 )|$ u2
 )|$(D
-)|$0A
 )|$0H
 )|$@D
 )|$@E
@@ -1710,6 +1717,7 @@ $tI(knN
 , localization %s
 , max frequency %.01f %s
 , not just within "
+, positional keys are enabled
 , setpos %0.2f %0.2f %0.2f; setang %0.2f %0.2f %0.2f
 ,#Player_DisconnectReason_CompetitiveCooldown
 ,$Lcl$hI
@@ -1949,8 +1957,6 @@ $tI(knN
 ..\content
 ..om?
 .00cfg
-.5, /
-.60B;
 .7=-l
 .9GXdx
 .>PJ;I:qE>
@@ -3109,6 +3115,7 @@ $tI(knN
 /%d/full?tick=%d
 /%d/start
 /%d/start?tick=%d&tps=%.1f&map=%s&protocol=%d
+/-45*
 /0v%H
 /2GG>!B
 /8szH
@@ -3119,7 +3126,6 @@ $tI(knN
 /B9A~_
 /BNA~_
 /CPrT
-/EXlI
 /F0si
 /M9 t*M
 /R?jjU?
@@ -3141,6 +3147,7 @@ $tI(knN
 0123456789abcdefghijklmnopqrstuvwxyz
 08@HP
 08@HR
+08@J "!
 09D*0}
 09D*0} D
 09D*0}"C
@@ -3149,6 +3156,7 @@ $tI(knN
 0: run all send jobs on main thread; 1: send jobs run asynchronously (except on dedicated server); 2: send jobs asynchronously; 3: send jobs run in parallel but block to not overlap the next tick; 4: main server clients' send jobs run in parallel, then HLTV server jobs; this approximately matches pre-async profile for a single HLTV server configuration
 0=Off, 1=Surface Wireframe, 2=Transparent Wireframe
 0=Off, 1=Visualize trace from camera, 2=Visualize occlusion
+0><%>
 0><[cZUg^>
 0A\][
 0A\][H
@@ -3229,10 +3237,10 @@ $tI(knN
 1.2.11
 127.0.0.1
 130801120000Z
+15:25:56
 16777215"R
 16777215B$
 18!P+*
-19:10:30
 1;C,sEH
 1<.	/>:
 1>O\kw
@@ -3255,7 +3263,6 @@ $tI(knN
 2,.CSVCMsg_PacketEntities.alternate_baseline_t
 2,.CSVCMsg_PacketEntities.command_queue_info_t
 200000
-21(&T1
 210429000000Z
 211007000000Z
 22.CSVCMsg_PacketEntities.non_transmitted_entities_t
@@ -3263,7 +3270,7 @@ $tI(knN
 220801000000Z
 230714000000Z
 24.ProtoFlattenedSerializerField_t.polymorphic_field_t
-240214192703Z0/
+240215232816Z0/
 241009235959Z0a1
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA0
@@ -3300,6 +3307,7 @@ $tI(knN
 4	IcD
 4$u.A
 456789:;<=
+4D;5p
 4DXgu~
 4HA;p
 4HA;x
@@ -3322,6 +3330,7 @@ $tI(knN
 6GQ^h~
 6I]Dc
 6KT3c7
+6L9-T
 6OB,n_
 6YA1H
 6p7"'
@@ -3407,7 +3416,10 @@ $tI(knN
 90~_H
 92~83
 92~B3
-957TD
+952}Z
+95<(E
+95g^D
+95u}Z
 98t H
 98~(H
 98~+H
@@ -3415,7 +3427,6 @@ $tI(knN
 99~CE
 9;C,r
 9;tkH
-9=*(Z
 9=aA\E
 9>~@H
 9?=d>?
@@ -4021,23 +4032,19 @@ $tI(knN
 @.data
 @.reloc
 @08@HPX`hpx
-@08N,
 @0HcB
 @8(tR
 @8,7u
-@8-S.W
 @80t.
 @81t)@8q
 @84)u
-@857g:
-@85nTD
-@85zTD
 @87tEH
 @87ue
 @88t"A
 @88t0H
 @88t2L
 @88th
+@8=Vk4
 @8HcB
 @8i(u
 @8j(t
@@ -4120,7 +4127,7 @@ $tI(knN
 @C#e<\
 @HHcB$;B(u
 @HPX&I
-@HPX`hv
+@HPX`hvP
 @L9nHu$
 @PHcB(;B,u
 @SATAUAVAWH
@@ -4289,6 +4296,7 @@ $tI(knN
 @VWAVH
 @VWAWH
 @WATAUAWH
+@WATAUH
 @WAUAVH
 @WAUAWH
 @WAUH
@@ -4432,6 +4440,7 @@ A>pP&
 A@D	A
 A@HcI8H
 A@L;B
+AA: =!
 ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_
@@ -4473,6 +4482,7 @@ A\_^][
 A]A\]
 A]A\^[]
 A]A\^]
+A]A\_
 A]A\_[]
 A]A\_][
 A]A\_^]
@@ -4491,7 +4501,6 @@ A^A\_^[]
 A^A\_^]
 A^A\_^][
 A^A]A\
-A^A]A\]
 A^A]A\^[]
 A^A]A\^]
 A^A]A\_]
@@ -4500,7 +4509,6 @@ A^A][
 A^A]]
 A^A]^[]
 A^A]_[]
-A^A]_]
 A^A]_^[]
 A^A]_^]
 A^A]_^]H
@@ -4538,6 +4546,7 @@ A_A][]
 A_A][]H
 A_A]]
 A_A]^]
+A_A]_]
 A_A]_^
 A_A]_^[
 A_A]_^]
@@ -4857,6 +4866,7 @@ BuildFullFrameSplit LONG buildTime=%4.2fms client=%d, tick=%d, chunks=%d, chunkS
 BuildFullFrameSplit: buildTime=%4.2fms client=%d, tick=%d, chunks=%d, chunkSize=%d, total compressed size=%d
 BuildSpawnGroupLoadMessage 
 BuildVersion
+Bypass secure challenge on TV port
 B~?Nd~?
 C 98|
 C ;C$t
@@ -4940,12 +4950,12 @@ C:\buildworker\csgo_rel_win64\build\src\tier2\threaded_logger.cpp
 C<:n$
 C<;C4A
 C<HcC
-C=-cN
-C=MWN
+C==fN
+C=M|N
 C=]mN
-C=m^N
-C=mfN
-C=mjN
+C=]uN
+C=]yN
+C=}lN
 C>YPH>z
 C@H98t$H
 C@L;B
@@ -5610,7 +5620,7 @@ C\$hH
 C\$pH
 C_NetworkUtlVectorBase
 C_UtlVectorEmbeddedNetworkVar
-C`9=0
+C`9= )G
 C`9C(
 C`LcD$PH
 C`LcE
@@ -5879,6 +5889,7 @@ Current alias commands: %d
 Current resident memory: %s
 Current server access password
 Current sv_pure value is %d.
+Currently bound to '%s'
 Currently storing %d client frames, %12s bytes
 Curtime( %f )
 Custom
@@ -6119,6 +6130,7 @@ D$PM+
 D$Pf;
 D$PfA;
 D$PfH
+D$PfI
 D$Pu!M
 D$Px(A;
 D$TA;
@@ -6243,7 +6255,6 @@ D8#t	E8&
 D8#t2H
 D8#t3H
 D8$0u
-D8%v&E
 D8(t	
 D8(t!D9
 D8(t-HcO4H
@@ -6257,6 +6268,7 @@ D8(uuH
 D8*t	H
 D8,0u
 D8,8u
+D8-Y7?
 D8.uBH
 D8/u#L
 D80t	
@@ -6275,6 +6287,7 @@ D87t3
 D88t6
 D8;tAH
 D8<8u
+D8=Qi6
 D8B u
 D8B9L
 D8C0H
@@ -6313,6 +6326,7 @@ D8}?t	H
 D8~"uB
 D9	tF
 D9	~OE
+D9%#ZD
 D9&t_I
 D9&~PH
 D9(tC
@@ -6320,9 +6334,9 @@ D9(tQ
 D9(tj
 D9(~FA
 D90t=
-D95[jP
 D9;~&H
-D9>~!H
+D9=U&D
+D9>~%H
 D9>~QH
 D9>~YH
 D9@(|
@@ -6567,6 +6581,7 @@ Disconnection during connection phase. Sign-on state: %d (%s). Disconnect reason
 Dispatch clients to relay proxies: 0=never, 1=if appropriate, 2=always
 DispatchEvent( %s ) took %f msecs
 Dispatching EventAppShutdown_t {
+Display information about the specified key or button.
 DisplayMessage
 Displays list of maps.
 Displays perf statistics information
@@ -6636,6 +6651,7 @@ E>nEA
 E@Lc{ J
 EDemoCommands
 EH*?H
+EH9=-7Z
 EHD9 uCL
 EHH;EPt
 EHHcI
@@ -6699,6 +6715,7 @@ Enable close captioning.
 Enable delta entity bit stream cache
 Enable floating point exceptions to find bugs
 Enable fog
+Enable framerate-related warnings, such as sv_long_frame_ms.  Disabling warnings is useful when running in situations such a debug where a slow frame rate is expected
 Enable instanced baselines. Saves network overhead.
 Enable instant replay recording.
 Enable new client clock synchronization strategy that tries to achieve a certain client recv margin
@@ -6896,6 +6913,7 @@ ExtensionRangeOptions
 Extensions in proto3 are only allowed for defining options.
 Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend a non-lite type to contain a lite type, but the reverse is allowed.
+Extra arguments given after name
 E|$@L
 F	@t#
 F	t,@
@@ -6995,6 +7013,7 @@ Failed to serialize one usercommand?
 Failed to set network config: %s
 Failed to write file %s, configFileType %d, nSlot %d
 False
+Feb 15 2024
 February
 Field "
 Field "$0" uses reserved number $1.
@@ -7147,28 +7166,32 @@ G fA;
 G fE;
 G$+G 
 G$+G(f
-G%%N>
-G%)T>
-G%9I>
-G%=O>
-G%AU>
-G%QJ>
-G%UP>
-G%iK>
+G%	V>
+G%!W>
+G%%	B
+G%1L>
+G%5R>
+G%IM>
+G%MS>
+G%aN>
+G%eT>
 G%llx,
-G%mQ>
+G%yO>
+G%}U>
 G(Lc1H
 G(fD;
 G0HcH
 G2*&#!
-G5B>D
+G5DJB
+G5RHD
+G5j]@
 G8$7u
 G89D$`t
 G8D8`au
 G;$.|
-G=3[@
-G=<3E
-G=OV>
+G=/X>
+G=l=E
+G=xJB
 G@9D$`t
 G@L;D$hu
 GAMEBIN
@@ -7529,18 +7552,15 @@ H8t	D
 H9(t8
 H9(tm
 H9+t	H
-H9-WF7
 H9/t	H
 H90t-H
 H92tBA
-H95"	
-H95J;3
-H95KhS
 H97t	H
 H97u+A
 H98t6H
 H99tjH
 H9;t	H
+H9=AD6
 H9A s
 H9A u)M
 H9AHu
@@ -8119,7 +8139,7 @@ Ic}0;
 IdempotencyLevel
 Idle (%s)
 IdleSleep
-If a server frame takes longer than N ms, complain about it.  (Dedicated server only.)
+If a server frame takes longer than N ms, complain about it.  (Dedicated server only.)  See also engine_enable_frametime_warnings.
 If in replay, jumps back to live
 If non-zero, client binds port to specific address.  Usually you should leave this blank to use a different random system-assigned port for each connection.
 If set to 1, the server calculates data and fills packets to bots. Used for perf testing.
@@ -8129,6 +8149,7 @@ If set to 1, the server will print a message whenever a client is verifying a CR
 If set to 2, the server will force all client files to come from Steam (and it will not load pure_server_whitelist.txt).
 If set, only members of Steam group will be able to join the server when it's empty, public people will be able to join the server only if it has players.
 If set, whenever a game ends, if the total memory used by the server is greater than this # of megabytes, the server will exit.
+If the binding doesn't work and you're not using a US English keyboard, you should try:
 If the clock offset is less than this amount (in milliseconds), then no clock correction is applied.
 If true when log when a query is blocked (can cause very large log files)
 IfA9,
@@ -8199,6 +8220,7 @@ Intentionally vague touch behavior for %p
 InterlockedFlushSList
 Interp
 Interpolate entities on the client.
+Interpreting bind command as:
 Interpreting non ascii codepoint %d.
 Interval time in seconds to write full updates to demo.
 Interval_per_tick %f out of range [%f to %f]
@@ -8267,6 +8289,7 @@ Jan 31 2024
 January
 Javanese
 JiYMm
+Joystick
 Jumping to random tick %d (%.2f min)
 JustInTime Resource Spawn Group
 JustInTimeManifest
@@ -8307,6 +8330,7 @@ Kick a player by userid or uniqueid, with a message.
 Kick a previously connected player with the same steamID if a replacement comes along
 Known Peer State "%s"
 Known by handlers: 
+Kt4_L
 KtLcCp
 K}*n:	
 K}udN
@@ -8536,29 +8560,28 @@ L+t$8
 L+} f
 L9 t!
 L9#t	H
+L9%eR>
 L9'uyD
-L9-]AP
+L9-MPP
 L90u2
 L92tDA
 L93t	H
-L95"'N
-L95#p3
-L95++I
-L95+[I
-L95;#I
-L95K0F
-L95K7I
-L95[bI
-L95[wE
-L95{8M
-L95{LI
-L95{nI
-L95|RW
+L95+2I
+L95;*I
+L95;?F
+L95;FI
+L95KqI
+L95kGM
+L95k[I
+L95k}I
+L95s#N
+L95sEN
+L95{wI
 L98t^D9=
 L9;t	H
 L9;u	H
-L9=Jm=
-L9=nB<
+L9=>C<
+L9=i(C
 L9?t	H
 L9@ s
 L9BHA
@@ -8631,7 +8654,7 @@ L9}`t
 L9}gt
 L9}ot
 L9}wt
-L;5w	
+L;5T	
 L;A r
 L;EPL
 L;Q s
@@ -8798,6 +8821,7 @@ Loading map "%s" (addon '%s')
 Local IP %s:%i, KB/sec In %.1f, Out %.1f
 Local Player
 Local Slots %i, Spectators %i, Proxies %i
+Local key name '%s' (can differ from the bind name%s)
 LocalFree
 LocaleNameToLCID
 Localize_001
@@ -9045,6 +9069,7 @@ Miscellaneous marker 0x%02x, length %u
 Mismatched CTier2AppSystemDict::SetAllowAddonChanges!!!
 Mismatched { } braces in command line arguments
 Missing Huffman code table entry
+Missing button or key name
 Missing field: FileDescriptorProto.name.
 Missing name.
 Ml$<E;
@@ -9057,6 +9082,7 @@ Mongolian
 MountAddon: Failed to find ADDONS search path.
 MountAddonSearchPaths: Failed to find CONTENTADDONS search path.
 Mounting addon '%s'
+Mouse
 Mouse Control
 Moves the camera position + orientation to the named entity
 Moves the camera position + orientation to the specified position
@@ -9152,6 +9178,7 @@ Networking
 Networking/Entity Data Size
 New_Tai_Lue
 No # necessary
+No %s found matching '%s'
 No Active SourceTV servers found
 No HLTV server running
 No SteamGameServer
@@ -9290,6 +9317,7 @@ Options
 Ordered constructor wrapped type has no default constructor.
 Oriya
 Osmanya
+Other
 Other Players
 OutSeqNum
 Output file write error --- out of disk space?
@@ -9307,11 +9335,13 @@ P HcN
 P LcW
 P Lc{8D;{H
 P#7)^
-P08@J
-P08N,
+P08@J "!
+P08J0
+P2 "!
 P8D8e t
 P8D8m t
 P8L9u
+P: "!
 P:S;A
 P>q_Y~
 P@HPX`hpx
@@ -9563,7 +9593,7 @@ Poor man's restart: reload the current map from disk.
 Post Source2 Client
 PostProcessingSystem_001
 PpHc5
-PpHc5X
+PpHc5H
 Pq?A6
 Pre Source2 Client
 Pre-match interface command from [U:1:%u]: %s
@@ -10304,8 +10334,10 @@ Sets the fog color override
 Sets the maximum number of milliseconds per second it is allowed to correct the client clock. It will only correct this amount if the difference between the client and server clock is equal to or larger than cl_clock_correction_adjustment_max_offset.
 Sets the server to shutdown when all games have completed
 Sets the specified cache to the specified size
+Setting cl_ticks_warning_level=0 due to %s=false
 Setting main thread priority to %d
 Settings
+Sf8]6
 ShaderVar_WireframeDepthEnable
 ShaderVar_WireframeOverrideColor
 Shavian
@@ -10652,7 +10684,6 @@ T$8Hc
 T$8I+
 T$8I;
 T$8L9T$0
-T$8fI
 T$<D;
 T$<D;T$D
 T$@A+
@@ -10715,7 +10746,6 @@ T$xH+
 T$xH;
 T$xH;L$0t
 T$xH;U
-T=aD+
 TACPL
 TATPL
 TD u"E;
@@ -10888,7 +10918,6 @@ U8fff
 U?:CU?K
 UA>N0Wl
 UATAUAVAWH
-UATAUAVH
 UATAUAWH
 UATAUH
 UATAVAWH
@@ -10981,7 +11010,6 @@ UWATAUH
 UWATAVAWH
 UWATAVH
 UWATH
-UWAUAVH
 UWAUAWH
 UWAUH
 UWAVAWH
@@ -11044,6 +11072,7 @@ Unknown message in DemoSpawnGroups %d.
 Unknown message in SpawnGroups %d.
 Unknown modifier in whitelist file: %s.
 Unknown net message %d!
+Unknown option '%s'
 Unknown variety of crash. You have now failed to crash. I hope you're happy.
 Unknown vtune option.
 UnmapViewOfFile
@@ -11279,7 +11308,6 @@ Value out of range for uint32 option "
 Valve Corp.0
 Valve Corp.1
 Valve.Source
-Vcz-%
 VeaFOfb
 Vector vPos( %.1f, %.1f, %.1f )
 VendorID
@@ -11303,8 +11331,6 @@ W IcD0LA
 W fff
 W"fA;
 W0D9b
-W5)5D
-W53'1
 W8fA;
 WARNING
 WARNING! TextConsole::Init: Could not attach console hook.
@@ -11479,12 +11505,13 @@ X-Origin-Auth header of the broadcast POSTs
 X-Origin-Auth header of the broadcast1 POSTs
 X-Origin-Delay
 X-Reason
-X5OGD
-X5P2>
-X5U5B
-X5UKD
-X5lg/
-X5|G9
+X5 %/
+X5<m/
+X5?[D
+X5@F>
+X5EIB
+X5E_D
+X5l[9
 X?/QY?s
 X?OsX?
 XA]A\_]
@@ -11512,24 +11539,20 @@ X|$ A
 X|$8E
 Y0HcR
 Y0LcQ\M
-Y5"M8
-Y5+OD
-Y5/]D
-Y5>ND
-Y5A8*
-Y5RPE
-Y5j!D
-Y5~nB
+Y5.bD
+Y5B`8
+Y5BdE
+Y5Z5D
+Y5tuD
 Y9"SD
-Y=9M8
-Y=KVE
+Y=;jE
+Y=Y`8
 Y>kX>M
 Y?'WY?
 YD$@f
 YL$,D
 YLPED
 YPHcAHH
-Y]aob
 You have been kicked and banned %s by the server.
 Your current chat group is "%s"
 YpU_Z
@@ -11559,6 +11582,7 @@ Zq",9
 [(fff
 [*ncd>0
 [-&LMb#{'
+[?gU4
 [A:%u:%u:%u]
 [C:%u:%u]
 [G:%u:%u]
@@ -11822,7 +11846,7 @@ Zq",9
 ],fD;
 ]0u0A
 ]4fD;
-]5E2D
+]55FD
 ]89E0t
 ]>)2X
 ]?K[`?n
@@ -11841,10 +11865,9 @@ Zq",9
 ^fD;]
 ^hmpsv
 ^oEZ_
-^r1'g
 ^u+fff
 _ ;_$t
-_%HSE
+_%8gE
 _(9w0
 _(HcG H
 _(fA;
@@ -11906,6 +11929,8 @@ _whitelist.txt
 `+!]?
 `-uRQg
 `.rdata
+`2 "!
+`2 =!
 `3Q"X
 `;k\|
 `;s\|
@@ -11936,7 +11961,7 @@ _whitelist.txt
 `A_A^_^[
 `A_A^_^]
 `A__]
-`L9=N
+`L9=>
 `RTTI
 `anonymous namespace'
 `copy constructor closure'
@@ -12117,6 +12142,7 @@ bind: no inputsystem for bindings
 binddefaults
 binddefaults [splitscreen player] : bind all commands to default settings for a particular splitscreen player
 binddefaults: no inputsystem for bindings
+binding
 bindings
 bindss
 bindss <player> <key> [command] : attach a command/inputvalue to a key
@@ -12155,6 +12181,7 @@ build_source_revision
 build_version
 built_from_cl
 built_from_cl.txt
+button_info
 bytes
 c	_V_ComposeFileName
 c HcC8
@@ -12167,7 +12194,6 @@ c?FA@s}
 cB$$"$""""SE$4"tfFDD
 cM*"K
 cPHcChL
-c`<o,
 callback_index
 cameraman_scoreboard
 can't find client frame for world snapshot %d (%d) on server tick %d
@@ -12632,6 +12658,7 @@ engine_allow_multiple_simulates_per_frame
 engine_allow_multiple_ticks_per_frame
 engine_client_tick_pad_enable
 engine_cpu_info_extended
+engine_enable_frametime_warnings
 engine_gcmessages.proto
 engine_latency_ms
 engine_low_latency_sleep_after_client_tick
@@ -12794,7 +12821,7 @@ fD9t$b
 fD9t$f
 fD9zbt]D
 fD;#};I
-fD;%rhH
+fD;%bwH
 fD;FRw~H
 fDD"AUDT$t
 fE9,Fu
@@ -13026,6 +13053,7 @@ hostname
 hostname : %s
 hostname_in_client_status
 hostport
+hpz "!
 hscript
 hscript_lightbinding
 http Send %.3f ms ave, %.3f ms max
@@ -13074,8 +13102,8 @@ info_player_start
 ingameui
 initial update
 inity
-input_button_code_is_scan_code
-input_button_code_is_scan_code %u
+input_button_code_is_scan_code_scd
+input_button_code_is_scan_code_scd %u
 input_downimpulsevalue
 input_filter_relative_analog_inputs
 input_forceuser
@@ -13276,6 +13304,7 @@ l$(H;
 l$(I;
 l$(M;
 l$0@8
+l$0A3
 l$0A_A^_
 l$0D+ D9
 l$0E3
@@ -13663,10 +13692,10 @@ multvar: cvar "%s" not found
 multvar: no varname specified!
 mwfA;
 mwtMH
-n D9-
+n D9-,ZD
 n03>Pu
 n09^8~.H
-n5xED
+n5hTD
 n<	fE
 n<	fG
 n<D9?uMH
@@ -13923,14 +13952,16 @@ p UAVAWH
 p UWATAVAWH
 p WATAUAVAWH
 p*W4H
-p08@H^,
+p08@H^
 p0R^G'
+p2 "!
 p2p_listpeers
 p2p_ping "%s"
 p4edit
 p7M}f
 p;>}	H
 p;Y>u
+p>h$>
 p?ati_compress_wrapper.dll
 p@HPX`h
 pA\_[
@@ -14086,7 +14117,6 @@ q(fff
 q?	?q?4
 q@fA;
 qH,	;`
-qL9-7
 qS>g?h3
 qangle
 qfefkv}
@@ -14283,7 +14313,6 @@ ruby_package
 run prediction after every CreateMove instead of only after CreateMove for the final tick in a frame.
 run_perftest
 rvf;\$d
-rx8,"
 s	_V_StripExtension
 s ;7}@H
 s ;7}VH
@@ -14323,6 +14352,8 @@ savegame not allowed in multiplayer games
 savegamefilename
 savegamename
 scale
+scan code
+scancode
 scenesystem
 schema_description
 schema_friendly_name
@@ -14688,7 +14719,7 @@ sys_minidumpspewlines
 system/network
 t	@8-
 t	@83t
-t	@85QTD
+t	@85
 t	@89t
 t	D8&t
 t	D88t
@@ -14806,7 +14837,7 @@ t$8fI
 t$8ff
 t$8t	H
 t$@-l
-t$@95 
+t$@95
 t$@9U
 t$@A;
 t$@A_A^A]A\_
@@ -14914,7 +14945,7 @@ t$xL;u
 t$xM;
 t$xfA9
 t$xt*3
-t%@8--.W
+t%@8-
 t%D8:t H
 t%fE9
 t%fff
@@ -14923,7 +14954,7 @@ t'< u
 t'<Zt
 t'HcW
 t(HcC
-t)D83t$H
+t)D8;t$H
 t)H9u
 t)IcV
 t*;S<u
@@ -14957,11 +14988,10 @@ t;LcF
 t<<E;
 t<HcE
 t=@8/t8H
-t=L95|
+t=L95l
 t?;tt?74t?
 t?Dlt?e
 t?H9-
-t?H9-dF7
 t?HcS
 t@A9~0I
 tA9C0u<
@@ -14974,7 +15004,6 @@ tDfff
 tEHcR
 tEfff
 tHD82tC
-tI95>
 tIHcA
 tIHcC
 tIL95
@@ -14998,7 +15027,7 @@ tTL9mhtNL
 tTOw}
 tU;\$0tH
 tUD88t6H
-tUH95
+tUH95q
 tUH99uPL
 tWHcM
 tXH99uSH
@@ -15167,6 +15196,7 @@ tv_relaypassword
 tv_relayvoice
 tv_retry
 tv_secret_code
+tv_secure_bypass
 tv_status
 tv_stop
 tv_stoprecord
@@ -15191,7 +15221,7 @@ t~HcqH3
 t~Hc|$P
 u	9JL
 u	9wT
-u	D8=|
+u	D8=
 u	D8}
 u	HcB
 u 9k(u
@@ -15264,7 +15294,7 @@ u]L9e
 u^HcO4H
 u^Hcu
 u_L9u
-u`L9%G.;
+u`L9%'/;
 uaH9C(H
 uaL9t$xt
 ucH9T$ht
@@ -15364,6 +15394,7 @@ v?,	m2
 v?/\v?
 v@D8s(t
 vAD8s(t
+vGfff
 vKfffff
 vQO+t
 vWewe
@@ -15835,7 +15866,7 @@ zhA9}
 |?MD|?
 |?\0 
 |?\0 >
-|BX J
+|BX5J
 |HfD;
 |Lu?c
 |O1(i

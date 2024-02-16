@@ -5,6 +5,14 @@
 var SettingsMenu;
 (function (SettingsMenu) {
     let activeTab;
+    const TabIds = [
+        'Promoted',
+        'KeybdMouseSettings',
+        'GameSettings',
+        'AudioSettings',
+        'VideoSettings',
+        'Search'
+    ];
     let tabInfo = {
         Promoted: {
             xml: "settings_promoted",
@@ -31,6 +39,10 @@ var SettingsMenu;
             radioid: "SearchRadio"
         }
     };
+    function IsTabId(tabname) {
+        return (TabIds.includes(tabname));
+    }
+    SettingsMenu.IsTabId = IsTabId;
     function NavigateToTab(tabID) {
         let bDisplaySteamInputSettings = false;
         let parentPanel = $('#SettingsMenuContent');
@@ -135,7 +147,14 @@ var SettingsMenu;
     }
     {
         _Init();
-        if (PromotedSettingsUtil.GetUnacknowledgedPromotedSettings().length > 0) {
+        if ($.GetContextPanel().GetAttributeString('set-active-section', '') !== '') {
+            let tab = $.GetContextPanel().GetAttributeString('set-active-section', '');
+            if (SettingsMenu.IsTabId(tab)) {
+                NavigateToTab(tab);
+                $.GetContextPanel().SetAttributeString('set-active-section', '');
+            }
+        }
+        else if (PromotedSettingsUtil.GetUnacknowledgedPromotedSettings().length > 0) {
             NavigateToTab('Promoted');
         }
         else {

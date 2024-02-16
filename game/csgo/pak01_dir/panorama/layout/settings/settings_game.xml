@@ -45,6 +45,9 @@
 				<RadioButton class="content-navbar__tabs__btn" onactivate="SettingsMenuShared.ScrollToId(&apos;SettingsCrosshair&apos;)" group="SettingsGame">
 					<Label text="#settings_crosshair" />
 				</RadioButton>
+				<RadioButton class="content-navbar__tabs__btn" onactivate="SettingsMenuShared.ScrollToId(&apos;SettingsTelemetry&apos;)" group="SettingsGame">
+					<Label text="#settings_telemetry_section" />
+				</RadioButton>
 			</Panel>
 		</Panel>
 		<Panel id="SettingsMenuTabContent" class="SettingsMenuTabContent vscroll" rememberchildfocus="true">
@@ -53,6 +56,24 @@
 					<Label class="SettingsSectionTitleLabel" text="#settings_game_settings_section" />
 				</Panel>
 				<Panel class="top-bottom-flow full-width">
+					<TooltipPanel id="enableconsoledropdown-container" class="SettingsMenuDropdownContainer" tooltip="#GameUI_Settings_Enable_Console_Tooltip">
+						<Label text="#SFUI_Settings_Enable_Console" class="half-width" />
+						<CSGOSettingsEnumDropDown id="enableconsoledropdown" class="PopupButton White" convar="con_enable">
+							<Label text="#GameUI_Yes" id="enableconsole0" value="1" />
+							<Label text="#GameUI_No" id="enableconsole1" value="0" />
+						</CSGOSettingsEnumDropDown>
+					</TooltipPanel>
+					<TooltipPanel id="enableconsoledropdowncmdline-container" class="SettingsMenuDropdownContainer" tooltip="#GameUI_Settings_Enable_Console_Tooltip">
+						<Label text="#SFUI_Settings_Enable_ConsoleCmdLine" class="half-width" />
+						<CSGOSettingsEnumDropDown id="enableconsoledropdowncmdline" disabled="true" class="PopupButton White" convar="con_enable">
+							<Label text="#GameUI_Yes" id="enableconsoledropdowncmdline0" value="1" />
+						</CSGOSettingsEnumDropDown>
+					</TooltipPanel>
+					<Button class="PopupButton White horizontal-align-right" onactivate="$.DispatchEvent( &apos;SettingsMenu_NavigateToSetting&apos;, &apos;KeybdMouseSettings&apos;, &apos;ConsoleBinder&apos; );">
+						<Image src="s2r://panorama/images/icons/ui/link.vsvg" />
+						<Label class="promoted-setting__label" text="#SFUI_Go_To_Console_Key_Binding" />
+					</Button>
+					<Panel class="horizontal-separator" />
 					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Match_Ping_Threshold_Info" style="tooltip-position: right;">
 						<CSGOSettingsSlider id="DatacenterPingThresholdSlider" text="#SFUI_Settings_Match_Ping_Threshold" max="350" min="25" convar="mm_dedicated_search_maxping" />
 					</TooltipPanel>
@@ -62,14 +83,6 @@
 						</Button>
 						<Panel class="DatacenterListContainer" id="DatacenterListContainer" />
 					</Panel>
-					<Panel class="horizontal-separator" />
-					<TooltipPanel id="NetworkProblemAutoShow" class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Network_ProblemAutoShow_Info">
-						<Label text="#SFUI_Settings_Network_ProblemAutoShow" class="half-width" />
-						<CSGOSettingsEnumDropDown class="PopupButton White" convar="cq_netgraph_problem_show_auto">
-							<Label text="#SFUI_Settings_Network_ProblemAutoShow_Off" id="problemautoshow0" value="0" />
-							<Label text="#SFUI_Settings_Network_ProblemAutoShow_Auto" id="problemautoshow1" value="1" />
-						</CSGOSettingsEnumDropDown>
-					</TooltipPanel>
 					<Panel class="horizontal-separator" />
 					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Network_Bandwidth_Info">
 						<Label text="#SFUI_Settings_Network_Bandwidth" class="half-width" />
@@ -91,20 +104,6 @@
 							<Label text="#SFUI_Settings_Network_ExtraBuffering_0" id="extrabuffering0" value="0" />
 							<Label text="#SFUI_Settings_Network_ExtraBuffering_1" id="extrabuffering1" value="1" />
 							<Label text="#SFUI_Settings_Network_ExtraBuffering_2" id="extrabuffering2" value="2" />
-						</CSGOSettingsEnumDropDown>
-					</TooltipPanel>
-					<Panel class="horizontal-separator" />
-					<TooltipPanel id="enableconsoledropdown-container" class="SettingsMenuDropdownContainer" tooltip="#GameUI_Settings_Enable_Console_Tooltip">
-						<Label text="#SFUI_Settings_Enable_Console" class="half-width" />
-						<CSGOSettingsEnumDropDown id="enableconsoledropdown" class="PopupButton White" convar="con_enable">
-							<Label text="#GameUI_Yes" id="enableconsole0" value="1" />
-							<Label text="#GameUI_No" id="enableconsole1" value="0" />
-						</CSGOSettingsEnumDropDown>
-					</TooltipPanel>
-					<TooltipPanel id="enableconsoledropdowncmdline-container" class="SettingsMenuDropdownContainer" tooltip="#GameUI_Settings_Enable_Console_Tooltip">
-						<Label text="#SFUI_Settings_Enable_ConsoleCmdLine" class="half-width" />
-						<CSGOSettingsEnumDropDown id="enableconsoledropdowncmdline" disabled="true" class="PopupButton White" convar="con_enable">
-							<Label text="#GameUI_Yes" id="enableconsoledropdowncmdline0" value="1" />
 						</CSGOSettingsEnumDropDown>
 					</TooltipPanel>
 					<Panel class="horizontal-separator" />
@@ -170,6 +169,7 @@
 					<Panel class="SettingsMenuDropdownContainer">
 						<CSGOSettingsSlider text="#SFUI_SteamToast_Location_Vert" max="100" min="0" convar="ui_steam_overlay_notification_position_vert" />
 					</Panel>
+					<Panel class="horizontal-separator" />
 				</Panel>
 			</Panel>
 			<Panel id="SettingsTeamSettings" class="SettingsBackground">
@@ -593,6 +593,49 @@
 								<Label text="#GameUI_ObservedBotCrosshair_Default" value="2" id="showbotobs2" />
 							</CSGOSettingsEnumDropDown>
 						</Panel>
+					</TooltipPanel>
+				</Panel>
+			</Panel>
+			<Panel id="SettingsTelemetry" class="SettingsBackground">
+				<Panel class="SettingsSectionTitleContianer">
+					<Label class="SettingsSectionTitleLabel" text="#settings_telemetry_section" />
+				</Panel>
+				<Panel class="top-bottom-flow full-width">
+					<TooltipPanel id="HudTelemetryFrameTime" class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_HudTelemetry_FrameTime_Info">
+						<Label text="#SFUI_Settings_HudTelemetry_FrameTime" class="half-width" />
+						<CSGOSettingsEnumDropDown class="PopupButton White" convar="cl_hud_telemetry_frametime_show">
+							<Label id="hudtelemetryshowframetime0" value="0" text="#SFUI_Settings_HudTelemetry_Show_Never" />
+							<Label id="hudtelemetryshowframetime1" value="1" text="#SFUI_Settings_HudTelemetry_Show_OnlyInPoorConditions" />
+							<Label id="hudtelemetryshowframetime2" value="2" text="#SFUI_Settings_HudTelemetry_Show_Always" />
+						</CSGOSettingsEnumDropDown>
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_HudTelemetry_FrameTimePoor_Info">
+						<Panel class="left-right-flow">
+							<CSGOFrameTimeSlider text="#SFUI_Settings_HudTelemetry_FrameTimePoor" edit_box_text="#SFUI_Settings_HudTelemetry_FrameTimePoor_Slider_Display" max="100" min="1" displayprecision="0" convar="cl_hud_telemetry_frametime_poor" />
+						</Panel>
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel id="HudTelemetryPing" class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_HudTelemetry_Ping_Info">
+						<Label text="#SFUI_Settings_HudTelemetry_Ping" class="half-width" />
+						<CSGOSettingsEnumDropDown class="PopupButton White" convar="cl_hud_telemetry_ping_show">
+							<Label id="hudtelemetryshowping0" value="0" text="#SFUI_Settings_HudTelemetry_Show_Never" />
+							<Label id="hudtelemetryshowping1" value="1" text="#SFUI_Settings_HudTelemetry_Show_OnlyInPoorConditions" />
+							<Label id="hudtelemetryshowping2" value="2" text="#SFUI_Settings_HudTelemetry_Show_Always" />
+						</CSGOSettingsEnumDropDown>
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel id="HudTelemetryPacketMisdelivery" class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_HudTelemetry_PacketMisdelivery_Info">
+						<Label text="#SFUI_Settings_HudTelemetry_PacketMisdelivery" class="half-width" />
+						<CSGOSettingsEnumDropDown class="PopupButton White" convar="cl_hud_telemetry_net_misdelivery_show">
+							<Label id="hudtelemetryshowmisdelivery0" value="0" text="#SFUI_Settings_HudTelemetry_Show_Never" />
+							<Label id="hudtelemetryshowmisdelivery1" value="1" text="#SFUI_Settings_HudTelemetry_Show_OnlyInPoorConditions" />
+							<Label id="hudtelemetryshowmisdelivery2" value="2" text="#SFUI_Settings_HudTelemetry_Show_Always" />
+						</CSGOSettingsEnumDropDown>
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel id="HudTelemetryPacketMisdeliveryPoor" class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_HudTelemetry_PacketMisdeliveryPoor_Info">
+						<CSGOSettingsSlider text="#SFUI_Settings_HudTelemetry_PacketMisdeliveryPoor" max="2" min="0" displayprecision="1" convar="cl_hud_telemetry_net_misdelivery_poor" />
 					</TooltipPanel>
 				</Panel>
 			</Panel>

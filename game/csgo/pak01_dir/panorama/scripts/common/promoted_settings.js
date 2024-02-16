@@ -124,14 +124,6 @@ var g_PromotedSettings = [
         end_date: new Date('January 30, 2024')
     },
     {
-        id: "NetworkProblemAutoShow",
-        loc_name: "#SFUI_Settings_Network_ProblemAutoShow",
-        loc_desc: "#SFUI_Settings_Network_ProblemAutoShow_Info",
-        section: "GameSettings",
-        start_date: new Date('October 11, 2023'),
-        end_date: new Date('February 28, 2024')
-    },
-    {
         id: "FirstPersonTracers",
         loc_name: "#Cstrike_FirstPersonTracers",
         loc_desc: "#Cstrike_FirstPersonTracers_Desc",
@@ -143,6 +135,14 @@ var g_PromotedSettings = [
         id: "ExtraBufffering",
         loc_name: "#SFUI_Settings_Network_ExtraBuffering",
         loc_desc: "#SFUI_Settings_Network_ExtraBuffering_Info",
+        section: "GameSettings",
+        start_date: new Date('February 6, 2024'),
+        end_date: new Date('April 28, 2024')
+    },
+    {
+        id: "SettingsTelemetry",
+        loc_name: "#settings_telemetry_section",
+        loc_desc: "#settings_telemetry_section_info",
         section: "GameSettings",
         start_date: new Date('February 6, 2024'),
         end_date: new Date('April 28, 2024')

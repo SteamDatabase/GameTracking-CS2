@@ -135,7 +135,8 @@
 		"r_grass_end_fade"				"3900"
 
 		// Default to binding keys based on keyboard position instead of key name
-		"input_button_code_is_scan_code"	"1"
+		"input_button_code_is_scan_code"		"1"
+		"input_button_code_is_scan_code_scd"	"1"
 
 		// Disable Cubemap Brightening
 		"lb_cubemap_normalization_max" 		"1"

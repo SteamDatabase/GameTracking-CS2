@@ -82,7 +82,7 @@ var SettingsMenuShared;
         let elLocationPanel = $.GetContextPanel().FindChildTraverse(locationId);
         if (elLocationPanel != null) {
             $.GetContextPanel().Data().bScrollingToId = true;
-            elLocationPanel.ScrollParentToMakePanelFit(1, false);
+            elLocationPanel.ScrollParentToMakePanelFit(3, false);
             elLocationPanel.TriggerClass('Highlight');
         }
     }
@@ -160,7 +160,7 @@ var SettingsMenuShared;
         let elBkg = $("#XhairBkg");
         if (elBkg) {
             let nBkgIdx = elBkg.GetAttributeInt("bkg-id", 0);
-            let arrBkgs = ["bkg-dust2", "bkg-aztec", "bkg-mirage", "bkg-office"];
+            let arrBkgs = ["bkg-dust2", "bkg-nuke", "bkg-mirage", "bkg-office"];
             nBkgIdx = (arrBkgs.length + nBkgIdx + delta) % arrBkgs.length;
             elBkg.SwitchClass("bkg-style", arrBkgs[nBkgIdx]);
             elBkg.SetAttributeInt("bkg-id", nBkgIdx);

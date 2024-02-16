@@ -216,6 +216,7 @@ var MainMenu;
         else if (GameTypesAPI.ShouldShowNewUserPopup()) {
             _NewUser_ShowTrainingCompletePopup();
         }
+        _ShowKeyboardBindingPopup();
         _m_bShownBefore = true;
     }
     function _TournamentDraftUpdate() {
@@ -374,6 +375,9 @@ var MainMenu;
         GameInterfaceAPI.SetSettingString('panorama_play_movie_ambient_sound', '0');
         if (!$.GetContextPanel().FindChildInLayoutFile(tab)) {
             const newPanel = $.CreatePanel('Panel', _m_elContentPanel, tab);
+            if ('settings/settings' && setActiveSection !== '') {
+                newPanel.SetAttributeString('set-active-section', setActiveSection);
+            }
             newPanel.BLoadLayout('file://{resources}/layout/' + XmlName + '.xml', false, false);
             newPanel.SetReadyForDisplay(false);
             newPanel.RegisterForReadyEvents(true);
@@ -837,7 +841,7 @@ var MainMenu;
         }
     }
     function _OpenSettings() {
-        NavigateToTab('JsSettings', 'settings/settings');
+        NavigateToTab('JsSettings', 'settings/settings', 'KeybdMouseSettings');
     }
     function _InsureSessionCreated() {
         if (!LobbyAPI.IsSessionActive()) {
@@ -1305,28 +1309,20 @@ var MainMenu;
         LobbyAPI.StartMatchmaking('', '', '', '');
     }
     function _CheckGraphicsDrivers() {
+        let info = GameInterfaceAPI.GetGraphicsDriverInfo();
+        if (!info.driver_out_of_date)
+            return;
         if (GameInterfaceAPI.GetSettingString('cl_graphics_driver_warning_dont_show_again') !== '0')
             return;
-        let info = GameInterfaceAPI.GetGraphicsDriverInfo();
         switch (info.vendor_id) {
             case 0x1002:
                 {
-                    let minHigh = (31 << 16) | 0;
-                    let minLow = (21905 << 16) | 1001;
-                    if (info.amd_post_vega) {
-                        minHigh = (31 << 16) | 0;
-                        minLow = (22023 << 16) | 1014;
-                    }
-                    if (info.version_high < minHigh || (info.version_high == minHigh && info.version_low < minLow))
-                        _ShowGraphicsDriverWarning("AMD", 'https://amd.com/support');
+                    _ShowGraphicsDriverWarning("AMD", 'https://amd.com/support');
                     break;
                 }
             case 0x10DE:
                 {
-                    let minHigh = (31 << 16) | 0;
-                    let minLow = (15 << 16) | 4601;
-                    if (info.version_high < minHigh || (info.version_high == minHigh && info.version_low < minLow))
-                        _ShowGraphicsDriverWarning("Nvidia", 'https://nvidia.com/drivers');
+                    _ShowGraphicsDriverWarning("Nvidia", 'https://nvidia.com/drivers');
                     break;
                 }
         }
@@ -1337,6 +1333,23 @@ var MainMenu;
         }, '#PlayMenu_GraphicsDriverWarning_DontShowAgain', () => {
             GameInterfaceAPI.SetSettingString('cl_graphics_driver_warning_dont_show_again', '1');
         }, '#OK', () => { });
+    }
+    function _ShowKeyboardBindingPopup() {
+        const setVersionTo = '2402';
+        if (GameInterfaceAPI.GetSettingString('cl_new_user_phase') === '-1') {
+            const currentVersion = GameInterfaceAPI.GetSettingString('ui_popup_weaponupdate_version');
+            if (currentVersion !== setVersionTo) {
+                UiToolkitAPI.ShowGenericPopupTwoOptions('#keyboard_support_popup_title', '#keyboard_support_popup_body', '', '#keyboard_support_popup_btn', () => {
+                    $.DispatchEvent('MainMenuGoToSettings');
+                    GameInterfaceAPI.SetSettingString('ui_popup_weaponupdate_version', setVersionTo);
+                }, '#OK', () => {
+                    GameInterfaceAPI.SetSettingString('ui_popup_weaponupdate_version', setVersionTo);
+                });
+            }
+        }
+        else {
+            GameInterfaceAPI.SetSettingString('ui_popup_weaponupdate_version', setVersionTo);
+        }
     }
     {
         $.LogChannel("CSGO_MainMenu", "LV_DEFAULT", "#aaff80");
