@@ -9,10 +9,12 @@ const TEAM_CT = 3;
 const INVALID_PLAYERSLOT = -1;
 const OBS_MODE_NONE = 0; // not in spectator mode
 const OBS_MODE_FIXED = 1; // view from a fixed camera position
-const OBS_MODE_IN_EYE = 1; // follow a player in first person view
-const OBS_MODE_CHASE = 1; // follow a player in third person view
-const OBS_MODE_ROAMING = 1; // free roaming
+const OBS_MODE_IN_EYE = 3; // follow a player in first person view
+const OBS_MODE_CHASE = 4; // follow a player in third person view
+const OBS_MODE_ROAMING = 5; // free roaming
 // TODO: Improve SourceTS convar API
+const mp_warmup_offline_enabled = () => Instance.Get_mp_warmup_offline_enabled();
+const mp_warmup_online_enabled = () => Instance.Get_mp_warmup_online_enabled();
 const mp_teammates_are_enemies = () => Instance.Get_mp_teammates_are_enemies();
 const sv_warmup_to_freezetime_delay = () => Instance.Get_sv_warmup_to_freezetime_delay();
 ;
@@ -66,24 +68,6 @@ if (Instance.IsServer()) {
     let hKnifeTierMusicCue = null;
     let nCurrentLeader = null;
     let nextThinkCallbacks = [];
-    Server.OnRestartMatch(() => {
-        bFirstThink = true;
-        initArmsRaceSequence();
-        nWinningPlayer = -1;
-        for (let i = 0; i < MAX_PLAYERS; ++i) {
-            const player = Server.GetPlayerController(i);
-            if (!player)
-                continue;
-            if (player.IsFakeClient())
-                Server.KickClient(i);
-            else
-                player.ChangeTeam(TEAM_UNASSIGNED);
-        }
-        Server.SetIsFirstConnected(false);
-        Server.ResetMatch();
-        Server.ResetRound();
-        Server.BeginFreezePeriod();
-    });
     Server.OnThink(() => {
         if (bFirstThink) {
             bFirstThink = false;
@@ -144,14 +128,38 @@ if (Instance.IsServer()) {
             }
         }
     });
+    Server.OnResetRound(() => {
+        nWinningPlayer = -1;
+        hKnifeTierMusicCue = null;
+        nCurrentLeader = null;
+    });
+    Server.OnRestartMatch(() => {
+        initArmsRaceSequence();
+        nWinningPlayer = -1;
+        for (let i = 0; i < MAX_PLAYERS; ++i) {
+            const player = Server.GetPlayerController(i);
+            if (!player)
+                continue;
+            if (player.IsFakeClient())
+                Server.KickClient(i);
+            else
+                player.ChangeTeam(TEAM_UNASSIGNED);
+        }
+        Server.SetIsFirstConnected(false);
+        Server.ResetMatch();
+        Server.ResetRound();
+        Server.FreezePlayers();
+        Server.BeginFreezePeriod();
+    });
     Server.OnPlayerChangedTeam((controller, _, nNewTeam) => {
         if (!controller.IsFakeClient() && !Server.IsFirstConnected()) {
             Server.SetIsFirstConnected(true);
-            if (Server.IsPlayingOffline()) {
-                Server.BeginGameRestart(0);
+            const bWarmup = Server.IsPlayingOffline() ? mp_warmup_offline_enabled() : mp_warmup_online_enabled();
+            if (bWarmup) {
+                Server.BeginWarmupPeriod();
             }
             else {
-                Server.BeginWarmupPeriod();
+                Server.BeginGameRestart(0);
             }
             nextThinkCallbacks.push(() => {
                 for (let i = 0; i < MAX_PLAYERS; ++i) {

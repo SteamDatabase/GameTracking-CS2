@@ -1,4 +1,5 @@
 import { Instance } from "testdomain";
+// Execute me using source_ts_test
 // ----------------------
 function TEST_EQ(sTestName, actual, expected) {
     if (actual === expected) {
@@ -28,6 +29,9 @@ TEST_EQ("Domain.GetStringWithDefault() == 'Default echo string.'", Instance.GetS
 {
     var ent_a = Instance.LibrarySpawnFakeEntity("foo");
     var ent_b = Instance.LibrarySpawnFakeEntity("bar");
+    if (ent_a) {
+        TEST_EQ("entity cache works", ent_a, Instance.LibraryFindFakeEntityByName(ent_a?.GetName()));
+    }
     if (ent_a && ent_b) {
         ent_a.SetIntValue(5);
         ent_b.SetIntValue(6);

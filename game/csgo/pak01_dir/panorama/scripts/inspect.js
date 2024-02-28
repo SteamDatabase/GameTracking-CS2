@@ -482,6 +482,7 @@ var InspectModelImage;
         if (m_isWorkshopPreview) {
             let sTransparentBackground = InventoryAPI.GetPreviewSceneStateAttribute("transparent_background");
             let sBackgroundColor = InventoryAPI.GetPreviewSceneStateAttribute("background_color");
+            let sPreviewIdleAnimation = InventoryAPI.GetPreviewSceneStateAttribute("idle_animation");
             if (sTransparentBackground === "1") {
                 elItemPanel.SetHideStaticGeometry(true);
                 elItemPanel.SetHideParticles(true);
@@ -499,6 +500,12 @@ var InspectModelImage;
                 elItemPanel.SetHideParticles(false);
                 elItemPanel.SetBackgroundColor(0, 0, 0, 255);
                 elItemPanel.SetTransparentBackground(false);
+            }
+            if (sPreviewIdleAnimation === "1") {
+                elItemPanel.SetWorkshopPreviewIdleAnimation(true);
+            }
+            else {
+                elItemPanel.SetWorkshopPreviewIdleAnimation(false);
             }
         }
     }

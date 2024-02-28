@@ -264,6 +264,11 @@
 						data_type = "bool"
 						value = "false"
 					}
+					join_non_mvp_group = 
+					{
+						data_type = "bool"
+						value = "false"
+					}
 				}
 			},
 			
@@ -409,138 +414,6 @@
 			},
 			
 			{
-				name = "stop_music_startround"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.StartRound"
-			},
-			
-			{
-				name = "stop_music_startaction"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.StartAction"
-			},
-			
-			{
-				name = "stop_music_bombplanted"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.BombPlanted"
-			},
-			
-			{
-				name = "stop_music_gothostage"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.GotHostage"
-			},
-			
-			{
-				name = "stop_music_hostagenearrescue"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.HostageNearRescue"
-			},
-			
-			{
-				name = "stop_music_bombtensec"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.BombTenSecCount"
-			},
-			
-			{
-				name = "stop_music_tensec"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.TenSecCount"
-			},
-			
-			{
-				name = "stop_music_startroundgg"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.StartRound_GG"
-			},
-			
-			{
-				name = "stop_music_wonround"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.WonRound"
-			},
-			
-			{
-				name = "stop_music_lostround"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.LostRound"
-			},
-			
-			{
-				name = "stop_music_deathcam"
-				operator = "soundevent_limiter"
-				input_execute = "@public.stop_music_except_mvp"
-				execute_once = "true"
-				input_max_events = "0"
-				match_entity = "false"
-				match_substring = "true"
-				match_this_event = "false"
-				match_event_name = "Music.DeathCam"
-			},
-			
-			{
 				name = "stop_all_non_music"
 				operator = "soundevent_limiter"
 				input_execute = "@public.stop_all_non_music"
@@ -551,6 +424,21 @@
 				match_this_event = "false"
 				match_event_name = "Music."
 				invert_match = "true"
+			},
+			
+			{
+				name = "stop_all_music_except_mvp"
+				operator = "soundevent_group_stop"
+				input_execute = "@public.stop_music_except_mvp"
+				execute_once = "true"
+				input_group_name = "non_mvp_music_group"
+			},
+			
+			{
+				name = "join_non_mvp_soundevent_group"
+				operator = "soundevent_group_join"
+				execute_once = "true"
+				input_group_name = "non_mvp_music_group"
 			},
 			
 			{
@@ -799,11 +687,35 @@
 			},
 			
 			{
+				name = "stop_elapsed_sub_elapsed_time"
+				operator = "math_float"
+				apply = "sub"
+				input1 = "@get_event_info.output_stop_elapsed_time"
+				input2 = "@get_event_info.output_elapsed_time"
+			},
+			
+			{
+				name = "stopped_immediately"
+				operator = "math_float"
+				apply = "equal"
+				input1 = "@stop_elapsed_sub_elapsed_time.output"
+				input2 = "0.00"
+			},
+			
+			{
+				name = "select_fade_time"
+				operator = "ctrl_switch_float"
+				input1 = "@public.volume_fade_out_input_max"
+				input2 = "0.0"
+				input_switch = "@stopped_immediately.output"
+			},
+			
+			{
 				name = "volume_fade_out"
 				operator = "math_remap_float"
 				input = "@get_event_info.output_stop_elapsed_time"
 				input_min = "0.0"
-				input_max = "@public.volume_fade_out_input_max"
+				input_max = "@select_fade_time.output"
 				input_map_min = "0.0"
 				input_map_max = "1.0"
 				default_to_max = "false"

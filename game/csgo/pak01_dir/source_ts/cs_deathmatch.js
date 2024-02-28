@@ -9,10 +9,12 @@ const TEAM_CT = 3;
 const INVALID_PLAYERSLOT = -1;
 const OBS_MODE_NONE = 0; // not in spectator mode
 const OBS_MODE_FIXED = 1; // view from a fixed camera position
-const OBS_MODE_IN_EYE = 1; // follow a player in first person view
-const OBS_MODE_CHASE = 1; // follow a player in third person view
-const OBS_MODE_ROAMING = 1; // free roaming
+const OBS_MODE_IN_EYE = 2; // follow a player in first person view
+const OBS_MODE_CHASE = 3; // follow a player in third person view
+const OBS_MODE_ROAMING = 4; // free roaming
 // TODO: Improve SourceTS convar API
+const mp_warmup_offline_enabled = () => Instance.Get_mp_warmup_offline_enabled();
+const mp_warmup_online_enabled = () => Instance.Get_mp_warmup_online_enabled();
 const mp_teammates_are_enemies = () => Instance.Get_mp_teammates_are_enemies();
 const sv_warmup_to_freezetime_delay = () => Instance.Get_sv_warmup_to_freezetime_delay();
 const mp_dm_time_between_bonus_min = () => Instance.Get_mp_dm_time_between_bonus_min();
@@ -51,12 +53,15 @@ const e_RoundEndReason = {
     RoundEndReason_Count: 23
 };
 const bonus_weapon_slots = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
-let bFirstThink = true;
-let bFirstThinkAfterConnected = false;
-const mKillStreaks = new Map();
-const mTaserStreaks = new Map();
 if (Instance.IsServer()) {
     const Server = Instance;
+    let bFirstThink = true;
+    let bFirstThinkAfterConnected = false;
+    const mKillStreaks = new Map();
+    const mTaserStreaks = new Map();
+    let flBonusWeaponStartTime = -1;
+    let flBonusWeaponDuration = -1;
+    let nBonusWeaponSlot = -1;
     Server.OnThink(() => {
         if (bFirstThink) {
             bFirstThink = false;
@@ -65,8 +70,6 @@ if (Instance.IsServer()) {
             Server.ResetRound();
             Server.FreezePlayers();
             Server.BeginFreezePeriod();
-            mKillStreaks.clear();
-            mTaserStreaks.clear();
         }
         if (Server.CheckGameOver())
             return;
@@ -116,12 +119,21 @@ if (Instance.IsServer()) {
                 nRoundEndReason = e_RoundEndReason.CTs_Win;
             else if (nWinningTeam == TEAM_TERRORIST)
                 nRoundEndReason = e_RoundEndReason.Terrorists_Win;
+            Server.EndBonusWeapon();
             Server.FreezePlayers();
             Server.EndRound(nRoundEndReason);
             Server.BeginIntermission();
         }
         if (Server.IsInMatch())
             HandleDeathmatchBonusWeapon();
+    });
+    Server.OnResetRound(() => {
+        mKillStreaks.clear();
+        mTaserStreaks.clear();
+        nBonusWeaponSlot = -1;
+        flBonusWeaponStartTime = -1;
+        flBonusWeaponDuration = -1;
+        Server.EndBonusWeapon();
     });
     Server.OnRestartMatch(() => {
         for (let i = 0; i < MAX_PLAYERS; ++i) {
@@ -136,28 +148,32 @@ if (Instance.IsServer()) {
         Server.SetIsFirstConnected(false);
         Server.ResetMatch();
         Server.ResetRound();
+        Server.FreezePlayers();
         Server.BeginFreezePeriod();
     });
     Server.OnPlayerChangedTeam((player) => {
         if (player && !player.IsFakeClient() && !Server.IsFirstConnected()) {
             Server.SetIsFirstConnected(true);
-            if (Server.IsPlayingOffline()) {
-                Server.BeginGameRestart(0);
+            const bWarmup = Server.IsPlayingOffline() ? mp_warmup_offline_enabled() : mp_warmup_online_enabled();
+            if (bWarmup) {
+                Server.BeginWarmupPeriod();
             }
             else {
-                Server.BeginWarmupPeriod();
+                Server.BeginGameRestart(0);
             }
             bFirstThinkAfterConnected = true;
         }
     });
     Server.OnEntityBeginDying((victim, takeDamageInfo) => {
         const victimPawn = Server.ToPlayer(victim);
-        const scorerPawn = Server.ToPlayer(takeDamageInfo?.GetDeathScorer(victim));
+        const scorerPawn = Server.ToPlayer(takeDamageInfo.GetDeathScorer(victim));
         if (victimPawn) {
             const nVictimSlot = victimPawn.GetOriginalController().GetPlayerSlot();
             mKillStreaks.set(nVictimSlot, 0);
             mTaserStreaks.set(nVictimSlot, 0);
         }
+        if (victimPawn === scorerPawn)
+            return;
         if (scorerPawn && victimPawn) {
             if (mp_teammates_are_enemies() || scorerPawn.GetTeamNumber() != victimPawn.GetTeamNumber()) {
                 const nScorerSlot = scorerPawn.GetOriginalController().GetPlayerSlot();
@@ -194,9 +210,6 @@ if (Instance.IsServer()) {
             Server.AddScoreDM(scorerPawn, undefined, 1);
         }
     });
-    let flBonusWeaponStartTime = -1;
-    let flBonusWeaponDuration = -1;
-    let nBonusWeaponSlot = -1;
     // Called every tick if gamemode is deathmatch
     function HandleDeathmatchBonusWeapon() {
         if (flBonusWeaponStartTime === -1) {
