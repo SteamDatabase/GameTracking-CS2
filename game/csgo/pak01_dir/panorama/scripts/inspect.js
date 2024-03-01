@@ -487,6 +487,7 @@ var InspectModelImage;
                 elItemPanel.SetHideStaticGeometry(true);
                 elItemPanel.SetHideParticles(true);
                 elItemPanel.SetTransparentBackground(true);
+                m_elContainer.SetHasClass('popup-inspect-background', false);
             }
             else if (sBackgroundColor) {
                 const oColor = _HexColorToRgb(sBackgroundColor);
