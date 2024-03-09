@@ -89,18 +89,13 @@ var StreamPanel;
                 elStreamPanelFeed.FindChildInLayoutFile("id-popout-btn").SetPanelEvent('onactivate', _StreamDragEnable);
                 elStreamPanelFeed.FindChildInLayoutFile("id-popout-reset-btn").SetPanelEvent('onactivate', _StreamDragDisable);
             }
-        }
-        if (!elStreamPanelFeed) {
-            return;
-        }
-        m_elEmbeddedStream = elStreamPanelFeed.FindChildInLayoutFile('StreamHTML');
-        if (urlStreamFeed) {
+            m_elEmbeddedStream = elStreamPanelFeed.FindChildInLayoutFile('StreamHTML');
             m_elEmbeddedStream.SetURL(urlStreamFeed);
             _SetClassesForVideoPlaying(EmbeddedStreamAPI.IsVideoPlaying());
         }
-        else {
+        else if (elStreamPanelFeed) {
+            elStreamPanelFeed.DeleteAsync(0);
             _SetClassesForVideoPlaying(false);
-            m_elEmbeddedStream.SetURL('about:blank');
         }
     }
     ;
