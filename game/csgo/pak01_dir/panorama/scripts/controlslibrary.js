@@ -148,11 +148,11 @@ function GenerateInventoryImages() {
     $("#Player1").GenerateInventoryImages();
 }
 var g_DialogVarCount = 0;
-function UpdateParentDialogVariablesFromTextEntry(panelName) {
+function UpdateParentDialogVariablesFromTextEntry() {
     var varStr = $("#ParentDialogVarTextEntry").text;
     $("#DialogVarParentPanel").SetDialogVariable('testvar', varStr);
 }
-function UpdateChildDialogVariablesFromTextEntry(panelName) {
+function UpdateChildDialogVariablesFromTextEntry() {
     var varStr = $("#ChildDialogVarTextEntry").text;
     $("#DialogVarChildPanel").SetDialogVariable('testvar', varStr);
 }

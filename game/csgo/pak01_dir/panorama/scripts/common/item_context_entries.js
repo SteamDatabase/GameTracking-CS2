@@ -27,7 +27,7 @@ var ItemContextEntries;
                     return InventoryAPI.GetItemAttributeValue(id, 'modification date') ? true : false;
                 return ItemInfo.IsPreviewable(id);
             },
-            OnSelected: (id) => {
+            OnSelected: (id, contextmenuparam) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 const defName = InventoryAPI.GetItemDefinitionName(id);
                 if (defName === 'casket') {
@@ -43,7 +43,7 @@ var ItemContextEntries;
                     }
                     return;
                 }
-                $.DispatchEvent("InventoryItemPreview", id);
+                $.DispatchEvent("InventoryItemPreview", id, contextmenuparam);
             }
         },
         {
@@ -164,10 +164,7 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 const isMusicvolumeOn = InventoryAPI.TestMusicVolume();
-                if (!isMusicvolumeOn) {
-                    $.DispatchEvent('ShowResetMusicVolumePopup', '');
-                }
-                else {
+                if (isMusicvolumeOn) {
                     $.DispatchEvent('CSGOPlaySoundEffect', 'equip_musickit', 'MOUSE');
                     EquipItem(id, ['noteam']);
                 }

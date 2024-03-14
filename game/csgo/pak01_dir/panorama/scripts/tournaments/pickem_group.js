@@ -39,7 +39,7 @@ var PickEmGroup = ( function()
 			var oItemIdData = PickemCommon.GetYourPicksItemIdData( 
 				elPanel._oPickemData.oTournamentData.tournamentid, 
 				oGroupData.picks[i].localid
-			 );
+			);
 			
 			PickemCommon.UpdateImageForPick( 
 				oItemIdData,

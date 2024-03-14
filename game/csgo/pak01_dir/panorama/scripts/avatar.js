@@ -63,8 +63,10 @@ var CAvatar = class {
             }
         }
         const imagePath = InventoryAPI.GetItemInventoryImage(flairItemId);
-        elFlair.SetImage('file://{images}' + imagePath + '_small.png');
-        elFlair.RemoveClass('hidden');
+        if (imagePath !== '') {
+            elFlair.SetImage('file://{images}' + imagePath + '_small.png');
+            elFlair.RemoveClass('hidden');
+        }
     }
     ;
     SetTeamColor(elAvatar, xuid) {

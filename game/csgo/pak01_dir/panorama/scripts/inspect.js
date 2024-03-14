@@ -45,8 +45,6 @@ var InspectModelImage;
         m_isWorkshopPreview = funcGetSettingCallback ? funcGetSettingCallback('workshopPreview', 'false') === 'true' : false;
         m_isStickerApplyRemove = funcGetSettingCallback ? funcGetSettingCallback('stickerApplyRemove', 'false') === 'true' : false;
         m_isItemInLootlist = funcGetSettingCallback ? funcGetSettingCallback('isItemInLootlist', 'false') === 'true' : false;
-        if (ItemInfo.ItemDefinitionNameSubstrMatch(itemId, 'tournament_journal_'))
-            itemId = (strViewFunc === 'primary') ? itemId : ItemInfo.GetFauxReplacementItemID(itemId, 'graffiti');
         if (!InventoryAPI.IsValidItemID(itemId)) {
             return '';
         }
@@ -54,6 +52,8 @@ var InspectModelImage;
         m_elContainer = elContainer;
         m_useAcknowledge = m_elContainer.Data().useAcknowledge ? m_elContainer.Data().useAcknowledge : false;
         m_rarityColor = InventoryAPI.GetItemRarityColor(itemId);
+        if (ItemInfo.ItemDefinitionNameSubstrMatch(itemId, 'tournament_journal_') && strViewFunc === 'graffiti')
+            itemId = ItemInfo.GetFauxReplacementItemID(itemId, 'graffiti');
         const model = ItemInfo.GetModelPathFromJSONOrAPI(itemId);
         _InitSceneBasedOnItemType(model, itemId);
         return model;

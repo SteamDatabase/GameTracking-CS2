@@ -821,7 +821,9 @@ var Scoreboard;
                         if (!elFlairImage || !elFlairImage.IsValid())
                             return;
                         let imagepath = InventoryAPI.GetFlairItemImage(oPlayer.m_xuid);
-                        elFlairImage.SetImage('file://{images}' + imagepath + '_small.png');
+                        if (imagepath !== '') {
+                            elFlairImage.SetImage('file://{images}' + imagepath + '_small.png');
+                        }
                     }
                 };
                 break;

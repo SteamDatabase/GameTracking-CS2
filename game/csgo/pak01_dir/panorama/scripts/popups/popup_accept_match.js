@@ -43,7 +43,7 @@ var PopupAcceptMatch;
             const elAgreementComp = $.GetContextPanel().FindChildInLayoutFile('AcceptMatchAgreementCompetitive');
             elAgreementComp.visible = m_lobbySettings.game.mode === "competitive";
         }
-        $.DispatchEvent("ShowReadyUpPanel", "");
+        $.DispatchEvent("ShowReadyUpPanel");
         _SetMatchData(map);
         _UpdateGameServerUi();
         if (m_isNqmmAnnouncementOnly) {

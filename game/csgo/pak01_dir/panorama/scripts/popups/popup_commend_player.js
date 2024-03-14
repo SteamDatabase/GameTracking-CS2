@@ -3,8 +3,8 @@
 var PopupCommendPlayer;
 (function (PopupCommendPlayer) {
     let m_loadingJob = 0;
-    let m_elStatus;
-    let m_elCommend;
+    let m_elStatus = null;
+    let m_elCommend = null;
     function Init() {
         m_elStatus = $("#id-commend-status");
         m_elCommend = $("#id-commend");

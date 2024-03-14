@@ -59,9 +59,7 @@ var InventorySearch;
         }
         _TextEntrySettings.UpdateText = UpdateText;
         function GetText() {
-            if (elTextEntry) {
-                return elTextEntry.text;
-            }
+            return elTextEntry ? elTextEntry.text : '';
         }
         _TextEntrySettings.GetText = GetText;
     })(_TextEntrySettings || (_TextEntrySettings = {}));

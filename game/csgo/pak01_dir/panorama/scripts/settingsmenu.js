@@ -4,16 +4,7 @@
 /// <reference path="settingsmenu_shared.ts" />
 var SettingsMenu;
 (function (SettingsMenu) {
-    let activeTab;
-    const TabIds = [
-        'Promoted',
-        'KeybdMouseSettings',
-        'GameSettings',
-        'AudioSettings',
-        'VideoSettings',
-        'Search'
-    ];
-    let tabInfo = {
+    const TabInfo = {
         Promoted: {
             xml: "settings_promoted",
             radioid: "PromotedSettingsRadio"
@@ -39,8 +30,9 @@ var SettingsMenu;
             radioid: "SearchRadio"
         }
     };
+    let activeTab;
     function IsTabId(tabname) {
-        return (TabIds.includes(tabname));
+        return TabInfo[tabname] != null;
     }
     SettingsMenu.IsTabId = IsTabId;
     function NavigateToTab(tabID) {
@@ -48,13 +40,13 @@ var SettingsMenu;
         let parentPanel = $('#SettingsMenuContent');
         if (!parentPanel.FindChildInLayoutFile(tabID)) {
             let newPanel = $.CreatePanel('Panel', parentPanel, tabID);
-            let XmlName = tabInfo[tabID].xml;
+            let XmlName = TabInfo[tabID].xml;
             if (bDisplaySteamInputSettings) {
                 XmlName = "settings_steaminput";
             }
             newPanel.BLoadLayout('file://{resources}/layout/settings/' + XmlName + '.xml', false, false);
-            newPanel.OnPropertyTransitionEndEvent = (panelName, propertyName) => {
-                if (newPanel.id === panelName && propertyName === 'opacity') {
+            newPanel.OnPropertyTransitionEndEvent = (panel, propertyName) => {
+                if (newPanel === panel && propertyName === 'opacity') {
                     if (newPanel.visible === true && newPanel.BIsTransparent()) {
                         newPanel.visible = false;
                         newPanel.SetReadyForDisplay(false);
@@ -95,7 +87,7 @@ var SettingsMenu;
                 let panelToHide = $.GetContextPanel().FindChildInLayoutFile(activeTab);
                 panelToHide.RemoveClass('Active');
             }
-            $("#" + tabInfo[tabID].radioid).checked = true;
+            $("#" + TabInfo[tabID].radioid).checked = true;
             activeTab = tabID;
             let activePanel = $.GetContextPanel().FindChildInLayoutFile(tabID);
             activePanel.AddClass('Active');
@@ -125,11 +117,15 @@ var SettingsMenu;
         InventoryAPI.StopItemPreviewMusic();
     }
     function _NavigateToSetting(tab, id) {
-        $.DispatchEvent("Activated", $("#" + tabInfo[tab].radioid), "mouse");
+        if (!IsTabId(tab))
+            return;
+        $.DispatchEvent("Activated", $("#" + TabInfo[tab].radioid), "mouse");
         SettingsMenuShared.ScrollToId(id);
     }
     function _NavigateToSettingPanel(tab, submenuRadioId, p) {
-        $.DispatchEvent("Activated", $("#" + tabInfo[tab].radioid), "mouse");
+        if (!IsTabId(tab))
+            return;
+        $.DispatchEvent("Activated", $("#" + TabInfo[tab].radioid), "mouse");
         if (submenuRadioId != '') {
             let elSubMenuRadio = $.GetContextPanel().GetParent().FindChildTraverse(submenuRadioId);
             if (elSubMenuRadio) {
@@ -140,7 +136,7 @@ var SettingsMenu;
         p.AddClass('Highlight');
     }
     function _Init() {
-        for (let tab in tabInfo) {
+        for (let tab in TabInfo) {
             if (tab !== "Promoted" && tab !== "Search")
                 NavigateToTab(tab);
         }

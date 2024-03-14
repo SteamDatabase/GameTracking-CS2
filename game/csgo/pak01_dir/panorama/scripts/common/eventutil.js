@@ -30,4 +30,16 @@ var EventUtil;
         return jsonEvents;
     }
     EventUtil.AnnotateOfficialEvents = AnnotateOfficialEvents;
+    function GetTournamentWinner(tournamentId, numTeams) {
+        let ProEventJSO = TournamentsAPI.GetProEventDataJSO(tournamentId, numTeams);
+        let oWinningTeam;
+        if (ProEventJSO
+            && ProEventJSO.hasOwnProperty('eventdata')
+            && ProEventJSO['eventdata'].hasOwnProperty(tournamentId)) {
+            oWinningTeam = ProEventJSO['eventdata'][tournamentId][0];
+        }
+        return oWinningTeam;
+    }
+    EventUtil.GetTournamentWinner = GetTournamentWinner;
+    ;
 })(EventUtil || (EventUtil = {}));

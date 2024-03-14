@@ -8,7 +8,7 @@
 var ItemTileStore;
 (function (ItemTileStore) {
     function Init(elPanel, oItemData) {
-        if (oItemData.hasOwnProperty('noDropsEarned') && oItemData.noDropsEarned) {
+        if (!oItemData || (oItemData.hasOwnProperty('noDropsEarned') && oItemData.noDropsEarned)) {
             elPanel.SetHasClass('no-drops-earned', true);
             return;
         }
@@ -19,6 +19,7 @@ var ItemTileStore;
         SetName(elPanel, oItemData);
         SetStatTrack(elPanel, oItemData.id);
         SetNewRelease(elPanel, (isNewRelease(oItemData) || oItemData.isDropItem));
+        NotReleased(elPanel, oItemData.isNotReleased);
         SetPrice(elPanel, oItemData);
         SetOnActivate(elPanel, oItemData);
         SetClaimed(elPanel, oItemData);
@@ -73,6 +74,10 @@ var ItemTileStore;
     function SetNewRelease(elPanel, isNew) {
         let elNew = elPanel.FindChildInLayoutFile('id-itemtile-store-new');
         elNew.SetHasClass('hidden', !isNew);
+    }
+    function NotReleased(elPanel, isnotReleased = false) {
+        let elNew = elPanel.FindChildInLayoutFile('id-itemtile-store-not-released');
+        elNew.SetHasClass('hidden', !isnotReleased);
     }
     function SetPrice(elPanel, oItemData) {
         if (oItemData.isDropItem) {
@@ -135,6 +140,7 @@ var ItemTileStore;
         return false;
     }
     function SetOnActivate(elPanel, oItemData) {
+        elPanel.enabled = !oItemData.isDisabled;
         if (oItemData.isDropItem || oItemData.isDisabled) {
             return;
         }
@@ -144,8 +150,8 @@ var ItemTileStore;
         else if (oItemData.hasOwnProperty('linkedid')) {
             let OpenContextMenu = function (itemId, linkedid, isNotReleased, warning) {
                 var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParameters('', '', 'file://{resources}/layout/context_menus/context_menu_store_linked_items.xml', 'itemids=' + itemId + ',' + linkedid +
-                    'is-not-released' + isNotReleased +
-                    'warning' + warning);
+                    '&' + 'is-not-released=' + isNotReleased +
+                    '&' + 'linkedWarning=' + warning);
                 contextMenuPanel.AddClass("ContextMenu_NoArrow");
             };
             let isNotReleased = oItemData.isNotReleased ? 'true' : 'false';
@@ -203,7 +209,10 @@ var ItemTileStore;
     let jsTooltipDelayHandle = null;
     function AddMouseOverEvents(elPanel, oItemData) {
         const tooltipHotspot = elPanel.FindChildTraverse('tooltip-hotspot');
-        const tooltipTargetPanelId = oItemData.isDropItem ? elPanel.id : oItemData.hasOwnProperty('linkedid') ? 'tooltip-hotspot' : 'id-itemtile-store-image-main';
+        const tooltipTargetPanelId = oItemData.isDropItem ? elPanel.id :
+            oItemData.hasOwnProperty('linkedid') ? 'tooltip-hotspot' :
+                oItemData.isNotReleased ? 'tooltip-hotspot' :
+                    'id-itemtile-store-image-main';
         tooltipHotspot.SetPanelEvent('onmouseover', ShowTooltip.bind(undefined, elPanel, oItemData, tooltipTargetPanelId));
         tooltipHotspot.SetPanelEvent('onmouseout', HideTooltip);
     }
@@ -218,6 +227,12 @@ var ItemTileStore;
         }
         if (oItemData.hasOwnProperty('linkedid')) {
             UiToolkitAPI.ShowTextTooltip(tooltipTargetPanelId, '#store_linked_item_tooltip');
+            return;
+        }
+        if (oItemData.hasOwnProperty('isNotReleased') && oItemData.isNotReleased) {
+            if (oItemData.hasOwnProperty('linkedWarning') && oItemData.linkedWarning) {
+                UiToolkitAPI.ShowTextTooltip(tooltipTargetPanelId, oItemData.linkedWarning);
+            }
             return;
         }
         UiToolkitAPI.ShowCustomLayoutParametersTooltip(tooltipTargetPanelId, 'JsItemStoreTooltip', 'file://{resources}/layout/tooltips/tooltip_inventory_item.xml', 'itemid=' + itemId);

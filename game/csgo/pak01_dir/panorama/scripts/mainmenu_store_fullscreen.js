@@ -64,8 +64,10 @@ var MainMenuStore;
         else if (_m_activePanelId === '' || !_m_activePanelId) {
             navBtn = _m_cp.FindChildInLayoutFile('id-store-nav-home');
         }
-        $.DispatchEvent("Activated", navBtn, "mouse");
-        navBtn.checked = true;
+        if (navBtn) {
+            $.DispatchEvent("Activated", navBtn, "mouse");
+            navBtn.checked = true;
+        }
     }
     function NavigateToTab(panelId, keyType = '') {
         if (keyType) {

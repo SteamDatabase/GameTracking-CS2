@@ -21,6 +21,12 @@ var PopupLeaderboards = ( function()
 		_MakeTabs( aTypes );
 		_ShowGlobalRank();
 
+		var extraStyle = $.GetContextPanel().GetAttributeString( 'popup-style', '' );
+		if ( extraStyle )
+		{
+			$.GetContextPanel().AddClass( extraStyle );
+		}
+
 		$( '#id-popup-leaderboard-refresh-button' ).SetPanelEvent(
 			'onactivate',
 			function( lbType ) { LeaderboardsAPI.Refresh( lbType ); }.bind( undefined, type )
@@ -30,7 +36,12 @@ var PopupLeaderboards = ( function()
 	var _SetTitle = function( type )
 	{
 		var titleOverride = $.GetContextPanel().GetAttributeString( 'titleoverride', '' );
-		var title = titleOverride !== '' ? titleOverride : '#CSGO_' + type;
+		var title = titleOverride;
+		if ( !title )
+		{
+			                                                                                       
+			title = '#CSGO_' + (type.split('.')[0]);
+		}
 		$.GetContextPanel().FindChildInLayoutFile( 'id-popup-leaderboard-title' ).text = $.Localize( title );
 	};
 
@@ -39,7 +50,7 @@ var PopupLeaderboards = ( function()
 		var strPointsTitle = $.GetContextPanel().GetAttributeString( 'points-title', '' );
 		if ( strPointsTitle !== '' )
 		{
-	  		                                                                                                                
+			$.GetContextPanel().FindChildInLayoutFile( 'id-header-score' ).text = $.Localize( strPointsTitle );
 		}
 	};
 
@@ -83,6 +94,8 @@ var PopupLeaderboards = ( function()
 		                                
 		m_type = type;
 
+		var count = 0;
+
 		var status = LeaderboardsAPI.GetState( type );
 		                                         
 
@@ -107,8 +120,13 @@ var PopupLeaderboards = ( function()
 	
 		if ( "ready" == status )
 		{
-			var count = LeaderboardsAPI.GetCount( type );
-			
+			count = LeaderboardsAPI.GetCount( type );
+			let limitRows = $.GetContextPanel().GetAttributeInt( 'limitrows', 0 );
+			if ( limitRows > 0 && limitRows < count )
+			{	                                                 
+				count = limitRows;
+			}
+
 			if ( count === 0 )
 			{
 				elData.SetHasClass( 'hidden', false );
@@ -127,6 +145,16 @@ var PopupLeaderboards = ( function()
 			if ( 1 <= LeaderboardsAPI.HowManyMinutesAgoCached( type ) )
 			{
 				LeaderboardsAPI.Refresh( type );
+			}
+		}
+
+		$.GetContextPanel().SetHasClass( 'leaderboard-has-nodata', count === 0 );
+		if ( $.GetContextPanel().BHasClass( 'leaderboard_embedded' ) )
+		{
+			let elParent = $.GetContextPanel().GetParent();
+			if ( elParent )
+			{
+				elParent.SetHasClass( 'leaderboard-has-nodata', count === 0 );
 			}
 		}
 	};
@@ -160,25 +188,13 @@ var PopupLeaderboards = ( function()
 			elAvatar.SetPanelEvent( "oncontextmenu", openCard.bind( undefined, xuid ) );
 		}
 
-		var strThousandsSeparator = $.Localize( '#csgo_thousands_separator' );
+		                                                                         
 		for ( var i = 0; i < count; i++ )
 		{
-			var xuid = LeaderboardsAPI.GetEntryXuidByIndex( type, i );
-			var score = LeaderboardsAPI.GetEntryScoreByIndex( type, i );             
-			var rankpct = LeaderboardsAPI.GetEntryGlobalPctByIndex( type, i );              
-
-			var detailsHandle = LeaderboardsAPI.GetEntryDetailsHandleByIndex( type, i );              
-
-			var MatchesWon = LeaderboardsAPI.GetDetailsMatchEntryStat( detailsHandle, 'MatchesWon' );
-			var MatchesTied = LeaderboardsAPI.GetDetailsMatchEntryStat( detailsHandle, 'MatchesTied' );
-			var MatchesLost = LeaderboardsAPI.GetDetailsMatchEntryStat( detailsHandle, 'MatchesLost' );
-			var RankWindowStats = LeaderboardsAPI.GetDetailsMatchEntryStat( detailsHandle, 'RankWindowStats' );
-
-			let windowStats = MatchDraftAPI.DecodePackedWindowStats( 1, RankWindowStats );
-
-			                                                         
-
-			let winRate = MatchesWon * 100.00 / ( MatchesWon + MatchesTied + MatchesLost );
+			var lbData = LeaderboardsAPI.GetEntryDetailsObjectByIndex( type, i );
+			var xuid = lbData.XUID;
+			var score = lbData.score;
+			                            
 
 			var elEntry = $.CreatePanel( "Panel", elParent, xuid );
 			elEntry.BLoadLayoutSnippet( "leaderboard-entry" );
@@ -186,14 +202,17 @@ var PopupLeaderboards = ( function()
 			elEntry.FindChildInLayoutFile('popup-leaderboard-entry-avatar').PopulateFromSteamID(xuid);
 			_AddOpenPlayerCardAction( elEntry, xuid );
 
-			let elRatingEmblem = elEntry.FindChildTraverse( 'jsRatingEmblem' );
-			RatingEmblem.SetXuid( elRatingEmblem, null, score );
-			
 			elEntry.SetDialogVariable( 'player-rank', i + 1 );
+			elEntry.SetDialogVariable( 'player-score', score );
 			elEntry.SetDialogVariable( 'player-name', FriendsListAPI.GetFriendName(xuid) );
-			elEntry.SetDialogVariable( 'player-wins', MatchesWon );
-			elEntry.SetDialogVariable( 'player-winrate', winRate.toFixed( 2 ) + '%' );
-			elEntry.SetDialogVariable( 'player-percentile', rankpct.toFixed( 2 ) + '%' );
+
+			let elItemImage = elEntry.FindChildInLayoutFile( 'id-itemimage' );
+			let itemid = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex( lbData.defidx, 0 );
+			if ( $.GetContextPanel().BHasClass( 'leaderboard_embedded' ) )
+			{
+				elItemImage.small = true;
+			}
+			elItemImage.itemid = itemid;
 
 			var children = elEntry.FindChildrenWithClassTraverse( 'popup-leaderboard__list__column' );
 			

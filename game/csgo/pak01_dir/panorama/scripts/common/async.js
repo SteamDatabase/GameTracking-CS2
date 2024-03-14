@@ -1,5 +1,5 @@
 "use strict";
-/// <reference path="../../../../core/panorama/scripts/index.d.ts" />
+/// <reference path="../csgo.d.ts" />
 var Async;
 (function (Async) {
     function Delay(fDelay, value) {

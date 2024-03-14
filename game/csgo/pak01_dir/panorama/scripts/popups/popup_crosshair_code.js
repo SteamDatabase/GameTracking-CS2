@@ -32,7 +32,7 @@ var PopupCrosshairCode;
     function OnEntrySubmit() {
         let bSuccess = MyPersonaAPI.BApplyCrosshairCode(elTextEntry.text);
         if (bSuccess) {
-            $.DispatchEvent('RefreshSettingsPanels', '');
+            $.DispatchEvent('RefreshSettingsPanels');
             $.DispatchEvent('UIPopupButtonClicked', '');
         }
         else {

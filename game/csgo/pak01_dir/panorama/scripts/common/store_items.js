@@ -100,14 +100,14 @@ var StoreItems;
             let FauxItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[i][0], 0);
             let GroupName = g_ActiveTournamentStoreLayout[i][2] ? g_ActiveTournamentStoreLayout[i][2] : '';
             let warning = warningTextTournamentItems(isPurchaseable(FauxItemId), FauxItemId);
-            if (ItemInfo.GetStoreSalePrice(FauxItemId, 1)) {
+            let itemPrice = ItemInfo.GetStoreSalePrice(FauxItemId, 1);
+            if (itemPrice || bContainsJustChampions) {
                 let storeItem = {
                     id: FauxItemId,
                     useTinyNames: true
                 };
-                if (isPurchaseable(FauxItemId)) {
-                    storeItem.isNotReleased = true;
-                }
+                storeItem.isDisabled = !isPurchaseable(FauxItemId);
+                storeItem.isNotReleased = !isPurchaseable(FauxItemId);
                 if (!bContainsJustChampions) {
                     storeItem.linkedid = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[i][1], 0);
                 }
@@ -117,13 +117,19 @@ var StoreItems;
                 if (warning) {
                     storeItem.linkedWarning = warning;
                 }
+                if (g_ActiveTournamentStoreLayout[i][0] === g_ActiveTournamentInfo.itemid_pass) {
+                    storeItem.isTournamentPass = true;
+                }
                 m_oItemsByCategory.tournament?.push(storeItem);
+            }
+            if (!itemPrice) {
+                break;
             }
         }
     }
     function warningTextTournamentItems(isPurchaseable, itemid) {
         return !isPurchaseable
-            ? '#tournament_items_not_released'
+            ? '#tournament_items_not_released_1'
             : InventoryAPI.GetItemTypeFromEnum(itemid) === 'type_tool' ? '#tournament_items_notice' : '';
     }
     function isPurchaseable(itemid) {

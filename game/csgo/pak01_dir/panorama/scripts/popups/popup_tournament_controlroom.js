@@ -284,7 +284,8 @@ var PopupTournamentControlRoom = ( function()
 					{
 						let parts = jso.info.split( ':' );
 						if ( ( parts.length === 2 )
-							&& ( parseInt( parts[0] ) >= 16 || parseInt( parts[1] ) >= 16 ) )
+							&& ( parseInt( parts[0] ) >= 13 || parseInt( parts[1] ) >= 13 )
+							&& ( parseInt( parts[0] ) > parseInt( parts[1] ) || parseInt( parts[0] ) < parseInt( parts[1] ) ) )
 						{
 							let elBtn = el.FindChildInLayoutFile( 'ButtonFinalize');
 							elBtn.SetPanelEvent( 'onactivate',

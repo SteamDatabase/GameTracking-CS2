@@ -70,8 +70,13 @@ var LoadoutGrid;
         m_equipSlotChangedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', OnEquipSlotChanged);
         m_setShuffleEnabledHandler = $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_SetShuffleEnabled', UpdateGridShuffleIcons);
         m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', () => {
-            UpdateItemList();
+            OnMyPersonaInventoryUpdated();
         });
+    }
+    function OnMyPersonaInventoryUpdated() {
+        UpdateItemList();
+        FillOutRowItems('ct');
+        FillOutRowItems('t');
     }
     function OnUnreadyForDisplay() {
         if (m_equipSlotChangedHandler) {
@@ -231,10 +236,14 @@ var LoadoutGrid;
             UpdateSlotItemImage(team, elBtn, bUseIcon, true);
             if (itemid && itemid != '0' && elBtn) {
                 elBtn.SetPanelEvent('oncontextmenu', () => {
+                    let filterValue = '';
                     if (LoadoutAPI.IsShuffleEnabled(OverrideTeam(team, slotName), slotName))
-                        OpenContextMenu(elBtn, 'shuffle_slot_' + team);
+                        filterValue = 'shuffle_slot_' + team;
                     else
-                        OpenContextMenu(elBtn, 'loadout_slot_' + team);
+                        filterValue = 'loadout_slot_' + team;
+                    if (slotName === 'spray0')
+                        filterValue += '&contextmenuparam=graffiti';
+                    OpenContextMenu(elBtn, filterValue);
                 });
                 elBtn.SetPanelEvent('onmouseover', () => {
                     if (team == m_selectedTeam && entry.equip_on_hover)
@@ -263,6 +272,9 @@ var LoadoutGrid;
             itemImage = $.CreatePanel('ItemImage', elPanel, 'loudout-item-image-' + slot, {
                 class: 'loadout-slot__image'
             });
+            if (slot === 'spray0') {
+                itemImage.SetAttributeInt('ItemInventoryImagePurpose', 1);
+            }
             if (!bUseIcon) {
                 elRarity = $.CreatePanel('Panel', elPanel, 'id-loadout-item-rarity', {
                     class: 'loadout-slot-rarity'
@@ -303,6 +315,10 @@ var LoadoutGrid;
             }
         }
         elPanel.Data().itemid = itemid;
+        elPanel.Data().visuals_itemid = itemid;
+        if (slot === 'spray0') {
+            elPanel.Data().visuals_itemid = ItemInfo.GetFauxReplacementItemID(itemid, 'graffiti');
+        }
         let color = InventoryAPI.GetItemRarityColor(itemid);
         if (elRarity) {
             elRarity.visible = color ? true : false;
@@ -322,7 +338,7 @@ var LoadoutGrid;
                 text: '{s:item-name}'
             });
         }
-        elPanel.SetDialogVariable('item-name', $.Localize(InventoryAPI.GetItemBaseName(elPanel.Data().itemid)));
+        elPanel.SetDialogVariable('item-name', $.Localize(InventoryAPI.GetItemBaseName(elPanel.Data().visuals_itemid)));
     }
     function UpdateMoney(elPanel, team) {
         let elMoney = elPanel.FindChild('id-loadout-item-money');
@@ -368,10 +384,14 @@ var LoadoutGrid;
         });
         elPanel.SetPanelEvent('oncontextmenu', () => {
             let slot = elPanel.GetAttributeString('data-slot', '');
+            let filterValue = '';
             if (LoadoutAPI.IsShuffleEnabled(m_selectedTeam, slot))
-                OpenContextMenu(elPanel, 'shuffle_slot_' + m_selectedTeam);
+                filterValue = 'shuffle_slot_' + m_selectedTeam;
             else
-                OpenContextMenu(elPanel, 'loadout_slot_' + m_selectedTeam);
+                filterValue = 'loadout_slot_' + m_selectedTeam;
+            if (slot === 'spray0')
+                filterValue += '&contextmenuparam=graffiti';
+            OpenContextMenu(elPanel, filterValue);
         });
         elPanel.SetDraggable(true);
         $.RegisterEventHandler('DragStart', elPanel, (elPanel, drag) => {
@@ -685,7 +705,7 @@ var LoadoutGrid;
         elItemTile.SetPanelEvent('onactivate', () => { });
         elItemTile.SetDraggable(true);
         $.RegisterEventHandler('DragStart', elItemTile, (elItemTile, drag) => {
-            $.DispatchEvent('CSGOInventoryHideTooltip', elItemTile);
+            $.DispatchEvent('CSGOInventoryHideTooltip');
             OnDragStart(elItemTile, drag, elItemTile.GetAttributeString('itemid', '0'), false);
         });
         $.RegisterEventHandler('DragEnd', elItemTile, (elItemTile, elDragImage) => {

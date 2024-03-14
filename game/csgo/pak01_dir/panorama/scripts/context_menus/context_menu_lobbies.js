@@ -91,8 +91,8 @@ var ContextMenuLobbies;
     ;
     function AddTransitionEndEventHandler(elTile) {
         $.RegisterEventHandler('PropertyTransitionEnd', elTile, fnOnPropertyTransitionEndEvent);
-        function fnOnPropertyTransitionEndEvent(panelName, propertyName) {
-            if (elTile.id === panelName && propertyName === 'opacity') {
+        function fnOnPropertyTransitionEndEvent(panel, propertyName) {
+            if (elTile === panel && propertyName === 'opacity') {
                 if (elTile.visible === true && elTile.BIsTransparent()) {
                     elTile.DeleteAsync(0.0);
                     return true;

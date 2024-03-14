@@ -356,11 +356,11 @@ var CapabilityDecodable;
             InventoryAPI.AcknowledgeNewItembyItemID(m_itemFromContainer);
             if (ItemInfo.ItemDefinitionNameSubstrMatch(m_itemFromContainer, 'tournament_journal_')) {
                 $.Schedule(0.2, () => {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_tournament_journal.xml', 'journalid=' + m_itemFromContainer);
+                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_major_hub.xml', 'journalid=' + m_itemFromContainer);
                 });
             }
             else {
-                $.DispatchEvent("InventoryItemPreview", m_itemFromContainer);
+                $.DispatchEvent("InventoryItemPreview", m_itemFromContainer, '');
             }
             CapabilityDecodable.ClosePopUp();
             let rarityVal = InventoryAPI.GetItemRarity(m_itemFromContainer);

@@ -62,13 +62,12 @@ var MainMenu;
             _m_playedInitalFadeUp = true;
             _RegisterOnShowEvents();
             _UpdateBackgroundMap();
-            SetHideTranstionOnLeftColumn();
         }
     }
     function SetHideTranstionOnLeftColumn() {
         const elLeftColumn = $.FindChildInContext('#JsLeftColumn');
-        function fnOnPropertyTransitionEndEvent(panelName, propertyName) {
-            if (elLeftColumn.id === panelName && propertyName === 'opacity') {
+        function fnOnPropertyTransitionEndEvent(panel, propertyName) {
+            if (elLeftColumn === panel && propertyName === 'opacity') {
                 if (elLeftColumn.visible === true && elLeftColumn.BIsTransparent()) {
                     elLeftColumn.SetReadyForDisplay(false);
                     elLeftColumn.visible = false;
@@ -541,7 +540,6 @@ var MainMenu;
     }
     function _ShowFloatingPanels() {
         $.FindChildInContext('#JsLeftColumn').SetHasClass('hidden', false);
-        $.FindChildInContext('#JsActiveMissionPanel').SetHasClass('hidden', false);
         $.FindChildInContext('#MainMenuVanityInfo').SetHasClass('hidden', false);
         const elVanityButton = $.FindChildInContext('#VanityControls');
         if (elVanityButton) {
@@ -550,8 +548,6 @@ var MainMenu;
     }
     function _HideFloatingPanels() {
         $.FindChildInContext('#JsLeftColumn').SetHasClass('hidden', true);
-        $.FindChildInContext('#JsActiveMissionPanel').SetHasClass('hidden', true);
-        $.FindChildInContext('#JsActiveMissionPanel').SetHasClass('hidden', true);
         $.FindChildInContext('#MainMenuVanityInfo').SetHasClass('hidden', true);
         const elVanityButton = $.FindChildInContext('#VanityControls');
         if (elVanityButton) {
@@ -895,8 +891,9 @@ var MainMenu;
         elAlert.SetDialogVariable("alert_value", count.toString());
         elAlert.SetHasClass('hidden', count < 1);
     }
-    function _OnInventoryInspect(id) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', `itemid=${id}&inspectonly=true&viewfunc=primary`);
+    function _OnInventoryInspect(id, contextmenuparam) {
+        let inspectviewfunc = contextmenuparam ? contextmenuparam : 'primary';
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', `itemid=${id}&inspectonly=true&viewfunc=${inspectviewfunc}`);
     }
     function _OnShowXrayCasePopup(toolid, caseId, bShowPopupWarning = false) {
         const showpopup = bShowPopupWarning ? 'yes' : 'no';

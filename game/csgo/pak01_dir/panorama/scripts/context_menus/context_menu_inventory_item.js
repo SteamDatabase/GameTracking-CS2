@@ -17,6 +17,7 @@ var ItemContextMenu;
             UiToolkitAPI.ShowTextTooltip(location, displayText);
         }
         let hasEntries = false;
+        let contextmenuparam = $.GetContextPanel().GetAttributeString('contextmenuparam', '');
         for (let i = 0; i < validEntries.length; i++) {
             let entry = validEntries[i];
             if (entry.AvailableForItem(id)) {
@@ -43,7 +44,7 @@ var ItemContextMenu;
                 let handler = entry.OnSelected;
                 elButton.SetPanelEvent('onactivate', () => {
                     $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_item_popupSelect', 'MOUSE');
-                    handler(id);
+                    handler(id, contextmenuparam);
                 });
                 if (entry.CustomName) {
                     if (entry.CustomName(id) !== '') {

@@ -207,7 +207,10 @@ var ItemTile;
         }
         let filterValue = $.GetContextPanel().GetAttributeString('context_menu_filter', '');
         let filterForContextMenuEntries = filterValue ? '&populatefiltertext=' + filterValue : '';
-        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('popup-inspect-' + id, '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + id + filterForContextMenuEntries, () => { });
+        let contextmenuparam = '';
+        if ($.GetContextPanel().GetAttributeString('filter_category', '') === 'inv_graphic_art')
+            contextmenuparam = '&contextmenuparam=graffiti';
+        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('popup-inspect-' + id, '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + id + filterForContextMenuEntries + contextmenuparam, () => { });
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
     ItemTile.OnActivate = OnActivate;

@@ -343,7 +343,7 @@ var InspectAsyncActionBar;
         else if (upgradeid !== '0') {
             InventoryAPI.AcknowledgeNewItembyItemID(upgradeid);
             InventoryAPI.SetItemSessionPropertyValue(upgradeid, 'recent', '1');
-            $.DispatchEvent('InventoryItemPreview', upgradeid);
+            $.DispatchEvent('InventoryItemPreview', upgradeid, '');
         }
     }
 })(InspectAsyncActionBar || (InspectAsyncActionBar = {}));

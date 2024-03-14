@@ -79,6 +79,9 @@ var InspectPurchaseBar;
         let attValue = InventoryAPI.GetItemAttributeValue(m_itemid, 'season access');
         if (attValue)
             return false;
+        let strToolType = InventoryAPI.GetToolType(m_itemid);
+        if (strToolType === 'fantoken')
+            return false;
         let defName = InventoryAPI.GetItemDefinitionName(m_itemid);
         if (defName === 'casket')
             return false;

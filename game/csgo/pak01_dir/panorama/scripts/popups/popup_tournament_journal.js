@@ -37,7 +37,7 @@ var TournamentJournal = ( function()
         {
             var nMissionNodeID = InventoryAPI.GetCampaignNodeIDbyIndex( nCampaignID, jj );
                                          
-            var strNodeState = InventoryAPI.GetCampaignNodeState( nCampaignID, nMissionNodeID, journalId );
+            var strNodeState = InventoryAPI.GetCampaignNodeState( nCampaignID, nMissionNodeID, journalId, true );
                                             
             var nQuestID = InventoryAPI.GetCampaignNodeQuestID( nCampaignID, nMissionNodeID );
             var strFauxQuestItem = InventoryAPI.GetQuestItemIDFromQuestID( nQuestID );

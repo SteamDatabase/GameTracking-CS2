@@ -1042,8 +1042,8 @@ var PlayMenu;
                     _UpdateOrCreateMapGroupTile(aMapGroups[index], elSectionContainer, null, panelID + aMapGroups[index], numTiles);
             });
         }
-        $.RegisterEventHandler('PropertyTransitionEnd', container, (panelName, propertyName) => {
-            if (container.id === panelName && propertyName === 'opacity' &&
+        $.RegisterEventHandler('PropertyTransitionEnd', container, (panel, propertyName) => {
+            if (container === panel && propertyName === 'opacity' &&
                 !container.id.startsWith("FriendLeaderboards")) {
                 if (container.visible === true && container.BIsTransparent()) {
                     container.visible = false;
