@@ -57,7 +57,7 @@ var PredictionsGroup;
         let isActiveSection = PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId);
         let canPick = PredictionsAPI.GetGroupCanPick(oPageData.tournamentId, oPageData.groupId);
         let elParent = oPageData.panel.FindChildInLayoutFile('id-predictions-draggable-teams');
-        const sourceNamePrefix = "id-group-team-";
+        const sourceNamePrefix = 'id-group' + oPageData.groupId + '-team-';
         elParent.GetParent().FindChildInLayoutFile('id-no-teams').visible = (!(nTeams > 0) || !isActiveSection) && canPick;
         elParent.GetParent().FindChildInLayoutFile('id-drag-teams').visible = (nTeams > 0 && isActiveSection);
         for (let i = 0; i < nTeams; ++i) {
@@ -71,12 +71,7 @@ var PredictionsGroup;
                     elTeam.Data().isSource = true;
                     if (isActiveSection && !oPageData.hasAlreadyInit.includes(oPageData.panel.id)) {
                         _AddDragSourceEvents(elTeam);
-                        elTeam.SetPanelEvent('onmouseover', () => {
-                            UiToolkitAPI.ShowTextTooltip(elTeam.id, PredictionsAPI.GetTeamName(elTeam.Data().teamId));
-                        });
-                        elTeam.SetPanelEvent('onmouseout', () => {
-                            UiToolkitAPI.HideTextTooltip();
-                        });
+                        _ShowHideTeamTooltip(elTeam);
                     }
                 }
                 _SetSourceDragTeamImage(elTeam, teamId);
@@ -98,6 +93,18 @@ var PredictionsGroup;
                 aLocalPicks.length > 0;
         }
         _FillWithEmptyTeams(elParent, nActualTeams);
+    }
+    function _ShowHideTeamTooltip(elPanel, tooltipLocIdOverride = '') {
+        elPanel.SetPanelEvent('onmouseover', () => {
+            if (!elPanel.Data().teamId)
+                return;
+            UiToolkitAPI.ShowTextTooltip(tooltipLocIdOverride ?
+                tooltipLocIdOverride :
+                elPanel.id, PredictionsAPI.GetTeamName(elPanel.Data().teamId));
+        });
+        elPanel.SetPanelEvent('onmouseout', () => {
+            UiToolkitAPI.HideTextTooltip();
+        });
     }
     function _FillWithEmptyTeams(elParent, nTeams) {
         let nTeamsPossible = 16;
@@ -180,6 +187,7 @@ var PredictionsGroup;
         drag.offsetY = 32;
         drag.removePositionBeforeDrop = false;
         $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_item_pickup', 'MOUSE');
+        UiToolkitAPI.HideTextTooltip();
     }
     function OnDragEnd(elDragImage) {
         elDragImage.DeleteAsync(0.25);
@@ -196,6 +204,7 @@ var PredictionsGroup;
         let isActiveSection = PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId);
         for (let i = 0; i < nCount; ++i) {
             let elTarget = oPageData.panel.FindChildInLayoutFile(_m_targetNamePrefix + i);
+            _MakeUniqueTooltipLocator(elTarget, oPageData.groupId, i);
             if (bForceClear) {
                 _UpdateDropTarget(elTarget, null);
             }
@@ -215,6 +224,15 @@ var PredictionsGroup;
         }
         if (bForceClear) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_item_notequipped', 'MOUSE');
+        }
+    }
+    function _MakeUniqueTooltipLocator(elTarget, groupId, index) {
+        let tooltipLocId = 'id-target-tooltip-loc-' + groupId + '-' + index;
+        let tooltipLoc = elTarget.FindChild(tooltipLocId);
+        let tooltipLocClass = (index === 5 || index === 6 || index === 7) ? 'group-stage-drop-target__tooltip-loc bottom' : 'group-stage-drop-target__tooltip-loc';
+        if (!tooltipLoc) {
+            tooltipLoc = $.CreatePanel('Panel', elTarget, tooltipLocId, { class: tooltipLocClass });
+            elTarget.Data().tooltipLocId = tooltipLocId;
         }
     }
     function _ItemDragTargetEvents(elTarget) {
@@ -252,6 +270,7 @@ var PredictionsGroup;
             elTarget.FindChildInLayoutFile('id-team-panel').SetDraggable(teamId !== null);
             elTarget.SetHasClass('not-active', teamId !== null);
             _SetSourceDragTeamImage(elTarget, teamId);
+            _ShowHideTeamTooltip(elTarget, elTarget.Data().tooltipLocId);
         }
     }
     function _FillOutPicksRandom() {
@@ -305,6 +324,7 @@ var PredictionsGroup;
                         break;
                     arrTeamPairs.push({ panel: elTeamPair, keyteamwl: 0, keyteam_wins: 0, keyteam_loss: 0 });
                     elTeamPair.SetHasClass('has_valid_matchup', false);
+                    elTeamPair.SetHasClass('has_match_in_progress', false);
                     elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-0').SetImage("file://{images}/tournaments/unknown_team.svg");
                     elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-1').SetImage("file://{images}/tournaments/unknown_team.svg");
                     elTeamPair.Data().umids = [];
@@ -360,6 +380,7 @@ var PredictionsGroup;
             let team0 = MatchInfoAPI.GetMatchTournamentTeamTag(umid, 0);
             let team1 = MatchInfoAPI.GetMatchTournamentTeamTag(umid, 1);
             let res = MatchInfoAPI.GetMatchOutcome(umid);
+            let bMatchStillInProgress = (!res || res <= 0);
             let winteam = ((res == 2) ? team1 : team0);
             let keyteam = (team0 < team1) ? team0 : team1;
             let steam = GetTeamState(keyteam);
@@ -371,14 +392,15 @@ var PredictionsGroup;
             if (_m_elSections[matchup][keyteam] < _m_elSections[matchup].matches.length) {
                 let omatch = _m_elSections[matchup].matches[_m_elSections[matchup][keyteam]];
                 let elTeamPair = omatch.panel;
-                omatch.keyteamwl += (winteam == keyteam) ? 1 : -1;
-                omatch.keyteam_wins += (winteam == keyteam) ? 1 : 0;
-                omatch.keyteam_loss += (winteam != keyteam) ? 1 : 0;
+                let nCountThisMatchForBO3 = bMatchStillInProgress ? 0 : 1;
+                omatch.keyteamwl += ((winteam == keyteam) ? 1 : -1) * nCountThisMatchForBO3;
+                omatch.keyteam_wins += ((winteam == keyteam) ? 1 : 0) * nCountThisMatchForBO3;
+                omatch.keyteam_loss += ((winteam != keyteam) ? 1 : 0) * nCountThisMatchForBO3;
                 let bSwap01 = (omatch.keyteamwl >= 0) ? ((team0 == keyteam) ? false : true)
                     : ((team0 == keyteam) ? true : false);
                 let nLeftScore = 0;
                 let nRightScore = 0;
-                if (omatch.keyteam_wins + omatch.keyteam_loss > 1) {
+                if (steam.wins >= 2 || steam.loss >= 2) {
                     nLeftScore = (omatch.keyteam_wins >= omatch.keyteam_loss) ? omatch.keyteam_wins : omatch.keyteam_loss;
                     nRightScore = (omatch.keyteam_wins < omatch.keyteam_loss) ? omatch.keyteam_wins : omatch.keyteam_loss;
                 }
@@ -387,6 +409,7 @@ var PredictionsGroup;
                     nRightScore = MatchInfoAPI.GetMatchRoundScoreForTeam(umid, bSwap01 ? 0 : 1);
                 }
                 elTeamPair.SetHasClass('has_valid_matchup', true);
+                elTeamPair.SetHasClass('has_match_in_progress', bMatchStillInProgress);
                 elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-0').SetImage("file://{images}/tournaments/teams/" +
                     (bSwap01 ? team1 : team0) + ".svg");
                 elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-1').SetImage("file://{images}/tournaments/teams/" +
@@ -394,6 +417,8 @@ var PredictionsGroup;
                 elTeamPair.SetDialogVariableInt('match-score-0', nLeftScore);
                 elTeamPair.SetDialogVariableInt('match-score-1', nRightScore);
                 elTeamPair.Data().umids.push(umid);
+                if (bMatchStillInProgress)
+                    elTeamPair.Data().umids = [];
             }
             AddWin(GetTeamState(winteam));
             AddLoss(GetTeamState((team0 == winteam) ? team1 : team0));

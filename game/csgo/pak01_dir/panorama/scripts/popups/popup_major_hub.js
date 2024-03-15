@@ -35,6 +35,7 @@ var PopupMajorHub;
         _m_cp.SetReadyForDisplay(false);
         $.DispatchEvent('UIPopupButtonClicked', '');
         $.DispatchEvent('ContextMenuEvent', '');
+        UiToolkitAPI.HideTextTooltip();
     }
     PopupMajorHub.ClosePopup = ClosePopup;
     function LeaderboardPopup() {
@@ -44,6 +45,15 @@ var PopupMajorHub;
             '&' + 'popup-style=major-hub-popup-leaderboard');
     }
     PopupMajorHub.LeaderboardPopup = LeaderboardPopup;
+    function Init() {
+        let eventId = $.GetContextPanel().GetAttributeString('eventid', '') ? parseInt($.GetContextPanel().GetAttributeString('eventid', '')) : -1;
+        if (eventId < 0) {
+            ClosePopup();
+            return;
+        }
+        ReadyForDisplay();
+    }
+    PopupMajorHub.Init = Init;
     function ReadyForDisplay() {
         if (!MyPersonaAPI.IsConnectedToGC()) {
             ClosePopup();
@@ -54,8 +64,14 @@ var PopupMajorHub;
             ClosePopup();
             return;
         }
-        _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', OnInventoryUpdated);
-        _m_eventId = g_ActiveTournamentInfo.eventid;
+        if (!_m_inventoryUpdatedHandler) {
+            _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', OnInventoryUpdated);
+        }
+        let eventId = $.GetContextPanel().GetAttributeString('eventid', '') ? parseInt($.GetContextPanel().GetAttributeString('eventid', '')) : -1;
+        if (eventId < 0) {
+            return;
+        }
+        _m_eventId = eventId;
         _m_tournamentId = 'tournament:' + _m_eventId;
         SetUpHubBasedOnEventId();
     }
@@ -69,6 +85,7 @@ var PopupMajorHub;
         _UpdateTournamentTitle();
         _UpdateChallenges();
         _SetUpSpray();
+        _SetBackgroundImages();
         let oWinningTeam = EventUtil.GetTournamentWinner(_m_eventId, 1);
         let isTournamentActive = (!oWinningTeam || !oWinningTeam.hasOwnProperty('team_id') ? true : false);
         let bItemsForSale = _ItemsForSale();
@@ -117,12 +134,18 @@ var PopupMajorHub;
         $.DispatchEvent("Activated", elNavBtn, "mouse");
         m_setDefaultTab = true;
     }
-    var _IsValidTournamentCoinItemId = function (id) {
-        return (!id || id === '0') ? false : true;
-    };
     function _UpdateTournamentTitle() {
         _m_cp.SetDialogVariable('tournament_name', $.Localize('#CSGO_Tournament_Event_NameShort_' + _m_eventId));
         _m_cp.FindChildInLayoutFile('id-major-logo').SetImage('file://{images}/tournaments/events/tournament_logo_' + _m_eventId + '.svg');
+    }
+    function _SetBackgroundImages() {
+        let bgImage = "url( 'file://{images}/tournaments/backgrounds/pickem_bg_" + _m_eventId + ".png')";
+        _m_cp.FindChildInLayoutFile('id-major-store-block').style.backgroundImage = bgImage;
+        _m_cp.FindChildInLayoutFile('id-major-store-block').SetHasClass('major-background-size', true);
+        _m_cp.FindChildInLayoutFile('id-graffiti-block').style.backgroundImage = bgImage;
+        _m_cp.FindChildInLayoutFile('id-graffiti-block').SetHasClass('major-background-size', true);
+        _m_cp.FindChildInLayoutFile('id-challenges-block').style.backgroundImage = bgImage;
+        _m_cp.FindChildInLayoutFile('id-challenges-block').SetHasClass('major-background-size', true);
     }
     function _UpdateSouvenirSection() {
         if (_m_eventId === g_ActiveTournamentInfo.eventid) {
@@ -213,6 +236,7 @@ var PopupMajorHub;
         if (bHasActiveCoin) {
             _SetPoints(nPointsEarned, tournamentCoinItemId);
             _SetThresholdText(nPointsEarned, numTotalChallenges, tournamentCoinItemId);
+            _RedemptionChargesRemaining(tournamentCoinItemId);
             _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetActiveItem(0);
             _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetItemItemId(tournamentCoinItemId);
         }
@@ -256,6 +280,20 @@ var PopupMajorHub;
         _m_cp.SetDialogVariableInt('challenges', challengesRemain);
         _m_cp.SetDialogVariable('challenges_status', $.Localize(sText, $.GetContextPanel()));
     };
+    var _RedemptionChargesRemaining = function (tournamentCoinItemId) {
+        let coinLevel = parseInt(InventoryAPI.GetItemAttributeValue(tournamentCoinItemId, "upgrade level"));
+        let coinRedeemsPurchased = parseInt(InventoryAPI.GetItemAttributeValue(tournamentCoinItemId, "operation drops awarded 1"));
+        if (coinRedeemsPurchased)
+            coinLevel += coinRedeemsPurchased;
+        let redeemed = parseInt(InventoryAPI.GetItemAttributeValue(tournamentCoinItemId, "operation drops awarded 0"));
+        let redeemsAvailable = coinLevel - redeemed;
+        _m_cp.SetDialogVariableInt('redeems', redeemsAvailable);
+        let elPanel = _m_cp.FindChildInLayoutFile('id-coin-status-charges');
+        elPanel.visible = redeemsAvailable > 0;
+        let sTooltip = $.Localize('#popup_redeem_souvenir_desc', _m_cp);
+        elPanel.SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltip('id-coin-status-charges', sTooltip); });
+        elPanel.SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });
+    };
     var _SetPassBtnAction = function () {
         let btn = _m_cp.FindChildInLayoutFile('id-pass-upsell-btn');
         let passItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId * -1);
@@ -274,7 +312,6 @@ var PopupMajorHub;
         }
     };
     function _SetUpSpray() {
-        var elPanel = $.GetContextPanel().FindChildInLayoutFile('id-graffiti-block');
         let tournamentCoinItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId);
         let elParent = $.GetContextPanel().FindChildInLayoutFile('id-major-store');
         if (!tournamentCoinItemId || tournamentCoinItemId === '0') {
@@ -303,6 +340,7 @@ var PopupMajorHub;
             m_oPageData.tournamentId = _m_tournamentId;
             m_oPageData.sectionId = sectionId;
             m_oPageData.groupId = groupId;
+            m_oPageData.groupIndex = groupIndex;
             PredictionsTimer.UpdateTimer();
             PredictionsGroup.Init();
             if (!m_oPageData.hasAlreadyInit.includes(elPage.id)) {
@@ -349,6 +387,9 @@ var PopupMajorHub;
             _m_cp.SetHasClass('loading', false);
             if (!m_setDefaultTab) {
                 $.Schedule(.15, SetDefaultTab);
+            }
+            else {
+                NavigateToTab(m_oPageData.groupIndex);
             }
             return;
         }

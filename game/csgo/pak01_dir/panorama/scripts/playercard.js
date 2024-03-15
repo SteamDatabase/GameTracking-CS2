@@ -335,14 +335,16 @@ var PlayerCard;
             let imagePath = InventoryAPI.GetItemInventoryImage(flairItemIdList[i]);
             let panelName = _m_xuid + flairItemIdList[i];
             if (elCarouselPage) {
-                let elFlair = $.CreatePanel('Image', elCarouselPage, panelName, {
-                    class: 'playercard-flair__icon',
-                    src: 'file://{images}' + imagePath + '_small.png',
-                    scaling: 'stretch-to-fit-preserve-aspect'
-                });
-                let flairItemId = flairItemIdList[i];
-                elFlair.SetPanelEvent('onmouseover', () => onMouseOver(flairItemId, panelName));
-                elFlair.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
+                if (imagePath !== '') {
+                    let elFlair = $.CreatePanel('Image', elCarouselPage, panelName, {
+                        class: 'playercard-flair__icon',
+                        src: 'file://{images}' + imagePath + '_small.png',
+                        scaling: 'stretch-to-fit-preserve-aspect'
+                    });
+                    let flairItemId = flairItemIdList[i];
+                    elFlair.SetPanelEvent('onmouseover', () => onMouseOver(flairItemId, panelName));
+                    elFlair.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
+                }
             }
         }
     }

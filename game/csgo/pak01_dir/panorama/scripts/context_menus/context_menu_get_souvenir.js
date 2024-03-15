@@ -38,9 +38,7 @@ var ContextMenuGetSouvenir;
         if (_m_redeemsAvailable > 0) {
             elRedeemHeader.visible = true;
             elRedeemHeader.SetDialogVariableInt('redeems', _m_redeemsAvailable);
-            elRedeemHeader.SetDialogVariable('redeems-text', (_m_redeemsAvailable > 1) ?
-                $.Localize('#popup_redeem_souvenir_desc', elRedeemHeader) :
-                $.Localize('#popup_redeem_souvenir_desc_single', elRedeemHeader));
+            elRedeemHeader.SetDialogVariable('redeems-text', $.Localize('#popup_redeem_souvenir_desc', elRedeemHeader));
         }
     }
     function MakeMatch(elParent, umid) {
@@ -52,9 +50,9 @@ var ContextMenuGetSouvenir;
         let team0 = MatchInfoAPI.GetMatchTournamentTeamTag(umid, 0);
         let team1 = MatchInfoAPI.GetMatchTournamentTeamTag(umid, 1);
         let res = MatchInfoAPI.GetMatchOutcome(umid);
-        let team0Score = MatchInfoAPI.GetMatchRoundScoreForTeam(umid, team0 ? 1 : 0);
-        let team1Score = MatchInfoAPI.GetMatchRoundScoreForTeam(umid, team1 ? 0 : 1);
-        let bTteamSwap = team0Score < team1Score;
+        let team0Score = MatchInfoAPI.GetMatchRoundScoreForTeam(umid, 0);
+        let team1Score = MatchInfoAPI.GetMatchRoundScoreForTeam(umid, 1);
+        let bTteamSwap = (res == 2);
         elMatch.SetDialogVariableInt('match-score-0', bTteamSwap ? team1Score : team0Score);
         elMatch.SetDialogVariableInt('match-score-1', bTteamSwap ? team0Score : team1Score);
         elMatch.SetDialogVariable('teamname-0', bTteamSwap ?
