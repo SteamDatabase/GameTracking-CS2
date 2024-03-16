@@ -109,8 +109,8 @@ var g_ActiveTournamentTeams = [
         team_group: 'challengers',
     },
     {
-        teamid: 128,
-        team: 'pand',
+        teamid: 115,
+        team: 'gl',
         stickerid_graffiti: 7368,
         team_group: 'challengers',
     },
