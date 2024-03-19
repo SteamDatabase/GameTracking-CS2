@@ -5,6 +5,7 @@
 /// <reference path="../common/store_items.ts" />
 /// <reference path="../generated/items_event_current_generated_store.d.ts" />
 /// <reference path="../generated/items_event_current_generated_store.ts" />
+/// <reference path="../popups/popup_acknowledge_item.ts" />
 /// <reference path="../itemtile_store.ts" />
 /// <reference path="../tournaments/predictions_timer.ts" />
 /// <reference path="../tournaments/predictions_group_stage.ts" />
@@ -131,20 +132,30 @@ var PopupMajorHub;
         }
     }
     function SetDefaultTab() {
+        let passItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId * -1);
+        let coinItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId);
+        if ((!coinItemId || coinItemId === '0') && (passItemId && passItemId !== '0') && !m_setDefaultTab)
+            OpenPassActivate(passItemId);
         let nCount = PredictionsAPI.GetEventSectionsCount(_m_tournamentId);
-        for (let i = 0; i < nCount; ++i) {
+        let elLastActiveSection;
+        for (let i = nCount - 1; i >= 0; --i) {
             let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, i);
             if (PredictionsAPI.GetSectionIsActive(_m_tournamentId, sectionId) === true) {
                 let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage' + i);
                 if (elNavBtn && elNavBtn.IsValid()) {
-                    $.DispatchEvent("Activated", elNavBtn, "mouse");
-                    m_setDefaultTab = true;
-                    return;
+                    elNavBtn.SetHasClass('active', true);
+                    elLastActiveSection = elNavBtn;
+                }
+                else {
+                    elNavBtn.SetHasClass('active', false);
                 }
             }
         }
-        let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage2');
-        {
+        if (elLastActiveSection && elLastActiveSection.IsValid()) {
+            $.DispatchEvent("Activated", elLastActiveSection, "mouse");
+        }
+        else {
+            let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage2');
             $.DispatchEvent("Activated", elNavBtn, "mouse");
         }
         m_setDefaultTab = true;
@@ -450,9 +461,16 @@ var PopupMajorHub;
         PredictionsTimer.UpdateTimer();
         PredictionsGroup.UpdateFromPredictionUploadedEvent();
     }
-    function ItemAcquired(ItemId) {
+    function ItemAcquired(itemId) {
         let nSouvenir = g_ActiveTournamentInfo;
-        let newItemDefName = InventoryAPI.GetItemDefinitionName(ItemId);
+        let newItemDefName = InventoryAPI.GetItemDefinitionName(itemId);
+        let passDef = InventoryAPI.GetItemDefinitionName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0));
+        let passPackDef = InventoryAPI.GetItemDefinitionName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pack, 0));
+        if (InventoryAPI.GetItemDefinitionName(itemId) === passDef || InventoryAPI.GetItemDefinitionName(itemId) === passPackDef) {
+            AcknowledgeItems.GetItemsByType([passDef, passPackDef], true);
+            OpenPassActivate(itemId);
+            return;
+        }
         Object.entries(nSouvenir.souvenirs).forEach(element => {
             let defName = InventoryAPI.GetItemDefinitionName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(element[1], 0));
             if (defName === newItemDefName) {
@@ -461,6 +479,10 @@ var PopupMajorHub;
                 return;
             }
         });
+    }
+    function OpenPassActivate(itemId) {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
+            '&' + 'asyncworktype=decodeable');
     }
     {
         ReadyForDisplay();
@@ -480,20 +502,20 @@ var SavePicksButton;
         ResetTimeoutHandle();
         let oPageData = PopupMajorHub.GetActivePageData();
         let elBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-apply-btn');
+        let bThisSectionIsNoLongerActive = !PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId);
         if (!PredictionsAPI.GetGroupCanPick(oPageData.tournamentId, oPageData.groupId)) {
             elBtn.enabled = false;
             elBtn.visible = false;
-            let sCorrectPicks = PredictionsAPI.GetGroupCorrectPicksByIndex(oPageData.tournamentId, oPageData.groupId, 0);
-            if (sCorrectPicks) {
-                let elToggleBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-toggle-correct-btn');
-                elToggleBtn.visible = true;
-                elToggleBtn.SetPanelEvent('onactivate', () => {
-                    oPageData.panel.SetHasClass('show-all-correct-picks', !oPageData.panel.BHasClass('show-all-correct-picks'));
-                });
-            }
+            let elToggleBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-toggle-correct-btn');
+            elToggleBtn.visible = true;
+            elToggleBtn.SetPanelEvent('onactivate', () => {
+                oPageData.panel.SetHasClass('show-all-correct-picks', !oPageData.panel.BHasClass('show-all-correct-picks'));
+            });
+            elToggleBtn.checked = bThisSectionIsNoLongerActive;
+            oPageData.panel.SetHasClass('show-all-correct-picks', bThisSectionIsNoLongerActive);
             return;
         }
-        if (!PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId)) {
+        if (bThisSectionIsNoLongerActive) {
             elBtn.enabled = false;
             elBtn.visible = false;
             return;

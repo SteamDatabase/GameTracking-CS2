@@ -215,7 +215,6 @@ var MainMenu;
         else if (GameTypesAPI.ShouldShowNewUserPopup()) {
             _NewUser_ShowTrainingCompletePopup();
         }
-        _ShowKeyboardBindingPopup();
         _m_bShownBefore = true;
     }
     function _TournamentDraftUpdate() {
@@ -1331,23 +1330,6 @@ var MainMenu;
         }, '#PlayMenu_GraphicsDriverWarning_DontShowAgain', () => {
             GameInterfaceAPI.SetSettingString('cl_graphics_driver_warning_dont_show_again', '1');
         }, '#OK', () => { });
-    }
-    function _ShowKeyboardBindingPopup() {
-        const setVersionTo = '2402';
-        if (GameInterfaceAPI.GetSettingString('cl_new_user_phase') === '-1') {
-            const currentVersion = GameInterfaceAPI.GetSettingString('ui_popup_weaponupdate_version');
-            if (currentVersion !== setVersionTo) {
-                UiToolkitAPI.ShowGenericPopupTwoOptions('#keyboard_support_popup_title', '#keyboard_support_popup_body', '', '#keyboard_support_popup_btn', () => {
-                    $.DispatchEvent('MainMenuGoToSettings');
-                    GameInterfaceAPI.SetSettingString('ui_popup_weaponupdate_version', setVersionTo);
-                }, '#OK', () => {
-                    GameInterfaceAPI.SetSettingString('ui_popup_weaponupdate_version', setVersionTo);
-                });
-            }
-        }
-        else {
-            GameInterfaceAPI.SetSettingString('ui_popup_weaponupdate_version', setVersionTo);
-        }
     }
     {
         $.LogChannel("CSGO_MainMenu", "LV_DEFAULT", "#aaff80");

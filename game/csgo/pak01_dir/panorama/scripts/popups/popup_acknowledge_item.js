@@ -17,6 +17,7 @@ var AcknowledgeItems;
     function Init() {
         const items = GetItems();
         if (items.length < 1) {
+            AcknowledgeAllItems.InvokeJSCallback();
             $.DispatchEvent('UIPopupButtonClicked', '');
             return;
         }
@@ -239,13 +240,17 @@ var AcknowledgeItems;
         function OnActivate() {
             AcknowledgeItems();
             InventoryAPI.AcknowledgeNewBaseItems();
+            InvokeJSCallback();
+            OnCloseEvents();
+        }
+        AcknowledgeAllItems.OnActivate = OnActivate;
+        function InvokeJSCallback() {
             const callbackResetAcknowlegePopupHandle = $.GetContextPanel().GetAttributeInt("callback", -1);
             if (callbackResetAcknowlegePopupHandle != -1) {
                 UiToolkitAPI.InvokeJSCallback(callbackResetAcknowlegePopupHandle);
             }
-            OnCloseEvents();
         }
-        AcknowledgeAllItems.OnActivate = OnActivate;
+        AcknowledgeAllItems.InvokeJSCallback = InvokeJSCallback;
         function OnCloseEvents() {
             $.DispatchEvent('UIPopupButtonClicked', '');
             $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_new_item_accept', 'MOUSE');
