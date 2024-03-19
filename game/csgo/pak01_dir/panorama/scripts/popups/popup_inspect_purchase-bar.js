@@ -18,8 +18,12 @@ var InspectPurchaseBar;
         m_itemid = !m_storeItemid ? itemId : m_storeItemid;
         let bFauxItemIdForPurchase = InventoryAPI.IsFauxItemID(m_itemid);
         let priceOriginal = bFauxItemIdForPurchase ? ItemInfo.GetStoreOriginalPrice(m_itemid, 1) : '';
-        if (!priceOriginal ||
-            (funcGetSettingCallback('inspectonly', 'false') === 'true') ||
+        if (!priceOriginal && (funcGetSettingCallback('inspectonly', 'false') === 'true') && !InventoryAPI.IsValidItemID(m_itemid)) {
+            elPanel.FindChildInLayoutFile('id-purchase-section').visible = false;
+            elPanel.RemoveClass('hidden');
+            return;
+        }
+        if ((funcGetSettingCallback('inspectonly', 'false') === 'true') ||
             !InventoryAPI.IsValidItemID(m_itemid)) {
             elPanel.AddClass('hidden');
             return;

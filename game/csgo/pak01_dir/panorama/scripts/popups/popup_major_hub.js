@@ -31,6 +31,7 @@ var PopupMajorHub;
                 }
             }
         });
+        PredictionsGroup.DeleteDragItem();
         $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_close', 'MOUSE');
         _m_cp.SetReadyForDisplay(false);
         $.DispatchEvent('UIPopupButtonClicked', '');
@@ -130,9 +131,24 @@ var PopupMajorHub;
         }
     }
     function SetDefaultTab() {
-        let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage0');
-        $.DispatchEvent("Activated", elNavBtn, "mouse");
+        let nCount = PredictionsAPI.GetEventSectionsCount(_m_tournamentId);
+        for (let i = 0; i < nCount; ++i) {
+            let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, i);
+            if (PredictionsAPI.GetSectionIsActive(_m_tournamentId, sectionId) === true) {
+                let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage' + i);
+                if (elNavBtn && elNavBtn.IsValid()) {
+                    $.DispatchEvent("Activated", elNavBtn, "mouse");
+                    m_setDefaultTab = true;
+                    return;
+                }
+            }
+        }
+        let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage2');
+        {
+            $.DispatchEvent("Activated", elNavBtn, "mouse");
+        }
         m_setDefaultTab = true;
+        return;
     }
     function _UpdateTournamentTitle() {
         _m_cp.SetDialogVariable('tournament_name', $.Localize('#CSGO_Tournament_Event_NameShort_' + _m_eventId));
@@ -163,7 +179,7 @@ var PopupMajorHub;
         Object.keys(oSouvenirs).forEach((key, index) => {
             elModelPanel.SetActiveItem(0);
             let idForCharges = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(oSouvenirs[key], 0);
-            elModelPanel.SetItemItemId(idForCharges);
+            elModelPanel.SetItemItemId(idForCharges, '');
         });
     }
     function _UpdateStoreTiles() {
@@ -238,7 +254,7 @@ var PopupMajorHub;
             _SetThresholdText(nPointsEarned, numTotalChallenges, tournamentCoinItemId);
             _RedemptionChargesRemaining(tournamentCoinItemId);
             _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetActiveItem(0);
-            _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetItemItemId(tournamentCoinItemId);
+            _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetItemItemId(tournamentCoinItemId, '');
         }
         else {
             let passIndex = g_ActiveTournamentInfo.itemid_pass;
@@ -327,20 +343,20 @@ var PopupMajorHub;
         elParent.SetHasClass('graffiti-panel-visible', true);
     }
     ;
-    function NavigateToTab(groupIndex) {
-        let elPage = _m_elPickemPages.FindChild('id-pickem-page-stage' + groupIndex);
+    function NavigateToTab(sectionIndex) {
+        let elPage = _m_elPickemPages.FindChild('id-pickem-page-stage' + sectionIndex);
         elPage?.SetHasClass('hidden', m_selectedPage === elPage);
         m_selectedPage?.SetHasClass('hidden', m_selectedPage !== elPage);
         m_selectedPage = elPage;
-        if ((groupIndex === 0 || groupIndex === 1) && elPage) {
-            let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, groupIndex);
+        if ((sectionIndex === 0 || sectionIndex === 1) && elPage) {
+            let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, sectionIndex);
             let groupId = PredictionsAPI.GetSectionGroupIDByIndex(_m_tournamentId, sectionId, 0);
             m_oPageData.panel = elPage;
             m_oPageData.eventId = _m_eventId;
             m_oPageData.tournamentId = _m_tournamentId;
             m_oPageData.sectionId = sectionId;
             m_oPageData.groupId = groupId;
-            m_oPageData.groupIndex = groupIndex;
+            m_oPageData.sectionIndex = sectionIndex;
             PredictionsTimer.UpdateTimer();
             PredictionsGroup.Init();
             if (!m_oPageData.hasAlreadyInit.includes(elPage.id)) {
@@ -348,7 +364,7 @@ var PopupMajorHub;
             }
         }
         else
-            (groupIndex === 2);
+            (sectionIndex === 2);
         {
         }
     }
@@ -389,7 +405,7 @@ var PopupMajorHub;
                 $.Schedule(.15, SetDefaultTab);
             }
             else {
-                NavigateToTab(m_oPageData.groupIndex);
+                NavigateToTab(m_oPageData.sectionIndex);
             }
             return;
         }
@@ -402,6 +418,11 @@ var PopupMajorHub;
         }
     }
     ;
+    function CheckIfPickIsCorrect(sCorrectPicks, userPickTeamID) {
+        let aCorrectPicks = sCorrectPicks.split(',');
+        return aCorrectPicks.includes(userPickTeamID.toString());
+    }
+    PopupMajorHub.CheckIfPickIsCorrect = CheckIfPickIsCorrect;
     function IsSectionActive() {
         if (PredictionsAPI.GetSectionIsActive(m_oPageData.tournamentId, m_oPageData.sectionId)) {
             return true;
@@ -461,8 +482,15 @@ var SavePicksButton;
         let elBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-apply-btn');
         if (!PredictionsAPI.GetGroupCanPick(oPageData.tournamentId, oPageData.groupId)) {
             elBtn.enabled = false;
-            elBtn.SwitchClass('btn_state', 'locked');
-            elBtn.SetDialogVariable('save-btn-text', $.Localize('#pickem_timer_locked'));
+            elBtn.visible = false;
+            let sCorrectPicks = PredictionsAPI.GetGroupCorrectPicksByIndex(oPageData.tournamentId, oPageData.groupId, 0);
+            if (sCorrectPicks) {
+                let elToggleBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-toggle-correct-btn');
+                elToggleBtn.visible = true;
+                elToggleBtn.SetPanelEvent('onactivate', () => {
+                    oPageData.panel.SetHasClass('show-all-correct-picks', !oPageData.panel.BHasClass('show-all-correct-picks'));
+                });
+            }
             return;
         }
         if (!PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId)) {

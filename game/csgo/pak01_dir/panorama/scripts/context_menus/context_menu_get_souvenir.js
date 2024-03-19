@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
+/// <reference path="../popups/popup_acknowledge_item.ts" />
 /// <reference path="../generated/items_event_current_generated_store.d.ts" />
 /// <reference path="../generated/items_event_current_generated_store.ts" />
 var ContextMenuGetSouvenir;
@@ -74,6 +75,7 @@ var ContextMenuGetSouvenir;
         elMatch.FindChildInLayoutFile('id-map-logo').SetImage("file://{images}/map_icons/map_icon_" + rawMapName + ".svg");
         let tournamentId = $.GetContextPanel().GetAttributeString('tournamentId', '');
         _SetButtonHintText(elMatch, parseInt(tournamentId), umid);
+        _SetPreviewBtn(elMatch, rawMapName, umid);
         elMatch.SetHasClass('show', true);
     }
     function _SetButtonHintText(elMatch, tournamentIndex, umid) {
@@ -147,9 +149,36 @@ var ContextMenuGetSouvenir;
         });
     }
     ;
+    function _SetPreviewBtn(elMatch, rawMapName, umid) {
+        let previewBtn = elMatch.FindChildInLayoutFile('id-preview-souvenir-btn');
+        previewBtn.SetPanelEvent('onactivate', () => {
+            let idFaux = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.souvenirs[rawMapName], 0);
+            let nEventID = MatchInfoAPI.GetMatchTournamentEventID(umid);
+            let nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
+            let team0 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 0);
+            let team1 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 1);
+            let attributes = `{ "tournament event id": ${nEventID}, "tournament event stage id": ${nStageID}, "tournament event team0 id": ${team0}, "tournament event team1 id": ${team1} }`;
+            UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + idFaux
+                + '&' +
+                'case-attributes=' + attributes
+                + '&' +
+                'asyncworkitemwarning=no'
+                + '&' +
+                'asyncforcehide=true'
+                + '&' +
+                'inspectonly=true'
+                + '&' +
+                'asyncworktype=decodeable');
+        });
+    }
     var _ItemCustomizationNotification = function (numericType, type, itemid) {
         _ResetTimeouthandle();
         if (type === 'souvenir_generated') {
+            let itemsToAcknowledge = AcknowledgeItems.GetItems();
+            if (itemsToAcknowledge.length > 0) {
+                $.DispatchEvent('ShowAcknowledgePopup', '', '');
+            }
+            return;
             InventoryAPI.AcknowledgeNewItembyItemID(itemid);
             UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemid +
                 '&' + 'inspectonly=true' +

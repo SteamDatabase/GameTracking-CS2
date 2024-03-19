@@ -7,6 +7,7 @@ var InspectModelImage;
     let m_elPanel = null;
     let m_elContainer = null;
     let m_useAcknowledge = false;
+    let m_itemAttributes = '';
     let m_rarityColor = '';
     let m_isStickerApplyRemove = false;
     let m_isItemInLootlist = false;
@@ -40,8 +41,9 @@ var InspectModelImage;
         { type: 'weapon_c4', camera: '3' },
         { type: 'weapon_taser', camera: '0' },
     ];
-    function Init(elContainer, itemId, funcGetSettingCallback) {
+    function Init(elContainer, itemId, funcGetSettingCallback, itemAttributes) {
         const strViewFunc = funcGetSettingCallback ? funcGetSettingCallback('viewfunc', '') : '';
+        m_itemAttributes = itemAttributes ? itemAttributes : '';
         m_isWorkshopPreview = funcGetSettingCallback ? funcGetSettingCallback('workshopPreview', 'false') === 'true' : false;
         m_isStickerApplyRemove = funcGetSettingCallback ? funcGetSettingCallback('stickerApplyRemove', 'false') === 'true' : false;
         m_isItemInLootlist = funcGetSettingCallback ? funcGetSettingCallback('isItemInLootlist', 'false') === 'true' : false;
@@ -432,7 +434,7 @@ var InspectModelImage;
         elPanel.Data().active_item_idx = oSettings.active_item_idx;
         elPanel.Data().loadedMap = mapName;
         elPanel.SetActiveItem(oSettings.active_item_idx);
-        elPanel.SetItemItemId(itemId);
+        elPanel.SetItemItemId(itemId, m_itemAttributes);
         elPanel.RemoveClass('inspect-model-image-panel--hidden');
         _AdditionalMapLoadSettings(elPanel, oSettings.active_item_idx, mapName);
         _SetParticlesBg(elPanel);
@@ -638,7 +640,7 @@ var InspectModelImage;
     function UpdateModelOnly(itemId) {
         let elpanel = m_elPanel;
         if (elpanel && elpanel.IsValid()) {
-            elpanel.SetItemItemId(itemId);
+            elpanel.SetItemItemId(itemId, '');
         }
     }
     InspectModelImage.UpdateModelOnly = UpdateModelOnly;

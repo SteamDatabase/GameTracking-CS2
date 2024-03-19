@@ -1250,6 +1250,7 @@ var MainMenu;
         UiToolkitAPI.ShowGenericPopupOkCancel('#ForceNewUserTraining_title', '#ForceNewUserTraining_text', '', () => {
             $.DispatchEvent('OpenPlayMenu');
             $.Schedule(0.1, _NewUser_TrainingMatch);
+            GameTypesAPI.OnStartForcedNewUserTraining();
         }, () => { });
     }
     function _NewUser_ShowTrainingCompletePopup() {

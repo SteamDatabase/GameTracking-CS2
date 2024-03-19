@@ -12,6 +12,7 @@ var CapabilityDecodable;
     let m_aItemsInLootlist = [];
     let m_scrollListsPanelIds = ['ScrollList', 'ScrollListMagnified'];
     let m_caseId = '';
+    let m_caseAttributes = '';
     let m_existingRewardFromXrayId = '';
     let m_itemFromContainer = '';
     let m_InspectPanel = $.GetContextPanel();
@@ -37,6 +38,7 @@ var CapabilityDecodable;
             m_caseId = oData.case;
         }
         let strMsg = $.GetContextPanel().GetAttributeString("key-and-case", "");
+        m_caseAttributes = $.GetContextPanel().GetAttributeString("case-attributes", "");
         m_isXrayMode = $.GetContextPanel().GetAttributeString("isxraymode", "no") === 'yes' ? true : false;
         m_isAllowedToInteractWithLootlistItems = ($.GetContextPanel().GetAttributeString('allowtointeractwithlootlistitems', 'true') === 'true') ? true : false;
         m_blurOperationPanel = ($.GetContextPanel().GetAttributeString('bluroperationpanel', 'false') === 'true') ? true : false;
@@ -171,7 +173,7 @@ var CapabilityDecodable;
     }
     function _SetCaseModelImage(caseId, PanelId) {
         let elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile(PanelId);
-        InspectModelImage.Init(elItemModelImagePanel, caseId);
+        InspectModelImage.Init(elItemModelImagePanel, caseId, undefined, m_caseAttributes);
         m_elCaseModelImagePanel = InspectModelImage.GetModelPanel();
     }
     function _SetUpAsyncActionBar(itemId) {

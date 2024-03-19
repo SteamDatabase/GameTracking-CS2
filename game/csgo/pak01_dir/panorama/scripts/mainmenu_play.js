@@ -1431,23 +1431,25 @@ var PlayMenu;
         if (gameMode === 'competitive' && m_serverSetting === 'listen' && !m_isWorkshop) {
             elButton.visible = true;
             elButton.SetPanelEvent('onactivate', () => {
-                const settings = {
-                    update: {
-                        Options: {
-                            action: 'custommatch',
-                            server: 'listen',
+                UiToolkitAPI.ShowGenericPopupOkCancel('#ForceNewUserTraining_title', '#ForceNewUserTraining_text', '', () => $.Schedule(0.1, () => {
+                    const settings = {
+                        update: {
+                            Options: {
+                                action: 'custommatch',
+                                server: 'listen',
+                            },
+                            Game: {
+                                mode: 'new_user_training',
+                                type: 'classic',
+                                mapgroupname: 'mg_de_dust2',
+                                map: 'de_dust2'
+                            }
                         },
-                        Game: {
-                            mode: 'new_user_training',
-                            type: 'classic',
-                            mapgroupname: 'mg_de_dust2',
-                            map: 'de_dust2'
-                        }
-                    },
-                    delete: {}
-                };
-                LobbyAPI.UpdateSessionSettings(settings);
-                LobbyAPI.StartMatchmaking('', '', '', '');
+                        delete: {}
+                    };
+                    LobbyAPI.UpdateSessionSettings(settings);
+                    LobbyAPI.StartMatchmaking('', '', '', '');
+                }), () => { });
             });
         }
         else {
