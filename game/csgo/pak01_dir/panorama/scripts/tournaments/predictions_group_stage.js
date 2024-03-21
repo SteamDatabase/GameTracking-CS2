@@ -66,6 +66,8 @@ var PredictionsGroup;
         elParent.GetParent().FindChildInLayoutFile('id-drag-teams').visible = (nTeams > 0 && isActiveSection);
         for (let i = 0; i < nTeams; ++i) {
             let teamId = PredictionsAPI.GetGroupTeamIDByIndex(oPageData.tournamentId, oPageData.groupId, i);
+            if (teamId !== 0 && teamId && !PredictionsAPI.GetFakeItemIDToRepresentTeamID(oPageData.tournamentId, teamId))
+                teamId = 0;
             let elTeam = oPageData.panel.FindChildInLayoutFile(sourceNamePrefix + teamId);
             if (teamId !== 0 && teamId) {
                 if (!elTeam) {

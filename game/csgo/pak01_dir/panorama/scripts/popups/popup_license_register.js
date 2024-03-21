@@ -7,7 +7,7 @@ var PopupLicenseRegister;
         let spinnerVisible = $.GetContextPanel().GetAttributeInt("spinner", 0);
         $("#Spinner").SetHasClass("SpinnerVisible", !!spinnerVisible);
         m_LicenseRegisterTimer = $.Schedule(11, PanelTimedOut);
-        $.Schedule(1, MyPersonaAPI.ActionStartAgreementSessionInGame);
+        $.Schedule(1, () => { MyPersonaAPI.ActionStartAgreementSessionInGame(); });
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_StartAgreementSessionInGame', StartAgreementSessionInGame);
     }
     PopupLicenseRegister.SetupPopup = SetupPopup;
