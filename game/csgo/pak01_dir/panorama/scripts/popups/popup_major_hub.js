@@ -9,6 +9,7 @@
 /// <reference path="../itemtile_store.ts" />
 /// <reference path="../tournaments/predictions_timer.ts" />
 /// <reference path="../tournaments/predictions_group_stage.ts" />
+/// <reference path="../tournaments/predictions_bracket_stage.ts" />
 var PopupMajorHub;
 (function (PopupMajorHub) {
     const _m_cp = $.GetContextPanel();
@@ -32,7 +33,7 @@ var PopupMajorHub;
                 }
             }
         });
-        PredictionsGroup.DeleteDragItem();
+        DeleteDragItem();
         $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_close', 'MOUSE');
         _m_cp.SetReadyForDisplay(false);
         $.DispatchEvent('UIPopupButtonClicked', '');
@@ -136,7 +137,7 @@ var PopupMajorHub;
         let coinItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId);
         if ((!coinItemId || coinItemId === '0') && (passItemId && passItemId !== '0') && !m_setDefaultTab)
             OpenPassActivate(passItemId);
-        let nCount = PredictionsAPI.GetEventSectionsCount(_m_tournamentId);
+        let nCount = 3;
         let elLastActiveSection;
         for (let i = nCount - 1; i >= 0; --i) {
             let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, i);
@@ -358,25 +359,24 @@ var PopupMajorHub;
         let elPage = _m_elPickemPages.FindChild('id-pickem-page-stage' + sectionIndex);
         elPage?.SetHasClass('hidden', m_selectedPage === elPage);
         m_selectedPage?.SetHasClass('hidden', m_selectedPage !== elPage);
+        let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, sectionIndex);
+        let groupId = PredictionsAPI.GetSectionGroupIDByIndex(_m_tournamentId, sectionId, 0);
         m_selectedPage = elPage;
+        m_oPageData.panel = elPage;
+        m_oPageData.eventId = _m_eventId;
+        m_oPageData.tournamentId = _m_tournamentId;
+        m_oPageData.sectionId = sectionId;
+        m_oPageData.groupId = groupId;
+        m_oPageData.sectionIndex = sectionIndex;
+        PredictionsTimer.UpdateTimer();
         if ((sectionIndex === 0 || sectionIndex === 1) && elPage) {
-            let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, sectionIndex);
-            let groupId = PredictionsAPI.GetSectionGroupIDByIndex(_m_tournamentId, sectionId, 0);
-            m_oPageData.panel = elPage;
-            m_oPageData.eventId = _m_eventId;
-            m_oPageData.tournamentId = _m_tournamentId;
-            m_oPageData.sectionId = sectionId;
-            m_oPageData.groupId = groupId;
-            m_oPageData.sectionIndex = sectionIndex;
-            PredictionsTimer.UpdateTimer();
             PredictionsGroup.Init();
-            if (!m_oPageData.hasAlreadyInit.includes(elPage.id)) {
-                m_oPageData.hasAlreadyInit.push(elPage.id);
-            }
         }
-        else
-            (sectionIndex === 2);
-        {
+        else if (sectionIndex === 2) {
+            PredictionsBracket.Init();
+        }
+        if (!m_oPageData.hasAlreadyInit.includes(elPage.id)) {
+            m_oPageData.hasAlreadyInit.push(elPage.id);
         }
     }
     PopupMajorHub.NavigateToTab = NavigateToTab;
@@ -459,7 +459,12 @@ var PopupMajorHub;
     }
     function RefreshActivePage() {
         PredictionsTimer.UpdateTimer();
-        PredictionsGroup.UpdateFromPredictionUploadedEvent();
+        if (m_oPageData.sectionIndex === 0 || m_oPageData.sectionIndex === 1) {
+            PredictionsGroup.UpdateFromPredictionUploadedEvent();
+        }
+        else if (m_oPageData.sectionIndex === 2) {
+            PredictionsBracket.UpdateFromPredictionUploadedEvent();
+        }
     }
     function ItemAcquired(itemId) {
         let nSouvenir = g_ActiveTournamentInfo;
@@ -484,6 +489,12 @@ var PopupMajorHub;
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
             '&' + 'asyncworktype=decodeable');
     }
+    function DeleteDragItem() {
+        if (PopupMajorHub.m_elDragImage && PopupMajorHub.m_elDragImage.IsValid()) {
+            PopupMajorHub.m_elDragImage.DeleteAsync(0.25);
+        }
+    }
+    PopupMajorHub.DeleteDragItem = DeleteDragItem;
     {
         ReadyForDisplay();
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_GcLogonNotificationReceived', ReadyForDisplay);
@@ -498,7 +509,7 @@ var PopupMajorHub;
 var SavePicksButton;
 (function (SavePicksButton) {
     let _m_timeoutApplyHandle;
-    function UpdateBtn(aLocalPicks) {
+    function UpdateBtn(aLocalPicks = []) {
         ResetTimeoutHandle();
         let oPageData = PopupMajorHub.GetActivePageData();
         let elBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-apply-btn');
@@ -521,11 +532,11 @@ var SavePicksButton;
             return;
         }
         elBtn.visible = true;
-        let nCount = PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
+        let nCount = oPageData.sectionIndex >= 2 ? 7 : PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
         if (aLocalPicks.length === nCount) {
             let bPicksDifferent = false;
             for (let i = 0; i < nCount; ++i) {
-                if (aLocalPicks[i] !== PredictionsAPI.GetMyPredictionTeamID(oPageData.tournamentId, oPageData.groupId, i)) {
+                if (aLocalPicks[i].teamId !== PredictionsAPI.GetMyPredictionTeamID(oPageData.tournamentId, aLocalPicks[i].group, aLocalPicks[i].groupIndex)) {
                     bPicksDifferent = true;
                     break;
                 }
@@ -553,7 +564,7 @@ var SavePicksButton;
         if (elBtn.enabled) {
             var args = [oPageData.tournamentId];
             for (var i = 0; i < nCount; ++i) {
-                args.push(oPageData.groupId.toString(), i.toString(), PredictionsAPI.GetFakeItemIDToRepresentTeamID(oPageData.tournamentId, aLocalPicks[i]));
+                args.push(aLocalPicks[i].group.toString(), aLocalPicks[i].groupIndex.toString(), PredictionsAPI.GetFakeItemIDToRepresentTeamID(oPageData.tournamentId, aLocalPicks[i].teamId));
             }
             elBtn.SetPanelEvent('onactivate', () => {
                 let tournamentCoinItemId = InventoryAPI.GetActiveTournamentCoinItemId(oPageData.eventId);

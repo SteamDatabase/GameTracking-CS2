@@ -4,7 +4,6 @@
 var PredictionsGroup;
 (function (PredictionsGroup) {
     let _m_foundTarget = false;
-    let _m_elDragImage;
     const _m_targetNamePrefix = "id-pickem-pick-";
     function Init() {
         let oPageData = PopupMajorHub.GetActivePageData();
@@ -81,15 +80,15 @@ var PredictionsGroup;
                     }
                 }
                 _SetSourceDragTeamImage(elTeam, teamId);
-                let isLocalPick = aLocalPicks.includes(teamId);
+                let isLocalPick = aLocalPicks.find(p => p.teamId == teamId);
                 if (isLocalPick) {
-                    elTeam.SwitchClass('source-state', 'already-picked');
+                    elTeam.SwitchClass('team-state', 'already-picked');
                 }
                 else if (!isActiveSection || !canPick) {
-                    elTeam.SwitchClass('source-state', 'team-locked');
+                    elTeam.SwitchClass('team-state', 'team-locked');
                 }
                 else {
-                    elTeam.SwitchClass('source-state', '');
+                    elTeam.SwitchClass('team-state', '');
                 }
                 elTeam.hittest = !isLocalPick;
                 elTeam.hittestchildren = !isLocalPick;
@@ -135,7 +134,7 @@ var PredictionsGroup;
             for (let i = 0; i < nEmptyteams; ++i) {
                 let elTeam = $.CreatePanel("Panel", elParent, 'empty-team');
                 elTeam.BLoadLayoutSnippet("team-draggable");
-                elTeam.SwitchClass('source-state', 'empty-team');
+                elTeam.SwitchClass('team-state', 'empty-team');
                 elTeam.hittest = false;
                 elTeam.hittestchildren = false;
             }
@@ -167,10 +166,10 @@ var PredictionsGroup;
         for (let i = 0; i < nCount; ++i) {
             let elTarget = oPageData.panel.FindChildInLayoutFile(_m_targetNamePrefix + i);
             if (bAllowEmptySlots) {
-                aPicks.push(elTarget.Data().teamId);
+                aPicks.push({ teamId: elTarget.Data().teamId, group: oPageData.groupId, groupIndex: i });
             }
             else if (elTarget.Data().teamId) {
-                aPicks.push(elTarget.Data().teamId);
+                aPicks.push({ teamId: elTarget.Data().teamId, group: oPageData.groupId, groupIndex: i });
             }
         }
         return aPicks;
@@ -196,7 +195,7 @@ var PredictionsGroup;
         elDragImage.AddClass('start-drag');
         elDragImage.Data().teamId = elDragSource.Data().teamId;
         elDragImage.Data().isSource = elDragSource.Data().isSource ? elDragSource.Data().isSource : false;
-        _m_elDragImage = elDragImage;
+        PopupMajorHub.m_elDragImage = elDragImage;
         drag.displayPanel = elDragImage;
         drag.offsetX = 32;
         drag.offsetY = 32;
@@ -206,7 +205,7 @@ var PredictionsGroup;
     }
     function OnDragEnd(elDragImage) {
         elDragImage.AddClass('drag-end');
-        DeleteDragItem();
+        PopupMajorHub.DeleteDragItem();
         if (!_m_foundTarget && !elDragImage.Data().isSource) {
             let elOldTarget = _GetLocalPickPanel(elDragImage.Data().teamId);
             _UpdateDropTarget(elOldTarget, null);
@@ -214,12 +213,6 @@ var PredictionsGroup;
         }
         _m_foundTarget = false;
     }
-    function DeleteDragItem() {
-        if (_m_elDragImage && _m_elDragImage.IsValid()) {
-            _m_elDragImage.DeleteAsync(0.25);
-        }
-    }
-    PredictionsGroup.DeleteDragItem = DeleteDragItem;
     function _UpdateDragTargets(oPageData, bForceClear = false) {
         let nCount = PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
         let isActiveSection = PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId);
@@ -301,7 +294,12 @@ var PredictionsGroup;
             elTarget.Data().teamId = teamId;
             elTarget.SetHasClass('has-pick', teamId !== null ? true : false);
             elTarget.SetHasClass('not-active', teamId !== null);
-            elTarget.FindChildInLayoutFile('id-team-panel').SetHasClass('team-locked', teamId !== null);
+            if (teamId === null || !isActiveSection || !canPick) {
+                elTarget.FindChildInLayoutFile('id-team-panel').SwitchClass('team-state', 'team-locked');
+            }
+            else {
+                elTarget.FindChildInLayoutFile('id-team-panel').SwitchClass('team-state', '');
+            }
             elTarget.FindChildInLayoutFile('id-team-panel').Data().teamId = teamId;
             elTarget.FindChildInLayoutFile('id-team-panel').SetDraggable((isActiveSection && canPick) && teamId !== null);
             _SetSourceDragTeamImage(elTarget, teamId);
@@ -315,9 +313,9 @@ var PredictionsGroup;
         let nTeams = PredictionsAPI.GetGroupTeamsCount(oPageData.tournamentId, oPageData.groupId);
         for (let i = 0; i < nTeams; ++i) {
             aTeams.push(PredictionsAPI.GetGroupTeamIDByIndex(oPageData.tournamentId, oPageData.groupId, i));
-            aTeams = aTeams.filter(valve => valve !== 0);
+            aTeams = aTeams.filter(value => value !== 0);
         }
-        let aUnpickedTeams = aTeams.filter((value, index) => !aLocalPicks.includes(value));
+        let aUnpickedTeams = aTeams.filter((value, index) => !aLocalPicks.find(p => p.teamId == value));
         let top = aUnpickedTeams.length;
         while (--top) {
             var current = Math.floor(Math.random() * (top + 1));
@@ -483,8 +481,10 @@ var PredictionsGroup;
                 if (bMatchStillInProgress)
                     elTeamPair.Data().umids = [];
             }
-            AddWin(GetTeamState(winteam));
-            AddLoss(GetTeamState((team0 == winteam) ? team1 : team0));
+            if (!bMatchStillInProgress) {
+                AddWin(GetTeamState(winteam));
+                AddLoss(GetTeamState((team0 == winteam) ? team1 : team0));
+            }
         }
         for (let teamtag in teamStates) {
             if (teamStates[teamtag].wins < 3 && teamStates[teamtag].loss < 3)
