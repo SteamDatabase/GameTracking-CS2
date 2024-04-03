@@ -89,15 +89,11 @@ var PopupMajorHub;
         _UpdateChallenges();
         _SetUpSpray();
         _SetBackgroundImages();
-        let oWinningTeam = EventUtil.GetTournamentWinner(_m_eventId, 1);
-        let isTournamentActive = (!oWinningTeam || !oWinningTeam.hasOwnProperty('team_id') ? true : false);
         let bItemsForSale = _ItemsForSale();
         _m_cp.SetHasClass('no-items-on-sale', !bItemsForSale);
         if (bItemsForSale) {
             _UpdateSouvenirSection();
             _UpdateStoreTiles();
-        }
-        else if (!isTournamentActive) {
         }
         else {
         }
@@ -215,8 +211,15 @@ var PopupMajorHub;
     }
     function _ItemsForSale() {
         var tournamentEventId = NewsAPI.GetActiveTournamentEventID();
-        return ((tournamentEventId !== 0) &&
-            ('' !== StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[0][0], 0), 1, '')));
+        if (tournamentEventId === 0)
+            return false;
+        if (g_ActiveTournamentInfo.eventid !== tournamentEventId)
+            return false;
+        for (let i = 0; i < g_ActiveTournamentStoreLayout.length; ++i) {
+            if ('' !== StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[i][0], 0), 1, ''))
+                return true;
+        }
+        return false;
     }
     ;
     function _UpdateChallenges() {
@@ -325,15 +328,27 @@ var PopupMajorHub;
     var _SetPassBtnAction = function () {
         let btn = _m_cp.FindChildInLayoutFile('id-pass-upsell-btn');
         let passItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId * -1);
-        btn.text = (!passItemId || passItemId === '0') ? '#SFUI_ConfirmBtn_GetPassNow' : '#SFUI_ConfirmBtn_ActivatePassNow';
-        if ((!passItemId || passItemId === '0'))
-            btn.SetPanelEvent('onactivate', () => {
-                var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParameters('', '', 'file://{resources}/layout/context_menus/context_menu_store_linked_items.xml', 'itemids=' + InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0) +
-                    ',' + InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pack, 0) +
-                    '&' + 'linkedWarning=#tournament_items_notice');
-                contextMenuPanel.AddClass("ContextMenu_NoArrow");
-            });
+        if ((!passItemId || passItemId === '0')) {
+            let bCanPurchasePass = (g_ActiveTournamentInfo.eventid === _m_eventId) &&
+                ('' !== StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[0][0], 0), 1, ''));
+            if (bCanPurchasePass) {
+                btn.text = '#SFUI_ConfirmBtn_GetPassNow';
+                btn.SetPanelEvent('onactivate', () => {
+                    var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParameters('', '', 'file://{resources}/layout/context_menus/context_menu_store_linked_items.xml', 'itemids=' + InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0) +
+                        ',' + InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pack, 0) +
+                        '&' + 'linkedWarning=#tournament_items_notice');
+                    contextMenuPanel.AddClass("ContextMenu_NoArrow");
+                });
+            }
+            else {
+                btn.text = '';
+                btn.visible = false;
+                btn.SetPanelEvent('onactivate', () => {
+                });
+            }
+        }
         else {
+            btn.text = '#SFUI_ConfirmBtn_ActivatePassNow';
             btn.SetPanelEvent('onactivate', () => {
                 InventoryAPI.UseTool(passItemId, '');
             });
@@ -342,7 +357,7 @@ var PopupMajorHub;
     function _SetUpSpray() {
         let tournamentCoinItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId);
         let elParent = $.GetContextPanel().FindChildInLayoutFile('id-major-store');
-        if (!tournamentCoinItemId || tournamentCoinItemId === '0') {
+        if (!tournamentCoinItemId || tournamentCoinItemId === '0' || g_ActiveTournamentInfo.eventid !== _m_eventId || !g_ActiveTournamentInfo.active) {
             elParent.SetHasClass('graffiti-panel-visible', false);
             return;
         }

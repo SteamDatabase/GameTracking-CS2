@@ -122,7 +122,7 @@ var StoreItems;
                 }
                 m_oItemsByCategory.tournament?.push(storeItem);
             }
-            if (!itemPrice) {
+            if (!itemPrice && i >= g_ActiveTournamentInfo.num_global_offerings) {
                 break;
             }
         }

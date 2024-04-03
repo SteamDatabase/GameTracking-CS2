@@ -22,7 +22,7 @@ var MainMenuMajorTile;
         let sRestriction = InventoryAPI.GetDecodeableRestriction("capsule");
         let bCanSellCapsules = (sRestriction !== "restricted" && sRestriction !== "xray");
         _m_cp.SetHasClass('can-sell-items', false);
-        let itemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[1][0], 0);
+        let itemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[4][0], 0);
         let tournamentEventId = NewsAPI.GetActiveTournamentEventID();
         if (bCanSellCapsules && (tournamentEventId !== 0) && ('' !== StoreAPI.GetStoreItemSalePrice(itemId, 1, ''))) {
             g_ActiveTournamentStoreLayout[4][1],

@@ -21,7 +21,7 @@ var g_ActiveTournamentInfo = {
         de_vertigo: 4932,
     },
     num_global_offerings: 1,
-    active: true,
+    active: false,
 };
 var g_ActiveTournamentTeams = [
     {
