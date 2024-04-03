@@ -87,6 +87,12 @@ var FriendsList;
         }
         if (m_activeSection !== sectionId) {
             m_activeSection = sectionId;
+            if (sectionId === 'id-friendslist-section-recent') {
+                TeammatesAPI.Refresh();
+            }
+            if (sectionId === 'id-friendslist-section-broadcast') {
+                RefreshLobbyListings();
+            }
         }
         _UpdateSection(sectionId, false);
     }
@@ -354,7 +360,6 @@ var FriendsList;
         return FriendsListAPI.GetFriendRequestsCount();
     }
     function _GetRecentsCount() {
-        TeammatesAPI.Refresh();
         let count = TeammatesAPI.GetCount();
         if (count)
             return count;
