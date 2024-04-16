@@ -22,12 +22,16 @@ var MainMenuMajorTile;
         let sRestriction = InventoryAPI.GetDecodeableRestriction("capsule");
         let bCanSellCapsules = (sRestriction !== "restricted" && sRestriction !== "xray");
         _m_cp.SetHasClass('can-sell-items', false);
+        _m_cp.SetHasClass('has-reduction', false);
         let itemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[4][0], 0);
         let tournamentEventId = NewsAPI.GetActiveTournamentEventID();
         if (bCanSellCapsules && (tournamentEventId !== 0) && ('' !== StoreAPI.GetStoreItemSalePrice(itemId, 1, ''))) {
             g_ActiveTournamentStoreLayout[4][1],
                 _m_cp.FindChildInLayoutFile('id-open-major-item-image').itemid = itemId;
             _m_cp.SetHasClass('can-sell-items', true);
+            let reduction = StoreAPI.GetStoreItemPercentReduction(itemId);
+            _m_cp.SetHasClass('has-reduction', reduction !== '' && reduction !== undefined);
+            _m_cp.FindChildInLayoutFile('id-items-banner').SetDialogVariable('items-text', reduction ? $.Localize('#store_sale') : $.Localize('#mainmenu_major_hub_items'));
         }
     }
     function OpenMajorHub() {

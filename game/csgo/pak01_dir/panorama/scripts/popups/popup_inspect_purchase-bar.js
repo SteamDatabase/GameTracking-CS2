@@ -23,7 +23,8 @@ var InspectPurchaseBar;
             elPanel.RemoveClass('hidden');
             return;
         }
-        if ((funcGetSettingCallback('inspectonly', 'false') === 'true') ||
+        if ((funcGetSettingCallback('asyncworktype', '') === 'delete') ||
+            (funcGetSettingCallback('inspectonly', 'false') === 'true') ||
             !InventoryAPI.IsValidItemID(m_itemid)) {
             elPanel.AddClass('hidden');
             return;

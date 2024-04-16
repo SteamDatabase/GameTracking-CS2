@@ -185,7 +185,8 @@ var matchInfo = ( function() {
             return;
         }
 
-        var canWatch = MatchInfoAPI.CanWatch( elParentPanel.matchId );
+                                                                         
+        var canWatch = false;                                                               
 
         for ( var i = 1; i <= totalBars; i++ )
         {

@@ -221,8 +221,6 @@ var CapabilityCanSticker;
         else {
             HighlightStickerBySlot(slotIndex);
             InventoryAPI.WearItemSticker(itemId, slotIndex);
-            const panelsList = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons').Children();
-            panelsList.forEach(element => element.enabled = false);
         }
     }
     CapabilityCanSticker.OnScratchSticker = OnScratchSticker;

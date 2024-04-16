@@ -27,6 +27,7 @@ var CanApplyPickSlot;
         elContainer.Children().forEach(element => {
             element.SetHasClass('is_sticker_remove_unselected', element.Data().slot !== slotIndex);
             element.SetHasClass('is_sticker_remove_selected', element.Data().slot === slotIndex);
+            element.checked = element.Data().slot === slotIndex;
             if (element.Data().slot === slotIndex) {
                 element.TriggerClass('popup-can-apply-item-image--anim');
             }
@@ -60,11 +61,7 @@ var CanApplyPickSlot;
                 elPatch.BLoadLayoutSnippet('RemoveBtn');
                 let elImage = elPatch.FindChildInLayoutFile('RemoveImage');
                 elImage.SetImage('file://{images}' + imagePath + '.png');
-                if (oSettings.worktype === 'remove_patch') {
-                    elPatch.SetPanelEvent('onactivate', () => oSettings.funcOnSelectForRemove(i));
-                }
-                elPatch.SetHasClass('is_sticker_remove_unselected', oSettings.worktype === 'remove_sticker');
-                elPatch.enabled = oSettings.worktype === 'remove_patch';
+                elPatch.SetPanelEvent('onactivate', () => oSettings.funcOnSelectForRemove(i));
             }
         }
     }
