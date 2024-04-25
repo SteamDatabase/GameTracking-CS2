@@ -136,6 +136,9 @@ var EOM_Voting;
                     const arrWinners = _GetWinningMaps();
                     if (arrWinners.length == 0)
                         return;
+                    if (arrWinners.length == 1) {
+                        return;
+                    }
                     let randIdx = 0;
                     if (arrWinners.length > 2) {
                         randIdx = Math.floor(Math.random() * arrWinners.length);

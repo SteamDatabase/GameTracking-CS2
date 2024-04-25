@@ -49,7 +49,7 @@ var InventoryPanel;
                 let metaData = _GetMetadata(tag, '', '');
                 let nameToken = _GetValueForKeyFromMetadata('nametoken', metaData);
                 $.CreatePanel('Label', elBtn, '', {
-                    text: $.Localize('#' + nameToken)
+                    text: '#' + nameToken
                 });
                 elBtn.SetAttributeString('tag', tag);
                 elBtn.Data().tag = tag;

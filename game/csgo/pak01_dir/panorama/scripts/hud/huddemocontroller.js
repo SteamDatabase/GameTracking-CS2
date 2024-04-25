@@ -6,14 +6,26 @@ var HudDemoController;
         return true;
     }
     HudDemoController.EatClick = EatClick;
+    const timeStepSeconds = 15;
     const cp = $.GetContextPanel();
+    cp.SetDialogVariableInt("timestep_value", timeStepSeconds);
     const slider = $("#Slider");
     const speeds = $("#SpeedControls").Children().slice(1);
-    let bActive = cp.BHasClass("active");
+    const hud = cp.GetParent();
+    let bActive = hud.BHasClass("DemoControllerActive");
     $.RegisterForUnhandledEvent("DemoToggleUI", () => {
+        if (!cp.IsPlayingDemo())
+            return;
+        if (lastState && lastState.bIsOverwatch)
+            return;
         bActive = !bActive;
-        cp.SetHasClass("active", bActive);
+        hud.SetHasClass("DemoControllerActive", bActive);
         cp.SetInputCaptureEnabled(bActive);
+    });
+    $.RegisterForUnhandledEvent("DemoSetHUDVisible", (bVisible) => {
+        if (!cp.IsPlayingDemo())
+            return;
+        hud.SetHasClass("hide", !bVisible);
     });
     let lastState = null;
     let bRoundsMarked = false;
@@ -35,6 +47,11 @@ var HudDemoController;
             if (nSlashIndex !== -1)
                 sFileName = sFileName.substring(nSlashIndex + 1);
             cp.SetDialogVariable("total_time", TicksToTimeText(state.nTotalTicks, state.nSecondsPerTick));
+            $("#IntervalLabel").text = state.bIsPlayingHighlights ? $.Localize('#CSGO_Demo_Highlight') : $.Localize('#CSGO_Demo_Round');
+            const bShowUI = state.bIsOverwatch;
+            hud.SetHasClass("DemoControllerActive", bShowUI);
+            cp.SetInputCaptureEnabled(bShowUI);
+            $("#EndPlayback").visible = state.bIsOverwatch;
         }
         lastState = state;
         const pMarkers = $("#RoundMarkers");
@@ -44,16 +61,16 @@ var HudDemoController;
             const pThumb = $("#SliderThumb");
             const nThumbWidth = pThumb.actuallayoutwidth / pThumb.actualuiscale_x;
             const nMarkersWidth = (pMarkers.actuallayoutwidth / pThumb.actualuiscale_x) - nThumbWidth;
-            for (let i = 0; i < state.RoundStarts.length; i++) {
-                const nStartTick = state.RoundStarts[i].nTick;
-                const nEndTick = i < state.RoundStarts.length - 1 ? state.RoundStarts[i + 1].nTick - 1 : state.nTotalTicks;
+            for (let i = 0; i < state.PlaybackIntervals.length; i++) {
+                const nStartTick = state.PlaybackIntervals[i].nTickStart;
+                const nEndTick = state.PlaybackIntervals[i].nTickEnd;
                 let nLeft = nStartTick / state.nTotalTicks * nMarkersWidth + nThumbWidth / 2;
                 let nWidth = (nEndTick - nStartTick) / state.nTotalTicks * nMarkersWidth;
-                if (i === 0) {
+                if (i === 0 && !state.bIsPlayingHighlights) {
                     nWidth += nLeft;
                     nLeft = 0;
                 }
-                else if (i === state.RoundStarts.length - 1) {
+                else if (i === state.PlaybackIntervals.length - 1) {
                     nWidth += nThumbWidth / 2;
                 }
                 const pMarker = $.CreatePanel("Panel", pMarkers, "", { class: i % 2 === 0 ? "even" : "odd" });
@@ -67,7 +84,7 @@ var HudDemoController;
         if (!slider.mousedown) {
             slider.value = state.nTick;
             cp.SetDialogVariable("current_time", TicksToTimeText(state.nTick, state.nSecondsPerTick));
-            cp.SetDialogVariableInt("round_number", TicksToRound(state.nTick, state.RoundStarts));
+            cp.SetDialogVariableInt("round_number", TicksToRound(state.nTick, state.PlaybackIntervals));
         }
         speeds[0].SetHasClass("selected", state.fTimeScale === .25);
         speeds[1].SetHasClass("selected", state.fTimeScale === .5);
@@ -80,7 +97,7 @@ var HudDemoController;
         if (lastState == null)
             return true;
         cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick));
-        cp.SetDialogVariableInt("round_number", TicksToRound(fValue, lastState.RoundStarts));
+        cp.SetDialogVariableInt("round_number", TicksToRound(fValue, lastState.PlaybackIntervals));
         cp.GotoTick(Math.floor(fValue));
         return true;
     });
@@ -88,7 +105,7 @@ var HudDemoController;
         if (lastState == null)
             return true;
         cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick));
-        cp.SetDialogVariableInt("round_number", TicksToRound(fValue, lastState.RoundStarts));
+        cp.SetDialogVariableInt("round_number", TicksToRound(fValue, lastState.PlaybackIntervals));
         return true;
     });
     function OnPlayClicked() {
@@ -96,31 +113,43 @@ var HudDemoController;
         return true;
     }
     HudDemoController.OnPlayClicked = OnPlayClicked;
+    function OnStepTimeBackward() {
+        return OnStepTime(-timeStepSeconds);
+    }
+    HudDemoController.OnStepTimeBackward = OnStepTimeBackward;
+    function OnStepTimeForward() {
+        return OnStepTime(timeStepSeconds);
+    }
+    HudDemoController.OnStepTimeForward = OnStepTimeForward;
     function OnStepTime(fStep) {
         if (lastState) {
             cp.GotoTick(lastState.nTick + (fStep / lastState.nSecondsPerTick));
         }
         return true;
     }
-    HudDemoController.OnStepTime = OnStepTime;
-    function OnStepRound(nStep) {
-        if (lastState && lastState.RoundStarts.length > 0) {
-            const nRoundIndex = lastState.RoundStarts.findIndex(r => r.nTick > lastState.nTick) - 1;
-            let nNewRound = nRoundIndex + nStep;
-            if (nNewRound < 0)
-                nNewRound = 0;
-            else if (nNewRound > lastState.RoundStarts.length - 1)
-                nNewRound = lastState.RoundStarts.length - 1;
-            cp.GotoTick(lastState.RoundStarts[nNewRound].nTick);
+    function OnStepInterval(nStep) {
+        if (lastState && lastState.PlaybackIntervals.length > 0) {
+            const nIntervalIndex = lastState.PlaybackIntervals.findIndex(r => r.nTickStart > lastState.nTick) - 1;
+            let nNewInterval = nIntervalIndex + nStep;
+            if (nNewInterval < 0)
+                nNewInterval = 0;
+            else if (nNewInterval > lastState.PlaybackIntervals.length - 1)
+                nNewInterval = lastState.PlaybackIntervals.length - 1;
+            cp.GotoTick(lastState.PlaybackIntervals[nNewInterval].nTickStart);
         }
         return true;
     }
-    HudDemoController.OnStepRound = OnStepRound;
+    HudDemoController.OnStepInterval = OnStepInterval;
     function OnTimeScale(fTimeScale) {
         cp.SetTimeScale(fTimeScale);
         return true;
     }
     HudDemoController.OnTimeScale = OnTimeScale;
+    function OnStopPlayback() {
+        cp.StopPlayback();
+        return true;
+    }
+    HudDemoController.OnStopPlayback = OnStopPlayback;
     function TicksToTimeText(nTick, nSecondsPerTick) {
         const nTime = Math.floor(nSecondsPerTick * nTick);
         const nSeconds = nTime % 60;
@@ -129,11 +158,11 @@ var HudDemoController;
         return `${nMinutes}:${sSeconds}`;
     }
     function TicksToRound(nTick, rounds) {
-        if (rounds.length === 0 || rounds[0].nTick > nTick)
+        if (rounds.length === 0 || rounds[0].nTickStart > nTick)
             return 0;
         for (let i = 0; i < rounds.length; i++) {
-            if (nTick < rounds[i].nTick) {
-                return i - 1;
+            if (nTick < rounds[i].nTickStart) {
+                return i;
             }
         }
         return rounds.length;

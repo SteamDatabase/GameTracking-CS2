@@ -201,6 +201,7 @@ var MainMenu;
         _LobbyPlayerUpdated();
         _OnInitFadeUp();
         $('#MainMenuNavBarPlay').SetHasClass('pausemenu-navbar__btn-small--hidden', false);
+        _UpdateOverwatch();
         _UpdateNotifications();
         _UpdateInventoryBtnAlert();
         _UpdateStoreAlert();
@@ -824,6 +825,10 @@ var MainMenu;
         _PauseMainMenuCharacter();
         NavigateToTab('JsPlayerStats', 'mainmenu_playerstats');
     }
+    var _UpdateOverwatch = function () {
+        var strCaseDescription = OverwatchAPI.GetAssignedCaseDescription();
+        $('#MainMenuNavBarOverwatch').SetHasClass('pausemenu-navbar__btn-small--hidden', strCaseDescription == "");
+    };
     function _OpenSubscriptionUpsell() {
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_subscription_upsell.xml', '');
     }
@@ -1353,6 +1358,7 @@ var MainMenu;
         $.RegisterForUnhandledEvent('LootlistItemPreview', _OnLootlistItemPreview);
         $.RegisterForUnhandledEvent('ShowXrayCasePopup', _OnShowXrayCasePopup);
         $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_WeaponPreviewRequest', _WeaponPreviewRequest);
+        $.RegisterForUnhandledEvent('PanoramaComponent_Overwatch_CaseUpdated', _UpdateOverwatch);
         $.RegisterForUnhandledEvent("PanoramaComponent_TournamentMatch_DraftUpdate", _TournamentDraftUpdate);
         $.RegisterForUnhandledEvent('ShowLoadoutForItem', _ShowLoadoutForItem);
         $.RegisterForUnhandledEvent('ShowAcknowledgePopup', _ShowAcknowledgePopup);

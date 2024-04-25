@@ -56,13 +56,15 @@ var friendLobby;
         else {
             szSkillGroupType = 'Premier';
         }
+        let score = Number(PartyBrowserAPI.GetPartySessionSetting(_m_xuid, 'game/ark'));
+        score = Math.floor(score / 10);
         const options = {
             root_panel: elTile.FindChildTraverse('jsRatingEmblem'),
-            xuid: _m_xuid,
             do_fx: true,
             full_details: false,
-            api: 'partybrowser',
-            rating_type: szSkillGroupType
+            rating_type: szSkillGroupType,
+            leaderboard_details: { score: score },
+            local_player: _m_xuid === MyPersonaAPI.GetXuid()
         };
         RatingEmblem.SetXuid(options);
     }

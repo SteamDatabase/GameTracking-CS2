@@ -25,7 +25,7 @@
 				<Label id="" text="#BuyMenu_NewUserExperience_Recommended" class="nux Hidden" />
 				<Label id="" text="#BuyMenu_Promoted" class="promoted-label Hidden" />
 				<Button id="BuyButton" class="buywheel-wedge">
-					<Label class="buywheel-button__key keybind" id="WedgeKeybinding" text="X" />
+					<Label class="buywheel-button__key keybind" id="WedgeKeybinding" text="" />
 					<Label id="ItemName" class="buywheel-item__name hud-colorize-wash" />
 					<Image id="ItemIcon" class="buywheel-item__icon hud-colorize-wash" />
 					<Label id="ItemPrice" class="buywheel-item__price hud-colorize-wash" />
@@ -42,12 +42,21 @@
 		<snippet name="snippet-player-pip">
 			<Panel class="player-pip" />
 		</snippet>
+		<snippet name="snippet-ground-weapon-entry">
+			<Button class="ground-weapon-entry">
+				<Image id="JsWeaponImage" class="ground-weapon-entry__image hud-colorize-wash" scaling="stretch-to-fit-preserve-aspect" src="s2r://panorama/images/icons/equipment/ak47.vsvg" />
+				<Panel class="horizontal-align-right vertical-center left-right-flow">
+					<Label class="ground-weapon-entry__count hud-colorize-wash" text="{d:count}x " />
+					<Label class="ground-weapon-entry__name hud-colorize-wash" text="{s:weapon-name}" />
+				</Panel>
+			</Button>
+		</snippet>
 	</snippets>
 	<CSGOBuyMenu class="buymenu">
 		<Panel class="buymenu__fullscreen">
 			<MapPlayerPreviewPanel id="id-buymenu-agent" class="buymenu-agent" map="ui/buy_menu" camera="cam_buymenu" require-composition-layer="true" playermodel="" playername="vanity_character" animgraphcharactermode="buy-menu" player="true" mouse_rotate="false" sync_spawn_addons="true" game-background="true" pin-fov="vertical" />
 			<Panel class="full-width full-height debug" hittest="false" hittestchildren="false">
-				<CSGOHudWeaponSelection id="EmbeddedHudWeaponSelection" neverfade="true" neverselected="true" class="embedded-weapons-overview" />
+				<CSGOHudWeaponSelection id="EmbeddedHudWeaponSelection" neverfade="true" neverselected="false" class="embedded-weapons-overview" />
 			</Panel>
 			<Panel class="buymenu-money">
 				<CSGOMoneyPanel id="BuyMenuMoney" class="" />
@@ -62,6 +71,7 @@
 								<Label text="{t:d:duration}" />
 							</CountdownTimer>
 						</Panel>
+						<Label id="buymenu-min-money-next-round" class="buymenu-minmoney" text="#BuyMenu_MinMoneyNextRound" hittest="false" />
 					</Panel>
 					<Panel class="buymenu-body">
 						<Image class="buy-wheel-background" />
@@ -76,13 +86,22 @@
 							<Frame snippet="ItemPanel" id="promo-item" />
 						</Panel>
 					</Panel>
-					<Panel class="buymenu__purchase-failure-container">
-						<Label id="PurchaseFailureLabel" class="buymenu__purchase-failure" />
-						<Label id="BuyForTeammateHintLabel" class="buymenu__purchase-failure buymenu__purchase-failure--teammate Hidden" text="#BuyMenu_BuyForTeammate_hint" />
+					<Panel class="buymenu__ground-weapons">
+						<Label class="buymenu__ground-weapons__title" text="#buymenu_groundweapons" />
+						<Panel id="jsGroundWeaponsListContainer" class="buymenu__ground-weapons__list-container" hittest="true" hittestchildren="true">
+							<Panel id="jsGroundWeaponsLister--Cat1" class="buymenu__ground-weapons__lister ccequip" />
+							<Panel id="jsGroundWeaponsLister--Cat2" class="buymenu__ground-weapons__lister ccpistols" />
+							<Panel id="jsGroundWeaponsLister--Cat3" class="buymenu__ground-weapons__lister ccmidtier" />
+							<Panel id="jsGroundWeaponsLister--Cat4" class="buymenu__ground-weapons__lister ccrifles" />
+							<Panel id="jsGroundWeaponsLister--Cat5" class="buymenu__ground-weapons__lister ccgrenades" />
+						</Panel>
 					</Panel>
 				</Panel>
 				<Panel class="buymenu-right">
 					<ItemPreviewPanel id="hack" class="hidden" />
+					<Panel class="buymenu__purchase-failure-container">
+						<Label id="PurchaseFailureLabel" class="buymenu__purchase-failure" />
+					</Panel>
 					<Panel id="ItemDesc" class="buymenu-item-info Hidden">
 						<Label id="WeaponNameAndRarity" class="buymenu-item-info__name" text="{s:item-name}" />
 						<Label class="buymenu-item-info__desc" text="{s:item-desc}" html="true" />

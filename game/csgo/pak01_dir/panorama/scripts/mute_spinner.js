@@ -21,6 +21,8 @@ var MuteSpinner;
             let xuid = $.GetContextPanel().GetParent().xuid;
             m_curVal = GameStateAPI.GetPlayerVoiceVolume(xuid).toFixed(2);
             m_isMuted = GameStateAPI.IsSelectedPlayerMuted(xuid);
+            if (m_isMuted === undefined)
+                m_isMuted = false;
         }
     }
     function _OnValueChanged(panel, flNewVal) {

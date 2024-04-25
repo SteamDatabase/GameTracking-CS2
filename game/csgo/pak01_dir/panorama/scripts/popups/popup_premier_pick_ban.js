@@ -370,6 +370,7 @@ var PremierPickBan;
         if (!elAvatar)
             return;
         let options = {
+            local_player: false,
             root_panel: elAvatar,
             rating_type: 'Premier',
             do_fx: true,

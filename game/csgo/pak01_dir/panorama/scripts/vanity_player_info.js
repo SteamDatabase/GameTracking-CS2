@@ -112,16 +112,27 @@ var VanityPlayerInfo;
         newPanel.RemoveClass('no-valid-xp');
     }
     function _SetSkillGroup(newPanel, xuid, isLocalPlayer) {
+        let rating_type;
+        let score;
+        let wins;
+        if (isLocalPlayer && !PartyListAPI.IsPartySessionActive()) {
+            rating_type = 'Premier';
+            score = MyPersonaAPI.GetPipRankCount(rating_type);
+            wins = MyPersonaAPI.GetPipRankWins(rating_type);
+        }
+        else {
+            rating_type = PartyListAPI.GetFriendCompetitiveRankType(xuid);
+            score = PartyListAPI.GetFriendCompetitiveRank(xuid);
+            wins = PartyListAPI.GetFriendCompetitiveWins(xuid);
+        }
         let options = {
             root_panel: newPanel,
-            xuid: xuid,
-            api: 'partylist',
             do_fx: true,
             full_details: false,
+            rating_type: rating_type,
+            leaderboard_details: { score: score, matchesWon: wins },
+            local_player: xuid === MyPersonaAPI.GetXuid()
         };
-        if (isLocalPlayer && !PartyListAPI.IsPartySessionActive()) {
-            options.api = 'mypersona';
-        }
         RatingEmblem.SetXuid(options);
         newPanel.SetDialogVariable('rating-text', RatingEmblem.GetRatingDesc(newPanel));
     }

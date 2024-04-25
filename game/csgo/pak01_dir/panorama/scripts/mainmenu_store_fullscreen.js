@@ -124,8 +124,8 @@ var MainMenuStore;
                     class: 'content-navbar__tabs__btn'
                 });
                 let btnString = key === 'tournament' ?
-                    $.Localize('#store_nav_' + key + '_' + g_ActiveTournamentInfo.eventid) :
-                    $.Localize('#store_nav_' + key);
+                    `#store_nav_${key}_${g_ActiveTournamentInfo.eventid}` :
+                    `#store_nav_${key}`;
                 $.CreatePanel('Label', elButton, '', {
                     text: btnString
                 });

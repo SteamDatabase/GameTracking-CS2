@@ -196,23 +196,18 @@ Instance.PublicMethod("PowOff", () => {
     }
 });
 let bLooping = false;
-let nSkin = 0;
 function StartStopLightLoop() {
     bLooping = true;
-    nSkin = 0;
     Instance.EntFireBroadcast("button_stop_light_loop", "Trigger", "");
 }
 Instance.PublicMethod("StopLightLoop", () => {
     if (bLooping == false)
         return;
-    // Do stuff this loop
-    if (nSkin == 1)
-        nSkin = 0;
-    else
-        nSkin = 1;
-    Instance.EntFireBroadcast("button_stop_light", "Skin", nSkin.toString());
-    // Run the public method "Loop" again in 1.5 seconds
-    Instance.EntFireBroadcast("button_stop_light_loop", "Trigger", "", 1);
+    Instance.EntFireBroadcast("button_stop_light", "Skin", "1", 0);
+    Instance.EntFireBroadcast("button_stop_light", "Skin", "0", 0.15);
+    Instance.EntFireBroadcast("button_stop_light", "Skin", "1", .3);
+    Instance.EntFireBroadcast("button_stop_light", "Skin", "0", .45);
+    Instance.EntFireBroadcast("button_stop_light_loop", "Trigger", "", 1.5);
 });
 function StopStopLightLoop() {
     Instance.EntFireBroadcast("button_stop_light", "Skin", "0");

@@ -45,6 +45,9 @@
 				<RadioButton class="content-navbar__tabs__btn" onactivate="SettingsMenuShared.ScrollToId(&apos;SettingsCrosshair&apos;)" group="SettingsGame">
 					<Label text="#settings_crosshair" />
 				</RadioButton>
+				<RadioButton class="content-navbar__tabs__btn" onactivate="SettingsMenuShared.ScrollToId(&apos;SettingsGrenadeCrosshair&apos;)" group="SettingsGame">
+					<Label text="#settings_grenadecrosshair" />
+				</RadioButton>
 				<RadioButton class="content-navbar__tabs__btn" onactivate="SettingsMenuShared.ScrollToId(&apos;SettingsTelemetry&apos;)" group="SettingsGame">
 					<Label text="#settings_telemetry_section" />
 				</RadioButton>
@@ -380,10 +383,21 @@
 						<Label text="#SFUI_Settings_ViewmodelPos" class="half-width" />
 						<CSGOSettingsEnumDropDown class="PopupButton White" convar="viewmodel_presetpos">
 							<Label text="#SFUI_Settings_ViewmodelPosDesktop" value="1" id="viewmodelpreset0" />
-							<Label text="#SFUI_Settings_ViewmodelPosCouch" value="2" id="viewmodelpreset1" />
-							<Label text="#SFUI_Settings_ViewmodelPosClassic" value="3" id="viewmodelpreset2" />
+							<Label text="#SFUI_Settings_ViewmodelPosClassic" value="2" id="viewmodelpreset1" />
 						</CSGOSettingsEnumDropDown>
 					</Panel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel id="PreferredHandedness" class="SettingsMenuDropdownContainer" tooltip="#Cstrike_PreferredHandedness_Desc">
+						<Label text="#Cstrike_PreferredHandedness" class="half-width" />
+						<CSGOSettingsEnumDropDown class="PopupButton White" convar="cl_prefer_lefthanded">
+							<Label text="#Cstrike_PreferredHandedness_Right" value="0" id="preferhandedness0" />
+							<Label text="#Cstrike_PreferredHandedness_Left" value="1" id="preferhandedness1" />
+						</CSGOSettingsEnumDropDown>
+					</TooltipPanel>
+					<Button class="PopupButton White horizontal-align-right" onactivate="$.DispatchEvent( &apos;SettingsMenu_NavigateToSetting&apos;, &apos;KeybdMouseSettings&apos;, &apos;SwitchHandednessBinder&apos; );">
+						<Image src="s2r://panorama/images/icons/ui/link.vsvg" />
+						<Label class="promoted-setting__label" text="#Cstrike_GoToSwitchHandednessKeyBinding" />
+					</Button>
 					<Panel class="horizontal-separator" />
 					<TooltipPanel id="FirstPersonTracers" class="SettingsMenuDropdownContainer" tooltip="#Cstrike_FirstPersonTracers_Desc">
 						<Label text="#Cstrike_FirstPersonTracers" class="half-width" />
@@ -463,6 +477,14 @@
 					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Radar_Scale_Info">
 						<CSGOSettingsSlider text="#SFUI_Settings_Radar_Scale" max="1.0" min="0.4" displayprecision="2" convar="cl_radar_scale" />
 					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel id="RadarScaleToggle" class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Radar_Scale_Alternate_Info">
+						<CSGOSettingsSlider text="#SFUI_Settings_Radar_Scale_Alternate" max="1.0" min="0.4" displayprecision="2" convar="cl_radar_scale_alternate" />
+					</TooltipPanel>
+					<Button class="PopupButton White horizontal-align-right" onactivate="$.DispatchEvent( &apos;SettingsMenu_NavigateToSetting&apos;, &apos;KeybdMouseSettings&apos;, &apos;ToggleRadarScale&apos; );">
+						<Image src="s2r://panorama/images/icons/ui/link.vsvg" />
+						<Label class="promoted-setting__label" text="#SFUI_Go_To_Radar_Toggle_Key_Binding" />
+					</Button>
 					<Panel class="horizontal-separator" />
 					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Radar_Shape_Scoreboard_Info">
 						<Label text="#SFUI_Settings_Radar_Shape_Scoreboard" class="half-width" />
@@ -585,6 +607,42 @@
 								<Label text="#GameUI_ObservedBotCrosshair_Default" value="2" id="showbotobs2" />
 							</CSGOSettingsEnumDropDown>
 						</Panel>
+					</TooltipPanel>
+				</Panel>
+			</Panel>
+			<Panel id="SettingsGrenadeCrosshair" class="SettingsBackground">
+				<Panel class="SettingsSectionTitleContianer">
+					<Label class="SettingsSectionTitleLabel" text="#settings_grenadecrosshair" />
+				</Panel>
+				<Panel class="top-bottom-flow full-width">
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_KeepCrosshairInfo">
+						<Panel id="XhairGrenadeKeepUserCrosshair" class="SettingsMenuDropdownContainer">
+							<Label text="#GameUI_KeepCrosshair" class="half-width" />
+							<CSGOSettingsEnumDropDown class="PopupButton White" convar="cl_grenadecrosshair_keepusercrosshair">
+								<Label text="#GameUI_Yes" value="1" id="weapongap1" />
+								<Label text="#GameUI_No" value="0" id="weapongap0" />
+							</CSGOSettingsEnumDropDown>
+						</Panel>
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_GrenadeCrosshairInfoTooltipFlash">
+						<CSGOSettingsSlider id="XhairGrenadeFlash" text="#GameUI_GrenadeCrosshairFlash" toggleconvar="cl_grenadecrosshair_flash" max="5.0" min="0.0" displayprecision="2" convar="cl_grenadecrosshairdelay_flash" />
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_GrenadeCrosshairInfoTooltipHE">
+						<CSGOSettingsSlider id="XhairGrenadeExplosive" text="#GameUI_GrenadeCrosshairHE" toggleconvar="cl_grenadecrosshair_explosive" max="5.0" min="0.0" displayprecision="2" convar="cl_grenadecrosshairdelay_explosive" />
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_GrenadeCrosshairInfoTooltipFire">
+						<CSGOSettingsSlider id="XhairGrenadeFire" text="#GameUI_GrenadeCrosshairFire" toggleconvar="cl_grenadecrosshair_fire" max="5.0" min="0.0" displayprecision="2" convar="cl_grenadecrosshairdelay_fire" />
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_GrenadeCrosshairInfoTooltipSmoke">
+						<CSGOSettingsSlider id="XhairGrenadeSmoke" text="#GameUI_GrenadeCrosshairSmoke" toggleconvar="cl_grenadecrosshair_smoke" max="5.0" min="0.0" displayprecision="2" convar="cl_grenadecrosshairdelay_smoke" />
+					</TooltipPanel>
+					<Panel class="horizontal-separator" />
+					<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_GrenadeCrosshairInfoTooltipDecoy">
+						<CSGOSettingsSlider id="XhairGrenadeDecoy" text="#GameUI_GrenadeCrosshairDecoy" toggleconvar="cl_grenadecrosshair_decoy" max="5.0" min="0.0" displayprecision="2" convar="cl_grenadecrosshairdelay_decoy" />
 					</TooltipPanel>
 				</Panel>
 			</Panel>

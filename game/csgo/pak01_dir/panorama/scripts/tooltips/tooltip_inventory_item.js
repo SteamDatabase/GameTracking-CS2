@@ -6,7 +6,12 @@ var TooltipInventoryItem;
         let ctx = $.GetContextPanel();
         let id = ctx.GetAttributeString("itemid", "0");
         let bThisIsFauxItemID = InventoryAPI.IsFauxItemID(id);
-        ctx.SetDialogVariable('name', InventoryAPI.GetItemName(id));
+        ctx.SetDialogVariable('name', InventoryAPI.GetItemNameUncustomized(id));
+        const elCustomName = ctx.FindChildInLayoutFile('jsCustomName');
+        if (elCustomName) {
+            elCustomName.visible = InventoryAPI.HasCustomName(id);
+            ctx.SetDialogVariable('custom-name', '"' + InventoryAPI.GetItemNameCustomized(id) + '"');
+        }
         let strDesc = InventoryAPI.GetItemDescription(id, '');
         if (strDesc.endsWith('<br>')) {
             strDesc = strDesc.slice(0, -4);

@@ -43,13 +43,15 @@ var MatchStakes;
         let elWin = elMatchStakes.FindChildTraverse('jsMatchStakesWin');
         let elLoss = elMatchStakes.FindChildTraverse('jsMatchStakesLoss');
         let elPfx = elMatchStakes.FindChildTraverse('jsMatchStakes_pfx');
+        const score = MockAdapter.GetPlayerCompetitiveRanking(mysteamid);
+        const wins = MockAdapter.GetPlayerCompetitiveWins(mysteamid);
         let options = {
-            api: 'gamestate',
-            xuid: mysteamid,
             root_panel: elMatchStakes,
             rating_type: 'Premier',
             do_fx: false,
             full_details: true,
+            leaderboard_details: { score: score, matchesWon: wins },
+            local_player: true
         };
         RatingEmblem.SetXuid(options);
         let introText = RatingEmblem.GetIntroText(elMatchStakes);

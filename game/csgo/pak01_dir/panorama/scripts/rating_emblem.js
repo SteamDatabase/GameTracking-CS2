@@ -59,73 +59,19 @@ var RatingEmblem;
         let rank = undefined;
         let pct = undefined;
         let bFullDetails = options.hasOwnProperty('full_details') ? options.full_details : false;
-        let source = options.api;
         let do_fx = options.do_fx;
         let rating_type = options.rating_type;
         let root_panel = _GetMainPanel(options.root_panel);
         if (!root_panel)
             return false;
         let debug_wins = false;
-        if (!rating_type && options.xuid) {
-            switch (source) {
-                case 'friends':
-                    rating_type = FriendsListAPI.GetFriendCompetitiveRankType(options.xuid);
-                    break;
-                case 'partylist':
-                    rating_type = PartyListAPI.GetFriendCompetitiveRankType(options.xuid);
-                    break;
-                case 'gamestate':
-                    rating_type = MockAdapter.GetPlayerCompetitiveRankType(options.xuid);
-                    break;
-                case 'mypersona':
-                default:
-                    rating_type = 'Premier';
-                    break;
-            }
-        }
-        if (options.xuid) {
-            switch (source) {
-                case 'friends':
-                    rating = FriendsListAPI.GetFriendCompetitiveRank(options.xuid, rating_type);
-                    wins = FriendsListAPI.GetFriendCompetitiveWins(options.xuid, rating_type);
-                    break;
-                case 'partylist':
-                    rating = PartyListAPI.GetFriendCompetitiveRank(options.xuid);
-                    wins = PartyListAPI.GetFriendCompetitiveWins(options.xuid);
-                    break;
-                case 'gamestate':
-                    rating = MockAdapter.GetPlayerCompetitiveRanking(options.xuid);
-                    wins = MockAdapter.GetPlayerCompetitiveWins(options.xuid);
-                    break;
-                case 'partybrowser':
-                    rating = Number(PartyBrowserAPI.GetPartySessionSetting(options.xuid, 'game/ark'));
-                    rating = Math.floor(rating / 10);
-                    break;
-                case 'mypersona':
-                    if (rating_type === 'Competitive' && options.rating_map) {
-                        let pmso = MyPersonaAPI.GetCompetitivePerMapStatsObject();
-                        rating = pmso[options.rating_map] ? pmso[options.rating_map]["skillgroup"] : -1;
-                        wins = pmso[options.rating_map] ? pmso[options.rating_map]["wins"] : -1;
-                    }
-                    else {
-                        rating = MyPersonaAPI.GetPipRankCount(rating_type);
-                        wins = MyPersonaAPI.GetPipRankWins(rating_type);
-                    }
-                    break;
-            }
-        }
         if (debug_wins) {
             wins = Math.floor(Math.random() * 20);
         }
-        if (rating_type === 'Premier') {
-            if (options.leaderboard_details && Object.keys(options.leaderboard_details).length > 0) {
-                rating = options.leaderboard_details.score;
-                wins = options.leaderboard_details.matchesWon;
-                rank = options.leaderboard_details.rank;
-                pct = options.leaderboard_details.pct;
-                _msg('got data from leaderboard_details');
-            }
-        }
+        rating = options.leaderboard_details.score;
+        wins = options.leaderboard_details.matchesWon;
+        rank = options.leaderboard_details.rank;
+        pct = options.leaderboard_details.pct;
         _msg(rating_type + root_panel.id);
         root_panel.SwitchClass('type', rating_type);
         if (bFullDetails) {
@@ -136,8 +82,8 @@ var RatingEmblem;
         let imagePath = '';
         let winsNeededForRank = SessionUtil ? SessionUtil.GetNumWinsNeededForRank(rating_type) : 10;
         let isloading = (rating === undefined || rating < 0);
-        let bRatingExpired = rating === 0;
-        let bTooFewWins = bRatingExpired && !!wins && (wins < winsNeededForRank);
+        let bRatingExpired = !isloading && rating === 0;
+        let bTooFewWins = wins === undefined || wins < winsNeededForRank;
         let bHasRating = !bRatingExpired && !bTooFewWins && !isloading;
         let ratingDesc = '';
         let tooltipText = '';
@@ -251,7 +197,7 @@ var RatingEmblem;
                         tooltipText = $.Localize('#tooltip_cs_rating_none', root_panel);
                         eomDescText = $.Localize('#cs_rating_wins_needed_verbose', root_panel);
                         introText = $.Localize('#cs_rating_wins_needed_verbose_intro', root_panel);
-                        if (options.xuid && options.xuid === MyPersonaAPI.GetXuid()) {
+                        if (options.local_player) {
                             ratingDesc = $.Localize('#cs_rating_wins_needed', root_panel);
                         }
                         else {

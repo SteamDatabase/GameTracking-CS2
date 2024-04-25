@@ -93,11 +93,11 @@ var PlayerStatsCard;
                 if (newPlayerData && newPlayerData.hasOwnProperty('new_rank') && newPlayerData.hasOwnProperty('rank_type')) {
                     const options = {
                         root_panel: elCard.FindChildTraverse('jsRatingEmblem'),
-                        xuid: xuid,
                         do_fx: true,
                         full_details: false,
                         leaderboard_details: { score: newPlayerData.new_rank },
                         rating_type: newPlayerData.rank_type,
+                        local_player: xuid === MyPersonaAPI.GetXuid()
                     };
                     $.Schedule(1.0 + 0.5 * i, () => {
                         if (elCard && elCard.IsValid()) {
@@ -112,12 +112,16 @@ var PlayerStatsCard;
     function SetSkillGroup(elCard, xuid) {
         if (!elCard.FindChildTraverse('jsRatingEmblem'))
             return;
-        let options = {
+        const rating_type = MockAdapter.GetPlayerCompetitiveRankType(xuid);
+        const score = MockAdapter.GetPlayerCompetitiveRanking(xuid);
+        const wins = MockAdapter.GetPlayerCompetitiveWins(xuid);
+        const options = {
             root_panel: elCard.FindChildTraverse('jsRatingEmblem'),
-            xuid: xuid,
-            api: 'gamestate',
             do_fx: true,
             full_details: true,
+            rating_type: rating_type,
+            leaderboard_details: { score: score, matchesWon: wins },
+            local_player: xuid === MyPersonaAPI.GetXuid()
         };
         const bShowSkillGroup = RatingEmblem.SetXuid(options);
         if (bShowSkillGroup) {

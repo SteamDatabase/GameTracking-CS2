@@ -11,6 +11,7 @@
 		<include src="s2r://panorama/scripts/rating_emblem.vts_c" />
 		<include src="s2r://panorama/scripts/match_stakes.vts_c" />
 		<include src="s2r://panorama/scripts/honor_icon.vts_c" />
+		<include src="s2r://panorama/scripts/context_menus/context_menu_playercard.vts_c" />
 		<include src="s2r://panorama/scripts/scoreboard.vts_c" />
 	</scripts>
 	<snippets>
@@ -29,7 +30,7 @@
 							<CSGOGameTimeLabel class="time_container__time" time-type="map-elapsed" text="{s:s_gametime_time}" />
 						</Panel>
 					</Panel>
-					<Panel class="full-width meta-row">
+					<Panel class="meta-row">
 						<Panel id="id-sb-meta__musickit" class="hidden">
 							<Image id="id-sb-meta__musickit-image" />
 							<Label id="id-sb-meta__musickit-name" class="stratum-regular-condensed" />
@@ -39,8 +40,8 @@
 								</TooltipPanel>
 							</Button>
 						</Panel>
-						<Label id="id-sb-meta__labels__server-viewers" class="stratum-regular-mono" text="{s:server_name}{s:hltv_viewers}" />
-						<Panel id="id-sb-meta__button-panel" class="hidden">
+						<Label id="id-sb-meta__labels__server-viewers" class="stratum-regular-mono mouse-active-hidden" text="{s:server_name}{s:hltv_viewers}" />
+						<Panel id="id-sb-meta__button-panel" class="mouse-active-visible">
 							<Panel class="sb-meta__button-panel__group">
 								<TooltipPanel tooltip="#scoreboard_cyclestats_button_tooltip">
 									<Button id="id-sb-meta__cycle" class="sb-meta__button-panel__btn hidden" onactivate="$.DispatchEvent(&apos;Scoreboard_CycleStats&apos;);">
@@ -70,7 +71,12 @@
 		<snippet name="snippet_scoreboard--no-teams">
 			<Panel class="sb-main">
 				<Frame snippet="snippet_sb-meta" />
-				<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover" />
+				<Panel id="id-sb-label-container">
+					<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover">
+						<Panel id="id-sb-players-table__labels-row__inner" />
+					</Panel>
+					<Panel id="id-sb-players-table__labels-row--spacer" />
+				</Panel>
 				<Panel class="sb-team__data sb-team__data--ANY" cachepaintcmdlist="true">
 					<Panel id="players-table-ANY" class="sb-players-table" />
 				</Panel>
@@ -229,7 +235,9 @@
 		<snippet name="snippet_scoreboard__classic-teams--CT">
 			<Panel class="top-bottom-flow">
 				<Panel id="id-sb-label-container">
-					<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover" />
+					<Panel id="id-sb-players-table__labels-row" class="sb-row--labels sb-row no-hover">
+						<Panel id="id-sb-players-table__labels-row__inner" />
+					</Panel>
 					<Panel id="id-sb-players-table__labels-row--spacer" />
 				</Panel>
 				<Panel id="id-sb-team--CT" class="sb-team sb-team--CT" cachepaintcmdlist="true">
@@ -265,7 +273,7 @@
 		<snippet name="snippet_scoreboard__classic-timeline--half-time-scores">
 			<Panel class="sb-timeline">
 				<Frame snippet="snippet_scoreboard-classic__half-time-scores" />
-				<Panel style="width: fill-parent-flow( 1.0 );">
+				<Panel class="sb-timeline__round">
 					<Label id="id-sb-timeline__round-label" class="sb-timeline__round-label hidden" text="#scoreboard_timeline_ot" hittest="false" />
 					<Panel hittest="true" id="id-sb-timeline__segments" class="sb-timeline__segments" onmouseover="$.DispatchEvent(&apos;Scoreboard_Casualties_OnMouseOver&apos;)" onmouseout="$.DispatchEvent(&apos;Scoreboard_Casualties_OnMouseOut&apos;)" />
 				</Panel>
@@ -313,7 +321,7 @@
 					<Label html="true" class="stratum-light" text="#CSGO_Watch_ServerWebsite" />
 					<Image src="s2r://panorama/images/icons/ui/link.vsvg" />
 				</Button>
-				<Label id="id-sb-mouse-instructions" class="stratum-bold" />
+				<Label id="id-sb-mouse-instructions" class="stratum-bold mouse-active-hidden" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard-classic--with-timeline--half-times">
@@ -437,6 +445,7 @@
 		</snippet>
 		<snippet name="stat--PING">
 			<Panel data-stat="ping">
+				<Image textureheight="36" class="bot-icon sb-team-tint" texturewidth="-1" src="s2r://panorama/images/icons/ui/bot.vsvg" />
 				<Label id="label" class="stratum-regular-mono" />
 			</Panel>
 		</snippet>
@@ -564,155 +573,188 @@
 				<Label id="label" class="sb-team-tint stratum-regular-mono" />
 			</Panel>
 		</snippet>
+		<snippet name="stat--REPORT">
+			<Panel data-stat="report" no-label="true" class="spectator-hidden mouse-active-visible cell--button" />
+		</snippet>
+		<snippet name="stat--COMMEND">
+			<Panel data-stat="commend" no-label="true" class="spectator-hidden mouse-active-visible cell--button" />
+		</snippet>
 		<snippet name="snippet_scoreboard-classic__row--premier">
-			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME-PREMIER" />
-				<Frame snippet="stat--MONEY" data-set="0" />
-				<Frame snippet="stat--KILLS" data-set="0" />
-				<Frame snippet="stat--DEATHS" data-set="0" />
-				<Frame snippet="stat--ASSISTS" data-set="0" />
-				<Frame snippet="stat--HSP" data-set="0" />
-				<Frame snippet="stat--MVPS" data-set="1" />
-				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
-				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
-				<Frame snippet="stat--KDR" data-set="1" />
-				<Frame snippet="stat--ADR" data-set="1" />
-				<Frame snippet="stat--DAMAGE" />
+			<Panel class="sb-row premier" cachepaintcmdlist="true">
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME-PREMIER" />
+					<Frame snippet="stat--MONEY" data-set="0" />
+					<Frame snippet="stat--KILLS" data-set="0" />
+					<Frame snippet="stat--DEATHS" data-set="0" />
+					<Frame snippet="stat--ASSISTS" data-set="0" />
+					<Frame snippet="stat--HSP" data-set="0" />
+					<Frame snippet="stat--MVPS" data-set="1" />
+					<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+					<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+					<Frame snippet="stat--KDR" data-set="1" />
+					<Frame snippet="stat--ADR" data-set="1" />
+					<Frame snippet="stat--DAMAGE" />
+				</Panel>
+				<Frame snippet="stat--REPORT" />
+				<Frame snippet="stat--COMMEND" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard-classic__row--comp">
-			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--MONEY" data-set="0" />
-				<Frame snippet="stat--KILLS" data-set="0" />
-				<Frame snippet="stat--DEATHS" data-set="0" />
-				<Frame snippet="stat--ASSISTS" data-set="0" />
-				<Frame snippet="stat--HSP" data-set="0" />
-				<Frame snippet="stat--MVPS" data-set="1" />
-				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
-				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
-				<Frame snippet="stat--KDR" data-set="1" />
-				<Frame snippet="stat--ADR" data-set="1" />
-				<Frame snippet="stat--DAMAGE" />
+			<Panel class="sb-row competitive" cachepaintcmdlist="true">
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--MONEY" data-set="0" />
+					<Frame snippet="stat--KILLS" data-set="0" />
+					<Frame snippet="stat--DEATHS" data-set="0" />
+					<Frame snippet="stat--ASSISTS" data-set="0" />
+					<Frame snippet="stat--HSP" data-set="0" />
+					<Frame snippet="stat--MVPS" data-set="1" />
+					<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+					<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+					<Frame snippet="stat--KDR" data-set="1" />
+					<Frame snippet="stat--ADR" data-set="1" />
+					<Frame snippet="stat--DAMAGE" />
+				</Panel>
+				<Frame snippet="stat--REPORT" />
+				<Frame snippet="stat--COMMEND" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard-classic__row--wingman">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--MONEY" data-set="0" />
-				<Frame snippet="stat--KILLS" data-set="0" />
-				<Frame snippet="stat--DEATHS" data-set="0" />
-				<Frame snippet="stat--ASSISTS" data-set="0" />
-				<Frame snippet="stat--MVPS" data-set="0" />
-				<Frame snippet="stat--HSP" data-set="1" />
-				<Frame snippet="stat--KDR" data-set="1" />
-				<Frame snippet="stat--ADR" data-set="1" />
-				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
-				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
-				<Frame snippet="stat--SCORE" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--MONEY" data-set="0" />
+					<Frame snippet="stat--KILLS" data-set="0" />
+					<Frame snippet="stat--DEATHS" data-set="0" />
+					<Frame snippet="stat--ASSISTS" data-set="0" />
+					<Frame snippet="stat--MVPS" data-set="0" />
+					<Frame snippet="stat--HSP" data-set="1" />
+					<Frame snippet="stat--KDR" data-set="1" />
+					<Frame snippet="stat--ADR" data-set="1" />
+					<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+					<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+					<Frame snippet="stat--SCORE" />
+				</Panel>
+				<Frame snippet="stat--REPORT" />
+				<Frame snippet="stat--COMMEND" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard-classic__row--casual">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--MONEY" data-set="0" />
-				<Frame snippet="stat--KILLS" data-set="0" />
-				<Frame snippet="stat--DEATHS" data-set="0" />
-				<Frame snippet="stat--ASSISTS" data-set="0" />
-				<Frame snippet="stat--MVPS" data-set="0" />
-				<Frame snippet="stat--HSP" data-set="1" />
-				<Frame snippet="stat--KDR" data-set="1" />
-				<Frame snippet="stat--ADR" data-set="1" />
-				<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
-				<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
-				<Frame snippet="stat--SCORE" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--MONEY" data-set="0" />
+					<Frame snippet="stat--KILLS" data-set="0" />
+					<Frame snippet="stat--DEATHS" data-set="0" />
+					<Frame snippet="stat--ASSISTS" data-set="0" />
+					<Frame snippet="stat--MVPS" data-set="0" />
+					<Frame snippet="stat--HSP" data-set="1" />
+					<Frame snippet="stat--KDR" data-set="1" />
+					<Frame snippet="stat--ADR" data-set="1" />
+					<Frame snippet="stat--UTILITYDAMAGE" data-set="1" />
+					<Frame snippet="stat--ENEMIESFLASHED" data-set="1" />
+					<Frame snippet="stat--SCORE" />
+				</Panel>
+				<Frame snippet="stat--REPORT" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard__row--flyingscoutsman">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--KILLS" />
-				<Frame snippet="stat--DEATHS" />
-				<Frame snippet="stat--ASSISTS" />
-				<Frame snippet="stat--HSP" />
-				<Frame snippet="stat--KDR" />
-				<Frame snippet="stat--ADR" />
-				<Frame snippet="stat--MVPS" />
-				<Frame snippet="stat--SCORE" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--KILLS" />
+					<Frame snippet="stat--DEATHS" />
+					<Frame snippet="stat--ASSISTS" />
+					<Frame snippet="stat--HSP" />
+					<Frame snippet="stat--KDR" />
+					<Frame snippet="stat--ADR" />
+					<Frame snippet="stat--MVPS" />
+					<Frame snippet="stat--SCORE" />
+				</Panel>
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard__row--cooperative">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--MONEY" />
-				<Frame snippet="stat--KILLS" />
-				<Frame snippet="stat--DEATHS" />
-				<Frame snippet="stat--ASSISTS" />
-				<Frame snippet="stat--SCORE" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--MONEY" />
+					<Frame snippet="stat--KILLS" />
+					<Frame snippet="stat--DEATHS" />
+					<Frame snippet="stat--ASSISTS" />
+					<Frame snippet="stat--SCORE" />
+				</Panel>
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard__row--deathmatch">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--KILLS" />
-				<Frame snippet="stat--DEATHS" />
-				<Frame snippet="stat--ASSISTS" />
-				<Frame snippet="stat--KDR" />
-				<Frame snippet="stat--HSP" />
-				<Frame snippet="stat--DAMAGE" />
-				<Frame snippet="stat--SCORE" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--KILLS" />
+					<Frame snippet="stat--DEATHS" />
+					<Frame snippet="stat--ASSISTS" />
+					<Frame snippet="stat--KDR" />
+					<Frame snippet="stat--HSP" />
+					<Frame snippet="stat--DAMAGE" />
+					<Frame snippet="stat--SCORE" />
+				</Panel>
+				<Frame snippet="stat--REPORT" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard__row--armsrace">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--STATUS" />
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
-				<Frame snippet="stat--KILLS" />
-				<Frame snippet="stat--DEATHS" />
-				<Frame snippet="stat--KDR" />
-				<Frame snippet="stat--HSP" />
-				<Frame snippet="stat--TASERKILLS" />
-				<Frame snippet="stat--KNIFEKILLS" />
-				<Frame snippet="stat--GGLEVEL" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--STATUS" />
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+					<Frame snippet="stat--KILLS" />
+					<Frame snippet="stat--DEATHS" />
+					<Frame snippet="stat--KDR" />
+					<Frame snippet="stat--HSP" />
+					<Frame snippet="stat--TASERKILLS" />
+					<Frame snippet="stat--KNIFEKILLS" />
+					<Frame snippet="stat--GGLEVEL" />
+				</Panel>
+				<Frame snippet="stat--REPORT" />
 			</Panel>
 		</snippet>
 		<snippet name="snippet_scoreboard__row--training">
 			<Panel class="sb-row" cachepaintcmdlist="true">
-				<Frame snippet="stat--PING" />
-				<Frame snippet="stat--FLAIR" />
-				<Frame snippet="stat--AVATAR" />
-				<Frame snippet="stat--NAME" />
+				<Panel class="highlight-row">
+					<Frame snippet="stat--PING" />
+					<Frame snippet="stat--FLAIR" />
+					<Frame snippet="stat--AVATAR" />
+					<Frame snippet="stat--NAME" />
+				</Panel>
 			</Panel>
 		</snippet>
 	</snippets>

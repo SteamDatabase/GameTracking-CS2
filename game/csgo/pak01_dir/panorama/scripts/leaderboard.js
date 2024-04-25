@@ -335,12 +335,11 @@ var Leaderboard;
                 options =
                     {
                         root_panel: elRatingEmblem,
-                        xuid: oPlayer.XUID,
-                        api: 'partylist',
                         rating_type: 'Premier',
                         do_fx: true,
                         leaderboard_details: oPlayer,
-                        full_details: false
+                        full_details: false,
+                        local_player: oPlayer.XUID === MyPersonaAPI.GetXuid()
                     };
             }
             else {
@@ -350,7 +349,8 @@ var Leaderboard;
                         rating_type: 'Premier',
                         do_fx: true,
                         leaderboard_details: oPlayer,
-                        full_details: false
+                        full_details: false,
+                        local_player: oPlayer.XUID === MyPersonaAPI.GetXuid()
                     };
             }
             RatingEmblem.SetXuid(options);

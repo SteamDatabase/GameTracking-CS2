@@ -6,6 +6,7 @@
 /// <reference path="rating_emblem.ts" />
 /// <reference path="match_stakes.ts" />
 /// <reference path="honor_icon.ts" />
+/// <reference path="context_menus/context_menu_playercard.ts" />
 var Scoreboard;
 (function (Scoreboard) {
     const _m_cP = $.GetContextPanel();
@@ -618,6 +619,7 @@ var Scoreboard;
                     let elLabel = elPanel.FindChildTraverse('label');
                     if (!elLabel)
                         return;
+                    oPlayer.m_elPlayer?.SetHasClass('bot', MockAdapter.IsFakePlayer(oPlayer.m_xuid));
                     let szCustomLabel = _GetCustomStatTextValue('ping', oPlayer.m_xuid);
                     elLabel.SetHasClass('sb-row__cell--ping__label--bot', !!szCustomLabel);
                     if (szCustomLabel) {
@@ -763,6 +765,12 @@ var Scoreboard;
                     if (!elPanel || !elPanel.IsValid())
                         return;
                     oPlayer.m_elPlayer.SetDialogVariableInt('player_slot', GameStateAPI.GetPlayerSlot(oPlayer.m_xuid));
+                };
+                break;
+            case 'honoricon':
+                fn = oPlayer => {
+                    if (!oPlayer.m_elPlayer || !oPlayer.m_elPlayer.IsValid())
+                        return;
                     const xp_trail_level = GameStateAPI.GetPlayerXpTrailLevel(oPlayer.m_xuid);
                     if (oPlayer.m_xp_trail_level != xp_trail_level) {
                         const honorIconOptions = {
@@ -870,11 +878,15 @@ var Scoreboard;
                             elSkillgroup.visible = true;
                             if (oPlayer.m_oStats[stat] !== newStatValue) {
                                 oPlayer.m_oStats[stat] = newStatValue;
+                                const rating_type = MockAdapter.GetPlayerCompetitiveRankType(oPlayer.m_xuid);
+                                const score = MockAdapter.GetPlayerCompetitiveRanking(oPlayer.m_xuid);
+                                const wins = MockAdapter.GetPlayerCompetitiveWins(oPlayer.m_xuid);
                                 let options = {
                                     root_panel: elPlayer.FindChildTraverse('jsRatingEmblem'),
-                                    xuid: oPlayer.m_xuid,
-                                    api: 'gamestate',
                                     full_details: false,
+                                    rating_type: rating_type,
+                                    leaderboard_details: { score: score, matchesWon: wins },
+                                    local_player: oPlayer.m_xuid === MyPersonaAPI.GetXuid()
                                 };
                                 RatingEmblem.SetXuid(options);
                             }
@@ -956,7 +968,7 @@ var Scoreboard;
         }
     }
     function _CreateLabelForStat(stat, set, isHidden) {
-        let elLabelRow = $('#id-sb-players-table__labels-row');
+        let elLabelRow = $('#id-sb-players-table__labels-row__inner');
         if (!elLabelRow || !elLabelRow.IsValid())
             return;
         let elLabelRowOrSet = elLabelRow;
@@ -1037,14 +1049,53 @@ var Scoreboard;
             if (MockAdapter.GetPlayerStatus(xuid) == 15) {
                 szCustomLabel = '#SFUI_scoreboard_lbl_dc';
             }
-            else if (MockAdapter.IsFakePlayer(xuid)) {
-                szCustomLabel = '#SFUI_scoreboard_lbl_bot';
-            }
             else if (IsTeamASpecTeam(MockAdapter.GetPlayerTeamName(xuid))) {
                 szCustomLabel = '#SFUI_scoreboard_lbl_spec';
             }
         }
         return szCustomLabel;
+    }
+    function _CreatePlayerButtons(oPlayer) {
+        if (MockAdapter.IsFakePlayer(oPlayer.m_xuid))
+            return;
+        const xuid = oPlayer.m_elPlayer ? oPlayer.m_elPlayer.m_xuid : '';
+        for (let entry of ContextmenuPlayerCard.ContextMenus) {
+            if (entry.AvailableForItem(xuid)) {
+                if (!oPlayer.m_oElStats.hasOwnProperty(entry.name))
+                    continue;
+                const elContextMenuBtns = oPlayer.m_oElStats[entry.name];
+                if ('xml' in entry) {
+                    let elEntryBtn = $.CreatePanel('Panel', elContextMenuBtns, entry.name, {
+                        class: 'cell__button',
+                        style: 'tooltip-position: bottom;'
+                    });
+                    elEntryBtn.BLoadLayout(entry.xml, false, false);
+                }
+                else {
+                    let elEntryBtn = $.CreatePanel('Button', elContextMenuBtns, entry.name + '_' + xuid, {
+                        class: 'cell__button',
+                        style: 'tooltip-position: bottom;'
+                    });
+                    $.CreatePanel('Image', elEntryBtn, entry.name, { src: 'file://{images}/icons/ui/' + entry.icon + '.svg' });
+                    let tooltip = '#tooltip_' + entry.name;
+                    if ('IsDisabled' in entry) {
+                        if (entry.IsDisabled()) {
+                            elEntryBtn.enabled = false;
+                            tooltip = '#tooltip_disabled_' + entry.name;
+                        }
+                        else {
+                            elEntryBtn.enabled = true;
+                        }
+                    }
+                    let onSelected = entry.OnSelected;
+                    elEntryBtn.SetPanelEvent('onactivate', () => onSelected(xuid, ''));
+                    if (true) {
+                        elEntryBtn.SetPanelEvent('onmouseover', () => UiToolkitAPI.ShowTextTooltip(elEntryBtn.id, tooltip));
+                        elEntryBtn.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
+                    }
+                }
+            }
+        }
     }
     function _NewPlayerPanel(oPlayer) {
         if (!oPlayer.m_elTeam || !oPlayer.m_elTeam.IsValid())
@@ -1056,9 +1107,7 @@ var Scoreboard;
         function _InitStatCell(elStatCell, oPlayer) {
             if (!elStatCell || !elStatCell.IsValid())
                 return;
-            let stat = elStatCell.GetAttributeString('data-stat', '');
-            let set = elStatCell.GetAttributeString('data-set', '');
-            let isHidden = elStatCell.GetAttributeString('data-hidden', '');
+            const stat = elStatCell.GetAttributeString('data-stat', '');
             let children = elStatCell.Children();
             for (let i = 0; i < children.length; i++) {
                 _InitStatCell(children[i], oPlayer);
@@ -1069,12 +1118,14 @@ var Scoreboard;
             oPlayer.m_oElStats[stat] = elStatCell;
             elStatCell.AddClass('sb-row__cell');
             elStatCell.AddClass('sb-row__cell--' + stat);
+            const set = elStatCell.GetAttributeString('data-set', '');
             if (set !== '') {
                 let SetContainerId = 'id-sb-row__set-container';
+                let elParent = elStatCell.GetParent();
                 let elSetContainer = oPlayer.m_elPlayer.FindChildTraverse(SetContainerId);
                 if (!elSetContainer || !elSetContainer.IsValid()) {
-                    elSetContainer = $.CreatePanel('Panel', oPlayer.m_elPlayer, SetContainerId);
-                    oPlayer.m_elPlayer.MoveChildBefore(elSetContainer, elStatCell);
+                    elSetContainer = $.CreatePanel('Panel', elParent, SetContainerId);
+                    elParent.MoveChildAfter(elSetContainer, elStatCell);
                 }
                 let setId = 'id-sb-set-' + set;
                 let elSet = elSetContainer.FindChildTraverse(setId);
@@ -1091,6 +1142,7 @@ var Scoreboard;
             }
             if (idx++ % 2)
                 elStatCell.AddClass('sb-row__cell--dark');
+            const isHidden = elStatCell.GetAttributeString('data-hidden', '');
             if (!isHidden) {
                 _CreateStatUpdateFn(stat);
             }
@@ -1102,11 +1154,12 @@ var Scoreboard;
         _CreateStatUpdateFn('leader');
         _CreateStatUpdateFn('teacher');
         _CreateStatUpdateFn('friendly');
-        let elStatCells = oPlayer.m_elPlayer.Children();
-        let cellCount = elStatCells.length;
-        for (let i = 0; i < cellCount; i++) {
+        _CreateStatUpdateFn('honoricon');
+        const elStatCells = oPlayer.m_elPlayer.Children();
+        for (let i = 0; i < elStatCells.length; i++) {
             _InitStatCell(elStatCells[i], oPlayer);
         }
+        _CreatePlayerButtons(oPlayer);
         oPlayer.m_oStats = {};
         oPlayer.m_oStats['idx'] = GameStateAPI.GetPlayerSlot(oPlayer.m_xuid);
         oPlayer.m_elPlayer.SetPanelEvent('onmouseover', () => { _m_arrSortingPausedRefGetCounter++; });
@@ -1806,7 +1859,8 @@ var Scoreboard;
         let stat = el.GetAttributeString('data-stat', '');
         let set = el.GetAttributeString('data-set', '');
         let isHidden = el.GetAttributeString('data-hidden', '');
-        if (stat != '')
+        const noLabel = el.GetAttributeString('no-label', 'false');
+        if (stat != '' && !(noLabel === 'true'))
             _CreateLabelForStat(stat, set, isHidden);
     }
     function _GetSortOrderForMode(mode) {
@@ -1937,26 +1991,10 @@ var Scoreboard;
         _UpdateSpectatorButtons();
     }
     function _OnMouseActive() {
-        let elButtonPanel = _m_cP.FindChildTraverse('id-sb-meta__button-panel');
-        if (elButtonPanel && elButtonPanel.IsValid())
-            elButtonPanel.RemoveClass('hidden');
-        let elServerViewers = _m_cP.FindChildTraverse('id-sb-meta__labels__server-viewers');
-        if (elServerViewers && elServerViewers.IsValid())
-            elServerViewers.AddClass('hidden');
-        let elMouseInstructions = _m_cP.FindChildTraverse('id-sb-mouse-instructions');
-        if (elMouseInstructions && elMouseInstructions.IsValid())
-            elMouseInstructions.AddClass('hidden');
+        $.GetContextPanel().AddClass('mouse-active');
     }
     function _OnMouseInactive() {
-        let elButtonPanel = _m_cP.FindChildTraverse('id-sb-meta__button-panel');
-        if (elButtonPanel && elButtonPanel.IsValid())
-            elButtonPanel.AddClass('hidden');
-        let elServerViewers = _m_cP.FindChildTraverse('id-sb-meta__labels__server-viewers');
-        if (elServerViewers && elServerViewers.IsValid())
-            elServerViewers.RemoveClass('hidden');
-        let elMouseInstructions = _m_cP.FindChildTraverse('id-sb-mouse-instructions');
-        if (elMouseInstructions && elMouseInstructions.IsValid())
-            elMouseInstructions.RemoveClass('hidden');
+        $.GetContextPanel().RemoveClass('mouse-active');
     }
     function _CloseScoreboard() {
         if (_m_updatePlayerHandler) {

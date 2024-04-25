@@ -1073,6 +1073,8 @@ var PlayMenu;
             return;
         if (m_gameModeSetting === 'premier')
             return;
+        if (!LobbyAPI.BIsHost())
+            return;
         const selectedMaps = _GetSelectedMapsForServerTypeAndGameMode(m_serverSetting, _RealGameMode(), true);
         if (selectedMaps === "") {
             if (!bSilent)
@@ -1132,13 +1134,16 @@ var PlayMenu;
             LobbyAPI.GetSessionSettings().hasOwnProperty('game') &&
             LobbyAPI.GetSessionSettings().game.hasOwnProperty('prime') &&
             LobbyAPI.GetSessionSettings().game.prime;
+        let pmso = MyPersonaAPI.GetCompetitivePerMapStatsObject();
+        let score = pmso[mapGroupName] ? pmso[mapGroupName]["skillgroup"] : -1;
+        let wins = pmso[mapGroupName] ? pmso[mapGroupName]["wins"] : -1;
         let options = {
             root_panel: p,
-            xuid: MyPersonaAPI.GetXuid(),
-            api: 'mypersona',
             rating_type: 'Competitive',
             rating_map: mapGroupName,
-            full_details: true
+            full_details: true,
+            leaderboard_details: { score: score, matchesWon: wins },
+            local_player: true
         };
         RatingEmblem.SetXuid(options);
         let winCountString = RatingEmblem.GetWinCountString(p);
@@ -1980,6 +1985,7 @@ var PlayMenu;
     }
     PlayMenu.OnPressListenServers = OnPressListenServers;
     function OnPressWorkshop() {
+        m_isWorkshop = true;
         _SetPlayDropdownToWorkshop();
         _TurnOffDirectChallenge();
         _UpdateDirectChallengePage(_IsSearching(), LobbyAPI.BIsHost());
@@ -2032,8 +2038,10 @@ var PlayMenu;
         const filter = $.HTMLEscape(elTextLabel.text).toLowerCase();
         const container = m_mapSelectionButtonContainers[k_workshopPanelId];
         const elCanelBtn = $('#WorkshopSearchTextEntryCanel');
-        elCanelBtn.SetHasClass('hide', filter == '');
-        elCanelBtn.SetPanelEvent('onactivate', () => { elTextLabel.text = '', _UpdateWorkshopMapFilter; });
+        if (elCanelBtn) {
+            elCanelBtn.SetHasClass('hide', filter == '');
+            elCanelBtn.SetPanelEvent('onactivate', () => { elTextLabel.text = '', _UpdateWorkshopMapFilter; });
+        }
         if (!container) {
             return;
         }

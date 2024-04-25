@@ -43,6 +43,7 @@ var EOM_Skillgroup;
         let winsNeededForRank = SessionUtil.GetNumWinsNeededForRank(oData.mode);
         let matchesNeeded = winsNeededForRank - oData.num_wins;
         _m_cP.SetDialogVariable('rating_type', $.Localize('#SFUI_GameMode' + oData.mode));
+        _m_cP.SetDialogVariable('map', GameStateAPI.GetMapName());
         if (current_rating < 1 && matchesNeeded <= 0) {
             switch (oData.mode) {
                 case 'Wingman':
@@ -70,17 +71,27 @@ var EOM_Skillgroup;
             }
         }
         else if (current_rating >= 1) {
+            let skillgroupDescString = '';
+            switch (oData.mode) {
+                case 'Wingman':
+                case 'Premier':
+                    skillgroupDescString = '#eom-skillgroup-name';
+                    break;
+                case 'Competitive':
+                    skillgroupDescString = '#eom-skillgroup-map-name';
+                    break;
+            }
             switch (oData.mode) {
                 case 'Wingman':
                 case 'Competitive':
                     let modePrefix = (oData.mode === 'Wingman') ? 'wingman' : 'skillgroup';
                     oData.old_image = 'file://{images}/icons/skillgroups/' + modePrefix + oData.old_rating + '.svg';
                     oData.old_rating_info = $.Localize('#RankName_' + oData.old_rating);
-                    oData.old_rating_desc = $.Localize('#eom-skillgroup-name', _m_cP);
+                    oData.old_rating_desc = $.Localize(skillgroupDescString, _m_cP);
                     if (oData.old_rating < oData.new_rating) {
                         oData.new_image = 'file://{images}/icons/skillgroups/' + modePrefix + oData.new_rating + '.svg';
                         oData.new_rating_info = $.Localize('#RankName_' + oData.new_rating);
-                        oData.new_rating_desc = $.Localize('#eom-skillgroup-name', _m_cP);
+                        oData.new_rating_desc = $.Localize(skillgroupDescString, _m_cP);
                         _m_pauseBeforeEnd = 3.0;
                         _LoadAndShowNewRankReveal(oData);
                     }
@@ -132,12 +143,13 @@ var EOM_Skillgroup;
         else if (oData.mode === 'Premier') {
             let options = {
                 root_panel: _m_cP.FindChildInLayoutFile('jsRatingEmblem'),
-                xuid: MockAdapter.GetLocalPlayerXuid(),
                 leaderboard_details: { score: oData.new_rating, matchesWon: oData.num_wins },
                 do_fx: false,
                 presentation: 'digital',
                 eom_digipanel_class_override: GetEmblemStyleOverride(oData.new_rating),
                 full_details: true,
+                rating_type: "Premier",
+                local_player: true
             };
             let winLossStyle = GetWinLossStyle(oData);
             _m_cP.FindChildInLayoutFile('jsRatingEmblem').SwitchClass('winloss', winLossStyle + '-anim');
@@ -195,15 +207,15 @@ var EOM_Skillgroup;
         return new_rating < 1000 ? 'digitpanel-container-3-digit-offset' : new_rating < 10000 ? 'digitpanel-container-4-digit-offset' : '';
     }
     function _FilloutPremierRankData(oData) {
-        let options = {
+        const options = {
             root_panel: _m_cP.FindChildInLayoutFile('jsRatingEmblem'),
-            xuid: MockAdapter.GetLocalPlayerXuid(),
             leaderboard_details: { score: oData.old_rating, matchesWon: oData.num_wins },
             do_fx: false,
             rating_type: oData.mode,
             presentation: 'digital',
             eom_digipanel_class_override: GetEmblemStyleOverride(oData.old_rating),
             full_details: true,
+            local_player: true
         };
         if (oData.rating_change === 0) {
             RatingEmblem.SetXuid(options);
@@ -287,7 +299,15 @@ var EOM_Skillgroup;
     }
     function SetWinDescString(oData, elLabel) {
         elLabel.SetDialogVariableInt("matcheswon", oData.num_wins);
-        elLabel.text = $.Localize('#eom-skillgroup-win', elLabel);
+        switch (oData.mode) {
+            case 'Competitive':
+                elLabel.text = $.Localize('#eom-skillgroup-map-win', elLabel);
+                break;
+            case 'Wingman':
+            case 'Premier':
+                elLabel.text = $.Localize('#eom-skillgroup-win', elLabel);
+                break;
+        }
     }
     function Start() {
         if (_DisplayMe()) {

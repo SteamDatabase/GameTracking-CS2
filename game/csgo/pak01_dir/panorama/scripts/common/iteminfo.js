@@ -5,9 +5,19 @@
 var ItemInfo;
 (function (ItemInfo) {
     function GetFormattedName(id) {
-        const strName = InventoryAPI.GetItemName(id);
+        const strName = InventoryAPI.GetItemNameUncustomized(id);
+        const strCustomName = InventoryAPI.GetItemNameCustomized(id);
         if (InventoryAPI.HasCustomName(id)) {
-            return new CFormattedText('#CSGO_ItemName_Custom', { item_name: strName });
+            const splitLoc = strName.indexOf('|');
+            let strWeaponName;
+            let strPaintName;
+            if (splitLoc >= 0) {
+                strWeaponName = strName.substring(0, splitLoc).trim();
+                strPaintName = strName.substring(splitLoc + 1).trim();
+                return new CFormattedText('#CSGO_ItemName_Custom_Painted', { item_name: strWeaponName, paintkit_name: strPaintName, custom_item_name: strCustomName });
+            }
+            else
+                return new CFormattedText('#CSGO_ItemName_Custom_Simple', { item_name: strName, custom_item_name: strCustomName });
         }
         else {
             const splitLoc = strName.indexOf('|');

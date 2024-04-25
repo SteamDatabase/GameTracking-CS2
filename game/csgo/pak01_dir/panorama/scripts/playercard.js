@@ -219,13 +219,15 @@ var PlayerCard;
         _m_arrAdditionalSkillGroups.forEach(type => _SetSkillGroup(type));
     }
     function _UpdateSkillGroup(elSkillGroup, type) {
+        const score = FriendsListAPI.GetFriendCompetitiveRank(_m_xuid, type);
+        const wins = FriendsListAPI.GetFriendCompetitiveWins(_m_xuid, type);
         let options = {
             root_panel: elSkillGroup,
-            xuid: _m_xuid,
-            api: 'friends',
             rating_type: type,
             do_fx: true,
             full_details: true,
+            leaderboard_details: { score: score, matchesWon: wins },
+            local_player: _m_xuid === MyPersonaAPI.GetXuid()
         };
         let haveRating = RatingEmblem.SetXuid(options);
         let showRating = haveRating || MyPersonaAPI.GetXuid() === _m_xuid;

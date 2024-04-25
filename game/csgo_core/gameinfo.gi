@@ -486,6 +486,7 @@
 		"MinDXLevel"								"110" // DX 11.0 is the minimum
 		"MinStreamingPoolSizeMB"					"500"
 		"MinStreamingPoolSizeMBTools"				"2048"
+		"UseHardwareGammaRamp"						"0" // Fullscreen gamma controlled in postprocessing
 	}
 
 	Manifest

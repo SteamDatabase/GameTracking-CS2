@@ -16,7 +16,7 @@ var ContextmenuPlayerCard;
         newPanel.SetAttributeString("xuid", xuid);
         newPanel.BLoadLayout('file://{resources}/layout/playercard.xml', false, false);
     }
-    let _ContextMenus = [
+    ContextmenuPlayerCard.ContextMenus = [
         {
             name: 'invite',
             icon: 'invite',
@@ -39,7 +39,7 @@ var ContextmenuPlayerCard;
                     return false;
                 }
                 return gss.game.apr > 1 ? true : false;
-            }
+            },
         },
         {
             name: 'join',
@@ -62,7 +62,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 FriendsListAPI.ActionJoinFriendSession(id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'watch',
@@ -75,7 +75,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 FriendsListAPI.ActionWatchFriendSession(id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'steamprofile',
@@ -84,7 +84,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.ShowUserProfilePage(id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'kick_from_lobby',
@@ -104,7 +104,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 LobbyAPI.KickPlayer(id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'leave_lobby',
@@ -119,7 +119,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 LobbyAPI.CloseSession();
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'message',
@@ -130,7 +130,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.StartChatWithUser(id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'trade',
@@ -139,7 +139,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.StartTradeWithUser(id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'friendaccept',
@@ -148,7 +148,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.InteractWithUser(id, 'friendrequestaccept');
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'friendignore',
@@ -157,7 +157,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.InteractWithUser(id, 'friendrequestignore');
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'cancelinvite',
@@ -166,7 +166,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.InteractWithUser(id, 'friendremove');
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'removefriend',
@@ -183,7 +183,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.InteractWithUser(id, 'friendremove');
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'request',
@@ -196,7 +196,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 SteamOverlayAPI.InteractWithUser(id, 'friendadd');
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'editprofile',
@@ -206,7 +206,7 @@ var ContextmenuPlayerCard;
                 let communityUrl = SteamOverlayAPI.GetSteamCommunityURL();
                 SteamOverlayAPI.OpenURL(communityUrl + "/profiles/" + id + "/minimaledit");
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'changecolor',
@@ -218,7 +218,7 @@ var ContextmenuPlayerCard;
             },
             OnSelected: (id) => {
                 LobbyAPI.ChangeTeammateColor();
-            }
+            },
         },
         {
             name: 'mute',
@@ -229,7 +229,7 @@ var ContextmenuPlayerCard;
                     !_IsSelf(id) &&
                     GameStateAPI.IsPlayerConnected(id);
             },
-            OnSelected: null
+            OnSelected: null,
         },
         {
             name: 'report',
@@ -244,7 +244,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_report_player.xml', 'xuid=' + id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'commend',
@@ -257,7 +257,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_commend_player.xml', 'xuid=' + id);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'borrowmusickit',
@@ -273,7 +273,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 GameInterfaceAPI.SetSettingString("cl_borrow_music_from_player_slot", "" + GameStateAPI.GetPlayerSlot(id));
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'stopborrowmusickit',
@@ -290,7 +290,7 @@ var ContextmenuPlayerCard;
             OnSelected: (id) => {
                 $.DispatchEvent('Scoreboard_UnborrowMusicKit');
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
         {
             name: 'copycrosshair',
@@ -303,7 +303,7 @@ var ContextmenuPlayerCard;
             OnSelected: (xuid) => {
                 $.DispatchEvent('Scoreboard_ApplyPlayerCrosshairCode', xuid);
                 $.DispatchEvent('ContextMenuEvent', '');
-            }
+            },
         },
     ];
     function _HasMusicKit(id) {
@@ -320,7 +320,7 @@ var ContextmenuPlayerCard;
         let count = 0;
         let rowCount = 0;
         let elContextMenuBtns;
-        for (let entry of _ContextMenus) {
+        for (let entry of ContextmenuPlayerCard.ContextMenus) {
             if (entry.AvailableForItem(xuid)) {
                 count = count === 5 ? 0 : count;
                 if (count === 0) {

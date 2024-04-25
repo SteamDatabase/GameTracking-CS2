@@ -18,7 +18,10 @@ var InspectHeader;
         let strViewFunc = funcGetSettingCallback ? funcGetSettingCallback('viewfunc', '') : '';
         if (ItemInfo.ItemDefinitionNameSubstrMatch(ItemId, 'tournament_journal_'))
             ItemId = (strViewFunc === 'primary') ? ItemId : ItemInfo.GetFauxReplacementItemID(ItemId, 'graffiti');
-        elPanel.FindChildInLayoutFile('InspectName').text = InventoryAPI.GetItemName(ItemId);
+        elPanel.SetDialogVariable('item_name', InventoryAPI.GetItemNameUncustomized(ItemId));
+        elPanel.SetDialogVariable('item_custom_name', InventoryAPI.GetItemNameCustomized(ItemId));
+        const bShowCustomName = InventoryAPI.HasCustomName(ItemId);
+        elPanel.FindChildInLayoutFile('InspectCustomName').visible = bShowCustomName;
     }
     function _SetRarity(elPanel, itemId) {
         let rarityColor = InventoryAPI.GetItemRarityColor(itemId);

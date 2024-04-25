@@ -137,7 +137,7 @@ var g_PromotedSettings = [
         loc_desc: "#SFUI_Settings_Network_ExtraBuffering_Info",
         section: "GameSettings",
         start_date: new Date('February 6, 2024'),
-        end_date: new Date('April 28, 2024')
+        end_date: new Date('April 22, 2024')
     },
     {
         id: "SettingsTelemetry",
@@ -145,8 +145,32 @@ var g_PromotedSettings = [
         loc_desc: "#settings_telemetry_section_info",
         section: "GameSettings",
         start_date: new Date('February 6, 2024'),
-        end_date: new Date('April 28, 2024')
+        end_date: new Date('April 22, 2024')
     },
+    {
+        id: "PreferredHandedness",
+        loc_name: "#Cstrike_PreferredHandedness",
+        loc_desc: "#Cstrike_PreferredHandedness_Desc",
+        section: "GameSettings",
+        start_date: new Date('April 22, 2024'),
+        end_date: new Date('June 1, 2024')
+    },
+    {
+        id: "RadarScaleToggle",
+        loc_name: "#SFUI_Settings_Radar_Scale_Alternate",
+        loc_desc: "#SFUI_Settings_Radar_Scale_Alternate_Info",
+        section: "GameSettings",
+        start_date: new Date('April 22, 2024'),
+        end_date: new Date('June 1, 2024')
+    },
+    {
+        id: "SettingsGrenadeCrosshair",
+        loc_name: "#settings_grenadecrosshair",
+        loc_desc: "#settings_grenadecrosshair_info",
+        section: "GameSettings",
+        start_date: new Date('April 22, 2024'),
+        end_date: new Date('June 1, 2024')
+    }
 ]
     .reverse();
 var PromotedSettingsUtil;
