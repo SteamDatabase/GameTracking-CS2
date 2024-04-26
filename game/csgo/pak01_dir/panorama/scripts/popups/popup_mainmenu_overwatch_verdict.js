@@ -18,7 +18,6 @@ var overwatch_verdict;
             elVerdict.SetDialogVariable('verdict_title', $.Localize(verdict.title));
             elVerdict.SetDialogVariable('verdict_desc', $.Localize(verdict.desc));
             _SetupVerdictButtons(elVerdict.FindChildInLayoutFile('verdict_btn_not_guilty'), verdict);
-            _SetupVerdictButtons(elVerdict.FindChildInLayoutFile('verdict_btn_maybe_guilty'), verdict);
             _SetupVerdictButtons(elVerdict.FindChildInLayoutFile('verdict_btn_guilty'), verdict);
         });
     }
@@ -38,9 +37,6 @@ var overwatch_verdict;
                 return false;
             if (elVerdict.FindChildInLayoutFile('verdict_btn_not_guilty').checked) {
                 _finalVerdict += verdict.type + ":dismiss;";
-            }
-            else if (elVerdict.FindChildInLayoutFile('verdict_btn_maybe_guilty').checked) {
-                _finalVerdict += verdict.type + ":inconclusive;";
             }
             else if (elVerdict.FindChildInLayoutFile('verdict_btn_guilty').checked) {
                 _finalVerdict += verdict.type + ":convict;";
