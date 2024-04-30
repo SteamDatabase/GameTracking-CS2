@@ -143,6 +143,9 @@ var EOM_Characters;
     }
     EOM_Characters.ShowWinningTeam = ShowWinningTeam;
     function _DisplayMe() {
+        if (GameStateAPI.IsOverwatch()) {
+            return false;
+        }
         let data = MockAdapter.GetAllPlayersMatchDataJSO();
         if (data && data.allplayerdata && data.allplayerdata.length > 0) {
             _m_arrAllPlayersMatchDataJSO = data.allplayerdata;
