@@ -37,6 +37,7 @@ var PlayMenu;
         deathmatch: 'deathmatch',
         training: 'training',
         coopstrike: 'coopmission',
+        armsrace: 'gungameprogressive',
         custom: 'custom',
         flyingscoutsman: 'flyingscoutsman',
         retakes: 'retakes'
