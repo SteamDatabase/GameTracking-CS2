@@ -29,17 +29,35 @@ var HudDemoController;
     });
     let lastState = null;
     let bRoundsMarked = false;
+    let bAtEndOfPlayback = false;
     function FrameUpdate() {
+        const state = cp.GetDemoControllerState();
+        if (state == null) {
+            lastState = null;
+            $.Schedule(1, FrameUpdate);
+            return;
+        }
+        const nFinalTick = state.PlaybackIntervals.at(-1)?.nTickEnd;
+        const bStateAtEndOfPlayback = nFinalTick != undefined && state.nTick >= nFinalTick;
+        if (bStateAtEndOfPlayback != bAtEndOfPlayback) {
+            if (bStateAtEndOfPlayback) {
+                bActive = true;
+                hud.SetHasClass("DemoControllerActive", true);
+                cp.SetInputCaptureEnabled(true);
+            }
+            if (state.bIsOverwatch) {
+                const sEndPlayback = bStateAtEndOfPlayback ?
+                    $.Localize('#CSGO_Demo_End_Playback_Overwatch_Finished') :
+                    $.Localize('#CSGO_Demo_End_Playback_Overwatch');
+                cp.SetDialogVariable('end-playback', sEndPlayback);
+            }
+            bAtEndOfPlayback = bStateAtEndOfPlayback;
+        }
         if (!cp.visible) {
             $.Schedule(1, FrameUpdate);
             return;
         }
         $.Schedule(0, FrameUpdate);
-        const state = cp.GetDemoControllerState();
-        if (state == null) {
-            lastState = null;
-            return;
-        }
         if (lastState == null || lastState.sFileName !== state.sFileName) {
             bRoundsMarked = false;
             let sFileName = state.sFileName.replaceAll("\\", "/");
@@ -51,7 +69,10 @@ var HudDemoController;
             const bShowUI = state.bIsOverwatch;
             hud.SetHasClass("DemoControllerActive", bShowUI);
             cp.SetInputCaptureEnabled(bShowUI);
-            $("#EndPlayback").visible = state.bIsOverwatch;
+            const sEndPlayback = state.bIsOverwatch ?
+                $.Localize('#CSGO_Demo_End_Playback_Overwatch') :
+                $.Localize('#CSGO_Demo_End_Playback');
+            cp.SetDialogVariable('end-playback', sEndPlayback);
         }
         lastState = state;
         const pMarkers = $("#RoundMarkers");
@@ -70,10 +91,17 @@ var HudDemoController;
                     nWidth += nLeft;
                     nLeft = 0;
                 }
-                else if (i === state.PlaybackIntervals.length - 1) {
+                else if (i === state.PlaybackIntervals.length - 1 && !state.bIsPlayingHighlights) {
                     nWidth += nThumbWidth / 2;
                 }
-                const pMarker = $.CreatePanel("Panel", pMarkers, "", { class: i % 2 === 0 ? "even" : "odd" });
+                let className = "even";
+                if (state.bIsPlayingHighlights) {
+                    className = state.PlaybackIntervals[i].sLabel;
+                }
+                else {
+                    className = i % 2 === 0 ? "even" : "odd";
+                }
+                const pMarker = $.CreatePanel("Panel", pMarkers, "", { class: className });
                 pMarker.style.marginLeft = nLeft + "px";
                 pMarker.style.width = nWidth + "px";
             }

@@ -86,7 +86,6 @@ var EOM_Voting;
             }
         });
         _UpdateVotes();
-        _m_cP.SetFocus();
         return true;
     }
     function _UpdateVotes() {
