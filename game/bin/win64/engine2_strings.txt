@@ -1,7 +1,6 @@
 					
 						
 								
-		V_isdigit_str
 	!s99
 	"%s" has %d known peers:
 	"%s" has no known peers.
@@ -11,16 +10,8 @@
 	$$$$$$$
 	%s manifest end
 	)	G*O
-	-1 = use default (parallel controller split)
-	0 = single threaded combined (i.e., ReadFieldList and Decode combined into one call)
-	1 = single threaded split (first pass ReadFieldList, second pass Decode)
 	2	?	
 	2	L	
-	2 = worker thread for decode (main thread does ReadFieldList, worker thread does Decode)
-	3 = parallel combined (threadpool does read/decode on work items in parallel)
-	4 = parallel split
-	5 = parallel controller combined (like parallel, but uses a parallelcontroller so each thread in pool can share a single SerializedEntity
-	6 = parallel controller split
 	6p7M
 	6p7MOf
 	8\$BH
@@ -48,10 +39,12 @@
 	TYPE_ENUM
 	This is necessary to run!
 	V	!#
+	V_fprintf
+	V_ftell
 	V_fwrite
+	V_isdigit_str
 	V_isnand
-	V_log10f
-	V_log2_uint
+	V_vsnprintf
 	Warning
 	You must construct it with ORDERED_CONSTRUCT macro in the dependency resolution function.
 	Z	?	
@@ -126,7 +119,6 @@
 	w|Hc
  	% t
  	S&L
- 	V_logf
  	uIH
                           
                                          N=0 to disable.  Default detail level is 'summary'
@@ -165,7 +157,7 @@
     Event %s
     Expected  : 
     Field type: 
-    FirstInput -> NetSend . :%s
+    FirstInput -> NetSend . :%s (pessimistic measurement, typically = 1 tick - half frame time)
     Network latency . . . . :%s (assumed, RTT=%.0fms)
     Render interpolation. . :%s
     Render. . . . . . . . . :%s
@@ -275,12 +267,12 @@
  ('" 
  (08@HPX`hpx
  (08@HPX`j
- (08@HPXb@f!
+ (08@HPXbPG!
  (08@HPZ
- (08@HR@f!
+ (08@HRPG!
  (08@J
- (08@J@f!
- (0X`hpz@f!
+ (08@JPG!
+ (0X`hpzPG!
  (IP "%s")
  (Texture)
  (You)
@@ -300,8 +292,7 @@
  -noscreenshot
  -product "%s"
  ... }
- .PV>
- .`$>
+ .P/>
  0"r$4&
  0: read from NULL
  1: write to NULL
@@ -916,7 +907,6 @@ $tI(knN
 %2d: proc group %u:%u, physical ID %d, core ID %d
 %2i/%2i on map %s
 %2i:%02i:%02i
-%32.32s: % 4d->% 4d: min: %8.3f (ms) max: %8.3f (ms) average: %8.3f (ms) : ~ per entity %8.3f
 %3333D
 %3;NYk{
 %3AObq~
@@ -986,6 +976,7 @@ $tI(knN
 %f Long frame (%s): %.2fms elapsed, %.2fms sim time, %d ticks, %d..%d.
 %f Player [%s][%d][adr:%s] was sent a datagram %d bits (%8.3f bytes)
 %f UNEXPECTED LONG FRAME DETECTED: %.2fms elapsed, %.2fms sim time, %d ticks, %d..%d.
+%f UNEXPECTED LONG FRAME DETECTED: %.2fms elapsed, %.2fms sim time, %d ticks, %d..%d.  (Last amnesty was '%s', %.2fs ago)
 %g %g
 %g %g %g
 %g %g %g %g
@@ -1178,6 +1169,7 @@ $tI(knN
 %u:%u
 %u:%u:%u
 %u[%d items changed]
+&	V_log10f
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
 &#GameUI_Disconnect_PureServer_Mismatch
@@ -1209,6 +1201,7 @@ $tI(knN
 &YA1H
 &YA1M
 &final
+'	V_log2_uint
 '!1*&
 '#GameUI_Disconnect_BadSpectatorPassword
 '#GameUI_Disconnect_DifferentClassTables
@@ -1248,11 +1241,10 @@ $tI(knN
 (*VERB) not recognized
 (*d/%
 (-AVX) 
+(-z.*
 (0`hpx
 (27>?<:20./-(
 (4%I!
-(5*})
-(5K~)
 (64-bit process)
 (8GXgw
 (;^ |
@@ -1343,7 +1335,6 @@ $tI(knN
 (L$PH
 (L$`A
 (L$`D
-(L$`L
 (L$pD
 (L;l$h
 (Lc)H
@@ -1366,7 +1357,6 @@ $tI(knN
 (T$@D
 (T$@t
 (T$PD
-(T$PI
 (T$PsV
 (T$`D
 (T$`L
@@ -1383,6 +1373,7 @@ $tI(knN
 (\$PD
 (\$`D
 (\$`H
+(\$pA
 (\$pL
 (]	.(0
 (_^][
@@ -1393,6 +1384,7 @@ $tI(knN
 (d$@D
 (d$PD
 (d$PL
+(d$`I
 (d$pD
 (dump took %.1fms)
 (f*^[0
@@ -1439,7 +1431,6 @@ $tI(knN
 (t$PD;
 (t$PE
 (t$PH
-(t$PI
 (t$PL
 (t$Ps
 (t$Pu
@@ -1530,7 +1521,6 @@ $tI(knN
 )L$@E
 )L$P@8
 )L$PD
-)L$`D
 )L$`E
 )L$`fD
 )L$pD
@@ -1547,7 +1537,6 @@ $tI(knN
 )T$@D
 )T$@E
 )T$PD
-)T$PE
 )T$PH
 )T$`D
 )T$pH
@@ -1564,6 +1553,7 @@ $tI(knN
 )\$PD
 )\$`A
 )\$`D
+)\$pD
 )\ZEo^m/
 )]@Mc
 )d$ E
@@ -1574,6 +1564,7 @@ $tI(knN
 )d$PE
 )d$PfA
 )d$`D
+)d$`E
 )d$pD
 )d$pH
 )l$ A
@@ -1589,7 +1580,6 @@ $tI(knN
 )l$pD
 )m@Hc
 )mpfA
-)t$ 3
 )t$ 9A
 )t$ A
 )t$ D
@@ -1597,7 +1587,6 @@ $tI(knN
 )t$ E3
 )t$ H
 )t$ H+
-)t$ L
 )t$ f
 )t$ t
 )t$ u
@@ -1692,6 +1681,8 @@ $tI(knN
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
 *StO9>T
 *YA1H
+*y~:&M
++	V_logf
 +!	-W
 ++CBaseSpawnGroup
 ++CNetworkGameClientBase
@@ -1737,7 +1728,6 @@ $tI(knN
 +port
 +shift
 +w?FFv?
-,	V_powf
 ,  Features: 
 , "%s"
 , Frequency: %.01f %s
@@ -1773,7 +1763,6 @@ $tI(knN
 ,d3c&
 ,j.b0^2`4^6`8^:f<
 ,p	X4
--	V_qsort
 - plays a demo file
 -#GameUI_Disconnect_LocalProblem_NetworkConfig
 -%s %d
@@ -1984,14 +1973,12 @@ $tI(knN
 -warmtime
 -width
 -worldwide
-.	V_qsort_s
 ................................................................................
 ...<truncated>...
 ../src/shaders
 ..\content
 ..om?
 .00cfg
-.5DN/
 .7=-l
 .9GXdx
 .>PJ;I:qE>
@@ -2026,7 +2013,6 @@ $tI(knN
 .?AV<lambda_1>@?6??force_fatal_error@@YAXAEBVCCommandContext@@AEBVCCommand@@@Z@
 .?AV<lambda_1>@?7??OnFrameBoundary@CScreenshotService@@AEAAXAEBUEventFrameBoundary_t@@@Z@
 .?AV<lambda_1>@?9??OnReadTexturePixels@CScreenshotServiceReadTexturePixelsCallback@@UEAAXPEBEW4ImageFormat@@HHHH@Z@
-.?AV<lambda_1>@?BH@??ProcessReadPacketEntitiesWorkItems@CNetworkGameClient@@AEAAXW4RPEStatType_t@@AEAVCEntityReadInfo@@@Z@
 .?AV<lambda_1>@?L@??LaunchAsyncBeginRenderingViewsJob@CRenderService@@QEAAXAEBUEventClientPreOutput_t@@_N@Z@
 .?AV<lambda_1>@?L@??WriteToBufferBC6H_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KAEBUFloatBitmapEncodeSettings_t@@@Z@
 .?AV<lambda_1>@?N@??FillAttr@CSOAContainer@@QEAAXHM@Z@
@@ -2035,6 +2021,7 @@ $tI(knN
 .?AV<lambda_1_>@InputAudioStreamParams_t@@
 .?AV<lambda_2>@?BA@??LaunchAsyncBeginRenderingViewsJob@CRenderService@@QEAAXAEBUEventClientPreOutput_t@@_N@Z@
 .?AV<lambda_2>@?BD@??WriteScreenshotToFile@CScreenshotService@@AEAA_NPEBD0AEAVCUtlBuffer@@_N22@Z@
+.?AV<lambda_2>@?BJ@??ProcessReadPacketEntitiesWorkItems@CNetworkGameClient@@AEAAXW4RPEStatType_t@@AEAVCEntityReadInfo@@@Z@
 .?AV<lambda_5a9ef80d79df7873994019ff15dceae5>@@
 .?AV<lambda_60c5de84e69e46aa92419d47e2f3ad51>@@
 .?AV<lambda_713ee8bbd6b08550d59c52695cab5ce3>@@
@@ -2250,11 +2237,12 @@ $tI(knN
 .?AV?$CParallelLambdaJob@V<lambda_1>@?8??WriteToBufferBC7_bc7e@FloatBitMap_t@@IEBA_NPEAX_KW4ImageFormat@@AEBUFloatBitmapEncodeSettings_t@@@Z@@CParallelProcessLauncher@@
 .?AV?$CParallelLambdaJob@V<lambda_1>@?8??WriteToBufferBC7_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KW4ImageFormat@@AEBUFloatBitmapEncodeSettings_t@@@Z@@CParallelProcessLauncher@@
 .?AV?$CParallelLambdaJob@V<lambda_1>@?8??WriteToBufferETC@FloatBitMap_t@@IEBA_NPEAX_KW4ImageFormat@@AEBUFloatBitmapEncodeSettings_t@@@Z@@CParallelProcessLauncher@@
-.?AV?$CParallelLambdaJob@V<lambda_1>@?BF@??PackEntities_Normal@CNetworkGameServer@@AEAAXAEAV?$CUtlVector@PEBUEntity2Networkable_t@@HV?$CUtlMemory@PEBUEntity2Networkable_t@@H@@@@HPEAPEAVCServerSideClient@@AEAV?$CBitVec@$0EAAA@@@PEAVCFrameSnapshot@@@Z@@CParallelProcessLauncher@@
 .?AV?$CParallelLambdaJob@V<lambda_1>@?DE@??ExpandDeltaFrameToFullFrame@CHLTVServerAsync@@IEAAXPEAUSHLTVDeltaFrame_t@@@Z@@CParallelProcessLauncher@@
-.?AV?$CParallelLambdaJob@V<lambda_2>@?BI@??PackEntities_Normal@CNetworkGameServer@@AEAAXAEAV?$CUtlVector@PEBUEntity2Networkable_t@@HV?$CUtlMemory@PEBUEntity2Networkable_t@@H@@@@HPEAPEAVCServerSideClient@@AEAV?$CBitVec@$0EAAA@@@PEAVCFrameSnapshot@@@Z@@CParallelProcessLauncher@@
+.?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_1>@?BF@??PackEntities_Normal@CNetworkGameServer@@AEAAXAEAV?$CUtlVector@PEBUEntity2Networkable_t@@HV?$CUtlMemory@PEBUEntity2Networkable_t@@H@@@@HPEAPEAVCServerSideClient@@AEAV?$CBitVec@$0EAAA@@@PEAVCFrameSnapshot@@@Z@@@YAXHHPEBDV1?BF@??PackEntities_Normal@CNetworkGameServer@@AEAAXAEAV?$CUtlVector@PEBUEntity2Networkable_t@@HV?$CUtlMemory@PEBUEntity2Networkable_t@@H@@@@HPEAPEAVCServerSideClient@@AEAV?$CBitVec@$0EAAA@@@PEAVCFrameSnapshot@@@Z@HHHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
+.?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_2>@?BI@??PackEntities_Normal@CNetworkGameServer@@AEAAXAEAV?$CUtlVector@PEBUEntity2Networkable_t@@HV?$CUtlMemory@PEBUEntity2Networkable_t@@H@@@@HPEAPEAVCServerSideClient@@AEAV?$CBitVec@$0EAAA@@@PEAVCFrameSnapshot@@@Z@@@YAXHHPEBDV<lambda_2>@?BI@??PackEntities_Normal@CNetworkGameServer@@AEAAXAEAV?$CUtlVector@PEBUEntity2Networkable_t@@HV?$CUtlMemory@PEBUEntity2Networkable_t@@H@@@@HPEAPEAVCServerSideClient@@AEAV?$CBitVec@$0EAAA@@@PEAVCFrameSnapshot@@@Z@HHHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@HV?$CLambdaJobItemProcessor@H@@$00@@@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@HV?$CMemberFuncJobItemProcessor@HVCNetworkGameClientBase@@V1@@@$00@@@@
+.?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@PEAUReadPacketEntitiesWorkItem_t@@V?$CMemberFuncJobItemProcessor@PEAUReadPacketEntitiesWorkItem_t@@VCNetworkGameClient@@V2@@@$00@@@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@UCrashItem_t@@V?$CFuncJobItemProcessor@UCrashItem_t@@@@$00@@@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@UFatalErrorItem_t@@V?$CFuncJobItemProcessor@UFatalErrorItem_t@@@@$00@@@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@UReadPacketEntitiesWorkItem_t@@V?$CMemberFuncJobItemProcessor@UReadPacketEntitiesWorkItem_t@@VCNetworkGameClient@@V2@@@$00@@@@
@@ -2432,7 +2420,6 @@ $tI(knN
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?6??force_fatal_error@@YAXAEBVCCommandContext@@AEBVCCommand@@@Z@X$$V@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?7??OnFrameBoundary@CScreenshotService@@AEAAXAEBUEventFrameBoundary_t@@@Z@X$$V@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?9??OnReadTexturePixels@CScreenshotServiceReadTexturePixelsCallback@@UEAAXPEBEW4ImageFormat@@HHHH@Z@X$$V@std@@
-.?AV?$_Func_impl_no_alloc@V<lambda_1>@?BH@??ProcessReadPacketEntitiesWorkItems@CNetworkGameClient@@AEAAXW4RPEStatType_t@@AEAVCEntityReadInfo@@@Z@X$$V@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?L@??LaunchAsyncBeginRenderingViewsJob@CRenderService@@QEAAXAEBUEventClientPreOutput_t@@_N@Z@X$$V@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?L@??WriteToBufferBC6H_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KAEBUFloatBitmapEncodeSettings_t@@@Z@XAEAH@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?N@??FillAttr@CSOAContainer@@QEAAXHM@Z@X$$V@std@@
@@ -2441,6 +2428,7 @@ $tI(knN
 .?AV?$_Func_impl_no_alloc@V<lambda_1_>@InputAudioStreamParams_t@@XPEAVIAudioInputStream@@H@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_2>@?BA@??LaunchAsyncBeginRenderingViewsJob@CRenderService@@QEAAXAEBUEventClientPreOutput_t@@_N@Z@X$$V@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_2>@?BD@??WriteScreenshotToFile@CScreenshotService@@AEAA_NPEBD0AEAVCUtlBuffer@@_N22@Z@XPEBX@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_2>@?BJ@??ProcessReadPacketEntitiesWorkItems@CNetworkGameClient@@AEAAXW4RPEStatType_t@@AEAVCEntityReadInfo@@@Z@X$$V@std@@
 .?AV?$_Iosb@H@std@@
 .?AV?$_Packaged_state@$$A6AIXZ@std@@
 .?AV?$_Packaged_state@$$A6AXXZ@std@@
@@ -3155,8 +3143,8 @@ $tI(knN
 /%d/full?tick=%d
 /%d/start
 /%d/start?tick=%d&tps=%.1f&map=%s&protocol=%d
-/-5K*
-/-T:*
+/-$5*
+/-hG%
 /0v%H
 /2GG>!B
 /8szH
@@ -3187,7 +3175,7 @@ $tI(knN
 0123456789abcdefghijklmnopqrstuvwxyz
 08@HP
 08@HR
-08@J@f!
+08@JPG!
 09D*0}
 09D*0} D
 09D*0}"C
@@ -3197,7 +3185,7 @@ $tI(knN
 0=Off, 1=Surface Wireframe, 2=Transparent Wireframe
 0=Off, 1=Visualize trace from camera, 2=Visualize occlusion
 0><[cZUg^>
-0>\i>
+0>\B>
 0A\][
 0A\][H
 0A\_^][
@@ -3242,9 +3230,11 @@ $tI(knN
 0A_A^_^[
 0A_A^_^[H
 0A_A^_^]
+0A_^]
 0A__[
 0A__]
 0A__^
+0A__^H
 0D;sH
 0D;v<|
 0D;{<
@@ -3275,7 +3265,7 @@ $tI(knN
 1#QNAN
 1#SNAN
 1.2.11
-11:16:17
+11:39:35
 127.0.0.1
 130801120000Z
 16777215"R
@@ -3310,7 +3300,7 @@ $tI(knN
 220801000000Z
 230714000000Z
 24.ProtoFlattenedSerializerField_t.polymorphic_field_t
-240501233115Z0/
+240507184107Z0/
 241009235959Z0a1
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA0
@@ -3347,6 +3337,7 @@ $tI(knN
 4	IcD
 4$u.A
 456789:;<=
+4D;={
 4DXgu~
 4HA;p
 4HA;x
@@ -3378,6 +3369,7 @@ $tI(knN
 6s?fBbEcJYG[I[NYVP\B]@f;g<h<u4{,
 6uu?>
 6uu?uj
+7	V_powf
 70503
 70@ )
 7K[iu
@@ -3385,7 +3377,7 @@ $tI(knN
 7fD9g*tZD
 7h>?8
 7http://cacerts.digicert.com/DigiCertAssuredIDRootCA.crt0E
-8	V_sincosf
+8	V_qsort
 8#8fD
 8#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
 8#LT`f
@@ -3416,7 +3408,6 @@ $tI(knN
 8A_A]][
 8A_A^A]A\_^][
 8A_A^^[
-8A_A^_[H
 8A_[H
 8Csinf
 8D$@t
@@ -3424,12 +3415,11 @@ $tI(knN
 8D$`t
 8D$zt
 8D)l$
-8D;=v
+8D;=f
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA10
 8Et8A
 8HcA H
-8L$ct
 8L9&t	H
 8L9ePt
 8NETWORK_DISCONNECT_LOCALPROBLEM_HOSTEDSERVERPRIMARYRELAY
@@ -3445,16 +3435,17 @@ $tI(knN
 8w>Hc
 8|u9H
 8}WW`
+9	V_qsort_s
 9)~4H
 9)~P3
 9*ubC'
 9+~&H
 9+~)L
-9-zI>
 90u(H
 90~_H
 92~83
 92~B3
+958K4
 98t H
 98~(H
 98~+H
@@ -3462,7 +3453,7 @@ $tI(knN
 99~CE
 9;C,r
 9;tcH
-9=28C
+9=B2Z
 9=aA\E
 9>~@H
 9?=d>?
@@ -3535,7 +3526,6 @@ $tI(knN
 9|$p~(H
 9}ou%D
 9~h~=H
-:	V_sinf
 :    processpacketentities: server executed through command %d
 : Tried to copy from a message with a different type. to: 
 : failed to parse contents
@@ -3555,7 +3545,7 @@ $tI(knN
 ;)u1D
 ;.u1L
 ;1} H
-;=vcG
+;=d2C
 ;?%L+
 ;?Bh9?
 ;?uX;?
@@ -3653,7 +3643,6 @@ $tI(knN
 <{uVA
 <}t$<-t
 <}tSH
-=	V_snprintf
 =%H5<mN
 =&~g>&"2?
 ='-0n
@@ -3703,6 +3692,7 @@ $tI(knN
 >wzHc
 >~a)>
 ?	g	2	
+? 6	zX 
 ?!5WOo
 ?+>^m
 ?.t$H
@@ -3722,6 +3712,7 @@ $tI(knN
 ??0CMiniDumpComment@@QEAA@HW4MemAllocAttribute_t@@@Z
 ??0CMiniDumpCommentBuilderBase@@QEAA@XZ
 ??0CStackTop_Base@@IEAA@XZ
+??0CTSListBase@@QEAA@XZ
 ??0CThread@@QEAA@XZ
 ??0CThreadEvent@@QEAA@_N@Z
 ??0CThreadFiber@@QEAA@_K@Z
@@ -3744,6 +3735,7 @@ $tI(knN
 ??1CMiniDumpComment@@QEAA@XZ
 ??1CMiniDumpCommentBuilderBase@@UEAA@XZ
 ??1CStackTop_Base@@IEAA@XZ
+??1CTSListBase@@QEAA@XZ
 ??1CThread@@UEAA@XZ
 ??1CThreadLocalScope@@QEAA@XZ
 ??1CThreadMutex@@QEAA@XZ
@@ -3813,6 +3805,7 @@ $tI(knN
 ?CopySubkeys@KeyValues@@QEBAXPEAV1@@Z
 ?DefaultExtension@CBufferString@@QEAAPEBDPEBD@Z
 ?DequeueNextCommand@CCommandBuffer@@QEAA_NXZ
+?Detach@CTSListBase@@QEAAPEAUTSLNodeBase_t@@XZ
 ?DevMsg@@YAXPEBDZZ
 ?Diff@CVirtualMemorySnapshot@@QEAAXPEBV1@0@Z
 ?Dump@KeyValues@@QEAA_NPEAVIKeyValuesDumpContext@@H@Z
@@ -3894,6 +3887,8 @@ $tI(knN
 ?Init@CThread@@MEAA_NXZ
 ?InitEmpty@CStrAutoEncode@@AEAAXXZ
 ?Insert@CBufferString@@QEAAPEBDHPEBDH_N@Z
+?InternalPop@CTSListBase@@AEAAPEAUTSLNodeBase_t@@XZ
+?InternalPush@CTSListBase@@AEAAXPEAUTSLNodeBase_t@@@Z
 ?Internal_GetString@CKeyValues_Data@@IEAAPEBDPEBDPEAD_K@Z
 ?IsAlive@CThread@@QEAA_NXZ
 ?IsEqual_CaseSensitive@CUtlString@@QEBA_NPEBD@Z
@@ -3938,10 +3933,12 @@ $tI(knN
 ?ParseToken@CUtlBuffer@@QEAAHPEBUcharacterset_t@@PEADH_N@Z
 ?PathJoin@CUtlString@@SA?AV1@PEBD0@Z
 ?Pause@CVProfile@@QEAAXXZ
+?Pop@CTSListBase@@QEAAPEAUTSLNodeBase_t@@XZ
 ?PrependComment@CMiniDumpComment@@QEAAXPEBD@Z
 ?Printf@CUtlBuffer@@QEAAXPEBDZZ
 ?Purge@CBufferString@@QEAAXH@Z
 ?Purge@CUtlString@@QEAAXXZ
+?Push@CTSListBase@@QEAAXPEAUTSLNodeBase_t@@@Z
 ?Put@CUtlBuffer@@QEAAXPEBXH@Z
 ?PutString@CUtlBuffer@@QEAAXPEBD@Z
 ?QY^&
@@ -4069,10 +4066,9 @@ $tI(knN
 @.reloc
 @08@HPX`hpx
 @0HcB
-@6p+>
-@8(tR
 @8,7u
 @80t.
+@80tR
 @81t)@8q
 @84)u
 @87tEH
@@ -4081,6 +4077,9 @@ $tI(knN
 @88t0H
 @88t2L
 @88th
+@89A8H
+@8;A8w
+@8=iI@
 @8HcB
 @8i(u
 @8j(t
@@ -4097,6 +4096,7 @@ $tI(knN
 @8t$zH
 @8uPt
 @8uPt*H
+@8utt
 @8w$t
 @8y uH
 @8y*uS@8y+u:H
@@ -4165,8 +4165,8 @@ $tI(knN
 @C#e<\
 @HHcB$;B(u
 @HPX&I
-@HPX`hvp<>
-@HV@J>
+@HPX`hvp
+@HV@#>
 @L9nHu$
 @PHcB(;B,u
 @SATAUAVAWH
@@ -4399,6 +4399,9 @@ A4D	A
 A84(u
 A84,u
 A84/u
+A8A9@8v
+A8A9A8vGH
+A8A9C8v
 A8D	A
 A8M(u
 A8XCtDIcp8
@@ -4413,7 +4416,9 @@ A96~9L
 A9<Fu
 A9@(|
 A9B w
+A9C8v
 A9D> u-M
+A9F4u
 A9G$t
 A9GpvkA
 A9HDt
@@ -4480,6 +4485,7 @@ A>pP&
 A@D	A
 A@HcI8H
 A@L;B
+AA:Pb!
 ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_
@@ -4547,6 +4553,7 @@ A^A][
 A^A]]
 A^A]^[]
 A^A]_[]
+A^A]_]
 A^A]_^[]
 A^A]_^]
 A^A]_^]H
@@ -4560,11 +4567,11 @@ A^_^[]
 A^_^[]H
 A^_^]
 A^_^][
+A^_^][H
 A_A\[
 A_A\[]
 A_A\]
 A_A\^
-A_A\^[]
 A_A\^]
 A_A\_
 A_A\_[
@@ -4585,6 +4592,7 @@ A_A]A\_^][
 A_A][]
 A_A][]H
 A_A]]
+A_A]^[]
 A_A]^]
 A_A]_^
 A_A]_^[
@@ -4607,13 +4615,13 @@ A_A^A\_^]A]
 A_A^A\_^][
 A_A^A]A\
 A_A^A]A\]
-A_A^A]A\^[]H
 A_A^A]A\^][
 A_A^A]A\_
 A_A^A]A\_[]
 A_A^A]A\_][
 A_A^A]A\_^[
 A_A^A]A\_^[]
+A_A^A]A\_^[]H
 A_A^A]A\_^]
 A_A^A]A\_^]H
 A_A^A]A\_^][
@@ -4736,7 +4744,6 @@ Application transferred too many scanlines
 Application unable to load gameinfo.gi file from directory "%s"
 ApplicationInfo
 Apr  1 2024
-Apr 30 2024
 April
 Arabic
 AreFileApisANSI
@@ -4787,7 +4794,12 @@ B"D%'R
 B$D	B
 B(H9A(uaH
 B(I9A(
+B89C8w
 B8<2u
+B8A9@8v
+B8A9A8v
+B8A9A8vYL
+B8A9C8v
 B8D8`duxA9]
 B8HcX\
 B9D6 
@@ -4911,7 +4923,7 @@ BuildVersion
 By default, player must maintain a reliable connection to Steam servers. When player Steam session drops, enforce it: 2 = instantly kick, 1 = kick at next spawn, 0 = do not kick.
 Bypass secure challenge on TV port
 B~?Nd~?
-C	V_sscanf
+C	V_sincosf
 C 98|
 C ;C$t
 C H!)H
@@ -4940,7 +4952,10 @@ C2S_CONNECT_Message
 C4;C8}
 C5R?	
 C847u
+C89C8v
 C8;C4s
+C8A9B8v
+C8A9C8v
 C8IcC0M
 C:\buildworker\csgo_rel_win64\build\_build_\engine2\_vpc_engine2\default\win64\_msvc_\Retail\engine2.pdb
 C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp
@@ -5404,6 +5419,7 @@ CNetworkClientSpawnGroup_WaitForAssetLoadPrerequisite
 CNetworkClientSpawnGroup_WaitForChildSpawnGroups
 CNetworkClientSpawnGroup_WaitForOwnerSpawnGroupPrerequisite
 CNetworkGameClient::Clear setting state to SIGNONSTATE_CONNECTED
+CNetworkGameClient::ClientSidePredict
 CNetworkGameClient::FinishSignonState_New() setting state to %s:%d
 CNetworkGameClient::OnPreserveEntity
 CNetworkGameClient::ProcessClassInfo: create on client %s
@@ -5416,13 +5432,14 @@ CNetworkGameClient::SetSignonState: start %i
 CNetworkGameClientBase::BuildClientClassDictionary
 CNetworkGameClientBase::BuildClientClassDictionary failed, no classes exported!
 CNetworkGameClientBase::ConstructFakeClientClassesListFromServerClasses
+CNetworkGameClientBase::CopyEntityBaseline
+CNetworkGameClientBase::DecodeClassBaseline
 CNetworkGameClientBase::FullConnect
 CNetworkGameClientBase::LinkClasses took %.3f msec
 CNetworkGameClientBase::ProcessClassInfo parsing %d server classes
 CNetworkGameClientBase::SynchronizeAndBlockUntilLoaded
 CNetworkGameServer::ActivateServer
-CNetworkGameServer::PackEntities_Normal(), C:\buildworker\csgo_rel_win64\build\src\engine2\sv_packedentities.cpp:1021
-CNetworkGameServer::PackEntities_Normal(), C:\buildworker\csgo_rel_win64\build\src\engine2\sv_packedentities.cpp:1041
+CNetworkGameServer::PackEntities
 CNetworkGameServerBase::ConnectClient( name='%s', remote='%s' )
 CNetworkGameServerBase::ReplyConnection
 CNetworkGameServerBase::SetServerState (%s -> %s)
@@ -5582,7 +5599,6 @@ CT$PH
 CT$hL
 CT$pH
 CTNEA
-CTSListBase: Misaligned list
 CTSQueue corruption
 CTSQueue: Misaligned queue
 CTSQueue<class CDelayedCallBase<class CServerSideClientBase> *,0>::Push
@@ -5632,7 +5648,6 @@ CUtlRBTree<struct CUtlMapBase<unsigned __int64,enum CGameResourceManifest::UGCSt
 CUtlRBTree<struct CUtlMapBase<unsigned int,class CNetworkClientSpawnGroup *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::Node_t,unsigned short,class CUtlMapBase<unsigned int,class CNetworkClientSpawnGroup *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::CKeyLess,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlMapBase<unsigned int,class CNetworkClientSpawnGroup *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::Node_t,unsigned short>,unsigned short> >::Insert
 CUtlRBTree<struct CUtlMapBase<unsigned int,class CNetworkServerSpawnGroup *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::Node_t,unsigned short,class CUtlMapBase<unsigned int,class CNetworkServerSpawnGroup *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::CKeyLess,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlMapBase<unsigned int,class CNetworkServerSpawnGroup *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::Node_t,unsigned short>,unsigned short> >::Insert
 CUtlRBTree<struct CUtlMapBase<unsigned int,class CPVS *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::Node_t,unsigned short,class CUtlMapBase<unsigned int,class CPVS *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::CKeyLess,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlMapBase<unsigned int,class CPVS *,unsigned short,bool (__cdecl*)(unsigned int const &,unsigned int const &)>::Node_t,unsigned short>,unsigned short> >::Insert
-CUtlRBTree<struct `public: void __cdecl CRPEStats::StatRecord_t::Spew(char const *)const '::`2'::sorted_t,unsigned short,bool (__cdecl*)(struct `public: void __cdecl CRPEStats::StatRecord_t::Spew(char const *)const '::`2'::sorted_t const &,struct `public: void __cdecl CRPEStats::StatRecord_t::Spew(char const *)const '::`2'::sorted_t const &),class CUtlMemory<struct UtlRBTreeNode_t<struct `public: void __cdecl CRPEStats::StatRecord_t::Spew(char const *)const '::`2'::sorted_t,unsigned short>,unsigned short> >::Insert
 CUtlSortVector<class CEntityIndex,class CVConsole2FlattenedSerializerListener::CEntityIndex_less,class CUtlVector<class CEntityIndex,int,class CUtlMemory<class CEntityIndex,int> > >::Find
 CUtlSortVector<int,class CUtlSortVectorDefaultLess<int>,class CUtlVector<int,int,class CUtlMemory<int,int> > >::FindLessOrEqual
 CUtlSortVector<int,class CUtlSortVectorDefaultLess<int>,class CUtlVector<int,int,class CUtlMemory<int,int> > >::InsertIfNotFound
@@ -5659,6 +5674,7 @@ C\$hH
 C\$pH
 C_NetworkUtlVectorBase
 C_UtlVectorEmbeddedNetworkVar
+C`9=0XG
 C`9C(
 C`LcD$PH
 C`LcE
@@ -5800,6 +5816,7 @@ ClientMoveSent
 ClientOutput
 ClientPollNetworking
 ClientPreOutput
+ClientPredictionPostNetupdate
 ClientProcessNetworking
 ClientPutInServer
 ClientPutInServer - no player in save game
@@ -5869,6 +5886,7 @@ Console
 Console History (reversed)
 Console initialized.
 ConsoleStartup
+ConsoleVisible
 ConstructFakeClientClassesListFromServerClasses failed to build classes
 Controls VTune's sampling.
 Convar %s is already registered but not as user info value
@@ -6093,6 +6111,7 @@ D$8Ic
 D$8L9
 D$8Lc|$PA
 D$8f;
+D$8fA
 D$8fD
 D$8fff
 D$8inf
@@ -6139,7 +6158,6 @@ D$HM;
 D$HeL
 D$Hf;
 D$HfA;
-D$HfH
 D$HtOH
 D$H|`L
 D$LE3
@@ -6151,7 +6169,7 @@ D$P;L$L
 D$PA+
 D$PAi
 D$PD+
-D$PD9%F9B
+D$PD9%
 D$PD;
 D$PD;o
 D$PE3
@@ -6189,7 +6207,6 @@ D$XIc
 D$XL+
 D$Xe}<[H
 D$Xf;
-D$XfH
 D$\E3
 D$`;G
 D$`;y0
@@ -6225,7 +6242,6 @@ D$hHc
 D$hIc
 D$hf;
 D$hfA;
-D$hfH
 D$ht?H
 D$lA+
 D$lE3
@@ -6246,6 +6262,7 @@ D$pHc
 D$pM+
 D$pMc
 D$pf;
+D$pfE;
 D$sD;{0
 D$tE3
 D$tt'
@@ -6289,6 +6306,7 @@ D24X8
 D24X8_SHADOW
 D32FS8
 D6 9E
+D8 t/HcO4H
 D8 t/I
 D8 uFI
 D8!t.L
@@ -6297,7 +6315,6 @@ D8#t	E8&
 D8#t2H
 D8#t3H
 D8$0u
-D8(t-HcO4H
 D8(t7H
 D8(tB
 D8(tC
@@ -6308,8 +6325,6 @@ D8(uuH
 D8*t	H
 D8,0u
 D8,8u
-D8-.t4
-D8-:t4
 D8.uBH
 D8/u#L
 D80t$A
@@ -6323,6 +6338,7 @@ D840uA
 D84:u
 D84>u
 D87t3
+D88t0
 D88t6
 D8;tAH
 D8<8u
@@ -6333,6 +6349,7 @@ D8CPA
 D8G(H
 D8J9H
 D8L$0u`
+D8L$ht
 D8[(u
 D8`)t
 D8`)u#H
@@ -6347,7 +6364,6 @@ D8i*t9I
 D8k0u
 D8l$0u@H
 D8l$Lt
-D8l/Gt
 D8q(u
 D8t$ht
 D8t5Gt
@@ -6373,7 +6389,6 @@ D9(tj
 D9(~FA
 D90t=
 D9;~&H
-D9=5aD
 D9>~%H
 D9>~QH
 D9>~YH
@@ -6443,11 +6458,11 @@ D9|$X~%
 D9|$`
 D9|$hu
 D9|$t
+D9}8~V
 D9}L~
 D9}wL
 D9~(D
 D9~\~m
-D;%B6B
 D;C<|
 D;D$p|
 D;D$p}CIc
@@ -6455,6 +6470,7 @@ D;Gp}
 D;Gx}
 D;I }
 D;J(|
+D;J8v
 D;L$ 
 D;L$$
 D;Op}
@@ -6652,6 +6668,7 @@ Dumped stack stats struct "%s" to file "%s"
 Duplicate engine service named "%s" registered!
 Duplicate loop named "%s" registered!
 D|$0H
+E	V_sinf
 E @8pHtD9s|~?L
 E D8xKtgA
 E D9{(
@@ -6693,6 +6710,7 @@ E>nEA
 E@Lc{ J
 EDemoCommands
 EH*?H
+EH9=^gZ
 EHD9 uCL
 EHH;EPt
 EHHcI
@@ -6890,7 +6908,6 @@ EventClientPostOutput_t
 EventClientPostSimulate_t
 EventClientPreOutput_t
 EventClientPreSimulate_t
-EventClientPredictionPostNetupdate_t
 EventClientProcessGameInput_t
 EventClientProcessInput_t
 EventClientProcessNetworking_t
@@ -6920,6 +6937,7 @@ Example: blink r_ssao           - toggles between 0 and 1 every second
 Exceeds Maximum Package Depth
 Excessive frame time of %.2fms (due to '%s') clamped.  Acting as if the frame only took %.2fms
 Excessive frame time of %.2fms clamped.  Acting as if the frame only took %.2fms
+Excessive frame time of %.2fms clamped.  Acting as if the frame only took %.2fms.  (Last amnesty was '%s', %.2fs ago)
 Executable Location
 Execute a cfg file
 Execute a cfg file if file exists
@@ -6959,6 +6977,7 @@ Extensions in proto3 are only allowed for defining options.
 Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend a non-lite type to contain a lite type, but the reverse is allowed.
 Extra arguments given after name
+E|$0I
 E|$@L
 F	@t#
 F	t,@
@@ -6989,6 +7008,7 @@ F49E`u~E3
 F8,!u
 F89HXtRA
 F8<2u
+F8|6Gt
 F>F_@>
 F>qUxv
 FALSE
@@ -7215,15 +7235,17 @@ G fA;
 G fE;
 G$+G 
 G$+G(f
-G%1y>
-G%Iz>
-G%^LB
-G%^u>
-G%a{>
+G%)s>
+G%-y>
+G%5JB
+G%At>
+G%Ez>
+G%MKB
+G%Yu>
+G%]{>
 G%llx,
-G%uMB
-G%uv>
-G%y|>
+G%qv>
+G%u|>
 G(Lc1H
 G(fD;
 G0HcH
@@ -7533,7 +7555,7 @@ H	CHL
 H	CHM
 H	GHH
 H	GHL
-H	V_stricmp_fast
+H	V_snprintf
 H 8YKt
 H 8YKt	
 H @8iKt
@@ -7560,7 +7582,6 @@ H#U0H
 H#]0H
 H#}0H
 H$HcH
-H%Bd]
 H(Nc4
 H*0"ZOW
 H+D$ H
@@ -7594,18 +7615,21 @@ H8t	D
 H9(t8
 H9(tm
 H9+t	H
+H9-4$9
+H9-bW7
 H9/t	H
 H90t-H
 H92tBA
 H93t	H
-H95:g3
+H95`2=
 H97t	H
 H97u+A
 H98t6H
 H99tjH
 H9;t	H
-H9=^V?
-H9=yF,
+H9=	H,
+H9=NO?
+H9=QU6
 H9A s
 H9A u)M
 H9AHu
@@ -7666,7 +7690,6 @@ H9t$Xu
 H9t$`t
 H9t; 
 H9u't
-H9u`t
 H9uot
 H9uwt
 H9x s
@@ -7735,7 +7758,6 @@ HD;N8|
 HD;Ot|
 HDUUUU
 HE;.|
-HGnyZ
 HH:mm:ss
 HHcA H
 HLTV Broadcast
@@ -7808,7 +7830,6 @@ HcD$pM
 HcD$x
 HcE H
 HcE(3
-HcE0;
 HcE0D
 HcE0H
 HcE4H
@@ -7973,15 +7994,16 @@ HcV L
 HcV$H
 HcV$H+
 HcV8;
-HcZ8H
 Hc\$(3
 Hc\$(L
 Hc\$4L
 Hc\$@
+Hc\$PH
 Hc\$`D
 Hc\$`H
 Hc\$lLct$XH
 Hc\$pL
+Hc]0IcD$0;
 Hc]xH
 Hc_`A;
 Hci4D
@@ -8158,6 +8180,7 @@ IcG8I
 IcG@3
 IcG@H
 IcGPE
+IcN4I
 IcO ;
 IcO A;
 IcO0H
@@ -8186,7 +8209,7 @@ IcZ A
 IcZ<A
 Ic] H
 Ico`L
-Ic}0;
+Ic~8H
 IdempotencyLevel
 Idle (%s)
 IdleSleep
@@ -8324,7 +8347,7 @@ IsValidCodePage
 IsValidLocale
 IsValidLocaleName
 Issue an rcon command.
-J	V_strlower_fast
+J89H8w
 J8qH*
 J9ez)
 J<L4,&
@@ -8334,6 +8357,7 @@ JFIF extension marker: JPEG-compressed thumbnail image, length %u
 JFIF extension marker: RGB thumbnail image, length %u
 JFIF extension marker: palette thumbnail image, length %u
 JFIF extension marker: type 0x%02x, length %u
+JKJl{
 JPEG datastream contains no image
 JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
 JPEGMEM
@@ -8360,6 +8384,8 @@ K,HcC0;
 K,t	H
 K0HcQ
 K0L9{Hu
+K8D;H8
+K8D;H8w
 K8HcC0M
 K<LcC8
 KD}/H
@@ -8408,9 +8434,9 @@ L$ SATAVAWH
 L$ SAUH
 L$ SH
 L$ SUVWATAVAWH
+L$ SUVWAUAWH
 L$ SUVWH
 L$ SUWATAUH
-L$ SVWAVAWH
 L$ SVWH
 L$ SWH
 L$ UATAUAVAWH
@@ -8440,7 +8466,6 @@ L$(H+
 L$(H3
 L$(Hc
 L$(I;
-L$(fH
 L$(fI
 L$(t?A
 L$0+G$3
@@ -8511,14 +8536,12 @@ L$HA+
 L$HD+
 L$HD;
 L$HE+
-L$HE3
 L$HH3
 L$HH;
 L$HHc
 L$HI;
 L$HL;
 L$Hf;
-L$HfH
 L$Hfff
 L$PA+
 L$PA;E
@@ -8528,7 +8551,6 @@ L$PH3
 L$PH;
 L$PI;
 L$Pf;
-L$PfH
 L$PfI
 L$QE3
 L$TA+
@@ -8541,7 +8563,6 @@ L$XL+
 L$XLk
 L$Xf;
 L$XfD
-L$XfH
 L$`;M
 L$`@2
 L$`A;
@@ -8557,7 +8578,6 @@ L$`L;
 L$`Lc
 L$`f;
 L$`fD
-L$`fH
 L$`fI
 L$h+G$3
 L$h;M
@@ -8583,7 +8603,6 @@ L$pf;
 L$pfD;
 L$pfH
 L$pff
-L$pu*H
 L$puO
 L$qE3
 L$tE3
@@ -8596,7 +8615,7 @@ L$xH9u
 L$xH;
 L$xHc
 L$xf;
-L$xfH
+L$xu(H
 L+@(H
 L+@0H
 L+A0L
@@ -8613,14 +8632,22 @@ L9&uyD
 L90u2
 L92tDA
 L93t	H
-L95 1I
-L95{BI
-L95{tI
+L95 ,I
+L95;8N
+L95K0N
+L95[CI
+L95[cN
+L95k<I
+L95kKI
+L95{?N
+L95{oI
 L98t^D9=
 L9;t	H
 L9;u	H
-L9=	bC
-L9=>v<
+L9=!B<
+L9=)[C
+L9=EB9
+L9=Nu<
 L9?t	H
 L9@ s
 L9BHA
@@ -8632,8 +8659,10 @@ L9b(t
 L9d$@t
 L9d$Ht
 L9d$P
+L9d$Pt
 L9d$xt
 L9e@t
+L9eHt
 L9ePt
 L9eht
 L9eot
@@ -8693,6 +8722,8 @@ L9}`t
 L9}gt
 L9}ot
 L9}wt
+L;5i%
+L;5t"
 L;A r
 L;EPL
 L;Q s
@@ -8748,6 +8779,7 @@ Lc#D;c
 Lc&D;f
 Lc&Ic
 Lc'D;g
+Lc-DD>
 Lc2G9
 Lc3A+
 Lc6D;v
@@ -8914,7 +8946,7 @@ Lydian
 L|4f;
 M HcE
 M HcG
-M Hc]4H
+M Hc}4H
 M |-H
 M#}0I
 M$4tu=
@@ -9039,6 +9071,7 @@ Maximum queries per second to respond to from a single IP address.
 Maximum queries per second to respond to from anywhere.
 Maximum replay time in seconds
 Maximum supported image dimension is %u pixels
+May  7 2024
 MbP?fff?
 Mc&E;f
 Mc4$A
@@ -9062,6 +9095,7 @@ Mcf E;f0
 McnPM
 Mcu H
 Mcu,A
+Mcu0A;
 Mcw(E;w8
 Mc~(M
 Mc~@H
@@ -9135,7 +9169,7 @@ Multiply specified convar value.
 MutableMessage
 MutableRawRepeatedField
 Myanmar
-N	V_strtod
+N	V_sscanf
 N(+V0
 N,t	H
 N0+V8
@@ -9309,7 +9343,6 @@ OnClientPostOutput
 OnClientPostSimulate
 OnClientPreOutput
 OnClientPreSimulate
-OnClientPredictionPostNetupdate
 OnClientProcessGameInput
 OnClientProcessInput
 OnClientProcessNetworking
@@ -9379,13 +9412,13 @@ P HcN
 P LcW
 P Lc{8D;{H
 P#7)^
-P08@J@f!
-P08JP6!
-P2@f!
+P08@JPG!
+P08J`
+P2PG!
 P8D8e t
 P8D8m t
 P8L9u
-P:@f!
+P:PG!
 P:S;A
 P>q_Y~
 P@HPX`hpx
@@ -9415,7 +9448,6 @@ PA_A^A]A\_^]
 PA_A^]
 PA_A^_^[
 PA_A^_^]
-PA_^]
 PAq=?Mp#
 PBDEMS2
 PCLMULQDQ 
@@ -9428,7 +9460,7 @@ PLAYBACK: ReadReplayMessage returning deltaFrame clientTick=%d tick=%d delta=%d
 PLAYBACK: ReadReplayMessage waiting for next tick at clientTick=%d
 POSIX collating elements are not supported
 POSIX named classes are supported only within a class
-PPH9=
+PPH9=K
 PQ${ZM
 PRUNE
 PS_FAILED %s in sequence for %s
@@ -9437,6 +9469,7 @@ PVS cluster %d
 PVS origin %s
 PX`hpx
 P`9_(
+PackEntities_Normal EnsureInstanceBaseline
 PackEntity: SnagChangeFrameList returned null
 PackEntity: ent(%d) at tick %d Encountered field %s in diff change that was not in the incremental change. This can lead to values not making it down to the client
 PackEntity: ent(%d) at tick %d Encountered field %s in incremental change that was not in the diff change. This can lead to slight network inefficiency
@@ -9636,8 +9669,8 @@ PollAndProcessInput
 Poor man's restart: reload the current map from disk.
 Post Source2 Client
 PostProcessingSystem_001
-PpHc-_
-PpHc5
+PpHc-o
+PpHc5hHH
 Pq?A6
 Pre Source2 Client
 Pre-match interface command from [U:1:%u]: %s
@@ -9647,6 +9680,7 @@ PrecacheDecal called with no server!
 PrecacheEntitiesAndConfirmResourcesAreLoaded
 PrecacheGeneric called with no server!
 PrecacheSound %s failed
+Prediction
 PrefetchType
 PreloadIcuucDll
 Premature end of JPEG file
@@ -9680,6 +9714,7 @@ Priority boost already enabled.
 Private bytes:           %s
 Private:  %s
 ProcesPacketEntitiesWorkItems_Combined
+ProcesPacketEntitiesWorkItems_Combined_Sort
 ProcesPacketEntitiesWorkItems_Decode
 ProcesPacketEntitiesWorkItems_ReadFieldList
 Process Memory:
@@ -9814,6 +9849,7 @@ ReadDemoHeader: %s has invalid demo header.
 ReadDemoHeader: invalid pBuffer.
 ReadFile
 ReadOnly
+ReadPacketEntities
 ReadPacketEntities:  buffer read overflow
 ReadPreserveEnt: u.m_nNewEntity == MAX_SNAPSHOT_ENTITIES
 ReadUserCmd
@@ -9970,6 +10006,7 @@ Run heap check at end of every frame
 Runic
 Running SteamAPI_RunCallbacks for first time
 Running [%s]
+S	V_stricmp_fast
 S(9S0
 S0Q0O
 S3: Client SteamID %s doesn't match SteamID %s from auth blob
@@ -10080,9 +10117,9 @@ SUVWATAVAWH
 SUVWATAVH
 SUVWATAWH
 SUVWATH
+SUVWAUAVAWH
 SUVWAUAVH
 SUVWAV
-SUVWAVAWH
 SUVWAVH
 SUVWH
 SUWATAUAVAWH
@@ -10172,7 +10209,6 @@ SWATAVH
 SWATAWH
 SWATH
 SWAUH
-SWAVAWH
 SWAVH
 SWAWH
 SXLcC
@@ -10729,7 +10765,6 @@ T$8H+
 T$8Hc
 T$8I+
 T$8I;
-T$8L9T$0
 T$<D;
 T$<D;T$D
 T$@A+
@@ -10759,6 +10794,7 @@ T$TAi
 T$XH+
 T$XH;
 T$XHc
+T$XL9T$0
 T$XL;
 T$XM;
 T$`;T$|
@@ -10793,7 +10829,6 @@ T$xH+
 T$xH;
 T$xH;L$0t
 T$xH;U
-T=QX+
 TACPH
 TATPL
 TD u"E;
@@ -10819,6 +10854,7 @@ TYPE_SINT64
 TYPE_STRING
 TYPE_UINT32
 TYPE_UINT64
+T^t_@+
 Ta?jib?
 Tagalog
 Tagbanwa
@@ -10959,7 +10995,7 @@ Turn on demo debug spew.
 Type appears to be in generated pool but wasn't 
 Type is already registered: 
 T~YRVr
-U	V_tanf
+U	V_strlower_fast
 U E;(
 U t	Ak
 U4fD;
@@ -11001,13 +11037,12 @@ USRLOCAL path not found!
 USRLOCAL path using Steam profile data folder:
 USRLOCAL path using environment setting '%s':
 USRLOCAL%s
-USVATAUAVAWH
 USVATAUAVI
 USVATAVAWH
-USVATAWH
 USVATH
 USVAUAVAWH
 USVAUAVH
+USVAUAWH
 USVAVH
 USVAVI
 USVWATAUAVAWH
@@ -11060,6 +11095,7 @@ UWATAUH
 UWATAVAWH
 UWATAVH
 UWATH
+UWAUAVH
 UWAUAWH
 UWAUH
 UWAVAWH
@@ -11203,7 +11239,6 @@ Using AVI will bring up a dialog for choosing the codec, which may not show if y
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
 UtlMemory_FailedAllocation
-Utv4H
 U}g7x~
 V/?[w8rV
 V0H;V8t
@@ -11333,8 +11368,6 @@ V_fflush
 V_fmodf
 V_fopen
 V_fopenUTF8
-V_fprintf
-V_ftell
 V_~]	,
 Validate each StateChanged against known offsets.
 Validation stalled
@@ -11378,7 +11411,6 @@ W IcD0LA
 W fff
 W"fA;
 W0D9b
-W5{Z1
 W8fA;
 WARNING
 WARNING! TextConsole::Init: Could not attach console hook.
@@ -11552,8 +11584,8 @@ X-Origin-Auth header of the broadcast POSTs
 X-Origin-Auth header of the broadcast1 POSTs
 X-Origin-Delay
 X-Reason
-X5PM/
-X5hx>
+X55kB
+X5E~D
 X?/QY?s
 X?OsX?
 XA]A\_]
@@ -11577,14 +11609,15 @@ XA_A^_^][
 XA__^[
 XGL'$
 XL$tL
-XfpN>
+Xfp'>
 X|$ A
 X|$8E
+Y	V_strtod
 Y0HcR
 Y0LcQ\M
-Y53@*
-Y57Z.
-Y5>fD
+Y5%g+
+Y5hi=
+Y5nXD
 Y9"SD
 Y>kX>M
 Y?'WY?
@@ -11848,7 +11881,8 @@ Zq",9
 \%lld.vpk
 \0 >%
 \0 >gM|
-\5vH>
+\5Sf+
+\=NG/
 \C not allowed in lookbehind assertion
 \GHfA
 \N\O\NZOt)s(r(
@@ -11883,9 +11917,7 @@ Zq",9
 ],fD;
 ]0u0A
 ]4fD;
-]56k*
-]5|\9
-]89E0t
+]5lR9
 ]>)2X
 ]?K[`?n
 ]J<0"0i3
@@ -11910,7 +11942,6 @@ _(HcG H
 _(fA;
 _,t-H
 _,t<H
-_5~];
 _89_D
 _8;_<t
 _8D;g@u4
@@ -11962,15 +11993,15 @@ _root_keyname
 _spawngroup_logging/log_%s_group_%s.txt
 _temp_mapcycle.txt
 _whitelist.txt
+`	V_tanf
 ` E]i
 ` UAVAWH
 `+!]?
 `-uRQg
 `.rdata
-`2@f!
+`2PG!
+`2Pb!
 `3Q"X
-`606>
-`6@/>
 `;k\|
 `;s\|
 `?NH]?E
@@ -11988,6 +12019,7 @@ _whitelist.txt
 `A^_]
 `A^_^
 `A^_^][
+`A^_^][H
 `A_A]A\_[
 `A_A]_^[
 `A_A^A\_^[]
@@ -12305,13 +12337,11 @@ cl_log_tick
 cl_log_tick_skips
 cl_parallel_readpacketentities
 cl_parallel_readpacketentities_threshold
-cl_parallel_readpacketentities_type
 cl_playback_screenshots
 cl_precacheinfo
 cl_precacheinfo:  not connected
 cl_predict
 cl_predict_after_every_createmove
-cl_profilereadpacketentities
 cl_resend
 cl_sendtable_cache_filename
 cl_showdemooverlay
@@ -12332,7 +12362,7 @@ cl_tickpacket_send_every_tick
 cl_ticks_warning_level
 cl_ticktiming
 cl_ticktiming usage:
-cl_ticktiming. . . . . TOTAL:%s (directly measured, may not be sum of below)
+cl_ticktiming. . . . . TOTAL:%s (may not be sum of below due to rounding and averaging)
 cl_ticktiming: bad argument '%s'
 cl_ticktiming:%7.1f  =%7.1f out (%4.1f +%6.1f +%4.1f)  +%5.1f sim  +%7.1f in (%5.1f +%5.1f +%5.1f +%5.1f +%4.1f +%4.1f)
 cl_timeout
@@ -12640,7 +12670,6 @@ double
 double_value
 driver,
 dt_name
-dump rpe
 dump the text currently in the console to condumpXX.log
 dumpstringtable
 dumpstringtable 
@@ -12859,7 +12888,6 @@ fD9t$b
 fD9t$f
 fD9zjt]D
 fD;#};I
-fD;%B
 fD;FRw~H
 fDD"AUDT$t
 fE9,Fu
@@ -13022,7 +13050,6 @@ group %u not async loaded
 group%d
 grp:%si
 gx>/'u>
-h	V_tier0_strcmp
 h A9}h~ED
 h WATAVH
 h$,&0
@@ -13092,7 +13119,7 @@ hostname
 hostname : %s
 hostname_in_client_status
 hostport
-hpz@f!
+hpzPG!
 hscript
 hscript_lightbinding
 http Send %.3f ms ave, %.3f ms max
@@ -13730,7 +13757,6 @@ mu?B0u?A
 multvar
 multvar: cvar "%s" not found
 multvar: no varname specified!
-mwfA;
 mwtMH
 n D9-
 n03>Pu
@@ -13992,7 +14018,7 @@ p WATAUAVAWH
 p*W4H
 p08@H^
 p0R^G'
-p2@f!
+p2PG!
 p2p_listpeers
 p2p_ping "%s"
 p4edit
@@ -14004,7 +14030,6 @@ p@HPX`h
 pA\_[
 pA]A\_^]
 pA^A\^
-pA^A]_^]H
 pA^_^
 pA^_^][
 pA_A\]
@@ -14016,8 +14041,8 @@ pA_A^A]A\_^[
 pA_A^A]A\_^]
 pA_A^A]_^
 pA_A^A]_^[]
+pA_A^A]_^][
 pA_A^]
-pA_A^_^[
 pA_A^_^]
 pA_^[
 pA__^[]
@@ -14036,10 +14061,6 @@ packet_offsets
 panorama
 panorama/
 panoramauiclient
-parallel combined
-parallel controller combined
-parallel controller split
-parallel split
 parameter file(s):  %s
 parentheses nested too deeply
 parentnamefixup
@@ -14155,7 +14176,8 @@ q(fff
 q?	?q?4
 q@fA;
 qH,	;`
-qL9-[&:
+qJ{NJe^8)
+qL9-{%:
 qS>g?h3
 qangle
 qfefkv}
@@ -14341,10 +14363,10 @@ results.txt
 resume
 retail
 rhMcBHA
+rjF}+
 rnd_down
 rnd_up
 round_start_ticks
-rpestats
 rpt/%04d_%02d_%02d
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 rsf;\$d
@@ -14353,6 +14375,7 @@ ruby_package
 run prediction after every CreateMove instead of only after CreateMove for the final tick in a frame.
 run_perftest
 rvf;\$d
+s	V_tier0_strcmp
 s ;7}@H
 s ;7}VH
 s AWH
@@ -14490,8 +14513,6 @@ signup_fragment
 signupfragment
 simple
 simplified
-singlethreaded combined
-singlethreaded split
 sint32
 sint64
 skipping %s during demo playback because haven't gotten sentinel yet
@@ -14758,7 +14779,7 @@ sys_info
 sys_minidumpexpandedspew
 sys_minidumpspewlines
 system/network
-t	@8-
+t	@8-,
 t	@83t
 t	@85
 t	@89t
@@ -14876,7 +14897,7 @@ t$8fD
 t$8ff
 t$8t	H
 t$@-l
-t$@95P
+t$@95 
 t$@9U
 t$@A;
 t$@A_A^A]A\_
@@ -14928,6 +14949,7 @@ t$PI+
 t$PL+
 t$PLcs`L
 t$PLcw
+t$PLi
 t$PLk
 t$Pff
 t$Pfff
@@ -14980,7 +15002,7 @@ t$xL;u
 t$xM;
 t$xfA9
 t$xt*3
-t%@8-
+t%@85
 t%D8:t H
 t%fE9
 t%fff
@@ -14991,12 +15013,12 @@ t'HcW
 t(HcC
 t)H9u
 t)IcV
+t)|'I
 t*;S<u
 t*HcA
 t*HcA(3
 t*HcC
 t*IcH
-t*|(H
 t+H+}
 t-D8v0H
 t-Lck
@@ -15025,7 +15047,8 @@ t=@8/t8H
 t=L95
 t?;tt?74t?
 t?Dlt?e
-t?H9-
+t?H9-$W7
+t?H9-oW7
 t?HcS
 t@A9~0I
 tA9C0u<
@@ -15038,7 +15061,7 @@ tDfff
 tEHcR
 tEfff
 tHD82tC
-tI95n%@
+tI95>#@
 tIHcA
 tIHcC
 tIL95
@@ -15064,13 +15087,12 @@ tU;\$0tH
 tUD88t6H
 tUH95
 tUH99uPL
-tWHcM
 tXH99uSH
 tYfff
 t\Hcu
 t^HcC
 t^~\2
-t_@85I
+t_@85)
 taHcC
 taHcJ
 table
@@ -15084,7 +15106,7 @@ target_entity
 taxQ3
 tbJ9|
 tcE8>t^
-tcxO3
+tdD9s
 teD9O
 temp/%s.wav
 temp/bugreport.wav
@@ -15119,6 +15141,7 @@ timedemoquit
 timeout
 times
 title_pw
+tjxUA
 tkD+c
 tkD9e
 tkIcF@;
@@ -15317,6 +15340,7 @@ uAH9T$pt
 uDH9T$@t
 uDfD;
 uED8r(t
+uK&vg
 uPA9~|I
 uPfD+
 uWD9}
@@ -15329,7 +15353,7 @@ u]L9e
 u^HcO4H
 u^Hcu
 u_L9u
-u`L9%qb;
+u`L9%Q`;
 uaH9C(H
 uaL9t$xt
 ucH9T$ht
@@ -15385,6 +15409,7 @@ unreserved
 unsigned
 unverified_lazy
 uoL;@
+upD;}h
 upconverting demo file '%s'.
 update_baseline
 updated
@@ -15545,8 +15570,8 @@ vtune
 vtune "pause" | "resume" : Suspend or resume VTune's sampling.
 v}`[>
 w HcG8
+w Lct$xIcG@A;
 w u#H
-w#fA;
 w$u H
 w+OQvr
 w+r2H;
@@ -15579,7 +15604,6 @@ win32
 wireframeColor
 with error
 wn>Jj
-work thread for decode
 world_offset_angle
 world_offset_pos
 worldgroupid
@@ -15629,6 +15653,7 @@ x?sMx?
 x@?%L+?
 x@?:B&
 xA\_^]
+xA_A]_^][
 xA_A^A\[
 xA_A^A\_^[
 xA_A^A\_^]
@@ -15677,7 +15702,6 @@ zPrePassNormals
 zY;>u:m	
 z_AMC
 zhA9}
-{	V_vsnprintf
 { ATAVAWH
 { AUAVAWH
 { AVH
@@ -15780,7 +15804,6 @@ zhA9}
 |$0t H
 |$0uE
 |$0uSH
-|$4E3
 |$4M+
 |$89{
 |$8A;
@@ -15877,7 +15900,6 @@ zhA9}
 |$pI;
 |$pLcC
 |$pff
-|$tLc
 |$x9~h~,H
 |$xD;
 |$xE3
@@ -15915,7 +15937,6 @@ zhA9}
 } fA;P&w
 }!A;l$<w
 }"fff
-}#fA;
 }$;_<w
 }$;{<w
 }&fD;}jw
@@ -15984,14 +16005,13 @@ zhA9}
 ~ $s%r
 ~ D;c
 ~ HcF8
-~ Hc|$pHcF@;
 ~'fff
 ~(D;c
 ~)R(d
+~+fff
 ~,*u<I
 ~,*uEI
 ~,t-H
-~-tZf
 ~.E9yH
 ~0D;c
 ~0u!I

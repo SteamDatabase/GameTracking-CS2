@@ -67,9 +67,10 @@
 	SubSystem / Rev:     0x%x / 0x%x
 	TYPE_BOOL
 	TYPE_ENUM
+	V_fprintf
+	V_frexpf
 	V_isnand
-	V_log10f
-	V_logd
+	V_vsnprintf
 	VendorId / DeviceId:     0x%x / 0x%x
 	Warning
 	You must construct it with ORDERED_CONSTRUCT macro in the dependency resolution function.
@@ -114,7 +115,6 @@
 	w|Hc
  			Color "255 255 255"
  	% t
- 	V_logf
  	uIH
   			Pos "300 0 0"
   		Sun
@@ -178,7 +178,7 @@
   Ss=%d, Se=%d, Ah=%d, Al=%d
   V%d: '%s' (%s)
  !"#$$$$$$
- !"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$p(
+ !"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
  !"#$%&'()*+,-./0123
  !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~
  !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
@@ -201,11 +201,13 @@
  (%lu = 0x%lx)
  (%u = 0x%x)
  (08@HPX`hpx
- (08@HPX`j
+ (08@HPX`j`
  (08@HPXb
- (08@HPZ
+ (08@HPZ`
  (08@HR
  (08@J
+ (08@J`
+ (0:`
  (0X`hpz
  (Hsl)
  (OFF):
@@ -727,7 +729,6 @@
 #\$`D
 #bML"
 #t'fA
-$	V_modfd
 $#?windowIcon@QWidget@@QEBA?AVQIcon@@XZ
 $#GameUI_Disconnect_BadServerPassword
 $#GameUI_Disconnect_ConnectionFailure
@@ -739,6 +740,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 $$LcH
 $(>gDY?HP
 $(?O@
+$*3Un
 $0  extend .$1 {
 $0  extensions $1 to $2;
 $0  reserved 
@@ -1136,6 +1138,7 @@ $schemasystem/schema_enable_defines.h
 %s_scale
 %suncompressed data
 %u (0x%x)
+&	V_log10f
 & ?timerEvent@QMenuBar@@MEAAXPEAVQTimerEvent@@@Z
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
@@ -1236,36 +1239,34 @@ $schemasystem/schema_enable_defines.h
 (#GameUI_Disconnect_LoopLevelLoadActivate
 (#GameUI_Disconnect_RemoteProblem_BadCert
 (#GameUI_Disconnect_RemoteProblem_Timeout
-(%-a=
+(%	l<
 (%1%) - Status: Total %2 shots - Done: %3 In Progress: %4 - Estimated days: %5 Worked on: %6 Remaining work: %7
 (%1,%2)
-(%PW<
-(%Yv<
+(%Cl<
+(%UH=
 (%d animationsets skipped due to having locked transform controls)
 (%d,%d
 (%d,%d)
 (%d,%d,%d
 (%d,%d,%d,%d
-(%ga=
-(%kR=
 (("**,
 ((((((
 ((6"8(:,<*>
 (*%s*), 
-(--W<
-(-Da=
-(-gW<
-(-pv<
-(-~a=
+(- l<
+(-.W=
+(-2H=
+(-Zl<
+(-lH=
 (0`hpx
 (0x)?[0-9a-fA-F]+
-(5DW<
-(5MW<
-(5[a=
-(5da=
-(='my
-(=G*y
-(=b=y
+(57l<
+(5@l<
+(5IH=
+(5RH=
+(5W}+
+(=R-y
+(=r@y
 (?=.*
 (?SetMappingMode@FbxLayerElement@fbxsdk@@QEAAXW4EMappingMode@12@@Z
 (A\_][
@@ -1580,7 +1581,6 @@ $schemasystem/schema_enable_defines.h
 )D$PH
 )D$PL
 )D$Pf
-)D$Pff
 )D$`3
 )D$`D
 )D$`E
@@ -1798,6 +1798,7 @@ $schemasystem/schema_enable_defines.h
 )|$pf
 )|B?d!
 )}`Mc
+*	V_logd
 * ?timerEvent@QTextEdit@@MEAAXPEAVQTimerEvent@@@Z
 * ForceRescanOfActiveKeys
 * Rehandling active codes
@@ -1838,7 +1839,7 @@ $schemasystem/schema_enable_defines.h
 *YA1H
 *u@A;
 +	?buddy@QSortFilterProxyModel@@UEBA?AVQModelIndex@@AEBV2@@Z
-+	V_powd
++	V_logf
 + ?timerEvent@QToolButton@@MEAAXPEAVQTimerEvent@@@Z
 +"?updateGeometries@QListView@@MEAAXXZ
 += %f
@@ -1879,7 +1880,6 @@ $schemasystem/schema_enable_defines.h
 +t$$H
 +t$4D
 +~4+^8
-,	V_powf
 , ?timerEvent@QTreeView@@MEAAXPEAVQTimerEvent@@@Z
 , ?writeData@QProcess@@MEAA_JPEBD_J@Z
 , Ripple
@@ -1924,7 +1924,6 @@ $schemasystem/schema_enable_defines.h
 ,pLcv
 ,uCA;
 ,xHco
--	V_qsort
 - Add Active Code: %s
 - Remove Active Code: %s
 -"?updateGeometries@QTreeView@@MEAAXXZ
@@ -1967,7 +1966,6 @@ $schemasystem/schema_enable_defines.h
 -tools
 -vsync
 -y -loglevel panic -sameq -f image2 -i %9d.png -vcodec mpeg4 -aspect 16:9 -s 1280x720 -r 23.976 -vb 8000000 <FULL_MOVIE_PATH>
-.	V_qsort_s
 .#?windowTitle@QWidget@@QEBA?AVQString@@XZ
 .,?sVectorDisplacementColor@FbxSurfaceMaterial@fbxsdk@@2PEBDEB
 ...<truncated>...
@@ -4811,7 +4809,9 @@ $schemasystem/schema_enable_defines.h
 .xJ>Hf
 .xdata
 .xdata$x
-/%;Ap
+/	V_modfd
+/%31p
+/%@lN
 // 						"BA_INT_AMBUSH"		someone please define this - I have no idea what it does
 // 						"BA_INT_COMBAT"		break out of this anim if combat occurs in my line of sight (bullet hits, grenades, etc), -OR- the max time is reached
 // 						"BA_INT_DANGER"		break out of this anim only if threatened
@@ -4830,8 +4830,7 @@ $schemasystem/schema_enable_defines.h
 /2GG>!B
 /41sO
 /41vO
-/53x&
-/5P?p
+/5H/p
 /<9w-
 /= %f
 />58d%
@@ -4877,8 +4876,7 @@ $schemasystem/schema_enable_defines.h
 0123456789abcdef
 0123456789abcdefghijklmnopqrstuvwxyz
 08@HP
-08@HR
-0>!*t
+08@HR`
 0><[cZUg^>
 0?d]<?
 0A\_^
@@ -5455,7 +5453,7 @@ $schemasystem/schema_enable_defines.h
 23.976
 230714000000Z
 24 fps
-240430182623Z0/
+240507184108Z0/
 241009235959Z0a1
 255 255 255
 256 (override)
@@ -5608,7 +5606,6 @@ $schemasystem/schema_enable_defines.h
 2valueChanged( int )
 2valueChanged(double)
 2valueChanged(int)
-3	V_roundf
 3 fps
 3,,)H
 311109235959Z0b1
@@ -5669,6 +5666,7 @@ $schemasystem/schema_enable_defines.h
 5http://cacerts.digicert.com/DigiCertTrustedRootG4.crt0C
 5sfm_v8
 6	?bytesAvailable@QProcess@@UEBA_JXZ
+6	V_powd
 6 fps
 6*f(_
 64 (override)
@@ -5684,12 +5682,13 @@ $schemasystem/schema_enable_defines.h
 6YA1H
 6[?setRenderHint@QPainter@@QEAAXW4RenderHint@1@_N@Z
 6p7MOf
+7	V_powf
 7'?SetAt@FbxLayerElementArray@fbxsdk@@QEAAXHPEBXW4EFbxType@2@@Z
 70503
 7YA1H
 7http://cacerts.digicert.com/DigiCertAssuredIDRootCA.crt0E
 7x>;p^
-8	V_sincosf
+8	V_qsort
 8 (override)
 8#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
 8-byte data pool
@@ -5787,14 +5786,14 @@ $schemasystem/schema_enable_defines.h
 8fB9l
 8ke?;
 8vmatt
-9	V_sind
+9	V_qsort_s
 9)~P3
 9+t2H
 9,0<	w
 90u(H
 93~i3
 94(t.H
-95u>4
+95E54
 960 x 540 (540p)
 97tmD
 97~o3
@@ -5938,7 +5937,6 @@ $schemasystem/schema_enable_defines.h
 9~P~7
 9~P~;
 9~h~y3
-:	V_sinf
 : Add
 : Tried to copy from a message with a different type. to: 
 : failed to parse contents
@@ -5958,12 +5956,13 @@ $schemasystem/schema_enable_defines.h
 :fA;x
 :uYA;
 ;	?bytesToWrite@QProcess@@UEBA_JXZ
+;#,%.0
 ;.u1L
 ;.|6H
 ;1} H
 ;8}NH
 ;;}/J
-;=Yf4
+;=)]4
 ;?WK?0
 ;A8u	;YH
 ;AhuK
@@ -6132,7 +6131,6 @@ $schemasystem/schema_enable_defines.h
 <unnamed>
 <utK@:
 <}\vH
-=	V_snprintf
 =%H5<mN
 =9>*:r
 =;pN<
@@ -6154,6 +6152,7 @@ $schemasystem/schema_enable_defines.h
 =rIQU
 =vO~?
 =}?e?TR
+>	V_roundf
 >"?IsValid@FbxProperty@fbxsdk@@QEBA_NXZ
 >#t	D
 >%H5<mN
@@ -6167,9 +6166,9 @@ $schemasystem/schema_enable_defines.h
 >0L&=
 >2wm?
 >2w}?T
->33s?
+>33s?H
 >:#J>
->;=1e
+>;=!U
 ><N!?
 ><N1?HP|>
 >?WK?
@@ -6238,6 +6237,7 @@ $schemasystem/schema_enable_defines.h
 ??$EvaluateValue@M@FbxProperty@fbxsdk@@QEAAMAEBVFbxTime@1@_N@Z
 ??0?$CUniformRandomStreamImpl@VCThreadNullMutex@@@@QEAA@XZ
 ??0CCountedStringPool@@QEAA@W4StringPoolCase_t@@@Z
+??0CTSListBase@@QEAA@XZ
 ??0CThreadMultiWaitEvent@@QEAA@_N@Z
 ??0CThreadMutex@@QEAA@PEBD@Z
 ??0CUtlBuffer@@QEAA@HHH@Z
@@ -6761,6 +6761,7 @@ $schemasystem/schema_enable_defines.h
 ?Create@FbxMesh@fbxsdk@@SAPEAV12@PEAVFbxObject@2@PEBD@Z
 ?Create@FbxScene@fbxsdk@@SAPEAV12@PEAVFbxManager@2@PEBD@Z
 ?Destroy@FbxObject@fbxsdk@@QEAAX_N@Z
+?Detach@CTSListBase@@QEAAPEAUTSLNodeBase_t@@XZ
 ?DevMsg@@YAXPEBDZZ
 ?E=$% B
 ?EatWhiteSpace@CUtlBuffer@@QEAAXXZ
@@ -6914,6 +6915,8 @@ $schemasystem/schema_enable_defines.h
 ?Ic.D
 ?InitEmpty@CStrAutoEncode@@AEAAXXZ
 ?Insert@CBufferString@@QEAAPEBDHPEBDH_N@Z
+?InternalPop@CTSListBase@@AEAAPEAUTSLNodeBase_t@@XZ
+?InternalPush@CTSListBase@@AEAAXPEAUTSLNodeBase_t@@@Z
 ?Internal_GetString@CKeyValues_Data@@IEAAPEBDPEBDPEAD_K@Z
 ?IsEqual_CaseSensitive@CUtlString@@QEBA_NPEBD@Z
 ?IsEqual_FastCaseInsensitive@CUtlString@@QEBA_NPEBD@Z
@@ -8966,7 +8969,6 @@ $schemasystem/schema_enable_defines.h
 @(L9d
 @.data
 @.reloc
-@/*T]
 @08@HPX`hpx
 @0HcB
 @80tfH
@@ -8975,6 +8977,7 @@ $schemasystem/schema_enable_defines.h
 @8;tIL
 @8;uLH
 @8<(u
+@8=ta|
 @8HcB
 @8IcO(L
 @8i(u
@@ -9012,6 +9015,7 @@ $schemasystem/schema_enable_defines.h
 @8}pu"
 @8~Xt	D
 @8~vt9H
+@: R(
 @<L9A0
 @>%>b
 @@HcB ;B$u
@@ -9098,7 +9102,7 @@ $schemasystem/schema_enable_defines.h
 @A__^[]
 @HHcB$;B(u
 @HPX&I
-@HPX`hv
+@HPX`hvP
 @HcA0E
 @HcAp3
 @HcD$(I
@@ -10158,7 +10162,7 @@ BumpSelectedClipsForwardOneFrame
 Bumpers
 By default all space separated strings much match, select this to match any space separated string
 By default space separated strings do filtering, select this to use full regular expression syntax for filtering
-C	V_sscanf
+C	V_sincosf
 C 9k(u.H9
 C ;C$t
 C ?toPlainText@QPlainTextEdit@@QEBA?AVQString@@XZ
@@ -11007,7 +11011,6 @@ CT$HH
 CT$PH
 CT$hL
 CT$pH
-CTSListBase: Misaligned list
 CTSQueue corruption
 CTSQueue: Misaligned queue
 CTSQueue<class std::function<void __cdecl(void)> *,0>::Push
@@ -11657,8 +11660,7 @@ CyclePlayRepeatType
 CycleRecordState
 C|$pH
 C|$xL
-C}r%0kq
-D	V_sscanf_s
+D	V_sind
 D ?toPlainText@QTextEdit@@QEBA?AVQString@@XZ
 D W?{W
 D!l$xA
@@ -11760,7 +11762,6 @@ D$(Hc_
 D$(L;
 D$(Lc0
 D$(McL$
-D$(fH
 D$(fI
 D$(fff
 D$(hH
@@ -11894,7 +11895,6 @@ D$8Lc
 D$8LcQ
 D$8eH
 D$8f;
-D$8fH
 D$8ff
 D$8fff
 D$8inf
@@ -12004,7 +12004,6 @@ D$HL;
 D$HM;
 D$Hf;
 D$HfA
-D$HfH
 D$HtOH
 D$HtQ
 D$HuH
@@ -12161,7 +12160,6 @@ D$hLc>
 D$hM+
 D$hf;
 D$hfA;
-D$hfH
 D$hff
 D$ht;H
 D$htsMc~hM
@@ -12274,10 +12272,7 @@ D32FS8
 D8 tZH
 D8 tzA
 D8 uCH
-D8%"l
-D8%7O8
-D8%r}/
-D8%}l
+D8%v\
 D8(u0H
 D8(uEH
 D8(uGH
@@ -12291,13 +12286,11 @@ D80t8K
 D81uUL9r
 D84:u
 D84>u
-D854qA
 D88tPH
 D88u5H
 D88ucH
 D8;tAH
 D8<;u
-D8=1P9
 D8D$(
 D8D$X
 D8I8t
@@ -12369,6 +12362,8 @@ D9.~2H
 D9/~|H
 D91|nD9q
 D97uFA
+D9=%Qa
+D9=6Ee
 D9@(|
 D9AHu
 D9EXD
@@ -12487,8 +12482,7 @@ D9~Xt H
 D:yrt#D
 D:yrt)D
 D; }LH
-D;%4c@
-D;%`c@
+D;%dW@
 D;0} H
 D;0}WH
 D;0}^H
@@ -12987,6 +12981,7 @@ DurationChanged
 Dynamic Configs
 D|$0H
 D}gD;e
+E	V_sinf
 E @8pHtD9s|~?L
 E A84$u
 E D8xKtgA
@@ -12998,7 +12993,6 @@ E HcH
 E HcS
 E HcU
 E Lc$
-E$SPV
 E(HcH
 E(HcS
 E(HcU
@@ -13395,7 +13389,6 @@ EventClientPostOutput_t
 EventClientPostSimulate_t
 EventClientPreOutput_t
 EventClientPreSimulate_t
-EventClientPredictionPostNetupdate_t
 EventClientProcessGameInput_t
 EventClientProcessInput_t
 EventClientProcessNetworking_t
@@ -14178,7 +14171,7 @@ G|$hL
 G|$xI
 H	CHH
 H	GHI
-H	V_stricmp_fast
+H	V_snprintf
 H 8YKt
 H 8YKt	
 H @8iKt
@@ -14263,39 +14256,32 @@ H9(t8
 H9(tzA
 H9+t	H
 H9+u]H
-H9-"9{
-H9-1Oq
-H9-=ck
-H9-C-
-H9-V&-
-H9-YQ9
-H9-dwk
-H9-e9{
-H9-j\n
-H9-xFn
-H9-~$-
+H9-<4n
+H9-QIq
+H9-b){
+H9-q?q
+H9-}Sk
 H9.t	H
 H9/t	H
 H92tBA
 H93t	H
-H95/{z
-H951|
-H95:`
+H95*P
+H95bu6
+H95ql
+H95x2
 H97t	H
 H97u+A
 H99te
 H99tjH
 H9;t	H
-H9=!Qw
-H9=(W
-H9=1kn
-H9=Ajn
-H9=BS
-H9=Oh
-H9=a8m
-H9=pq5
-H9=sP
-H9=xI
+H9=2C
+H9=?X
+H9=@h5
+H9=AAw
+H9=c@
+H9=d}
+H9=h9
+H9=q[n
 H9A s
 H9A u)M
 H9APu{H
@@ -14526,13 +14512,14 @@ HasMaterialOverride
 HasTeamCustomHealthbarColor
 Hc);i
 Hc+;k
-Hc-T=~
+Hc-D-~
 Hc.;n
 Hc/;o
 Hc/E3
 Hc3;s
 Hc;;{
-Hc=<3
+Hc=,#
+Hc=xX
 HcA(E3
 HcA0H
 HcA8;
@@ -14944,6 +14931,7 @@ I;^htJH
 I;_@u
 I;y`tHL
 I=#J[
+I>~r>
 I@H9k8u
 IBindTarget
 IBindableCameraScene
@@ -15355,7 +15343,6 @@ Isometric Tangents
 Item Operations
 ItemIsolateView
 ItemIsolateVignette
-J	V_strlower_fast
 J<L4,&
 J>@G_
 J@UE3
@@ -15551,7 +15538,6 @@ L$(Hc
 L$(IcA
 L$(Lc
 L$(Mc
-L$(fH
 L$(fI
 L$,+D$ +L$(
 L$,E3
@@ -15695,7 +15681,6 @@ L$HLc
 L$HMc
 L$Hf;
 L$HfA
-L$HfH
 L$LE3
 L$LfA
 L$ND;
@@ -15852,25 +15837,27 @@ L5?Qk
 L9	u)H
 L9#t	H
 L9$:H
-L9%1r~
-L9%4@}
-L9%Kr~
-L9%Q)
-L9%tA}
+L9%$0}
+L9%Fau
+L9%Q\
+L9%cJ9
+L9%d1}
+L9%qb~
 L9(t6
 L9+t	H
-L9-.6|
-L9-80/
-L9-]R~
+L9-+{4
+L9-MB~
+L9-}T
 L92tDA
-L95)!
-L952}=
-L95Jmy
-L95Qny
-L95S9
-L95\h5
-L95a8r
-L95wQn
+L95!Sr
+L95!_y
+L95,_5
+L95C)
+L95Q*z
+L95T_y
+L95ow=
+L95vt=
+L95}l=
 L96t	H
 L97u	L9
 L97vH
@@ -15878,7 +15865,6 @@ L9:tr
 L9;t	H
 L9;tHA
 L9;u	H
-L9='%~
 L9@ s
 L9AHA
 L9BHA
@@ -16078,7 +16064,7 @@ Lc.Hc
 Lc3D;
 Lc3D;s
 Lc3Hc8H
-Lc5le
+Lc5\U
 Lc6D;v
 Lc7D;
 Lc7D;w
@@ -16772,7 +16758,7 @@ MuteSoundsFromTrackGroupAndCopyToSequence
 MuteTrack
 MwLcA
 Mx~3H
-N	V_strtod
+N	V_sscanf
 N(+V0
 N0+V8
 N0B;D
@@ -16978,6 +16964,7 @@ Numbers starting with leading zero must be in octal.
 NvOptimusEnablement
 NxHcB
 N|E9~\
+O	V_sscanf_s
 O!t/H
 O#?Left@FbxString@fbxsdk@@QEBA?AV12@_K@Z
 O$M9o
@@ -17002,7 +16989,6 @@ OTHcD$@
 OUTPUT %s
 OX9JXt
 OZw3(?
-O]DZa
 O`+Wh
 Oa?width@QImage@@QEBAHXZ
 ObjectID
@@ -17427,6 +17413,7 @@ P(A+x
 P(HcE
 P(Hc]
 P08@J
+P08J`R+
 P4 Operation failed
 P4InteractionDialog
 P4OpenFilesDialog
@@ -17625,6 +17612,7 @@ PerforceSubmitDocument
 PerforceViewInP4
 PerforceViewInP4Win
 Permit Responses
+Pf@	t
 PhonemeExtractionSettings
 Photometric tag is missing, assuming data is YCbCr
 Photometric tag value assumed incorrect, assuming data is YCbCr instead of RGB
@@ -18286,6 +18274,7 @@ RtlUnwind
 RtlUnwindEx
 RtlVirtualUnwind
 RunFrame
+S	V_stricmp_fast
 S M;C8u
 S(9S0
 S,;S(~9D
@@ -19430,6 +19419,7 @@ TRIANGLE
 TUUUU
 TVGamma
 TW?restoreOverrideCursor@QGuiApplication@@SAXXZ
+TX>m[
 TYPE_BYTES
 TYPE_DOUBLE
 TYPE_FIXED32
@@ -19783,7 +19773,7 @@ Type in key time
 Type in key value
 Type is already registered: 
 TypeColumnHidden
-U	V_tanf
+U	V_strlower_fast
 U ;U(~
 U I;U(
 U Lc63
@@ -20267,8 +20257,6 @@ V_expd
 V_expf
 V_fmodf
 V_fpclassifyd
-V_fprintf
-V_frexpf
 V_~]	,
 Va?width@QPixmap@@QEBAHXZ
 Val : voiced labialdental fricative
@@ -20336,19 +20324,15 @@ VrLightCookieSettings
 Vrad3_001
 W H92t
 W fff
+W%gi0
 W*?=,4
-W- }0
-W-?i4
-W-Io;
-W-iv0
-W-}w;
+W-)c;
+W->	.
+W-Ij0
+W-]k;
 W0D9b
-W5.I{
-W5.Lf
-W5<N4
-W5^?f
+W5N/f
 W9QHI
-W=(Fb
 W?rowCount@QStandardItem@@QEBAHXZ
 W?rowCount@QStandardItemModel@@UEBAHAEBVQModelIndex@@@Z
 W?save@QImage@@QEBA_NAEBVQString@@PEBDH@Z
@@ -20478,36 +20462,28 @@ X VWATH
 X VWAVH
 X to the Y power
 X!t5~
-X%{C2
-X-	x0
-X-/k9
-X-4y9
-X-9d4
-X-=Y5
-X-@j;
-X-Jx0
-X-mk9
-X-n)8
-X-tr;
-X-xf3
-X-yd4
-X-{q9
+X%K:2
+X-!X4
+X-%M5
+X-(^;
+X-){0
+X-2l0
+X-U_9
+X-\f;
+X-`Z3
+X-aX4
+X-ce9
+X-g^;
+X-nT5
+X-u|9
+X-x 0
 X0HcE
-X5 b6
-X5%D{
-X5&0\
-X5&;b
-X5/I4
-X59	<
-X5\b6
-X5d;b
-X5dD{
-X5dq<
-X5j,\
-X5nI4
-X5nPx
-X5wr9
-X5y	<
+X5DV6
+X5V=4
+X5\+b
+X5\4{
+X5_f9
+X5f@x
 X8fff
 X?setBrush@QPainter@@QEAAXAEBVQBrush@@@Z
 X?setBrush@QPainter@@QEAAXW4BrushStyle@Qt@@@Z
@@ -20558,6 +20534,7 @@ XClipPathUnits
 XD$HI
 XD$`D
 XD$xD
+XHc-I
 XL$$H
 XL$,D
 XL$DLcwH
@@ -20573,34 +20550,33 @@ XT$\A
 XX?setBackground@QPainter@@QEAAXAEBVQBrush@@@Z
 XYZ, Luv
 X_^][
+X`hr`
 Xd$ D
 Xt$0Ic
 Xt$dL
 X|$ A
 X|$ D
 X|$8E
+Y	V_strtod
 Y u!H
-Y%4v?
-Y%Pi$
-Y%R%4
-Y%`x?
-Y-/1=
-Y-Bd 
-Y-W	d
+Y%CN 
+Y%dj?
+Y%p`$
+Y-Ci7
+Y-^92
 Y0HcR
-Y5&6]
-Y5)	k
-Y5-Xw
-Y5=Do
-Y5@6]
-Y5t^x
-Y5uv\
+Y554o
+Y58&]
+Y5lNx
+Y5mHw
+Y5mf\
 Y9"SD
-Y=${1
-Y=)P=
-Y=*T=
-Y=kDo
-Y=|u7
+Y=P^ 
+Y=To1
+Y=c4o
+Y=j_ 
+Y=ys=
+Y=z6b
 Y>kX>M
 Y?setData@QStandardItem@@UEAAXAEBVQVariant@@H@Z
 Y?setData@QStandardItemModel@@UEAA_NAEBVQModelIndex@@AEBVQVariant@@H@Z
@@ -21001,22 +20977,15 @@ Zt?_)
 \$|Lc
 \$|t9A
 \$|u.A
-\%0E2
-\-$E2
-\--Z5
-\-:y0
-\-]l9
-\-ie4
-\-ok;
-\58E2
-\5Lc6
-\5T<b
-\5TE{
-\5^J4
-\5nq<
-\5{	<
-\=,E2
-\=~,\
+\-"m0
+\-E`9
+\-QY4
+\-W_;
+\-{f0
+\54W6
+\5F>4
+\5L,b
+\5L5{
 \?setWidth@QPen@@QEAAXH@Z
 \?setWidthF@QPen@@QEAAXN@Z
 \D$ A
@@ -21032,19 +21001,17 @@ Zt?_)
 \Wt+A
 \content\
 \game\
-\k-g!
 \t3D8T$(t
 \vx+A
 \|$`H
 ]$Lc}
-]%IH0
 ])6M>&
 ],fD;
 ]0tOH
 ]0tQH
 ]0tTH
 ]4fD;
-]5^J=
+]5F>=
 ]8tQH
 ]>)2X
 ]?sharedPainter@QPaintDevice@@MEBAPEAVQPainter@@XZ
@@ -21149,10 +21116,11 @@ _root_keyname
 _scale
 _to_curve_
 _x;_|t
-`	V_tier0_ispunct
+`	V_tanf
 ` UAVAWH
 `+!]?
 `.rdata
+`2pQ*
 `;k8|
 `?validate@QDoubleValidator@@UEBA?AW4State@QValidator@@AEAVQString@@AEAH@Z
 `?validate@QIntValidator@@UEBA?AW4State@QValidator@@AEAVQString@@AEAH@Z
@@ -22353,6 +22321,7 @@ fffffff
 ffmpeg
 field
 fieldOfView
+fijx}
 file error
 file exists
 file too large
@@ -23068,12 +23037,13 @@ js_value
 json_name = "
 jstype
 jstype is only allowed on int64, uint64, sint64, fixed64 or sfixed64 fields.
+k	V_tier0_ispunct
 k VWATAUAVH
 k u H
 k"?value@QAbstractSlider@@QEBAHXZ
 k$97uB
 k(H9+t	H
-k(H9-l
+k(H9-
 k(u H
 k0HcC
 k0i0$
@@ -23087,8 +23057,9 @@ k<9s@~DL
 k<9{@~EL
 k<9{@~LL
 k@H9-
+kGd$O
 kL@8o(u
-kPH9-6|J
+kPH9-fpJ
 kQ?lineSpacing@QFontMetrics@@QEBAHXZ
 kX?setBlue@QColor@@QEAAXH@Z
 k`D9kp
@@ -23238,7 +23209,7 @@ l$@ff
 l$@tO
 l$@u!H
 l$@u/HcU
-l$@~]3
+l$@~\3
 l$@~{M
 l$HA+
 l$HA_A^A]A\_^
@@ -23308,7 +23279,7 @@ l$`E2
 l$`E3
 l$`E9j
 l$`E;j
-l$`H9=,K
+l$`H9=
 l$`Hc
 l$`HcD$XM
 l$`HcE
@@ -23354,7 +23325,7 @@ l$pM;
 l$pff
 l$pu1H
 l$tHc
-l$xD8=
+l$xD8=r
 l$xHc
 l$xM+
 l$xeH
@@ -24068,7 +24039,8 @@ n|$`fA
 n|$|f
 o H9o
 o0H9o
-o5m<\
+o5],\
+o=0t]
 oD$ H
 oD$ f
 oD$@H
@@ -24076,7 +24048,6 @@ oD$PH
 oD$`H
 oD$`f
 oD$pf
-oI0E3
 oI>O7
 oOffset
 oPD8l$xt(L
@@ -24183,8 +24154,6 @@ p7M}f
 p9L$8|
 p;>}	H
 p;Y>u
-p>M)t
-p>l)t
 p?X94<
 p@HPX`h
 pA\[]
@@ -25172,7 +25141,7 @@ t$@E3
 t$@E;
 t$@E;}
 t$@H+
-t$@H9=z
+t$@H9=j
 t$@H;t$X
 t$@Hc
 t$@HcC
@@ -25317,7 +25286,7 @@ t$`Ic
 t$`KcD
 t$`KcD'
 t$`L#
-t$`L9-3ok
+t$`L9-s_k
 t$`L9t$@t
 t$`L;
 t$`fD
@@ -25382,7 +25351,7 @@ t'HcW
 t'fff
 t(fff
 t)IcV
-t)L9=t
+t)L9=
 t)fff
 t*D9&}%H
 t*H9{ t$H
@@ -25396,8 +25365,8 @@ t+H+}
 t,D8p
 t-Lck
 t.H9i t(H
-t.L9=E
-t.L9=|
+t.L9=5
+t.L9=l
 t.fff
 t0@8}pt
 t0H9-
@@ -25406,22 +25375,20 @@ t1Hc}
 t2D8(t-H
 t2H9-
 t2L9%
-t2L9%A@}
-t2L9-
-t2L9-h
-t2L9-y
-t2L9=N
+t2L9%10}
+t2L9-8{4
+t2L9-Q
+t2L9-i
+t2L9=>
 t2fB9,
 t3@8:t.
 t3@8>t.
 t3H9-
-t3H9-c
-t3H9-c&-
 t3H95
-t3H95P
-t3H95W
-t3H95f
-t3L95W
+t3H95@
+t3H95G
+t3H95V
+t3L95
 t4D8e
 t4D9}
 t4I92u/M
@@ -25430,39 +25397,40 @@ t4v2D
 t5Hc=
 t5Ich
 t6H9-
-t6H9-fQ9
+t6H9-[
+t6H9-a
+t6H9-q
 t6H95
-t6H95G`
+t6H957P
 t6H9=
-t6H9=9
-t6H9=\h
-t6H9=i
-t6H9=}q5
+t6H9=)
+t6H9=LX
+t6H9=Mh5
 t6H9qPH
 t6L9%
-t6L9-;6|
+t6L9%q1}
+t6L9-+&|
 t6L9=
-t6L9=4%~
+t6L9=$
+t6L9=|
 t6fE94
 t7@8sXt1H
 t7D8H
 t7HcP
 t8H9-
-t8H9-|
+t8H9-L
 t8H95
-t8H95<{z
-t8H95j
-t8H9=
+t8H95,kz
+t8H9=*
 t8H9^ t2H
 t8L95
-t8L95%|=
-t8L955
-t8L956
-t8L95?}=
-t8L95M
-t8L95ih5
-t8L95j
-t8L9=
+t8L95%
+t8L95&
+t8L959_5
+t8L95=
+t8L95Z
+t8L95|
+t8L9=w
 t9H95
 t9H9=
 t:IcE0
@@ -25473,28 +25441,33 @@ t=HcN\H
 t>HcF\I
 t?H9(t
 t?H9-
+t?H9-H
 t?H95
 t?H955
-t?H95F
+t?H95H
+t?H95ou6
 t?H9=
-t?H9=>
-t?H9=K
-t?H9=j
+t?H9=.
+t?H9=;
+t?H9=Z
+t?H9=l
+t?H9=y
 t?HcS
-t?L9%
+t?L9%pJ9
 t?L95
-t?L953
-t?L95N
-t?L95`9
+t?L95>
+t?L95@
+t?L95D
+t?L95P)
 t?fff
 t@8] u;E3
 t@9+u,9s
 t@@88t;I
 tAD8(t<H
 tAH95
-tAH95^
-tAH95e
-tAH95t
+tAH95N
+tAH95U
+tAH95d
 tAfff
 tBHct$`
 tBIcN\H
@@ -25513,7 +25486,7 @@ tE8] u@D
 tE@8}
 tEHcR
 tFA8)tAH
-tFH95$
+tFH95
 tG@8}gu
 tH@8+tCH
 tH@8}gu
@@ -25534,7 +25507,7 @@ tOO : high back rounded vowel
 tP@87uKH
 tPD8nLuJI
 tPHcM
-tPL9=.`
+tPL9=
 tQD8uouKE3
 tQHcM
 tQIc6A
@@ -25554,7 +25527,7 @@ tX@8}gu>I
 tXD8)tSL
 tXH99uSH
 tXMcup3
-tY@85*O6
+tY@85ZC6
 tYIcD
 tYfff
 tZD8 tUH
@@ -25573,7 +25546,7 @@ t^H9_
 t^H9w
 t^HcC
 t^~\2
-t_Hc=r
+t_Hc=b
 t_HcE
 t_HcM
 t_~]2
@@ -25844,7 +25817,7 @@ uIE9F
 uLHcw
 uLHc~
 uMA9l$
-uMD8=
+uMD8=m
 uNIcT
 uOE9F
 uOt	H
@@ -26178,20 +26151,18 @@ x AUAVAWH
 x AVH
 x AVHcA
 x D+p
-x L9%
+x L9%Ab~
 x LcT$HI;
 x UATAUAVAWH
 x UAVAWH
 x!;W`L
 x!A;E
 x!A;Fx}
-x!H95/
-x!L9%_
+x!H95o
+x!L9%
 x!L9-
-x!L9-@
 x!L95
-x!L95^fr
-x!L9=P
+x!L9=
 x"?valueFromText@QSpinBox@@MEBAHAEBVQString@@@Z
 x"A;M
 x"L9%
@@ -26199,7 +26170,7 @@ x#;QH}
 x#;Q`}
 x#D;Bh}
 x$E;M
-x$H95
+x$H95 >r
 x%A;uH}
 x(A;7}#I
 x)?k+v=
@@ -26265,7 +26236,6 @@ x^j=|
 x_^[]
 x_^][
 xaD;7}\H
-xc%`G
 xcoord
 xen_flora_animatedmover
 xen_hearing_flower
@@ -26303,7 +26273,6 @@ zY;>u:m
 z`u^H
 zero_value
 znear
-{	V_vsnprintf
 { ATAVAWH
 { AUAVAWH
 { AVH
@@ -26328,11 +26297,12 @@ znear
 {PH9{ 
 {X?setBottom@QIntValidator@@QEAAXH@Z
 {X@8p u	@87u
-{pH9=
+{^GDk/
+{pH9=T
 {pHck0H
 {pHc{`Hc
 {un'%
-{xH9=/
+{xH9=o
 {y~Ic
 {}()':
 | L;m
@@ -26477,7 +26447,7 @@ znear
 |$8u!
 |$8u)H
 |$8xjL
-|$<;=
+|$<;=I
 |$<;{0
 |$<E3
 |$@	u
@@ -26781,7 +26751,6 @@ znear
 ~SHcU
 ~THcU
 ~[Lc]
-~\{|f
 ~_D9#~PH
 ~cfff
 ~hMcnxE
