@@ -2003,6 +2003,7 @@ var Scoreboard;
         }
         $.DispatchEvent('DismissAllContextMenus');
         _OnMouseInactive();
+        _UnregisterEvents();
     }
     function _OpenScoreboard() {
         _UpdateEverything();
@@ -2010,9 +2011,7 @@ var Scoreboard;
         if (!_m_updatePlayerHandler) {
             _m_updatePlayerHandler = $.RegisterForUnhandledEvent('Scoreboard_UpdatePlayerByPlayerSlot', _UpdatePlayerByPlayerSlot_delayed);
         }
-    }
-    function _OnEndOfMatch() {
-        _OpenScoreboard();
+        _RegisterEvents();
     }
     function GetFreeForAllTopThreePlayers() {
         _UpdateEverything();
@@ -2049,31 +2048,44 @@ var Scoreboard;
     function _ApplyPlayerCrosshairCode(panel, xuid) {
         UiToolkitAPI.ShowGenericPopupYesNo($.Localize('#tooltip_copycrosshair'), $.Localize('#GameUI_Xhair_Copy_Code_Confirm'), '', () => { let code = GameStateAPI.GetCrosshairCode(xuid); MyPersonaAPI.BApplyCrosshairCode(code); }, () => { });
     }
-    {
-        $.RegisterForUnhandledEvent('OnOpenScoreboard', _OpenScoreboard);
-        $.RegisterForUnhandledEvent('OnCloseScoreboard', _CloseScoreboard);
+    const events = [
+        ['Scoreboard_UnborrowMusicKit', _UnborrowMusicKit],
+        ['Scoreboard_Casualties_OnMouseOver', _Casualties_OnMouseOver],
+        ['Scoreboard_Casualties_OnMouseOut', _Casualties_OnMouseOut],
+        ['Scoreboard_RoundLossBonusMoney_OnMouseOver_CT', _RoundLossBonusMoney_OnMouseOver_CT],
+        ['Scoreboard_RoundLossBonusMoney_OnMouseOut_CT', _RoundLossBonusMoney_OnMouseOut_CT],
+        ['Scoreboard_RoundLossBonusMoney_OnMouseOver_TERRORIST', _RoundLossBonusMoney_OnMouseOver_TERRORIST],
+        ['Scoreboard_RoundLossBonusMoney_OnMouseOut_TERRORIST', _RoundLossBonusMoney_OnMouseOut_TERRORIST],
+        ['Scoreboard_MuteVoice', _MuteVoice],
+        ['Scoreboard_BlockUgc', _BlockUgc],
+        ['Scoreboard_OnMouseActive', _OnMouseActive],
+        ['Scoreboard_ApplyPlayerCrosshairCode', _ApplyPlayerCrosshairCode]
+    ];
+    let eventHandles = [];
+    function _RegisterEvents() {
+        events.forEach(function (arrEvent, idx) {
+            eventHandles[idx] = $.RegisterForUnhandledEvent(arrEvent[0], arrEvent[1]);
+        });
+    }
+    function _UnregisterEvents() {
+        events.forEach(function (arrEvent, idx) {
+            $.UnregisterForUnhandledEvent(arrEvent[0], eventHandles[idx]);
+        });
+    }
+    if (!$.GetContextPanel().Data().bEventsRegistered) {
+        $.RegisterEventHandler('OnOpenScoreboard', $.GetContextPanel(), _OpenScoreboard);
+        $.RegisterEventHandler('OnCloseScoreboard', $.GetContextPanel(), _CloseScoreboard);
         $.RegisterForUnhandledEvent('GameState_OnLevelLoad', _Initialize);
         $.RegisterForUnhandledEvent('Scoreboard_ResetAndInit', _Initialize);
         $.RegisterForUnhandledEvent('Scoreboard_UpdateEverything', _UpdateEverything);
         $.RegisterForUnhandledEvent('Scoreboard_UpdateJob', _UpdateJob);
         $.RegisterForUnhandledEvent('Scoreboard_CycleStats', _CycleStats);
-        $.RegisterForUnhandledEvent('Scoreboard_OnMouseActive', _OnMouseActive);
-        $.RegisterForUnhandledEvent('Scoreboard_OnEndOfMatch', _OnEndOfMatch);
-        $.RegisterForUnhandledEvent('Scoreboard_UnborrowMusicKit', _UnborrowMusicKit);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterIsCameraman', _ToggleSetCasterIsCameraman);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterIsHeard', _ToggleSetCasterIsHeard);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterControlsXray', _ToggleSetCasterControlsXray);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterControlsUI', _ToggleSetCasterControlsUI);
         $.RegisterForUnhandledEvent('GameState_RankRevealAll', _RankRevealAll);
         $.RegisterForUnhandledEvent('Scoreboard_UpdateHLTVViewers', _UpdateHLTVViewerNumber);
-        $.RegisterForUnhandledEvent('Scoreboard_Casualties_OnMouseOver', _Casualties_OnMouseOver);
-        $.RegisterForUnhandledEvent('Scoreboard_Casualties_OnMouseOut', _Casualties_OnMouseOut);
-        $.RegisterForUnhandledEvent('Scoreboard_RoundLossBonusMoney_OnMouseOver_CT', _RoundLossBonusMoney_OnMouseOver_CT);
-        $.RegisterForUnhandledEvent('Scoreboard_RoundLossBonusMoney_OnMouseOut_CT', _RoundLossBonusMoney_OnMouseOut_CT);
-        $.RegisterForUnhandledEvent('Scoreboard_RoundLossBonusMoney_OnMouseOver_TERRORIST', _RoundLossBonusMoney_OnMouseOver_TERRORIST);
-        $.RegisterForUnhandledEvent('Scoreboard_RoundLossBonusMoney_OnMouseOut_TERRORIST', _RoundLossBonusMoney_OnMouseOut_TERRORIST);
-        $.RegisterForUnhandledEvent('Scoreboard_MuteVoice', _MuteVoice);
-        $.RegisterForUnhandledEvent('Scoreboard_BlockUgc', _BlockUgc);
-        $.RegisterForUnhandledEvent('Scoreboard_ApplyPlayerCrosshairCode', _ApplyPlayerCrosshairCode);
+        $.GetContextPanel().Data().bEventsRegistered = true;
     }
 })(Scoreboard || (Scoreboard = {}));

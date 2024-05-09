@@ -33,6 +33,11 @@ var HudDemoController;
     function FrameUpdate() {
         const state = cp.GetDemoControllerState();
         if (state == null) {
+            if (bActive) {
+                bActive = false;
+                hud.SetHasClass("DemoControllerActive", false);
+                cp.SetInputCaptureEnabled(false);
+            }
             lastState = null;
             $.Schedule(1, FrameUpdate);
             return;
