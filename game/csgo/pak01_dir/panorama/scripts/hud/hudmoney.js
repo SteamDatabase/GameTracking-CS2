@@ -7,9 +7,14 @@ var MoneyPanel;
     function _UpdateMoney(amt, bInstant = false) {
         const elContainer = $('#jsRotaryMoney');
         if (elContainer) {
-            if (!$('#DigitPanel'))
-                DigitPanelFactory.MakeDigitPanel(elContainer, 6, '', 0.6, "#digitpanel_digits_hudmoney");
-            DigitPanelFactory.SetDigitPanelString(elContainer, '$' + amt, bInstant);
+            if (!$('#DigitPanel')) {
+                $.GetContextPanel().SetDialogVariableInt("money", 16000);
+                const maxLen = $.Localize("#buymenu_money", $.GetContextPanel());
+                DigitPanelFactory.MakeDigitPanel(elContainer, maxLen.length, '', 0.6, "#buymenu_money_digitpanel_digits");
+            }
+            $.GetContextPanel().SetDialogVariableInt("money", amt);
+            const digitString = $.Localize("#buymenu_money", $.GetContextPanel());
+            DigitPanelFactory.SetDigitPanelString(elContainer, digitString, bInstant);
         }
     }
 })(MoneyPanel || (MoneyPanel = {}));

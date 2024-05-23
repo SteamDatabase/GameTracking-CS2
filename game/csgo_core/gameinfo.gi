@@ -9,8 +9,6 @@
 	l4dcrosshair 1
 	nodegraph 0
 	perfwizard 0
-	SupportsXbox360 0
-	SupportsDX8	0
 	tonemapping 1 // Show tonemapping ui in tools mode
 	configconflictresolutiondialog 0
 	GameData	"csgo.fgd"
@@ -150,15 +148,8 @@
 	{
 		BetaUniverse
 		{
-			// No fake lag or loss temporarily, while I turn on the new clock sync and command pacing code
-			"FakeLag"			"0"
-			"FakeLoss"			"0"
-			"FakeReorderPct"	"0"
-			"FakeReorderDelay"	"0"
-			//"FakeLag"			"20"
-			//"FakeLoss"			".5"
-			//"FakeReorderPct"	"30"
-			//"FakeReorderDelay"	"2"
+			"FakeLag"			"20"
+			"FakeLoss"			".1"
 
 			"TimeTable"
 			{
@@ -195,6 +186,7 @@
 		"GpuLightBinner" "1"
 		"GpuLightBinnerSunLightFastPath" "1"
 		"GpuLightBinnerBinEnvMaps" "1"
+		"GpuLightBinnerBinLPVs" "0"
 		"GpuLightBinnerSupportViewModelCascade" "1"
 		"DefaultShadowTextureWidth" "4096"
 		"DefaultShadowTextureHeight" "4096"
@@ -231,6 +223,8 @@
 		"CMTAtlasChunkSize" "128"
 
 		"DynamicDecalsUseShrinkWrap" "1"	// enable shrinkwrap optimization for dynamic decal materials using F_FASTAPPROX
+
+		"ComputeShaderSkinning" "1"
 	}
 
 	ToolsEnvironment
@@ -265,6 +259,7 @@
 		"DefaultGrassMaterial"			"materials/grass/grassquad1.vmat"
 		"SteamAudioEnabled"				"1"
 		"AddonMapCommand"				"map_workshop"
+		"LatticeDeformerEnabled"		"1"
 	}
 
 	RenderPipelineAliases
@@ -460,6 +455,7 @@
 		"GrassCompressDensity" "0"
 		"GrassDilateColors"	"0"
 		"GrassNoHalfTexel"	"1"
+		"LPVEdgeBlending"	"0"	// Don't apply the edge fade distance to LPV bounds, we don't blend LPVs in CS2 shaders
 	}
 
 	ModelDoc

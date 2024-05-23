@@ -324,8 +324,6 @@ var Scoreboard;
             return;
         _m_oPlayers.DeleteMissingPlayers(playerData);
         for (const teamName of teamNames) {
-            if (!ShouldCreateTeamForMode(teamName))
-                continue;
             CreateTeam(teamName);
             for (const xuid of Object.values(playerData[teamName])) {
                 if (xuid == null || xuid === "0")
@@ -339,20 +337,11 @@ var Scoreboard;
                 }
             }
         }
-        if (ShouldCreateTeamForMode('CT'))
-            CreateTeam('CT');
-        if (ShouldCreateTeamForMode('TERRORIST'))
-            CreateTeam('TERRORIST');
+        CreateTeam('CT');
+        CreateTeam('TERRORIST');
         function CreateTeam(teamName) {
             if (!_m_oTeams[teamName])
                 _m_oTeams[teamName] = new Team_t(teamName);
-        }
-        function ShouldCreateTeamForMode(team) {
-            let mode = GameStateAPI.GetGameModeInternalName(false);
-            if (mode == 'cooperative' || mode == 'coopmission') {
-                return team.toUpperCase() === GameStateAPI.GetCooperativePlayerTeamName().toUpperCase();
-            }
-            return true;
         }
     }
     function _ChangeTeams(oPlayer, newTeam) {
@@ -1995,6 +1984,7 @@ var Scoreboard;
     }
     function _OnMouseInactive() {
         $.GetContextPanel().RemoveClass('mouse-active');
+        UiToolkitAPI.HideTextTooltip();
     }
     function _CloseScoreboard() {
         if (_m_updatePlayerHandler) {

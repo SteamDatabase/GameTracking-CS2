@@ -754,5 +754,44 @@ Small values will also be less efficient to render (there is effectively more em
 
 Smaller will quickly increase the cost generating the surface and number of vertices/indices generated."
 		"Attribute.C_INIT_CreateOnModel.m_bUseMesh:help"		"Places the particles on randomly chosen points on the renderable mesh surface. You'll need to make sure your mesh has the Keep Vertices In Memory flag set in ModelDoc, or we won't have surface data to use and will fall back to using the hitboxes in that case."
+		"Element.C_OP_SetUserEvent:name_ref"		"Set Event"
+		"Element.C_OP_SetUserEvent:help"		"This operator allows per-particle events to created and read by children.  Child systems can create and initialize particles based on these events, so they can initialize their positions/colors/radii etc. to the values of the parent particle who created the event.
+<p>
+Any particle float evaluator value can be used to determine when the event is created, such as a speed or time threshold, a CP value, etc.
+<p>
+There are two thresholds relative to the output value that will be evaluated and events can be created on both.
+<p>
+The Rising Edge is the treshold that activates when the value is greater than this value.  After this is activated, no further events will be created for this particle until it falls below the Falling Edge.  If the falling edge has its own event, that will fire when the value goes below it.
+<p>
+Note that the falling edge will not ever occur until rising edge has occurred."
+		"Attribute.C_OP_SetUserEvent.m_flRisingEdge"		"Rising Edge Threshold"
+		"Attribute.C_OP_SetUserEvent.m_flRisingEdge:help"		"The Rising Edge is the treshold that activates when the value is greater than this value.  After this is activated, no further events will be created for this particle until it falls below the Falling Edge.  If the falling edge has its own event, that will fire when the value goes below it."
+		"Attribute.C_OP_SetUserEvent.m_nRisingEventType"		"Rising Edge Event Type"
+		"Attribute.C_OP_SetUserEvent.m_nRisingEventType:help"		"The event that gets created when passing the rising edge threshold."
+		"Attribute.C_OP_SetUserEvent.m_flFallingEdge"		"Falling Edge Threshold"
+		"Attribute.C_OP_SetUserEvent.m_flFallingEdge:help"		"The Falling Edge Event will fire once the value falls below this value if it was previously active.  
+The falling edge will not ever occur until rising edge has occurred.  An event is optional here, but likewise, another Rising Edge event will not be created until a falling edge has occurred."
+		"Attribute.C_OP_SetUserEvent.m_nFallingEventType"		"Falling Edge Event Type"
+		"Attribute.C_OP_SetUserEvent.m_nFallingEventType:help"		"The event that gets created when passing the falling edge threshold."
+		"Attribute.C_OP_ContinuousEmitter.m_nEventType:help"		"This is the type of event which will cause the particle to be emitted."
+		"Attribute.C_OP_ContinuousEmitter.m_bInitFromKilledParentParticles:help"		"Particles can be created on events that occur in the parent.  For example, when they die, or collide with the world, or are spawned.  There are also user created events you can manually create on the parent with the Set Event operator."
+		"Attribute.C_INIT_InitFromParentKilled.m_nEventType:help"		"What type of event should we be using to initialize this value?"
+		"Attribute.C_OP_RenderGpuImplicit.m_nIndexCountKb:help"		"Size of the index buffer required to render this system.
+If you see artifacts when rendering, a very small grid is generally the cause.
+If you require a very small grid (<b>expensive</b>!), as a backup increase this value -- you can get an estimate of the value required via `r_particle_gpu_implicit_debug_stats 1`"
+		"Attribute.C_OP_RenderGpuImplicit.m_nVertexCountKb:help"		"Size of the vertex buffer required to render this system.
+If you see artifacts when rendering, a very small grid is generally the cause.
+If you require a very small grid (<b>expensive</b>!), as a backup increase this value -- you can get an estimate of the value required via `r_particle_gpu_implicit_debug_stats 1`"
+		"Attribute.C_OP_RenderModels.m_nSubModelFieldType:help"		"Controls how the <b>submodel field</b> is used.
+<p>
+<b>BodyGroup SubModel</b><br>
+By default it's the submodel index of the bodygroup specified by bodygroup field.<p>
+<b>MeshGroup Index</b><br>
+Allows a single meshgroup to be specified, bodygroup field is ignored.<p>
+<b>MeshGroup Mask</b><br>
+Allows a composite meshgroup mask to be specified, bodygroup field is ignored.<p>
+<b>Model Default MeshGroup Mask</b><br>
+submodel and bodygroup fields ignored, model gets default meshgroup mask
+compiled into model.<p>"
 	}
 }

@@ -13,25 +13,30 @@ var InspectAsyncActionBar;
     let m_isDecodeableKeyless = false;
     let m_asynActionForceHide = false;
     let m_showAsyncActionDesc = false;
-    let m_isXrayMode = false;
+    let m_showXrayMachineUi = false;
     let m_allowXrayClaim = false;
+    let m_allowRental = false;
     let m_inspectOnly = false;
     let m_isSeasonPass = false;
     let m_panel = null;
     let _m_PanelRegisteredForEvents = undefined;
+    let m_isWorkshopPreview = false;
     function Init(elPanel, itemId, funcGetSettingCallback, funcCallbackOnAction) {
         m_itemid = itemId;
         m_worktype = funcGetSettingCallback('asyncworktype', '');
         m_toolid = funcGetSettingCallback('toolid', '');
+        m_allowRental = (funcGetSettingCallback('allow-rent', 'no') === 'yes');
         m_isDecodeableKeyless = (funcGetSettingCallback('decodeablekeyless', 'false') === 'true');
         m_asynActionForceHide = (funcGetSettingCallback('asyncforcehide', 'false') === 'true');
         m_showAsyncActionDesc = (funcGetSettingCallback('asyncactiondescription', 'no') === 'yes');
-        m_isXrayMode = (funcGetSettingCallback("isxraymode", "no") === 'yes');
+        m_showXrayMachineUi = (funcGetSettingCallback("showXrayMachineUi", "no") === 'yes');
         m_allowXrayClaim = (funcGetSettingCallback("allowxrayclaim", "no") === 'yes');
         m_inspectOnly = (funcGetSettingCallback('inspectonly', 'false') === 'true');
         m_isSeasonPass = (funcGetSettingCallback('seasonpass', 'false') === 'true');
+        m_isWorkshopPreview = (funcGetSettingCallback('workshopPreview', 'false') === 'true');
         if (m_asynActionForceHide ||
             !m_worktype ||
+            (m_allowRental && !m_showXrayMachineUi) ||
             (m_worktype === 'nameable' && !m_toolid) ||
             _DoesNotMeetDecodalbeRequirements()) {
             elPanel.AddClass('hidden');
@@ -60,7 +65,7 @@ var InspectAsyncActionBar;
     function _DoesNotMeetDecodalbeRequirements() {
         if (m_worktype === 'decodeable') {
             let sRestriction = InventoryAPI.GetDecodeableRestriction(m_itemid);
-            if (sRestriction === 'restricted' || (sRestriction === 'xray' && !m_isXrayMode) || m_inspectOnly)
+            if (sRestriction === 'restricted' || (sRestriction === 'xray' && !m_showXrayMachineUi) || m_inspectOnly)
                 return false;
             return (!m_toolid && !m_isDecodeableKeyless);
         }
@@ -115,6 +120,9 @@ var InspectAsyncActionBar;
     }
     function _SetUpButtonStates(elPanel, funcGetSettingCallback, funcCallbackOnAction) {
         let elOK = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
+        if (m_isWorkshopPreview) {
+            elOK.AddClass('hidden');
+        }
         function _SetPanelEventOnAccept() {
             elOK.SetPanelEvent('onactivate', () => _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnAction));
         }
@@ -128,7 +136,7 @@ var InspectAsyncActionBar;
                 elDescImage.visible = false;
                 return;
             }
-            if (m_isXrayMode) {
+            if (m_showXrayMachineUi) {
                 let enabled = m_allowXrayClaim ? true : false;
                 EnableDisableOkBtn(elPanel, enabled);
                 elOK.AddClass(m_okButtonClass);
@@ -173,8 +181,8 @@ var InspectAsyncActionBar;
     function _SetUpDescription(elPanel) {
         let elDescLabel = elPanel.FindChildInLayoutFile('AsyncItemWorkDesc');
         let elDescImage = elPanel.FindChildInLayoutFile('AsyncItemWorkDescImage');
-        elDescLabel.SetHasClass('popup-capability-faded', m_isXrayMode && !m_allowXrayClaim);
-        elDescImage.SetHasClass('popup-capability-faded', m_isXrayMode && !m_allowXrayClaim);
+        elDescLabel.SetHasClass('popup-capability-faded', m_showXrayMachineUi && !m_allowXrayClaim);
+        elDescImage.SetHasClass('popup-capability-faded', m_showXrayMachineUi && !m_allowXrayClaim);
         if (m_showAsyncActionDesc) {
             elDescImage.itemid = m_toolid;
             let itemName = InventoryAPI.GetItemName(m_toolid);
@@ -296,9 +304,6 @@ var InspectAsyncActionBar;
     }
     function OnEventToClose(bCloseForLootlistPreview = false) {
         ResetTimeouthandle();
-        if (!bCloseForLootlistPreview) {
-            $.DispatchEvent('UnblurOperationPanel');
-        }
         _ClosePopup();
     }
     InspectAsyncActionBar.OnEventToClose = OnEventToClose;

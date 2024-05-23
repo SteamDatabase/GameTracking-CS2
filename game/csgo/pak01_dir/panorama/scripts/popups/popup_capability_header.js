@@ -9,19 +9,21 @@ var CapabilityHeader;
     let m_itemid = '';
     let m_itemtype = '';
     let m_ToolId = '';
-    let m_isXrayMode = false;
+    let m_showXrayMachineUi = false;
     let m_allowXrayClaim = false;
     let m_allowXrayPurchase = false;
     let m_inspectOnly = false;
+    let m_allowRental = false;
     function Init(elPanel, itemId, funcGetSettingCallback) {
         m_itemid = itemId;
         m_worktype = funcGetSettingCallback("asyncworktype", "");
         m_storeItemid = funcGetSettingCallback("storeitemid", "");
         m_ToolId = funcGetSettingCallback("toolid", "");
-        m_isXrayMode = (funcGetSettingCallback("isxraymode", "no") === 'yes');
+        m_showXrayMachineUi = (funcGetSettingCallback("showXrayMachineUi", "no") === 'yes');
         m_allowXrayPurchase = (funcGetSettingCallback("allowxraypurchase", "no") === 'yes');
         m_allowXrayClaim = (funcGetSettingCallback("allowxrayclaim", "no") === 'yes');
         m_inspectOnly = (funcGetSettingCallback('inspectonly', 'false') === 'true');
+        m_allowRental = (funcGetSettingCallback('allow-rent', 'no') === 'yes');
         if (!m_worktype && !m_storeItemid)
             return;
         if (m_itemid != undefined && m_itemid != null && m_itemid !== '') {
@@ -52,7 +54,7 @@ var CapabilityHeader;
         if (m_inspectOnly && m_worktype === 'decodeable') {
             elTitle.text = '#popup_cartpreview_title';
         }
-        else if (m_isXrayMode) {
+        else if (m_showXrayMachineUi) {
             if (m_allowXrayPurchase || m_allowXrayClaim) {
                 elTitle.text = "#popup_xray_claim_title";
             }
@@ -84,7 +86,7 @@ var CapabilityHeader;
         }
         if (m_worktype === 'decodeable') {
             let sRestriction = m_storeItemid ? '' : InventoryAPI.GetDecodeableRestriction(m_itemid);
-            if (sRestriction === 'restricted' || (sRestriction === 'xray' && m_isXrayMode)) {
+            if ((sRestriction === 'restricted' && !m_allowRental) || (sRestriction === 'xray' && m_showXrayMachineUi)) {
                 sWarnLocString = '#popup_' + m_worktype + '_err_' + sRestriction;
                 elWarn.AddClass('popup-capability__error');
             }
@@ -103,7 +105,7 @@ var CapabilityHeader;
         if (m_worktype === 'decodeable' && m_inspectOnly) {
             sDescString = "#popup_preview_desc";
         }
-        else if (m_isXrayMode) {
+        else if (m_showXrayMachineUi) {
             if (m_allowXrayClaim || m_allowXrayPurchase) {
                 sDescString = "#popup_xray_claim_desc";
             }

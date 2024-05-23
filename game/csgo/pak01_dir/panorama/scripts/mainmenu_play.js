@@ -798,7 +798,12 @@ var PlayMenu;
         if ($.GetContextPanel().BHasClass('play-menu__lobbymapveto_activated') && mapGroupNameClicked !== 'mg_lobby_mapveto') {
             return;
         }
-        $.DispatchEvent('CSGOPlaySoundEffect', 'submenu_leveloptions_select', 'MOUSE');
+        if (mapgroupButton.checked) {
+            $.DispatchEvent('CSGOPlaySoundEffect', 'submenu_leveloptions_select', 'MOUSE');
+        }
+        else {
+            $.DispatchEvent('CSGOPlaySoundEffect', 'submenu_leveloptions_deselect', 'MOUSE');
+        }
         let mapGroupName = mapGroupNameClicked;
         if (mapGroupName) {
             const siblingSuffix = '_scrimmagemap';

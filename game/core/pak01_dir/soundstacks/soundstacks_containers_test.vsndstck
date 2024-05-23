@@ -1,0 +1,171 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	container_env_test = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						value = "sounds/common/null.vsnd"
+					}
+					vsnd_env = 
+					{
+						data_type = "vsnd"
+						value = "sounds/common/null.vsnd"
+					}
+					memory_type = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "sample_env_curve"
+				operator = "container_sample_curve"
+				input_time = "@get_event_info.output_elapsed_time"
+				input_index = "0"
+				input_container = "@public.vsnd_env"
+			},
+			
+			{
+				name = "volume_fan"
+				operator = "util_float_to_speakers"
+				input = "@sample_env_curve.output"
+			},
+			
+			{
+				name = "start_vsnd"
+				operator = "vmix_voice_start"
+				input_vsnd1 = "@public.vsnd_files"
+				execute_once = "false"
+				input_execute = "1.000000"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "@volume_fan.output"
+				input_memory_type = "@public.memory_type"
+			},
+		]
+	}
+	container_oneshot_test = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					volume = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						value = "sounds/common/null.vsnd"
+					}
+					memory_type = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "volume_fan"
+				operator = "util_float_to_speakers"
+				input = "@public.volume"
+			},
+			
+			{
+				name = "start_vsnd"
+				operator = "vmix_voice_start"
+				input_vsnd1 = "@public.vsnd_files"
+				execute_once = "false"
+				input_execute = "1.000000"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "@volume_fan.output"
+				input_memory_type = "@public.memory_type"
+			},
+		]
+	}
+	container_arg_test = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					volume = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						value = "sounds/common/null.vsnd"
+					}
+					memory_type = 
+					{
+						data_type = "float"
+						value = "1.0"
+					}
+					index_override = 
+					{
+						data_type = "float"
+						value = -1.000000
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "volume_fan"
+				operator = "util_float_to_speakers"
+				input = "@public.volume"
+			},
+			
+			{
+				name = "start_vsnd"
+				operator = "vmix_voice_start"
+				input_vsnd1 = "@public.vsnd_files"
+				execute_once = "false"
+				input_execute = "1.000000"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "@volume_fan.output"
+				input_memory_type = "@public.memory_type"
+				input_argname1_1 = "Override"
+				input_arg1_1 = "@public.index_override"
+			},
+		]
+	}
+}

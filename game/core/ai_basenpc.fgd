@@ -145,6 +145,8 @@
 		3 : "Combat"
 	]
 
+	cooldown(float) : "Cooldown" : 0 : "After use, how long does another NPC has to wait in order to use this hint (in seconds)."
+
 	// Inputs
 	input EnableHint(void) : "Enable hint."
 	input DisableHint(void) : "Disable hint."
@@ -259,7 +261,7 @@
 [
 	subclass_name( vdata_choice:scripts/npc_units.vdata ) : "Unit Name" : "" : "Name of the NPC Unit."
 	squadname(String) [ group="NPC Properties" ] : "Squad Name" : : "NPCs that are in the same squad (i.e. have matching squad names) will share information about enemies, and will take turns attacking and covering each other."
-	hintgroup(String) [ group="NPC Properties" ] : "Hint Group" : "" : "Hint groups are used by NPCs to restrict their hint-node searching to a subset of the map's hint nodes. Only hint nodes with matching hint group names will be considered by this NPC. Note that if this is empty, the NPC will be able to use any hint node, even nodes that have a hint group specified."
+	hintgroup(String) [ group="NPC Properties" ] : "Hint Groups" : "" : "Comma-separated list of hint groups. Hint groups are used by NPCs to restrict their hint-node searching to a subset of the map's hint nodes. Only hint nodes with matching hint group names will be considered by this NPC. If this is empty, the NPC will only be able to use hint nodes that do not have a group."
 
 	spawnflags(Flags) = 
 	[
@@ -310,6 +312,8 @@
 	output OnDenyCommanderUse(void) : "Fired when this NPC has refused to join the player's squad."
 	output OnPlayerUse(void) : "Fired when a player +Uses this npc."
 	output OnUse(void) : "Fired when ANYTHING calls Use on this npc (such as other NPCs)."
+	output OnStartTouchMaterial(void) : "Fired when NPC touches a surface material defined in the touch material modifier."
+	output OnEndTouchMaterial(void) : "Fired when NPC leaves a surface material defined in the touch material modifier."
 
 	// Inputs
 	input OverrideHealth(integer) : "Overrides this entity's health, ignoring max health constraints. This is for prototyping only and all uses of this input should be audited before shipping! Values <=0 are ignored."
@@ -381,7 +385,19 @@
 	]
 
 	ZeroPitchAndRoll(boolean) : "Zero Pitch and Roll on Spawn" : 1 : "Should we only orient the NPC using the YAW of the destination or spawner, or should we allow any angle?"
-		
+
+	// Tactical Search Spawn		
+	centered_entity(target_destination) [ group="Tactical Search Spawn" ]: "Centered Entity" : "" : "Entity to center the tactical search spawn test around.  Filling in this field will enable this spawning path.  Requiers AI_DefaultNPC currently."
+	near_dist_min(float) [ group="Tactical Search Spawn" ]: "Distance Min" : "128" : "Minimum distance allowed from the origin of the centered entity."
+	near_dist_max(float) [ group="Tactical Search Spawn" ]: "Distance Max" : "1024" : "Maximum distance allowed from the origin of the centered entity."
+	vis_view_angle(float)  [group="Tactical Search Spawn" ]: "View Angle" : "-1" : "View angle used, if other than -1, to create side planes of a view frustum."
+	view_angle_optional(boolean) [group="Tactical Search Spawn" ]: "View Angle Optional" : "0" : "If enalbed, allow the search to fallback to outside the defined view angle in order to find a spawn position."
+	nav_filter_tag(string) [ group="Tactical Search Spawn" ]: "Nav Filter Tag Name" : "" : "Nav tag filter constraint requirement."
+	material_filter_name(string) [ group="Tactical Search Spawn" ]: "Material Filter Name" : "" : "Ground material contraint requirement.  Defined in material's surface properties."
+	spawn_randomization_radius(float) [ group="Tactical Search Spawn" ]: "Spawn Randomization Radius" : "0" : "Calculate a random spawn point within this radius centered around the center entity (WIP)."
+	allow_non_z_nav(boolean) [ group="Tactical Search Spawn" ]: "Allow Non-Z Nav" : 0 : "Allow non-Z up nav meshes as part of the path search."
+
+
 	// Outputs
 	output OnSpawnNPC(string) : "Fired when an NPC is spawned. The activator is the NPC, and the string is the name of the NPC." 
 	output OnAllSpawned(void) : "Fired when the spawned is exhausted (all children have been spawned)."
@@ -400,8 +416,9 @@
 	input SpawnInRadius(void) : "Spawn an NPC somewhere within the maker's radius."
 	input SpawnInLine(void) : "Spawn an NPC somewhere within a line behind the maker."
 	input SpawnMultiple(integer) : "Spawn multiple NPCs (uses destination group, else radius)."
-	input ChangeDestinationGroup(string) : "Switch to a different set of Destination entities."
+	input ChangeDestinationGroup(target_destination) : "Switch to a different set of Destination entities."
 	input SetMinimumSpawnDistance(integer) : "Set the minimum spawn distance from player to destination node."
+	input SetSpawnEntity(target_destination) : "Select (override) the entity to center the spawn destination around."
 ]
 
 @BaseClass base(BaseNPC) = VehicleDriverNPC
@@ -967,21 +984,19 @@
 // Logic Entities
 //
 //-------------------------------------------------------------------------c
-@PointClass color(0 0 255) base(Targetname) tags( Choreo )  iconsprite("editor/choreo_scene.vmat") = logic_scripted_scenario :
-	"Manages the flow of scenes with branches and stuff like that"
-
-[
-	subclass_name( subclass_choice:scripts/misc.vdata ) : "Scenario Class" : "" : ""
-
-	input BeginScenario(void) : "Starts playback of the scenario"
-	input SetBlackboardValue(string) : "Set the value of a blackboard variable"
-	input TriggerEvent(string) : "Trigger an event by name. Events are handled by event listener nodes"
-	input SwitchToNode(string) : "Switch to a node by name. Current active node will be canceled"
-]
-
-
-@PointClass color(0 0 255) base(Targetname) tags( Choreo )  iconsprite("editor/choreo_scene.vmat") = logic_choreographed_scene :
-	"Manages a choreographed scene of one or more actors."
+@PointClass color(0 0 255) 
+	base(Targetname) 
+	tags( Choreo )  
+	selected_line( 255 255 255, targetname, target1 )
+	selected_line( 255 255 255, targetname, target2 )
+	selected_line( 255 255 255, targetname, target3 )
+	selected_line( 255 255 255, targetname, target4 )
+	selected_line( 255 255 255, targetname, target5 )
+	selected_line( 255 255 255, targetname, target6 )
+	selected_line( 255 255 255, targetname, target7 )
+	selected_line( 255 255 255, targetname, target8 )
+	iconsprite("editor/choreo_scene.vmat") = logic_choreographed_scene :
+		"Manages a choreographed scene of one or more actors."
 
 [
 	// Keys
@@ -1101,27 +1116,30 @@
 
 	soundtype(choices) : "Sound Type" : 0 : "The type of sound or smell will determine the reaction of NPCs that sense it." =
 	[
-		0: "Select one"
-		1: "Combat"
-		2: "World"
-		//4: "Player (Don't use)"
-		8: "Danger"
-		16: "Bullet Impact"
-		32: "Carcass"
-		64: "Meat"
-		128: "Garbage"
-		256: "Thumper"
-		4096: "Move Away - Most NPCs will clear the radius of this sound when heard."
-		16384 : "Readiness - Low"
-		32768 : "Readiness - Medium"
-		65536 : "Readiness - High"
+		0 : "Select one"
+		1 : "Combat"
+		//2 : "Player (Don't use)"
+		3 : "Danger"
+		4 : "Bullet Impact"
+		5 : "Thumper"
+		//6 : "Physics Danger"
+		7 : "Move Away - Most NPCs will clear the radius of this sound when heard."
+		//8 : "Player Vehicle"
+		9 : "Glass Break"
+		//10 : "Physics Object"
 	]
 
 	soundcontext(choices) : "Additional sound context (optional)" : 0 : "Optional settings specifying such things as who can or cannot hear the sound." =
 	[
 		0 : "Select one"
-		8388608 : "Only Combine hear"
-		67108864 : "Combine cannot hear"
+		1 : "Gunfire"
+		2 : "Only Combine hear"
+		//4 : "React to Source"
+		8 : "Explosion"
+		16 : "Combine cannot hear"
+		//32 : "Danger Approaching"
+		64 : "Player Allies only hear"
+		128 : "Cause Hearers to blindly panic"
 	]
 
 	locationproxy(target_destination) : "Location Proxy" : "" : "The name of an entity to use as a proxy to determine the location at which to make the sound. If you specify an entity here, the sound will be made at that entity's location (!player included)" 
@@ -1131,7 +1149,15 @@
 @PointClass base( BaseNPCMaker) tags( Logic ) iconsprite("editor/npc_maker.vmat")
 	metadata
 	{
-		create_entity_lump_mode = "TemplateMaker"
+		create_entity_template_lumps = 
+		[
+			{
+				lumpMode = "SingleTemplate"
+				sourceKey = "TemplateName"
+				targetWorldKey = "worldName"
+				targetLumpKey = "entityLumpName"
+			}
+		]
 	}
 = npc_template_maker : 
 	"An entity that creates NPCs. The NPCs it creates are clones of a template NPC. NPCs are spawned around this maker's origin, or at specified destination points."

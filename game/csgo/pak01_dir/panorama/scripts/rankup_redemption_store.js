@@ -109,7 +109,6 @@ var RankUpRedemptionStore;
             elInspect.SetPanelEvent('onactivate', () => {
                 if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !InventoryAPI.IsTool(itemId)) {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + itemId +
-                        '&' + 'extrapopupfullscreenstyle=solidbkgnd' +
                         '&' + 'asyncworkitemwarning=no' +
                         '&' + 'inspectonly=true' +
                         '&' + 'asyncworktype=decodeable' +

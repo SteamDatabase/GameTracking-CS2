@@ -58,6 +58,9 @@ function OnPopupCustomLayoutPremierPickBan() {
 function OnPopupCustomLayoutXpGrant() {
     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_acknowledge_xpgrant.xml', 'none');
 }
+function OnPopupCustomLayoutCaseConfirm() {
+    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_container_open_confirm.xml', 'none');
+}
 function OnPopupCustomLayoutOperationHub(startPage) {
     var nActiveSeason = GameTypesAPI.GetActiveSeasionIndexValue();
     if (nActiveSeason < 0)
@@ -127,6 +130,27 @@ function InitScenePanel() {
     playerPanel.SetPlayerModel(model);
     playerPanel.PlaySequence(g_sceneanimsList[g_sceneanimindex], true);
     playerPanel.SetCameraPreset(6, false);
+    var playbackSpeedSlider = $('#PlaybackSpeedSlider');
+    playbackSpeedSlider.min = -2;
+    playbackSpeedSlider.max = 2;
+    playbackSpeedSlider.value = 1;
+}
+function SceneCameraPlaybackSpeedSliderChanged() {
+    var playbackSpeedSlider = $('#PlaybackSpeedSlider');
+    var playbackSpeedText = $('#PlaybackSpeedText');
+    var vanityPanel = $('#MapForVanity');
+    playbackSpeedText.text = playbackSpeedSlider.value.toFixed(3);
+    vanityPanel.SetCameraPlaybackSpeed(playbackSpeedSlider.value);
+}
+function SceneCameraPlaybackSpeedTextChanged() {
+    var playbackSpeedText = $('#PlaybackSpeedText');
+    var value = parseFloat(playbackSpeedText.text);
+    if (!isNaN(value)) {
+        var playbackSpeedSlider = $('#PlaybackSpeedSlider');
+        playbackSpeedSlider.value = value;
+    }
+    else {
+    }
 }
 function SceneNextAnimSequence() {
     g_sceneanimindex++;
@@ -282,6 +306,27 @@ function JSControlsPageSetControlPointParticles(cp, xpos, ypos, zpos) {
     for (const curPanel of $('#ControlsLibParticles').FindChildrenWithClassTraverse('TestParticlePanel')) {
         curPanel.SetControlPoint(cp, 0, 1 + ypos, zpos);
         curPanel.SetControlPoint(cp, xpos, ypos, zpos);
+    }
+}
+function JSPanelStartParticles(name) {
+    for (const curPanel of $.GetContextPanel().FindChildrenWithClassTraverse(name)) {
+        curPanel.StartParticles();
+    }
+}
+function JSPanelStopPlayEndCapParticles(name) {
+    for (const curPanel of $.GetContextPanel().FindChildrenWithClassTraverse(name)) {
+        curPanel.StopParticlesWithEndcaps();
+    }
+}
+function JSPanelSetControlPointParticles(name, cp, xpos, ypos, zpos) {
+    for (const curPanel of $.GetContextPanel().FindChildrenWithClassTraverse(name)) {
+        curPanel.SetControlPoint(cp, 0, 1 + ypos, zpos);
+        curPanel.SetControlPoint(cp, xpos, ypos, zpos);
+    }
+}
+function JSPanelSetParticlesName(name, particleName) {
+    for (const curPanel of $.GetContextPanel().FindChildrenWithClassTraverse(name)) {
+        curPanel.SetParticleNameAndRefresh(particleName);
     }
 }
 function ShowHideWinPanel(bshow) {

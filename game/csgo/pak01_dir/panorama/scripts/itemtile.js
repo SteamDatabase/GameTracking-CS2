@@ -2,6 +2,7 @@
 /// <reference path="csgo.d.ts" />
 /// <reference path="common/iteminfo.ts" />
 /// <reference path="mainmenu_inventory.ts" />
+/// <reference path="common/formattext.ts" />
 var ItemTile;
 (function (ItemTile) {
     function _OnTileUpdated() {
@@ -21,6 +22,8 @@ var ItemTile;
         _DisableTile(id);
         _SetBackground(id);
         _SetMultiSelect(id);
+        _SetRentalTime(id);
+        _SetIsRentable(id);
         let loadImage = $.GetContextPanel().GetAttributeString('loadimage', '');
         if (loadImage) {
             _SetImage(id);
@@ -133,7 +136,7 @@ var ItemTile;
     function _SetRecentLabel(id) {
         let isRecentValue = InventoryAPI.GetItemSessionPropertyValue(id, 'recent');
         let isUpdatedValue = InventoryAPI.GetItemSessionPropertyValue(id, 'updated');
-        let elPanel = $.GetContextPanel().FindChildInLayoutFile('JsRecent');
+        let elLabel = $.GetContextPanel().FindChildInLayoutFile('JsRecent');
         if (isUpdatedValue === '1' || isRecentValue === '1') {
             let locString = '#inv_session_prop_recent';
             if (isRecentValue === '1') {
@@ -145,11 +148,11 @@ var ItemTile;
             else {
                 locString = '#inv_session_prop_updated';
             }
-            elPanel.RemoveClass('hidden');
-            elPanel.text = $.Localize(locString);
+            elLabel.RemoveClass('hidden');
+            elLabel.text = $.Localize(locString);
             return;
         }
-        elPanel.AddClass('hidden');
+        elLabel.AddClass('hidden');
     }
     ;
     function _TintSprayImage(id) {
@@ -167,9 +170,40 @@ var ItemTile;
         }
     }
     ;
+    function _SetRentalTime(id) {
+        let elLabel = $.GetContextPanel().FindChildInLayoutFile('JsItemRental');
+        if (!InventoryAPI.IsRental(id)) {
+            elLabel.AddClass('hidden');
+            return;
+        }
+        let expirationDate = InventoryAPI.GetExpirationDate(id);
+        if (expirationDate <= 0) {
+            elLabel.AddClass('hidden');
+            return;
+        }
+        let oLocData = FormatText.FormatRentalTime(expirationDate);
+        elLabel.SetHasClass('item-expired', oLocData.isExpired);
+        elLabel.SetDialogVariable('time-remaining', oLocData.time);
+        elLabel.text = $.Localize(oLocData.locString, elLabel);
+        elLabel.RemoveClass('hidden');
+    }
+    function _SetIsRentable(id) {
+        let elLabel = $.GetContextPanel().FindChildInLayoutFile('JsCanRentItem');
+        if (!InventoryAPI.CanOpenForRental(id)) {
+            elLabel.AddClass('hidden');
+            return;
+        }
+        elLabel.text = $.Localize('#item-can-rent');
+        elLabel.RemoveClass('hidden');
+    }
+    ItemTile._SetIsRentable = _SetIsRentable;
     function OnActivate() {
         HideTooltip();
         let id = $.GetContextPanel().GetAttributeString('itemid', '0');
+        if ($.GetContextPanel().FindAncestor("Inspect_SelectItem") != null) {
+            $.DispatchEvent("OnItemTileActivated", $.GetContextPanel(), id);
+            return;
+        }
         let capabilityInfo = _GetPopUpCapability();
         if (capabilityInfo) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_item_select', 'MOUSE');
@@ -178,7 +212,7 @@ var ItemTile;
                 _CapabilityNameableAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
             }
             else if (capabilityInfo.capability === 'can_sticker') {
-                _CapabilityCanStickerAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
+                _CapabilityCanStickerAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId), capabilityInfo.bWorkshopItemPreview);
             }
             else if (capabilityInfo.capability === 'can_patch') {
                 _CapabilityCanPatchAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
@@ -245,9 +279,11 @@ var ItemTile;
             '&' + 'asyncworktype=nameable');
     }
     ;
-    function _CapabilityCanStickerAction(idsToUse) {
+    function _CapabilityCanStickerAction(idsToUse, bWorkshopItemPreview) {
+        const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
         UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_sticker');
+            '&' + 'asyncworktype=can_sticker' +
+            '&' + 'workshopPreview=' + workshopPreview);
     }
     ;
     function _CapabilityCanPatchAction(idsToUse) {

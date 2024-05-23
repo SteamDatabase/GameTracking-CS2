@@ -4495,6 +4495,11 @@
 						data_type = "float"
 						value = "0"
 					}
+					lifespan = 
+					{
+						data_type = "float"
+						value = "-1"
+					}
 				}
 			},
 			
@@ -4508,7 +4513,8 @@
 				execute_once = "true"
 				operator = "soundevent_group_join"
 				input_group_name = "branch_eventtype"
-				input_opvar = "@public.event_type"
+				input_match_float = "@public.event_type"
+				input_lifespan_time = "@public.lifespan"
 			},
 			
 			{
@@ -4670,7 +4676,7 @@
 				execute_once = "true"
 				operator = "soundevent_group_join"
 				input_group_name = "match_eventtype"
-				input_opvar = "@public.opvar"
+				input_match_float = "@public.opvar"
 				input_invert_match = "@public.invert"
 			},
 			
@@ -4679,8 +4685,299 @@
 				execute_once = "true"
 				operator = "soundevent_group_join"
 				input_group_name = "match_opvar_invert"
-				input_opvar = "@public.opvar"
+				input_match_float = "@public.opvar"
 				input_invert_match = "@public.invert"
+			},
+			
+			{
+				name = "add_dependent"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	test_groups_persist = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					invert = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					opvar = 
+					{
+						data_type = "float"
+						value = "666"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "match_opvar"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "match_all_persists"
+			},
+			
+			{
+				name = "add_dependent"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	test_groups_envelope = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "match_all"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "match_all_count_envelope"
+				input_lifespan_time = 4
+			},
+			
+			{
+				name = "get_envelope_kv3"
+				execute_once = "false"
+				operator = "soundevent_group_get_float"
+				input_group_result = "@match_all.output_result"
+				input_name = "envelope_result"
+			},
+			
+			{
+				name = "ENV: "
+				operator = "util_print_float"
+				input = "@get_envelope_kv3.output"
+			},
+			
+			{
+				name = "add_dependent"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	test_groups_branch_string = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					string = 
+					{
+						data_type = "string"
+						value = "string_test1"
+					}
+					string2 = 
+					{
+						data_type = "string"
+						value = "string_test2"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "branch_opvar_string"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "branch_opvar_string"
+				input_match_string = "@public.string"
+			},
+			
+			{
+				name = "branch_opvar_string2"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "branch_opvar_string"
+				input_match_string = "@public.string2"
+			},
+			
+			{
+				name = "add_dependent"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	test_groups_branch_string_variables = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "branch_opvar_string"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "branch_opvar_string"
+				input_match_string = "branch1"
+			},
+			
+			{
+				name = "set_group1_variable1"
+				execute_once = "true"
+				operator = "soundevent_group_set_float"
+				input_group_result = "@branch_opvar_string.output_result"
+				input_name = "grp1_var1"
+				input = "1"
+			},
+			
+			{
+				name = "set_group1_variable1b"
+				execute_once = "true"
+				operator = "soundevent_group_set_float"
+				input_group_result = "@branch_opvar_string.output_result"
+				input_name = "grp1_var1"
+				input = "1.1"
+			},
+			
+			{
+				name = "get_group1_variable1"
+				execute_once = "true"
+				operator = "soundevent_group_get_float"
+				input_group_result = "@branch_opvar_string.output_result"
+				input_name = "grp1_var1"
+			},
+			
+			{
+				name = "GRP1_VAR1"
+				operator = "util_print_float"
+				input = "@get_group1_variable1.output"
+			},
+			
+			{
+				name = "set_group1_variable2"
+				execute_once = "true"
+				operator = "soundevent_group_set_float"
+				input_group_result = "@branch_opvar_string.output_result"
+				input_name = "grp1_var2"
+				input = "1"
+			},
+			
+			{
+				name = "set_group1_variable2b"
+				execute_once = "true"
+				operator = "soundevent_group_set_float"
+				input_group_result = "@branch_opvar_string.output_result"
+				input_name = "grp1_var2"
+				input = "2.2"
+			},
+			
+			{
+				name = "get_group1_variable2"
+				execute_once = "true"
+				operator = "soundevent_group_get_float"
+				input_group_result = "@branch_opvar_string.output_result"
+				input_name = "grp1_var2"
+			},
+			
+			{
+				name = "GRP1_VAR2"
+				operator = "util_print_float"
+				input = "@get_group1_variable2.output"
+			},
+			
+			{
+				name = "branch_opvar_string2"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "branch_opvar_string"
+				input_match_string = "branch2"
+			},
+			
+			{
+				name = "add_dependent"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	test_groups_read_envelope = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "find_envelope_group"
+				execute_once = "true"
+				operator = "soundevent_group_find"
+				input_group_name = "match_all_envelope"
+			},
+			
+			{
+				name = "get_envelope"
+				execute_once = "true"
+				operator = "soundevent_group_get_float"
+				input_group_result = "@find_envelope_group.output_result"
+				input_name = "envelope_result"
+			},
+			
+			{
+				name = "GRP1_VAR1"
+				operator = "util_print_float"
+				input = "@get_envelope.output"
 			},
 			
 			{

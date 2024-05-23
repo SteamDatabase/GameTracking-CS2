@@ -8,13 +8,12 @@ var InspectActionBar;
     let m_modelImagePanel = null;
     let m_itemId = '';
     let m_callbackHandle = -1;
-    let m_showCert = true;
+    let m_doNotShowCert = true;
     let m_showEquip = true;
     let m_insideCasketID = '';
     let m_capability = '';
     let m_showMarketLink = false;
     let m_showCharSelect = true;
-    let m_blurOperationPanel = false;
     let m_previewingMusic = false;
     let m_isSelected = false;
     let m_schfnMusicMvpPreviewEnd = null;
@@ -26,14 +25,13 @@ var InspectActionBar;
         m_modelImagePanel = elItemModelImagePanel;
         m_itemId = itemId;
         m_callbackHandle = funcGetSettingCallbackInt('callback', -1);
-        m_showCert = (funcGetSettingCallback('showitemcert', 'true') === 'false');
+        m_doNotShowCert = (funcGetSettingCallback('showitemcert', 'true') === 'false');
         m_showEquip = (funcGetSettingCallback('showequip', 'true') === 'false');
         m_insideCasketID = funcGetSettingCallback('insidecasketid', '');
         m_capability = funcGetSettingCallback('capability', '');
         m_showMarketLink = (funcGetSettingCallback('showmarketlink', 'false') === 'true');
         m_showCharSelect = (funcGetSettingCallback('showcharselect', 'true') === 'true');
         m_isSelected = (funcGetSettingCallback('isselected', 'false') === 'true');
-        m_blurOperationPanel = ($.GetContextPanel().GetAttributeString('bluroperationpanel', 'false') === 'true') ? true : false;
         m_isItemInLootlist = funcGetSettingCallback ? funcGetSettingCallback('isItemInLootlist', 'false') === 'true' : false;
         _SetUpItemCertificate(elPanel, itemId);
         _SetupEquipItemBtns(elPanel, itemId);
@@ -63,7 +61,7 @@ var InspectActionBar;
             return;
         }
         const certData = InventoryAPI.GetItemCertificateInfo(id);
-        if (!certData || m_showCert) {
+        if (!certData || m_doNotShowCert) {
             elCert.visible = false;
             return;
         }
@@ -111,16 +109,14 @@ var InspectActionBar;
         const isPatch = ItemInfo.IsPatch(id);
         const isSpraySealed = ItemInfo.IsSpraySealed(id);
         const isEquipped = InventoryAPI.IsEquipped(id, 't') || InventoryAPI.IsEquipped(id, 'ct') || InventoryAPI.IsEquipped(id, "noteam");
+        let bCloseInspectOnSingleAction = (isSticker || isSpraySealed || isFanToken || isPatch);
         if (ItemInfo.IsEquippalbleButNotAWeapon(id) ||
-            isSticker ||
-            isSpraySealed ||
-            isFanToken ||
-            isPatch ||
+            bCloseInspectOnSingleAction ||
             isEquipped) {
             elMoreActionsBtn.AddClass('hidden');
             if (!isEquipped) {
                 elSingleActionBtn.RemoveClass('hidden');
-                _SetUpSingleActionBtn(elPanel, id, (isSticker || isSpraySealed || isFanToken || isPatch));
+                _SetUpSingleActionBtn(elPanel, id, bCloseInspectOnSingleAction);
             }
             return;
         }
@@ -291,9 +287,6 @@ var InspectActionBar;
         if (callbackFunc != -1) {
             UiToolkitAPI.InvokeJSCallback(callbackFunc);
         }
-        if (m_blurOperationPanel) {
-            $.DispatchEvent('UnblurOperationPanel');
-        }
         if (m_previewingMusic) {
             InventoryAPI.StopItemPreviewMusic();
             m_previewingMusic = false;
@@ -304,4 +297,14 @@ var InspectActionBar;
         }
     }
     InspectActionBar.CloseBtnAction = CloseBtnAction;
+    function fnItemSelected(itemid) {
+    }
+    function SelectItemPopup() {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('Inspect_SelectItem', 'file://{resources}/layout/popups/popup_select_inventory_item.xml', 'associated_item=' + m_itemId +
+            '&filter_category=can_sticker:' + m_itemId);
+    }
+    InspectActionBar.SelectItemPopup = SelectItemPopup;
+    {
+        $.RegisterForUnhandledEvent("OnInventoryItemSelected", fnItemSelected);
+    }
 })(InspectActionBar || (InspectActionBar = {}));

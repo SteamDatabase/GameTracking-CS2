@@ -84,7 +84,7 @@ var CanApplyPickSlot;
         let elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
         let elCancelBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyCancel');
         if (elContinueBtn)
-            elContinueBtn.SetHasClass('hidden', oSettings.isRemove);
+            elContinueBtn.SetHasClass('hidden', oSettings.isRemove || oSettings.isWorkshopPreview);
         if (elNextSlotBtn) {
             elNextSlotBtn.enabled = !(oSettings.isRemove);
             elNextSlotBtn.SetHasClass('hidden', oSettings.isRemove);

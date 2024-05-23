@@ -3,6 +3,7 @@
 /// <reference path="inspect.ts" />
 /// <reference path="common/iteminfo.ts" />
 /// <reference path="common/tint_spray_icon.ts" />
+/// <reference path="common/formattext.ts" />
 var LoadoutGrid;
 (function (LoadoutGrid) {
     let m_hasRunFirstTime = false;
@@ -26,6 +27,11 @@ var LoadoutGrid;
         noteam: '',
     };
     let m_currentCharWeaponId = {
+        t: '',
+        ct: '',
+        noteam: '',
+    };
+    let m_currentPetId = {
         t: '',
         ct: '',
         noteam: '',
@@ -189,7 +195,9 @@ var LoadoutGrid;
             if (!weaponId || weaponId == '0')
                 weaponId = LoadoutAPI.GetItemID(team, 'melee');
         }
-        if (charId != m_currentCharId[team] || glovesId != m_currentCharGlovesId[team] || weaponId != m_currentCharWeaponId[team]) {
+        if (charId != m_currentCharId[team] ||
+            glovesId != m_currentCharGlovesId[team] ||
+            weaponId != m_currentCharWeaponId[team]) {
             m_currentCharId[team] = charId;
             m_currentCharGlovesId[team] = glovesId;
             m_currentCharWeaponId[team] = weaponId;
@@ -212,6 +220,7 @@ var LoadoutGrid;
                     UpdateSlotItemImage(team, aPanels[i], false, true);
                     UpdateName(aPanels[i]);
                     UpdateMoney(aPanels[i], team);
+                    UpdateIsRentable(aPanels[i], team);
                 }
             }
         }
@@ -232,7 +241,8 @@ var LoadoutGrid;
             }
             let slotName = entry.slot;
             let itemid = LoadoutAPI.GetItemID(OverrideTeam(team, slotName), slotName);
-            let bUseIcon = (slotName === 'musickit' || slotName === 'spray0' || slotName === 'flair0') && itemid === '0' ? true : false;
+            let useIconSlots = ['musickit', 'spray0', 'flair0'];
+            let bUseIcon = useIconSlots.includes(slotName) && itemid === '0' ? true : false;
             UpdateSlotItemImage(team, elBtn, bUseIcon, true);
             if (itemid && itemid != '0' && elBtn) {
                 elBtn.SetPanelEvent('oncontextmenu', () => {
@@ -362,8 +372,35 @@ var LoadoutGrid;
             return aDefName[1];
         }
     }
+    function UpdateIsRentable(elPanel, team) {
+        let elLabel = elPanel.FindChild('id-loadout-item-is-rentable');
+        if (!elLabel) {
+            elLabel = $.CreatePanel('Label', elPanel, 'id-loadout-item-is-rentable', {
+                html: 'true',
+                class: 'item-tile__rental-expiration stratum-regular-italic',
+                text: '#item-rental-time-remaining'
+            });
+        }
+        let slot = elPanel.GetAttributeString('data-slot', '');
+        let itemId = LoadoutAPI.GetItemID(team, slot);
+        if (!InventoryAPI.IsRental(itemId)) {
+            elLabel.AddClass('hide');
+            return;
+        }
+        let expirationDate = InventoryAPI.GetExpirationDate(itemId);
+        if (expirationDate <= 0) {
+            elLabel.AddClass('hide');
+            return;
+        }
+        let oLocData = FormatText.FormatRentalTime(expirationDate);
+        elLabel.SetHasClass('item-expired', oLocData.isExpired);
+        elLabel.SetDialogVariable('time-remaining', oLocData.time);
+        elLabel.text = $.Localize(oLocData.locString, elLabel);
+        elLabel.RemoveClass('hide');
+    }
     function OverrideTeam(team, slot) {
-        return slot === 'musickit' || slot === 'spray0' || slot === 'flair0' ? 'noteam' : team;
+        let noteamSlots = ['musickit', 'spray0', 'flair0'];
+        return noteamSlots.includes(slot) ? 'noteam' : team;
     }
     function LoadoutSlotItemTileEvents(elPanel) {
         elPanel.SetPanelEvent('onactivate', () => {

@@ -68,7 +68,7 @@ var TeamIntroMenu;
         Async.RunSequence(function* () {
             for (const ref of modelRefs.values()) {
                 yield Async.Delay(1.0);
-                const elInfo = _CreateTeammateInfo(ref.sXuid, ref.nOrdinal);
+                const elInfo = _CreateTeammateInfo(ref);
                 teammateInfos.set(ref.nOrdinal, elInfo);
                 elInfo.RemoveClass("hidden");
             }
@@ -103,7 +103,9 @@ var TeamIntroMenu;
             }
         }
     }
-    function _CreateTeammateInfo(sXuid, nOrdinal) {
+    function _CreateTeammateInfo(ref) {
+        const sXuid = ref.sXuid;
+        const nOrdinal = ref.nOrdinal;
         const elInfos = $("#TeamIntroTeammateInfos");
         const elInfo = $.CreatePanel("Panel", elInfos, nOrdinal.toString());
         elInfo.BLoadLayoutSnippet("TeamIntroTeammateInfo");
@@ -122,10 +124,12 @@ var TeamIntroMenu;
         elMenu.ClearModels();
         const modelRefs = [];
         for (let nOrdinal = 1;; ++nOrdinal) {
-            const sXuid = elMenu.AddModel(nLocalTeam, nOrdinal);
+            const jso = elMenu.AddModel(nLocalTeam, nOrdinal);
+            const sXuid = jso.sXuid;
             if (!sXuid)
                 break;
-            modelRefs.push({ sXuid, nOrdinal });
+            const ref = { sXuid, nOrdinal };
+            modelRefs.push(ref);
         }
         return modelRefs;
     }

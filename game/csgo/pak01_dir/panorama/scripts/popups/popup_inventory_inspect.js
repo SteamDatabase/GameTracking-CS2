@@ -21,15 +21,6 @@ var InventoryInspect;
         _UpdatePanelData(itemId);
         _PlayShowPanelSound(itemId);
         _LoadEquipNotification();
-        let styleforPopUpInspectFullScreenHostContainer = $.GetContextPanel().GetAttributeString('extrapopupfullscreenstyle', '');
-        if (styleforPopUpInspectFullScreenHostContainer) {
-            let elPopUpInspectFullScreenHostContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectFullScreenHostContainer');
-            elPopUpInspectFullScreenHostContainer.AddClass(styleforPopUpInspectFullScreenHostContainer);
-        }
-        let blurOperationPanel = ($.GetContextPanel().GetAttributeString('bluroperationpanel', 'false') === 'true') ? true : false;
-        if (blurOperationPanel) {
-            $.DispatchEvent('BlurOperationPanel');
-        }
         let defIdx = InventoryAPI.GetItemDefinitionIndex(itemId);
         if (defIdx > 0) {
             StoreAPI.RecordUIEvent("Inventory_Inspect", defIdx);
@@ -118,9 +109,13 @@ var InventoryInspect;
         m_lootlistItemIndex = 0;
         let aLootlistIds = _GetLootlistItems();
         if (aLootlistIds.length < 1) {
-            $.GetContextPanel().FindChildInLayoutFile('id-lootlist-btns-container').visible = false;
-            $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container').visible = false;
-            return;
+            let rentalItemIds = $.GetContextPanel().GetAttributeString("rentalItems", '');
+            if (!rentalItemIds) {
+                $.GetContextPanel().FindChildInLayoutFile('id-lootlist-btns-container').visible = false;
+                $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container').visible = false;
+                return;
+            }
+            aLootlistIds = rentalItemIds.split(',');
         }
         m_Inspectpanel.SetAttributeString('isItemInLootlist', 'true');
         $.GetContextPanel().FindChildInLayoutFile('id-lootlist-btns-container').visible = true;
@@ -196,6 +191,9 @@ var InventoryInspect;
         elPanel.SetDialogVariable('container', InventoryAPI.GetItemName(caseId));
         elPanel.SetDialogVariableInt('index', m_lootlistItemIndex + 1);
         elPanel.SetDialogVariableInt('total', count);
+        let rentalItemIds = $.GetContextPanel().GetAttributeString("rentalItems", '');
+        let text = !rentalItemIds ? $.Localize('#popup_inv_lootlist_header', elPanel) : $.Localize('#popup_inv_lootlist_rental_header', elPanel);
+        elPanel.SetDialogVariable('lootlist-header', text);
     }
     function _ItemAcquired(ItemId) {
         let storeItemId = $.GetContextPanel().GetAttributeString("storeitemid", "");
@@ -210,8 +208,7 @@ var InventoryInspect;
                     $.DispatchEvent('HideStoreStatusPanel');
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ItemId +
                         '&' + 'asyncworktype=useitem' +
-                        '&' + 'seasonpass=true' +
-                        '&' + 'bluroperationpanel=true');
+                        '&' + 'seasonpass=true');
                     return;
                 }
             }

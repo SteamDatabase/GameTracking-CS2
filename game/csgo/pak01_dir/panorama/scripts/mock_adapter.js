@@ -48,6 +48,7 @@ var MockAdapter = (function () {
     const k_GetPlayerScore = "k_GetPlayerScore";
     const k_GetPlayerMVPs = "k_GetPlayerMVPs";
     const k_GetPlayerKills = "k_GetPlayerKills";
+    const k_GetPlayerRoundKills = "k_GetPlayerRoundKills";
     const k_GetPlayerAssists = "k_GetPlayerAssists";
     const k_GetPlayerDeaths = "k_GetPlayerDeaths";
     const k_GetPlayerPing = "k_GetPlayerPing";
@@ -64,7 +65,6 @@ var MockAdapter = (function () {
     const k_GetPlayerItemTerrorist = "k_GetPlayerItemTerrorist";
     const k_AccoladesJSO = "k_AccoladesJSO";
     const k_GetCharacterDefaultCheerByXuid = "k_GetCharacterDefaultCheerByXuid";
-    const k_GetCooperativePlayerTeamName = "k_GetCooperativePlayerTeamName";
     const k_GetAllPlayersMatchDataJSO = "k_GetAllPlayersMatchDataJSO";
     const k_GetPlayerCharacterItemID = "k_GetPlayerCharacterItemID";
     const k_GetFauxItemIDFromDefAndPaintIndex = "k_GetFauxItemIDFromDefAndPaintIndex";
@@ -451,6 +451,7 @@ var MockAdapter = (function () {
         GetPlayerScore: function _GetPlayerScore(xuid) { return _APIAccessor(GameStateAPI.GetPlayerScore(xuid), k_GetPlayerScore, xuid); },
         GetPlayerMVPs: function _GetPlayerMVPs(xuid) { return _APIAccessor(GameStateAPI.GetPlayerMVPs(xuid), k_GetPlayerMVPs, xuid); },
         GetPlayerKills: function _GetPlayerKills(xuid) { return _APIAccessor(GameStateAPI.GetPlayerKills(xuid), k_GetPlayerKills, xuid); },
+        GetPlayerRoundKills: function GetPlayerRoundKills(xuid) { return _APIAccessor(GameStateAPI.GetPlayerRoundKills(xuid), k_GetPlayerRoundKills, xuid); },
         GetPlayerAssists: function _GetPlayerAssists(xuid) { return _APIAccessor(GameStateAPI.GetPlayerAssists(xuid), k_GetPlayerAssists, xuid); },
         GetPlayerDeaths: function _GetPlayerDeaths(xuid) { return _APIAccessor(GameStateAPI.GetPlayerDeaths(xuid), k_GetPlayerDeaths, xuid); },
         GetPlayerPing: function _GetPlayerPing(xuid) { return _APIAccessor(GameStateAPI.GetPlayerPing(xuid), k_GetPlayerPing, xuid); },
@@ -467,7 +468,6 @@ var MockAdapter = (function () {
         GetPlayerItemTerrorist: function _GetPlayerItemTerrorist(panel) { return _APIAccessor(panel.GetPlayerItemTerrorist(), k_GetPlayerItemTerrorist); },
         GetCharacterDefaultCheerByXuid: function _GetCharacterDefaultCheerByXuid(xuid) { return _APIAccessor(GameStateAPI.GetCharacterDefaultCheerByXuid(xuid), k_GetCharacterDefaultCheerByXuid, xuid); },
         GetCharacterDefaultDefeatByXuid: function _GetCharacterDefaultDefeatByXuid(xuid) { return _APIAccessor(GameStateAPI.GetCharacterDefaultDefeatByXuid(xuid), k_GetCharacterDefaultCheerByXuid, xuid); },
-        GetCooperativePlayerTeamName: function _GetCooperativePlayerTeamName() { return _APIAccessor(GameStateAPI.GetCooperativePlayerTeamName(), k_GetCooperativePlayerTeamName); },
         GetAllPlayersMatchDataJSO: function _GetAllPlayersMatchDataJSO() { return _APIAccessor(GameStateAPI.GetAllPlayersMatchDataJSO(), k_GetAllPlayersMatchDataJSO); },
         GetPlayerCharacterItemID: function _GetPlayerCharacterItemID(xuid) { return _APIAccessor(GameStateAPI.GetPlayerCharacterItemID(xuid), k_GetPlayerCharacterItemID); },
         GetFauxItemIDFromDefAndPaintIndex: function _GetFauxItemIDFromDefAndPaintIndex(defindex, paintid) { return _APIAccessor(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defindex, paintid), k_GetFauxItemIDFromDefAndPaintIndex); },

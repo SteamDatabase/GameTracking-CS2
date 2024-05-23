@@ -168,7 +168,9 @@ var ContextMenuGetSouvenir;
                 + '&' +
                 'inspectonly=true'
                 + '&' +
-                'asyncworktype=decodeable');
+                'asyncworktype=decodeable'
+                + '&' +
+                'onlyclosepurchasebar=true');
         });
     }
     var _ItemCustomizationNotification = function (numericType, type, itemid) {

@@ -52,7 +52,41 @@ const e_RoundEndReason = {
     Survival_Draw: 22,
     RoundEndReason_Count: 23
 };
-const bonus_weapon_slots = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
+const bonus_weapons = [
+    "weapon_deagle",
+    "weapon_revolver",
+    "weapon_elite",
+    "weapon_fiveseven",
+    "weapon_cz75a",
+    "weapon_glock",
+    "weapon_ak47",
+    "weapon_aug",
+    "weapon_awp",
+    "weapon_famas",
+    "weapon_g3sg1",
+    "weapon_galilar",
+    "weapon_m249",
+    "weapon_m4a1",
+    "weapon_m4a1_silencer",
+    "weapon_mac10",
+    "weapon_p90",
+    "weapon_ump45",
+    "weapon_xm1014",
+    "weapon_bizon",
+    "weapon_mag7",
+    "weapon_negev",
+    "weapon_sawedoff",
+    "weapon_tec9",
+    "weapon_cz75a",
+    "weapon_hkp2000",
+    "weapon_mp7",
+    "weapon_mp9",
+    "weapon_nova",
+    "weapon_p250",
+    "weapon_scar20",
+    "weapon_sg556",
+    "weapon_ssg08",
+];
 if (Instance.IsServer()) {
     const Server = Instance;
     let bFirstThink = true;
@@ -61,7 +95,7 @@ if (Instance.IsServer()) {
     const mTaserStreaks = new Map();
     let flBonusWeaponStartTime = -1;
     let flBonusWeaponDuration = -1;
-    let nBonusWeaponSlot = -1;
+    let sBonusWeapon = "";
     Server.OnThink(() => {
         if (bFirstThink) {
             bFirstThink = false;
@@ -130,7 +164,7 @@ if (Instance.IsServer()) {
     Server.OnResetRound(() => {
         mKillStreaks.clear();
         mTaserStreaks.clear();
-        nBonusWeaponSlot = -1;
+        sBonusWeapon = "";
         flBonusWeaponStartTime = -1;
         flBonusWeaponDuration = -1;
         Server.EndBonusWeapon();
@@ -189,8 +223,7 @@ if (Instance.IsServer()) {
                 if (weapon) {
                     const weaponData = weapon.GetData();
                     nScore = GetBaseWeaponScore(weaponData.GetType(), weaponData.GetPrice());
-                    const bonusWeaponData = scorerPawn.GetOriginalController()?.GetWeaponDataForLoadoutSlot(nBonusWeaponSlot);
-                    if (bonusWeaponData && bonusWeaponData.GetName() === weaponData.GetName()) {
+                    if (sBonusWeapon === weaponData.GetName()) {
                         nBonus = GetBonusWeaponScore(nScore);
                     }
                     else if (weaponData.GetType() == 8 /* ECSWeaponType.WEAPONTYPE_TASER */) {
@@ -219,14 +252,14 @@ if (Instance.IsServer()) {
         if (flCurTime > flBonusWeaponStartTime) {
             if (flBonusWeaponDuration === -1) {
                 flBonusWeaponDuration = RandomBonusWeaponDuration();
-                nBonusWeaponSlot = RandomBonusWeaponSlot();
-                Server.StartBonusWeapon(flBonusWeaponDuration, nBonusWeaponSlot);
+                sBonusWeapon = RandomBonusWeapon();
+                Server.StartBonusWeapon(flBonusWeaponDuration, sBonusWeapon);
             }
             else if (flBonusWeaponStartTime + flBonusWeaponDuration < flCurTime) {
                 Server.EndBonusWeapon();
                 flBonusWeaponStartTime = RandomBonusWeaponStartTime();
                 flBonusWeaponDuration = -1;
-                nBonusWeaponSlot = -1;
+                sBonusWeapon = "";
             }
         }
     }
@@ -236,8 +269,8 @@ if (Instance.IsServer()) {
     function RandomBonusWeaponDuration() {
         return mp_dm_bonus_length_min() + Math.random() * (mp_dm_bonus_length_max() - mp_dm_bonus_length_min());
     }
-    function RandomBonusWeaponSlot() {
-        return bonus_weapon_slots[Math.floor(Math.random() * bonus_weapon_slots.length)];
+    function RandomBonusWeapon() {
+        return bonus_weapons[Math.floor(Math.random() * bonus_weapons.length)];
     }
 }
 function GetBaseWeaponScore(nWeaponType, nWeaponPrice) {

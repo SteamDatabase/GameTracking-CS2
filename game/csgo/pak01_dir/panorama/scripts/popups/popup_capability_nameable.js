@@ -98,7 +98,7 @@ var CapabilityNameable;
         m_elRemoveBtn.SetPanelEvent('onactivate', _RemoveButtonAction);
         m_elRemoveConfirm.SetPanelEvent('onactivate', _OnRemoveConfirm.bind(undefined, itemId));
         const defName = InventoryAPI.GetItemDefinitionName(itemId);
-        m_elRemoveConfirm.SetHasClass('hidden', !hasName || defName === 'casket');
+        m_elRemoveConfirm.SetHasClass('hidden', !hasName || defName === 'casket' || defName === 'pet');
         m_elTextEntry.SetFocus();
         m_elTextEntry.SetMaxChars(20);
         m_elTextEntry.text = _SetDefaultTextForTextEntry(hasName, itemId);

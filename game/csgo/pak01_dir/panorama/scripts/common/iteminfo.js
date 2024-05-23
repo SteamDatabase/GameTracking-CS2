@@ -285,7 +285,7 @@ var ItemInfo;
         const isSpray = itemSchemaDef.name === 'spraypaint';
         const isSprayPaint = itemSchemaDef.name === 'spray';
         const isFanTokenOrShieldItem = itemSchemaDef.name && itemSchemaDef.name.indexOf('tournament_journal_') != -1;
-        const isPet = itemSchemaDef.name === itemSchemaDef.name && itemSchemaDef.name.indexOf('pet_') != -1;
+        const isPet = InventoryAPI.DoesItemMatchDefinitionByName(id, 'pet');
         if (isSpray || isSprayPaint || isFanTokenOrShieldItem)
             return 'vmt://spraypreview_' + id;
         else if (IsSticker(id) || IsPatch(id))

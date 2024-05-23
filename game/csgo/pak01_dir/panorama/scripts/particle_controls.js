@@ -9,6 +9,7 @@ var ParticleControls;
     function IsParticleScenePanel(panel) {
         return panel.type === "ParticleScenePanel";
     }
+    ParticleControls.IsParticleScenePanel = IsParticleScenePanel;
     function GetWorldExtendsFromCamFov(fov, xpos, ypos, zpos, pheight, pwidth) {
         let height = Math.tan(fov * .5) * Math.sqrt((xpos * xpos) + (ypos * ypos) + (zpos * zpos));
         let width = (pwidth / pheight) * height;
@@ -41,16 +42,6 @@ var ParticleControls;
         }
     }
     ParticleControls.RestartStatusRank = RestartStatusRank;
-    function SACVpcfParticleSystem(panelId, particlename) {
-        const panel = $(panelId);
-        if (panel && IsParticleScenePanel(panel)) {
-            panel.StopParticlesImmediately(true);
-            panel.SetParticleNameAndRefresh(particlename);
-            panel.SetControlPoint(0, 0, 0, 0);
-            panel.StartParticles();
-        }
-    }
-    ParticleControls.SACVpcfParticleSystem = SACVpcfParticleSystem;
     function UpdateMainMenuTopBar(elPanel, curTabID) {
         let g_RadioButtonIdLookup = {
             JsInventory: "#MainMenuNavBarInventory",

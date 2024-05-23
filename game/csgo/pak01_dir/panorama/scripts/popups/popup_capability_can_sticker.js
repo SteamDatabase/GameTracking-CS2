@@ -11,11 +11,13 @@ var CapabilityCanApplyAction;
     const m_elPreviewPanel = m_cP.FindChildInLayoutFile('CanApplyItemModel');
     let m_isRemove = false;
     let m_worktype = '';
+    let m_isWorkshopPreview = false;
     function Init() {
         m_cP.SetAttributeString('stickerApplyRemove', 'true');
         let itemId = '';
         let toolId = '';
         m_worktype = (m_cP.GetAttributeString("asyncworktype", ""));
+        m_isWorkshopPreview = (m_cP.GetAttributeString("workshopPreview", "false") === "true");
         m_isRemove = (m_worktype === "remove_sticker" || m_worktype === "remove_patch");
         if (m_isRemove) {
             itemId = m_cP.GetAttributeString("itemid", "(not found)");
@@ -38,6 +40,7 @@ var CapabilityCanApplyAction;
             isRemove: m_isRemove,
             worktype: m_worktype,
             type: (m_worktype.indexOf('sticker') !== -1) ? 'sticker' : (m_worktype.indexOf('patch') !== -1) ? 'patch' : '',
+            isWorkshopPreview: m_isWorkshopPreview,
             funcOnConfirm: _OnConfirmPressed,
             funcOnNext: _OnNextPressed,
             funcOnCancel: _OnCancelPressed,

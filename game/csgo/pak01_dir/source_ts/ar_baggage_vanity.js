@@ -1,4 +1,4 @@
-import { Instance } from "clientpointentity";
+import { Instance } from "client/cspointscript";
 const planeNames = shuffle([
     'plane_01',
     'plane_02',
@@ -27,19 +27,12 @@ Instance.InitialActivate(() => {
     Instance.SetNextClientThink(Instance.GetGameTime() + 0.1);
 });
 Instance.ClientThink(() => {
-    const planeName = planeNames[nNextPlaneIndex];
-    const planeEnt = Instance.ToDynamicProp(Instance.FindFirstEntityByName(planeName));
-    if (planeEnt)
-        planeEnt.SetAnimationNotLooping("distant_plane06");
+    Instance.EntFireAtName(planeNames[nNextPlaneIndex], "SetAnimationNotLooping", "distant_plane06");
     nNextPlaneIndex++;
     if (nNextPlaneIndex >= planeNames.length)
         nNextPlaneIndex = 0;
     Instance.SetNextClientThink(Instance.GetGameTime() + planeSpacing);
 });
-// Random integer including min, less than max [min,max)
-function randomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 function shuffle(input) {
     const output = [...input];
     for (let i = output.length - 1; i > 0; i--) {

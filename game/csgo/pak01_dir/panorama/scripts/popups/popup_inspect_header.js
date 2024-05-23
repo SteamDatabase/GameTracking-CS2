@@ -3,15 +3,16 @@
 /// <reference path="../common/iteminfo.ts" />
 var InspectHeader;
 (function (InspectHeader) {
-    let m_isXrayMode = false;
+    let m_showXrayMachineUi = false;
     function Init(elPanel, itemId, funcGetSettingCallback) {
-        m_isXrayMode = (funcGetSettingCallback("isxraymode", "no") === 'yes') ? true : false;
-        if (funcGetSettingCallback('inspectonly', 'false') === 'false' && !m_isXrayMode)
+        m_showXrayMachineUi = (funcGetSettingCallback("showXrayMachineUi", "no") === 'yes') ? true : false;
+        if (funcGetSettingCallback('inspectonly', 'false') === 'false' && !m_showXrayMachineUi)
             return;
         elPanel.RemoveClass('hidden');
         _SetName(elPanel, itemId, funcGetSettingCallback);
         _SetRarity(elPanel, itemId);
         _SetCollectionInfo(elPanel, itemId);
+        _SetRentalTime(elPanel, itemId);
     }
     InspectHeader.Init = Init;
     function _SetName(elPanel, ItemId, funcGetSettingCallback) {
@@ -22,6 +23,17 @@ var InspectHeader;
         elPanel.SetDialogVariable('item_custom_name', InventoryAPI.GetItemNameCustomized(ItemId));
         const bShowCustomName = InventoryAPI.HasCustomName(ItemId);
         elPanel.FindChildInLayoutFile('InspectCustomName').visible = bShowCustomName;
+        elPanel.FindChildInLayoutFile('InspectName').SetHasClass('text-align-left', ItemInfo.GetSet(ItemId) !== '');
+    }
+    function _SetRentalTime(elPanel, ItemId) {
+        if (!InventoryAPI.IsRental(ItemId)) {
+            elPanel.FindChildInLayoutFile('ItemRentalTime').SetHasClass('hide', true);
+            return;
+        }
+        let seconds = InventoryAPI.GetExpirationDate(ItemId);
+        let oLocData = FormatText.FormatRentalTime(seconds);
+        elPanel.SetDialogVariable('time-remaining', oLocData.time);
+        elPanel.FindChildInLayoutFile('ItemRentalTime').SetHasClass('hide', false);
     }
     function _SetRarity(elPanel, itemId) {
         let rarityColor = InventoryAPI.GetItemRarityColor(itemId);

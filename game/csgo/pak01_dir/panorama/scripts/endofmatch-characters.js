@@ -151,10 +151,8 @@ var EOM_Characters;
             _m_arrAllPlayersMatchDataJSO = data.allplayerdata;
         }
         else {
-            EndOfMatch.ToggleBetweenScoreboardAndCharacters();
             return false;
         }
-        EndOfMatch.EnableToggleBetweenScoreboardAndCharacters();
         let localPlayerSet = _m_arrAllPlayersMatchDataJSO.filter(oPlayer => oPlayer['xuid'] == MockAdapter.GetLocalPlayerXuid());
         let localPlayer = (localPlayerSet.length > 0) ? localPlayerSet[0] : undefined;
         let oMatchEndData = MockAdapter.GetMatchEndWinDataJSO();

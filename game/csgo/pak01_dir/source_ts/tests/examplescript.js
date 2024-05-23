@@ -1,5 +1,5 @@
-import { Instance } from "serverpointentity";
-// Run me with ent_create point_script { "script" "source_ts/tests//examplescript.vts" }
+import { Instance } from "server/cspointscript";
+// Run me with ent_create cs_point_script { "script" "source_ts/tests//examplescript.vts" }
 Instance.Msg("DOMAIN");
 Instance.Msg(JSON.stringify(Object.keys(Instance)));
 Instance.Msg(Instance.GameMode().toString());

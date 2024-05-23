@@ -2,11 +2,22 @@
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../avatar.ts" />
 /// <reference path="../digitpanel.ts" />
+/// <reference path="../particle_controls.ts" />
 /// <reference path="../common/formattext.ts" />
 /// <reference path="../common/scheduler.ts" />
 /// <reference path="../common/teamcolor.ts" />
 var HudWinPanel;
 (function (HudWinPanel) {
+    function MVPParticleSystem(panelId, particlename, cp15) {
+        const panel = $(panelId);
+        if (panel && ParticleControls.IsParticleScenePanel(panel)) {
+            panel.StopParticlesImmediately(true);
+            panel.SetParticleNameAndRefresh(particlename);
+            panel.SetControlPoint(0, 0, 0, 0);
+            panel.SetControlPoint(20, ...cp15);
+            panel.StartParticles();
+        }
+    }
     let _m_elCanvas;
     let _m_elPlotContainer;
     let _m_canvasHeightInPixels;
@@ -32,7 +43,63 @@ var HudWinPanel;
         $.RegisterForUnhandledEvent('Player_Death', _OnReceivePlayerDeath);
         _m_bInit = true;
     }
-    function _SetMVPFlairImage(xuid) {
+    function _SetMVP(xuid, reason, team) {
+        const avatar = $("#MVPAvatar");
+        avatar.PopulateFromPlayerSlot(GameStateAPI.GetPlayerSlot(xuid));
+        avatar.SetHasClass("team--TERRORIST", team === 2);
+        avatar.SetHasClass("team--CT", team === 3);
+        $.GetContextPanel().SetDialogVariableInt('player_slot', GameStateAPI.GetPlayerSlot(xuid));
+        let sMvpReasonToken = "#Panorama_winpanel_mvp_award";
+        let sParticleSystem = "particles/dev/empty.vpcf";
+        let sParticleControlPoints = [0, 0, team];
+        switch (reason) {
+            case 1:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_kills";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_multikill.vpcf";
+                sParticleControlPoints[0] = GameStateAPI.GetPlayerRoundKills(xuid);
+                break;
+            case 2:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_bombplant";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_bombplant_panel.vpcf";
+                break;
+            case 3:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_bombdefuse";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_bombdefuse_panel.vpcf";
+                break;
+            case 4:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_rescue";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_rescue_panel.vpcf";
+                break;
+            case 5:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_gungame";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_multikill.vpcf";
+                sParticleControlPoints[0] = GameStateAPI.GetPlayerRoundKills(xuid);
+                break;
+            case 7:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_winner";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner.vpcf";
+                break;
+            case 9:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_ace";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_ace_panel.vpcf";
+                sParticleControlPoints[0] = GameStateAPI.GetPlayerRoundKills(xuid);
+                break;
+            case 10:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_inferno";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_inferno.vpcf";
+                break;
+            case 11:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_award_blast";
+                sParticleSystem = "particles/ui/hud/ui_mvp_winner_blast.vpcf";
+                break;
+            case 12:
+                sMvpReasonToken = "#Panorama_winpanel_mvp_winner";
+                sParticleSystem = "particles/ui/hud/ui_mvp_mography.vpcf";
+                break;
+        }
+        $.GetContextPanel().SetDialogVariable("mvp_name_and_reason", $.Localize(sMvpReasonToken, $.GetContextPanel()));
+        const jsHonorIcon = $("#jsHonorIcon");
+        $.DispatchEvent("HonorIcon_SetOptions", jsHonorIcon, jsHonorIcon, true, GameStateAPI.GetPlayerXpTrailLevel(xuid), false);
         const imagePath = InventoryAPI.GetFlairItemImage(xuid);
         const elBgImage = $.GetContextPanel().FindChildInLayoutFile('MedalBackground');
         elBgImage.style.backgroundImage = (imagePath) ? 'url("file://{images}' + imagePath + '.png")' : 'none';
@@ -418,7 +485,7 @@ var HudWinPanel;
         _Colorize();
     }
     {
-        $.RegisterEventHandler('HudWinPanel_MVP', $.GetContextPanel(), _SetMVPFlairImage);
+        $.RegisterEventHandler('HudWinPanel_MVP', $.GetContextPanel(), _SetMVP);
         _Init();
     }
 })(HudWinPanel || (HudWinPanel = {}));

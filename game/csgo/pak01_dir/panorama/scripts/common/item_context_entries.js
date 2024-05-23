@@ -173,7 +173,10 @@ var ItemContextEntries;
         {
             name: 'unequip',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
-            AvailableForItem: (id) => InventoryAPI.IsEquipped(id, "noteam") && ['flair0', 'spray0'].includes(InventoryAPI.GetDefaultSlot(id)),
+            AvailableForItem: (id) => {
+                let availableForSlots = ['flair0', 'spray0'];
+                return InventoryAPI.IsEquipped(id, "noteam") && availableForSlots.includes(InventoryAPI.GetDefaultSlot(id));
+            },
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 TryEquipItemInSlot('noteam', '0', InventoryAPI.GetDefaultSlot(id));
@@ -244,10 +247,8 @@ var ItemContextEntries;
         },
         {
             name: (id) => {
-                if (InventoryAPI.GetDecodeableRestriction(id) === 'xray' && !InventoryAPI.IsTool(id))
+                if (InventoryAPI.GetDecodeableRestriction(id) === 'restricted' && !InventoryAPI.IsTool(id) && !InventoryAPI.CanOpenForRental(id))
                     return 'look_inside';
-                else if (IsKeyForXrayItem(id) !== '')
-                    return 'goto_xray';
                 else
                     return 'open_package';
             },
@@ -267,19 +268,6 @@ var ItemContextEntries;
                     $.DispatchEvent('ContextMenuEvent', '');
                     return;
                 }
-                if (InventoryAPI.GetChosenActionItemsCount(id, 'decodable') > 0 && InventoryAPI.IsTool(id) && InventoryAPI.GetDecodeableRestriction(id) === 'xray') {
-                    const caseId = IsKeyForXrayItem(id);
-                    if (caseId) {
-                        $.DispatchEvent("ShowXrayCasePopup", id, caseId, false);
-                        $.DispatchEvent('ContextMenuEvent', '');
-                        return;
-                    }
-                }
-                if (!InventoryAPI.IsTool(id) && InventoryAPI.GetDecodeableRestriction(id) === 'xray') {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
-                        '&' + 'asyncworktype=decodeable');
-                    return;
-                }
                 $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'decodable', id, '');
             }
         },
@@ -295,7 +283,7 @@ var ItemContextEntries;
                 return (defName === 'casket' || defName === 'Name Tag') ? '' : 'TopSeparator';
             },
             AvailableForItem: (id) => {
-                return ItemInfo.ItemHasCapability(id, 'nameable');
+                return ItemInfo.ItemHasCapability(id, 'nameable') && !InventoryAPI.IsRental(id);
             },
             OnSelected: (id) => {
                 if (InventoryAPI.GetItemDefinitionName(id) === 'casket') {
@@ -331,7 +319,8 @@ var ItemContextEntries;
             name: 'can_sticker',
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'can_sticker') &&
-                    InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id);
+                    InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id) &&
+                    !InventoryAPI.IsRental(id);
             },
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -341,7 +330,7 @@ var ItemContextEntries;
         },
         {
             name: 'remove_sticker',
-            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0,
+            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0 && !InventoryAPI.IsRental(id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'itemid=' + id +
@@ -397,7 +386,7 @@ var ItemContextEntries;
             populateFilter: ['tradeup_items'],
             AvailableForItem: (id) => {
                 const slot = InventoryAPI.GetDefaultSlot(id);
-                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id) &&
+                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id) && !InventoryAPI.IsRental(id) &&
                     (InventoryAPI.CanTradeUp(id) || InventoryAPI.GetNumItemsNeededToTradeUp(id) > 0);
             },
             OnSelected: (id) => {
@@ -410,7 +399,7 @@ var ItemContextEntries;
             exclusiveFilter: ['tradeup_ingredients'],
             AvailableForItem: (id) => {
                 const slot = InventoryAPI.GetDefaultSlot(id);
-                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id);
+                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id) && !InventoryAPI.IsRental(id);
             },
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -644,7 +633,7 @@ var ItemContextEntries;
         {
             name: 'intocasket',
             style: (id) => 'TopSeparator',
-            AvailableForItem: (id) => InventoryAPI.IsPotentiallyMarketable(id),
+            AvailableForItem: (id) => InventoryAPI.IsPotentiallyMarketable(id) && !InventoryAPI.IsRental(id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 if (InventoryAPI.GetChosenActionItemsCount(id, 'can_collect') > 0) {
@@ -664,7 +653,7 @@ var ItemContextEntries;
         },
         {
             name: 'sell',
-            AvailableForItem: (id) => InventoryAPI.IsMarketable(id),
+            AvailableForItem: (id) => InventoryAPI.IsMarketable(id) && !InventoryAPI.IsRental(id),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_sellOnMarket', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');

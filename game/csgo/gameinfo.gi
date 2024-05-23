@@ -134,6 +134,9 @@
 		"r_grass_start_fade"			"3000"
 		"r_grass_end_fade"				"3900"
 
+		// Disable smooth morph normals
+		"r_smooth_morph_normals"		"0"
+
 		// Default to binding keys based on keyboard position instead of key name
 		"input_button_code_is_scan_code"		"1"
 		"input_button_code_is_scan_code_scd"	"1"
@@ -169,7 +172,6 @@
 		"snd_steamaudio_normalize_default_hrtf_volume"		"1"
 		"snd_steamaudio_default_hrtf_volume_gain"			"0.0"
 		"snd_hrtf_distance_behind"							"50"
-		"snd_hrtf_perspective_distance_behind"				"50"
 		"snd_steamaudio_max_hrtf_normalization_gain_db"		"6.0"
 		"snd_steamaudio_enable_pathing"						"1"
 		"snd_steamaudio_source_pathing_debug"				"0"
@@ -240,6 +242,7 @@
 		"greek" "3"
 		"hungarian" "3"
 		"italian" "3"
+		"indonesian" "3"
 		"japanese" "3"
 		"koreana" "3"
 		"latam" "3"

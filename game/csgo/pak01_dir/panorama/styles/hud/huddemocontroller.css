@@ -20,26 +20,30 @@ CSGOHudDemoController
 	width: 100%;
 	height: 0px;
 	flow-children: down;
-	border-width: 1px 0 0 0;
-	border-color: #000000a0;
-	border-style: solidcolor;
+	box-shadow: black 0px 0px 2px 0px;
 	background-color: hud-blur-bg-color;
 	world-blur: hudWorldBlur;
 	transition-property: height;
 	transition-duration: .1s;
 	transition-timing-function: ease-out;
-	overflow: clip;
+	overflow: noclip;
 }
 
-.DemoControllerActive #Contents
+.DemoControllerFull #Contents
 {
-	height: 82px;
+	height: 90px;
+}
+
+.DemoControllerMinimal #Contents
+{
+	height: 45px;
 }
 
 #SliderRow
 {
+	margin-bottom: -6px;
 	width: 100%;
-	height: 36px;
+	height: 50px;
 	flow-children: none;
 }
 
@@ -48,6 +52,7 @@ CSGOHudDemoController
 	margin: 0px 10px;
 	width: 100%;
 	height: 100%;
+	position: 0px 10px 0px;
 }
 
 #Slider #SliderThumb
@@ -61,6 +66,11 @@ CSGOHudDemoController
 	visibility: collapse;
 }
 
+.highlightsActive #SliderTrack Panel
+{
+	opacity: 0;
+}
+
 #RoundMarkers
 {
 	margin: 0px 10px;
@@ -69,32 +79,134 @@ CSGOHudDemoController
 	vertical-align: center;
 }
 
-#RoundMarkers .odd
+#RoundMarkers .roundMarker
 {
 	height: 8px;
-	margin-top: 14px;
+	margin-top: 30px;
+}
+
+#RoundMarkers .roundMarker.odd
+{
 	background-color: #ffffff20;
 }
 
-#RoundMarkers .even
+#RoundMarkers .roundMarker.even
 {
-	height: 8px;
-	margin-top: 14px;
 	background-color: #ffffff50;
 }
 
-#RoundMarkers .kill
+.highlightsActive #RoundMarkers Panel
 {
-	height: 8px;
-	margin-top: 14px;
-	background-color: #40ff4050;
+	opacity: 0.2;
 }
 
-#RoundMarkers .death
+#HighlightMarkers
+{
+	margin: 0px 10px;
+	width: 100%;
+	height: 100%;
+	vertical-align: center;
+}
+
+#HighlightMarkers Panel
 {
 	height: 8px;
-	margin-top: 14px;
-	background-color: #ff404050;
+	margin-top: 30px;
+	background-color: #ffffffff;
+	visibility: collapse;
+}
+
+.highlightsActive #HighlightMarkers Panel
+{
+	visibility: visible;
+}
+
+#HighlightIcons
+{
+	margin: 0px 10px;
+	position: 0px -10px 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+#HighlightIcons .highlight-icon
+{
+	width: 22px;
+	height: 22px;
+	vertical-align: center;
+	transform-origin: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: contain;
+	img-shadow: 1px 1px 1px 1.0 #0000003b;
+	brightness: 0.8;
+	transition-property: pre-transform-scale2d, transform, brightness;
+	transition-duration: 0.05s;
+	transition-timing-function: ease-out;
+}
+
+#HighlightIcons .highlight-icon:hover
+{
+	transform: translateY( -2px ) scale3d( 1.2, 1.2, 1.2 );
+	z-index: 1;
+	brightness: 2.0;
+}
+
+#HighlightIcons .highlight-icon.kill
+{
+	wash-color: #707070ff;
+	background-image: url("s2r://panorama/images/icons/ui/crosshair_circle.vsvg");
+}
+
+#HighlightIcons .highlight-icon.death
+{
+	wash-color: #707070ff;
+	background-image: url("s2r://panorama/images/icons/ui/kill.vsvg");
+}
+
+#HighlightIcons .highlight-icon.tick
+{
+	wash-color: #707070ff;
+	background-image: url("s2r://panorama/images/icons/ui/bullet.vsvg");
+}
+
+#HighlightIcons .highlight-icon.tagged
+{
+	wash-color: rgb(253, 57, 57);
+	background-image: url("s2r://panorama/images/icons/ui/alert.vsvg");
+	brightness: 1.0;
+}
+
+#HighlightIcons .highlight-icon.tagged:hover
+{
+	brightness: 2.0;
+}
+
+#HighlightIcons .highlight-icon.untagged
+{
+	background-image: url("s2r://panorama/images/icons/ui/alert.vsvg");
+	brightness: 0.4;
+}
+
+#HighlightIcons .highlight-icon.untagged:hover
+{
+	brightness: 1.0;
+}
+
+.highlightsActive #HighlightIcons Panel
+{
+	pre-transform-scale2d: 1.1;
+	transform: translateY( -4px );
+	transition-property: pre-transform-scale2d, transform, wash-color;
+	transition-duration: 0.1s;
+	transition-timing-function: ease-out;
+	brightness: 4.0;
+}
+
+.highlightsActive #HighlightIcons Panel:hover
+{
+	transform: translateY( -6px ) scale3d( 1.2, 1.2, 1.2 );
+	brightness: 6.0;
 }
 
 #ControlRow
@@ -103,6 +215,11 @@ CSGOHudDemoController
 	height: 41px;
 	margin: 0 5px 5px 5px;
 	flow-children: right;
+}
+
+.DemoControllerMinimal #ControlRow
+{
+	visibility: collapse;
 }
 
 #PlayButton
@@ -228,6 +345,54 @@ CSGOHudDemoController
 	font-weight: bold;
 }
 
+#HighlightsButton
+{
+	margin-left: 25px;
+	padding: 4px;
+	border-radius: 2px;
+	wash-color: #a0a0a0ff;
+}
+
+#HighlightsButton:hover
+{
+	background-color: #ffffff40;
+}
+
+.highlightsActive #HighlightsButton
+{
+	wash-color: white;
+}
+
+#HotKeyLabels
+{
+	width: fill-parent-flow( 1.0 );
+	vertical-align: bottom;
+	flow-children: left;
+	padding-right: 20px;
+	margin-bottom: 10px;
+}
+
+#HotKeyLabels .hotkeylabel
+{
+	font-size: 14px;
+	padding-right: 10px;
+}
+
+.mouseActive #HotKey_Enable_Mouse_Cursor
+{
+	opacity: 0.2;
+}
+
+.highlightsActive #HotKey_Player_Next,.flyCamActive #HotKey_Player_Next
+{
+	opacity: 0.2;
+}
+
+.highlightsActive #HotKey_Next_Camera
+{
+	opacity: 0.2;
+}
+
 #EndPlayback
 {
 	horizontal-align: right;
@@ -235,6 +400,8 @@ CSGOHudDemoController
 	padding: 5px;
 	margin-right: 10px;
 	background-color: #ffffff08;
+	border-radius: 2px;
+	height: 36px;
 }
 
 #EndPlayback:hover

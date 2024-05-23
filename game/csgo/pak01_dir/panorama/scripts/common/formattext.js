@@ -148,4 +148,23 @@ var FormatText;
         return result;
     }
     FormatText.AbbreviateNumber = AbbreviateNumber;
+    function FormatRentalTime(expirationDate) {
+        let currentDate = Math.trunc(Date.now() / 1000);
+        if (expirationDate <= currentDate) {
+            return {
+                time: '',
+                locString: '#item-rental-time-expired',
+                isExpired: true
+            };
+        }
+        else {
+            let seconds = expirationDate - currentDate;
+            return {
+                time: FormatText.SecondsToSignificantTimeString(seconds),
+                locString: '#item-rental-time-remaining',
+                isExpired: false
+            };
+        }
+    }
+    FormatText.FormatRentalTime = FormatRentalTime;
 })(FormatText || (FormatText = {}));

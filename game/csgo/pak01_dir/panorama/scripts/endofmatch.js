@@ -16,8 +16,7 @@ var EndOfMatch;
     };
     $.RegisterEventHandler("EndOfMatch_Show", _m_cP, _Start);
     $.RegisterForUnhandledEvent("EndOfMatch_Shutdown", _Shutdown);
-    $.RegisterForUnhandledEvent("EndOfMatch_ShowScoreboard", _ShowScoreboard);
-    $.RegisterForUnhandledEvent("EndOfMatch_HideScoreboard", _HideScoreboard);
+    _m_cP.AddClass('scoreboard-visible');
     function _NavigateToTab(tab) {
         if (_m_data._m_elActiveTab && _m_data._m_elActiveTab.IsValid()) {
             _m_data._m_elActiveTab.RemoveClass('eom-panel--active');
@@ -26,23 +25,6 @@ var EndOfMatch;
         if (_m_data._m_elActiveTab) {
             _m_data._m_elActiveTab.AddClass('eom-panel--active');
         }
-    }
-    function ToggleBetweenScoreboardAndCharacters() {
-        _m_data._m_scoreboardVisible = !_m_data._m_scoreboardVisible;
-        _m_cP.SetHasClass('scoreboard-visible', _m_data._m_scoreboardVisible);
-    }
-    EndOfMatch.ToggleBetweenScoreboardAndCharacters = ToggleBetweenScoreboardAndCharacters;
-    function EnableToggleBetweenScoreboardAndCharacters() {
-        _m_cP.SetHasClass('scoreboard-visible', _m_data._m_scoreboardVisible);
-    }
-    EndOfMatch.EnableToggleBetweenScoreboardAndCharacters = EnableToggleBetweenScoreboardAndCharacters;
-    function _ShowScoreboard() {
-        _m_cP.SetHasClass('scoreboard-visible', true);
-        _m_data._m_scoreboardVisible = true;
-    }
-    function _HideScoreboard() {
-        _m_cP.SetHasClass('scoreboard-visible', false);
-        _m_data._m_scoreboardVisible = false;
     }
     function SwitchToPanel(tab) {
         _m_cP.FindChildTraverse('rb--' + tab).RemoveClass("hidden");

@@ -13,6 +13,7 @@ var InventoryPanel;
     let _m_elInventoryNavBar = $.GetContextPanel().FindChildInLayoutFile('id-navbar-tabs');
     let _m_isCapabliltyPopupOpen = false;
     let _m_InventoryUpdatedHandler = null;
+    let _m_bFilterRentals = false;
     let _m_HiddenContentClassname = 'mainmenu-content--hidden';
     function _Init() {
         if (!_m_InventoryUpdatedHandler) {
@@ -23,6 +24,7 @@ var InventoryPanel;
         _InitMarketLink();
         _InitXrayBtn();
         _LoadEquipNotification();
+        _ShowHideRentalTab();
     }
     function _RunEveryTimeInventoryIsShown() {
         _OnShowAcknowledgePanel();
@@ -74,10 +76,14 @@ var InventoryPanel;
                 let elNavBar = _CreateNavBar(tag, elCategory);
                 if (subCategories.length > 1) {
                     _MakeNavBarButtons(elNavBar, subCategories, (subCategory) => {
+                        _UpdateFilterRentalBtnInCategoryVisibility(tag, subCategory);
                         _UpdateActiveInventoryList();
                     });
                 }
                 _AddSortDropdownToNavBar(elNavBar.GetParent(), false);
+                if (tag === 'any' || tag === 'inv_group_equipment') {
+                    _AddFilterToNavBar(elNavBar.GetParent());
+                }
                 $.CreatePanel('InventoryItemList', elCategory, tag + '-List');
             }
         }
@@ -156,7 +162,7 @@ var InventoryPanel;
             return;
         }
         let activePanel = _m_elInventoryMain.FindChildInLayoutFile(_m_activeCategory);
-        _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), _m_activeCategory, _GetSelectedSubCategory(activePanel), _GetSelectedSort(activePanel), '');
+        _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), _m_activeCategory, _GetSelectedSubCategory(activePanel), _GetSelectedSort(activePanel), _GetFilterRentedItemsSetting(activePanel));
     }
     function NavigateToTab(category) {
         if (_m_activeCategory !== category) {
@@ -187,7 +193,8 @@ var InventoryPanel;
                 activePanel.visible = true;
                 activePanel.SetReadyForDisplay(true);
                 _m_activeCategory = category;
-                _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), category, _GetSelectedSubCategory(activePanel), _GetSelectedSort(activePanel), '');
+                _UpdateFilterRentalBtnInCategoryVisibility(category);
+                _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), category, _GetSelectedSubCategory(activePanel), _GetSelectedSort(activePanel), _GetFilterRentedItemsSetting(activePanel));
             }
         }
     }
@@ -213,10 +220,49 @@ var InventoryPanel;
             elDropdown.SetSelected(GameInterfaceAPI.GetSettingString("cl_inventory_saved_sort2"));
         }
     }
+    function _AddFilterToNavBar(elNavBar) {
+        let elFilter = elNavBar.FindChildInLayoutFile('InvFilterRentedItems');
+        if (!elFilter) {
+            let elFilter = $.CreatePanel('ToggleButton', elNavBar, 'InvFilterRentedItems', { class: 'overflow-noclip' });
+            elFilter.BLoadLayoutSnippet('InvFilterRentedItemsSnippet');
+            elFilter.SetPanelEvent('onactivate', () => {
+                let activePanel = _m_elInventoryMain.FindChildInLayoutFile(_m_activeCategory);
+                let elDropdown = elNavBar.FindChildInLayoutFile('InvSortDropdown');
+                let dropdownSetting = elDropdown ? elDropdown.GetSelected().id : '';
+                elFilter.checked = !_m_bFilterRentals;
+                _m_bFilterRentals = elFilter.checked;
+                let filterSetting = elFilter.checked ? 'is_rental:false' : '';
+                _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), _m_activeCategory, _GetSelectedSubCategory(activePanel), dropdownSetting, filterSetting);
+            });
+        }
+    }
+    function _GetFilterRentedItemsSetting(activePanel) {
+        let elFilterBtn = activePanel.FindChildInLayoutFile('InvFilterRentedItems');
+        return (elFilterBtn && elFilterBtn.checked) ? 'is_rental:false' : '';
+    }
+    function _UpdateFilterRentalBtnInCategoryVisibility(category, subCategory = '') {
+        let elNavBtn = $.GetContextPanel().FindChildInLayoutFile(category + '-NavBarParent');
+        if (!elNavBtn || !elNavBtn.IsValid()) {
+            return;
+        }
+        let elFilterBtn = elNavBtn.FindChildInLayoutFile('InvFilterRentedItems');
+        if (!elFilterBtn || !elFilterBtn.IsValid()) {
+            return;
+        }
+        elFilterBtn.SetHasClass('hide', (category !== 'any' && category !== 'inv_group_equipment') ||
+            !InventoryAPI.CategoryContainsItems('rentals') ||
+            (subCategory === 'customplayer' ||
+                subCategory === 'misc' ||
+                subCategory === 'clothing_hands' ||
+                subCategory === 'musickit'));
+        if (!elFilterBtn.BHasClass('hide')) {
+            elFilterBtn.checked = _m_bFilterRentals;
+        }
+    }
     function _UpdateSort(elDropdown) {
         let activePanel = _m_elInventoryMain.FindChildInLayoutFile(_m_activeCategory);
         if (activePanel) {
-            _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), _m_activeCategory, _GetSelectedSubCategory(activePanel), elDropdown.GetSelected().id, '');
+            _UpdateActiveItemList(_GetActiveCategoryLister(activePanel), _m_activeCategory, _GetSelectedSubCategory(activePanel), elDropdown.GetSelected().id, _GetFilterRentedItemsSetting(activePanel));
             if (typeof elDropdown.GetSelected().id === "string" && elDropdown.GetSelected().id !== GameInterfaceAPI.GetSettingString("cl_inventory_saved_sort2")) {
                 GameInterfaceAPI.SetSettingString("cl_inventory_saved_sort2", elDropdown.GetSelected().id);
                 GameInterfaceAPI.ConsoleCommand("host_writeconfig");
@@ -424,6 +470,7 @@ var InventoryPanel;
     function _OnReadyForDisplay() {
         _RunEveryTimeInventoryIsShown();
         _UpdateActiveInventoryList();
+        _ShowHideRentalTab();
         // @ts-ignore
         if (!_m_elInventoryMain.updatePlayerEquipSlotChangedHandler) {
             // @ts-ignore
@@ -435,6 +482,8 @@ var InventoryPanel;
     }
     function _InventoryUpdated() {
         _ShowHideXrayBtn();
+        _ShowHideRentalTab();
+        _UpdateFilterRentalBtnInCategoryVisibility(_m_activeCategory);
         if ($.GetContextPanel().BHasClass(_m_HiddenContentClassname) || _m_isCapabliltyPopupOpen)
             return;
         _OnShowAcknowledgePanel();
@@ -458,6 +507,7 @@ var InventoryPanel;
         multiselectItemIds: {},
         multiselectItemIdsArray: [],
         popupVisible: false,
+        bWorkshopItemPreview: false
     };
     function GetCapabilityInfo() {
         return _SelectedCapabilityInfo;
@@ -466,7 +516,7 @@ var InventoryPanel;
     function _PromptShowSelectItemForCapabilityPopup(titletxt, messagetxt, capability, itemid, itemid2) {
         UiToolkitAPI.ShowGenericPopupOkCancel($.Localize(titletxt), $.Localize(messagetxt), '', () => $.DispatchEvent("ShowSelectItemForCapabilityPopup", capability, itemid, itemid2), () => { });
     }
-    function _ShowSelectItemForCapabilityPopup(capability, itemid, itemid2) {
+    function _ShowSelectItemForCapability(capability, itemid, itemid2, bWorkshopItemPreview) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'tab_mainmenu_inventory', 'MOUSE');
         _m_elSelectItemForCapabilityPopup.RemoveClass(_m_HiddenContentClassname);
         _m_elSelectItemForCapabilityPopup.SetFocus();
@@ -478,11 +528,18 @@ var InventoryPanel;
         _SelectedCapabilityInfo.multiselectItemIds = {};
         _SelectedCapabilityInfo.multiselectItemIdsArray = [];
         _SelectedCapabilityInfo.popupVisible = true;
+        _SelectedCapabilityInfo.bWorkshopItemPreview = bWorkshopItemPreview;
         let elDropDownParent = _m_elSelectItemForCapabilityPopup.FindChildInLayoutFile('CapabilityPopupSortContainer');
         _AddSortDropdownToNavBar(elDropDownParent, true);
         let elDropdown = elDropDownParent.FindChildInLayoutFile('InvSortDropdown');
         elDropdown.SetPanelEvent('oninputsubmit', () => _UpdatePopup(itemid, capability));
         _UpdatePopup(itemid, capability);
+    }
+    function _ShowSelectItemForCapabilityPopup(capability, itemid, itemid2) {
+        _ShowSelectItemForCapability(capability, itemid, itemid2, false);
+    }
+    function _ShowSelectItemForWorkshopPreviewCapability(capability, itemid, itemid2) {
+        _ShowSelectItemForCapability(capability, itemid, itemid2, true);
     }
     function CloseSelectItemForCapabilityPopup() {
         $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_close', 'MOUSE');
@@ -502,7 +559,7 @@ var InventoryPanel;
         if (!elList)
             elList = $.CreatePanel('InventoryItemList', _m_elSelectItemForCapabilityPopup, 'ItemListForCapability');
         elList.SetHasClass('inv-multi-select-allow', capability === "casketstore" || capability === "casketretrieve");
-        let capabilityFilter = capability + ':' + id;
+        let capabilityFilter = capability + ':' + id + ',' + 'is_rental:false';
         _UpdateActiveItemList(elList, 'any', 'any', _GetSelectedSort(_m_elSelectItemForCapabilityPopup.FindChildInLayoutFile('CapabilityPopupSortContainer')), capabilityFilter);
         _SetUpCasketPopup(capability, elList);
         _SetCapabilityPopupTitle(id, capability);
@@ -662,6 +719,23 @@ var InventoryPanel;
         }
     }
     InventoryPanel.UpdateItemListCallback = UpdateItemListCallback;
+    function _ShowHideRentalTab() {
+        let elNavBarBtnsContainer = $.GetContextPanel().FindChildInLayoutFile('id-navbar-tabs-catagory-btns-container');
+        if (elNavBarBtnsContainer) {
+            let elNavBarRentalsBtn = elNavBarBtnsContainer.FindChild('rentals');
+            if (elNavBarRentalsBtn) {
+                let bInventoryContainsRentals = InventoryAPI.CategoryContainsItems('rentals');
+                if (!bInventoryContainsRentals && _m_activeCategory === 'rentals') {
+                    let elNavBarEverythingBtn = elNavBarBtnsContainer.FindChild('any');
+                    if (elNavBarEverythingBtn) {
+                        elNavBarEverythingBtn.checked = true;
+                        NavigateToTab('any');
+                    }
+                }
+                elNavBarRentalsBtn.SetHasClass('hide', !bInventoryContainsRentals);
+            }
+        }
+    }
     {
         _Init();
         let elJsInventory = $('#JsInventory');
@@ -677,6 +751,7 @@ var InventoryPanel;
         $.RegisterForUnhandledEvent('ShowDeleteItemConfirmationPopup', _ShowDeleteItemConfirmation);
         $.RegisterForUnhandledEvent('ShowUseItemOnceConfirmationPopup', _ShowUseItemOnceConfirmationPopup);
         $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_CraftIngredientAdded', () => NavigateToTab('tradeup'));
+        $.RegisterForUnhandledEvent('ShowSelectItemForWorkshopPreviewCapability', _ShowSelectItemForWorkshopPreviewCapability);
         $.RegisterForUnhandledEvent('ShowTradeUpPanel', _GotoTradeUpPanel);
     }
 })(InventoryPanel || (InventoryPanel = {}));

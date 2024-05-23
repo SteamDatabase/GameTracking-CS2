@@ -47,21 +47,8 @@
 	ActorName( string ) : "Look at Actor"
 	LookType( string ) : "Type" : "How much of the body looks at the target, fullbody faces"
 	LookSpeed( string ) : "Speed" : "How fast does the head/chest look at the target"
-	HoldEvent( bool ) : "Hold Event" : 0 : "When event is over, hold the look at target until the next look at event"
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Look At Target Event In This Channel"
 ]
-
-@PointClass base(ChoreoEvent) = iklockleftarm : "Lock IK Left Arm" 
-[
-	ActorName( string ) : "Lock To Actor"
-	LockBodyFacing( boolean ) : "Lock Rotation" : 1 : "Lock Rotation"
-]
-
-@PointClass base(ChoreoEvent) = iklockrightarm : "Lock IK Right Arm" 
-[
-	ActorName( string ) : "Lock To Actor"
-	LockBodyFacing( boolean ) : "Lock Rotation" : 1 : "Lock Rotation"
-]
-
 
 @PointClass base(ChoreoEvent) = moveto : "Move To Target" 
 [
@@ -96,6 +83,12 @@
 	PlaySequenceOverScript( boolean ) : "Play Sequence Overtop Script"
 ]
 
+@PointClass base(ChoreoEvent, PitchYaw) = face : "Face To Actor" 
+[
+	ActorName( string ) : "Face Actor"
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Face To Event In This Channel"
+]
+
 // lockbodyfacing is designed to run on top of both normal AI and on top of
 // scripted_sequences.  By allowing torso turns during post-idles, pre-idles, 
 // act-busy's, scripted_sequences, normal AI movements, etc., it increases 
@@ -104,16 +97,15 @@
 // AI's control.
 // lockbody facing is also usefull when npcs are moving and you want them to turn
 // towards something but still walk in the direction of travel.
-@PointClass base(ChoreoEvent, PitchYaw) = face : "Face To Actor" 
+@PointClass base(ChoreoEvent) = lock_facing : "Lock Body Facing" 
 [
-	ActorName( string ) : "Face Actor"
-	LockBodyFacing( boolean ) : "Lock Body Facing" : 0 : "Lock Facing (twist but don't turn)"
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Event In This Channel"
 ]
 
 @PointClass base(ChoreoEvent) = facetransition : "Face Transition" 
 [
 	ActorName( string ) : "Transition To Actor"
-	LockBodyFacing( boolean ) : "Lock Body Facing" : 0 : "Lock Facing (twist but don't turn)"
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Face To Event In This Channel"
 ]
 
 
@@ -131,13 +123,13 @@
 @PointClass base(ChoreoEvent) = mood : "Mood Event" 
 [
 	MoodName( string ) : "Mood"
-	HoldEvent( bool ) : "Hold Event" : 0 : "When event is over, don't reset animgraph to default"
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Mood Event In This Channel"
 ]
 
 @PointClass base(ChoreoEvent) = moodbody : "Mood Body Event" 
 [
 	MoodBodyName( string ) : "Mood"
-	HoldEvent( bool ) : "Hold Event" : 0 : "When event is over, don't reset animgraph to default"
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Mood Body Event In This Channel"
 ]
 
 
@@ -209,6 +201,7 @@
 
 @PointClass base(ChoreoEvent) = ignorelookats : "Ignore External Lookats" 
 [
+	HoldEvent( bool ) : "Hold Event" : 0 : "Extend Event To Next Ignore External Lookats In This Channel"
 ]
 
 // Global events (different base class)

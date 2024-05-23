@@ -18,13 +18,15 @@
 
 	// Outputs
 	output OnFoundPlayer(string) : "Fired when this NPC establishes line of sight to its enemy, and that enemy is a player (outputs player entity)."
-	output OnHearWorld(void) : "Fired when this NPC hears a sound (other than combat or the player)."
 	output OnHearPlayer(void) : "Fired when this NPC hears the player."
 	output OnHearCombat(void) : "Fired when this NPC hears combat sounds."
 	output OnUnragdollFinished(void) : "This NPC just finished getting up after being a ragdoll."
 	output OnForcedInteractionStarted(void) : "Fired when the NPC starts a forced interaction."
 	output OnForcedInteractionAborted(void) : "Fired when the NPC aborts a forced interaction for some reason (target NPC died, couldn't be pathed to, etc)"
 	output OnForcedInteractionFinished(void) : "NPCs in actbusies can no longer perform dynamic interactions."
+	output OnConditionAdded(string) : "A new condition was set on the NPC. Only a subset of conditions are sent through this to reduce the amount of entity IO happening."
+	output OnConditionRemoved(string) : "A condition was removed from the NPC. Only a subset of conditions are sent through this to reduce the amount of entity IO happening."
+	output OnAbilityUse(string) : "An ability has been performed."
 
 	// Inputs
 	input IgnoreDangerSounds(float) : "Ignore danger sounds for the specified number of seconds."
@@ -54,10 +56,15 @@
 	input ForceReturnToAIAbility( string ) : "Return the ability on the NPC to the AI's control (i.e. AI will decide whether or not the ability is enabled or disabled)"
 	input RemoveAbility( string ) : "Removes an ability to the NPC"
 	input DisableAllAbilities( boolean ) : "Disable all abilities on the NPC. Parameter: 0 - Do not disable all abilities, 1 - Do disable all abilities"
-	input SetMovementGaitOverride(string) : "Force this NPC to use a specified movement gait. Empty string cancels the override; otherwise use 'Walk', 'Jog', 'Run', or 'Sprint'."
+	input SetMovementGaitOverride(string) : "Force this NPC to use a specified movement gait. Empty string cancels the override; otherwise use 'Slow,Medium,Fast,VeryFast' ."
 	input SetForceAim(integer) : "Force this NPC to aim or not aim. Parameter: 0 - Return to AI, 1 - Force Aiming, 2 - Force Not Aiming. Note that an NPC forced to Not Aim may be non-functional in combat."
 	input StartActBusy(string) : "Force an NPC to go into an Act Busy. The parameter is the act busy entry name found in actbusy.vdata"
 	input StopActBusy(void) : "Force an NPC to exit a performing Act Busy."
+	input SetHintGroup(string) : "Set the hint group you want the NPC to find hints for. This takes precedence over preferrred hint groups specified in vdata."
+	input AddAvailableHintGroup(string) : "Adds a hint group that the NPC to find hints for. This takes precedence over preferrred hint groups specified in vdata."
+	input RemoveAvailableHintGroup(string) : "Removes a hint group that the NPC to find hints for. This takes precedence over preferrred hint groups specified in vdata."
+	input AddDisallowedAttribute(string) : "Adds a nav attribute by name that the NPC is not allowed to navigate on."
+	input RemoveDisallowedAttribute(string) : "Removes a nav attribute by name that the NPC was not allowed to navigate on."
 ]
 
 @BaseClass base(DefaultNPC) = TalkNPC
@@ -229,6 +236,7 @@
 	]
 	furniture_physics(boolean) : "Furniture Physics" : 0 : "Create (kinematic) physics for the furniture. (By default npc_furniture is nonsolid to avoid unintentional interactions with any co-actors.)"
 	lightingorigin(target_destination) : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
+	invulnerable(boolean) : "Invulnerable" : 1 : "If enabled, this will have a ton of health and will not allow damage."
 ]
 
 @PointClass base(npc_furniture) tags( Choreo ) model() iconsprite("editor/ghost_speaker.vmat") = ghost_speaker : "A meshless model you can use as a speaker location for vcd's"
@@ -304,7 +312,6 @@
 	m_iszPlay(sequence) : "Action Animation" : "" : "The name of the main sequence (such as 'reload02') to play."
 	m_iszPostIdle(sequence) : "Post Action Idle Animation" : "" : "The name of the sequence (such as 'idle01') to play after the action animation."
 	sync_group(string) : "Synchronization Group" : : "If set, identifier used to match other scripted sequences to synchronze with (alternative to name-based sync)"
-	m_iszModifierToAddOnPlay(string) : "Modifier to add on Play" : "" : "A modifier name to add when the scripted sequence starts."
 	m_bAllowCameraMovement(boolean) : "Allow Player Camera Movement?" : 1
 	m_bLoopPreIdleSequence(boolean) : "Loop Pre Idle Animation?" : 0
 	m_bLoopActionSequence(boolean) : "Loop Action Animation?" : 0
@@ -320,14 +327,20 @@
 	m_flRadius(integer) : "Search Radius (0=everywhere)" : 0 : "Radius to search within for an NPC to use. 0 searches everywhere."
 	m_flRepeat(integer) : "Repeat Rate ms" : 0
 	m_flMoveInterpTime(float) : "Move-to interp time" : 0
-	m_fMoveTo(Choices) : "Move to Position" : 1 =
+	m_fMoveTo(Choices) : "Move to Position" : "eMoveWithGait" =
 	[
-		0 : "No"
-		1 : "Walk"
-		2 : "Run"
-		3 : "Custom movement"
-		4 : "Instantaneous"
-		5 : "No - Turn to Face"
+		"eWait"			: "No"
+		"eMoveWithGait"	: "Use Specified Gait"
+		"eTeleport"		: "Instantaneous"
+		"eWaitFacing"	: "No - Turn to Face"
+	]
+	move_to_gait(choices) : "Move to Gait" : "eInvalid" : "Gait to use if Move to Position is set to 'Use Specified Gait'." =
+	[
+		"eInvalid"	: "Code-Driven"
+		"eSlow"		: "Slow (Walk)"
+		"eMedium"	: "Medium (Jog)"
+		"eFast"		: "Fast (Run)"
+		"eVeryFast"	: "Very Fast (Sprint)"
 	]
 	m_iszNextScript(target_destination) : "Next Script" : : "The name of the script to run immediately after this script completes. The NPC will not return to AI between the two scripts."
 	m_bIgnoreGravity(boolean) : "Ignore Gravity on NPC during script" : 0 : "If this is set to 'Yes', the NPC will not be subject to gravity while playing this script."
@@ -394,18 +407,15 @@
 	"The MoveToPosition input runs steps 1 and 2, then waits while playing the pre-action idle animation until the BeginSequence input is received.<br><br>"+
 	"If the sequence has motion extraction in it, set the 'Don't Teleport NPC On End' spawnflag."
 [
-	spawnflags(Flags) = 
-	[
-		4 : "Repeatable" : 0
-		8 : "Leave Corpse (if not, fade)" : 0
-		16 : "Start on Spawn" : 0
-		32: "No Interruptions" : 0
-		64: "Override AI" : 0
-		128: "Don't Teleport NPC On End" : 0
-		512: "Priority Script" : 0
-		2048: "Hide Debug Complaints" : 0
-		4096: "Allow other NPC actors to continue after this NPC actor's death" : 0
-	]
+	repeatable(boolean) : "Is Repeatable" : 0 : "If yes, this scripted sequence can be started multiple times."
+	should_leave_corpse(boolean) : "Leave Corpse (if not, fade)" : 0 : "If no, the NPC will fade out if it's in a dying state."
+	start_on_spawn(boolean) : "Start On Spawn" : 0 : ""
+	no_interrupts(boolean) : "No Interruptions" : 0 : ""
+	can_override_npc_state(boolean) : "Override AI" : 0 : "We can start the sequence, no matter the NPC state."
+	no_teleport_at_end(boolean) : "Don't Teleport NPC On End" : 0 : "Don't fixup end position with a teleport when the SS is finished."
+	high_priority(boolean) : "Is Priority Script" : 0 : "If set, we don't allow other scripts to steal our spot in the queue."
+	hide_debug_complaints(boolean) : "Hide Debug Complaints" : 0 : ""
+	continue_on_death(boolean) : "Continue On Death" : 0 : "Allow other NPC actors to continue after this NPC actor's death"
 
 	onplayerdeath(choices) : "On player death" : 0 : "What this entity should do if the player dies." =
 	[
@@ -420,22 +430,46 @@
 		2 : "Perform a death animation"
 	]
 
-	prevent_update_yaw_on_finish(choices) : "Prevent Yaw Update on Finish" : 0 : "By default, when finishing the sequence, the NPC has its ideal yaw updated to maintain the current forward facing. This allows you to prevent that if you want to return to the facing prior to starting the sequence." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	ensure_on_navmesh_on_finish(choices) : "Ensure on Nav Mesh on Finish" : 1 : "When finishing the sequence, if the NPC uses the navmesh, ensure the NPC is on a valid location on the navmesh." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
+	prevent_update_yaw_on_finish(boolean) : "Prevent Yaw Update on Finish" : 0 : "By default, when finishing the sequence, the NPC has its ideal yaw updated to maintain the current forward facing. This allows you to prevent that if you want to return to the facing prior to starting the sequence."
+	ensure_on_navmesh_on_finish(boolean) : "Ensure on Nav Mesh on Finish" : 1 : "When finishing the sequence, if the NPC uses the navmesh, ensure the NPC is on a valid location on the navmesh."
 	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
 ]
 
-@PointClass base(Targetname) 
+@BaseClass = AIScriptedBase
+[
+	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC which will run the scripted command. If multiple NPCs are found, all of them will perform the command."
+	m_iszTarget(target_destination) : "Target" : "" : "An optional entity that marks the target of the scripted command."
+
+	priority(choices) : "Priority" : "SCP_HIGH" : "Used to decide when to start the scripted command. Low means only start when the NPC is about to idle. High means it should start as soon as possible, unless the NPC needs to perform a critical schedule (like being required to flinch in response to heavy damage)." =
+	[
+		"SCP_LOW" : "Low"
+		"SCP_HIGH" : "High"
+	]
+	resilient(boolean) : "Reacquire after break" : 1 : "If set, once the NPC has nothing important to do, it'll return to idling, even if it previously broke out of the schedule due to the Interruptability choices."
+
+	interruptability(choices) : "Interruptability" : "eGeneral" : "Sets what kind of events can interrupt an NPC that's performing this scripted command. Note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
+	[
+		"eGeneral" : "Everything that usually interrupts AI"
+		"eCombat" : "Direct Combat (Seeing enemies, taking damage, etc)"
+		"eDamageOrDeath" : "Only Taking Damage"
+		"eDeath" : "Nothing"
+	]
+	
+	start_on_spawn(boolean) : "Start on Spawn?" : 0 : "If checked, when this entity is spawned, it will start the scripted command on all eligible NPC(s)."
+	switchidletoalert(boolean) : "Switch To Alert State if Idle" : 0 : "If the commanded NPC(s) is in Idle state, switch them to Alert state."
+	shouldsetenemy(boolean) : "Set Enemy To Target" : 0 : "If the script target is an NPC or player, setting this to 'Yes' will also give commanded NPCs memory of the target, and cause them to set their enemy to it. Note that if there's another NPC that's a better enemy, commanded NPCs will flip to the better enemy on their next think."
+
+	// Inputs
+	input StartScript(void) : "Starts all target NPC(s) performing the scripted command."
+	input CancelScript(void) : "Cancels the scripted command on all target NPCs that are performing it."
+
+	// Outputs
+	output OnSucceeded(void) : "Fired when any target NPC finishes performing the scripted command."
+	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to perform the scripted command. This occurs if no target NPCs could be found, or if they were found but if they failed to be able to execute the action. Note that resilient actions will not trigger a failure ever; they will just try to restart the action again later if they fail."
+	output OnCanceled(void) : "Fired when the scripted command is aborted, either because the AI needed to switch away, or because a different scripted action was started."
+]
+
+@PointClass base(Targetname, AIScriptedBase) 
 	tags( Choreo ) 
 	color(255 0 255) 
 	iconsprite("editor/aiscripted_schedule") 
@@ -444,102 +478,28 @@
 = ai_scripted_idle :
 	"Forces an NPC to idle (optionally at a specified location), allowing you to control what will interrupt it."
 [
-	start_on_spawn(boolean) : "Start Idle on Spawn?" : "No" : "If checked, when this entity is spawned, it will start the idle on all eligible NPC(s)."
-	
-	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to idle."
-	m_iszTarget(target_destination) : "Target Destination" : "" : "An optional entity that marks the position at which the NPC should idle. If left blank, the NPC will idle where it currently is."
-
-	resilient(choices) : "Reacquire after break" : 1 : "If set, once the NPC has nothing important to do, it'll return to idling, even if it previously broke out of the schedule due to the Interruptability choices." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	switchidletoalert(choices) : "Switch To Alert State if Idle" : 0 : "If the commanded NPC(s) is in Idle state, switch them to Alert state." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	interruptability(choices) : "Interruptability" : "eGeneral" : "Sets what kind of events can interrupt an NPC that's performing this idle. Note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
-	[
-		"eGeneral" : "Everything that usually interrupts AI"
-		"eCombat" : "Direct Combat (Seeing enemies, taking damage, etc)"
-		"eDamageOrDeath" : "Only Taking Damage"
-		"eDeath" : "Nothing"
-	]
-	
-	// Inputs
-	input StartIdle(void) : "Starts all target NPC(s) idling, potentially to the target destination if it's specified and they're not on it."
-	input StopIdle(void) : "Stops all target NPCs that are performing this idle."
-
-	// Outputs
-	output OnSucceeded(void) : "Fired when any target NPC finishes idling at the destination."
-	output OnFailedToPerform(void) : "Fired when any target NPC(s) fails to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
+	e_action_desired(string) : "Handshake Action to Perform" : : "The e_action_desired animgraph parameter will be set to this value during this idle. If it is a looping animation, the idle will not exit until explicitly canceled or interrupted by game code."
 ]
 
-@PointClass base(Targetname) tags( Choreo ) selected_line( 255 255 255, targetname, m_iszTarget ) selected_line( 255 255 255, targetname, m_iszNPC ) color(255 0 255)  iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
+@PointClass base(Targetname, AIScriptedBase) tags( Choreo ) selected_line( 255 255 255, targetname, m_iszTarget ) selected_line( 255 255 255, targetname, m_iszNPC ) color(255 0 255)  iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
 	"Forces an NPC to move to a specified destination entity."
 [
-	start_on_spawn(boolean) : "Start MoveTo on Spawn?" : "No" : "If checked, when this entity is spawned, it will start all eligible NPC(s) moving to the target destination."
-	
-	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to move to the Target Destination."
-	m_iszTarget(target_destination) : "Target Destination" : "" : "The entity that marks the destination of this move-to."
-
-	resilient(choices) : "Reacquire after break" : 1 : "If set, if the NPC doesn't complete the movement, it'll retry, even if it previously broke out of the schedule due to the Interruptability choices. Note that by default, the Reacquisition Priority is Low, which means they'll only retry when they're idling. Set that to High if you want them to retry in combat." =
+	e_action_desired(string) : "Handshake Action to Perform" : : "The e_action_desired animgraph parameter will be set to this value during the move. The action will not complete until both the movement and the action are finished."
+	forced_gait(choices) : "Force Gait" : "eInvalid" : "Force this NPC to use a specific movement gait. Will return to the AI's default value afterwards." =
 	[
-		0 : "No"
-		1 : "Yes"
+		"eInvalid"	: "Default (No Override)"
+		"eSlow"		: "Forced Slow (Walk)"
+		"eMedium"	: "Forced Medium (Jog)"
+		"eFast"		: "Forced Fast (Run)"
+		"eVeryFast"	: "Forced Very Fast (Sprint)"
 	]
-
-	resumepriority(choices) : "Reacquisition Priority" : 0 : "Used to decide when to retry the moveto after it failed. Low means only retry when the NPC is about to idle. High means it should retry any time the NPC selects a schedule, unless the NPC needs to perform a critical schedule (like being required to flinch in response to heavy damage)." =
-	[
-		0 : "Low"
-		1 : "High"
-	]
-
-	shouldsetenemy(choices) : "Set Enemy To Target" : 0 : "If the target destination is an NPC or player, setting this to 'Yes' will also give commanded NPCs memory of the target, and cause them to set their enemy to it. Note that if there's another NPC that's a better enemy, commanded NPCs will flip to the better enemy on their next think." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	switchidletoalert(choices) : "Switch To Alert State if Idle" : 0 : "If the commanded NPC(s) is in Idle state, switch them to Alert state." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	interruptability(choices) : "Interruptability" : "eGeneral" : "Sets what kind of events can interrupt an NPC that's performing this move to. Note that this only describes events that interrupt the moveto while it's working properly, not whether or not movement itself can fail. So even if this is set to 'Nothing', a moveto can still fail due to core movement failure (path failing / route blocked). Also, note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
-	[
-		"eGeneral" : "Everything that usually interrupts AI"
-		"eCombat" : "Direct Combat (Seeing enemies, taking damage, etc)"
-		"eDamageOrDeath" : "Only Taking Damage"
-		"eDeath" : "Nothing"
-	]
-
 	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
-
-	// Inputs
-	input StartMoveTo(void) : "Starts all target NPC(s) moving to the target destination."
-	input StopMoveTo(void) : "Stops all target NPCs that are performing this move to."
-	input UpdateDestination(string) : "Stop the current move and start a new one pointing to this new target."
-
-	// Outputs
-	output OnSucceeded(void) : "Fired when any target NPC finishes moving to the destination."
-	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
-	output OnCanceled(void) : "Fired when the target NPC was asked to stop."
 ]
 
-
-@PointClass base(Targetname) tags( Choreo ) color(255 0 255) iconsprite("editor/aiscripted_schedule") = ai_scripted_abilityusage :
+@PointClass base(Targetname, AIScriptedBase) tags( Choreo ) color(255 0 255) iconsprite("editor/aiscripted_schedule") = ai_scripted_abilityusage :
 	"Forces an NPC to perform an ability at a specified target."
 [
-	start_on_spawn(boolean) : "Use Ability on Spawn?" : "No" : "If checked, when this entity is spawned, all eligible NPC(s) will use the ability."
-	
-	m_iszNPC(target_destination) : "Target NPC(s)" : "" : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to perform the ability at the Ability Target."
 	m_iszAbilityName(npc_ability_name) : "Ability Subclass to Perform" : "" : "Subclass of the ability that target NPC(s) should perform against the Ability Target."
-	m_iszTarget(target_destination) : "Ability Target" : "" : "The entity that marks the target of the ability."
 	m_bAddIfMissing(boolean) : "Add Ability if Missing?" : "No" : "If yes, we'll add the ability to the NPC when trying to execute it. "
 
 	m_nAbilityTargetBodyLoc(choices) : "Target Body Location" : 3 : "The body location on the Ability Target entity that the ability should target." =
@@ -558,34 +518,7 @@
 		3 : "Last Seen Position"
 	]
 
-	resilient(choices) : "Force Completion" : 1 : "If set, if the NPC was unable to perform the ability when first asked, it'll attempt to run a schedule to resolve whatever issue prevented it. Once that's completed, it'll try again to perform the ability." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	shouldsetenemy(choices) : "Set Enemy To Target" : 0 : "If the target destination is an NPC or player, setting this to 'Yes' will also give commanded NPCs memory of the target, and cause them to set their enemy to it. Note that if there's another NPC that's a better enemy, commanded NPCs will flip to the better enemy on their next think." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	switchidletoalert(choices) : "Switch To Alert State if Idle" : 0 : "If the Target NPC(s) is in Idle state, switch them to Alert state." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
+	move_while_using_target(target_destination) : "Move While Using Target" : "" : "An optional entity that marks where to move to while using the ability."
 
 	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
-
-	m_flPostScriptAbilityCooldown(float) : "Post Script Ability Cooldown" : "0.0" : "Amount of time after this script to cooldown all abilities on this NPC"
-
-	// Inputs
-	input PerformAbility(void) : "Tells all target NPC(s) to perform the ability."
-	input AbortAbilityPerformance(void) : "Tells all target NPC(s) to abort performing the ability, if they're in the process of doing it."
-
-	// Outputs
-	output OnSucceeded(void) : "Fired when any target NPC finishes performing the ability."
-	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to perform the ability. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the ability."
-	output OnCanceled(void) : "Fired when the ability is aborted."
 ]

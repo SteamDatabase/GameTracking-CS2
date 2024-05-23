@@ -8,7 +8,7 @@ var LoadingScreen;
     const SLIDE_DURATION = 4;
     let m_slideShowJob = null;
     let m_mapName = null;
-    let m_numImageProcessed = 0;
+    let m_numImageLoading = 0;
     function _Init() {
         $('#ProgressBar').value = 0;
         $('#LoadingScreenMapName').text = "";
@@ -20,7 +20,7 @@ var LoadingScreen;
         $('#LoadingScreenIcon').visible = false;
         const elSlideShow = $.GetContextPanel().FindChildTraverse('LoadingScreenSlideShow');
         elSlideShow.RemoveAndDeleteChildren();
-        m_numImageProcessed = 0;
+        m_numImageLoading = 0;
         if (m_slideShowJob) {
             $.CancelScheduled(m_slideShowJob);
             m_slideShowJob = null;
@@ -28,11 +28,14 @@ var LoadingScreen;
         m_mapName = null;
     }
     function _CreateSlide(n) {
+        const suffix = n == 0 ? '' : '_' + n;
+        const imagePath = 'file://{images}/map_icons/screenshots/1080p/' + m_mapName + suffix + '.png';
+        if (!$.BImageFileExists(imagePath)) {
+            return false;
+        }
         const elSlideShow = $.GetContextPanel().FindChildTraverse('LoadingScreenSlideShow');
         const elSlide = $.CreatePanel('Image', elSlideShow, 'slide_' + n);
         elSlide.BLoadLayoutSnippet('snippet-loadingscreen-slide');
-        const suffix = n == 0 ? '' : '_' + n;
-        const imagePath = 'file://{images}/map_icons/screenshots/1080p/' + m_mapName + suffix + '.png';
         elSlide.SetImage(imagePath);
         elSlide.Data().imagePath = imagePath;
         elSlide.SwitchClass('viz', 'hide');
@@ -41,17 +44,19 @@ var LoadingScreen;
         if (title == titleToken)
             title = '';
         elSlide.SetDialogVariable('screenshot-title', title);
+        m_numImageLoading++;
         $.RegisterEventHandler('ImageLoaded', elSlide, () => {
-            m_numImageProcessed++;
-            if (m_numImageProcessed == MAX_SLIDES)
+            m_numImageLoading--;
+            if (m_numImageLoading <= 0)
                 _StartSlideShow();
         });
         $.RegisterEventHandler('ImageFailedLoad', elSlide, () => {
             elSlide.DeleteAsync(0.0);
-            m_numImageProcessed++;
-            if (m_numImageProcessed == MAX_SLIDES)
+            m_numImageLoading--;
+            if (m_numImageLoading <= 0)
                 _StartSlideShow();
         });
+        return true;
     }
     function _InitSlideShow() {
         if (m_slideShowJob)
