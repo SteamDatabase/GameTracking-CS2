@@ -6,6 +6,15 @@ var HudDemoController;
         return true;
     }
     HudDemoController.EatClick = EatClick;
+    let ObserverMode;
+    (function (ObserverMode) {
+        ObserverMode[ObserverMode["OBS_MODE_NONE"] = 0] = "OBS_MODE_NONE";
+        ObserverMode[ObserverMode["OBS_MODE_FIXED"] = 1] = "OBS_MODE_FIXED";
+        ObserverMode[ObserverMode["OBS_MODE_IN_EYE"] = 2] = "OBS_MODE_IN_EYE";
+        ObserverMode[ObserverMode["OBS_MODE_CHASE"] = 3] = "OBS_MODE_CHASE";
+        ObserverMode[ObserverMode["OBS_MODE_ROAMING"] = 4] = "OBS_MODE_ROAMING";
+        ObserverMode[ObserverMode["OBS_MODE_DIRECTED"] = 5] = "OBS_MODE_DIRECTED";
+    })(ObserverMode || (ObserverMode = {}));
     const timeStepSeconds = 15;
     const cp = $.GetContextPanel();
     cp.SetDialogVariableInt("timestep_value", timeStepSeconds);
@@ -39,6 +48,10 @@ var HudDemoController;
         if (!cp.IsPlayingDemo())
             return;
         cp.SetHasClass("mouseActive", bEnabled);
+        const sMouseMode = bEnabled ?
+            $.Localize('#CSGO_Demo_Enable_Mouse_Camera', cp) :
+            $.Localize('#CSGO_Demo_Enable_Mouse_Cursor', cp);
+        cp.SetDialogVariable('mouse-mode', sMouseMode);
     });
     let lastState = null;
     let bRoundsMarked = false;
@@ -94,6 +107,8 @@ var HudDemoController;
                 $.Localize('#CSGO_Demo_End_Playback_Overwatch') :
                 $.Localize('#CSGO_Demo_End_Playback');
             cp.SetDialogVariable('end-playback', sEndPlayback);
+            const sMouseMode = $.Localize('#CSGO_Demo_Enable_Mouse_Camera', cp);
+            cp.SetDialogVariable('mouse-mode', sMouseMode);
         }
         lastState = state;
         const pMarkers = $("#RoundMarkers");
@@ -152,13 +167,14 @@ var HudDemoController;
             CreateHighlightIntervals();
             nSpectatingPlayerId = state.nSpectatingPlayerId;
             $("#HighlightsButton")?.SetHasClass("hide", !ShouldShowHighlightsButton());
-            cp.SetHasClass("flyCamActive", nSpectatingPlayerId == -1);
         }
         if ((state.bIsPlayingHighlights != bHighlightsMode) || bStateChanged) {
             OnHighlightsModeChanged(state.bIsPlayingHighlights);
             bHighlightsMode = state.bIsPlayingHighlights;
         }
         cp.SetHasClass("paused", state.bIsPaused);
+        cp.SetHasClass("mouseCamAllowed", IsMouseCameraAllowed());
+        cp.SetHasClass("flyCamActive", state.nObserverMode == ObserverMode.OBS_MODE_ROAMING);
         slider.min = 0;
         slider.max = state.nTotalTicks;
         if (!slider.mousedown) {
@@ -318,5 +334,9 @@ var HudDemoController;
             }
         }
         return rounds.length;
+    }
+    function IsMouseCameraAllowed() {
+        return lastState?.nObserverMode == ObserverMode.OBS_MODE_CHASE ||
+            lastState?.nObserverMode == ObserverMode.OBS_MODE_ROAMING;
     }
 })(HudDemoController || (HudDemoController = {}));
