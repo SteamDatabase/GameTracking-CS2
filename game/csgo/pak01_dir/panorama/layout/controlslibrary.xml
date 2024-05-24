@@ -1,4 +1,4 @@
-<!-- xml reconstructed by Source 2 Viewer 7.0.0.0 - https://valveresourceformat.github.io -->
+<!-- xml reconstructed by Source 2 Viewer 9.2.0.0 - https://valveresourceformat.github.io -->
 <root>
 	<styles>
 		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
@@ -101,6 +101,9 @@
 				</RadioButton>
 				<RadioButton id="JsControlParticleMVP" group="nav" onactivate="ControlsLibNavigateToTab(&apos;ControlsLibParticlesMVP&apos;, &apos;JsControlBugs&apos;); ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesMVP&apos;));">
 					<Label text="Particles MVP Panel" />
+				</RadioButton>
+				<RadioButton id="JsParticleMVPRecord" group="nav" onactivate="ControlsLibNavigateToTab(&apos;ControlsLibParticlesRecordMVP&apos;, &apos;JsControlBugs&apos;); ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesRecordMVP&apos;));">
+					<Label text="Particles MVP recorder" />
 				</RadioButton>
 			</Panel>
 		</Panel>
@@ -277,6 +280,9 @@
 						</Button>
 						<Button class="PopupButton" onactivate="OnPopupCustomLayoutOperationHub()">
 							<Label text="Operation Hub" />
+						</Button>
+						<Button class="PopupButton" onactivate="OnPopupCustomLayoutCaseConfirm()">
+							<Label text="Case Confirm" />
 						</Button>
 					</Panel>
 					<Panel class="top-bottom-flow FillParentFlow">
@@ -682,7 +688,7 @@
 			<Panel id="ControlsLibVanityPanel" class="ControlsLib" onload="InitScenePanel()">
 				<Panel class="left-right-flow">
 					<Panel class="" acceptsinput="true">
-						<MapPlayerPreviewPanel id="MapForVanity" class="ItemPreviewPanelForBuildingInventoryImages" camera="cam_default" require-composition-layer="true" playermodel="characters/models/ctm_sas/ctm_sas.vmdl" style="width:1400px;" playername="vanity_character" parallax_degrees="5.0" parallax_offset="50.0" onload="var vanityPanel = $( &apos;#MapForVanity&apos; ); vanityPanel.EquipPlayerWithItem(&apos;17293822569102704641&apos;); " animgraphcharactermode="main-menu" player="true" mouse_rotate="true" hittest="true" />
+						<MapPlayerPreviewPanel id="MapForVanity" class="ItemPreviewPanelForBuildingInventoryImages" map="test_maps/test_vanity" camera="cam_default" require-composition-layer="true" playermodel="characters/models/ctm_sas/ctm_sas.vmdl" style="width:1400px;" playername="vanity_character" parallax_degrees="5.0" parallax_offset="50.0" onload="var vanityPanel = $( &apos;#MapForVanity&apos; ); vanityPanel.EquipPlayerWithItem(&apos;17293822569102704641&apos;); " animgraphcharactermode="main-menu" player="true" mouse_rotate="true" hittest="true" />
 						<Panel id="VanityControls" hittest="true">
 							<Button id="Start Particles" class="IconButton" style=" position: 100px 0px 0px;" onactivate="var vanityPanel = $( &apos;#MapForVanity&apos; );  vanityPanel.SetActiveCharacter(1); vanityPanel.SetPlayerModel(&apos;characters/models/ctm_fbi/ctm_fbi.vmdl&apos;);  vanityPanel.EquipPlayerWithItem(&apos;17293822569102704699&apos;); vanityPanel.SetActiveCharacter(0);" onmouseover="var vanityPanel = $( &apos;#MapForVanity&apos; );    vanityPanel.StartParticleSystem(&apos;dumpster_fire&apos;);vanityPanel.SetActiveCharacter(0); vanityPanel.RemoveCharacterModel(); vanityPanel.FireEntityInput(&apos;cam_default&apos;, &apos;ChangeFOV&apos;, &apos;70 2&apos;);" onmouseout="var vanityPanel = $( &apos;#MapForVanity&apos; );    vanityPanel.StopParticleSystem(&apos;dumpster_fire&apos;); vanityPanel.SetActiveCharacter(0); vanityPanel.SetPlayerModel(&apos;characters/models/ctm_sas/ctm_sas.vmdl&apos;); vanityPanel.FireEntityInput(&apos;cam_default&apos;, &apos;ChangeFOV&apos;, &apos;55 0.25&apos;);">
 								<Image textureheight="64" texturewidth="-1" src="s2r://panorama/images/icons/ui/player.vsvg" />
@@ -702,6 +708,11 @@
 						<Button id="" class="FlatButton" onactivate="var vanityPanel = $( &apos;#MapForVanity&apos; ); vanityPanel.TransitionToCamera(&apos;cam_path_loop&apos;, 1.0);">
 							<Label id="" text="Camera - path (loop)" />
 						</Button>
+						<Panel class="left-right-flow">
+							<Label text="Playback speed: " />
+							<Slider id="PlaybackSpeedSlider" class="HorizontalSlider" direction="horizontal" style="width:150px;" onvaluechanged="SceneCameraPlaybackSpeedSliderChanged();" />
+							<TextEntry id="PlaybackSpeedText" class="FlatButton" text="1.0" ontextentrysubmit="SceneCameraPlaybackSpeedTextChanged();" />
+						</Panel>
 					</Panel>
 				</Panel>
 			</Panel>
@@ -1356,33 +1367,76 @@
 			<Panel id="ControlsLibParticlesMVP" class="ControlsLib top-bottom-flow">
 				<Panel class="left-right-flow FillParentFlow">
 					<Button id="StartParticles" class="FlatButton" onactivate="ParticleControls.StartAllChildrenParticles($(&apos;#ControlsLibParticlesMVP&apos;));">
-						<Label text="Start Particles" />
+						<Label style="font-size: 10px;" text="Start Particles" />
 					</Button>
 					<Button id="StopParticles" class="FlatButton" onactivate="ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesMVP&apos;));">
-						<Label text="Stop Particles" />
+						<Label style="font-size: 10px;" text="Stop Particles" />
 					</Button>
-					<Button id="ShowZooWinPanel" class="FlatButton" onactivate="$(&apos;#MVPParticleEffectPanel&apos;).AddClass(&apos;UIMvpEffects_additive&apos;);ShowHideWinPanel( true );ParticleControls.SACVpcfParticleSystem(&apos;#MVPParticleEffectPanel&apos;,&apos;particles/ui/hud/ui_mvp_winner.vpcf&apos;);">
-						<Label text="Show MVP opt1" />
+					<Button id="ShowZooWinPanel opt2" class="FlatButton" onactivate="ShowHideWinPanel( true );$.DispatchEvent( &apos;HudWinPanel_MVP&apos;, $(&apos;#ZooWinPanel&apos;), MyPersonaAPI.GetXuid(), 1, 2 );">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_kills" />
 					</Button>
-					<Button id="ShowZooWinPanel opt2" class="FlatButton" onactivate="$(&apos;#MVPParticleEffectPanel&apos;).AddClass(&apos;UIMvpEffects_additive&apos;);ShowHideWinPanel( true );ParticleControls.SACVpcfParticleSystem(&apos;#MVPParticleEffectPanel&apos;,&apos;particles/ui/hud/ui_mvp_winner_alt_a.vpcf&apos; );">
-						<Label text="Show MVP opt2" />
+					<Button id="ShowZooWinPanel opt3" class="FlatButton" onactivate="ShowHideWinPanel( true );$.DispatchEvent( &apos;HudWinPanel_MVP&apos;, $(&apos;#ZooWinPanel&apos;), MyPersonaAPI.GetXuid(), 2, 2 );">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_bombplant" />
 					</Button>
-					<Button id="ShowZooWinPanel opt3" class="FlatButton" onactivate="$(&apos;#MVPParticleEffectPanel&apos;).AddClass(&apos;UIMvpEffects_additive&apos;);ShowHideWinPanel( true );ParticleControls.SACVpcfParticleSystem(&apos;#MVPParticleEffectPanel&apos;,&apos;particles/ui/hud/ui_mvp_winner_alt_b.vpcf&apos; );">
-						<Label text="Show MVP opt3" />
+					<Button id="ShowZooWinPanel opt5" class="FlatButton" onactivate="ShowHideWinPanel( true );$.DispatchEvent( &apos;HudWinPanel_MVP&apos;, $(&apos;#ZooWinPanel&apos;), MyPersonaAPI.GetXuid(), 3, 2 );">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_bombdefuse" />
 					</Button>
-					<Button id="ShowZooWinPanel opt4" class="FlatButton" onactivate="$(&apos;#MVPParticleEffectPanel&apos;).RemoveClass(&apos;UIMvpEffects_additive&apos;);ShowHideWinPanel( true );ParticleControls.SACVpcfParticleSystem(&apos;#MVPParticleEffectPanel&apos;,&apos;particles/ui/hud/ui_mvp_winner_alt_c.vpcf&apos; );">
-						<Label text="Show MVP opt4" />
+					<Button id="ShowZooWinPanel opt4" class="FlatButton" onactivate="ShowHideWinPanel( false );ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesMVP&apos;));ShowHideWinPanel( true );$.DispatchEvent( &apos;HudWinPanel_MVP&apos;, $(&apos;#ZooWinPanel&apos;), MyPersonaAPI.GetXuid(), 9, 2 );">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_ace" />
+					</Button>
+					<Button id="ShowZooWinPanel opt3a" class="FlatButton Negative" onactivate="ShowHideWinPanel( false );ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesMVP&apos;));ShowHideWinPanel( true );$.DispatchEvent( &apos;HudWinPanel_MVP&apos;, $(&apos;#ZooWinPanel&apos;), MyPersonaAPI.GetXuid(), 10, 2 );">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_inferno" />
+					</Button>
+					<Button id="ShowZooWinPanel ALT" class="FlatButton Negative" onmouseover="ShowHideWinPanel( false );ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesMVP&apos;));" onactivate="ShowHideWinPanel( true );$.DispatchEvent( &apos;HudWinPanel_MVP&apos;, $(&apos;#ZooWinPanel&apos;), MyPersonaAPI.GetXuid(), 11, 2 );">
+						<Label style="font-size: 10px;" text="ALT" />
 					</Button>
 					<Button id="HideZooWinPanel" class="FlatButton" onactivate="ShowHideWinPanel( false );ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesMVP&apos;));">
-						<Label text="Hide MVP" />
+						<Label style="font-size: 10px;" text="Hide MVP" />
 					</Button>
 				</Panel>
 				<Panel class="no-flow">
 					<Image src="s2r://panorama/images/map_icons/screenshots/1080p/de_dust2_png.vtex" />
 					<Panel class="UIMVP">
 						<Panel class="UIMvpMockup">
-							<ParticleScenePanel id="MVPParticleEffectPanel" class="UIMvpEffectsContainer" style="" hittest="false" startActive="true" particleName="particles/ui/hud/ui_mvp_winner.vpcf" cameraOrigin="0 600 11" lookAt="0 0 11" fov="72" />
-							<Frame id="ZooWinPanel" class="text-only" src="s2r://panorama/layout/hud/hudwinpanel.vxml_c" />
+							<CSGOHudWinPanel id="ZooWinPanel" hittest="false" hittestchildren="false" />
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+			<Panel id="ControlsLibParticlesRecordMVP" class="ControlsLib top-bottom-flow">
+				<Panel class="left-right-flow FillParentFlow">
+					<Button id="StartParticles" class="FlatButton" onactivate="ParticleControls.StartAllChildrenParticles($(&apos;#ControlsLibParticlesRecordMVP&apos;));">
+						<Label style="font-size: 10px;" text="Start Particles" />
+					</Button>
+					<Button id="StopParticles" class="FlatButton" onactivate="ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesRecordMVP&apos;));">
+						<Label style="font-size: 10px;" text="Stop Particles" />
+					</Button>
+					<Button id="ShowZooWinPanel opt2" class="FlatButton" onactivate="JSPanelSetParticlesName( &apos;MVP__EffectsContainerRecorder&apos;, &apos;particles/ui/hud/ui_mvp_winner_multikill.vpcf&apos; );JSPanelSetControlPointParticles ( &apos;MVP__EffectsContainerRecorder&apos;,20 , 4, 0 , 0);">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_kills" />
+					</Button>
+					<Button id="ShowZooWinPanel opt3" class="FlatButton" onactivate="JSPanelSetParticlesName( &apos;MVP__EffectsContainerRecorder&apos;, &apos;particles/ui/hud/ui_mvp_winner_bombplant_panel.vpcf&apos; );JSPanelSetControlPointParticles ( &apos;MVP__EffectsContainerRecorder&apos;,20 , 5, 0 , 0);">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_bombplant" />
+					</Button>
+					<Button id="ShowZooWinPanel opt5" class="FlatButton" onactivate="JSPanelSetParticlesName( &apos;MVP__EffectsContainerRecorder&apos;, &apos;particles/ui/hud/ui_mvp_winner_bombdefuse_panel.vpcf&apos; );JSPanelSetControlPointParticles ( &apos;MVP__EffectsContainerRecorder&apos;,20 , 5, 0 , 0)">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_bombdefuse" />
+					</Button>
+					<Button id="ShowZooWinPanel opt4" class="FlatButton" onactivate="JSPanelSetParticlesName( &apos;MVP__EffectsContainerRecorder&apos;, &apos;particles/ui/hud/ui_mvp_winner_ace_panel.vpcf&apos; );JSPanelSetControlPointParticles ( &apos;MVP__EffectsContainerRecorder&apos;,20 , 5, 0 , 0);">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_ace" />
+					</Button>
+					<Button id="ShowZooWinPanel opt3a" class="FlatButton Negative" onactivate="JSPanelSetParticlesName( &apos;MVP__EffectsContainerRecorder&apos;, &apos;particles/ui/hud/ui_mvp_winner_inferno.vpcf&apos; );JSPanelSetControlPointParticles ( &apos;MVP__EffectsContainerRecorder&apos;,20 , 5, 0 , 0)">
+						<Label style="font-size: 10px;" text="winpanel_mvp_award_inferno" />
+					</Button>
+					<Button id="ShowZooWinPanel ALT" class="FlatButton Negative" onactivate="JSPanelSetParticlesName( &apos;MVP__EffectsContainerRecorder&apos;, &apos;particles/ui/hud/ui_mvp_winner_blast.vpcf&apos; );JSPanelSetControlPointParticles ( &apos;MVP__EffectsContainerRecorder&apos;,20 , 5, 0 , 0)">
+						<Label style="font-size: 10px;" text="ALT" />
+					</Button>
+					<Button id="HideZooWinPanel" class="FlatButton" onactivate="ShowHideWinPanel( false );ParticleControls.StopAllChildrenParticlesImmediately($(&apos;#ControlsLibParticlesRecordMVP&apos;));">
+						<Label style="font-size: 10px;" text="Hide MVP" />
+					</Button>
+				</Panel>
+				<Panel class="no-flow">
+					<Panel class="UIMVP">
+						<Panel class="UIMvpMockup">
+							<ParticleScenePanel id="TestParticlePanel" class="MVP__EffectsContainerRecorder" style="width: 100%;" startActive="true" particleName="particles/dev/empty.vpcf" cameraOrigin="0 705 0" lookAt="0 0 0" fov="74" />
 						</Panel>
 					</Panel>
 				</Panel>
