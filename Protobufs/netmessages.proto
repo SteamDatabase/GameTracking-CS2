@@ -51,6 +51,7 @@ enum SVC_Messages {
 	svc_HltvReplay = 73;
 	svc_Broadcast_Command = 74;
 	svc_HltvFixupOperatorStatus = 75;
+	svc_UserCmds = 76;
 }
 
 enum VoiceDataFormat_t {
@@ -608,4 +609,15 @@ message CCLCMsg_HltvFixupOperatorTick {
 message CSVCMsg_HltvFixupOperatorStatus {
 	optional uint32 mode = 1;
 	optional string override_operator_name = 2;
+}
+
+message CMsgServerUserCmd {
+	optional bytes data = 1;
+	optional int32 cmd_number = 2;
+	optional int32 player_slot = 3 [default = -1];
+	optional int32 server_tick_executed = 4;
+}
+
+message CSVCMsg_UserCommands {
+	repeated .CMsgServerUserCmd commands = 1;
 }

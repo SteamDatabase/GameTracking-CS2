@@ -1096,10 +1096,15 @@ var MainMenu;
         const nIsVacBanned = MyPersonaAPI.IsVacBanned();
         if (nIsVacBanned != 0) {
             notification.color_class = "NotificationRed";
-            if (nIsVacBanned == 1) {
+            if ((nIsVacBanned & 1) == 1) {
                 notification.title = $.Localize("#SFUI_MainMenu_Vac_Title");
                 notification.tooltip = $.Localize("#SFUI_MainMenu_Vac_Info");
                 notification.link = "https://help.steampowered.com/faqs/view/647C-5CC1-7EA9-3C29";
+            }
+            else if ((nIsVacBanned & 4) == 4) {
+                notification.title = $.Localize("#SFUI_MainMenu_AccountLocked_Title");
+                notification.tooltip = $.Localize("#SFUI_MainMenu_AccountLocked_Info");
+                notification.link = "https://help.steampowered.com/en/faqs/view/4F62-35F9-F395-5C23";
             }
             else {
                 notification.title = $.Localize("#SFUI_MainMenu_GameBan_Title");
@@ -1144,7 +1149,7 @@ var MainMenu;
     function _UpdateNotificationBar() {
         const notification = _GetNotificationBarData();
         for (let strColorClass of _m_NotificationBarColorClasses) {
-            const bVisibleColor = notification && notification.color_class;
+            const bVisibleColor = notification && notification.color_class && (notification.color_class == strColorClass);
             _m_elNotificationsContainer.SetHasClass(strColorClass, !!bVisibleColor);
         }
         if (notification !== null) {

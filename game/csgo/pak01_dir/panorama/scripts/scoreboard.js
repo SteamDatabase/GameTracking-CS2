@@ -1156,7 +1156,7 @@ var Scoreboard;
         if (MockAdapter.IsXuidValid(oPlayer.m_xuid)) {
             oPlayer.m_elPlayer.SetPanelEvent('onactivate', () => {
                 _m_arrSortingPausedRefGetCounter++;
-                let elPlayerCardContextMenu = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + oPlayer.m_xuid, _OnPlayerCardDismiss);
+                let elPlayerCardContextMenu = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEventSetFocus('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + oPlayer.m_xuid, _OnPlayerCardDismiss, false);
                 elPlayerCardContextMenu.AddClass('ContextMenu_NoArrow');
                 if (!_m_hDenyInputToGame) {
                     _m_hDenyInputToGame = UiToolkitAPI.AddDenyInputFlagsToGame(elPlayerCardContextMenu, 'ScoreboardPlayercard', 'CaptureMouse');

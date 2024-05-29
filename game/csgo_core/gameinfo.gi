@@ -512,5 +512,7 @@
 	ConVars
 	{
 		"cl_usesocketsforloopback" "1"
+        "cl_joystick_enabled" "0"
+        "panorama_joystick_enabled" "0"
 	}
 }

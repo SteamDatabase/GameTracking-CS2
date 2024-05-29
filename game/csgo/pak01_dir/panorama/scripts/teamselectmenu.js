@@ -198,7 +198,7 @@ var TeamSelectMenu;
         }
         elTeammate.SetHasClass('bot', MockAdapter.IsFakePlayer(xuid));
         let elName = elTeammate.FindChildInLayoutFile("TeamSelectTeammateName");
-        elName.text = MockAdapter.GetPlayerName(xuid);
+        elName.SetDialogVariableInt('player_slot', GameStateAPI.GetPlayerSlot(xuid));
         elTeammate.MoveChildAfter(elName, elAvatar);
         _UpdateBotPlayerCount(m_botCounts[nTeamIdx], m_playerCounts[nTeamIdx], nTeamIdx == 0 ? "TERRORIST" : "CT");
     }
