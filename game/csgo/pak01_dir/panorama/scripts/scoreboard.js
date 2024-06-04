@@ -2065,10 +2065,10 @@ var Scoreboard;
     if (!$.GetContextPanel().Data().bEventsRegistered) {
         $.RegisterEventHandler('OnOpenScoreboard', $.GetContextPanel(), _OpenScoreboard);
         $.RegisterEventHandler('OnCloseScoreboard', $.GetContextPanel(), _CloseScoreboard);
+        $.RegisterEventHandler('Scoreboard_UpdateJob', $.GetContextPanel(), _UpdateJob);
+        $.RegisterEventHandler('Scoreboard_ResetAndInit', $.GetContextPanel(), _Initialize);
+        $.RegisterEventHandler('Scoreboard_UpdateEverything', $.GetContextPanel(), _UpdateEverything);
         $.RegisterForUnhandledEvent('GameState_OnLevelLoad', _Initialize);
-        $.RegisterForUnhandledEvent('Scoreboard_ResetAndInit', _Initialize);
-        $.RegisterForUnhandledEvent('Scoreboard_UpdateEverything', _UpdateEverything);
-        $.RegisterForUnhandledEvent('Scoreboard_UpdateJob', _UpdateJob);
         $.RegisterForUnhandledEvent('Scoreboard_CycleStats', _CycleStats);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterIsCameraman', _ToggleSetCasterIsCameraman);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterIsHeard', _ToggleSetCasterIsHeard);
