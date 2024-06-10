@@ -116,10 +116,16 @@ var SettingsMenu;
         GameInterfaceAPI.ConsoleCommand("host_writeconfig");
         InventoryAPI.StopItemPreviewMusic();
     }
-    function _NavigateToSetting(tab, id) {
+    function _NavigateToSetting(tab, submenuRadioId, id) {
         if (!IsTabId(tab))
             return;
         $.DispatchEvent("Activated", $("#" + TabInfo[tab].radioid), "mouse");
+        if (submenuRadioId != '') {
+            let elSubMenuRadio = $.GetContextPanel().GetParent().FindChildTraverse(submenuRadioId);
+            if (elSubMenuRadio) {
+                $.DispatchEvent("Activated", elSubMenuRadio, "mouse");
+            }
+        }
         SettingsMenuShared.ScrollToId(id);
     }
     function _NavigateToSettingPanel(tab, submenuRadioId, p) {

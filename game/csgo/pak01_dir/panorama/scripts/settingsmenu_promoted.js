@@ -19,7 +19,7 @@ var SettingsMenuPromoted;
             this.elemID = "PromotedSetting__" + setting.id;
         }
         view() {
-            $.DispatchEvent("SettingsMenu_NavigateToSetting", this.setting.section, this.setting.id);
+            $.DispatchEvent("SettingsMenu_NavigateToSetting", this.setting.section, this.setting.subsection ?? '', this.setting.id);
         }
         createPanel() {
             let elNewSetting = $.CreatePanel("Panel", this.elRoot, this.elemID);

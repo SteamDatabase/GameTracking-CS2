@@ -1,6 +1,5 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
-/// <reference path="mock_adapter.ts" />
 /// <reference path="digitpanel.ts" />
 /// <reference path="common/sessionutil.ts" />
 var RatingEmblem;

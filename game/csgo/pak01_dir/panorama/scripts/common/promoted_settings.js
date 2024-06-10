@@ -170,7 +170,16 @@ var g_PromotedSettings = [
         section: "GameSettings",
         start_date: new Date('April 22, 2024'),
         end_date: new Date('June 1, 2024')
-    }
+    },
+    {
+        id: "DynamicShadowsContainer",
+        loc_name: "#SFUI_Settings_DynamicShadows",
+        loc_desc: "#SFUI_Settings_DynamicShadows_Info",
+        section: "VideoSettings",
+        subsection: "AdvancedVideoSettingsRadio",
+        start_date: new Date('June 1, 2024'),
+        end_date: new Date('July 1, 2024')
+    },
 ]
     .reverse();
 var PromotedSettingsUtil;
