@@ -206,7 +206,6 @@
 
 		"sv_long_frame_ms" "15"
 		"cq_buffer_bloat_msecs_max" "64"
-		"cq_buffer_bloat_msecs" "64"
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 
