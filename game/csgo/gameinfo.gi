@@ -92,7 +92,11 @@
 		// Performance
 		"sv_parallel_checktransmit"		"2"
 		"fps_max"		"400"
-		"fps_max_ui"	"120"
+		"fps_max_ui"
+		{
+			"default"	"200"
+			"version"	"2"
+		}
 		"r_add_views_in_pre_output"		"1"
 
 		// Nav fixups

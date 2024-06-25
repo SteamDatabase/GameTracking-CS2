@@ -1,6 +1,7 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
 /// <reference path="common/iteminfo.ts" />
+/// <reference path="hud/hudwinpanel_background_map.ts" />
 var controlsLibActiveTab = null;
 function ControlsLibNavigateToTab(tab, msg) {
     if (controlsLibActiveTab) {
@@ -329,15 +330,18 @@ function JSPanelSetParticlesName(name, particleName) {
         curPanel.SetParticleNameAndRefresh(particleName);
     }
 }
-function ShowHideWinPanel(bshow) {
+function ShowHideWinPanel(bshow, teamOverride = 2, mode = 'casual') {
     let elPanel = $.GetContextPanel().FindChildInLayoutFile('ZooWinPanel');
+    elPanel.RemoveClass('WinPanelRoot--Win--T');
+    elPanel.Data().teamOverride = teamOverride;
+    elPanel.Data().gameModeOverride = mode;
     elPanel.SetHasClass('winpanel-basic-round-result-visible', bshow);
     elPanel.SetHasClass('WinPanelRoot--Win', bshow);
     elPanel.SetHasClass('winpanel-mvp--show', bshow);
     elPanel.SetHasClass('MVP__MusicKit--show', bshow);
     elPanel.SetHasClass('winpanel-funfacts--show', bshow);
     elPanel.SetDialogVariable('winpanel-funfact', $.Localize('#GameUI_Stat_LastMatch_MaxPlayers'));
-    elPanel.SetDialogVariable('winpanel-title', $.Localize('#winpanel_ct_win'));
+    elPanel.SetDialogVariable('winpanel-title', $.Localize('#WinPanel_RoundWon'));
     let elAvatar = elPanel.FindChildInLayoutFile('MVPAvatar');
     elAvatar.PopulateFromSteamID(MyPersonaAPI.GetXuid());
     let musicKitId = LoadoutAPI.GetItemID('noteam', 'musickit');

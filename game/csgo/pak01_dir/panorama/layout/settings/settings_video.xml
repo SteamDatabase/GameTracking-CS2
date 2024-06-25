@@ -32,19 +32,14 @@
 							<Label class="SettingsSectionTitleLabel" text="#settings_video_section" />
 						</Panel>
 						<Panel class="top-bottom-flow full-width">
-							<TooltipPanel id="MainMenuMovieSceneSelector" class="SettingsMenuDropdownContainer" tooltip="#GameUI_MainMenuMovieScene_Tooltip">
-								<Label text="#GameUI_MainMenuMovieScene" class="half-width" />
-								<CSGOSettingsEnumDropDown id="MainMenuBkgSettingContainer" class="PopupButton White" convar="ui_mainmenu_bkgnd_movie" />
-							</TooltipPanel>
-							<Panel class="horizontal-separator" />
-							<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#GameUI_InspectBackgroundMap_Tooltip">
-								<Label text="#GameUI_InspectBackgroundMap" class="half-width" />
-								<CSGOSettingsEnumDropDown id="InspectBackgroundMapDropDown" class="PopupButton White" convar="ui_inspect_bkgnd_map" />
-							</TooltipPanel>
-							<Panel class="horizontal-separator" />
-							<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Brightness">
-								<CSGOSettingsSlider onvaluechanged="SettingsMenuShared.VideoSettingsOnUserInputSubmit()" id="brightness" text="#GameUI_Brightness" max="4.0" min="1.0" invert="true" percentage="true" value100percent="2.0" convar="r_fullscreen_gamma" />
-							</TooltipPanel>
+							<Panel class="SettingsMenuDropdownContainer">
+								<Label text="#SFUI_Settings_Display_Mode" class="half-width" />
+								<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsOnUserInputSubmit()" class="PopupButton White" id="DisplayModeEnum" oninputsubmit="CSGODisplayModeSelectionChanged()">
+									<Label text="#SFUI_Settings_Windowed" value="0" id="displaymode0" />
+									<Label text="#SFUI_Settings_Fullscreen" value="1" id="displaymode1" />
+									<Label text="#SFUI_Settings_Fullscreen_Windowed" value="2" id="displaymode2" />
+								</CSGOSettingsEnumDropDown>
+							</Panel>
 							<Panel class="horizontal-separator" />
 							<Panel class="SettingsMenuDropdownContainer">
 								<Label text="#SFUI_Settings_Aspect_Ratio" class="half-width" />
@@ -63,28 +58,16 @@
 							</Panel>
 							<Panel class="horizontal-separator" />
 							<Panel class="SettingsMenuDropdownContainer">
-								<Label text="#SFUI_Settings_Display_Mode" class="half-width" />
-								<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsOnUserInputSubmit()" class="PopupButton White" id="DisplayModeEnum" oninputsubmit="CSGODisplayModeSelectionChanged()">
-									<Label text="#SFUI_Settings_Windowed" value="0" id="displaymode0" />
-									<Label text="#SFUI_Settings_Fullscreen" value="1" id="displaymode1" />
-									<Label text="#SFUI_Settings_Fullscreen_Windowed" value="2" id="displaymode2" />
-								</CSGOSettingsEnumDropDown>
-							</Panel>
-							<Panel class="horizontal-separator" />
-							<Panel class="SettingsMenuDropdownContainer">
 								<Label text="#SFUI_Settings_Refresh" class="half-width" />
 								<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsOnUserInputSubmit()" class="PopupButton White" id="RefreshEnum" oninputsubmit="CSGOResolutionSelectionChanged()">
 									<Label value="0" id="refresh0" />
 								</CSGOSettingsEnumDropDown>
 							</Panel>
 							<Panel class="horizontal-separator" />
-							<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_PowerSavings_Info">
-								<Label text="#SFUI_Settings_Laptop_Power" class="half-width" />
-								<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsOnUserInputSubmit()" class="PopupButton White" id="PowerSavingsMode">
-									<Label text="#SFUI_Settings_Disabled" value="0" id="laptoppower0" />
-									<Label text="#SFUI_Settings_Enabled" value="1" id="laptoppower1" />
-								</CSGOSettingsEnumDropDown>
+							<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Brightness">
+								<CSGOSettingsSlider onvaluechanged="SettingsMenuShared.VideoSettingsOnUserInputSubmit()" id="brightness" text="#GameUI_Brightness" max="4.0" min="1.0" invert="true" percentage="true" value100percent="2.0" convar="r_fullscreen_gamma" />
 							</TooltipPanel>
+							<Panel class="horizontal-separator" />
 						</Panel>
 					</Panel>
 				</Panel>
@@ -111,12 +94,11 @@
 						<Label text="#SFUI_Magnified" class="SettingsSectionTitleLabel" style="position: 0% 70.0% 0.0%; horizontal-align: center; vertical-align: top;" />
 					</MapGraphicsSettingsPanel>
 					<Panel class="VideoSettingsMenuTabContent vscroll" style="width: 50%;">
-						<Panel id="SettingsVideoAdvanced" class="SettingsBackground" style="padding: 32px 16px;">
+						<Panel class="SettingsBackground" style="padding: 32px 16px;">
 							<Panel class="SettingsSectionTitleContianer">
 								<Label class="SettingsSectionTitleLabel" text="#settings_video_advanced_section" />
 							</Panel>
 							<Panel class="top-bottom-flow full-width">
-								<Panel class="horizontal-separator" />
 								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_PlayerContrast_Info">
 									<Label text="#SFUI_Settings_PlayerContrast" class="half-width" />
 									<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsEnableDiscard()" oninputsubmit="CSGOVideoChanged(&apos;&apos;)" class="PopupButton White" id="PlayerContrast">
@@ -125,7 +107,14 @@
 									</CSGOSettingsEnumDropDown>
 								</TooltipPanel>
 								<Panel class="horizontal-separator" />
-								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_WaitForVSync_Info">
+							</Panel>
+						</Panel>
+						<Panel class="SettingsBackground" style="padding: 32px 16px;">
+							<Panel class="SettingsSectionTitleContianer">
+								<Label class="SettingsSectionTitleLabel" text="#settings_video_frame_pacing" />
+							</Panel>
+							<Panel class="top-bottom-flow full-width">
+								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_WaitForVSync_Info" id="VSyncPanel">
 									<Label text="#SFUI_Settings_Vertical_Sync" class="half-width" />
 									<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsEnableDiscard()" oninputsubmit="CSGOVideoChanged(&apos;vsync&apos;)" class="PopupButton White" id="VSync">
 										<Label text="#SFUI_Settings_Disabled" value="0" id="vsync0" />
@@ -133,6 +122,44 @@
 									</CSGOSettingsEnumDropDown>
 								</TooltipPanel>
 								<Panel class="horizontal-separator" />
+								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_GSync_Info" id="GSyncPanel">
+									<Label text="#SFUI_Settings_GSync" class="half-width" />
+									<Panel class="horizontal-align-right left-right-flow">
+										<Button class="PopupButton White horizontal-align-right" id="GSyncHelpLink">
+											<Image src="s2r://panorama/images/icons/ui/link.vsvg" />
+											<Label class="promoted-setting__label" text="#PlayMenu_GraphicsDriverLink_Nvidia" />
+										</Button>
+										<CSGOSettingsEnumDropDown class="PopupButton White" id="GSync">
+											<Label text="#SFUI_Settings_Disabled" value="0" id="gsync0" />
+											<Label text="#SFUI_Settings_Enabled" value="1" id="gsync1" />
+										</CSGOSettingsEnumDropDown>
+									</Panel>
+								</TooltipPanel>
+								<Panel class="horizontal-separator" id="GSyncSeparator" />
+								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Reflex_Info" id="ReflexPanel">
+									<Label text="#SFUI_Settings_Reflex" class="half-width" id="ReflexLabel" />
+									<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsEnableDiscard()" oninputsubmit="CSGOVideoChanged(&apos;reflex&apos;)" class="PopupButton White" id="Reflex">
+										<Label text="#SFUI_Settings_Disabled" value="0" id="reflex0" />
+										<Label text="#SFUI_Settings_Enabled" value="1" id="reflex1" />
+										<Label text="#SFUI_Settings_Reflex_Boost" value="2" id="reflex2" />
+									</CSGOSettingsEnumDropDown>
+								</TooltipPanel>
+								<Panel class="horizontal-separator" id="ReflexSeparator" />
+								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_FPS_Max_Info">
+									<CSGOSettingsSlider id="FPSMax" text="#SFUI_Settings_FPS_Max" min="64" max="1000" convar="fps_max" />
+								</TooltipPanel>
+								<Panel class="horizontal-separator" />
+								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_FPS_Max_UI_Info">
+									<CSGOSettingsSlider id="FPSMaxUI" text="#SFUI_Settings_FPS_Max_UI" min="64" max="1000" convar="fps_max_ui" />
+								</TooltipPanel>
+								<Panel class="horizontal-separator" />
+							</Panel>
+						</Panel>
+						<Panel class="SettingsBackground" style="padding: 32px 16px;">
+							<Panel class="SettingsSectionTitleContianer">
+								<Label class="SettingsSectionTitleLabel" text="#settings_video_presets" />
+							</Panel>
+							<Panel class="top-bottom-flow full-width">
 								<Panel class="SettingsMenuDropdownContainer">
 									<Label text="#SFUI_Settings_Presets" class="half-width" />
 									<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsEnableDiscard()" oninputsubmit="CSGOPresetChanged();" class="PopupButton White" id="Presets">
@@ -143,9 +170,7 @@
 										<Label text="#SFUI_Settings_Choice_Custom" value="9999999" id="presetlevel4" />
 									</CSGOSettingsEnumDropDown>
 								</Panel>
-								<Panel class="SettingsSectionTitleContianer" style="margin-bottom: 8px;">
-									<Label class="SettingsSectionTitleLabel" text="#settings_video_individual_presets" />
-								</Panel>
+								<Panel class="horizontal-separator" />
 								<Panel class="top-bottom-flow" style="width: 95%; horizontal-align: right;">
 									<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Antialiasing_Info">
 										<Label text="#SFUI_Settings_Antialiasing_Mode" class="half-width" />
@@ -239,16 +264,8 @@
 											<Label text="#SFUI_Settings_FSR_Disabled" value="0" id="fsr0" />
 										</CSGOSettingsEnumDropDown>
 									</TooltipPanel>
+									<Panel class="horizontal-separator" />
 								</Panel>
-								<Panel class="horizontal-separator" />
-								<TooltipPanel class="SettingsMenuDropdownContainer" tooltip="#SFUI_Settings_Reflex_Info" id="ReflexPanel">
-									<Label text="#SFUI_Settings_Reflex" class="half-width" id="ReflexLabel" />
-									<CSGOSettingsEnumDropDown onuserinputsubmit="SettingsMenuShared.VideoSettingsEnableDiscard()" oninputsubmit="CSGOVideoChanged(&apos;reflex&apos;)" class="PopupButton White" id="Reflex">
-										<Label text="#SFUI_Settings_Disabled" value="0" id="reflex0" />
-										<Label text="#SFUI_Settings_Enabled" value="1" id="reflex1" />
-										<Label text="#SFUI_Settings_Reflex_Boost" value="2" id="reflex2" />
-									</CSGOSettingsEnumDropDown>
-								</TooltipPanel>
 							</Panel>
 						</Panel>
 					</Panel>

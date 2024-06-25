@@ -90,7 +90,8 @@ var PlayerStatsCard;
             const elCard = $.GetContextPanel().FindChildTraverse(cardId);
             if (elCard) {
                 const newPlayerData = oSkillgroupData[xuid];
-                if (newPlayerData && newPlayerData.hasOwnProperty('new_rank') && newPlayerData.hasOwnProperty('rank_type')) {
+                if (newPlayerData && newPlayerData.hasOwnProperty('new_rank') &&
+                    newPlayerData.hasOwnProperty('rank_type') && (newPlayerData.rank_type === 'Premier')) {
                     const options = {
                         root_panel: elCard.FindChildTraverse('jsRatingEmblem'),
                         do_fx: true,
@@ -123,7 +124,7 @@ var PlayerStatsCard;
             leaderboard_details: { score: score, matchesWon: wins },
             local_player: xuid === MyPersonaAPI.GetXuid()
         };
-        const bShowSkillGroup = RatingEmblem.SetXuid(options);
+        const bShowSkillGroup = (rating_type === 'Premier') && RatingEmblem.SetXuid(options);
         if (bShowSkillGroup) {
             elCard.RemoveClass('show-skillgroup');
             $.Schedule(0, () => elCard && elCard.IsValid() ? elCard.AddClass('show-skillgroup') : '');

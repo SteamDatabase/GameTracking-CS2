@@ -33,6 +33,17 @@ var ParticleControls;
         }
     }
     ParticleControls.StopAllChildrenParticlesImmediately = StopAllChildrenParticlesImmediately;
+    function SetPanelParticleControlPoint(panelId, cp, x, y, z) {
+        const AllPanels = GetAllChildren($(panelId));
+        for (const panel of AllPanels) {
+            if (panel && IsParticleScenePanel(panel)) {
+                panel.StopParticlesImmediately(true);
+                panel.StartParticles();
+                panel.SetControlPoint(cp, x, y, z);
+            }
+        }
+    }
+    ParticleControls.SetPanelParticleControlPoint = SetPanelParticleControlPoint;
     function RestartStatusRank(panelId, x, y, z) {
         const panel = $(panelId);
         if (panel && IsParticleScenePanel(panel)) {

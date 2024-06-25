@@ -110,14 +110,16 @@ var EOM_Rank;
             if (xpToXpTrailEvent > -1) {
                 const xpTrailAnimStartTime = xpToXpTrailEvent * sPerXp;
                 $.Schedule(animTime + xpTrailAnimStartTime, () => {
-                    _m_cP.SetHasClass('xptrail-acquired', true);
-                    _DisplayXpTrailRemainingTime(oXpData.xp_trail_remaining);
-                    HonorIcon.SetOptions({
-                        honor_icon_frame_panel: _m_cP.FindChildTraverse('jsHonorIcon'),
-                        do_fx: true,
-                        xptrail_value: xp_trail_level,
-                        force_icon: 'xptrail',
-                    });
+                    if (_m_cP && _m_cP.IsValid()) {
+                        _m_cP.SetHasClass('xptrail-acquired', true);
+                        _DisplayXpTrailRemainingTime(oXpData.xp_trail_remaining);
+                        HonorIcon.SetOptions({
+                            honor_icon_frame_panel: _m_cP.FindChildTraverse('jsHonorIcon'),
+                            do_fx: true,
+                            xptrail_value: xp_trail_level,
+                            force_icon: 'xptrail',
+                        });
+                    }
                 });
             }
             return duration;

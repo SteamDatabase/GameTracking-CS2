@@ -19,40 +19,11 @@ var SettingsMenuVideo;
         $('#AdvancedVideoSettingsRadio').checked = true;
     }
     SettingsMenuVideo.SelectAdvancedVideoSettings = SelectAdvancedVideoSettings;
-    function Init() {
-        let elMainMenuBkgSetting = $('#MainMenuBkgSettingContainer');
-        let cvarInfo = GameInterfaceAPI.GetSettingInfo("ui_mainmenu_bkgnd_movie");
-        let aMaps = cvarInfo.allowed_values;
-        for (let map of aMaps) {
-            let p = $.CreatePanel("Label", elMainMenuBkgSetting, "ui_mainmenu_bkgnd_movie_" + map, {
-                text: "#SFUI_Map_" + map,
-                value: map
-            });
-            elMainMenuBkgSetting.AddOption(p);
-        }
-        elMainMenuBkgSetting.RefreshDisplay();
-        let elInspectBkgSetting = $('#InspectBackgroundMapDropDown');
-        elInspectBkgSetting.SetDialogVariableLocString("mainmenu_bkgnd", "#SFUI_Map_" + GameInterfaceAPI.GetSettingString("ui_mainmenu_bkgnd_movie"));
-        $.RegisterForUnhandledEvent("CSGOMainInitBackgroundMovie", () => {
-            elInspectBkgSetting.SetDialogVariableLocString("mainmenu_bkgnd", "#SFUI_Map_" + GameInterfaceAPI.GetSettingString("ui_mainmenu_bkgnd_movie"));
-        });
-        cvarInfo = GameInterfaceAPI.GetSettingInfo("ui_inspect_bkgnd_map");
-        aMaps = cvarInfo.allowed_values;
-        for (let map of aMaps) {
-            let p = $.CreatePanel("Label", elInspectBkgSetting, "ui_inspect_bkgnd_map_" + map, {
-                text: "#SFUI_Map_" + map,
-                value: map
-            });
-            elInspectBkgSetting.AddOption(p);
-        }
-        elInspectBkgSetting.RefreshDisplay();
-    }
     function ShowHudEdgePositions() {
         UiToolkitAPI.ShowCustomLayoutPopupWithCancelCallback('', 'file://{resources}/layout/popups/popup_hud_edge_positions.xml', () => { });
     }
     SettingsMenuVideo.ShowHudEdgePositions = ShowHudEdgePositions;
     {
         SelectSimpleVideoSettings();
-        Init();
     }
 })(SettingsMenuVideo || (SettingsMenuVideo = {}));

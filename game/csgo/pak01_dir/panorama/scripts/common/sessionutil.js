@@ -28,6 +28,8 @@ var SessionUtil;
     }
     SessionUtil.AreLobbyPlayersPrime = AreLobbyPlayersPrime;
     function GetNumWinsNeededForRank(skillgroupType) {
+        if (skillgroupType === 'Competitive')
+            return 2;
         return 10;
     }
     SessionUtil.GetNumWinsNeededForRank = GetNumWinsNeededForRank;

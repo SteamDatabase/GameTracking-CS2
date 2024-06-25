@@ -1,14 +1,9 @@
 /* Prettified by Source 2 Viewer 9.2.0.0 - https://valveresourceformat.github.io */
 
 @define winPanelPosY: 190px;
-@define winPanelWidth: 640px;
-@define winPanelPosYDeathmatch: 0px;
-@define winPanelPosYSurvival: 0px;
-@define winPanelHeightSurvival: 0px;
-@define musicKitAnimDuration: 0.0s;
-@define winPanelRowHeight: 80px;
-@define mvpContentTop: 90px;
-@define mvpEffectsTop: winPanelRowHeight;
+@define winPanelWidth: 400px;
+@define winPanelBgColorT: rgba(66, 46, 8, 0.85);
+@define winPanelBgColorCT: rgba(9, 40, 61, 0.85);
 CSGOHudWinPanel Label
 {
 	font-family: Stratum2, 'Arial Unicode MS';
@@ -26,29 +21,6 @@ CSGOHudWinPanel Label
 	transition-timing-function: ease-out;
 }
 
-.winpanelrow--ris
-{
-	horizontal-align: center;
-}
-
-.ris__main
-{
-	width: 0px;
-	visibility: collapse;
-	transition-property: width, brightness, position;
-	transition-duration: 0.3s, .5s, 0.5s;
-	transition-delay: .2s;
-	transition-timing-function: ease-in-out;
-	brightness: 100;
-}
-
-.winpanel-round-end-report-visible .ris__main
-{
-	visibility: visible;
-	width: winPanelWidth;
-	brightness: 1;
-}
-
 .endofmatch .WinPanelRoot
 {
 	opacity: 0;
@@ -58,6 +30,7 @@ CSGOHudWinPanel Label
 {
 	width: 100%;
 	horizontal-align: center;
+	flow-children: down;
 }
 
 .WinPanelRoot--ForceHide
@@ -65,292 +38,264 @@ CSGOHudWinPanel Label
 	visibility: collapse;
 }
 
-.WinPanelRow--White-flash
+.WinPanelRoot--ForceHide .WinPanel__Result__glitch
 {
-	transform: scaleY(0);
-	height: 50%;
-	background-color: white;
-	horizontal-align: center;
-	box-shadow: #ffffffcc 0px 0px 10px 05px ;
-	z-index: 3;
-	transition-property: transform, opacity;
-	transition-duration: .1s, .1s;
-	transition-timing-function: ease-in;
+	visibility: collapse;
 }
 
-.winpanel-basic-round-result-visible .WinPanelRow--White-flash
+.WinPanelTopSection
 {
-	transform: scaleY(1);
-	height: 50%;
-	opacity: 0;
-	transition-property: transform, opacity;
-	transition-duration: .25s, 1s;
-	transition-timing-function: ease-out;
-}
-
-.WinPanelRow--Main
-{
-	width: 920px;
-	transform: scale3d( 0, 1, 1 );
-	height: winPanelRowHeight;
-	world-blur: hudWorldBlur;
-	background-color: white;
-	opacity-mask: url("s2r://panorama/images/masks/fade-both-right-left2_png.vtex");
+	width: winPanelWidth;
 	horizontal-align: center;
 	z-index: 2;
-	opacity: 0;
-	transition-property: transform, background-color, opacity;
-	transition-delay: .0s, .25s, .25s;
-	transition-duration: .25s, .25s, 0s;
+	transition-property: opacity;
+	transition-delay:.25s;
+	transition-duration: 0s;
 	transition-timing-function: ease-in;
+	flow-children: down;
+	margin-bottom: 16px;
 }
 
-.winpanel-basic-round-result-visible .WinPanelRow--Main
-{
-	transform: scale3d( 1, 1, 1 );
-	background-color: rgba(255, 255, 255, 0);
-	opacity: 1;
-	transition-property: transform, background-color, opacity;
-	transition-delay: .25s, 0s, 0s;
-	transition-duration: .25s, .25s, 25s;
-	transition-timing-function: ease-in;
-}
-
-.winpanel-basic-round-result-visible.WinPanelRoot--Lost .WinPanelRow--Main
-{
-	background-color: rgba(110, 7, 7, 0.9);
-}
-
-.winpanel-basic-round-result-visible.WinPanelRoot--Win .WinPanelRow--Main
-{
-	background-color: rgba(3, 107, 12, 0.9);
-}
-
-.WinPanelRow__Contents
+.WinPanelTopSection__Contents
 {
 	width: 100%;
 	flow-children: down;
 }
 
-.WinPanelRow__BG__Glitch
-{
-	width: 100%;
-	height: 100%;
-	opacity: 0;
-	visibility: collapse;
-	background-size: auto auto;
-	background-image: url("file://{resources}/videos/digital_glitch.webm");
-	wash-color: rgb(61, 233, 61);
-	-s2-mix-blend-mode: additive;
-}
-
-.winpanel-basic-round-result-visible .WinPanelRow__BG__Glitch
-{
-	visibility: visible;
-	animation-name: eom-show-glitch;
-	animation-duration: 1s;
-	animation-timing-function: ease-out;
-	animation-iteration-count: 1;
-	animation-fill-mode: forwards;
-}
-
-@keyframes 'eom-show-glitch'
-{
-	0%
-	{
-		opacity: 1;
-	}
-	
-	100%
-	{
-		opacity: 0.0;
-	}
-	
-}
-
-.winpanel-basic-round-result-visible .WinPanelRow__BG__Glitch
-{
-	opacity: 0 ;
-	visibility: visible;
-}
-
-.WinPanelRoot--Win .WinPanelRow__BG__Glitch,.WinPanelRoot--Win .WinPanelRow__BG__Dots
-{
-	wash-color: positiveColor;
-}
-
-.WinPanelRoot--Lost .WinPanelRow__BG__Glitch,.WinPanelRoot--Lost .WinPanelRow__BG__Dots
-{
-	wash-color: negativeColor;
-}
-
-.WinPanelRoot--Draw .WinPanelRow__BG__Glitch,.WinPanelRoot--Draw .WinPanelRow__BG__Dots
-{
-	wash-color: rgb(172, 172, 172);
-}
-
-.HUD--localplayer--spectator .WinPanelRoot--Win--T .WinPanelRow__BG__Glitch,.HUD--localplayer--spectator .WinPanelRoot--Win--T .WinPanelRow__BG__Dots,.HUD--localplayer--spectator .WinPanelRoot--Win--T .WinPanel__Result Label
+.HUD--localplayer--spectator .WinPanelRoot--Win--T .WinPanel__Result Label
 {
 	wash-color: t-color;
 }
 
-.HUD--localplayer--spectator .WinPanelRoot--Win--CT .WinPanelRow__BG__Glitch,.HUD--localplayer--spectator .WinPanelRoot--Win--CT .WinPanelRow__BG__Dots,.HUD--localplayer--spectator .WinPanelRoot--Win--CT .WinPanel__Result Label
+.HUD--localplayer--spectator .WinPanelRoot--Win--CT .WinPanel__Result Label
 {
 	wash-color: ct-color;
 }
 
-.WinPanelRow__BG
+.WinPanel__Result__white
 {
-	width: 100%;
-}
-
-.WinPanelRow__BG__Container
-{
-	width: 100%;
-}
-
-.WinPanelRow__BG__AnimBg
-{
-	background-repeat: no-repeat;
-	horizontal-align: center;
-	width: 35%;
-	height: 100%;
-	background-size: 100% 100%;
-	background-position: 50% 50%;
-	brightness: .3;
-	opacity: .6;
-}
-
-.WinPanelRow__BG__Dots
-{
+	background-color: white;
 	width: 100%;
 	height: 100%;
-	background-image: url("s2r://panorama/images/backgrounds/bluedots_large_png.vtex");
-	background-size: backgroundDotsSize;
-	background-img-opacity: .2;
+	opacity: 1;
+	transition-property: opacity;
+	transition-delay: .25s;
+	transition-duration: .2s;
+	transition-timing-function: ease-in;
 }
 
 .WinPanel__Result
 {
 	horizontal-align: center;
-	vertical-align: center;
-	flow-children: none;
-	width: 100%;
-	height:fill-parent-flow(1);
-	border-top: 0px solid rgb(255, 255, 255);
-	border-bottom: 0px solid rgb(255, 255, 255);
-}
-
-.WinPanel__Result__TeamIcon
-{
-	margin-right: 8px;
-	width: height-percentage( 100% );
-	height: 48px;
-	visibility: collapse;
-}
-
-.HUD--localplayer--spectator .WinPanel__Result__TeamIcon
-{
-	visibility: visible;
-}
-
-.WinPanel__Result__Title
-{
-	width: 100%;
-	height: 44px;
-	margin: 4px 0px;
-	vertical-align: center;
-	horizontal-align: center;
-	font-weight: bold;
-	font-size: 38px;
-	color: rgb(255, 255, 255);
-	letter-spacing: 1px;
-	text-align: center;
-	-s2-mix-blend-mode: additive;
-}
-
-.WinPanel__Result__Title--Faded
-{
-	font-size: 75px;
-	opacity: .3;
-	height: 100%;
-	transform: translateY(-5px) scale3d(.9, 1, 1);
-	transition-property: opacity, transform;
-	transition-duration: 8s;
+	width: winPanelWidth;
+	height: 80px;
+	opacity: 0;
+	transform: scale3d( 0, 1, 1);
+	border-left: 4px solid white;
+	border-right: 4px solid white;
+	border-radius: 3px;
+	world-blur: hudWorldBlur;
+	background-color: rgba(255, 255, 255, 0.356);
+	background-image: url("s2r://panorama/images/backgrounds/bluedots_large_png.vtex");
+	background-size: backgroundDotsSize;
+	background-img-opacity: 0.04;
+	transition-property: transform, opacity;
+	transition-duration: 0.25s, 0.25s;
 	transition-timing-function: ease-in;
 }
 
-.winpanel-basic-round-result-visible .WinPanel__Result__Title
+.winpanel-basic-round-result-visible .WinPanel__Result
 {
-	letter-spacing: 10px;
+	opacity: 1;
+	transform: scale3d(1, 1, 1);
+	transition-property: transform, opacity;
+	transition-duration: 0.25s, 0.25s;
+	transition-timing-function: ease-in;
 }
 
-.winpanel-basic-round-result-visible .WinPanel__Result__Title--Faded
+.winpanel-basic-round-result-visible .WinPanel__Result .WinPanel__Result__glitch
 {
-	transform: translateY(-5px) scale3d(1.2, 1, 1);
 	opacity: 0;
-	transition-property: opacity, transform;
-	transition-duration: 8s;
+	brightness: 1;
+}
+
+.winpanel-basic-round-result-visible .WinPanel__Result .WinPanel__Result__white
+{
+	opacity: 0;
+	transition-delay: 0s;
+	transition-property: opacity;
+	transition-duration: 0s;
 	transition-timing-function: ease-in-out;
 }
 
-.winpanel-basic-round-result-visible.WinPanelRoot--Lost .WinPanel__Result
+.winpanel-basic-round-result-visible .WinPanel__Result .WinPanel__Result__Title
 {
-	border-top: 2px solid negativeColor;
-	border-bottom: 2px solid negativeColor;
+	pre-transform-scale2d: 1, 1;
+	transition-property: pre-transform-scale2d;
+	transition-duration: 5s;
+	transition-timing-function: ease-in;
 }
 
-.winpanel-basic-round-result-visible.WinPanelRoot--Win .WinPanel__Result
+.winpanel-basic-round-result-visible .WinPanel__Result .WinPanel__Result__double-arrows
 {
-	border-top: 2px solid positiveColor;
-	border-bottom: 2px solid positiveColor;
+	transform: translateX(0px) scaleX(-1);
+	brightness: 1;
 }
 
-.WinPanelRoot--Lost .WinPanel__Result__Title
+.winpanel-basic-round-result-visible .WinPanel__Result .WinPanel__Result__double-arrows.WinPanel__Result__double-arrows--right
 {
-	color: negativeColor;
+	transform: translateX(0px) scaleX(1);
 }
 
-.WinPanelRoot--Win .WinPanel__Result__Title
+.WinPanelRoot--Win--CT:not(.WinPanelRoot--Lost) .WinPanel__Result
 {
-	color: positiveColor;
+	border-left: 4px solid ct-color;
+	border-right: 4px solid ct-color;
+	background-color: winPanelBgColorCT;
 }
 
-.WinPanel__Result__Title__Surrender
+.WinPanelRoot--Win--CT:not(.WinPanelRoot--Lost) .WinPanel__Result .WinPanel__Result__double-arrows,.WinPanelRoot--Win--CT:not(.WinPanelRoot--Lost) .WinPanel__Result .WinPanel__Result__glitch,.WinPanelRoot--Win--CT:not(.WinPanelRoot--Lost) .WinPanel__Result .WinPanel__Result__Title
 {
-	font-size: 16px;
-	font-weight: medium;
-	color: rgb(14, 14, 14);
-	letter-spacing: 0px;
+	wash-color: ct-color;
+}
+
+.WinPanelRoot--Win--T:not(.WinPanelRoot--Lost) .WinPanel__Result
+{
+	border-left: 4px solid t-color;
+	border-right: 4px solid t-color;
+	background-color: winPanelBgColorT;
+}
+
+.WinPanelRoot--Win--T:not(.WinPanelRoot--Lost) .WinPanel__Result .WinPanel__Result__double-arrows,.WinPanelRoot--Win--T:not(.WinPanelRoot--Lost) .WinPanel__Result .WinPanel__Result__glitch,.WinPanelRoot--Win--T:not(.WinPanelRoot--Lost) .WinPanel__Result .WinPanel__Result__Title
+{
+	wash-color: t-color;
+}
+
+.WinPanelRoot--Lost .WinPanel__Result
+{
+	border-left: 4px solid negativeColor;
+	border-right: 4px solid negativeColor;
+	background-color: rgba(32, 2, 2, 0.877);
+}
+
+.WinPanelRoot--Lost .WinPanel__Result .WinPanel__Result__double-arrows,.WinPanelRoot--Lost .WinPanel__Result .WinPanel__Result__glitch,.WinPanelRoot--Lost .WinPanel__Result .WinPanel__Result__Title
+{
+	wash-color: negativeColor;
+}
+
+.WinPanel__Result .WinPanel__Result__Title
+{
+	font-weight: bold;
+	font-family: Stratum2 Medium Condensed;
+	font-size: 64px;
+	letter-spacing: 8px;
+	text-transform: uppercase;
+	height: 66px;
+	width: 340px;
+	text-overflow: shrink;
+	color: white;
+	flow-children: none;
+	pre-transform-scale2d: 1.5, 1.5;
+	text-shadow: 0px 0px 8px #353535bb;
 	text-align: center;
-	width: fit-children;
-	vertical-align: top;
+	vertical-align: center;
 	horizontal-align: center;
-	padding: 4px 8px;
-	border-radius: 3px;
-	background-color: rgba(255, 255, 255, 0.445);
-	world-blur: hudWorldBlur;
-	transform: translateY(-10px);
-	visibility: collapse;
-	background-color: hud-blur-bg-color;
+	transition-property: pre-transform-scale2d, letter-spacing;
+	transition-duration: 0.25s;
+	transition-timing-function: ease-in;
 }
 
-.WinPanelRoot--Surrender
+.WinPanel__Result .WinPanel__Result__glitch
 {
-	visibility: visible;
+	width: 100%;
+	height: 100%;
+	opacity: .25;
+	brightness: 10;
+	background-size: auto auto;
+	background-image: url("file://{resources}/videos/digital_glitch.webm");
+	transition-property: opacity, brightness;
+	transition-delay: .50s;
+	transition-duration: .2s;
+	transition-timing-function: ease-in;
+}
+
+.WinPanel__Result .WinPanel__Result__double-arrows
+{
+	vertical-align: center;
+	margin-left: 12px;
+	transform: translateX(25px) scaleX(-1);
+	brightness: 10;
+	transition-property: transform, brightness;
+	transition-delay: .50s;
+	transition-duration: 0.25s;
+	transition-timing-function: ease-in;
+}
+
+.WinPanel__Result .WinPanel__Result__double-arrows.WinPanel__Result__double-arrows--right
+{
+	transform: translateX(25px) scaleX(1);
+	margin-right: 12px;
+	horizontal-align: right;
+}
+
+.MVP__white
+{
+	background-color: white;
+	width: 100%;
+	height: 100%;
+	opacity: 1;
+	transition-property: opacity;
+	transition-delay: 1.25s;
+	transition-duration: .2s;
+	transition-timing-function: ease-in;
+}
+
+.WinPanelRoot--Win--CT .MVP__WinnerName,.WinPanelRoot--Win--CT .MVP__MusicKitText
+{
+	color: ct-color;
+}
+
+.WinPanelRoot--Win--CT .MVP__Reason
+{
+	background-color: ct-color;
+}
+
+.WinPanelRoot--Win--T .MVP__WinnerName,.WinPanelRoot--Win--T .MVP__MusicKitText
+{
+	color: t-color;
+}
+
+.WinPanelRoot--Win--T .MVP__Reason
+{
+	background-color: t-color;
 }
 
 .WinPanelRow--funfacts
 {
 	horizontal-align: center;
 	vertical-align: bottom;
-	height: 24px;
 	opacity: 0;
 	width: 100%;
 	transition-property: height, opacity;
 	transition-delay: 0s;
 	transition-duration: .25s;
 	transition-timing-function: ease-in;
+}
+
+.WinPanelRow--funfacts .WinPanelRow--funfacts__text
+{
+	max-width: 100%;
+	height: 16px;
+	font-size: 12px;
+	font-weight: normal;
+	margin: 3px 0px;
+	horizontal-align: center;
+	font-family: Stratum2, "Arial Unicode MS";
+	text-align: center;
+	text-overflow: shrink;
+	color: white;
+	text-shadow: 0px 0px 8px #141414c7;
+	-s2-mix-blend-mode: normal;
 }
 
 .winpanel-basic-round-result-visible.winpanel-funfacts--show .WinPanelRow--funfacts
@@ -362,156 +307,88 @@ CSGOHudWinPanel Label
 	transition-timing-function: ease-in;
 }
 
-.WinPanelRow--funfacts__text
+.MVP_section
 {
-	max-width: 100%;
-	font-size: 14px;
-	font-weight: normal;
-	color: #ffffff;
-	horizontal-align: center;
-	text-align: center;
-	text-overflow: shrink;
-	padding: 4px 12px;
-}
-
-.WinPanelGunGame
-{
-	width: 100%;
-	height: 100%;
-	background-color: red;
-	visibility: collapse;
-	z-index: 5;
-}
-
-.WinPanelRoot--GunGame .WinPanelGunGame
-{
-	visibility: visible;
-}
-
-.GunGameBG
-{
-	width: 100%;
-	height: 100%;
-	opacity: 0.98;
-}
-
-.GunGameBG__Border
-{
-	width: 100%;
-	height: 100%;
-	padding: 3px;
-	background-color: gradient( linear, 0% 0%, 0% 100%, from( #5A7182 ), to( #1F2A31 ) );
-}
-
-.GunGameBG__MainBG
-{
-	width: 100%;
-	height: 100%;
-	background-color: gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.20, #000000cc ) , color-stop(0.50, #000000ff), color-stop( 0.80, #000000cc ), to( #00000000 ) );
-}
-
-.GunGameBG__TitleBG
-{
-	width: 100%;
-	height: 39px;
-	y: 4px;
-	background-color: gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.20, #000000cc ) , color-stop(0.50, #000000ff), color-stop( 0.80, #000000cc ), to( #00000000 ) );
-}
-
-.GunGameFG
-{
-	width: 100%;
-	height: 100%;
-}
-
-.GunGameFG__Title
-{
-	width: 100%;
-	vertical-align: top;
-	font-weight: bold;
-	font-size: 30px;
-	color: #a7a7a7;
-	letter-spacing: 0.5px;
-	text-align: center;
-}
-
-.MVP_background
-{
-	margin-top: mvpContentTop;
-	margin-bottom: 4px;
-	width: 0px;
+	transform: scale3d( 0, 1, 1);
 	height: 90px;
 	horizontal-align: center;
+	border-radius: 3px;
+	opacity-mask: url("s2r://panorama/images/masks/mvp_banner_fade-both-right-left_png.vtex");
 	world-blur: hudWorldBlur;
-	background-color: rgba(0, 0, 0, 0.75);
-	opacity-mask: url("s2r://panorama/images/masks/fade-both-right-left2_png.vtex");
-	opacity: 0;
+	background-image: url("s2r://panorama/images/backgrounds/bluedots_large_png.vtex");
+	background-size: backgroundDotsSize;
+	background-img-opacity: 0.01;
 	transition-delay: 1s;
-	transition-property: width, opacity;
-	transition-duration: .1s, .3s, .3s;
+	transition-property: width, transform, opacity;
+	transition-duration: .25s;
 	transition-timing-function: ease-in-out;
 }
 
-.winpanel-basic-round-result-visible.winpanel-mvp--show .MVP_background
+.winpanel-basic-round-result-visible.winpanel-mvp--show .MVP_section
 {
-	width: 1220px;
+	width: 920px;
 	opacity: 1;
+	transform: scale3d( 1, 1, 1);
 	transition-delay: .25s, 0s, 0s;
 	transition-property: width, transform, opacity;
 	transition-duration: .25s;
 	transition-timing-function: ease-in-out;
+}
+
+.winpanel-basic-round-result-visible.winpanel-mvp--show .MVP_section .MVP__white
+{
+	opacity: 0;
+	transition-delay: .25s, 0s, 0s;
+	transition-property: width, transform, opacity;
+	transition-duration: .25s;
+	transition-timing-function: ease-in-out;
+}
+
+.winpanel-basic-round-result-visible.non-premier.winpanel-mvp--show .MVP_section
+{
+	width: 640px;
+}
+
+.WinPanelRoot--Win--T .MVP_section
+{
+	background-color: winPanelBgColorT;
+}
+
+.WinPanelRoot--Win--CT .MVP_section
+{
+	background-color: winPanelBgColorCT;
 }
 
 .MVP_content
 {
-	margin-top: mvpContentTop;
-	width: 0px;
-	height: 90px;
 	horizontal-align: center;
-	opacity-mask: url("s2r://panorama/images/masks/fade-both-right-left2_png.vtex");
-	opacity: 0;
+	vertical-align: center;
+	height: 100%;
+	width: 100%;
+	opacity: 1;
+}
+
+.mvp_map_container
+{
+	height: 100%;
+	width: 100%;
+	horizontal-align: center;
 	transition-delay: 1s;
 	transition-property: width, opacity;
 	transition-duration: .1s, .3s, .3s;
 	transition-timing-function: ease-in-out;
 }
 
-.winpanel-basic-round-result-visible.winpanel-mvp--show .MVP_content
+.mvp_map_container .mvp_map
 {
-	width: 1220px;
-	opacity: 1;
-	transition-delay: .25s, 0s, 0s;
-	transition-property: width, transform, opacity;
-	transition-duration: .25s;
-	transition-timing-function: ease-in-out;
-}
-
-.MVP__EffectsContainer
-{
-	margin-top: 60px;
-	horizontal-align: center;
-	width: 1220px;
-	height: 150px;
-	opacity-mask: url("s2r://panorama/images/masks/mvp_banner_fade-both-right-left_png.vtex");
-	opacity: 0;
-}
-
-.winpanel-basic-round-result-visible.winpanel-mvp--show .MVP__EffectsContainer
-{
-	width: 1220px;
-	opacity: 1;
-	transition-delay: .25s, 0s, 0s;
-	transition-property: width, transform, opacity;
-	transition-duration: .25s;
-	transition-timing-function: ease-in-out;
+	height: 100%;
+	width: 100%;
 }
 
 .MVP
 {
-	width: 100%;
 	horizontal-align: center;
 	vertical-align: middle;
-	margin: 0px 24px;
 	opacity: 0;
 	transition-property: opacity;
 	transition-duration: .3s;
@@ -526,53 +403,91 @@ CSGOHudWinPanel Label
 	transition-timing-function: ease-in-out;
 }
 
-.MVP__Layout--Hidden
-{
-	visibility: collapse;
-}
-
-.MVP__Layout--Right
-{
-	width: fit-children;
-}
-
-.MVP__Winner
+.MVP .MVP__Winner
 {
 	width: fit-children;
 	flow-children: right;
 	horizontal-align: left;
-	transform: translateX(400px);
-	margin: 4px 0px;
-	min-height: 54px;
+	height: 90px;
 }
 
-.MVP__WinnerStar
+.MVP .MVP__Winner .MVP__Winner_Icons
 {
-	height: 16px;
-	vertical-align: middle;
-	margin: 0px 2px 3px 0px;
+	vertical-align: center;
+	overflow: noclip;
+	height: 100%;
 }
 
-.MVP__Reason
+.MVP .MVP__Winner .MVP__Winner_Icons .MVP__Avatar
+{
+	width: 72px;
+	height: 72px;
+	vertical-align: center;
+	margin-right: 8px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #6d6d6d ), to( #464646) );
+}
+
+.MVP .MVP__Winner .MVP__Winner_Icons .MVP__Avatar .AvatarImage
+{
+	width: 100%;
+	height: width-percentage(100%);
+}
+
+.MVP .MVP__Winner .MVP__Winner_Icons .MVP__MusicKitIcon
+{
+	width: 38px;
+	height: 38px;
+	vertical-align: bottom;
+	transform: translateY( 0px) translateX(42px);
+	visibility: collapse;
+}
+
+.MVP__MusicKit--show .MVP .MVP__Winner .MVP__Winner_Icons .MVP__MusicKitIcon
+{
+	visibility: visible;
+}
+
+.MVP .MVP__Winner .MVP_Details
+{
+	vertical-align: center;
+	padding-left: 0px;
+	flow-children: down;
+}
+
+.MVP .MVP__Winner .MVP_Details .MVP__Reason
 {
 	vertical-align: top;
-	font-size: 14px;
-	height: 14px;
+	font-size: 18px;
 	text-overflow: ellipsis;
-	font-weight: medium;
-	color: #ffffff;
 	width: fit-children;
+	color: black;
+	padding: 0px 6px;
 }
 
-.MVP__WinnerName
+.MVP .MVP__Winner .MVP_Details .MVP__WinnerName
 {
-	width: 400px;
+	max-width: 300px;
 	vertical-align: bottom;
-	font-size: 20px;
-	height: 24px;
+	font-size: 28px;
 	text-overflow: ellipsis;
 	font-weight: medium;
-	color: #ffffff;
+	font-weight: black;
+	text-shadow: 0px 2px 4px 2 #141414dc;
+	brightness: 1.5;
+}
+
+@keyframes 'CoinAnim'
+{
+	0%
+	{
+		transform: translatey( -40% );
+	}
+	
+	100%
+	{
+		transform: translatey( 0% );
+	}
+	
 }
 
 #jsHonorIcon
@@ -581,24 +496,6 @@ CSGOHudWinPanel Label
 	height: width-percentage(100%);
 	vertical-align: center;
 	margin-right: 2px;
-}
-
-.WinPanelRoot--GunGame .MVP__WinnerName
-{
-	color: #ffffff;
-}
-
-.WinPanelRow__BG__AnimBg
-{
-	opacity-mask: url("s2r://panorama/images/masks/top-bottom-fade_png.vtex");
-}
-
-.WinPanelRow__BG__AnimBg--anim
-{
-	animation-name: BackgroundScroll;
-	animation-duration: 4s;
-	animation-timing-function: ease-in-out;
-	animation-iteration-count: 1;
 }
 
 @keyframes 'BackgroundScroll'
@@ -615,398 +512,43 @@ CSGOHudWinPanel Label
 	
 }
 
-.MVP__Avatar
-{
-	width: 40px;
-	height: 40px;
-	vertical-align: center;
-	y: -6px;
-	margin-right: 8px;
-	background-color: gradient( linear, 0% 0%, 0% 100%, from( #6d6d6d ), to( #464646) );
-	box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 6px 0px ;
-}
-
-.MVP__Winner_Icons
-{
-	vertical-align: center;
-	overflow: noclip;
-}
-
-.MVP__Avatar--ExtraMargin
-{
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-.MVP__AvatarText
-{
-	vertical-align: center;
-	font-size: 18px;
-	font-weight: bold;
-	color: #999999;
-}
-
-.MVP__MusicKit,.MVP__MusicKit-deathmatch
+.MVP__MusicKit
 {
 	flow-children: down;
 	width: fit-children;
 	visibility: collapse;
 }
 
-.MVP__MusicKitIcon
-{
-	width: 38px;
-	height: 38px;
-	vertical-align: bottom;
-	transform: translatey( 18px) translateX(16px);
-	visibility: collapse;
-}
-
-.MVP__MusicKit--show .MVP__MusicKit,.MVP__MusicKit--show .MVP__MusicKitIcon
-{
-	visibility: visible;
-}
-
-.MVP__MusicKitText
+.MVP__MusicKit .MVP__MusicKitText
 {
 	font-size: 12px;
-	color: #ffffff;
-	vertical-align: middle;
 	font-weight: bold;
-	max-width: 300px;
+	vertical-align: middle;
 	white-space: nowrap;
 	text-overflow: shrink;
-	font-family: Stratum2 Medium Italic, "Arial Unicode MS";
+	text-shadow: 0px 2px 4px 1.5 #141414ee;
+	max-width: 300px;
+	opacity: 1;
+	brightness: 1.3;
 }
 
-#MVPMusicKitStatTrak
+.MVP__MusicKit #MVPMusicKitStatTrak
 {
 	margin-top: 2px;
 	font-family: Stratum2 Medium, "Arial Unicode MS";
 	visibility: collapse;
 }
 
-.MVP__MusicKitName
+.MVP__MusicKit .MVP__MusicKitName
 {
 	font-weight: normal;
 	text-overflow: ellipsis;
+	text-shadow: 0px 2px 4px 1.5 #141414ee;
+	brightness: 1.3;
 }
 
-.MVP__MusicKitText--Hidden
-{
-	visibility: collapse;
-}
-
-.MVP__GunGameAvatars
-{
-	flow-children: right;
-	vertical-align: center;
-	margin-left: 10px;
-	visibility: collapse;
-}
-
-.MVP__GunGameAvatars.MVP__GunGameAvatars--show
+.MVP__MusicKit--show .MVP__MusicKit
 {
 	visibility: visible;
-}
-
-.survival-winner-container
-{
-	visibility: collapse;
-	height: 100%;
-	width: 100%;
-}
-
-.WinPanelRoot--SurvivalVictory .survival-winner-container,.WinPanelRoot--SurvivalDeath .survival-winner-container
-{
-	visibility: visible;
-}
-
-.survival-winner
-{
-	width: 512px;
-	height: 512px;
-	horizontal-align: center;
-	vertical-align: center;
-	transform-origin: 50% 50%;
-	background-color: rgba(0, 0, 0, 0.95);
-	opacity-mask: url("s2r://panorama/images/masks/survival-eom_png.vtex");
-}
-
-.survival-winner__movie
-{
-	width: 500px;
-	height: 500px;
-	horizontal-align: center;
-	vertical-align: center;
-	opacity: 1;
-	transition-delay: 1.25s;
-	transition-property: opacity;
-	transition-duration: .25s;
-	transition-timing-function: ease-in;
-}
-
-.survival-winner__movie--fadeout
-{
-	opacity: 0;
-}
-
-#id-survival-border-1,#id-survival-border-2,#id-survival-border-3,#id-survival-border-4
-{
-	visibility: collapse;
-}
-
-.survival-winner--placement-1 #id-survival-border-1
-{
-	visibility: visible;
-}
-
-.survival-winner--placement-2 #id-survival-border-2
-{
-	visibility: visible;
-}
-
-.survival-winner--placement-3 #id-survival-border-3
-{
-	visibility: visible;
-}
-
-.survival-winner--placement-4 #id-survival-border-4
-{
-	visibility: visible;
-}
-
-.survival-winner__ring
-{
-	width: 400px;
-	height: 400px;
-	horizontal-align: center;
-	vertical-align: center;
-	transform: scale3d( 1, 1, 1 );
-	border-radius: 50%;
-	border: 3px solid white;
-	blur: gaussian( 2, 2, 6 );
-	-s2-mix-blend-mode: screen;
-	opacity: 0;
-}
-
-.survival-winner__ring--flash
-{
-	animation-name: survival-eom-flash;
-	animation-delay: 0.50s;
-	animation-duration: .4s;
-	animation-timing-function: ease-in;
-	animation-iteration-count: 1;
-	animation-fill-mode: both;
-}
-
-@keyframes 'survival-eom-flash'
-{
-	0%
-	{
-		transform: scale3d( 1, 1, 1 );
-		opacity: 0;
-	}
-	
-	1%
-	{
-		transform: scale3d( 1, 1, 1 );
-		opacity: 1;
-	}
-	
-	100%
-	{
-		transform: scale3d( 1.8, 1.8, 1.8 );
-		opacity: 0;
-	}
-	
-}
-
-.survival-winner__data
-{
-	flow-children: down;
-	horizontal-align: center;
-	vertical-align: center;
-}
-
-.survival-winner__text-large
-{
-	horizontal-align: center;
-	text-align: center;
-	font-size: 32px;
-	font-weight: medium;
-	text-transform: uppercase;
-	-s2-mix-blend-mode: screen;
-	max-width: 350px;
-	text-overflow: shrink;
-}
-
-.survival-winner__text-small
-{
-	horizontal-align: center;
-	text-align: center;
-	font-size: 20px;
-	font-weight: medium;
-	text-transform: none;
-	-s2-mix-blend-mode: screen;
-	max-width: 350px;
-	text-overflow: ellipsis;
-	height: 32px;
-}
-
-.survival-winner--placement-1 .survival-winner__text-large,.survival-winner--placement-1 .survival-winner__text-small
-{
-	color:#f5f3ba;
-}
-
-.survival-winner--placement-1 .survival-winner__text-large
-{
-	text-shadow: 0px 0px 6px 0.25 #bdbb8f;
-}
-
-.survival-winner--placement-2 .survival-winner__text-large,.survival-winner--placement-2 .survival-winner__text-small
-{
-	color:#c4c1b5;
-}
-
-.survival-winner--placement-2 .survival-winner__text-large
-{
-	text-shadow: 0px 0px 6px 0.25 #8d8c83;
-}
-
-.survival-winner--placement-3 .survival-winner__text-large,.survival-winner--placement-3 .survival-winner__text-small
-{
-	color:#ab836e;
-}
-
-.survival-winner--placement-3 .survival-winner__text-large
-{
-	text-shadow: 0px 0px 6px 0.25 #816352;
-}
-
-.survival-winner--placement-4 .survival-winner__text-large,.survival-winner--placement-4 .survival-winner__text-small
-{
-	color:#b12b2b;
-}
-
-.survival-winner--placement-4 .survival-winner__text-large
-{
-	text-shadow: 0px 0px 6px 0.25 #7e1f1f;
-}
-
-.survival-winner__avatar
-{
-	width: 154px;
-	height: 154px;
-	horizontal-align: center;
-	opacity-mask: url("s2r://panorama/images/masks/hex_png.vtex");
-}
-
-.survival-winner--placement-1 .survival-winner__avatar-bg
-{
-	width: 158px;
-	height: 158px;
-	background-color: gradient( linear, 0% 0%, 0% 100%, from( #f5f3ba ), to( #afad6b) );
-	opacity-mask: url("s2r://panorama/images/masks/hex_png.vtex");
-}
-
-.survival-winner--placement-2 .survival-winner__avatar-bg
-{
-	width: 158px;
-	height: 158px;
-	background-color: gradient( linear, 0% 0%, 0% 100%, from( #afada2 ), to( #757570) );
-	opacity-mask: url("s2r://panorama/images/masks/hex_png.vtex");
-}
-
-.survival-winner--placement-3 .survival-winner__avatar-bg
-{
-	width: 158px;
-	height: 158px;
-	background-color: gradient( linear, 0% 0%, 0% 100%, from( #ab836e ), to( #856452) );
-	opacity-mask: url("s2r://panorama/images/masks/hex_png.vtex");
-}
-
-.survival-winner--placement-4 .survival-winner__avatar-bg
-{
-	width: 158px;
-	height: 158px;
-	background-color: gradient( linear, 0% 0%, 0% 100%, from( #da3d3d ), to( #741717) );
-	opacity-mask: url("s2r://panorama/images/masks/hex_png.vtex");
-}
-
-#id-survival-avatar-container
-{
-	opacity: 0;
-	transition-property: opacity;
-	transition-delay: .80s;
-	transition-duration: 0.1s;
-	transition-timing-function: ease-in-out;
-}
-
-#id-survival-avatar-container.reveal
-{
-	opacity: 1;
-}
-
-.survival-winner--reveal
-{
-	animation-name: survival-eom-enter, survival-eom-shrink;
-	animation-duration: .75s, 1s;
-	animation-delay: 0s, 5s;
-	animation-timing-function: ease-in;
-	animation-iteration-count: 1;
-	animation-fill-mode: both;
-}
-
-@keyframes 'survival-eom-enter'
-{
-	0%
-	{
-		transform: scale3d( 3, 3, 3 );
-		opacity: 0;
-	}
-	
-	80%
-	{
-		transform: scale3d( 1, 1, 1 );
-		opacity: 1;
-		brightness: 1;
-	}
-	
-	90%
-	{
-		transform: scale3d( 1.015, 1.015, 1.015 );
-		brightness: 50;
-	}
-	
-	100%
-	{
-		transform: scale3d( 1, 1, 1 );
-		brightness: 1.0;
-	}
-	
-}
-
-.survival-winner--shrink
-{
-	animation-name: survival-eom-shrink;
-	animation-duration: 1s;
-	animation-delay: 5s;
-	animation-timing-function: ease-in-out;
-	animation-iteration-count: 1;
-}
-
-@keyframes 'survival-eom-shrink'
-{
-	0%
-	{
-		transform: scale3d( 1, 1, 1 );
-	}
-	
-	100%
-	{
-		transform: scale3d( .5, .5, .5 ) translatey( -300px );
-	}
-	
 }
 

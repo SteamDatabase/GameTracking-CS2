@@ -9,6 +9,7 @@
 /// <reference path="avatar.ts" />
 /// <reference path="vanity_player_info.ts" />
 /// <reference path="particle_controls.ts" />
+/// <reference path="video_setting_recommendations.ts" />
 var MainMenu;
 (function (MainMenu) {
     const _m_bPerfectWorld = (MyPersonaAPI.GetLauncherType() === "perfectworld");
@@ -37,7 +38,8 @@ var MainMenu;
     const nNumNewSettings = UpdateSettingsMenuAlert();
     const m_MainMenuTopBarParticleFX = $('#MainMenuNavigateParticles');
     ParticleControls.UpdateMainMenuTopBar(m_MainMenuTopBarParticleFX, '');
-    let _m_bShownBefore = false;
+    let _m_nActiveFrameCount = 0;
+    let _m_bTriedShowVideoSettingRecommendation = false;
     const _m_acknowledgedRentalExpirationCrateIds = new Set();
     function _msg(text, ...args) {
     }
@@ -213,13 +215,9 @@ var MainMenu;
         _FetchTournamentData();
         _ShowFloatingPanels();
         $('#MainMenuNavBarHome').checked = true;
-        if (!_m_bShownBefore) {
-            _CheckGraphicsDrivers();
-        }
-        else if (GameTypesAPI.ShouldShowNewUserPopup()) {
+        if (GameTypesAPI.ShouldShowNewUserPopup()) {
             _NewUser_ShowTrainingCompletePopup();
         }
-        _m_bShownBefore = true;
     }
     function _TournamentDraftUpdate() {
         if (!m_TournamentPickBanPopup || !m_TournamentPickBanPopup.IsValid()) {
@@ -821,6 +819,16 @@ var MainMenu;
                 }
             }
         }
+        if (GameInterfaceAPI.IsAppActive()) {
+            _m_nActiveFrameCount++;
+            if (_m_nActiveFrameCount == 100 && !_m_bTriedShowVideoSettingRecommendation) {
+                VideoSettingRecommendations.MaybeShowPopup();
+                _m_bTriedShowVideoSettingRecommendation = true;
+            }
+        }
+        else {
+            _m_nActiveFrameCount = 0;
+        }
     }
     function _OpenPlayMenu() {
         if (MatchStatsAPI.GetUiExperienceType())
@@ -844,6 +852,10 @@ var MainMenu;
     function _OpenStatsMenu() {
         _PauseMainMenuCharacter();
         NavigateToTab('JsPlayerStats', 'mainmenu_playerstats');
+    }
+    function _OpenSettingsMenu() {
+        _PauseMainMenuCharacter();
+        NavigateToTab('JsSettings', 'settings/settings');
     }
     var _UpdateOverwatch = function () {
         var strCaseDescription = OverwatchAPI.GetAssignedCaseDescription();
@@ -1379,31 +1391,8 @@ var MainMenu;
         LobbyAPI.UpdateSessionSettings(settings);
         LobbyAPI.StartMatchmaking('', '', '', '');
     }
-    function _CheckGraphicsDrivers() {
-        let info = GameInterfaceAPI.GetGraphicsDriverInfo();
-        if (!info.driver_out_of_date)
-            return;
-        if (GameInterfaceAPI.GetSettingString('cl_graphics_driver_warning_dont_show_again') !== '0')
-            return;
-        switch (info.vendor_id) {
-            case 0x1002:
-                {
-                    _ShowGraphicsDriverWarning("AMD", 'https://amd.com/support');
-                    break;
-                }
-            case 0x10DE:
-                {
-                    _ShowGraphicsDriverWarning("Nvidia", 'https://nvidia.com/drivers');
-                    break;
-                }
-        }
-    }
-    function _ShowGraphicsDriverWarning(vendor, link) {
-        UiToolkitAPI.ShowGenericPopupThreeOptions('#PlayMenu_GraphicsDriverWarning_Title', '#PlayMenu_GraphicsDriverWarning_' + vendor, '', '#PlayMenu_GraphicsDriverLink_' + vendor, () => {
-            SteamOverlayAPI.OpenExternalBrowserURL(link);
-        }, '#PlayMenu_GraphicsDriverWarning_DontShowAgain', () => {
-            GameInterfaceAPI.SetSettingString('cl_graphics_driver_warning_dont_show_again', '1');
-        }, '#OK', () => { });
+    function _MainInitBackgroundMovie() {
+        _UpdateBackgroundMap();
     }
     {
         $.LogChannel("CSGO_MainMenu", "LV_DEFAULT", "#aaff80");
@@ -1413,6 +1402,7 @@ var MainMenu;
         $.RegisterForUnhandledEvent('OpenInventory', _OpenInventory);
         $.RegisterForUnhandledEvent('OpenWatchMenu', _OpenWatchMenu);
         $.RegisterForUnhandledEvent('OpenStatsMenu', _OpenStatsMenu);
+        $.RegisterForUnhandledEvent('OpenSettingsMenu', _OpenSettingsMenu);
         $.RegisterForUnhandledEvent('OpenSubscriptionUpsell', _OpenSubscriptionUpsell);
         $.RegisterForUnhandledEvent('CSGOShowMainMenu', _OnShowMainMenu);
         $.RegisterForUnhandledEvent('CSGOHideMainMenu', _OnHideMainMenu);
@@ -1438,7 +1428,7 @@ var MainMenu;
         $.RegisterForUnhandledEvent("PanoramaComponent_EmbeddedStream_VideoPlaying", _OnSteamIsPlaying);
         $.RegisterForUnhandledEvent("StreamPanelClosed", _ResetNewsEntryStyle);
         $.RegisterForUnhandledEvent("HideMainMenuNewsPanel", _HideMainMenuNewsPanel);
-        $.RegisterForUnhandledEvent("CSGOMainInitBackgroundMovie", _UpdateBackgroundMap);
+        $.RegisterForUnhandledEvent("CSGOMainInitBackgroundMovie", _MainInitBackgroundMovie);
         $.RegisterForUnhandledEvent("MainMenuGoToSettings", _OpenSettings);
         $.RegisterForUnhandledEvent("MainMenuGoToStore", _OpenFullscreenStore);
         $.RegisterForUnhandledEvent("MainMenuGoToCharacterLoadout", _GoToCharacterLoadout);
