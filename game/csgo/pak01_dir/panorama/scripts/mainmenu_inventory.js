@@ -237,8 +237,11 @@ var InventoryPanel;
         }
     }
     function _GetFilterRentedItemsSetting(activePanel) {
-        let elFilterBtn = activePanel.FindChildInLayoutFile('InvFilterRentedItems');
-        return (elFilterBtn && elFilterBtn.checked) ? 'is_rental:false' : '';
+        if (activePanel) {
+            let elFilterBtn = activePanel.FindChildInLayoutFile('InvFilterRentedItems');
+            return (elFilterBtn && elFilterBtn.checked) ? 'is_rental:false' : '';
+        }
+        return '';
     }
     function _UpdateFilterRentalBtnInCategoryVisibility(category, subCategory = '') {
         let elNavBtn = $.GetContextPanel().FindChildInLayoutFile(category + '-NavBarParent');
