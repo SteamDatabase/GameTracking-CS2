@@ -148,8 +148,9 @@
 	{
 		BetaUniverse
 		{
-			"FakeLag"			"20"
+			"FakeLag"			"40"
 			"FakeLoss"			".1"
+			"FakeJitter"		"low"
 
 			"TimeTable"
 			{
@@ -160,10 +161,14 @@
 					"FakeLoss"			"0"
 					"FakeReorderPct"	"0"
 					"FakeReorderDelay"	"0"
+					"FakeJitter"		"off"
 				}
 				// Back to more realistic internet conditions 2:45:00 PM local time
 				"144500"
 				{
+					"FakeLag"			"60"
+					"FakeLoss"			".2"
+					"FakeJitter"		"med"
 				}
 			}
 		}

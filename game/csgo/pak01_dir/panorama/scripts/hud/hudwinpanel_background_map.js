@@ -371,7 +371,7 @@ var MvpBackgroundMap;
             oSettings.mapPanel.FireEntityInput("item", "Alpha", '0');
             return;
         }
-        oSettings.mapPanel.FireEntityInput("item", "Alpha", '160');
+        oSettings.mapPanel.FireEntityInput("item", "Alpha", '170');
         oSettings.mapPanel.FireEntityInput("item", "SetItem", flairItemId);
     }
 })(MvpBackgroundMap || (MvpBackgroundMap = {}));
