@@ -311,10 +311,6 @@ var MvpBackgroundMap;
         ShowCharacters(oSettings);
         oSettings.backgroundIndex = 2;
         SharedMapLogic(oSettings);
-        $.Schedule(1.75, () => {
-            elMap.FireEntityInput('mvp_blast_effect', 'Stop');
-            elMap.FireEntityInput('mvp_blast_effect', 'start');
-        });
         $.Schedule(2, () => {
             elMap.TransitionToCamera('camera_grenade', 1);
             elMap.FireEntityInput('mvp_char11', 'Alpha', '255');
