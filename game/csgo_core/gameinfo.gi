@@ -166,9 +166,6 @@
 				// Back to more realistic internet conditions 2:45:00 PM local time
 				"144500"
 				{
-					"FakeLag"			"60"
-					"FakeLoss"			".2"
-					"FakeJitter"		"med"
 				}
 			}
 		}
