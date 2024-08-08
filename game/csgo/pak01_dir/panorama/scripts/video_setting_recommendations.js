@@ -57,6 +57,8 @@ var VideoSettingRecommendations;
         switch (driverInfo.vendor_id) {
             case 0x10DE:
                 {
+                    if (GameInterfaceAPI.HasCommandLineParm("-tools"))
+                        return false;
                     ShowVariableRefreshRatePopup("Nvidia", $.Localize('#GSyncHelpLinkURL'));
                     return true;
                 }

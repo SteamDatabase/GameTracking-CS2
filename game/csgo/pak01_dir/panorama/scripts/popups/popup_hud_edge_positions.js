@@ -21,6 +21,7 @@ var HudEdgePositions;
         m_XSlider.min = minHeight / width;
         if (m_XSlider.actualvalue < m_XSlider.min)
             m_XSlider.actualvalue = m_XSlider.min;
+        m_XSlider.min = Math.max(m_XSlider.min, OptionsMenuAPI.GetHudSafeZoneXMin());
         m_Edge.style.margin = `${(1 - m_YSlider.actualvalue) * 100 / 2}% ${(1 - m_XSlider.actualvalue) * 100 / 2}%`;
     }
     HudEdgePositions.Update = Update;
