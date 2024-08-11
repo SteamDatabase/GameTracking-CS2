@@ -7,6 +7,7 @@ echo "Processing CS2..."
 
 ProcessDepot ".so"
 ProcessDepot ".dll"
+DeduplicateStringsFrom ".so" "game/bin/linuxsteamrt64/libengine2_strings.txt" "game/bin/linuxsteamrt64/libtier0_strings.txt"
 ProcessVPK
 
 while IFS= read -r -d '' file
@@ -14,7 +15,7 @@ do
 	echo " > $file"
 
 	# When updating vpk_extensions, also update "vpk:..." in GameTracking/files.json
-	~/ValveResourceFormat/Decompiler/bin/Release/linux-x64/publish/Decompiler \
+	"$VRF_PATH" \
 		--input "$file" \
 		--output "$(echo "$file" | sed -e 's/\.vpk$/\//g')" \
 		--vpk_cache \
