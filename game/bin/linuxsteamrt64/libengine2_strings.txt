@@ -1082,7 +1082,6 @@ $tLVRenderDeviceSetupV001
 0(D7
 00000000-0000-0000-0000-000000000000
 00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899
-00:57:46
 00A+
 0123456789abcdef
 0: Force z prepass off. 1: Force on. -1: Don't force
@@ -1201,6 +1200,8 @@ $tLVRenderDeviceSetupV001
 13CLoopModeBase
 13CLoopTypeBase
 13CMsgTransform
+13CNetMessagePBILi1073741824E21NetMessagePacketStartL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
+13CNetMessagePBILi1073741825E19NetMessagePacketEndL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi11E34CNETMsg_SpawnGroup_SetCreationTickL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi12E25CNETMsg_SpawnGroup_UnloadL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi13E32CNETMsg_SpawnGroup_LoadCompletedL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
@@ -1259,8 +1260,6 @@ $tLVRenderDeviceSetupV001
 13CNetMessagePBILi8E23CNETMsg_SpawnGroup_LoadL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi9E33CNETMsg_SpawnGroup_ManifestUpdateL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILin1E19C2S_CONNECT_MessageL13SignonGroup_t0EL19NetChannelBufType_t1ELb0EE
-13CNetMessagePBILin1E19NetMessagePacketEndL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
-13CNetMessagePBILin1E21NetMessagePacketStartL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILin1E22C2S_CONNECTION_MessageL13SignonGroup_t0EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILin1E26NetMessageConnectionClosedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILin1E27NetMessageConnectionCrashedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
@@ -1718,6 +1717,7 @@ $tLVRenderDeviceSetupV001
 21IUGCAddonPathResolver
 21IVConCommDataReceived
 21NetMessagePacketStart
+22:11:47
 22C2S_CONNECTION_Message
 22CCLCMsg_CmdKeyValues_t
 22CCLCMsg_FileCRCCheck_t
@@ -1742,6 +1742,7 @@ $tLVRenderDeviceSetupV001
 22CSVCMsg_FullFrameSplit
 22CSVCMsg_PacketEntities
 22CSVCMsg_PacketReliable
+22CSVCMsg_UserCommands_t
 22CSchemaInstallCallback
 22CServerConsoleRedirect
 22CSimpleLoggingListener
@@ -1974,7 +1975,6 @@ $tLVRenderDeviceSetupV001
 49CNetworkServerSpawnGroup_LoadEntitiesPrerequisite
 49CNetworkServerSpawnGroup_LoadSaveGamePrerequisite
 49CSVCMsg_PacketEntities_non_transmitted_entities_t
-4:mkL
 4CPVS
 4DXgu~
 4E#6
@@ -2137,6 +2137,7 @@ $tLVRenderDeviceSetupV001
 @@EventQueue
 @CLoopModeInGameUI::LoopInit
 @UUUUUU
+@fff?
 @fff?fff?fff?fff?
 @i-kuX
 A command with the specified name already exists. Cannot create an alias with the same name.\n
@@ -2519,7 +2520,7 @@ Attempted to post a message to a NULL entity!\n
 Attempted to switch to unknown loop "%s"!\n
 AudioLanguage
 AudioSubLanguage
-Aug  9 2024
+Aug 13 2024
 August
 AutoBugComponent
 AutoBugProduct
@@ -2726,7 +2727,7 @@ CCircularBuffer::Write(void const*, int)
 CCircularBuffer::WriteZeroed(int)
 CCircularBuffer::~CCircularBuffer()
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!\n
-CCommandBuffer::AddText(char const*, int, int, double)
+CCommandBuffer::AddText(char const*, int, int, bool, double, unsigned long long)
 CCommandBuffer::BeginProcessingCommands(int)
 CCommandBuffer::CCommandBuffer()
 CCommandBuffer::DequeueNextCommand()
@@ -3132,6 +3133,7 @@ CHLTVClient::SendSnapshot: Failed to serialize CNETMsg_Tick_t\n
 CHLTVClient::SendSnapshot: Failed to serialize CSVCMsg_PacketEntities_t\n
 CHLTVClient::SendSnapshot: Failed to serialize CSVCMsg_PacketReliable_t (reliable state false)\n
 CHLTVClient::SendSnapshot: Failed to serialize CSVCMsg_PacketReliable_t (reliable state true)\n
+CHLTVClient::SendSnapshot: Failed to serialize CSVCMsg_UserCommands_t\n
 CHLTVClient::SendSnapshot: Failed to serialize CSVCMsg_VoiceData_t\n
 CHLTVClient::ShouldSendMessages: Send delayed due to !CanPacket, tick=%d NetTime=%f client=%s\n
 CHLTVClient::WriteSpawnGroupUpdateMessages
@@ -3246,7 +3248,6 @@ CL:  Successfully connected to %s\n
 CL:  Suppress INetchannel::Transmit() in loopmode( %s )\n
 CL:  TransmitNetChannel
 CL:  Unexpected authentication protocol %i!\n
-CL:  WARNING! User command buffer overflow (start:%i, current:%i, end:%i), buffer size %d bytes\n
 CL:  WARNING:  Connection Problem, not requesting uncompressed update due to sv_snapshot_unlimited == true\n
 CL:  WARNING:  Connection Problem, requesting uncompressed update\n
 CL:  [%s: %s | %s | %s] Load\n
@@ -4060,6 +4061,7 @@ Enable instanced baselines. Saves network overhead.
 Enable instant replay recording.
 Enable logging about events that disable frame time warnings
 Enable multithreading to use std::thread
+Enable polling for network messages every frame, instead of every tick
 Enable precomputed visibility when true
 Enable rendering of translucent geometry
 Enable the rendering of panorama UI
@@ -5215,7 +5217,6 @@ Known Peer State "%s"
 Known by handlers: 
 KuoW
 L %02i/%02i/%04i - %02i:%02i:%02i: %s
-L>fff?
 L?%OX
 LANG
 LAYEREDGAMEROOT
@@ -5588,6 +5589,8 @@ N10__cxxabiv120__si_class_type_infoE
 N10__cxxabiv121__vmi_class_type_infoE
 N10__cxxabiv123__fundamental_type_infoE
 N10__cxxabiv129__pointer_to_member_type_infoE
+N13CNetMessagePBILi1073741824E21NetMessagePacketStartL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
+N13CNetMessagePBILi1073741825E19NetMessagePacketEndL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi11E34CNETMsg_SpawnGroup_SetCreationTickL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi12E25CNETMsg_SpawnGroup_UnloadL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi13E32CNETMsg_SpawnGroup_LoadCompletedL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
@@ -5646,8 +5649,6 @@ N13CNetMessagePBILi7E19CNETMsg_SignonStateL13SignonGroup_t10EL19NetChannelBufTyp
 N13CNetMessagePBILi8E23CNETMsg_SpawnGroup_LoadL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi9E33CNETMsg_SpawnGroup_ManifestUpdateL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILin1E19C2S_CONNECT_MessageL13SignonGroup_t0EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
-N13CNetMessagePBILin1E19NetMessagePacketEndL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
-N13CNetMessagePBILin1E21NetMessagePacketStartL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILin1E22C2S_CONNECTION_MessageL13SignonGroup_t0EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILin1E26NetMessageConnectionClosedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILin1E27NetMessageConnectionCrashedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
@@ -8617,6 +8618,7 @@ __UNKNOWN__
 ___clientsideitemsplaceholder0___
 ___clientsideitemsplaceholder1___
 __assert_fail
+__beginseq
 __bss_start
 __ctype_b_loc
 __ctype_get_mb_cur_max
@@ -8677,6 +8679,7 @@ __cxxabiv1::__vmi_class_type_info::__do_upcast(__cxxabiv1::__class_type_info con
 __cxxabiv1::__vmi_class_type_info::~__vmi_class_type_info()
 __duplocale
 __dynamic_cast
+__endseq
 __errno_location
 __float128
 __fprintf_chk
@@ -9142,6 +9145,7 @@ cl_log_tick_skips
 cl_parallel_readpacketentities
 cl_parallel_readpacketentities_threshold
 cl_playback_screenshots
+cl_poll_network_early
 cl_precacheinfo
 cl_precacheinfo:  not connected\n
 cl_predict
@@ -9445,6 +9449,7 @@ engine_frametime_warnings_enable
 engine_gcmessages.proto
 engine_low_latency_sleep_after_client_tick
 engine_max_resource_system_update_time
+engine_max_ticks_to_simulate
 engine_no_focus_sleep
 engine_no_focus_sleep_vconsole_suppress
 engine_ostype
@@ -9457,7 +9462,6 @@ engine_show_frame_dispatch
 engine_show_frame_pacing
 engine_show_frame_ticks
 engine_sse42
-engine_vr_max_ticks_to_simulate
 english
 entindex
 entindex %d snaps: 
@@ -9816,7 +9820,7 @@ hltv_proxies
 hltv_slots
 hltv_update_stats
 hltvclientstate.cpp
-hltvserver_async.cpp:1069
+hltvserver_async.cpp:1096
 host_force_frametime_to_equal_tick_interval
 host_force_max_frametime_to_tick_interval
 host_framerate
@@ -10668,6 +10672,7 @@ r?dar?\n
 rA?7
 rEy5
 rFg7
+rPVc
 r_add_views_in_pre_output
 r_always_render_all_windows
 r_aspectratio

@@ -41,6 +41,9 @@ var ContextMenuGetSouvenir;
             elRedeemHeader.SetDialogVariableInt('redeems', _m_redeemsAvailable);
             elRedeemHeader.SetDialogVariable('redeems-text', $.Localize('#popup_redeem_souvenir_desc', elRedeemHeader));
         }
+        else {
+            elRedeemHeader.GetParent().visible = false;
+        }
     }
     function MakeMatch(elParent, umid) {
         let elMatch = elParent.FindChild(umid);

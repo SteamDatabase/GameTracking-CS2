@@ -1821,6 +1821,7 @@ var PlayMenu;
     function _ReadyForDisplay() {
         _StartRotatingMapGroupTimer();
         _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', _InventoryUpdated);
+        _InventoryUpdated();
     }
     function _UnreadyForDisplay() {
         _CancelRotatingMapGroupSchedule();

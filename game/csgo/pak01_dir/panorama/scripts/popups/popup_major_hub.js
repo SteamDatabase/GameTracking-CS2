@@ -20,6 +20,7 @@ var PopupMajorHub;
     let _m_inventoryUpdatedHandler;
     let m_selectedPage;
     let m_setDefaultTab;
+    let m_redeemAvailable = 0;
     let m_oPageData = {};
     m_oPageData.hasAlreadyInit = [];
     function ClosePopup() {
@@ -92,10 +93,11 @@ var PopupMajorHub;
         let bItemsForSale = _ItemsForSale();
         _m_cp.SetHasClass('no-items-on-sale', !bItemsForSale);
         if (bItemsForSale) {
-            _UpdateSouvenirSection();
+            _UpdateSouvenirSection(bItemsForSale);
             _UpdateStoreTiles();
         }
         else {
+            _UpdateSouvenirSection(bItemsForSale);
         }
         LoadPickEmData();
         SetUpTournamentControlRoom();
@@ -171,11 +173,22 @@ var PopupMajorHub;
         _m_cp.FindChildInLayoutFile('id-challenges-block').style.backgroundImage = bgImage;
         _m_cp.FindChildInLayoutFile('id-challenges-block').SetHasClass('major-background-size', true);
     }
-    function _UpdateSouvenirSection() {
+    function _UpdateSouvenirSection(bItemsForSale) {
         if (_m_eventId === g_ActiveTournamentInfo.eventid) {
-            let idForCharges = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_charge, 0);
-            if (StoreAPI.GetStoreItemSalePrice(idForCharges, 1, '')) {
-                _m_cp.SetDialogVariable('souvenir_price', StoreAPI.GetStoreItemSalePrice(idForCharges, 1, ''));
+            let elDesc = _m_cp.FindChildInLayoutFile('id-major-hub-souvenir-desc');
+            elDesc.visible = true;
+            if (bItemsForSale) {
+                let idForCharges = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_charge, 0);
+                if (StoreAPI.GetStoreItemSalePrice(idForCharges, 1, '')) {
+                    _m_cp.SetDialogVariable('souvenir_price', StoreAPI.GetStoreItemSalePrice(idForCharges, 1, ''));
+                }
+                elDesc.SetDialogVariable('souvenir_package_desc', $.Localize('#major_hub_souvenir_package_desc', _m_cp));
+            }
+            else if (m_redeemAvailable && m_redeemAvailable > 0) {
+                elDesc.SetDialogVariable('souvenir_package_desc', $.Localize('#major_hub_souvenir_package_desc_no_price', _m_cp));
+            }
+            else {
+                elDesc.visible = false;
             }
         }
         _m_cp.SetDialogVariable('souvenir_package', $.Localize('#CSGO_crate_' + g_ActiveTournamentInfo.location + '_promo'));
@@ -317,10 +330,10 @@ var PopupMajorHub;
         if (coinRedeemsPurchased)
             coinLevel += coinRedeemsPurchased;
         let redeemed = parseInt(InventoryAPI.GetItemAttributeValue(tournamentCoinItemId, "operation drops awarded 0"));
-        let redeemsAvailable = coinLevel - redeemed;
-        _m_cp.SetDialogVariableInt('redeems', redeemsAvailable);
+        m_redeemAvailable = coinLevel - redeemed;
+        _m_cp.SetDialogVariableInt('redeems', m_redeemAvailable);
         let elPanel = _m_cp.FindChildInLayoutFile('id-coin-status-charges');
-        elPanel.visible = redeemsAvailable > 0;
+        elPanel.visible = m_redeemAvailable > 0;
         let sTooltip = $.Localize('#popup_redeem_souvenir_desc', _m_cp);
         elPanel.SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltip('id-coin-status-charges', sTooltip); });
         elPanel.SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });

@@ -52,6 +52,7 @@
      %-120.120s %10.2f %10.2f\n
      %-40.40s %10.10s %10.10s\n
      %-40.40s %10.2f %10.2f\n
+    %d: cmd_num: %d, client_tick:%d\n
     '%s' localization matches\n
     - m_AudiblePlayers[%d] = %u\n
     - m_ServerBannedPlayers[%d] = %u\n
@@ -1920,8 +1921,10 @@ $JXsZ
 $PQ%u
 $PositionKeyFrames
 $RotationKeyFrames
+$SprayDetailBlendFactor
 $SprayPlaneColorTint
 $SprayPlaneTextureColor
+$SprayTextureColor
 $XI(6
 $d`D-laM
 $ent_age
@@ -2124,6 +2127,7 @@ $taser_charge
 %d: %f %f %f
 %d: %s: %s %s
 %d: World: %s Refcount: %d\n
+%d: preentitypacketrec:exec %d->%d [ack %d]
 %d:%02d
 %d:%s : clamping rebased tick %s [baseTick %d] value %d to zero!\n
 %d:%s::%s %s
@@ -3157,6 +3161,7 @@ $taser_charge
 0;Q5[
 0<cz
 0=low, 1=medium, 2=high, 3=ultra
+0Gw?
 0M2~@p
 0W/5
 0Z@q
@@ -3310,6 +3315,7 @@ $taser_charge
 12CSpiderGraph
 12CTEExplosion
 12CTraceFilter
+12CUserCmdBase
 12CVDiagnostic
 12CViewEffects
 12CVoiceStatus
@@ -3933,6 +3939,7 @@ $taser_charge
 16CUI_ToastManager
 16CUI_Tooltip_Base
 16CUI_Tooltip_Text
+16CUserCmdBaseHostI13CSGOUserCmdPBE
 16CUserMessageFade
 16CWorldGameSystem
 16C_BasePlayerPawn
@@ -4538,6 +4545,7 @@ $taser_charge
 20ISchemaAttributeType
 20PerFriendPreferences
 20PhysicsRagdollPose_t
+20PredictedDamageTag_t
 20PublishedFileDetails
 20ScoreLeaderboardData
 20TEImpact_GameEvent_t
@@ -4662,6 +4670,7 @@ $taser_charge
 22CCSUsrMsg_CloseCaption
 22CCSUsrMsg_ReloadEffect
 22CCSUsrMsg_RequestState
+22CCSUsrMsg_SnapTapStats
 22CCSUsrMsg_VoteFailed_t
 22CClientPulseGameSystem
 22CClientUIDialogManager
@@ -4910,6 +4919,7 @@ $taser_charge
 24CFixedSizeCircularBufferI23CSGOInputHistoryEntryPBLi32EiE
 24CFixedSizeCircularBufferI24SmokeVolumeBulletTrail_tLi16EiE
 24CFixedSizeCircularBufferI27SmokeVolumeHEGrenadeTrail_tLi5EiE
+24CFixedSizeCircularBufferIN19CCSSnapTapDetection9Attempt_tELi20EiE
 24CFixedSizeCircularBufferIN24CCSPlayer_WeaponServices27ShootPositionHistoryEntry_tELi32EiE
 24CFixedSizeCircularBufferIiLi16EiE
 24CFlashlightEffectManager
@@ -6668,7 +6678,6 @@ $taser_charge
 <entindex> <fieldname>:  Track changes to entity index entindex, for field fieldname.
 <es-8R
 <failure>
-<font color="%s">"%s"</font>
 <font color="%s">%s %s</font> %s <font color="%s">%s</font>
 <font color="%s">%s %s</font>: %s
 <font color="%s">%s </font><font color="%s">%s</font>
@@ -6726,8 +6735,8 @@ $taser_charge
 >4|6eXg_e
 >7^0g
 >BigShot
->CTextureBasedAnimatable
 >Default Game Description
+>OnObserverModeChanged
 >Sem
 >Server Peers
 >WK6
@@ -6742,7 +6751,6 @@ $taser_charge
 ???CRR_Response bogus index
 ?AnimatedImageStrip
 ?CBaseModelEntity
-?CCSTeam
 ?CHTML::Paint
 ?CInfoDynamicShadowHint
 ?CUtlBlockMemory overflow!\n
@@ -6762,6 +6770,7 @@ $taser_charge
 ?avx::BVH4OBBVirtualCurveIntersector1
 ?d86L
 ?dt]X
+?end-of-match
 ?error: more roots than expected\n
 ?ffffff
 ?gameui_activated
@@ -6786,7 +6795,6 @@ $taser_charge
 @CFireObjectDesc
 @Converted s1 character schema path from %s to %s\n
 @MfKZ
-@No ongoing match
 @Pgl
 @Pu\rm
 @WE]X
@@ -6986,6 +6994,7 @@ ANSI X9.62
 ANTLR3_EXCEPTION number %d (%08X).\n
 ANTLR3_EXCEPTION: %s\n
 ANY PRIVATE KEY
+ANo ongoing match
 AO DETAIL\t %d    \t\t\t\t\t\n
 AO Proxies
 AOHeightMapGlobal
@@ -8368,6 +8377,7 @@ CCSPointScriptExtensions_weapon_cs_base
 CCSPointScriptExtensions_weapon_cs_base!GetData
 CCSReplayObserverHandler
 CCSSteamVideo
+CCSTeam
 CCSUsrMsg_AdjustMoney_t
 CCSUsrMsg_CallVoteFailed_t
 CCSUsrMsg_CurrentRoundOdds_t
@@ -9548,7 +9558,6 @@ CSkyCamera
 CSkyboxReference
 CSmokeGrenade
 CSmokeGrenadeProjectile
-CSmokeVolumeObjectDesc
 CSoundAreaEntityBase
 CSoundAreaEntityOrientedBox
 CSoundAreaEntitySphere
@@ -9628,6 +9637,7 @@ CTempEnts::PhysicsProp: model %s not found\n
 CTestDomainDerived_Cursor
 CTestDomainDerived_Cursor!GetCursorValueB
 CTestDomainDerived_Cursor!SetCursorValueB
+CTextureBasedAnimatable
 CTimeline
 CTonemapController2
 CTriggerBuoyancy
@@ -11352,7 +11362,6 @@ D_VIEWMODEL_PASS
 D_VR_DEPTH_MASK_TEXTURE
 D_VR_DEPTH_TEXTURE
 D_WIND_ALLOWED
-D_WORLDSPACEZONETEXTURE
 D_WRITE_COC
 D_WRITE_DEST_ALPHA
 Daisy wheel input mode: RS | ABXY
@@ -11375,7 +11384,6 @@ DamageTypes_t
 DangerIcon
 DangerSoundThink
 DangerZoneProjection.vtex
-DangerZoneProjectionRT
 DashboardLabel
 Dashboard__HZone
 Data Encipherment
@@ -13130,6 +13138,7 @@ GUERILLA02
 GXqN
 GXy{
 Ga=o
+Ga?33
 Game Blackboards: 
 Game Event Fired: %s\n
 Game Instructor Counts
@@ -14208,6 +14217,7 @@ HITGROUP_RIGHTLEG
 HITGROUP_SPECIAL
 HITGROUP_STOMACH
 HITGROUP_UNUSED
+HKw{
 HLTVConnectRelay
 HMAC
 HMAC GOST 34.11-94
@@ -14840,7 +14850,6 @@ Ignoring %s: unsupported file type.\n
 Ignoring '%s' (default rule)\n
 Ignoring '%s'\n
 Ignoring CSVCMsg_UserCommands_t from bot\n
-Ignoring CSVCMsg_UserCommands_t with bogus steamID %s\n
 Ignoring CSVCMsg_UserCommands_t, command fails protobuf parse\n
 Ij)s
 Ik\f`dub`D
@@ -16338,7 +16347,7 @@ MovePanelUp
 MoveRight
 MoveType_t
 MoveUp
-Movement Inaccuracy
+Movement
 MovementGait_t
 MovementSettings
 MovieBuffering
@@ -17929,8 +17938,6 @@ N6embree9CurveNiMBILi8EE4TypeE
 N6embree9StrStreamE
 N6embree9TriangleMILi4EE4TypeE
 N7CJ'
-N7usercmd16CUserCmdBaseHostINS_17CProtoUserCmdBaseI13CSGOUserCmdPBEEEE
-N7usercmd17CProtoUserCmdBaseI13CSGOUserCmdPBEE
 N8panorama10CCountdownE
 N8panorama10CDragPanelE
 N8panorama10CScrollBarE
@@ -18765,7 +18772,6 @@ OnNetworkedAnimationChanged
 OnNetworkedSequenceChanged
 OnNewChatEntry
 OnNextStickerButtonPressed
-OnObserverModeChanged
 OnObserverTargetChanged
 OnOpen event 
 OnOpenPlayMenu
@@ -18782,6 +18788,7 @@ OnPlayerRemoved
 OnPlayerUpdated
 OnPosChanged
 OnPreDataUpdate: missing ent %d
+OnPredictedDamageTagsChanged
 OnQuestProgressMade
 OnRagdollStateChangedCompat
 OnReceivedEquippedProfileItems
@@ -19738,6 +19745,7 @@ PredCopy_Reset
 PredCopy_SetCommand
 PredCopy_SetHeapSize
 PredCopy_Tell
+PredictedDamageTag_t
 Prediction copy does not support FTYPEDESC_PTR(%s)
 PredictionCopyDataMap_t::LookupFlatGroup( %u ) is invalid, list only has %u entries\n
 PredictionCopyDataMap_t::m_CustomFields only allows fields of type FIELD_CUSTOM! [%s] is invalid!
@@ -21145,6 +21153,7 @@ Saved log to '%s'\n
 SavedCullDistance
 Saves all active animgraph recordings to disk
 Saving game to %s...\n
+Scalar for player tagging modifier when hit. Lower values for greater tagging.
 Scale (%s space)
 Scale damage when distributed across two players
 Scale down the main viewport (to reduce GPU impact on CPU profiling)
@@ -22521,6 +22530,8 @@ SurroundingBoundsType_t
 Survival.DropBigGunsInitial
 Survival.FirstBombsIncoming
 SurvivalEndOfMatch
+Suspicion
+Suspicious Shot Sample
 Swamp
 SweptBox
 Switch to firstperson camera.
@@ -22925,6 +22936,7 @@ Thread "%s" (ID %llu) failed to shut down
 ThreadingMain
 Thrill
 Thunder
+Tick %d predicting %d commands (last exec cmd: %d, server tick %d):\n
 Tick %d predicting command %d.\n{ %s }\n
 Tick: %d
 Tick: %d / Command: %d
@@ -23567,6 +23579,7 @@ V8ParamToPanoramaType expected IUIPanel object to convert, but got some other in
 V8ParamToPanoramaType expected Number type to convert, but got something else (%s)
 V8ParamToPanoramaType expected bool type to convert, but got something else (%s)
 V8ParamToPanoramaType expected object type to convert, but got something else (%s)
+V@CSmokeVolumeObjectDesc
 VAC banned
 VALVw
 VDPr
@@ -24691,6 +24704,7 @@ Z~wl
 \rjwB\t
 \roKK
 \rrCj
+\rspec_goto
 \sG7tPD
 \t Round is in freeze time.\n
 \t Round is in progress.\n
@@ -27446,6 +27460,7 @@ cl_track_aim_head_log_closest: FIRE @ %.3f %.3f %.3f (T = %.3f)\n
 cl_track_aim_head_threshold
 cl_track_render_eye_angles
 cl_tree_sway_dir
+cl_true_sight_spectate
 cl_ui_particles_destroy_when_not_painting
 cl_updatevisibility
 cl_use_entity_as_targetid
@@ -28379,6 +28394,8 @@ defer-load-map-until-model-set
 deferred
 defined.\n
 defuse_autoclear
+defuse_cable_a
+defuse_cable_b
 defuse_cancel_autoclear
 defuse_kit_autoclear
 defusekit
@@ -28958,7 +28975,6 @@ encryptedKey
 encryption ctrl failure
 encryption not supported for this key type
 end %f %f %f
-end-of-match
 end-time
 endLerpTo
 end_drag_sound
@@ -29578,6 +29594,9 @@ flDistance
 flDurationSec
 flExecTime
 flExponent
+flFlinchModLarge
+flFlinchModSmall
+flFriendlyFireDamageReductionRatio
 flIkBlendTime
 flIn
 flInterval
@@ -30249,7 +30268,6 @@ hFcg
 hJxRX@_
 hN2D
 hRB.
-hS0Gw?
 hThinkFunc
 hW*m
 hW1M
@@ -30285,6 +30303,7 @@ hasNotches
 hasParent
 has_attribute
 has_halftime
+has_kit
 hashAlgorithm
 hashFunc
 hasnotches
@@ -30393,6 +30412,7 @@ hip_dip_chng_dir
 hippo
 hiresDepth
 hiresdepth
+hitChance=%.2f suspicionChance=%.2f
 hitSound
 hitbox_id_locations
 hitboxes-container-priority-high
@@ -31019,7 +31039,7 @@ in_spewbuttonhold
 in_spewent
 in_spewinput
 in_tangent_local
-inaccuracy value: %.4f deflection angle: %.4f score: %.4f
+inaccuracy value: %.4f score: %.4f
 inappropriate fallback
 incgrenade_particle
 include-scale2d
@@ -32542,6 +32562,7 @@ m_PredUInt16Variables
 m_PredUInt32Variables
 m_PredUInt64Variables
 m_PredVectorVariables
+m_PredictedDamageTags
 m_PrevSwayVector
 m_ProviderType
 m_Providers
@@ -33590,6 +33611,7 @@ m_flFlashedTime
 m_flFlashlightTime
 m_flFlexDelayTime
 m_flFlexDelayedWeight
+m_flFlinchStack
 m_flFlinchVelocityModifierLarge
 m_flFlinchVelocityModifierSmall
 m_flFluidDensity
@@ -33632,6 +33654,7 @@ m_flFreezeTransitionOverride
 m_flFreezeTransitionStart
 m_flFrequency
 m_flFriction
+m_flFriendlyFireDamageReductionRatio
 m_flGameStartTime
 m_flGlassHalfThickness
 m_flGlowBackfaceMult
@@ -34630,6 +34653,7 @@ m_nHealthLost
 m_nHierarchicalDepth
 m_nHierarchyId
 m_nHierarchyType
+m_nHighestAppliedDamageTagTick
 m_nHighestConsumedServerViewAngleChangeIndex
 m_nHitBodyPart
 m_nHitBox
@@ -34779,6 +34803,7 @@ m_nPredictionRandomSeed
 m_nPrevArmor
 m_nPrevArmorVal
 m_nPrevGrenadeAmmoCount
+m_nPrevHighestReceivedDamageTagTick
 m_nPrice
 m_nPrimaryAmmoType
 m_nPrimaryReserveAmmoMax
@@ -36401,6 +36426,7 @@ mp_t_default_grenades
 mp_t_default_melee
 mp_t_default_primary
 mp_t_default_secondary
+mp_tagging_scale
 mp_taser_recharge_time
 mp_team_timeout_max
 mp_team_timeout_ot_add_each
@@ -36522,6 +36548,7 @@ nStf,a
 nSummarisedCount
 nSwitchValue
 nSw}Z\tu
+nTagTick
 nTestStep
 nTickEnd
 nTickStart
@@ -37798,6 +37825,7 @@ pose_sequence
 positionInLocalSpace
 positions are all identical
 posix_memalign
+possessive_player_name
 post-initialized
 postOfficeBox
 post_processing_volume
@@ -37847,7 +37875,6 @@ prediction
 prediction forced re-latch of %s due to prediction error for field marked FTYPEDESC_INTERPOLATEDVAR\n
 preentitypacket
 preentitypacket:ack %d cmds
-preentitypacketrec:exec %d->%d [ack %d]
 prefab_load_dynamic
 prefabs
 preferredDeliveryMethod
@@ -38364,6 +38391,7 @@ rank_type
 rareitem
 rarities
 rarity_class
+rarity_color
 ratchetType
 ratelimit
 rattlesnake
@@ -40300,6 +40328,7 @@ survival_no_respawns_warning
 survival_paradrop_break
 survival_paradrop_spawn
 survivor_neck
+susHitOdds=%.2f
 sv interp0: [ #%d, #%d, %.3f ]\n
 sv interp1: [ #%d, #%d, %.3f ]\n
 sv: ERROR: Player %s calculated shoot time [ #%d + %.3f ] does not match time from cmd [ #%d + %.3f ]\n
@@ -42033,6 +42062,7 @@ weapon_incgrenade
 weapon_incgrenade.ventr
 weapon_incgrenade_client
 weapon_itemid
+weapon_kit_name
 weapon_knife
 weapon_knife.ventr
 weapon_knife_client
@@ -42075,10 +42105,7 @@ weapon_mp9
 weapon_mp9.ventr
 weapon_mp9_client
 weapon_name
-weapon_name_base
 weapon_name_custom
-weapon_name_kit
-weapon_name_possessive
 weapon_near_empty_sound
 weapon_negev
 weapon_negev.ventr

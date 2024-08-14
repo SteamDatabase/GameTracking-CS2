@@ -6,7 +6,7 @@ var PartyMenu;
 (function (PartyMenu) {
     let elPartySection = $('#PartyList');
     let m_eventRebuildPartyList;
-    let m_prevMembersInParty = -1;
+    let m_prevMembersInParty = 1;
     function _Init() {
         _RefreshPartyMembers();
         _AddOnActivateLeaveBtn();

@@ -161,7 +161,6 @@
 !\t@UUUUUU
 !activator
 !bAnyMalformed
-!bonemerge
 !bonemergeflex
 !caller
 !contains
@@ -1657,8 +1656,8 @@ $tFa\v
 ./baseentity.h
 ./cstrike15/hostage/cs_simple_hostage.cpp
 ./gameinterface.cpp
-./gameinterface.cpp:3311
-./gameinterface.cpp:3422
+./gameinterface.cpp:3317
+./gameinterface.cpp:3428
 ./info_spawngroupstream.cpp
 ./nav_space_build.cpp
 .ANavAreaBuildPath
@@ -1888,6 +1887,7 @@ $tFa\v
 12CTriggerOnce
 12CTriggerPush
 12CTriggerSave
+12CUserCmdBase
 12CVDiagnostic
 12CWaterBullet
 12CWeaponBizon
@@ -2055,6 +2055,7 @@ $tFa\v
 13CNetMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
+13CNetMessagePBILi384E22CCSUsrMsg_SnapTapStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
@@ -2309,6 +2310,7 @@ $tFa\v
 14CUserMessagePBILi379E28CCSUsrMsg_RoundEndReportDataL19NetChannelBufType_t1EE
 14CUserMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL19NetChannelBufType_t1EE
 14CUserMessagePBILi383E19CCSUsrMsg_ShootInfoL19NetChannelBufType_t1EE
+14CUserMessagePBILi384E22CCSUsrMsg_SnapTapStatsL19NetChannelBufType_t1EE
 14CWeaponGalilAR
 14CWeaponHKP2000
 14CountdownTimer
@@ -2559,6 +2561,7 @@ $tFa\v
 16CTriggerMultiple
 16CTriggerTeleport
 16CTriggerTripWire
+16CUserCmdBaseHostI13CSGOUserCmdPBE
 16CUserMessageFade
 16CWeaponFiveSeven
 16CWorldGameSystem
@@ -3133,6 +3136,7 @@ $tFa\v
 20ISchemaAttributeType
 20ISource2GameEntities
 20PhysicsRagdollPose_t
+20PredictedDamageTag_t
 20ScoreLeaderboardData
 20TEImpact_GameEvent_t
 20TESparks_GameEvent_t
@@ -3254,6 +3258,7 @@ $tFa\v
 22CCSUsrMsg_CloseCaption
 22CCSUsrMsg_ReloadEffect
 22CCSUsrMsg_RequestState
+22CCSUsrMsg_SnapTapStats
 22CCSUsrMsg_VoteFailed_t
 22CClientUIDialogManager
 22CColorCorrectionSystem
@@ -3302,7 +3307,6 @@ $tFa\v
 22CPulseCell_Inflow_Wait
 22CPulseGraphIOSignature
 22CSOEconItemEventTicket
-22CSVCMsg_UserCommands_t
 22CScriptTriggerMultiple
 22CScrubEntityGameSystem
 22CServerOnlyModelEntity
@@ -3462,6 +3466,7 @@ $tFa\v
 24CCSPlayer_WeaponServices
 24CCSUsrMsgPreMatchSayText
 24CCSUsrMsg_CallVoteFailed
+24CCSUsrMsg_SnapTapStats_t
 24CCSUsrMsg_WarmupHasEnded
 24CCStrike15ItemDefinition
 24CChicken_GraphController
@@ -4608,14 +4613,14 @@ $tFa\v
 ?BaseNPCs and hint groups do not exist in this mod.\n
 ?CAK47
 ?CBasePlayerWeaponVData
-?CDamageRecord
 ?CFuncMonitor
 ?CHostage
-?CTextureBasedAnimatable
+?GiM
 ?PRECIPITATIONBLOCKER
 ?TestCheckpoint: %s
 ?Warning: NavMesh place %s is undefined?\n
 ?autosave\n
+?weapons/models/shared/stattrak/stattrak_module.vmdl
 @333333
 @<unknown>
 @@regex_error
@@ -5258,6 +5263,7 @@ Branch (%s): %s
 Branch value: %s
 Branch%02d
 Breach Charge
+BreakOnFirstImpact
 BreakThink
 Breakable door %s has no KeyValues/door_options\n
 Breakable.Ceiling
@@ -5767,6 +5773,7 @@ CCustomGameEventManager::Script_RegisterListener - Registered %s\n
 CCustomGameEventManager::Script_UnregisterListener - ID %d not found.\n
 CCustomGameEventManager::Script_UnregisterListener - Invalid ID\n
 CDEagle
+CDamageRecord
 CDebugHistory
 CDebugOverlayEntityCatalog
 CDebugOverlayGameSystem
@@ -5909,7 +5916,6 @@ CFuncMoveLinear::NavMovableThink
 CFuncMoveLinear::NavObstacleThink
 CFuncMoveLinearAlias_momentary_door
 CFuncMover
-CFuncMover::Move
 CFuncMover::Move_t
 CFuncNavBlocker
 CFuncNavObstruction
@@ -6809,6 +6815,7 @@ CTestDomainDerived_Cursor
 CTestDomainDerived_Cursor!GetCursorValueB
 CTestDomainDerived_Cursor!SetCursorValueB
 CTestEffect
+CTextureBasedAnimatable
 CTimeline
 CTimerEntity
 CTonemapController2
@@ -7602,6 +7609,7 @@ Degenerate Navigation Area at ( %0.2f, %0.2f, %0.2f )\n
 Degenerate area %d
 Delay between end of warmup and start of match.
 Delay between player disconnecting and their corpse getting cleaned up.
+Delay player slowdown when damaged by # ticks to reduce misprediction effects
 DelayedStart
 Delays map change until broadcast is complete
 Delete an entity attribute.
@@ -8940,7 +8948,7 @@ GunfireThink
 HARD
 HAS_LADDERS
 HB@T\tJ
-HC33s@
+HCff&?33s@
 HDR Color Scale: %0.3f
 HEGrenade.Bounce
 HIERARCHY_ABSORIGIN
@@ -8963,6 +8971,7 @@ HITGROUP_RIGHTLEG
 HITGROUP_SPECIAL
 HITGROUP_STOMACH
 HITGROUP_UNUSED
+HLTV UserCmd Server Tick %d: cmd_num: %d, client_tick: %d\n
 HLTV streams will include player usercommands each tick
 HLTVDirector: Inserted game event %s at tick %d (%d total)\n
 HMAC
@@ -10729,7 +10738,6 @@ MoveToInitialEncounter: Can't find battlefront!\n
 MoveToInitialEncounter: No enemy spawn points?\n
 MoveToInitialEncounter: Pathfind failed.\n
 MoveToPlayArea
-Movement Inaccuracy
 MovementGait_t
 MovementSettings
 Moveto: %s
@@ -10893,6 +10901,7 @@ N13CNetMessagePBILi379E28CCSUsrMsg_RoundEndReportDataL13SignonGroup_t13EL19NetCh
 N13CNetMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
+N13CNetMessagePBILi384E22CCSUsrMsg_SnapTapStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
@@ -11026,8 +11035,6 @@ N5GCSDK30CGCClientSharedObjectTypeCacheE
 N5GCSDK4CJobE
 N5GCSDK9CGCClientE
 N5GCSDK9CRefCountE
-N7usercmd16CUserCmdBaseHostINS_17CProtoUserCmdBaseI13CSGOUserCmdPBEEEE
-N7usercmd17CProtoUserCmdBaseI13CSGOUserCmdPBEE
 N8CChicken29NetworkVar_m_AttributeManagerE
 N8CEnvWind26NetworkVar_m_EnvWindSharedE
 N8CHostage23NetworkVar_m_reuseTimerE
@@ -11950,6 +11957,7 @@ PrecacheTest2
 PrecacheTest3
 PrecacheTest_server
 Precaches a specific resource
+PredictedDamageTag_t
 PredictionDiffManager001
 PredictionOwnerOnly
 Present players with a list of lowest playtime maps to choose from?
@@ -13713,6 +13721,8 @@ SurroundingBoundsType_t
 Survival.BumpMinePickUp
 Survival.CreepDamage
 Survival.ShieldPush
+Suspicion
+Suspicious Shot Sample
 Swap the teams and restart the game
 SwapTeams
 SweptBox
@@ -14665,6 +14675,7 @@ WorldTextPanelOrientation_t
 WorldTextPanelVerticalAlign_t
 Wrapper class over g_pDebugOverlay instance
 WriteEHandle to slot %d for entity %d:%s\n
+WriteToBuffer Message %s is not initialized! Probably missing required fields!\n
 X to the Y power
 X-Game-%s
 X-LogBytes-BeginOffset
@@ -14856,6 +14867,7 @@ Zooming
 [%s] playing sequence [%s] at time [%f]\n
 [%s] sent command that failed delta decode, discarding move msg\n
 [%s] sent message containing more than %d user commands, discarding\n
+[%s] sent move msg with invalid last_command_number %d and %d commands.\n
 [%s][%s (%u)]: %s\n
 [***INVALID INSTRUCTION %d***]\n
 [+%d identical]
@@ -15008,7 +15020,6 @@ Zooming
 [unknown type %i]
 \_`bccV[^accNTX]acBGMU^c069CRc
 \`acccW[_bccOSX^bcCDKT^c1/3>Pc
-\f@execMode
 \fFblendindices
 \n    near %s\n    
 \n################################################################################\n\n
@@ -17291,6 +17302,7 @@ exec "gamemode_%s_short.cfg"\n
 exec "gamemode_%s_tmm.cfg"\n
 exec maps/%s.cfg\n
 exec skill%d.cfg\n
+execMode
 execifexists %s\n
 execifexists server_default.cfg
 exit_bombzone
@@ -17531,8 +17543,11 @@ flDistSqrToCenter
 flDurationSec
 flExecTime
 flExponent
+flFlinchModLarge
+flFlinchModSmall
 flFootIKMoveModeBlendValue
 flFriction
+flFriendlyFireDamageReductionRatio
 flGravity
 flHingeFriction
 flIkBlendTime
@@ -18084,6 +18099,7 @@ hint_vr_offset_y
 hint_vr_offset_z
 hint_vr_panel_type
 hip_dip_chng_dir
+hitChance=%.2f suspicionChance=%.2f
 hitboxset
 hl_prop_vr_hand
 hl_vr_texture_based_animatable
@@ -18477,7 +18493,7 @@ in_spewbuttonhold
 in_spewent
 in_spewinput
 in_tangent_local
-inaccuracy value: %.4f deflection angle: %.4f score: %.4f
+inaccuracy value: %.4f score: %.4f
 incoming connection not found
 index
 index,length,id,name,desc\n
@@ -19607,6 +19623,7 @@ m_PredUInt16Variables
 m_PredUInt32Variables
 m_PredUInt64Variables
 m_PredVectorVariables
+m_PredictedDamageTags
 m_PrevSwayVector
 m_ProviderType
 m_Providers
@@ -21038,6 +21055,7 @@ m_flFrameRate
 m_flFreezeTransitionDuration
 m_flFrequency
 m_flFriction
+m_flFriendlyFireDamageReductionRatio
 m_flFuel
 m_flGameStartTime
 m_flGlassHalfThickness
@@ -21131,7 +21149,6 @@ m_flLastDmgTime
 m_flLastDuckTime
 m_flLastEntitySteadyState
 m_flLastFlexAnimationTime
-m_flLastFriendlyFireDamageReductionRatio
 m_flLastHeatLevel
 m_flLastJumpTime
 m_flLastLOSTraceFailureTime
@@ -22547,6 +22564,7 @@ m_nHealthPointsRemovedTotal
 m_nHierarchicalDepth
 m_nHierarchyId
 m_nHierarchyType
+m_nHighestAppliedDamageTagTick
 m_nHighestCountIndex
 m_nHighestGeneratedServerViewAngleChangeIndex
 m_nHitBodyPart
@@ -24350,6 +24368,7 @@ nSoundEventGuid
 nSpawnNodeID
 nSummarisedCount
 nSwitchValue
+nTagTick
 nTestStep
 nTextOffset
 nValue
@@ -26606,6 +26625,7 @@ surname
 survival
 survival_paradrop_break
 survival_paradrop_spawn
+susHitOdds=%.2f
 suspension_damping_ratio
 suspension_frequency
 suspension_height_offset
@@ -26721,7 +26741,6 @@ sv_explode_smokegrenade_at_crosshair
 sv_extract_ammo_from_dropped_weapons
 sv_extreme_strafe_accuracy_fishtail
 sv_fade_player_visibility_farz
-sv_fake_dropped_ucmd_interval
 sv_falldamage_scale
 sv_falldamage_to_below_player_multiplier
 sv_falldamage_to_below_player_ratio
@@ -26845,6 +26864,7 @@ sv_phys_stop_at_collision
 sv_phys_visualize_awake
 sv_player_search_range
 sv_playerradio_use_allowlist
+sv_predictable_damage_tag_ticks
 sv_prime_accounts_only
 sv_pushaway_clientside
 sv_pushaway_clientside_size
@@ -27892,7 +27912,6 @@ weapons/models/grenade/incendiary/weapon_incendiarygrenade.vmdl
 weapons/models/grenade/molotov/weapon_molotov.vmdl
 weapons/models/grenade/smokegrenade/weapon_smokegrenade.vmdl
 weapons/models/shared/nametag/nametag_module.vmdl
-weapons/models/shared/stattrak/stattrak_module.vmdl
 weapons/models/shared/stattrak/stattrak_module_knife.vmdl
 wear_remap_max
 wear_remap_min

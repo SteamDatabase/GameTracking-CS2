@@ -41,6 +41,7 @@ var MainMenu;
     let _m_nActiveFrameCount = 0;
     let _m_bTriedShowVideoSettingRecommendation = false;
     const _m_acknowledgedRentalExpirationCrateIds = new Set();
+    let _m_bPreLoadedTabs = false;
     function _msg(text, ...args) {
     }
     function UpdateSettingsMenuAlert() {
@@ -218,6 +219,12 @@ var MainMenu;
         if (GameTypesAPI.ShouldShowNewUserPopup()) {
             _NewUser_ShowTrainingCompletePopup();
         }
+        if (!_m_bPreLoadedTabs) {
+            _LoadTab('JsSettings', 'settings/settings');
+            _OpenPlayMenu();
+            OnHomeButtonPressed();
+            _m_bPreLoadedTabs = true;
+        }
     }
     function _TournamentDraftUpdate() {
         if (!m_TournamentPickBanPopup || !m_TournamentPickBanPopup.IsValid()) {
@@ -364,17 +371,7 @@ var MainMenu;
         }
         return true;
     }
-    function NavigateToTab(tab, XmlName, setActiveSection = '') {
-        _msg('tabToShow: ' + tab + ' XmlName = ' + XmlName);
-        if (!_BCheckTabCanBeOpenedRightNow(tab)) {
-            OnHomeButtonPressed();
-            return;
-        }
-        if (tab === 'JsPlayerStats') {
-            return;
-        }
-        $.DispatchEvent('PlayMainMenuMusic', true, false);
-        GameInterfaceAPI.SetSettingString('panorama_play_movie_ambient_sound', '0');
+    function _LoadTab(tab, XmlName, setActiveSection = '') {
         if (!$.GetContextPanel().FindChildInLayoutFile(tab)) {
             const newPanel = $.CreatePanel('Panel', _m_elContentPanel, tab);
             if ('settings/settings' && setActiveSection !== '') {
@@ -398,10 +395,25 @@ var MainMenu;
                 }
                 return false;
             });
+            newPanel.AddClass('mainmenu-content--hidden');
+            newPanel.visible = false;
         }
+    }
+    function NavigateToTab(tab, XmlName, setActiveSection = '') {
+        _msg('tabToShow: ' + tab + ' XmlName = ' + XmlName);
+        if (!_BCheckTabCanBeOpenedRightNow(tab)) {
+            OnHomeButtonPressed();
+            return;
+        }
+        if (tab === 'JsPlayerStats') {
+            return;
+        }
+        $.DispatchEvent('PlayMainMenuMusic', true, false);
+        GameInterfaceAPI.SetSettingString('panorama_play_movie_ambient_sound', '0');
+        _LoadTab(tab, XmlName, setActiveSection);
         ParticleControls.UpdateMainMenuTopBar(m_MainMenuTopBarParticleFX, tab);
         if (_m_activeTab !== tab) {
-            if (XmlName) {
+            if (XmlName && _m_bPreLoadedTabs) {
                 let soundName = '';
                 if (XmlName === 'mainmenu_store_fullscreen') {
                     if (setActiveSection !== '') {
