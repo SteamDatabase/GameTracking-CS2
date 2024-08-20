@@ -2067,7 +2067,6 @@ var Scoreboard;
         $.RegisterEventHandler('OnCloseScoreboard', $.GetContextPanel(), _CloseScoreboard);
         $.RegisterEventHandler('Scoreboard_UpdateJob', $.GetContextPanel(), _UpdateJob);
         $.RegisterEventHandler('Scoreboard_ResetAndInit', $.GetContextPanel(), _Initialize);
-        $.RegisterEventHandler('Scoreboard_UpdateEverything', $.GetContextPanel(), _UpdateEverything);
         $.RegisterForUnhandledEvent('GameState_OnLevelLoad', _Initialize);
         $.RegisterForUnhandledEvent('Scoreboard_CycleStats', _CycleStats);
         $.RegisterForUnhandledEvent('Scoreboard_ToggleSetCasterIsCameraman', _ToggleSetCasterIsCameraman);
