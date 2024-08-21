@@ -86,7 +86,7 @@
 *** vfx_common.cpp(1196): Error masking unused parts for "%s"!\n\n
 *** vfx_common.cpp(231): Don't call VfxInit() more than once!
 *** vfx_common.cpp(239): g_pFullFileSystem must be set up before calling VfxInit!\n
-*** vfx_common.cpp(6592): Programmer Error! The order of VfxVariableSourceType_t does not match s_shaderVariableSource!\n
+*** vfx_common.cpp(6714): Programmer Error! The order of VfxVariableSourceType_t does not match s_shaderVariableSource!\n
 *N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZ31CompileAllShadersForStaticComboyR19CVfxStaticComboDataR4CVfx12VfxProgram_tP4IVfxEUliE_EviiPKcT0_ii13JobPriority_tEUliE_EE
 *N24CParallelProcessLauncher18CParallelLambdaJobIZ48CompileComboAndGetVariables_DynamicShaderCompileR10CUtlVectorI26DynamicShaderCompileTask_ti10CUtlMemoryIS2_iEEPFviiEEUliE_EE
 *ZN10CMaterial222IssueAsyncLoadRequestsER14CUtlLeanVectorI32MaterialStaticComboLoadRequest_tsE11CWeakHandleI29InfoForResourceTypeIMaterial2E16ShaderLoadMode_tEUlP25IAsyncResourceDataRequestE_
@@ -420,6 +420,7 @@ FcPatternCreate
 FcPatternDestroy
 FcPatternGetCharSet
 FcPatternGetString
+FeatureAlias
 FeatureRule
 File
 Force shader quality setting (valid values are 0 or 1)
@@ -730,6 +731,7 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy500152889462E24PostProcessingResourc
 \n*** %s "%s" in %s has min(%d) < 0!\n\n
 \n*** %s "%s" in %s has min(%d) > max(%d)!\n\n
 \n*** A dynamic combo in %s doesn't start with "D_"! Aborting shader compile!\n\n
+\n*** A feature alias in %s doesn't start with "F_"! Aborting shader compile!\n\n
 \n*** A feature in %s doesn't start with "F_"! Aborting shader compile!\n\n
 \n*** A static combo in %s doesn't start with "S_"! Aborting shader compile!\n\n
 \n*** Combo "%s" in %s doesn't match a known combo source!\n\n
@@ -775,6 +777,8 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy500152889462E24PostProcessingResourc
 \n*** Feature "%s" in %s is missing an option!\n\n
 \n*** Feature "%s" in %s is missing string options! Ex: 0..2( "a", "b", "c" )\n\n
 \n*** Feature "%s" in %s requires string to be N="String" where N = combo value for arg %d!\n\n
+\n*** Feature alias %s trying to alias another alias in %s!\n\n
+\n*** Feature alias %s trying to alias unknown feature "%s" in %s!\n\n
 \n*** Found combo "%s" multiple times in %s declared differently!\n\n
 \n*** Found feature "%s" multiple times in %s!\n\n
 \n*** Mode "%s" in %s is missing an option!\n\n
@@ -785,13 +789,13 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy500152889462E24PostProcessingResourc
 \n*** material2.cpp(1458): Error! Trying to load material "%s" without any params!\n
 \n*** vfx_common.cpp(1347): Error opening file "%s"!\n\n
 \n*** vfx_common.cpp(1424): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(5487): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(5637): Error opening include file in features list"%s"!\n\n
-\n*** vfx_common.cpp(5676): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(5905): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(5939): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(5978): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6082): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(5521): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(5671): Error opening include file in features list"%s"!\n\n
+\n*** vfx_common.cpp(5712): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6025): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6059): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6098): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6202): Error opening file "%s"!\n\n
 \n//-----------------------------------\n
 \nPS_RENDER_STATE
 \nRTX
@@ -813,8 +817,8 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy500152889462E24PostProcessingResourc
 \nmaterial2.cpp(1630): Error creating static combos for shader %s and error.vfx instead!\n
 \nmaterial2.cpp(2649): Dynamic Combos should be assumed to be unique for dynamic shader compile! %d != %d\n
 \nmaterial2.cpp(2728): Dynamic shader compile failed for %s in material "%s"!\n
-\nmaterial2.cpp(3347): All bad! The error material failed in dynamic shader compile!\n
-\nmaterial2.cpp(4005): Find a graphics programmer! Trying to bind a "%s" shader that doesn't exist! for %s\n
+\nmaterial2.cpp(3367): All bad! The error material failed in dynamic shader compile!\n
+\nmaterial2.cpp(4025): Find a graphics programmer! Trying to bind a "%s" shader that doesn't exist! for %s\n
 \t The lexer was matching from line %d, offset %d, which\n\t 
 \t\tStatic:
 ^^^ Attribute-based texture warning is now disabled after outputting 50 warnings.\n
@@ -1127,7 +1131,7 @@ mat_warn_bad_modes
 material2.cpp
 material2.cpp(1526): Error creating shader %s for material %s!\n
 material2.cpp(2302): DxSupportLevel %d not supported!\n
-material2.cpp(3017): Failed call to FindOrLoadStaticComboData()!\n
+material2.cpp(3037): Failed call to FindOrLoadStaticComboData()!\n
 material2.cpp(601): Material "%s" is requesting a bad mode "%s"!\n
 material2.cpp(716): Error! Material "%s" doesn't have any valid layers to get the CVsInputSignatureVector from!\n
 material2.cpp(748): Error! Material "%s" doesn't have a CVsInputSignatureVector!\n
@@ -1251,13 +1255,13 @@ time
 utils/materialsystem2utils.cpp
 v$G2
 vfx_common.cpp
-vfx_common.cpp(3951): Error! Ref count !=0 for static combo data cache entry!\n
-vfx_common.cpp(4038): Error! Ref count !=0 for static combo data cache entry!\n
-vfx_common.cpp(7291): Error opening file %s\n
-vfx_common.cpp(7364): VCS %s Unserialize failed\n
-vfx_common.cpp(7378): VCS %s Unserialize hit EOF\n
-vfx_common.cpp(7510): Error opening file %s\n
-vfx_common.cpp(7517): Error calling SkipAndValidateVCSHeader() for %s\n
+vfx_common.cpp(3963): Error! Ref count !=0 for static combo data cache entry!\n
+vfx_common.cpp(4050): Error! Ref count !=0 for static combo data cache entry!\n
+vfx_common.cpp(7413): Error opening file %s\n
+vfx_common.cpp(7486): VCS %s Unserialize failed\n
+vfx_common.cpp(7500): VCS %s Unserialize hit EOF\n
+vfx_common.cpp(7632): Error opening file %s\n
+vfx_common.cpp(7639): Error calling SkipAndValidateVCSHeader() for %s\n
 vfx_compile_target_expr.cpp(106): : Failed to create lexer from "%s"\n
 vfx_compile_target_expr.cpp(114): : Failed to create token stream from "%s"\n
 vfx_compile_target_expr.cpp(122): : Failed to create parser from "%s"\n
