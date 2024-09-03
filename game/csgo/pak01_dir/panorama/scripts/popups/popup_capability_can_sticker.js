@@ -194,7 +194,6 @@ var CapabilityCanSticker;
         $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
         let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
         InventoryAPI.PreviewStickerInModelPanel(stickerId, slot, elPanel);
-        InventoryAPI.PeelEffectStickerBySlot(slot);
     }
     CapabilityCanSticker.PreviewStickerInSlot = PreviewStickerInSlot;
     function CameraAnim(slot) {

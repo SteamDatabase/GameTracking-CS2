@@ -440,7 +440,6 @@ var MainMenu;
             activePanel.visible = true;
             activePanel.SetReadyForDisplay(true);
             _msg('ShowPanel: ' + _m_activeTab);
-            _PauseMainMenuCharacter();
         }
         _ShowContentPanel();
     }
@@ -847,26 +846,20 @@ var MainMenu;
             return;
         _InsureSessionCreated();
         NavigateToTab('JsPlay', 'mainmenu_play');
-        _PauseMainMenuCharacter();
     }
     function _OpenWatchMenu() {
-        _PauseMainMenuCharacter();
         NavigateToTab('JsWatch', 'mainmenu_watch');
     }
     function _OpenInventory() {
-        _PauseMainMenuCharacter();
         NavigateToTab('JsInventory', 'mainmenu_inventory');
     }
     function _OpenFullscreenStore(openToSection) {
-        _PauseMainMenuCharacter();
         NavigateToTab('JsMainMenuStore', 'mainmenu_store_fullscreen', 'id-store-nav-coupon');
     }
     function _OpenStatsMenu() {
-        _PauseMainMenuCharacter();
         NavigateToTab('JsPlayerStats', 'mainmenu_playerstats');
     }
     function _OpenSettingsMenu() {
-        _PauseMainMenuCharacter();
         NavigateToTab('JsSettings', 'settings/settings');
     }
     var _UpdateOverwatch = function () {
@@ -1254,12 +1247,6 @@ var MainMenu;
             '&' + 'allowclose=' + paramclose +
             '&' + 'cancel=' + paramcancel +
             '&' + 'okcmd=' + strOkCmd);
-    }
-    function _PauseMainMenuCharacter() {
-        const vanityPanel = $('#JsMainmenu_Vanity');
-        if (vanityPanel && UiToolkitAPI.IsPanoramaInECOMode()) {
-            vanityPanel.Pause();
-        }
     }
     function _AddPauseMenuMissionPanel() {
         let elPanel = null;

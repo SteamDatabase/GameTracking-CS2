@@ -1326,13 +1326,7 @@ var Scoreboard;
         }
         elRndTop.AddClass('sb-team--CT');
         elRndBot.AddClass('sb-team--TERRORIST');
-        let idx;
-        if (MatchStatsAPI.DoesSupportOvertimeStats()) {
-            idx = rnd - jsoTime['first_round_this_period'] + 1;
-        }
-        else {
-            idx = rnd;
-        }
+        let idx = rnd - jsoTime['first_round_this_period'] + 1;
         const roundData = oScoreData.rounddata[idx];
         if (typeof roundData !== 'object')
             return;
@@ -1401,7 +1395,6 @@ var Scoreboard;
     function _Casualties_OnMouseOver() {
         if (GameInterfaceAPI.GetSettingString('cl_scoreboard_survivors_always_on') == '0')
             _ShowSurvivors();
-        UiToolkitAPI.ShowCustomLayoutTooltipStyled('1', 'id-tooltip-sb-casualties', 'file://{resources}/layout/tooltips/tooltip_scoreboard_casualties.xml', 'Tooltip_NoArrow');
     }
     function _Casualties_OnMouseOut() {
         if (GameInterfaceAPI.GetSettingString('cl_scoreboard_survivors_always_on') == '0')
@@ -1495,13 +1488,7 @@ var Scoreboard;
             return;
         if (!_SupportsTimeline(jsoTime))
             return;
-        let lastRound;
-        if (MatchStatsAPI.DoesSupportOvertimeStats()) {
-            lastRound = jsoTime['last_round_this_period'];
-        }
-        else {
-            lastRound = jsoTime['maxrounds'];
-        }
+        let lastRound = jsoTime['last_round_this_period'];
         m_topScore = 0;
         m_botScore = 0;
         if (jsoTime['overtime'] > 0) {
@@ -1607,13 +1594,7 @@ var Scoreboard;
     function _SupportsTimeline(jsoTime) {
         if (jsoTime == undefined)
             jsoTime = MockAdapter.GetTimeDataJSO();
-        let roundCountToEvaluate;
-        if (MatchStatsAPI.DoesSupportOvertimeStats()) {
-            roundCountToEvaluate = jsoTime['maxrounds_this_period'];
-        }
-        else {
-            roundCountToEvaluate = jsoTime['maxrounds'];
-        }
+        let roundCountToEvaluate = jsoTime['maxrounds_this_period'];
         return (roundCountToEvaluate <= 30);
     }
     function _UpdateRoundLossBonus() {
@@ -1650,17 +1631,11 @@ var Scoreboard;
         let firstRound;
         let lastRound;
         let midRound;
-        if (MatchStatsAPI.DoesSupportOvertimeStats()) {
-            firstRound = jsoTime['first_round_this_period'];
-            lastRound = jsoTime['last_round_this_period'];
-            let elLabel = _m_cP.FindChildTraverse('id-sb-timeline__round-label');
-            if (elLabel && elLabel.IsValid()) {
-                elLabel.SetHasClass('hidden', jsoTime['overtime'] == 0);
-            }
-        }
-        else {
-            firstRound = 1;
-            lastRound = jsoTime['maxrounds'];
+        firstRound = jsoTime['first_round_this_period'];
+        lastRound = jsoTime['last_round_this_period'];
+        let elLabel = _m_cP.FindChildTraverse('id-sb-timeline__round-label');
+        if (elLabel && elLabel.IsValid()) {
+            elLabel.SetHasClass('hidden', jsoTime['overtime'] == 0);
         }
         midRound = firstRound + Math.ceil((lastRound - firstRound) / 2) - 1;
         if (MockAdapter.HasHalfTime()) {
