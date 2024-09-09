@@ -1677,6 +1677,7 @@ $tFa\v
 0 == ( pInstance->GetOwnerEntity()->GetEntityIdentity()->GetFlags() & EF_IN_STAGING_LIST )
 0 == all alive, any other number is the number the CT's need to rescue to win the round.
 0 for traditional method, 1 for more realistic method
+0: never, 1: every time counter-strafe input automation is detected, 2: every counter-strafe
 0: no damage print in console. 1: damage print in console on death. 2: damage print in console only at next round restart.
 0: regular radar; 1: always disabled; 2: disabled in warmup
 0@NX^b!/@P\b
@@ -2055,6 +2056,7 @@ $tFa\v
 13CNetMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
+13CNetMessagePBILi385E23CCSUsrMsg_CounterStrafeL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
@@ -2309,6 +2311,7 @@ $tFa\v
 14CUserMessagePBILi379E28CCSUsrMsg_RoundEndReportDataL19NetChannelBufType_t1EE
 14CUserMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL19NetChannelBufType_t1EE
 14CUserMessagePBILi383E19CCSUsrMsg_ShootInfoL19NetChannelBufType_t1EE
+14CUserMessagePBILi385E23CCSUsrMsg_CounterStrafeL19NetChannelBufType_t1EE
 14CWeaponGalilAR
 14CWeaponHKP2000
 14CountdownTimer
@@ -3592,6 +3595,7 @@ $tFa\v
 25CCSGOPlayerAnimGraphState
 25CCSGameModeRules_ArmsRace
 25CCSPlayer_HostageServices
+25CCSUsrMsg_CounterStrafe_t
 25CCSUsrMsg_GlowPropTurnOff
 25CCSUsrMsg_MarkAchievement
 25CCompressedAnimQuaternion
@@ -4445,6 +4449,7 @@ $tFa\v
 64CProductInfo_SetRichPresenceLocalization_Request_LanguageSection
 64CWorkshop_PopulateItemDescriptions_Request_SingleItemDescription
 68CUserMsg_ParticleManager_SetParticleNamedValueContext_EHandleContext
+6?CEnvParticleGlow
 6CBlood
 6CCSBot
 6CCoJob
@@ -4611,6 +4616,7 @@ $tFa\v
 ?CBasePlayerWeaponVData
 ?CFuncMonitor
 ?CHostage
+?GPM
 ?PRECIPITATIONBLOCKER
 ?TestCheckpoint: %s
 ?Warning: NavMesh place %s is undefined?\n
@@ -10897,6 +10903,7 @@ N13CNetMessagePBILi379E28CCSUsrMsg_RoundEndReportDataL13SignonGroup_t13EL19NetCh
 N13CNetMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
+N13CNetMessagePBILi385E23CCSUsrMsg_CounterStrafeL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
@@ -13923,6 +13930,8 @@ The entity origin (absolute).
 The entity origin (local)
 The entity team number
 The entity to specifically debug
+The length of sequential counter-strafe attempts evaluated relative to the success threshold. Input automation detection considers the best sequence within the larger attempt window.
+The length of the window of trailing counter-strafe attempts considered during input automation detection.
 The max speed of a player when they are wearing the heavy assault suit
 The max speed of a player when they have a shield deployed
 The max speed of a player when they have a shield holstered
@@ -13930,12 +13939,16 @@ The maximum distance to adjust the view height
 The maximum number of areas to draw in edit mode
 The maximum number of hostages (%i) has been exceeded.
 The maximum slope the player can overcome [-]
+The minimum number of counter-strafe attempts required for input automation detection. The player must be moving more than 135.2 units/s for their counter-strafe to be considered an attempt. An attempt is either considered a success (counter-strafing took place within a single tick), an overlap (both directions were held for 1+ ticks) or an underlap (neither direction was held for 1+ ticks).
+The minimum number of successful counter-strafes within a best sequence that will trigger input automation detection. The number of successes that trigger input automation detection is interpolated between the success threshold and a 'perfect' sequence (all counter-strafes in a sequence are successes), depending on the player's percentage of overlapping counter-strafe attempts.
 The minimum ratio of players needed to vote on an issue to resolve it.
 The nav mesh needs a full nav_analyze\n
 The number of seconds a player can continue talking after dying as if they were still alive
 The number of seconds before radio command tokens refresh.
 The offset of the nav drag volume bottom from center
 The offset of the nav drag volume top from center
+The percentage of overlapping attempts in the attempt window below which input automation detection is triggered at the success threshold.
+The percentage of overlapping attempts in the attempt window below which input automation detection is triggered when all counter-strafes in a sequence are successes.
 The player controller entity.
 The player pawn entity.
 The server session ID for the new steamworks gamestats.
@@ -14608,6 +14621,7 @@ Whether or not players vote for the next map at the end of the match when the fi
 Whether or not the debug text will follow the entity around as it moves
 Whether or not to do a warmup period at the start of a match in an offline (bot) match.
 Whether or not to do a warmup period at the start of an online match.
+Whether or not to kick players when counter-strafe input automation is detected.
 Whether players can purchase grenades from the buy menu or not.
 Whether players can purchase guns: pistols (1), SMGs (2), rifles (4), shotguns (8), sniper rifles (16), heavy MGs (32).
 Whether this map should spawn a c4 bomb for a player or not.
@@ -14722,7 +14736,6 @@ X9.57 CM ?
 X9cm
 XUID
 Y?333?33s?
-Y@CEnvParticleGlow
 YYYY
 YYYY-MM-DD
 YYYY-MM-DD hh:mm:ss
@@ -24869,6 +24882,7 @@ output_weapon
 outputid
 outside
 overhead_follow
+overlap
 overlay_vars
 overrideBlockLOS
 override_anticipation_name
@@ -26660,6 +26674,22 @@ sv_allow_switching_weapon_handedness
 sv_allow_votes
 sv_alltalk
 sv_auto_adjust_bot_difficulty
+sv_auto_cstrafe_attempt_window
+sv_auto_cstrafe_kick
+sv_auto_cstrafe_logging
+sv_auto_cstrafe_logging: actual overlaps in the last %d attempts: %d (%f%%)\n
+sv_auto_cstrafe_logging: best success sequence in the last %d attempts: %d/%d\n
+sv_auto_cstrafe_logging: input automation detected: %s\n
+sv_auto_cstrafe_logging: last attempt: %d ticks of %s\n
+sv_auto_cstrafe_logging: overall attempts with %2d ticks of overlap:  %2u\n
+sv_auto_cstrafe_logging: overall attempts with %2d ticks of underlap: %2u\n
+sv_auto_cstrafe_logging: overlap threshold for this best success sequence: %f%%\n
+sv_auto_cstrafe_logging: player %d: %s\n
+sv_auto_cstrafe_lower_overlap_pct_threshold
+sv_auto_cstrafe_min_attempts
+sv_auto_cstrafe_sequence_length
+sv_auto_cstrafe_success_threshold
+sv_auto_cstrafe_upper_overlap_pct_threshold
 sv_auto_full_alltalk_during_warmup_half_end
 sv_autobunnyhopping
 sv_autobuyammo
@@ -27492,6 +27522,7 @@ unSlot
 unabled to read %d bytes from %s\n
 unallocated
 undefined
+underlap
 union 
 uniqueMember
 unique_target

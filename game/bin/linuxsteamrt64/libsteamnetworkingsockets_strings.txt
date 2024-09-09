@@ -13,6 +13,7 @@
   ##%%&&))**,,//1122447788;;==>>@@CCEEFFIIJJLLOOQQRRTTWWXX[[]]^^aabbddgghhkkmmnnppssuuvvyyzz||
   %s: %d (est)
   %s: %d (est, opt %d  pess %d)
+  %s=0x%02x[DSCP%d ECN%d]
   (No valid certs)
   Connection gap %.0fms.
   Local routes: %s\n
@@ -36,6 +37,7 @@
  (Unicast/Multicast)
  (Unknown SAFI %u)
  (VPLS)
+ (first measurement to %s, estimate was %d)
  GMT
  \vjpF
  a protocol 
@@ -92,7 +94,6 @@
 "!"%"+"1"9"K"O"c"g"s"u"
 "3ii
 "; boundary="----%s"%s%s
-"A\n(CMsgSteamDatagramClientPingSampleRequest
 "J\n'CMsgSteamDatagramSessionCryptInfoSigned
 "^\n\fOneofOptions
 "`bB303
@@ -331,6 +332,7 @@ $d`D-laM
 (\n$k_ESteamNetworkingSocketsCipher_NULL
 (\n\radd_candidate
 (\r"Y\n!CMsgSteamSockets_UDP_NoConnection
+(\t"A\n(CMsgSteamDatagramClientPingSampleRequest
 (\t"x\n"CMsgSteamDatagramP2PSessionRequest
 (\v2 .google.protobuf.DescriptorProto
 (\v2!.CMsgSteamDatagramP2PRoutes.Route
@@ -463,6 +465,7 @@ $d`D-laM
 .CMsgICERendezvous.Auth
 .CMsgSteamDatagramCertificateB
 .CMsgSteamNetworkingIPAddress
+.CMsgTOSTreatment
 .ESteamNetworkingSocketsCipher"'\n
 .HCK\v
 .cnf
@@ -583,6 +586,7 @@ $d`D-laM
 14CCryptoKeyBase
 15CEC25519KeyBase
 16CMsgICECandidate
+16CMsgTOSTreatment
 17CMsgICERendezvous
 19CECSigningPublicKey
 1H@H
@@ -1141,6 +1145,7 @@ Assertion Failed: (&src < Base()) || (&src >= (Base() + Count()))
 Assertion Failed: (elem == Count()) || IsValidIndex(elem)
 Assertion Failed: (int)cbEncrypted <= k_cbSteamNetworkingSocketsMaxEncryptedPayloadSend
 Assertion Failed: (int)cbEncrypted >= cbPlainText
+Assertion Failed: (int64)usecTimeSinceSentLast >= 0
 Assertion Failed: (links.m_pNext->*pMbrLinks).m_pPrev == this
 Assertion Failed: (links.m_pPrev->*pMbrLinks).m_pNext == this
 Assertion Failed: (pPrev->*pMbrLinks).m_pNext == pSuccessor
@@ -1948,6 +1953,7 @@ Assertion Failed: usecNextCheck > usecNow
 Assertion Failed: usecNextThinkRelay > usecNow
 Assertion Failed: usecNextThinkSession > usecNow
 Assertion Failed: usecNow > 0x20000*k_usecAckDelayPrecision
+Assertion Failed: usecRecvTimeSincePrev >= 0
 Assertion Failed: usecReliableRTO <= usecNow
 Assertion Failed: usecTimeoutDuration > 0
 Assertion Failed: usecWhen > 0
@@ -2384,6 +2390,7 @@ CMsgSteamSockets_UDP_ConnectRequest
 CMsgSteamSockets_UDP_ConnectionClosed
 CMsgSteamSockets_UDP_NoConnection
 CMsgSteamSockets_UDP_Stats
+CMsgTOSTreatment
 CONF_dump_fp
 CONF_load
 CONF_load_fp
@@ -3033,6 +3040,7 @@ Extension Request
 Extension factory's GetPrototype() returned NULL for extension: 
 ExtensionRange
 ExtensionRangeOptions
+Extra control data returned besides TOS?  0x%x/0x%x
 Extra text starting with character 0x%02x='%c'
 ExtractSubrange() when arena is non-NULL is only supported when 
 F6tr
@@ -3171,8 +3179,10 @@ FileDescriptorProto
 FileDescriptorSet
 FileOptions
 FinalizeLocalCrypto
+FindServerDataForCluster
 Fingerprint check failed: %x vs. %x
 Flags
+Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %d, packet size %d
 FlushMessagesOnConnection
 For best results, preload the config.  (See SDR_NETWORK_CONFIG env var)\n
 Found existing connection [%s].  Only one symmetric connection can be active at a time.
@@ -3820,6 +3830,7 @@ No cert data
 No certs?
 No client identity\n
 No configured STUN servers
+No control data returned even though we asked for TOS?
 No data
 No dropped packets, pkt num %lld, dup bit not set?  recvseq=%lld inorder=%lld, dup=%lld, lurch=%lld, ooo=%lld, %s.  (%s)
 No identity data
@@ -4234,7 +4245,7 @@ Ping location: %s\n
 Ping measurement completed in %.1fs.  Relays: %d valid, %d great, %d good+, %d ok+, %d ignored\n
 Ping request has my_ips list, but from address isn't present.  Could be spoofed / replay attack.  Dropping!
 Ping timed out to %s\n
-Pinging %s (%s).
+Pinging %s (%s).  ECN%d  reply_tos=0x%02x[DSCP%d ECN%d]
 Pkt number lurch by %lld; %04x->%04x
 Policy Qualifier CPS
 Policy Qualifier User Notice
@@ -4474,7 +4485,6 @@ Router network: %s\n
 RouterPingReply
 RouterPingReply from %s latency lists not the same length.  %d vs %d.  Ignoring message
 RouterPingReply from %s, %dms
-RouterPingReply from %s, %dms (first measurement to %s, estimate was %d)
 RouterPingReply from %s; dropping due to override
 Routing Domain Identifiers
 Running in anonymous mode, can't get cert from Steam.
@@ -4515,6 +4525,7 @@ SDR shared socket listening on local address %s\n
 SDRClient_ConsecutitivePingTimeoutsFail
 SDRClient_ConsecutitivePingTimeoutsFailInitial
 SDRClient_DevTicket
+SDRClient_EnableTOSProbes
 SDRClient_FakeClusterPing
 SDRClient_ForceProxyAddr
 SDRClient_ForceRelayCluster
@@ -4657,6 +4668,7 @@ SendMessages
 SendRateMax
 SendRateMin
 SendServerBrowserPacket
+SendTimeSincePreviousPacket
 SendUDPacket
 Sender sent abs latest recv pkt number using %llx mod %llx, next send %llx\n
 Sender sent abs unreliable message number using %llx mod %llx, highest seen %llx\n
@@ -4935,6 +4947,7 @@ Unauthenticated connections not allowed.
 Unencrypted
 Unencrypted addresses only allowed to 'dev' POPID
 Unexpected AvailAnyRouterCommunication %d
+Unexpected IP_TOS cmsg_len %lld
 Unexpected NoConnection
 Unexpected P2PSessionError %d
 Unexpected auth avail %d (%s)
@@ -5285,7 +5298,7 @@ ZiKw
 [%s] Peer acked our routes for revision %u, but our latest revision is %u!
 [%s] Peer appears to be using '%s' transport as primary\n
 [%s] Peer sent hosted_server_ticket.  Switching to SDR client transport\n
-[%s] Pinging %s (%s).
+[%s] Pinging %s (%s).  ECN%d  reply_tos=0x%02x[DSCP%d ECN%d]
 [%s] Posting SteamNetworkingMessagesSessionFailed_t\n
 [%s] Primary router %s going offline in %d seconds; seeking replacement
 [%s] Protobuf failed to parse CMsgSteamDatagramP2PRoutes routes\n
@@ -5503,6 +5516,7 @@ ZiKw
 \n\fca_signature
 \n\fclose_reason
 \n\fdouble_value
+\n\fdummy_varint
 \n\finitial_ping
 \n\fip_addresses
 \n\fis_extension
@@ -5538,6 +5552,7 @@ ZiKw
 \n\ngo_package
 \n\ninput_type
 \n\nkludge_pad
+\n\nl4s_detect
 \n\nsdr_routes
 \n\nstart_time
 \n\rMethodOptions
@@ -5548,6 +5563,7 @@ ZiKw
 \n\rclose_message
 \n\rconnection_id
 \n\rdefault_value
+\n\recho_sent_tos
 \n\rfixed64_value
 \n\rfrom_identity
 \n\rfront_ping_ms
@@ -5582,7 +5598,6 @@ ZiKw
 \n\ttype_name
 \n\vEnumOptions
 \n\vFileOptions
-\n\vNetworkNext
 \n\vTYPE_DOUBLE
 \n\vTYPE_SINT32
 \n\vTYPE_SINT64
@@ -5590,6 +5605,7 @@ ZiKw
 \n\vTYPE_UINT32
 \n\vTYPE_UINT64
 \n\vallow_alias
+\n\vdown_dscp45
 \n\vfrom_fakeip
 \n\vice_enabled
 \n\vint64_value
@@ -5634,7 +5650,7 @@ ZiKw
 \tOzG\r
 \t\n CMsgSteamNetworkingP2PRendezvous
 \t\tCJAAQ
-\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t00000000000000007777777777777777[
+\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t00000000000000007777777777777777;
 \t\taJj
 \ttqE5
 \txYn
@@ -7005,6 +7021,7 @@ ecdsa_with_SHA3-512
 echo
 echo_console
 echo_relay_unix_time
+echo_request_reply_tos
 eckey_param2type
 eckey_param_decode
 eckey_priv_decode
@@ -8025,7 +8042,7 @@ length
 length is greater than %ld\n
 length too long
 level_add_node
-lib Jun 26 2024 20:40:08
+lib Sep  7 2024 21:42:40
 lib(%lu)
 librt.so.1
 libstdc++.so.6
@@ -8850,7 +8867,8 @@ recipientInfos
 recipientinfo
 recommended-private-length: %d bits\n
 recursive directory include
-recvfrom
+recv_tos
+recvmsg
 registered: 
 registeredAddress
 registrationNumber
@@ -8873,6 +8891,8 @@ remote_candidate_types
 removeFromCRL
 reqCert
 req_info
+req_recv_tos
+req_sent_tos
 request not signed
 request too large for drbg
 requestExtensions
@@ -8918,6 +8938,9 @@ router_backhaul_latencies %s
 routes
 routing
 routing_secret
+rpl_echo_req_tos
+rpl_recv_tos
+rpl_sent_tos
 rsa operations not supported
 rsa routines
 rsaEncryption
@@ -9053,6 +9076,7 @@ sendProxiedRouter
 sendRouter
 sendmsg
 sendto
+sent_tos
 sequence length mismatch
 sequence not constructed
 sequence or set needs config
@@ -9285,6 +9309,7 @@ snmpv2
 socket() call failed.  Error code 0x%08x.
 socketpair
 socketpair() call failed.  Error code 0x%08x.
+sockopt(IPPROTO_IP, IP_RECVTOS, 1) failed (0x%x), will not be able to read TOS\n
 source_code_info
 span
 spkac
@@ -9622,6 +9647,7 @@ unsupported version
 unverified
 unwrap error
 unwrap failure
+up_ecn1
 uri authority unsupported
 user
 user data duplication unsupported
