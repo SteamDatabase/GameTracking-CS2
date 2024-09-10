@@ -17,4 +17,9 @@
 		"PreprocessResources"	  "1"			// Removes comments/devonly sections/devmsg etc.. from css,xml,js,ts
 	}
 
+	ConVars
+	{
+		"cl_usesocketsforloopback" "0"
+	}
+
 }
