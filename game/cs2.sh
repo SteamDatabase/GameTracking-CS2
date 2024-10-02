@@ -7,6 +7,7 @@
 # $PWD
 
 GAMEROOT=$(cd "${0%/*}" && echo $PWD)
+SCRIPTNAME=$(basename $0)
 
 #determine platform
 UNAMEPATH=`command -v uname`
@@ -32,7 +33,7 @@ elif [ "$UNAME" == "Linux" ]; then
     if [ "$VERSION_CODENAME" != "sniper" ]; then
         # a dialog box (zenity?) would be nice, but at this point we do not really know what is available to us
         echo
-        echo "FATAL: It appears CS2 was not launched within the Steam for Linux sniper runtime environment."
+        echo "FATAL: It appears $SCRIPTNAME was not launched within the Steam for Linux sniper runtime environment."
         echo "FATAL: Please consult documentation to ensure correct configuration, aborting."
         echo
         exit 1
@@ -64,33 +65,11 @@ if [ "$UNAME" == "Linux" ]; then
 	export ENABLE_PATHMATCH=1
 fi
 
-# Run inside of the Steam runtime if necessary and allowed.
-if [ "$STEAM_RUNTIME_ROOT" != "" ]; then
-    # Already in the runtime.
-    USE_STEAM_RUNTIME=0
-fi
-if [ "$STEAM_RUNTIME" = "0" ]; then
-    # Runtime is explicitly disabled.
-    USE_STEAM_RUNTIME=0
-fi
-
-if [ "$USE_STEAM_RUNTIME" = "1" ]; then
-    STEAM_RUNTIME_PREFIX=/valve/steam-runtime/shell.sh
-    if [ ! -f $STEAM_RUNTIME_PREFIX ]; then
-        STEAM_RUNTIME_PREFIX=
-    fi
-    if [ "$STEAM_RUNTIME_PREFIX" != "" ]; then
-        echo "Running with the Steam runtime SDK"
-    fi
-fi
-
 # Remove when Source 2 supports Wayland
 export SDL_VIDEO_DRIVER=x11
 
 # Do the following for strace:
 # 	GAME_DEBUGGER="strace -f -o strace.log"
-# Do the following for tcmalloc
-#   LD_PRELOAD=../src/thirdparty/gperftools-2.0/.libs/libtcmalloc_debug.so:$LD_PRELOAD
 
 STATUS=42
 while [ $STATUS -eq 42 ]; do
@@ -102,7 +81,8 @@ while [ $STATUS -eq 42 ]; do
 		#   gameoverlayrenderer.so and the other preload objects aren't loaded in our debugger's process.
 		echo set env LD_PRELOAD=$LD_PRELOAD >> "$ARGSFILE"
 		echo show env LD_PRELOAD >> "$ARGSFILE"
-		echo set disable-randomization off >> "$ARGSFILE"
+		# Unless you are chasing a bug that is explicitly related to address space randomization..
+		#echo set disable-randomization off >> "$ARGSFILE"
 		unset LD_PRELOAD
 
 		echo run $@ >> "$ARGSFILE"

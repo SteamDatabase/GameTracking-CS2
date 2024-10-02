@@ -363,11 +363,6 @@ var MvpBackgroundMap;
     }
     function SetFlairModel(oSettings, xuid) {
         let flairItemId = InventoryAPI.GetFlairItemId(xuid);
-        if (!flairItemId) {
-            oSettings.mapPanel.FireEntityInput("item", "Alpha", '0');
-            return;
-        }
-        oSettings.mapPanel.FireEntityInput("item", "Alpha", '170');
         oSettings.mapPanel.FireEntityInput("item", "SetItem", flairItemId);
     }
 })(MvpBackgroundMap || (MvpBackgroundMap = {}));

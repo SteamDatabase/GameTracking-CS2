@@ -1,4 +1,4 @@
-<!-- xml reconstructed by Source 2 Viewer 10.1.0.0 - https://valveresourceformat.github.io -->
+<!-- xml reconstructed by Source 2 Viewer 10.2.0.0 - https://valveresourceformat.github.io -->
 <root>
 	<styles>
 		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
@@ -16,6 +16,7 @@
 		<include src="s2r://panorama/scripts/hud/hudwinpanel_background_map.vts_c" />
 		<include src="s2r://panorama/scripts/rating_emblem.vts_c" />
 		<include src="s2r://panorama/scripts/honor_icon.vts_c" />
+		<include src="s2r://panorama/scripts/xpshop_track.vts_c" />
 	</scripts>
 	<snippets>
 		<snippet name="frame-snippet-example">
@@ -24,7 +25,7 @@
 			</Panel>
 		</snippet>
 	</snippets>
-	<Panel class="mainmenu-content__container">
+	<Panel class="mainmenu-content__container" useglobalcontext="true">
 		<Panel class="content-navbar">
 			<Label id="" class="content-navbar__title" text="CONTROLS LIBRARY" />
 		</Panel>
@@ -92,7 +93,7 @@
 					<Label text="Bugs" />
 				</RadioButton>
 				<RadioButton id="JsControlParticles" group="nav" onactivate="ControlsLibNavigateToTab(&apos;ControlsLibParticles&apos;, &apos;JsControlBugs&apos;)">
-					<Label text="Particles" />
+					<Label text="XP SHOP Particles" />
 				</RadioButton>
 				<RadioButton id="JsControlParticleRanks" group="nav" onactivate="ControlsLibNavigateToTab(&apos;ControlsLibParticlesRanks&apos;, &apos;JsControlBugs&apos;)">
 					<Label text="ParticleRanks" />
@@ -688,7 +689,7 @@
 					<Panel class="" acceptsinput="true">
 						<MapPlayerPreviewPanel id="MapForVanity" class="ItemPreviewPanelForBuildingInventoryImages" map="test_maps/test_vanity" camera="cam_default" require-composition-layer="true" playermodel="characters/models/ctm_sas/ctm_sas.vmdl" style="width:1400px;" playername="vanity_character" parallax_degrees="5.0" parallax_offset="50.0" onload="var vanityPanel = $( &apos;#MapForVanity&apos; ); vanityPanel.EquipPlayerWithItem(&apos;17293822569102704641&apos;); " animgraphcharactermode="main-menu" player="true" mouse_rotate="true" hittest="true" />
 						<Panel id="VanityControls" hittest="true">
-							<Button id="Start Particles" class="IconButton" style=" position: 100px 0px 0px;" onactivate="var vanityPanel = $( &apos;#MapForVanity&apos; );  vanityPanel.SetActiveCharacter(1); vanityPanel.SetPlayerModel(&apos;characters/models/ctm_fbi/ctm_fbi.vmdl&apos;);  vanityPanel.EquipPlayerWithItem(&apos;17293822569102704699&apos;); vanityPanel.SetActiveCharacter(0);" onmouseover="var vanityPanel = $( &apos;#MapForVanity&apos; );    vanityPanel.StartParticleSystem(&apos;dumpster_fire&apos;);vanityPanel.SetActiveCharacter(0); vanityPanel.RemoveCharacterModel(); vanityPanel.FireEntityInput(&apos;cam_default&apos;, &apos;ChangeFOV&apos;, &apos;70 2&apos;);" onmouseout="var vanityPanel = $( &apos;#MapForVanity&apos; );    vanityPanel.StopParticleSystem(&apos;dumpster_fire&apos;); vanityPanel.SetActiveCharacter(0); vanityPanel.SetPlayerModel(&apos;characters/models/ctm_sas/ctm_sas.vmdl&apos;); vanityPanel.FireEntityInput(&apos;cam_default&apos;, &apos;ChangeFOV&apos;, &apos;55 0.25&apos;);">
+							<Button id="StartParticles" class="IconButton" style=" position: 100px 0px 0px;" onactivate="var vanityPanel = $( &apos;#MapForVanity&apos; );  vanityPanel.SetActiveCharacter(1); vanityPanel.SetPlayerModel(&apos;characters/models/ctm_fbi/ctm_fbi.vmdl&apos;);  vanityPanel.EquipPlayerWithItem(&apos;17293822569102704699&apos;); vanityPanel.SetActiveCharacter(0);" onmouseover="var vanityPanel = $( &apos;#MapForVanity&apos; );    vanityPanel.StartParticleSystem(&apos;dumpster_fire&apos;);vanityPanel.SetActiveCharacter(0); vanityPanel.RemoveCharacterModel(); vanityPanel.FireEntityInput(&apos;cam_default&apos;, &apos;ChangeFOV&apos;, &apos;70 2&apos;);" onmouseout="var vanityPanel = $( &apos;#MapForVanity&apos; );    vanityPanel.StopParticleSystem(&apos;dumpster_fire&apos;); vanityPanel.SetActiveCharacter(0); vanityPanel.SetPlayerModel(&apos;characters/models/ctm_sas/ctm_sas.vmdl&apos;); vanityPanel.FireEntityInput(&apos;cam_default&apos;, &apos;ChangeFOV&apos;, &apos;55 0.25&apos;);">
 								<Image textureheight="64" texturewidth="-1" src="s2r://panorama/images/icons/ui/player.vsvg" />
 							</Button>
 						</Panel>
@@ -830,7 +831,19 @@
 			</Panel>
 			<Panel id="ControlsLibPanels" class="ControlsLib" onload="InitPanels()">
 				<Panel class="top-bottom-flow vscroll">
-					<Panel class="top-bottom-flow" style="padding: 30px;">
+					<Panel class="top-bottom-flow" style="padding: 20px;">
+						<Panel id="jsxpshoptracks" class="left-right-flow">
+							<Frame class="1" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;1&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:00})})" />
+							<Frame class="2" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;2&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:3300})})" />
+							<Frame class="3" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;3&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:4999})})" />
+							<Frame class="4" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;4&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:11999})})" />
+							<Frame class="5" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;5&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:12000})})" />
+							<Frame class="6" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;6&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:501})})" onactivate="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;6&apos;).forEach( el =&gt; XpShopTrack.XpShopUpdate( {xpshop_track_frame_panel:el, xpshop_track_value:$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;6&apos;)[0].Data().prev_xpshop_track_value + Math.random()*300}))" />
+							<Frame class="7" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;7&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:501})})" onactivate="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;7&apos;).forEach( el =&gt; XpShopTrack.XpShopUpdate( {xpshop_track_frame_panel:el, xpshop_track_value:$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;7&apos;)[0].Data().prev_xpshop_track_value + 500 + Math.random()*1000 }))" />
+							<Frame class="8" src="s2r://panorama/layout/xpshop_track.vxml_c" onload="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;8&apos;).forEach( el =&gt;{ el.SetDialogVariableInt(&apos;max-stars&apos;,50); XpShopTrack.XpShopInit( {xpshop_track_frame_panel:el, xpshop_track_value:250})})" onactivate="$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;8&apos;).forEach( el =&gt; XpShopTrack.XpShopUpdate( {xpshop_track_frame_panel:el, xpshop_track_value:$(&apos;#jsxpshoptracks&apos;).FindChildrenWithClassTraverse(&apos;8&apos;)[0].Data().prev_xpshop_track_value + 1500 + Math.random()*3000 }))" />
+						</Panel>
+					</Panel>
+					<Panel class="top-bottom-flow" style="padding: 20px;">
 						<Panel id="jshonoricons" class="left-right-flow">
 							<Frame class="lib-honor-icon lvl1 " src="s2r://panorama/layout/honor_icon.vxml_c" onload="$(&apos;#jshonoricons&apos;).FindChildrenWithClassTraverse(&apos;lvl1&apos;).forEach( el =&gt; HonorIcon.SetOptions( {honor_icon_frame_panel:el, force_icon:&apos;xptrail&apos;, xptrail_value:1, do_fx:true}))" />
 							<Frame class="lib-honor-icon lvl1 scoreboard-t" src="s2r://panorama/layout/honor_icon.vxml_c" />
@@ -1162,27 +1175,34 @@
 					<Button id="StartParticles" class="FlatButton" onactivate="JSControlsPageStartParticles();">
 						<Label text="Start Particles" />
 					</Button>
-					<Button id="StopParticles" class="FlatButton" onactivate="JSControlsPageStopPlayEndCapParticles();">
+					<Button id="StopParticles" class="FlatButton" onactivate="JSControlsPageStopPlayEndCapParticles();JSControlsPageSetControlPointParticles(16, 200, 200, 200);">
 						<Label text="Stop Particles" />
 					</Button>
-					<Button id="cp1Move_loc1" class="FlatButton" onactivate="JSControlsPageSetControlPointParticles(1, 256, 0 , 0);JSControlsPageSetControlPointParticles(2, 256, 0 , 0);JSControlsPageSetControlPointParticles(3, 255, 0 , 0);">
-						<Label text="cp1 Loc 1" />
+					<Button id="cp1Move_loc1" class="FlatButton TestControlPointcolorRed" onactivate="JSControlsPageStopPlayEndCapParticles();JSControlsPageStartParticles();JSControlsPageSetControlPointParticles(16, 256, 0 , 0);">
+						<Label text="Red" />
 					</Button>
-					<Button id="cp1Move_loc2" class="FlatButton" onactivate="JSControlsPageSetControlPointParticles(1, 0, 0 , 0);JSControlsPageSetControlPointParticles(2, 128, 0 , 0);JSControlsPageSetControlPointParticles(3, 255, 0 , 0);">
-						<Label text="cp1 Loc 2" />
+					<Button id="cp1Move_loc2" class="FlatButton TestControlPointcolorBlue" onactivate="JSControlsPageStopPlayEndCapParticles();JSControlsPageStartParticles();JSControlsPageSetControlPointParticles(16, 0, 149, 255);">
+						<Label text="Blue" />
 					</Button>
-					<Button id="cp1Move_loc3" class="FlatButton" onactivate="JSControlsPageSetControlPointParticles(1, -256, 0 , 0 );JSControlsPageSetControlPointParticles(2, 68, 0 , 0);JSControlsPageSetControlPointParticles(3, 255, 0 , 0);">
-						<Label text="cp1 Loc 3" />
+					<Button id="cp1Move_loc3" class="FlatButton TestControlPointcolorPurple" onactivate="JSControlsPageStopPlayEndCapParticles();JSControlsPageStartParticles();JSControlsPageSetControlPointParticles(16, 238, 0, 255);">
+						<Label text="Purple" />
+					</Button>
+					<Button id="cp1Move_loc4" class="FlatButton TestControlPointcolorWhite" onactivate="JSControlsPageStopPlayEndCapParticles();JSControlsPageStartParticles();JSControlsPageSetControlPointParticles(16, 200, 200, 200);">
+						<Label text="White" />
 					</Button>
 				</Panel>
-				<Panel class="left-right-flow FillParentFlow">
+				<Panel id="uiParticles_TOP" class="left-right-flow FillParentFlow">
 					<Panel class="top-bottom-flow" style="width:50%;">
 						<Label text="Experience Points/Awards" />
 						<Panel id="uiParticles_Rewards" class="left-right-flow">
-							<ParticleScenePanel class="TestParticlePanel" style="width: 600px;-s2-mix-blend-mode: additive;" hittest="false" startActive="true" particleName="particles/ui/ammohealthcenter/ui_hud_kill_streaks_3.vpcf" cameraOrigin="0 600 80" lookAt="0 0 80" fov="40" />
+							<ParticleScenePanel id="xpSelectionTest" class="TestParticlePanel XpShopLowerGlow" hittest="true" onmouseover="ParticleControls.SetPanelParticleControlPointDirect($(&apos;#xpSelectionTest&apos;),5, 1, 0, 0)" startActive="true" particleName="particles/ui/xpshop/xpshop_panel_select.vpcf" cameraOrigin="0 500 10" lookAt="0 0 120" fov="40" />
+							<ParticleScenePanel id="xpSelectionTestSoftGlow" class="TestParticlePanel XpShopLowerGlow" hittest="true" startActive="true" onmouseover="ParticleControls.SetPanelParticleControlPointDirect($(&apos;#xpSelectionTestSoftGlow&apos;),5, 1, 0, 0)" onmouseout="ParticleControls.SetPanelParticleControlPointDirect($(&apos;#xpSelectionTestSoftGlow&apos;),5, 0, 0, 0)" particleName="particles/ui/xpshop/xpshop_ambient_highlight.vpcf" cameraOrigin="0 500 1" lookAt="0 0 90" fov="35" />
+							<ParticleScenePanel class="TestParticlePanel XpShopLowerGlow" hittest="false" onmouseover="" startActive="true" particleName="particles/ui/xpshop/xpshop_panel_rising_squares.vpcf" onactivate="ParticleControls.startAndRefresh($(&apos;#xpSelectionTestSoftGlow&apos;))" cameraOrigin="0 500 1" lookAt="0 0 90" fov="35" />
 						</Panel>
 						<Panel id="uiParticles_Rewards_2" class="left-right-flow">
-							<ParticleScenePanel class="TestParticlePanel" style="width: 600px;-s2-mix-blend-mode: additive;" hittest="false" startActive="true" particleName="particles/ui/ammohealthcenter/ui_hud_kill_streaks_5.vpcf" cameraOrigin="0 600 80" lookAt="0 0 80" fov="40" />
+							<ParticleScenePanel class="TestParticlePanel XpShopTopGlow" hittest="false" startActive="true" particleName="particles/ui/xpshop/xpshop_panel_right_glow.vpcf" cameraOrigin="0 -300 0" lookAt="0 0 0" fov="40" />
+							<ParticleScenePanel id="xpHexMouseOver" class="TestParticlePanel XpShopTopGlow" hittest="true" startActive="true" onmouseover="$(&apos;#xpHexMouseOver&apos;).StopParticlesWithEndcaps()" onmouseout="ParticleControls.ForcePanelToParticleName($(&apos;#xpHexMouseOver&apos;), &apos;particles/ui/xpshop/hex_screen.vpcf&apos;)" particleName="particles/ui/xpshop/hex_screen.vpcf" cameraOrigin="0 -300 0" lookAt="0 0 0" fov="40" />
+							<ParticleScenePanel id="xpHexMouseOverB" class="TestParticlePanel XpShopTopGlow" hittest="true" startActive="true" onmouseover="$(&apos;#xpHexMouseOverB&apos;).StopParticlesWithEndcaps()" onmouseout="ParticleControls.ForcePanelToParticleName($(&apos;#xpHexMouseOverB&apos;), &apos;particles/ui/xpshop/hex_screen.vpcf&apos;)" particleName="particles/ui/xpshop/hex_screen.vpcf" cameraOrigin="10 -300 0" lookAt="10 0 0" fov="40" />
 						</Panel>
 						<Label text="Panel Reveal" />
 						<Panel id="uiParticles_zoo_2" class="left-right-flow">
@@ -1202,7 +1222,7 @@
 								</Panel>
 								<Label text="Kill Streak and Victory/Loss" />
 								<Panel id="uiParticles_zoo_3" class="left-right-flow">
-									<ParticleScenePanel class="TestParticlePanel" style="width: 300px;" hittest="false" startActive="true" particleName="particles/ui/ui_hud_kill_lvl_base.vpcf" cameraOrigin="0 450 50" lookAt="0 0 50" fov="40" />
+									<ParticleScenePanel class="TestParticlePanel" style="width: 300px;" hittest="false" startActive="true" particleName="particles/ui/xpshop/xpshop_oscilliscope_runner.vpcf" cameraOrigin="0 300 0" lookAt="0 0 0" fov="40" />
 								</Panel>
 							</Panel>
 							<Panel id="uiParticles_zoo_6" class="top-bottom-flow">

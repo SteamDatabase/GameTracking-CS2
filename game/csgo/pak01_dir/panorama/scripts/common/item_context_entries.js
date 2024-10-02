@@ -25,6 +25,8 @@ var ItemContextEntries;
                 const defName = InventoryAPI.GetItemDefinitionName(id);
                 if (defName === 'casket')
                     return InventoryAPI.GetItemAttributeValue(id, 'modification date') ? true : false;
+                if (InventoryAPI.DoesItemMatchDefinitionByName(id, "Remove Keychain Tool"))
+                    return true;
                 return ItemInfo.IsPreviewable(id);
             },
             OnSelected: (id, contextmenuparam) => {
@@ -213,6 +215,10 @@ var ItemContextEntries;
             AvailableForItem: (id) => {
                 if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_'))
                     return true;
+                if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'XpShopTicket'))
+                    return true;
+                if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'Remove Keychain Tool '))
+                    return true;
                 if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'xpgrant')) {
                     return (FriendsListAPI.GetFriendLevel(MyPersonaAPI.GetXuid()) < InventoryAPI.GetMaxLevel());
                 }
@@ -306,8 +312,48 @@ var ItemContextEntries;
             }
         },
         {
+            name: 'can_keychain',
+            populateFilter: ['inspect', 'preview', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            AvailableForItem: (id) => ItemInfo.IsKeychain(id) && ItemInfo.ItemHasCapability(id, 'can_keychain'),
+            OnSelected: (id) => {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ContextMenuEvent', '');
+                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_keychain', id, '');
+            }
+        },
+        {
+            name: 'can_keychain',
+            AvailableForItem: (id) => {
+                return ItemInfo.ItemHasCapability(id, 'can_keychain') &&
+                    InventoryAPI.GetItemKeychainSlotCount(id) > InventoryAPI.GetItemKeychainCount(id) &&
+                    !InventoryAPI.IsRental(id);
+            },
+            OnSelected: (id) => {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ContextMenuEvent', '');
+                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_keychain', id, '');
+            }
+        },
+        {
+            name: 'remove_keychain',
+            AvailableForItem: (id) => InventoryAPI.DoesItemMatchDefinitionByName(id, "Remove Keychain Tool"),
+            OnSelected: (id) => {
+                $.DispatchEvent('ContextMenuEvent', '');
+                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'remove_keychain', id, '');
+            }
+        },
+        {
+            name: 'remove_keychain',
+            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_keychain') && InventoryAPI.GetItemKeychainCount(id) > 0 && !InventoryAPI.IsRental(id),
+            OnSelected: (id) => {
+                $.DispatchEvent('ContextMenuEvent', '');
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + id +
+                    '&' + 'asyncworktype=remove_keychain');
+            }
+        },
+        {
             name: 'can_sticker',
-            populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            populateFilter: ['inspect', 'preview', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => ItemInfo.IsSticker(id) && ItemInfo.ItemHasCapability(id, 'can_sticker'),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -339,7 +385,7 @@ var ItemContextEntries;
         },
         {
             name: 'can_patch',
-            populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            populateFilter: ['inspect', 'preview', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => ItemInfo.IsPatch(id) && ItemInfo.ItemHasCapability(id, 'can_patch'),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');

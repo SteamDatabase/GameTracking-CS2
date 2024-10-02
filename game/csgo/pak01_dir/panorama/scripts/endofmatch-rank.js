@@ -2,6 +2,7 @@
 /// <reference path="csgo.d.ts" />
 /// <reference path="common/formattext.ts" />
 /// <reference path="mock_adapter.ts" />
+/// <reference path="xpshop_track.ts" />
 /// <reference path="rank_skillgroup_particles.ts" />
 /// <reference path="endofmatch.ts" />
 var EOM_Rank;
@@ -260,6 +261,36 @@ var EOM_Rank;
         }
         _AnimSequenceNext(() => {
         }, 1);
+        let oXpShopData = MockAdapter.XPShopDataJSO(_m_cP);
+        if (oXpShopData && oXpShopData.hasOwnProperty('prematch')) {
+            const elRoot = _m_cP.FindChildTraverse('jsXpShopTrackRoot');
+            const elXpShopContainer = _m_cP.FindChildTraverse('jsXpShopTrackContainer');
+            oXpShopData.prematch.xp_tracks.forEach(function (track, idx) {
+                const elTrack = $.CreatePanel('Panel', elXpShopContainer, 'id-xpshop_track_' + idx);
+                elTrack.BLoadLayout('file://{resources}/layout/xpshop_track.xml', false, false);
+                XpShopTrack.XpShopInit({
+                    xpshop_track_frame_panel: elTrack,
+                    xpshop_track_value: track,
+                    show_star_count: false,
+                });
+            });
+            _AnimSequenceNext(() => {
+                elRoot.AddClass('reveal');
+            }, 0.3);
+            if (oXpShopData.hasOwnProperty('postmatch')) {
+                _AnimPause(1.0);
+                _AnimSequenceNext(() => {
+                    oXpShopData.postmatch.xp_tracks.forEach(function (track, idx) {
+                        const elTrack = elXpShopContainer.FindChildTraverse('id-xpshop_track_' + idx);
+                        XpShopTrack.XpShopUpdate({
+                            xpshop_track_frame_panel: elTrack,
+                            xpshop_track_value: track,
+                            show_star_count: false,
+                        });
+                    });
+                }, 2);
+            }
+        }
         _m_pauseBeforeEnd += animTime;
         return true;
     }

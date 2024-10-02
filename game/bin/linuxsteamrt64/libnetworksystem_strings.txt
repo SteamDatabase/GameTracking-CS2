@@ -47,7 +47,6 @@
 %8.3f: %s: ParseMessagesSNP RELIABLE%s %d bytes\n
 %8.3f: %s: ParseMessagesSNP UNRELIABLE%s Seq=%d %d bytes\n
 %8.3f: PollSocket(%d)\n
-%d %s field end <= start (start %d -> end %d) (width %d)\n
 %d (%d peak) fields allocated in mempool\n
 %d / %s "%s" thinking for %.02f ms!!!\n
 %d [%s,%s] %s
@@ -98,13 +97,12 @@
 %s:  (%d bits/%d bytes):\n
 %s:  CNetChan::Transmit( %s ) while suppressing transmit\n
 %s:  CNetChan::Transmit(%s) SinceLastSend=%.1fs, Sent=%d, pending R/U=%d/%d, queueTime=%.1fms\n
-%s:  NetChan QoS flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)\n
 %s:  NetChan Setting Timeout to %4.2f seconds\n
 %s:  couldn't find serializer %s in %s\n
 %s:  encodeded data mismatched %d bits\n
 %s:  encoding mismatched %d vs. %d bits\n
-%s:  high packet loss detected flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)\n
 %s:  in serializer '%s' couldn't find field %s::%s, possibly already marked MNetworkExclude\n
+%s:  meta info problem %s\n
 %s:  metadata( %d: '% -10s' %s = %u )
 %s:  specified different usergroup proxy functions for '%s'\n
 %s:  value %u: count %d\n
@@ -124,7 +122,12 @@
 %s::%s has more than one MNetworkChangeCallback that requires passing network value into handler, this is unsupported\n
 %s::%s was in the original serializer at offset %u but that offset isn't in the ignore list!!!\n
 %s::%s:%u (%s ) already encountered at %s::%s:%u (%s)
-%s:Dropped %i packets at %i\n
+%s:Inbound net frame %d dropped\n
+%s:Inbound net frame %d duplicated\n
+%s:Inbound net frame %d out of order (latest received is %d)\n
+%s:Inbound net frames %d..%d dropped (%d frames)\n
+%s:Outbound net frame %d dropped\n
+%s:Outbound net frame %d out of order\n
 %sApplying %s\n
 %sCull fields for %s\n
 %sCulled %s::%s\n
@@ -166,22 +169,8 @@
 - total: in %.1f, out %.1f MB\n\n
 --- %s has duplicate fields\n
 -FLT_MAX
--dti
--net_no_parallel_build
--networkprofile_fsbuild
--networkspew
--networkspewcreate
--networkspewentity
--networkspewentity_readfieldlist
--networkspeweverything
--networkspewexcludes
--networkspewfakefields
--networkvar_validate
--noip
--steamnetworkingsockets_use_steamclient
--use_valve_ice
-../public/networksystem/serializedentity.cpp
 ../public/networksystem/serializedentity.h
+.Afc=%d, m=%d, sum=%d (poly:%d), bits=%u
 0 bit issue, changes
 0 bit issue, spot 1
 0 bit issue, spot 2
@@ -238,8 +227,8 @@
 <classname> <fieldname>:  spew why field was excluded from networking for classname.
 >CNetworkMessages::AllocateAndCopyConstructNetMessageAbstract unable to allocate unknown message type!\n
 ?CNetworkUtlVectorBase
-?Capture active, %s samples written\nnet_captureculldata stop to stop the capture\n
 @@regex_error
+@Capture active, %s samples written\nnet_captureculldata stop to stop the capture\n
 Accepting Steam Net connection %s\n
 Activates/deactivates net message validation
 AddMultipleToTail
@@ -265,13 +254,9 @@ BetaUniverse
 Bitfield
 Buffer overflow in net channel %s
 BuildDelta
-BuildDeltaProperites_Old
 BuildDeltaProperties fieldDataBuf
-BuildDeltaProperties_New
 BuildEntityClassNetworkSerializer
 BuildHierarchy_R
-BuildMergedSerializedEntity
-BuildMergedSerializedEntity with bogus offsets!\n
 BuildMergedSerializedEntity:  delta header with corrupt array count [ ent %d ]:  entry %d/%d == %u!
 BuildMergedSerializedEntity:  ignoring %s, was in previous state only, now outside of valid range for root field %s [array count %d, base index %d]\n
 BuildMergedSerializedEntity:  problem writing %s:  %d bits [%d to %d] is < 1 bit!\n
@@ -344,8 +329,6 @@ CSerializedEntities::CompareSerializedEntities from field %s '%s' not present in
 CSerializedEntities::CompareSerializedEntities to field %s '%s' not present in from\n
 CSerializedEntities::CompareSerializedEntities:  from serializer is '%s' and to serializer is '%s', comparison doesn't make sense!\n
 CSerializedEntities::CompareSerializedEntities:  to pointer is %s and from pointer is %s\n
-CSerializedEntity::SetFieldInfo with bogus offsets!\n
-CSerializedEntity::SetPackedFieldOffsets with bogus offsets!\n
 CStrongHandle
 CUtlBinaryBlock
 CacheableConnectionExpired
@@ -397,7 +380,6 @@ DTI: can't Flush(), no data to write.\n
 DTI: enabled from command line.\n
 DTI: was unable to open file '%s' for write!\n
 DTI: wrote client stats into %s. Session duration = %0.2f seconds, rowcount %d.\n
-Deadlock
 DebugCallback
 Declared Class
 Declared Enum
@@ -497,8 +479,6 @@ List all registered net messages
 Log network processing
 Log packets to files
 Loss . . . . . . . . . : %8.2f%%%8.2f%%%9s   net_fakeloss\n
-MIsBoxedFloatType
-MIsBoxedIntegerType
 MNetworkAlias
 MNetworkArraySerializer
 MNetworkChangePointerCallback
@@ -529,8 +509,8 @@ Merge
 Multiple steam net connections from %s\n
 N13CNetMessagePBILi0E11CNETMsg_NOPL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi3E23CNETMsg_SplitScreenUserL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
-N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder12ComputeDepthEP30BuildFlattenedSerializerInfo_tiEUliE_EviiPKcT0_ii13JobPriority_tEUliE_EE
-N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder7ProcessEbEUliE_EviiPKcT0_ii13JobPriority_tEUliE_EE
+N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder12ComputeDepthEP30BuildFlattenedSerializerInfo_tiEUliE_EviiPKcOT0_ii13JobPriority_tEUliE_EE
+N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder7ProcessEbEUliE_EviiPKcOT0_ii13JobPriority_tEUliE_EE
 Net graph %s\n
 Net status for host %s:\n
 NetChan %s ProcessMessages has taken more than %dms to process %d messages.  (Current message type: '%s')\n
@@ -571,6 +551,7 @@ Overrides IP for multihomed hosts
 PACKET_STATUS_DROPPED
 PACKET_STATUS_INVALID
 PACKET_STATUS_NORMAL
+PACKET_STATUS_OUT_OF_ORDER
 ParseMessages
 Path_Remove failed for read only CFieldPath
 Path_RemoveAll failed for read only CFieldPath
@@ -594,7 +575,6 @@ Print current simulated network condifions
 Print detailed network statistics for each network connection
 ProcessMessages
 ProcessOverride encountered unknown directive NetworkOverrideType_t(%d)\n
-ProcessPacket %s:%s packet %i at %i\n
 Processing
 Proto 
 PushN
@@ -625,8 +605,6 @@ QueueChange
 QueueReplayCompatFieldChange
 QueueReplayCompatFieldChange( %s ): can't place MNetworkReplayCompatField callback on a fully fake struct (e.g., a pointed to component or object), game code should move callback on entity %d to a C_BaseEntity derived class!\n
 RadianEuler
-ReadFieldList
-ReadFieldList with bogus offsets!\n
 ReadFields
 Recv
 RegisterFieldChangeCallbackPriority
@@ -647,8 +625,6 @@ SDR connect
 SDR ping location: %s\n
 SDR relay network status: %s (%d %d %d)\n
 Schema
-SetFieldInfo
-SetPackedFieldOffsets
 SetRecursiveProxyIndices_R
 Setting FS %s field %s to %s\n
 Shortcut to set both FakePacketLag_Recv and FakePacketLag_Send net options
@@ -664,7 +640,6 @@ Shows net channel info
 Socket '%s' bound to '%s' [%s]:\n
 Socket '%s' listening for %s on port %d:\n
 Socket '%s' listening for SDR on port %d virtual port %d\n
-Source 2 Unit Tests
 Spew CSerializedEntity memory
 Spew CSerializedEntity metadata information
 Spew QoS interval data as we gather it
@@ -715,9 +690,10 @@ Unable to unambiguously match %s::%s in %s, %d possible matches found\n
 Unexpected argument '%s'\n
 Unknown jitter profile '%s'.\n
 Unknown message type %u
+Unreliable header too small
 Usage: net_captureculldata <file path>\n
 Usage: net_option <setting> [<value>]\n
-Usage:\nnet_fakejitter [send|recv] AVG [PCT] [MAX]\nnet_fakejitter [send|recv] PROFILE\n\nsend|recv  If present, applies the changes to the specified direction only.\nAVG        Mean delay, for packets that are jittered, in ms.  The random\n           delay is chosen using the exponential distribution.\nPCT        Percentage of packets (0...100) that will receive a random delay.\nMAX        Clamp random jitter delay to MAX ms.\nPROFILE    One of: off, low, med, high\n\nUse net_fakestatus to display current simulated network conditions.\n
+Usage:\nnet_fakejitter [send|recv] AVG [PCT] [MAX]\nnet_fakejitter [send|recv] PROFILE\n\nsend|recv  If present, applies the changes to the specified direction only.\nAVG        Mean delay, for packets that are jittered, in ms.  The random\n           delay is chosen using the exponential distribution.\nPCT        Percentage of packets (0...100) that will receive a random delay.\nMAX        Clamp random jitter delay to MAX ms.\nPROFILE    One of: off, low, med, high, huge\n\nUse net_fakestatus to display current simulated network conditions.\n
 Using Valve ICE implementation\n
 VERBOSE_BITCOUNT
 VERBOSE_ENDBIT
@@ -731,7 +707,6 @@ VERBOSE_STARTBIT
 VERBOSE_TYPENAME
 VERBOSE_VALUE
 Validate
-ValidateOffsets(false)
 ValidateSerializedEntity:  %s [ent %d] invalid change '%s' for field %s (value '%s') on array that has metadata with only %d array elements!\n
 ValidateSerializedEntity:  expected metadata entry of ARRAYCOUNT for %s but got %s instead\n
 ValidateSerializedEntity:  metadata incorrect entry for %s [%d expected %d]\n
@@ -743,6 +718,8 @@ WriteFields
 WriteToBuffer Message %s is not initialized! Probably missing required fields!\n
 Writing %d bits for path %s of serializer %s entity %d, this will fail to parse\n
 [ Net Message Info: %s ]\n
+[%s] high frame misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping\n
+[%s] misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping\n
 [%s] setting extremely high timeout\n
 [GroupID]
 [Group]
@@ -771,7 +748,6 @@ avg_packet_in
 avg_packet_loss
 avg_packet_out
 backing paths
-badpacket%03i.dat
 bit %d - %d (%d bits/%d bytes):\n
 bitcount=%d, 
 both states
@@ -806,16 +782,15 @@ dt_instrumentation.cpp
 dti_%02d%02d%02d-%02d%02d%02d_%s.csv
 dti_enabled
 due to MNetworkNoBase
-duplicate
 eight
 embedded field
 enable
 encoding_stats
 excluding
 failed to construct fake field from metadata %s::%s (%s) in %s\n
-fc=%d, m=%d, sum=%d (poly:%d), bits=%u
 fclose
 fflush
+field %s not present in %s\n
 field not in previous encoding
 field pointer
 field serializer '%s' already matched to meta variant %d, cloning serializer to allow matching to different meta variant %d\n
@@ -833,6 +808,9 @@ flattenedserializers.cpp
 flattenedserializers_database.cpp
 fp_trace
 free
+from
+from meta %u != to meta %u
+from missing
 fs_spew_readfieldlist
 fwrite
 g_pSteamGameServerNetworkingSockets
@@ -841,8 +819,8 @@ g_pSteamNetworkingUtils
 groupindex
 groupnames
 has_network_encoding_data
-high
 hostip
+huge
 identified %d entity related c++ field shadowing issues:\n
 including
 incoming_data_bytespersecond
@@ -933,16 +911,15 @@ no fastpath
 no metadata!\n
 non-parallel
 noscale
+nothing
 null
 nullptr != pFieldOwnerStruct
 org(%g,%g,%g) ang(%g,%g,%g)
-original\n
+out-of-order
 outgoing_data_bytespersecond
 outgoing_sequence
 outgoing_sequence_start
-pEntity->ValidateOffsets()
 pFSField
-pMerged->ValidateOffsets()
 packet_status
 pending data
 pmInfoDest.m_pFlattenedSerializer
@@ -979,12 +956,11 @@ strtod
 symbols
 tag='%s':%u
 target struct
+to missing
 unable to match %s::%s (type %s) in %s, no likely matches found\n
 unfiltered_server_framerate
 unreliable
 unreliable_bits
-updated field %d/%d: %s\n
-updated\n
 usage: %s <client|server>\n
 usage: %s <name> <server>\n
 usage: %s classname fieldname\n

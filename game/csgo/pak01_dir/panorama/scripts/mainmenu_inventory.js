@@ -348,6 +348,12 @@ var InventoryPanel;
             return true;
         }
     }
+    function _UpdateCraftingPanelContentsIfCrafting() {
+        let elCrafting = $('#InvCraftingPanel');
+        if (!elCrafting.BHasClass(_m_HiddenContentClassname)) {
+            $.DispatchEvent('UpdateTradeUpPanel');
+        }
+    }
     function _UpdateSearchPanelVisibility(bShow) {
         let elSearch = $('#InvSearchPanel');
         if (bShow) {
@@ -474,6 +480,7 @@ var InventoryPanel;
         _RunEveryTimeInventoryIsShown();
         _UpdateActiveInventoryList();
         _ShowHideRentalTab();
+        _UpdateCraftingPanelContentsIfCrafting();
         // @ts-ignore
         if (!_m_elInventoryMain.updatePlayerEquipSlotChangedHandler) {
             // @ts-ignore
@@ -487,6 +494,7 @@ var InventoryPanel;
         _ShowHideXrayBtn();
         _ShowHideRentalTab();
         _UpdateFilterRentalBtnInCategoryVisibility(_m_activeCategory);
+        _UpdateCraftingPanelContentsIfCrafting();
         if ($.GetContextPanel().BHasClass(_m_HiddenContentClassname) || _m_isCapabliltyPopupOpen)
             return;
         _OnShowAcknowledgePanel();

@@ -183,7 +183,6 @@ var ItemInfo;
         const count = InventoryAPI.GetItemStickerCount(id);
         const stickerList = [];
         for (let i = 0; i < count; i++) {
-            const image = InventoryAPI.GetItemStickerImageByIndex(id, i);
             const oStickerInfo = {
                 image: InventoryAPI.GetItemStickerImageByIndex(id, i),
                 name: InventoryAPI.GetItemStickerNameByIndex(id, i)
@@ -193,6 +192,19 @@ var ItemInfo;
         return stickerList;
     }
     ItemInfo.GetitemStickerList = GetitemStickerList;
+    function GetitemKeychainList(id) {
+        const count = InventoryAPI.GetItemKeychainCount(id);
+        const keychainList = [];
+        for (let i = 0; i < count; i++) {
+            const oKeychainInfo = {
+                image: InventoryAPI.GetItemKeychainImageByIndex(id, i),
+                name: InventoryAPI.GetItemKeychainNameByIndex(id, i)
+            };
+            keychainList.push(oKeychainInfo);
+        }
+        return keychainList;
+    }
+    ItemInfo.GetitemKeychainList = GetitemKeychainList;
     function GetStoreOriginalPrice(id, count, rules) {
         return StoreAPI.GetStoreItemOriginalPrice(id, count, rules ? rules : '');
     }
@@ -290,7 +302,7 @@ var ItemInfo;
             return 'vmt://spraypreview_' + id;
         else if (IsSticker(id) || IsPatch(id))
             return 'vmt://stickerpreview_' + id;
-        else if (itemSchemaDef.hasOwnProperty("model_player") || isMusicKit || issMusicKitDefault || isPet)
+        else if (itemSchemaDef.hasOwnProperty("model_player") || isMusicKit || issMusicKitDefault || isPet || IsKeychain(id))
             return 'img://inventory_' + id;
     }
     function GetModelPlayer(id) {
@@ -302,6 +314,10 @@ var ItemInfo;
         return modelPlayer;
     }
     ItemInfo.GetModelPlayer = GetModelPlayer;
+    function IsKeychain(itemId) {
+        return InventoryAPI.DoesItemMatchDefinitionByName(itemId, 'keychain');
+    }
+    ItemInfo.IsKeychain = IsKeychain;
     function IsSticker(itemId) {
         return InventoryAPI.DoesItemMatchDefinitionByName(itemId, 'sticker');
     }
@@ -362,7 +378,7 @@ var ItemInfo;
     }
     ItemInfo.FindAnyUserOwnedCharacterItemID = FindAnyUserOwnedCharacterItemID;
     function IsPreviewable(id) {
-        return !!InventoryAPI.GetDefaultSlot(id) || IsSticker(id) || IsPatch(id) || IsSpraySealed(id);
+        return !!InventoryAPI.GetDefaultSlot(id) || IsSticker(id) || IsPatch(id) || IsSpraySealed(id) || IsKeychain(id);
     }
     ItemInfo.IsPreviewable = IsPreviewable;
     function IsNameTag(id) {

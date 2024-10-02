@@ -1,5 +1,16 @@
 <!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
 {
+	core_empty = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+			},
+		]
+	}
 	core_distance_limiter = 
 	{
 		operators = 
@@ -57,6 +68,72 @@
 				operator = "sos_goto"
 				execute_once = "true"
 				input_execute = "@dist_limit_and.output"
+				input_goto_end = "true"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "core"
+			display_group = "utility"
+		}
+	}
+	core_volume_limiter = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					volume_input = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					volume_block_min_threshold = 
+					{
+						data_type = "float"
+						value = "-1.000000"
+					}
+				}
+			},
+			
+			{
+				name = "volume_limit_on"
+				operator = "math_float"
+				execute_once = "true"
+				apply = "greater_than"
+				input1 = "@public.volume_block_min_threshold"
+				input2 = "-1.000000"
+			},
+			
+			{
+				name = "volume_limit_test"
+				operator = "math_float"
+				execute_once = "true"
+				apply = "less_than"
+				input_execute = "@volume_limit_on.output"
+				input1 = "@public.volume_input"
+				input2 = "@public.volume_block_min_threshold"
+			},
+			
+			{
+				name = "volume_limit_and"
+				operator = "math_float"
+				execute_once = "true"
+				apply = "min"
+				input_execute = "1.000000"
+				input1 = "@volume_limit_on.output"
+				input2 = "@volume_limit_test.output"
+			},
+			
+			{
+				name = "exit"
+				operator = "sos_goto"
+				execute_once = "true"
+				input_execute = "@volume_limit_and.output"
 				input_goto_end = "true"
 			},
 		]

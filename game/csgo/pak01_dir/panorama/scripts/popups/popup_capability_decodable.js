@@ -731,4 +731,5 @@ var CapabilityDecodable;
     $.RegisterForUnhandledEvent("CSGOInspectBackgroundMapChanged", UpdateInspectMap);
     $.RegisterForUnhandledEvent('CSGOShowMainMenu', _Refresh);
     $.RegisterForUnhandledEvent('PopulateLoadingScreen', ClosePopUp);
+    $.RegisterForUnhandledEvent('OpenInventory', ClosePopUp);
 })(CapabilityDecodable || (CapabilityDecodable = {}));

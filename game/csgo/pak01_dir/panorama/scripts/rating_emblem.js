@@ -104,10 +104,10 @@ var RatingEmblem;
             let locTypeModifer = rating_type === 'Competitive' ? '' : rating_type.toLowerCase();
             imagePath = locTypeModifer !== '' ? locTypeModifer : 'skillgroup';
             const elCompWinsNeeded = root_panel.FindChildTraverse('jsRating-CompetitiveWinsNeeded');
-            elCompWinsNeeded.visible = bTooFewWins;
+            elCompWinsNeeded.visible = !isloading && bTooFewWins && options.local_player;
             if (bTooFewWins || isloading) {
                 elSkillGroupImage.SetImage('file://{images}/icons/skillgroups/' + imagePath + '_none.svg');
-                if (!isloading) {
+                if (!isloading && options.local_player) {
                     const winsneeded = Math.max(0, winsNeededForRank - wins);
                     elSkillGroupImage.SetImage('file://{images}/icons/skillgroups/' + imagePath + '_need_wins.svg');
                     elSkillGroupImage.SetDialogVariableInt('wins', wins);

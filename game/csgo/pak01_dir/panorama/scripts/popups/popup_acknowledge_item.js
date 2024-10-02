@@ -68,7 +68,7 @@ var AcknowledgeItems;
         ColorRarityBar(elItemTile, rarityColor);
         SetItemName(elItemTile, item.id);
         ShowGiftPanel(elItemTile, item.id);
-        ShowSetPanel(elItemTile, item.id);
+        ShowSetPanel(elItemTile, item);
         ItemCount(elItemTile, index, numItems);
         elParent.Data().itemId = item.id;
     }
@@ -88,10 +88,10 @@ var AcknowledgeItems;
         elLabel.text = InventoryAPI.GetItemName(id);
     }
     function SetTitle(elItemTile, item, rarityColor) {
-        const isOperationReward = item.pickuptype === 'quest_reward';
         const defName = InventoryAPI.GetItemDefinitionName(item.id);
         const elTitle = elItemTile.FindChildInLayoutFile('AcknowledgeItemTitle');
-        const titleSuffex = isOperationReward ? 'quest_reward' : item.type;
+        const titleSuffex = (item.pickuptype
+            && ['xpshopredeem', 'quest_reward'].includes(item.pickuptype)) ? item.pickuptype : item.type;
         if (defName === 'casket' && item.type === 'nametag_add') {
             elTitle.text = $.Localize('#CSGO_Tool_Casket_Tag');
         }
@@ -132,10 +132,24 @@ var AcknowledgeItems;
         elLabel.SetDialogVariable('name', FriendsListAPI.GetFriendName(gifterId));
         elLabel.text = $.Localize('#acknowledge_gifter', elLabel);
     }
-    function ShowSetPanel(elItemTile, id) {
+    function ShowSetPanel(elItemTile, item) {
+        const id = item.id;
         const elPanel = elItemTile.FindChildInLayoutFile('AcknowledgeItemSet');
+        const elLabel = elItemTile.FindChildInLayoutFile('AcknowledgeItemSetLabel');
+        const elImage = elItemTile.FindChildInLayoutFile('AcknowledgeItemSetImage');
         const strSetName = InventoryAPI.GetTag(id, 'ItemSet');
         if (!strSetName || strSetName === '0') {
+            if (ItemInfo.IsKeychain(id) && item.pickuptype === 'xpshopredeem') {
+                let m_szRemoveKeychainToolChargesForPurchase = 'Remove Keychain Tool Pack';
+                let defidxForPurchase = InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_szRemoveKeychainToolChargesForPurchase);
+                let fauxPurchaseItemID = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxForPurchase, 0);
+                elLabel.SetDialogVariableInt('item_count', Number(InventoryAPI.GetItemAttributeValue(fauxPurchaseItemID, '{uint32}items count')));
+                elLabel.text = $.Localize('#CSGO_RemoveKeychainToolCharges_Reward', elLabel);
+                elImage.SetImage('file://{images}/icons/ui/keychain_removal.svg');
+                elImage.SetHasClass('popup-acknowledge__subtitle_seticon_tiny', true);
+                elPanel.SetHasClass('hide', false);
+                return;
+            }
             elPanel.SetHasClass('hide', true);
             return;
         }
@@ -144,10 +158,9 @@ var AcknowledgeItems;
             elPanel.SetHasClass('hide', true);
             return;
         }
-        const elLabel = elItemTile.FindChildInLayoutFile('AcknowledgeItemSetLabel');
         elLabel.text = setName;
-        const elImage = elItemTile.FindChildInLayoutFile('AcknowledgeItemSetImage');
         elImage.SetImage('file://{images}/econ/set_icons/' + strSetName + '_small.png');
+        elImage.SetHasClass('popup-acknowledge__subtitle_seticon_tiny', false);
         elPanel.SetHasClass('hide', false);
     }
     function ItemCount(elItemTile, index, numItems) {
@@ -174,8 +187,9 @@ var AcknowledgeItems;
         if (getUpdateItem && newItems.filter(item => item.id === getUpdateItem.id).length < 1) {
             newItems.push(getUpdateItem);
         }
-        const rewardItems = newItems.filter(item => item.pickuptype === "quest_reward");
-        const otherItems = newItems.filter(item => item.pickuptype !== "quest_reward");
+        const priorityItemAckTypes = ["xpshopredeem", "quest_reward"];
+        const rewardItems = newItems.filter(item => item.pickuptype && priorityItemAckTypes.includes(item.pickuptype));
+        const otherItems = newItems.filter(item => !(item.pickuptype && priorityItemAckTypes.includes(item.pickuptype)));
         return rewardItems.concat(otherItems);
     }
     AcknowledgeItems_1.GetItems = GetItems;

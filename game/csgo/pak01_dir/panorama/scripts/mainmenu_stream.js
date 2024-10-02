@@ -24,6 +24,10 @@ var StreamPanel;
     ;
     function _MinimizeStream() {
         m_cp.SetHasClass('minimize_stream', true);
+        let elDragPanel = m_dragParent.FindChildInLayoutFile('main-menu-drag-panel');
+        if (m_cp.GetParent().id === elDragPanel.id) {
+            $.Schedule(.25, () => { elDragPanel.style.width = 'fit-children'; });
+        }
     }
     ;
     function _FullSizeStream() {
@@ -34,7 +38,14 @@ var StreamPanel;
         let elDragPanel = m_dragParent.FindChildInLayoutFile('main-menu-drag-panel');
         m_cp.SetParent(elDragPanel);
         m_cp.style.y = "0px";
-        elDragPanel.SetDragPosition(28, 475);
+        m_cp.style.x = "0px";
+        $.Schedule(.25, () => { elDragPanel.style.width = 'fit-children'; });
+        let rightOffset = 140;
+        let xpos = (elDragPanel.GetParent().actuallayoutwidth / elDragPanel.GetParent().actualuiscale_x);
+        xpos = xpos - ((m_cp.actuallayoutwidth / m_cp.actualuiscale_x) + rightOffset);
+        let ypos = (elDragPanel.GetParent().actuallayoutheight / elDragPanel.GetParent().actualuiscale_y);
+        ypos = ypos - ((m_cp.actuallayoutheight / m_cp.actualuiscale_y) + rightOffset);
+        elDragPanel.SetDragPosition(xpos, ypos);
         m_cp.SetHasClass('stream-drag-enabled', true);
     }
     function _StreamDragDisable() {
@@ -45,7 +56,7 @@ var StreamPanel;
             m_cp.SetParent(m_pinnedParent);
             m_cp.SetHasClass('stream-drag-enabled', false);
             m_cp.FindChild('StreamPanelFeed').style.opacity = '1';
-            m_pinnedParent.MoveChildBefore(m_cp, m_pinnedParent.FindChild('id-mainmenu-mini-store-panel'));
+            m_pinnedParent.MoveChildBefore(m_cp, m_pinnedParent.FindChild('VanityControls'));
         });
     }
     function _CSGOHideMainMenu() {

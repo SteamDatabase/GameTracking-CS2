@@ -31,7 +31,7 @@ var CapabilityCanPatch;
     function OnRemovePatch(itemId, slotIndex) {
         UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Patch_Remove'), $.Localize('#SFUI_Patch_Remove_Desc'), '', $.Localize('#SFUI_Patch_Remove'), () => {
             InspectAsyncActionBar.ResetTimeouthandle();
-            InventoryAPI.WearItemSticker(itemId, slotIndex);
+            InventoryAPI.WearItemSticker(itemId, slotIndex, 0);
             InspectAsyncActionBar.SetCallbackTimeout();
         }, $.Localize('#UI_Cancel'), () => {
             InspectAsyncActionBar.ResetTimeouthandle();
@@ -44,10 +44,10 @@ var CapabilityCanPatch;
             return;
         if (!InventoryAPI.IsItemInfoValid(m_elPreviewPanel.Data().id))
             return;
+        m_firstCameraAnim = true;
         InventoryAPI.HighlightPatchBySlot(activeIndex);
         _UpdatePreviewPanelSettingsForPatchPosition(m_elPreviewPanel.Data().id, activeIndex);
         m_prevCameraSlot = activeIndex;
-        m_firstCameraAnim = m_firstCameraAnim === false ? true : true;
     }
     CapabilityCanPatch.CameraAnim = CameraAnim;
     ;
@@ -67,6 +67,7 @@ var CapabilityCanPatch;
         let patchPosition = InventoryAPI.GetCharacterPatchPosition(charItemId, activeIndex.toString());
         let oPositionData = m_positionData.filter(entry => entry.type === patchPosition)[0];
         if (!oPositionData) {
+            m_firstCameraAnim = false;
             return;
         }
         InspectModelImage.SetCharScene(m_elPreviewPanel.Data().id, LoadoutAPI.GetItemID(setting_team, oPositionData.loadoutSlot));

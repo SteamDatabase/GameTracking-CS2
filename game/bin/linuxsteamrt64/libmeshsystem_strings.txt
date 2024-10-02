@@ -4,6 +4,8 @@
 %s (Color)
 %s (Material)
 %s_color
+%s_group%d_groom_ao
+%s_group%d_groom_density
 %s_hair_ao
 %s_hair_density
 %s_hairsim_PosVelQuat
@@ -61,6 +63,7 @@
 20ISceneObjectDescBaseI20CSceneSkeletonObjectE
 21CUtlMultiJobProcessor
 21IShaderReloadListener
+22CSceneAnimatableObject
 23CKV3ResourceBlockHelper
 23CSyncModelResourceUtils
 24CSceneSkeletonObjectDesc
@@ -95,6 +98,7 @@
 ?RESOURCE_TYPE_MORPHSET_INTERNAL
 @MESH_DRAW_FLAGS_NONE
 ATTACHMENT_INFLUENCE_FLAGS_NONE
+AddMultipleToTail
 AllocateAndLoad failed for '%s' (%s)\n
 AllocateAndLoad failed for '%s'\n
 AllocateResource: Error creating data for %s!\n
@@ -153,6 +157,7 @@ Bad sequence in GetSequenceActivityName() for model '%s'!\n
 BaseSceneObjectDesc
 Body
 BoneConstraintList
+BoundingBoxBloat
 CAimConstraint
 CAnimAttachment
 CAnimCycle
@@ -226,7 +231,8 @@ CStrongHandle
 CStrongHandleCopyable
 CTiltTwistConstraint
 CTwistConstraint
-CUtlVectorFixedGrowable
+CUtlLeanVector
+CUtlLeanVectorFixedGrowable
 CVPhysXSurfacePropertiesList
 Cables
 Cannot allocate abstract class
@@ -329,7 +335,6 @@ Ges-8R
 HBmodellib
 HELPER_BONE
 IKV3TransferInterface_ResourceLoad
-IS_TYPESAFE_INTEGER
 Identity
 InfoForResourceTypeCAnimationGroup
 InfoForResourceTypeCModel
@@ -361,7 +366,6 @@ MESH_DRAW_FLAGS_USE_SHADOW_FAST_PATH
 MESH_DRAW_FLAGS_USE_UNCOMPRESSED_PER_VERTEX_LIGHTING
 MESH_DRAW_INPUT_LAYOUT_IS_NOT_MATCHED_TO_MATERIAL
 MGetKV3ClassDefaults
-MIsBoxedIntegerType
 MKV3TransferName
 MODEL_BONE_FLEX_INVALID
 MODEL_BONE_FLEX_TX
@@ -519,6 +523,7 @@ SkeletonAnimCapture_t::Frame_t
 SkeletonBoneBounds_t
 SkeletonDemoDb_t
 TILT_TWIST
+TanFrameQuat
 Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference specific type.
 Trying to override a material with an invalid draw call index\n
@@ -559,7 +564,6 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy1818520950E15PermModelData_tE24Deall
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE15AllocateAndLoadER23CKV3TransferLoadContextPK21ResourceBindingBase_tP29IRD_RegisterResourceDataUtilsE15CAllocatorUtils
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE24DeallocateDestroyCleanupEPvP25IResourceDeallocatorUtilsE17CDeallocatorUtils
 [idx=%d] "%s"
-\nJzZ&
 angularburst
 anim_data_block
 anim_graph_resource
@@ -570,6 +574,7 @@ audioreflectivity
 audioroughnessfactor
 audiosounds
 bOwnVBAndIB == m_bOwnVBAndIB && m_pFixedMeshDataOverride
+baselayer
 bentnormal
 bentnormal_back
 bentnormal_front
@@ -614,8 +619,15 @@ fadetime
 fclose
 fff?
 fflush
+flActivationDistance
+flAngleCenter
+flAngleExtents
 flAnimationForceAttraction
 flAnimationVertexAttraction
+flBias
+flBounciness
+flCurvature
+flCurvatureRadius
 flDist
 flGravity
 flGroundFriction
@@ -636,11 +648,14 @@ flSwingRelax
 flTwistRelax
 flVolumetricSolveStrength
 flWeight0
+flWeight4
+flWeight5
 flWorldFriction
 free
 fwrite
 g_hSkeletonMeshLayout
 hair
+heatconductivity
 impactHardThreshold
 impacthard
 impactsoft
@@ -653,6 +668,8 @@ lowprecisionuv1
 m_AnimCaptures
 m_AnimStrayRadii
 m_AnimatedMaterialAttributes
+m_AntiTunnelProbes
+m_AntiTunnelTargetNodes
 m_AttachmentName
 m_AttachmentType
 m_AttributeName
@@ -685,6 +702,7 @@ m_CtrlOsOffsets
 m_CtrlSoftOffsets
 m_CullingData
 m_Data
+m_Distances
 m_DynNodeFriction
 m_DynNodeVertexSet
 m_DynNodeWindBases
@@ -715,6 +733,7 @@ m_GoalStrength
 m_Gradient
 m_Gravity
 m_GroupName
+m_HingeLimits
 m_HitBoxSets
 m_HitBoxes
 m_Hull
@@ -765,6 +784,7 @@ m_ReverseOffsets
 m_RigidColliderPriorities
 m_Rods
 m_Ropes
+m_SDFRigids
 m_SimStateBones
 m_SimdAnimStrayRadii
 m_SimdNodeBases
@@ -832,17 +852,25 @@ m_bIgnoreRotation
 m_bInfluenceRootTransform
 m_bInverse
 m_bIsAttachment
+m_bIsFarFieldOnly
 m_bIsNotMatchedToMaterial
 m_bIsTwoSided
+m_bNoShadow
+m_bOnlyShadow
 m_bOverrideMassCenter
 m_bPredicted
 m_bRecomputeSmoothNormalsAfterAnimation
+m_bSmoothNormalsAcrossUvSeams
 m_bTeleport
 m_bTeleportTick
 m_bTopLevel
 m_bTranslationOnly
 m_bUseCompressedNormalTangent
+m_bUseForCollision
+m_bUseForOcclusion
 m_bUseShadowFastPath
+m_bUserFriendlyNameLong
+m_bUserFriendlyNameSealed
 m_bUserSpecifiedColor
 m_bUserSpecifiedMaterialGroup
 m_baseNameHash
@@ -872,7 +900,6 @@ m_constraints2
 m_controls
 m_debugPartNames
 m_definition
-m_density
 m_description
 m_distanceFields
 m_drawBounds
@@ -925,6 +952,8 @@ m_flDefaultTimeDilation
 m_flDefaultVelAirDrag
 m_flDefaultVelQuadAirDrag
 m_flDefaultVolumetricSolveAmount
+m_flElasticDamping
+m_flElasticity
 m_flEntitySimTime
 m_flFalloff
 m_flFootLength
@@ -935,6 +964,7 @@ m_flInternalPressure
 m_flLinearDamping
 m_flLinearDampingRatio
 m_flLinearFrequency
+m_flLocalDrag1
 m_flLocalForce
 m_flLocalRotation
 m_flMass
@@ -954,6 +984,7 @@ m_flPitchBounce
 m_flPitchDamping
 m_flPitchFriction
 m_flPitchStiffness
+m_flPlasticity
 m_flPosition
 m_flProgression
 m_flQuadVelocitySmoothRate
@@ -967,7 +998,6 @@ m_flShapeRadius
 m_flSphereRadius
 m_flStanceDirectionMS
 m_flStaticImpactVolume
-m_flSumOfAllHairLengths
 m_flSurfaceArea
 m_flSurfaceBias
 m_flTensionCompressScale
@@ -988,6 +1018,7 @@ m_flYawBounce
 m_flYawDamping
 m_flYawFriction
 m_flYawStiffness
+m_flashpoint
 m_flexController
 m_flexControllerToken
 m_footLandCycle
@@ -1001,10 +1032,12 @@ m_goalPosition
 m_hBuffer
 m_hModel
 m_hSimParamsMat
+m_hairPositionOffsets
 m_hairs
 m_hardThreshold
 m_hardVelocityThreshold
 m_hardnessFactor
+m_heatConductivity
 m_hitboxsets
 m_hulls
 m_impactHard
@@ -1068,6 +1101,7 @@ m_nCollisionMask
 m_nCollisionPlaneIndex
 m_nDebugFlags
 m_nDefaultMeshGroupMask
+m_nDepth
 m_nDynamicNodeFlags
 m_nEntIndex
 m_nEntParent
@@ -1116,6 +1150,7 @@ m_nRodVelocitySmoothIterations
 m_nRopeCount
 m_nRotLockStaticNodes
 m_nRotateMotion
+m_nSDFRigidIndex
 m_nSegmentsPerHairStrand
 m_nShapeType
 m_nSimdQuadCount1
@@ -1131,6 +1166,7 @@ m_nStaticNodes
 m_nSurfacePropertyIndex
 m_nTaperedCapsuleRigidIndex
 m_nTargetAxis
+m_nToolMaterialHash
 m_nTranslateMotion
 m_nTreeDepth
 m_nTriCount1
@@ -1281,7 +1317,7 @@ mesh_calculate_curvature_smooth_weight
 mesh_index
 meshinstance_imp.cpp
 meshsystem.cpp
-meshsystem.cpp(169): GetErrorModel() called before error model exists!\n
+meshsystem.cpp(170): GetErrorModel() called before error model exists!\n
 meshutils.cpp
 model_default_preview_sequence_name
 model_dump_convert_info
@@ -1294,6 +1330,7 @@ morph_block
 morph_name
 morph_texture
 motiondisabled
+nBegin
 nBeginDynamic
 nBoneCtrl
 nChildNode
@@ -1315,6 +1352,7 @@ nNodeX1
 nNodeY0
 nNodeY1
 nParentNode
+nProbeNode
 nScaleSourceNode
 nTargetNode
 nVertexBase
@@ -1325,6 +1363,7 @@ null
 occlusionFactor
 offset
 optionallycompressedtangentframe
+overlay
 particles_list
 pervertexlighting
 phys_data_block
@@ -1343,6 +1382,7 @@ root
 scrapeRoughThreshold
 scraperough
 scrapesmooth
+seq_trans
 seqgroup_data_block
 skidstop
 softcontactdampingratio
@@ -1354,9 +1394,12 @@ surfacePropertyName
 table
 tangent
 tangentu_signv
+targetNodes
 texcoord
 tmFrame2
 vCenterOfMass
+vLocalMax
+vLocalMin
 vShape
 vSize
 vSphere

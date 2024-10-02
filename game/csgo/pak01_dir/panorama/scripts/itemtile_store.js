@@ -123,7 +123,7 @@ var ItemTileStore;
     }
     function SetClaimed(elPanel, oItemData) {
         if (oItemData.isDropItem) {
-            const bIsFauxItem = InventoryAPI.IsFauxItemID(oItemData.id);
+            const bIsFauxItem = InventoryAPI.IsClaimedItem(oItemData.id);
             elPanel.SetHasClass('item-claimed', bIsFauxItem);
         }
     }

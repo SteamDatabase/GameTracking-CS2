@@ -30,6 +30,9 @@ do
 done <   <(find . -type f -name "*.js" -print0)
 
 ProcessToolAssetInfo
+
+../tools/dump_source2.sh csgo csgo
+
 FixUCS2
 
 CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')" "$1"

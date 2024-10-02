@@ -9,12 +9,18 @@ var InspectPurchaseBar;
     let m_showToolUpsell = false;
     let m_showXrayMachineUi = false;
     let m_allowXrayPurchase = false;
-    let m_bOverridePurchaseMultiple = false;
+    let m_nOverridePurchaseMultiple = -1;
     function Init(elPanel, itemId, funcGetSettingCallback) {
         m_storeItemid = funcGetSettingCallback("storeitemid", "");
-        m_bOverridePurchaseMultiple = (funcGetSettingCallback("overridepurchasemultiple", "") === '1');
         m_showXrayMachineUi = (funcGetSettingCallback("showXrayMachineUi", "no") === 'yes');
         m_allowXrayPurchase = (funcGetSettingCallback("allowxraypurchase", "no") === 'yes');
+        let paramOverridePurchaseMultiple = funcGetSettingCallback("overridepurchasemultiple", "");
+        if (paramOverridePurchaseMultiple === '1') {
+            m_nOverridePurchaseMultiple = 1;
+        }
+        else if (paramOverridePurchaseMultiple === '0') {
+            m_nOverridePurchaseMultiple = 0;
+        }
         m_itemid = !m_storeItemid ? itemId : m_storeItemid;
         let bFauxItemIdForPurchase = InventoryAPI.IsFauxItemID(m_itemid);
         let priceOriginal = bFauxItemIdForPurchase ? ItemInfo.GetStoreOriginalPrice(m_itemid, 1) : '';
@@ -81,8 +87,8 @@ var InspectPurchaseBar;
         _UpdateSalePrice(ItemInfo.GetStoreOriginalPrice(m_itemid, qty));
     }
     function _isAllowedToPurchaseMultiple() {
-        if (m_bOverridePurchaseMultiple)
-            return true;
+        if (m_nOverridePurchaseMultiple >= 0)
+            return (m_nOverridePurchaseMultiple === 1);
         let attValue = InventoryAPI.GetItemAttributeValue(m_itemid, 'season access');
         if (attValue)
             return false;
@@ -91,6 +97,8 @@ var InspectPurchaseBar;
             return false;
         let defName = InventoryAPI.GetItemDefinitionName(m_itemid);
         if (defName === 'casket')
+            return false;
+        if (defName && defName.startsWith('XpShopTicket'))
             return false;
         return true;
     }
@@ -132,6 +140,7 @@ var InspectPurchaseBar;
         else {
             StoreAPI.StoreItemPurchase(purchaseString);
         }
+        $.DispatchEvent("CSGOPlaySoundEffect", "UIPanorama.buymenu_purchase", "MOUSE");
     }
     function ClosePopup() {
         InventoryAPI.StopItemPreviewMusic();

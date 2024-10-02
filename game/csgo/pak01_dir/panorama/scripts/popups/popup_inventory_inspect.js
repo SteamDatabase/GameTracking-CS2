@@ -186,9 +186,17 @@ var InventoryInspect;
         return aLootlistIds;
     }
     function _UpdateLootlistTitleBar(count) {
-        let caseId = $.GetContextPanel().GetAttributeString("caseidforlootlist", "");
         let elPanel = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container');
-        elPanel.SetDialogVariable('container', InventoryAPI.GetItemName(caseId));
+        let lootlistOverride = $.GetContextPanel().GetAttributeString("lootlistNameOverride", "");
+        let caseName;
+        if (lootlistOverride !== 'false' && lootlistOverride !== '') {
+            caseName = $.Localize(lootlistOverride, $.GetContextPanel());
+        }
+        else {
+            let caseId = $.GetContextPanel().GetAttributeString("caseidforlootlist", "");
+            caseName = InventoryAPI.GetItemName(caseId);
+        }
+        elPanel.SetDialogVariable('container', caseName);
         elPanel.SetDialogVariableInt('index', m_lootlistItemIndex + 1);
         elPanel.SetDialogVariableInt('total', count);
         let rentalItemIds = $.GetContextPanel().GetAttributeString("rentalItems", '');
@@ -200,17 +208,20 @@ var InventoryInspect;
         if (storeItemId) {
             let storeItemSeasonAccess = InventoryAPI.GetItemAttributeValue(storeItemId, 'season access');
             let acquiredItemSeasonAccess = InventoryAPI.GetItemAttributeValue(ItemId, 'season access');
-            if (storeItemSeasonAccess === acquiredItemSeasonAccess) {
+            if (acquiredItemSeasonAccess && (storeItemSeasonAccess === acquiredItemSeasonAccess)) {
                 let nSeasonAccess = GameTypesAPI.GetActiveSeasionIndexValue();
                 let nCoinRank = MyPersonaAPI.GetMyMedalRankByType((nSeasonAccess + 1) + "Operation$OperationCoin");
                 if (nCoinRank === 1 && nSeasonAccess === acquiredItemSeasonAccess) {
-                    ClosePopup();
-                    $.DispatchEvent('HideStoreStatusPanel');
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ItemId +
-                        '&' + 'asyncworktype=useitem' +
-                        '&' + 'seasonpass=true');
+                    ShowActiveItemPopup(ItemId);
                     return;
                 }
+            }
+            let storeItemToolType = InventoryAPI.GetToolType(storeItemId);
+            let acquiredItemToolType = InventoryAPI.GetToolType(ItemId);
+            if (storeItemToolType === 'xp_shop_ticket' && acquiredItemToolType === 'xp_shop_ticket') {
+                InventoryAPI.AcknowledgeNewItembyItemID(ItemId);
+                ClosePopup();
+                $.DispatchEvent('HideStoreStatusPanel');
             }
             let defName = InventoryAPI.GetItemDefinitionName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_charge, 0));
             if (InventoryAPI.DoesItemMatchDefinitionByName(storeItemId, defName) && InventoryAPI.DoesItemMatchDefinitionByName(ItemId, defName)) {
@@ -223,6 +234,14 @@ var InventoryInspect;
             $.DispatchEvent('ShowAcknowledgePopup', '', ItemId);
             $.DispatchEvent('HideStoreStatusPanel');
         }
+    }
+    function ShowActiveItemPopup(itemId) {
+        InventoryAPI.AcknowledgeNewItembyItemID(itemId);
+        ClosePopup();
+        $.DispatchEvent('HideStoreStatusPanel');
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
+            '&' + 'asyncworktype=useitem' +
+            '&' + 'seasonpass=true');
     }
     function ClosePopup() {
         let elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
@@ -247,8 +266,6 @@ var InventoryInspect;
         _UpdatePanelData(itemId);
         InspectActionBar.NavigateModelPanel('InspectModel');
     }
-    $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', _ShowNotification);
-    $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _ItemAcquired);
     $.RegisterForUnhandledEvent('CSGOShowMainMenu', _Refresh);
     $.RegisterForUnhandledEvent('PopulateLoadingScreen', ClosePopup);
 })(InventoryInspect || (InventoryInspect = {}));

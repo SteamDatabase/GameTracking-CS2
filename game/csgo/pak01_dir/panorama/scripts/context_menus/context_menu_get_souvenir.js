@@ -188,7 +188,7 @@ var ContextMenuGetSouvenir;
             UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemid +
                 '&' + 'inspectonly=true' +
                 '&' + 'showcharselect=false' +
-                '&' + 'showequip=false' +
+                '&' + 'showallitemactions=false' +
                 '&' + 'showmarketlink=false' +
                 '&' + 'showitemcert=false' +
                 '&' + 'allowsave=false' +

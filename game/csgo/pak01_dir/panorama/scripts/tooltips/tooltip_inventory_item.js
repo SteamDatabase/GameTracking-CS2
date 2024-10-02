@@ -16,6 +16,13 @@ var TooltipInventoryItem;
         if (strDesc.endsWith('<br>')) {
             strDesc = strDesc.slice(0, -4);
         }
+        if (bThisIsFauxItemID && InventoryAPI.DoesItemMatchDefinitionByName(id, "Remove Keychain Tool")) {
+            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+            if (numKeychainRemoveToolChargesRemaining > 0) {
+                ctx.SetDialogVariableInt('item_count', numKeychainRemoveToolChargesRemaining);
+                strDesc = strDesc + '<br/><font color="#99ccff">' + $.Localize('#Attrib_KeychainRemoveTool_Charges', ctx) + '</font>';
+            }
+        }
         ctx.SetDialogVariable('description', strDesc);
         let strSetName = InventoryAPI.GetTag(id, 'ItemSet');
         let elCollectionLogo = $('#CollectionLogo');

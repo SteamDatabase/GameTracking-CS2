@@ -2,9 +2,12 @@
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../inspect.ts" />
 /// <reference path="../common/iteminfo.ts" />
+/// <reference path="popup_inspect_purchase-bar.ts" />
+/// <reference path="popup_capability_can_keychain.ts" />
 /// <reference path="popup_capability_can_patch.ts" />
 /// <reference path="popup_can_apply_pick_slot.ts" />
 /// <reference path="popup_can_apply_header.ts" />
+/// <reference path="popup_acknowledge_item.ts" />
 var CapabilityCanApplyAction;
 (function (CapabilityCanApplyAction) {
     const m_cP = $.GetContextPanel();
@@ -12,15 +15,19 @@ var CapabilityCanApplyAction;
     let m_isRemove = false;
     let m_worktype = '';
     let m_isWorkshopPreview = false;
+    let m_toolId = "(not found)";
+    let m_itemId = "(not found)";
+    let m_itemIdCreatedTemp = '';
+    let m_szRemoveKeychainToolChargesForPurchase = 'Remove Keychain Tool Pack';
     function Init() {
         m_cP.SetAttributeString('stickerApplyRemove', 'true');
         let itemId = '';
         let toolId = '';
         m_worktype = (m_cP.GetAttributeString("asyncworktype", ""));
         m_isWorkshopPreview = (m_cP.GetAttributeString("workshopPreview", "false") === "true");
-        m_isRemove = (m_worktype === "remove_sticker" || m_worktype === "remove_patch");
+        m_isRemove = (m_worktype === "remove_sticker" || m_worktype === "remove_patch" || m_worktype === "remove_keychain");
         if (m_isRemove) {
-            itemId = m_cP.GetAttributeString("itemid", "(not found)");
+            m_itemId = itemId = m_cP.GetAttributeString("itemid", "(not found)");
             if (!itemId) {
                 ClosePopUp();
                 return;
@@ -29,17 +36,28 @@ var CapabilityCanApplyAction;
         else {
             const strMsg = m_cP.GetAttributeString("toolid-and-itemid", "(not found)");
             let idList = strMsg.split(',');
-            toolId = idList[0];
-            itemId = idList[1];
+            m_toolId = toolId = idList[0];
+            m_itemId = itemId = idList[1];
+            if (m_worktype === 'can_keychain' || m_worktype === 'can_sticker') {
+                m_itemIdCreatedTemp = itemId = InventoryAPI.CreateTempCombinedItemWithTool(m_itemId, m_toolId);
+                if (!itemId) {
+                    ClosePopUp();
+                    return;
+                }
+            }
         }
         let oSettings = {
             headerPanel: m_cP.FindChildInLayoutFile('PopUpCanApplyHeader'),
             infoPanel: m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot'),
+            asyncbarPanel: m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar'),
             itemId: itemId,
             toolId: toolId,
             isRemove: m_isRemove,
             worktype: m_worktype,
-            type: (m_worktype.indexOf('sticker') !== -1) ? 'sticker' : (m_worktype.indexOf('patch') !== -1) ? 'patch' : '',
+            type: (m_worktype.indexOf('sticker') !== -1) ? 'sticker'
+                : (m_worktype.indexOf('patch') !== -1) ? 'patch'
+                    : (m_worktype.indexOf('keychain') !== -1) ? 'keychain'
+                        : '',
             isWorkshopPreview: m_isWorkshopPreview,
             funcOnConfirm: _OnConfirmPressed,
             funcOnNext: _OnNextPressed,
@@ -49,15 +67,46 @@ var CapabilityCanApplyAction;
         CanApplyHeader.Init(oSettings);
         CanApplySlotInfo.ResetSlotIndex();
         CapabilityCanPatch.ResetPos();
+        CapabilityCanKeychain.ResetPos();
         CanApplySlotInfo.UpdateEmptySlotList(itemId);
         CanApplyPickSlot.Init(oSettings);
         _SetItemModel(toolId, itemId);
         _SetUpAsyncActionBar(toolId, itemId);
         _UpdateEnableDisableOkBtn(false);
+        if (oSettings.isRemove && oSettings.type === 'keychain') {
+            _OnConfirmPressed();
+        }
         if (m_worktype === "remove_sticker") {
             $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', CapabilityCanSticker.OnFinishedScratch);
         }
         $.DispatchEvent('CapabilityPopupIsOpen', true);
+        if (m_worktype === 'remove_keychain') {
+            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+            if (numKeychainRemoveToolChargesRemaining > 0) {
+            }
+            else {
+                let ownedKeychainRemoveChargesID = '';
+                let bAutoAcknowledge = true;
+                let unackItems = AcknowledgeItems.GetItemsByType([m_szRemoveKeychainToolChargesForPurchase], bAutoAcknowledge);
+                if (unackItems && unackItems.length > 0) {
+                    ownedKeychainRemoveChargesID = unackItems[0];
+                }
+                if (!ownedKeychainRemoveChargesID) {
+                    InventoryAPI.SetInventorySortAndFilters('inv_sort_age', false, 'item_definition:' + m_szRemoveKeychainToolChargesForPurchase, '', '');
+                    let countOfChargeItemsOwned = InventoryAPI.GetInventoryCount();
+                    if (countOfChargeItemsOwned > 0) {
+                        ownedKeychainRemoveChargesID = InventoryAPI.GetInventoryItemIDByIndex(0);
+                    }
+                }
+                if (ownedKeychainRemoveChargesID) {
+                    ClosePopUp();
+                    $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ownedKeychainRemoveChargesID +
+                        '&' + 'asyncworktype=useitem');
+                }
+                else {
+                }
+            }
+        }
     }
     CapabilityCanApplyAction.Init = Init;
     function _OnConfirmPressed() {
@@ -68,7 +117,7 @@ var CapabilityCanApplyAction;
     }
     function _OnNextPressed(itemToApplyId, activeSlot) {
         _UpdateEnableDisableOkBtn(false);
-        if (m_worktype === 'can_sticker') {
+        if (m_worktype === 'can_sticker' || m_worktype === 'can_keychain') {
             CapabilityCanSticker.NextStickerButtonPressed();
             CapabilityCanSticker.ShowCancelBtn();
         }
@@ -108,10 +157,8 @@ var CapabilityCanApplyAction;
     }
     function _UpdateInspectMap() {
         InspectModelImage.SwitchMap(m_cP);
-        const strMsg = m_cP.GetAttributeString("toolid-and-itemid", "(not found)");
-        let idList = strMsg.split(',');
         InspectAsyncActionBar.ZoomCamera(true);
-        _UpdateItemToApplyPreview(idList[0]);
+        _UpdateItemToApplyPreview(m_toolId);
     }
     function _SetItemModel(toolId, itemId) {
         if (!InventoryAPI.IsItemInfoValid(itemId))
@@ -138,30 +185,73 @@ var CapabilityCanApplyAction;
     function _SetUpAsyncActionBar(toolId, itemId) {
         m_cP.SetAttributeString('toolid', toolId);
         const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
-        InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback, _AsyncActionPerformedCallback);
+        InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback, _AsyncActionPerformedPositiveBind, (m_worktype === 'remove_sticker') ? _AsyncActionPerformedNegativeBind : undefined);
+        if (m_worktype === 'remove_keychain' || m_worktype === 'can_keychain') {
+            let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
+            let mustPurchaseItemID = '';
+            if (m_worktype === 'remove_keychain') {
+                let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+                let defidxForPurchase = (numKeychainRemoveToolChargesRemaining > 0) ? 0 : InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_szRemoveKeychainToolChargesForPurchase);
+                if (defidxForPurchase) {
+                    mustPurchaseItemID = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxForPurchase, 0);
+                    $.GetContextPanel().SetAttributeString('purchaseItemId', mustPurchaseItemID);
+                }
+            }
+            InspectPurchaseBar.Init(elPurchase, mustPurchaseItemID, _GetSettingCallback);
+            if (mustPurchaseItemID) {
+                elAsyncActionBarPanel.AddClass('hidden');
+            }
+        }
     }
+    function _OnStorePurchaseToolChargesAcquired(ItemId) {
+        if (InventoryAPI.DoesItemMatchDefinitionByName(ItemId, m_szRemoveKeychainToolChargesForPurchase)) {
+            $.DispatchEvent('HideStoreStatusPanel');
+            let bAutoAcknowledge = true;
+            AcknowledgeItems.GetItemsByType([m_szRemoveKeychainToolChargesForPurchase], bAutoAcknowledge);
+            ClosePopUp();
+            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ItemId +
+                '&' + 'asyncworktype=useitem');
+        }
+    }
+    ;
     function _GetSettingCallback(settingname, defaultvalue) {
+        if (settingname === 'overridepurchasemultiple')
+            return '0';
         return m_cP.GetAttributeString(settingname, defaultvalue);
     }
-    function _AsyncActionPerformedCallback(itemid, toolid, slot) {
+    function _AsyncActionPerformedPositiveBind(itemid, toolid, slot) {
+        _AsyncActionPerformedCallback(true, itemid, toolid, slot);
+    }
+    function _AsyncActionPerformedNegativeBind(itemid, toolid, slot) {
+        _AsyncActionPerformedCallback(false, itemid, toolid, slot);
+    }
+    function _AsyncActionPerformedCallback(bPositiveAction, itemid, toolid, slot) {
         CanApplyPickSlot.DisableBtns(m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot'));
+        if (m_itemIdCreatedTemp !== '' && itemid === m_itemIdCreatedTemp) {
+            itemid = m_itemId;
+        }
         if (m_worktype === 'remove_sticker') {
-            CapabilityCanSticker.OnScratchSticker(itemid, slot);
+            CapabilityCanSticker.OnScratchSticker(itemid, slot, !bPositiveAction);
         }
         else if (m_worktype === 'remove_patch') {
             CapabilityCanPatch.OnRemovePatch(itemid, slot);
         }
+        else if (m_worktype === 'remove_keychain') {
+            CapabilityCanKeychain.OnRemoveKeychain(itemid, slot);
+        }
         else {
-            let bIsValid = InventoryAPI.SetStickerToolSlot(itemid, slot);
-            if (bIsValid) {
-                InventoryAPI.UseTool(toolid, itemid);
-            }
+            InventoryAPI.SetStickerToolSlot(itemid, slot);
+            InventoryAPI.UseTool(toolid, itemid);
         }
     }
     function ClosePopUp() {
         const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
+        let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
         if (!elAsyncActionBarPanel.BHasClass('hidden')) {
             InspectAsyncActionBar.OnEventToClose();
+        }
+        else if (elPurchase && elPurchase.IsValid() && !elPurchase.BHasClass('hidden')) {
+            InspectPurchaseBar.ClosePopup();
         }
     }
     CapabilityCanApplyAction.ClosePopUp = ClosePopUp;
@@ -169,6 +259,7 @@ var CapabilityCanApplyAction;
         let _m_PanelRegisteredForEventsStickerApply;
         if (!_m_PanelRegisteredForEventsStickerApply) {
             _m_PanelRegisteredForEventsStickerApply = $.RegisterForUnhandledEvent('CSGOShowMainMenu', Init);
+            $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _OnStorePurchaseToolChargesAcquired);
             $.RegisterForUnhandledEvent("CSGOInspectBackgroundMapChanged", _UpdateInspectMap);
             $.RegisterForUnhandledEvent("CS2StickerPreviewMoved", _StickerPlacementUpdated);
             $.RegisterForUnhandledEvent("CS2StickerScrapeClickedStickerIndex", _OnSelectForRemove);
@@ -190,6 +281,13 @@ var CapabilityCanSticker;
         }
     }
     CapabilityCanSticker.NextStickerButtonPressed = NextStickerButtonPressed;
+    function SetStickerScrapeLevel(valScrapeLevel) {
+        let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
+        if (elPanel != null) {
+            InventoryAPI.SetStickerScrapeLevel(elPanel, valScrapeLevel);
+        }
+    }
+    CapabilityCanSticker.SetStickerScrapeLevel = SetStickerScrapeLevel;
     function PreviewStickerInSlot(stickerId, slot) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
         let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
@@ -206,13 +304,14 @@ var CapabilityCanSticker;
         elPanel.SetRotation(0, 0, 1);
     }
     CapabilityCanSticker.CameraAnim = CameraAnim;
-    function OnScratchSticker(itemId, slotIndex) {
-        $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_scratchOff', 'MOUSE');
-        if (InventoryAPI.IsItemStickerAtExtremeWear(itemId, slotIndex)) {
+    function OnScratchSticker(itemId, slotIndex, bRemoveCompletely) {
+        if (bRemoveCompletely || InventoryAPI.IsItemStickerAtExtremeWear(itemId, slotIndex)) {
+            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
             m_isFinalScratch = true;
-            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Sticker_Remove'), $.Localize('#SFUI_Sticker_Remove_Desc'), '', $.Localize('#SFUI_Sticker_Remove'), () => {
+            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Sticker_Remove'), $.Localize(bRemoveCompletely ? '#SFUI_Sticker_RemoveImmediate_Desc' : '#SFUI_Sticker_Remove_Desc'), '', $.Localize('#SFUI_Sticker_Remove'), () => {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
                 InspectAsyncActionBar.ResetTimeouthandle();
-                InventoryAPI.WearItemSticker(itemId, slotIndex);
+                InventoryAPI.WearItemSticker(itemId, slotIndex, 111);
                 InspectAsyncActionBar.SetCallbackTimeout();
             }, $.Localize('#UI_Cancel'), () => {
                 m_isFinalScratch = false;
@@ -221,8 +320,22 @@ var CapabilityCanSticker;
             });
         }
         else {
+            let valTargetWear = 0;
+            let elStickerScrapeLevelContainer = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('StickerScrapeLevelContainer');
+            if (elStickerScrapeLevelContainer) {
+                let elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
+                if (elStickerScrapeLevelSlider) {
+                    valTargetWear = elStickerScrapeLevelSlider.value;
+                    if (valTargetWear <= elStickerScrapeLevelSlider.default) {
+                        InspectAsyncActionBar.ResetTimeouthandle();
+                        InspectAsyncActionBar.OnCloseRemove();
+                        return;
+                    }
+                }
+            }
+            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
             HighlightStickerBySlot(slotIndex);
-            InventoryAPI.WearItemSticker(itemId, slotIndex);
+            InventoryAPI.WearItemSticker(itemId, slotIndex, valTargetWear);
         }
     }
     CapabilityCanSticker.OnScratchSticker = OnScratchSticker;
@@ -241,6 +354,12 @@ var CapabilityCanSticker;
         if (elStickersToRemove && m_cP.GetAttributeString("asyncworktype", "") === "remove_patch") {
             const panelsList = elStickersToRemove.Children();
             panelsList.forEach(element => element.enabled = true);
+        }
+        if (elStickersToRemove && m_cP.GetAttributeString("asyncworktype", "") === "remove_sticker") {
+            const panelsList = elStickersToRemove.Children();
+            panelsList.forEach(element => { if (element.checked) {
+                $.DispatchEvent("Activated", element, "mouse");
+            } });
         }
     }
     CapabilityCanSticker.OnFinishedScratch = OnFinishedScratch;

@@ -8,9 +8,13 @@ var CanApplyPickSlot;
 (function (CanApplyPickSlot) {
     let m_elItemToApply;
     let m_infoPanel;
+    let m_asyncbarPanel;
+    let m_worktype;
     function Init(oSettings) {
         m_infoPanel = oSettings.infoPanel;
-        ShowHideInfoPanel(false);
+        m_asyncbarPanel = oSettings.asyncbarPanel;
+        m_worktype = oSettings.worktype;
+        ShowHideInfoPanel(oSettings.isRemove && oSettings.type === 'keychain');
         if (oSettings.isRemove) {
             _ShowItemIconsToRemove(oSettings);
         }
@@ -24,14 +28,36 @@ var CanApplyPickSlot;
     CanApplyPickSlot.Init = Init;
     function UpdateSelectedRemoveForSticker(slotIndex) {
         let elContainer = m_infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
+        let itemId = '';
         elContainer.Children().forEach(element => {
             element.SetHasClass('is_sticker_remove_unselected', element.Data().slot !== slotIndex);
             element.SetHasClass('is_sticker_remove_selected', element.Data().slot === slotIndex);
             element.checked = element.Data().slot === slotIndex;
             if (element.Data().slot === slotIndex) {
+                itemId = element.Data().itemId;
                 element.TriggerClass('popup-can-apply-item-image--anim');
             }
         });
+        let elStickerScrapeLevelContainer = m_infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        if (elStickerScrapeLevelContainer) {
+            elStickerScrapeLevelContainer.SetHasClass('StickerScrapeLevelContainerHidden', itemId ? false : true);
+            let elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
+            if (elStickerScrapeLevelSlider && itemId) {
+                let valWear = InventoryAPI.GetItemAttributeValue(itemId, "sticker slot " + slotIndex + " wear");
+                if (!valWear)
+                    valWear = 0.0;
+                valWear = Math.ceil(valWear * 100.0);
+                elStickerScrapeLevelSlider.default = valWear;
+                elStickerScrapeLevelSlider.SetValueNoEvents(valWear);
+                if (m_asyncbarPanel) {
+                    let elGreenButton = m_asyncbarPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
+                    if (elGreenButton)
+                        elGreenButton.SetHasClass('AsyncItemWorkAcceptConfirmDisabled', true);
+                    InventoryAPI.HighlightStickerBySlot(slotIndex);
+                    CapabilityCanSticker.SetStickerScrapeLevel(0);
+                }
+            }
+        }
     }
     CanApplyPickSlot.UpdateSelectedRemoveForSticker = UpdateSelectedRemoveForSticker;
     function _ShowHideStickerApplyHints(oSettings) {
@@ -58,6 +84,7 @@ var CanApplyPickSlot;
             if (imagePath) {
                 let elPatch = $.CreatePanel('RadioButton', elContainer, imagePath, { group: "remove-btns" });
                 elPatch.Data().slot = i;
+                elPatch.Data().itemId = oSettings.itemId;
                 elPatch.BLoadLayoutSnippet('RemoveBtn');
                 let elImage = elPatch.FindChildInLayoutFile('RemoveImage');
                 elImage.SetImage('file://{images}' + imagePath + '.png');
@@ -73,11 +100,40 @@ var CanApplyPickSlot;
             let elImage = elContainer.FindChildInLayoutFile(itemId);
             if (!elImage) {
                 let elImage = $.CreatePanel('ItemImage', elContainer, itemId);
-                elImage.itemid = Number(itemId);
+                elImage.itemid = itemId;
                 elImage.AddClass('popup-can-apply-item-image');
             }
         }
     }
+    function _OnStickerScrapeLevelSliderValueChanged() {
+        let elStickerScrapeLevelSlider = m_infoPanel.FindChildInLayoutFile('StickerScrapeLevelSlider');
+        if (elStickerScrapeLevelSlider) {
+            let newvalue = elStickerScrapeLevelSlider.value;
+            if (m_worktype === 'can_sticker') {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
+                CapabilityCanSticker.SetStickerScrapeLevel(newvalue);
+            }
+            else if (m_worktype === 'remove_sticker') {
+                let bCanScrapeStickerToTargetWear = false;
+                if (m_asyncbarPanel) {
+                    let elGreenButton = m_asyncbarPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
+                    if (elGreenButton) {
+                        bCanScrapeStickerToTargetWear = (newvalue > elStickerScrapeLevelSlider.default);
+                        elGreenButton.SetHasClass('AsyncItemWorkAcceptConfirmDisabled', !bCanScrapeStickerToTargetWear);
+                        if (bCanScrapeStickerToTargetWear) {
+                            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
+                            CapabilityCanSticker.SetStickerScrapeLevel(newvalue);
+                        }
+                    }
+                }
+                if (!bCanScrapeStickerToTargetWear) {
+                    elStickerScrapeLevelSlider.SetValueNoEvents(elStickerScrapeLevelSlider.default);
+                    CapabilityCanSticker.SetStickerScrapeLevel(0);
+                }
+            }
+        }
+    }
+    ;
     function _BtnActions(oSettings) {
         let slotsCount = oSettings.isRemove ? InventoryAPI.GetItemStickerSlotCount(oSettings.itemId) : CanApplySlotInfo.GetEmptySlotList().length;
         let elContinueBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyContinue');
@@ -93,16 +149,32 @@ var CanApplyPickSlot;
             elCancelBtn.SetHasClass('hidden', true);
             elCancelBtn.SetPanelEvent('onactivate', () => _OnCancel(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings));
         }
+        let elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        if (elStickerScrapeLevelContainer) {
+            elStickerScrapeLevelContainer.visible = oSettings.worktype === 'can_sticker' || oSettings.worktype === 'remove_sticker';
+            if (oSettings.worktype === 'remove_sticker')
+                elStickerScrapeLevelContainer.AddClass('StickerScrapeLevelContainerHidden');
+            let elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
+            if (elStickerScrapeLevelSlider) {
+                elStickerScrapeLevelSlider.min = 0;
+                elStickerScrapeLevelSlider.increment = 1;
+                elStickerScrapeLevelSlider.max = 100;
+                elStickerScrapeLevelSlider.default = 0;
+                elStickerScrapeLevelSlider.SetValueNoEvents(0);
+                CapabilityCanSticker.SetStickerScrapeLevel(0);
+                elStickerScrapeLevelSlider.SetPanelEvent('onvaluechanged', _OnStickerScrapeLevelSliderValueChanged);
+            }
+        }
         if (oSettings.isRemove) {
             return;
         }
-        if (slotsCount >= 1) {
+        if (slotsCount >= 1 || oSettings.worktype === 'can_keychain') {
             if (elContinueBtn)
                 elContinueBtn.SetPanelEvent('onactivate', () => _OnContinue(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings));
             if (elNextSlotBtn)
                 elNextSlotBtn.SetPanelEvent('onactivate', () => _NextSlot(elContinueBtn, oSettings));
         }
-        if (oSettings.type === 'sticker') {
+        if (oSettings.type === 'sticker' || oSettings.type === 'keychain') {
             elContinueBtn.enabled = false;
             $.Schedule(3.0, () => elContinueBtn.enabled = true);
         }
@@ -121,6 +193,10 @@ var CanApplyPickSlot;
         elNextSlotBtn.SetHasClass('hidden', true);
         elContinueBtn.enabled = false;
         InspectAsyncActionBar.ZoomCamera(true);
+        let elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        if (elStickerScrapeLevelContainer) {
+            elStickerScrapeLevelContainer.enabled = false;
+        }
     }
     function _OnCancel(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings) {
         oSettings.funcOnCancel();
@@ -128,9 +204,13 @@ var CanApplyPickSlot;
         elNextSlotBtn.enabled = true;
         elNextSlotBtn.SetHasClass('hidden', false);
         elCancelBtn.SetHasClass('hidden', true);
+        let elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        if (elStickerScrapeLevelContainer) {
+            elStickerScrapeLevelContainer.enabled = true;
+        }
     }
     function _NextSlot(elContinueBtn, oSettings) {
-        let delayTime = oSettings.type === 'sticker' ? 0 : 1;
+        let delayTime = (oSettings.type === 'sticker' || oSettings.type === 'keychain') ? 0 : 1;
         CanApplySlotInfo.IncrementIndex();
         oSettings.funcOnNext(oSettings.toolId, CanApplySlotInfo.GetSelectedEmptySlot());
         let elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
@@ -151,6 +231,8 @@ var CanApplyPickSlot;
     }
     CanApplyPickSlot.PanCamera = PanCamera;
     function ShowHidePanBtns(bShow) {
+        if (!m_infoPanel || !m_infoPanel.IsValid())
+            return;
         let btnPanRight = m_infoPanel.FindChildInLayoutFile('InspectPanRight');
         let btnPanLeft = m_infoPanel.FindChildInLayoutFile('InspectPanLeft');
         btnPanRight.SetHasClass('hidden', !bShow);
@@ -185,7 +267,9 @@ var CanApplySlotInfo;
         let slotsCount = InventoryAPI.GetItemStickerSlotCount(itemId);
         for (let i = 0; i < slotsCount; i++) {
             let ImagePath = InventoryAPI.GetItemStickerImageBySlot(itemId, i);
-            aSlotInfoList.push({ index: i, path: !ImagePath ? 'empty' : ImagePath });
+            if (!ImagePath)
+                ImagePath = 'empty';
+            aSlotInfoList.push({ index: i, path: ImagePath });
         }
         return aSlotInfoList;
     }

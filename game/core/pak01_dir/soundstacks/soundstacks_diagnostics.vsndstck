@@ -5674,4 +5674,115 @@
 			},
 		]
 	}
+	test_eval = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					expr = 
+					{
+						data_type = "string"
+						value = "_1 + _2*_3 + 5"
+					}
+					input1 = 
+					{
+						data_type = "float"
+						value = "0"
+						_system_properties = 
+						{
+							display_group = "Normal"
+						}
+					}
+					input2 = 
+					{
+						data_type = "float"
+						value = "2"
+						_system_properties = 
+						{
+							display_group = "Normal"
+						}
+					}
+					input3 = 
+					{
+						data_type = "float"
+						value = "0"
+						_system_properties = 
+						{
+							display_group = "Normal"
+						}
+					}
+					input4 = 
+					{
+						data_type = "float"
+						value = "0"
+						_system_properties = 
+						{
+							display_group = "Normal"
+						}
+					}
+					input5 = 
+					{
+						data_type = "float"
+						value = "0"
+						_system_properties = 
+						{
+							display_group = "Normal"
+						}
+					}
+					output_curve = 
+					{
+						data_type = "float6"
+						soundevent_data = "true"
+						value = 
+						[
+							"[ -10, 0.0, 1.0, 1.0, 1.0, 1.0 ]",
+							"[ 10.0, 0.0, 1.0, 1.0, 0.0, 1.0 ]",
+						]
+						_system_properties = 
+						{
+							display_group = "Normal"
+							display_edit_type = "field_curve_2d_editor"
+						}
+					}
+				}
+			},
+			
+			{
+				name = "eval_test"
+				operator = "math_float_eval"
+				execute_once = true
+				expression = "@public.expr"
+				input1 = "@public.input1"
+				input2 = "@public.input2"
+				input3 = "@public.input3"
+				input4 = "@public.input4"
+				input5 = "@public.input5"
+			},
+			
+			{
+				name = "curve_output"
+				operator = "math_curve_2d"
+				public_field_name = "public.output_curve"
+				input = "@eval_test.output"
+			},
+			
+			{
+				name = "info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "control"
+				operator = "soundevent_control"
+				input_add_dependent = "@info.output_unstopped"
+				input_clear_dependencies = "@info.output_stopped"
+				input_stop_at_time = "3"
+			},
+		]
+	}
 }

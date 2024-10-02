@@ -9,7 +9,7 @@ var InspectActionBar;
     let m_itemId = '';
     let m_callbackHandle = -1;
     let m_doNotShowCert = true;
-    let m_showEquip = true;
+    let m_bShowAllItemActions = false;
     let m_insideCasketID = '';
     let m_capability = '';
     let m_showMarketLink = false;
@@ -26,7 +26,7 @@ var InspectActionBar;
         m_itemId = itemId;
         m_callbackHandle = funcGetSettingCallbackInt('callback', -1);
         m_doNotShowCert = (funcGetSettingCallback('showitemcert', 'true') === 'false');
-        m_showEquip = (funcGetSettingCallback('showequip', 'true') === 'false');
+        m_bShowAllItemActions = (funcGetSettingCallback('showallitemactions', 'true') !== 'false');
         m_insideCasketID = funcGetSettingCallback('insidecasketid', '');
         m_capability = funcGetSettingCallback('capability', '');
         m_showMarketLink = (funcGetSettingCallback('showmarketlink', 'false') === 'true');
@@ -99,17 +99,19 @@ var InspectActionBar;
             elSingleActionBtn.SetPanelEvent('onactivate', () => _OnActivateUpdateSelectionForMultiSelect(id));
             return;
         }
-        if (m_showEquip) {
+        if (!m_bShowAllItemActions) {
             elMoreActionsBtn.AddClass('hidden');
             elSingleActionBtn.AddClass('hidden');
+            _TrySetUpSingleActionPreviewBtn(elPanel, id);
             return;
         }
         const isFanToken = ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_');
         const isSticker = ItemInfo.IsSticker(id);
         const isPatch = ItemInfo.IsPatch(id);
+        const isKeychain = ItemInfo.IsKeychain(id);
         const isSpraySealed = ItemInfo.IsSpraySealed(id);
         const isEquipped = InventoryAPI.IsEquipped(id, 't') || InventoryAPI.IsEquipped(id, 'ct') || InventoryAPI.IsEquipped(id, "noteam");
-        let bCloseInspectOnSingleAction = (isSticker || isSpraySealed || isFanToken || isPatch);
+        let bCloseInspectOnSingleAction = (isSticker || isSpraySealed || isFanToken || isPatch || isKeychain);
         if (ItemInfo.IsEquippalbleButNotAWeapon(id) ||
             bCloseInspectOnSingleAction ||
             isEquipped) {
@@ -144,10 +146,30 @@ var InspectActionBar;
             }
         }
     }
+    function _TrySetUpSingleActionPreviewBtn(elPanel, id) {
+        const validEntries = ItemContextEntries.FilterEntries('preview');
+        const elSingleActionBtn = elPanel.FindChildInLayoutFile('SingleAction');
+        for (let i = 0; i < validEntries.length; i++) {
+            const entry = validEntries[i];
+            if (entry.AvailableForItem(id)) {
+                let displayName = '';
+                if (entry.name instanceof Function) {
+                    displayName = entry.name(id);
+                }
+                else {
+                    displayName = entry.name;
+                }
+                elSingleActionBtn.text = '#inv_context_preview_' + displayName;
+                elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, true));
+                elSingleActionBtn.RemoveClass('hidden');
+            }
+        }
+    }
     function _OnSingleAction(entry, id, closeInspect) {
         if (closeInspect) {
             CloseBtnAction();
         }
+        $.DispatchEvent('OpenInventory');
         entry.OnSelected(id);
     }
     function _OnActivateUpdateSelectionForMultiSelect(idSubjectItem) {

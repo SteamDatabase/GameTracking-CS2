@@ -76,6 +76,9 @@ var InspectModelImage;
             DeleteExistingItemPanel(itemId, 'ItemPreviewPanel');
             m_elPanel = _InitDisplayScene(itemId);
         }
+        else if (ItemInfo.IsKeychain(itemId)) {
+            m_elPanel = _InitNametagScene(itemId);
+        }
         else if (InventoryAPI.GetLoadoutCategory(itemId) == "musickit") {
             m_elPanel = _InitMusicKitScene(itemId);
         }
@@ -84,7 +87,7 @@ var InspectModelImage;
             m_elPanel = _InitSprayScene(itemId);
         }
         else if (ItemInfo.IsCase(itemId)) {
-            m_elPanel = _InitCaseScene(itemId);
+            m_elPanel = model ? _InitCaseScene(itemId) : _SetImage(itemId);
         }
         else if (ItemInfo.IsNameTag(itemId)) {
             m_elPanel = _InitNametagScene(itemId);
@@ -176,7 +179,7 @@ var InspectModelImage;
             flSplitPlane0Distance = 160.0;
         }
         else if (backgroundMap === 'de_inferno_vanity') {
-            flSplitPlane0Distance = 140.0;
+            flSplitPlane0Distance = 160.0;
         }
         else if (backgroundMap === 'cs_italy_vanity') {
             flSplitPlane0Distance = 200.0;
@@ -407,6 +410,7 @@ var InspectModelImage;
         let mapName = _GetBackGroundMap();
         let elPanel = GetExistingItemPanel('ItemPreviewPanel');
         if (!elPanel) {
+            let strAsyncWorkType = $.GetContextPanel().GetAttributeString("asyncworktype", "");
             elPanel = $.CreatePanel(oSettings.panel_type, m_elContainer, 'ItemPreviewPanel', {
                 "require-composition-layer": "true",
                 'transparent-background': 'false',
@@ -426,8 +430,9 @@ var InspectModelImage;
                 auto_rotate_period_y: oSettings.auto_rotate_period_y,
                 auto_recenter: oSettings.auto_recenter,
                 workshop_preview: m_isWorkshopPreview,
-                sticker_application_mode: $.GetContextPanel().GetAttributeString("asyncworktype", "") === "can_sticker",
-                sticker_scrape_mode: $.GetContextPanel().GetAttributeString("asyncworktype", "") === "remove_sticker",
+                sticker_application_mode: (strAsyncWorkType === "can_sticker"),
+                keychain_application_mode: (strAsyncWorkType === "can_keychain"),
+                sticker_scrape_mode: strAsyncWorkType === "remove_sticker",
             });
         }
         elPanel.Data().itemId = itemId;

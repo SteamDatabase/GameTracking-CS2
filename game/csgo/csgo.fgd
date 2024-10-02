@@ -58,9 +58,6 @@
 //Exclude this since we want to remove some defunct parameters. Only way to do this currently is to exclude and redefine
 @exclude env_sky 
 @exclude func_illusionary
-@exclude light_ortho
-@exclude light_spot
-@exclude light_omni
 @exclude light_dynamic
 @exclude beam_spotlight
 @exclude color_correction
@@ -436,7 +433,7 @@
 	input HideHudHint(void) : "Hides the hint message."
 ]
 
-@PointClass base(Targetname, Angles) studio("characters/models/shared/spawn/ctm_spawnpoint.vmdl")
+@PointClass base(Targetname, Angles) tags( PlayerPosition )studio("characters/models/shared/spawn/ctm_spawnpoint.vmdl")
 	metadata
 	{
 	entity_tool_name = "Counter Terrorist Spawn Point"
@@ -457,7 +454,7 @@
 ]
 
 
-@PointClass base(Targetname, Angles) studio("characters/models/shared/spawn/tm_spawnpoint.vmdl") 
+@PointClass base(Targetname, Angles) tags( PlayerPosition ) studio("characters/models/shared/spawn/tm_spawnpoint.vmdl") 
 	metadata
 	{
 	entity_tool_name = "Terrorist Spawn Point"
@@ -861,10 +858,29 @@
 	// Hacks
 	minroughness(float) { group="Specular" min="0.0" max="1.0" } : "Specular Softness" : "0" : "USE WITH CAUTION: Artificially softens direct specular (not cubemaps) to simulate cheap, soft area lights. Note: Direct Lighting must be set to Stationary or Dynamic for this to have an effect."
 	
+	ambient_occlusion_proxy_override(boolean) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxies" : 0
+	ambient_occlusion_proxy_position_0(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 0" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_position_1(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 1" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_position_2(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 2" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_position_3(target_destination) [ group="Ambient Occlusion Proxies" ] : "Custom AO Proxy Position 3" : "0 0 0" : "Relative to origin of the light_environment."
+	ambient_occlusion_proxy_cone_angle_0(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 0" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_cone_angle_1(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 1" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_cone_angle_2(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 2" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_cone_angle_3(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "Custom AO Proxy Cone Softness 3" : "0.3" : "Softness of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_0(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 0" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_1(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 1" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_2(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 2" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_strength_3(float) { group="Ambient Occlusion Proxies" min="0.0" max="1.0" } : "Custom AO Proxy Cone Strength 3" : "0.5" : "Relative Strength of Imaginary Shadowing Light."
+	ambient_occlusion_proxy_ambient_strength(float) { group="Ambient Occlusion Proxies" min="0.01" max="1.0" } : "AO Proxy Ambient Strength" : "1.0" : "Relative Strength of Ambient/Unshadowed term. Lower values make darker shadows."
 ]
 
 @OverrideClass = light_barn
 [
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "1" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]
 	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
 	[
 		0 : "No"
@@ -885,13 +901,27 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	// Light Source / Area Light Settings
+	luminaire_shape(choices) { group="Light Source" }: "Light Source Type" : "1" : "Point or area light shapes. Point produces sharp shadows whereas Disk and Rectangle are area lights, with shadow softness/falloff influenced by the Area Light Size/Width." =
+	[
+//		Don says "Point" is purely a LTC (realtime area lights) optimisation, but since we don't currently support LTC in CS2, I'm doing to remove the option to simplyfy and avoid confusion)
+//		"0" : "Point"
+		"1" : "Disk (Area Light)"
+		"2" : "Rectangle (Area Light)"
+	]	
 	fog(remove_key)
 	fogstrength(remove_key)
 	fogshadows(remove_key)
+	fogmixedshadows(remove_key)
 ]
 
 @OverrideClass = light_rect
 [
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "1" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]
 	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
 	[
 		0 : "No"
@@ -915,10 +945,16 @@
 	fog(remove_key)
 	fogstrength(remove_key)
 	fogshadows(remove_key)
+	fogmixedshadows(remove_key)
 ]
 
 @OverrideClass = light_omni2
 [
+	colormode(choices) { group="Direct Light" } : "Color Mode" : "1" : "How to calculate the light's color" =
+	[
+		"0" : "Color"
+		"1" : "Color Temperature"
+	]	
 	clientSideEntity(choices) [ group="Misc" ] : "Create Client-Only Entity" : 1 =
 	[
 		0 : "No"
@@ -939,9 +975,19 @@
 		"3" : "Stationary"
 		"2" : "Dynamic"
 	]
+	// Shape
+	shape(choices) { group="Light Shape" } : "Shape" : "0" : "Shape of the light" =
+	[
+//		Don says "Point" is purely a LTC (realtime area lights) optimisation, but since we don't currently support LTC in CS2, I'm doing to remove the option to simplyfy and avoid confusion)
+//		"3" : "Point"
+		"0" : "Sphere"
+		"1" : "Tube"
+		"2" : "Tube with end caps"
+	]	
 	fog(remove_key)
 	fogstrength(remove_key)
 	fogshadows(remove_key)	
+	fogmixedshadows(remove_key)	
 ]
 
 @OverrideClass = sky_camera
@@ -1356,6 +1402,7 @@
 	weapon_state(animgraph_enum)  { enabled={ function="ModelHasAnimGraph" } } : "Weapon State" : "" : "Weapon specific animgraph. Should be set to 'inspect' for weapon preview.  Set by game code for weapons."
 	model_scale(float)  : "Model Scale" : "" : "Initial scale for the model."
 	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	reset_model_on_spawn(boolean) : "Reset Model on Spawn" : "0" : "Clear this model when the entity spawns. Used for previewing a specific model in hammer but populating the actual model based on player equipment."
 
 	input SetItem(void) : "Set the itemid for this preview."
 ]
@@ -1384,6 +1431,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/team_select" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/team_select") 
 	= team_select : "In-map team select position." 
 [
@@ -1398,6 +1446,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/terrorist_team_intro" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/terrorist_team_intro") 
 	= terrorist_team_intro : "In-map terrorist team intro variant #1." 
 [
@@ -1412,6 +1461,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/terrorist_team_intro_variant2" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/terrorist_team_intro_variant2")
 	= terrorist_team_intro_variant2 : "In-map terrorist team intro variant #2." 
 [
@@ -1426,6 +1476,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/counterterrorist_team_intro" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/counterterrorist_team_intro") 
 	= counterterrorist_team_intro : "In-map counter-terrorist team intro variant #1." 
 [
@@ -1440,6 +1491,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/counterterrorist_team_intro_variant2" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/counterterrorist_team_intro_variant2")
 	= counterterrorist_team_intro_variant2 : "In-map counter-terrorist team intro variant #2." 
 [
@@ -1482,6 +1534,7 @@
 			{ key = "targetMapName" value = "prefabs/misc/end_of_match" }
 		]
 	}
+	tags( PlayerPosition )
 	model("models/editor/end_of_match") = end_of_match : "In-map end-of-match position." 
 [
 ]
@@ -1518,4 +1571,8 @@
 	
 	output OnMoneySpent(void) : "Fires when input SpendMoneyFromPlayer succeeded."
 	output OnMoneySpentFail(void) : "Fires when input SpendMoneyFromPlayer failed. (Player didn't have enough money)"
+]
+
+@PointClass base( Angles) studio("characters/models/shared/spawn/ctm_spawnpoint.vmdl") = point_scale_reference_human : "Scale Reference (Human)"
+[
 ]

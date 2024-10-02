@@ -45,6 +45,15 @@ var InspectHeader;
         let setName = ItemInfo.GetSet(itemId);
         let elImage = elPanel.FindChildInLayoutFile('InspectSetImage');
         let elLabel = elPanel.FindChildInLayoutFile('InspectCollection');
+        if (InventoryAPI.DoesItemMatchDefinitionByName(itemId, "Remove Keychain Tool")) {
+            elImage.SetImage('file://{images}/icons/ui/keychain_removal.svg');
+            elImage.visible = true;
+            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+            elLabel.SetDialogVariableInt('item_count', numKeychainRemoveToolChargesRemaining);
+            elLabel.text = $.Localize('#Attrib_KeychainRemoveTool_Charges', elLabel);
+            elLabel.visible = true;
+            return;
+        }
         if (setName === '') {
             elImage.visible = false;
             elLabel.visible = false;

@@ -15,6 +15,13 @@
 		1 : "Ragdoll and get up when settled"
 		2 : "Ragdoll and remain ragdoll"
 	]
+	combat_zone(target_destination) [ group="NPC Properties" ] : "Combat Zone" : "" : "Markup volume entity to restrict npc. Forces the npc to navigate to the zone and stay inside of it."
+
+	spawn_hunting_nearest_player(choices) : "Spawn Hunting Nearest Player?" : 0 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
 
 	// Outputs
 	output OnFoundPlayer(string) : "Fired when this NPC establishes line of sight to its enemy, and that enemy is a player (outputs player entity)."
@@ -26,7 +33,8 @@
 	output OnForcedInteractionFinished(void) : "NPCs in actbusies can no longer perform dynamic interactions."
 	output OnConditionAdded(string) : "A new condition was set on the NPC. Only a subset of conditions are sent through this to reduce the amount of entity IO happening."
 	output OnConditionRemoved(string) : "A condition was removed from the NPC. Only a subset of conditions are sent through this to reduce the amount of entity IO happening."
-	output OnAbilityUse(string) : "An ability has been performed."
+	output OnAbilityUse(string) : "An ability has started, but may not complete."
+	output OnAbilityUseEnded(string) : "An ability has been finished."
 
 	// Inputs
 	input IgnoreDangerSounds(float) : "Ignore danger sounds for the specified number of seconds."
@@ -342,6 +350,13 @@
 		"eFast"		: "Fast (Run)"
 		"eVeryFast"	: "Very Fast (Sprint)"
 	]
+	held_weapon_behavior(choices) : "Held Weapon Behavior" : "eInvalid" : "What do to with any held weapon before starting the sequence." =
+	[
+		"eInvalid"	: "Do Nothing"
+		"eHolster"	: "Holster"
+		"eDeploy"	: "Deploy"
+		"eDrop"		: "Drop"
+	]
 	m_iszNextScript(target_destination) : "Next Script" : : "The name of the script to run immediately after this script completes. The NPC will not return to AI between the two scripts."
 	m_bIgnoreGravity(boolean) : "Ignore Gravity on NPC during script" : 0 : "If this is set to 'Yes', the NPC will not be subject to gravity while playing this script."
 	m_bIgnoreLookAt(boolean) : "Ignore look at targets during script" : 1 : "If this is set to 'Yes', the NPC will not look at the look at target when playing the script."
@@ -353,6 +368,7 @@
 	input MoveToPosition(void) : "Summons an NPC to the script location. They will play their scripted idle (or ACT_IDLE if none is specified) until BeginSequence is triggered."
 	input CancelSequence(void) : "Stops the scripted sequence. If fired after a sequence starts, this input will not take effect until the NPC finishes playing the scripted action animation."
 	input SetActionSequence(string) : "Sets the name of the action sequence that will play when the action sequence plays. Can be used for branching sequences."
+	input ForceTarget(string) : "Forces a particular NPC to be the target of the scripted sequence"
 
 	// Outputs
 	output OnBeginSequence(void) : "Fires when the scripted sequence begins playing."
@@ -520,5 +536,7 @@
 
 	move_while_using_target(target_destination) : "Move While Using Target" : "" : "An optional entity that marks where to move to while using the ability."
 
-	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
+	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optional per NPC override of the same parameter defined in the lock trigger."
+
+	m_bAddIfMissing(boolean) : "Add If Missing?" : "No" : "If yes, the ability will be temporarily added to the NPC so they can perform it. It will be removed after the ability has been performed."
 ]

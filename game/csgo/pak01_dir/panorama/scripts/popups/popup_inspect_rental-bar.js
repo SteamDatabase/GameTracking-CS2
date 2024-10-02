@@ -228,7 +228,7 @@ var InspectRentalBar;
             UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + m_onlyRentalItemIds[0] +
                 '&' + 'inspectonly=true' +
                 '&' + 'allowsave=false' +
-                '&' + 'showequip=false' +
+                '&' + 'showallitemactions=false' +
                 '&' + 'showitemcert=true' +
                 '&' + 'rentalItems=' + m_onlyRentalItemIds.join(',') +
                 '&' + 'caseidforlootlist=' + m_itemId);

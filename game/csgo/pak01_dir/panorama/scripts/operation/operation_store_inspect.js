@@ -350,7 +350,7 @@ var OperationStoreInspect = ( function()
 			'itemid=' + itemId +
 			'&' + 'inspectonly=true'+
 			'&' + 'asyncworkitemwarning=no' +
-			'&' + 'showequip=false' +
+			'&' + 'showallitemactions=false' +
 			'&' + 'showitemcert=false' +
 			'&' + 'showmarketlink=false' +
 			'&' + 'asyncworkbtnstyle=hidden'+
@@ -557,8 +557,9 @@ var OperationStoreInspect = ( function()
 				var isSticker = ItemInfo.IsSticker( _m_recievedRewardId );
 				var isPatch = ItemInfo.IsPatch( _m_recievedRewardId );
 				var isSpraySealed = ItemInfo.IsSpraySealed( _m_recievedRewardId );
+				var isKeychain = ItemInfo.IsKeychain( _m_recievedRewardId );
 
-				var showEquip = ( isSticker || isPatch || isSpraySealed ) ? 'false' : 'true';
+				var bShowAllItemActions = ( isSticker || isPatch || isSpraySealed || isKeychain ) ? 'false' : 'true';
 
 				$.DispatchEvent( 'BlurOperationPanel' );
 				UiToolkitAPI.ShowCustomLayoutPopupParameters(
@@ -566,7 +567,7 @@ var OperationStoreInspect = ( function()
 					'file://{resources}/layout/popups/popup_inventory_inspect.xml',
 					'itemid=' + _m_recievedRewardId +
 					'&' + 'inspectonly=true'+
-					'&' + 'showequip='+ showEquip +
+					'&' + 'showallitemactions='+ bShowAllItemActions +
 					'&' + 'bluroperationpanel=true',
 					'none'
 				);

@@ -29,6 +29,7 @@
  <-- Retval '%s'
  LinePos:
 !g_pPulseSystem->GetWeakHandleTable()->AnyHandlesAllocated()
+"Limit Count: " + m_nLimitCount
 %d CallInfos:\n
 %d Cells:\n
 %d Chunks:\n
@@ -84,10 +85,14 @@
 15CTier1AppSystemI12IPulseSystemLx0EE
 15CTier2AppSystemI12IPulseSystemLx0EE
 15CTier3AppSystemI12IPulseSystemLx0EE
+15IGapHost_Cursor
 16CGenericExprPart
 16CPulseExecCursor
+16IGapHost_ExecLog
+16IGapHost_Unknown
 17CPulseTypeManager
 18CGenericExpr_Unary
+18CPulseCell_Unknown
 19CGenericExpr_Binary
 19CPulseCell_BaseFlow
 19CPulseCell_Timeline
@@ -110,6 +115,7 @@
 23CKV3ResourceTypeManagerILy111546415280246EE
 23CPulseCell_Inflow_Yield
 23CPulseTestHandleService
+23IGapHost_YieldingCursor
 23IGapTypeQueriesForScope
 24CGenericExpr_BoolLiteral
 24CPulseCell_Inflow_Method
@@ -126,6 +132,7 @@
 27CPulseCell_Inflow_GraphHook
 28CPulseCell_Outflow_IntSwitch
 28CPulseCell_Step_PublicOutput
+28CPulseCell_Value_RandomFloat
 28CPulseCell_Value_TestValue50
 29CPulseCell_BaseYieldingInflow
 29PulseSystemEventYieldResume_t
@@ -191,6 +198,7 @@
 @@0123456789
 @MAtomicTransfersAsPlainString
 A default string (set)
+A string associated with this Cursor, to use later for remote Kill or Wait requests. Cursors can have any number of Tags associated with them.
 A testing-only domain that doesn't correspond to any in-engine use case.
 A testing-only domain that draws on a 2D canvas with a LOGO-like 'turtle' cursor.
 ADD_FLOAT
@@ -213,6 +221,7 @@ Any cursors above this count will wait, up to the limit.
 Any extra waiting cursors will be terminated. -1 for infinite cursors.
 Apply the same tag we're waiting on to the resulting cursor upon wait completion. Can be used to wait on our result cursor with the same tag.
 Are we currently running unit tests?
+AssertFatalCast
 Async Fire C%d:I%d
 Asynchronous - returns and continues despite the called method yielding
 BACKSLASH_CHAR
@@ -253,6 +262,8 @@ BinNe
 BinSub
 Black
 Boolean
+Breakpoint Log [%u]
+Breakpoint Log [%u] - %s
 CBasePulseGraphInstance
 CBufferString
 CELL_INVOKE
@@ -323,8 +334,10 @@ CPulseCell_Test_MultiOutflow_WithParams_Yielding::CursorState_t
 CPulseCell_Test_NoInflow
 CPulseCell_Timeline
 CPulseCell_Timeline::TimelineEvent_t
+CPulseCell_Unknown
 CPulseCell_Val_TestDomainFindEntityByName
 CPulseCell_Val_TestDomainGetEntityName
+CPulseCell_Value_RandomFloat
 CPulseCell_Value_RandomInt
 CPulseCell_Value_TestValue50
 CPulseCell_WaitForCursorsWithTag
@@ -369,9 +382,6 @@ CPulseMathlib!Sin
 CPulseRuntimeMethodArg
 CPulseSystem::Internal_InstanceCreated( %s, %p )\n
 CPulseSystem::Internal_InstanceDestroyed( %s, %p )\n
-CPulseTestFuncs_DerivedDomain
-CPulseTestFuncs_DerivedDomain!GetCursorValueA
-CPulseTestFuncs_DerivedDomain!SetCursorValueA
 CPulseTestFuncs_LibraryA
 CPulseTestFuncs_LibraryA!Event_AGreaterThan5
 CPulseTestFuncs_LibraryA!Event_AValueChanged
@@ -431,7 +441,9 @@ CPulse_ResumePoint
 CPulse_Variable
 CResourceNameTyped
 CTestDomainDerived_Cursor
+CTestDomainDerived_Cursor!GetCursorValueA
 CTestDomainDerived_Cursor!GetCursorValueB
+CTestDomainDerived_Cursor!SetCursorValueA
 CTestDomainDerived_Cursor!SetCursorValueB
 CURSOR_ADD_TAG
 CURSOR_REMOVE_TAG
@@ -448,7 +460,7 @@ Cannot allocate abstract class
 Cannot deduce for class
 Cannot reference domain '%s' from '%s'\n
 Cannot reinterpret instance (actual: %s) from (original) %s to (desired) %s
-Cast of %s loses value information (returning %s) on %s:%d\n
+Cast of %s loses value information (returning %s) in %s on %s:%u\n
 Causes each execution cursor to pause at this node for a fixed period of time. Each cursor will wake up and resume execution when the time expires, unless aborted or early-woken.
 Causes each execution cursor to wait for the completion of all prior cursors that have visited this node. Use this to safely support multiple triggers to areas of the graph that take time to complete.
 Causes this execution cursor to wait for the completion of other cursors with the given tag. Can optionally kill the tag while waiting.
@@ -467,6 +479,7 @@ CommitStep
 Convert %s R%d <- %s R%d
 Copy R%d <- R%d
 Cosine of angle, in degrees (0 -> 1, 90 -> 0)
+Could not execute '%s' because this graph domain does not support the required IGapHost
 Couldn't load KV3 for resource: %s
 CreateFakeEntity
 CreateFakeEntity( "%s", "%s" ) -> idx %d (handle %d)\n
@@ -489,6 +502,8 @@ DOUBLE_AND
 DOUBLE_OR
 DOUBLE_QUOTED_STRING
 DOUBLE_QUOTE_CHAR
+Data breakpoint [%s]
+Data breakpoint [%s] - %s
 Data breakpoint hit
 Default echo string.
 DefaultTime
@@ -504,6 +519,7 @@ Destroy a fake entity from a static library function.
 DestroyAll
 DestroyFakeEntity( handle %d)\n
 Destroying SourceTSInstance[%d]\n
+Did not execute '%s' because the 'Target' object was missing
 Disallowed variable name: %s
 Div R%d <- R%d / R%d
 Do not stop the current yielding node, but do not continue to the next node afterwards.
@@ -516,6 +532,7 @@ EQ_FLOAT
 EQ_INT
 EQ_OPAQUE_HANDLE
 EQ_PANEL_HANDLE
+EQ_SCHEMA_ENUM
 EQ_STRING
 EQ_TEST_HANDLE
 ESCAPE_CHAR
@@ -564,7 +581,6 @@ FakeEntity_tAPI!GetIntValue
 FakeEntity_tAPI!GetName
 FakeEntity_tAPI!SetAndGetIntValue
 FakeEntity_tAPI!SetIntValue
-FatalCastNumberInternal
 Find Fake Entity
 Find a spawned entity by name.
 Find all the yielded cursors on this graph and cancel them.
@@ -586,7 +602,7 @@ GET_DOMAIN_VALUE
 GET_VAR
 GREEN
 Game Blackboards: 
-GameTime_t
+Generate a random float between min and max (inclusive)
 Generate a random integer between min and max (inclusive)
 GenerateInt
 GenerateIntWithResult
@@ -625,6 +641,9 @@ Hook register '%s' invoked with invalid function as first paramter.
 Hook register '%s' invoked with unrecognized 'this' value.
 I could not work out what I was expecting, like so many of us these days!\n
 ID_CHAR
+IGapHost_Cursor
+IGapHost_ExecLog
+IGapHost_YieldingCursor
 IKV3TransferInterface_EHandle_Load
 IKV3TransferInterface_EHandle_Save
 IKV3TransferInterface_GameTime_Load
@@ -635,10 +654,9 @@ IMMEDIATE_HALT
 IPulseInstanceLoadAPI
 IPulseInstanceSaveAPI
 IPulseReloadListener
-IS_TYPESAFE_INTEGER
 If (R%d) Jump to Instr I%d
 If (R%d) Leap to Chunk C%d
-If this cursor spawns other work via Fire And Forget, should this tag be inherited?
+If this cursor spawns other work via Fire And Forget, should this Tag be inherited?
 Immediate Wake
 ImmediateWake
 Immediately reactivate any waiting cursors regardless of how long they have been waiting.
@@ -680,6 +698,7 @@ LTE_FLOAT
 LTE_INT
 LT_FLOAT
 LT_INT
+LayoutAndAllocateConstantStorage
 Less R%d <- R%d < R%d
 LessEq R%d <- R%d <= R%d
 Lexer encountered %d error(s)
@@ -699,7 +718,6 @@ MEnumeratorIsNotAFlag
 MFgdFromSchemaCompletelySkipField
 MGapTypeQueriesForScopeSingleton
 MGetKV3ClassDefaults
-MIsBoxedIntegerType
 ML_COMMENT
 MOD_FLOAT
 MOD_INT
@@ -718,12 +736,12 @@ MPulseCellOutflowHookInfo
 MPulseCellOutflow_IsDefault
 MPulseCellWithCustomDocNode
 MPulseCursorTerminates
-MPulseCursorYields
 MPulseDomainHiddenInTool
 MPulseDomainHookInfo
 MPulseDomainOptInFeatureTag
 MPulseEditorHeaderIcon
 MPulseEditorHeaderText
+MPulseEditorIsControlFlowNode
 MPulseExpressionAlias
 MPulseGraphHook
 MPulseInstanceDomainInfo
@@ -738,7 +756,9 @@ MPulseProvideFeatureTag
 MPulseRequirementCheck
 MPulseRequirementCommit
 MPulseRequirementPass
+MPulseRequirementSummaryExpr
 MPulseSignatureForOutflow
+MPulseSignatureName
 MUL_FLOAT
 MUL_INT
 Max Float
@@ -758,6 +778,7 @@ Minimum of two values (float)
 Minimum of two values (int)
 Mismatched Token Exception
 Mismatched set
+Missing cell schema '%s', replacing with 'CPulseCell_Unknown'\n
 Missing required transfer interface: %s
 Missing token
 Missing token %s
@@ -782,6 +803,7 @@ NE_FLOAT
 NE_INT
 NE_OPAQUE_HANDLE
 NE_PANEL_HANDLE
+NE_SCHEMA_ENUM
 NE_STRING
 NE_TEST_HANDLE
 NO_FLAGS
@@ -815,6 +837,7 @@ Opaque Handle
 Open a specific graph instance by id
 Optional. After taking an OnCanceled outflow, signal to any observers that this cursor is now canceled. Equivalent to not handling the original cancel outflow. If you don't use this, handling OnCanceled will be treated as success.
 Optional. After taking an OnFailed outflow, signal to any observers that this cursor is now failed. Equivalent to not handling the original fail outflow. If you don't use this, handling OnFailed will be treated as success.
+Optional. Type 'Any'. An associated value, e.g. the Entity Handle which is responsible for this Cursor. The Tag is defined by the unique combination of Name and Value.
 Or R%d <- R%d || R%d
 PANEL_ID
 PGDInstruction_t
@@ -835,15 +858,17 @@ PVAL_PANORAMA_PANEL_HANDLE
 PVAL_RESOURCE
 PVAL_SCHEMA_ENUM
 PVAL_SNDEVT_GUID
+PVAL_SNDEVT_NAME
 PVAL_STRING
 PVAL_TEST_HANDLE
 PVAL_TRANSFORM
 PVAL_TYPESAFE_INT
 PVAL_VEC3
-Panel ID
 PanelID
 Panorama Panel Handle
+Parent Map Entity
 Parent Map: %s\n
+Parent XML Panel
 Parser encountered %d error(s)
 Pause
 Pause the cursor at this point.
@@ -908,6 +933,7 @@ RESOURCE_TYPE_PULSE_GRAPH_DEF
 RETURN_VALUE
 RETURN_VOID
 Raise pen.
+Random Float
 Random Integer
 Randomly taken half of the time
 Recognition Exception
@@ -960,18 +986,19 @@ Set the global string value.
 Set the test value as an int
 SetBlackboardReference BR%d (%s) <- R%d 
 SetVar V%d (%s) <- R%d R%d
-Signature hook to fill out arguments for m_AsyncChild1
-Signature hook to fill out arguments for m_AsyncChild2
-Signature hook to fill out arguments for m_Out1
-Signature hook to fill out arguments for m_Out2
-Signature hook to fill out arguments for m_YieldResume1
-Signature hook to fill out arguments for m_YieldResume2
+Signature hook to fill out arguments for OutflowSignature_OnAsyncChild1
+Signature hook to fill out arguments for OutflowSignature_OnAsyncChild2
+Signature hook to fill out arguments for OutflowSignature_OnOut1
+Signature hook to fill out arguments for OutflowSignature_OnOut2
+Signature hook to fill out arguments for OutflowSignature_OnYieldResume1
+Signature hook to fill out arguments for OutflowSignature_OnYieldResume2
 SignatureOutflow_Continue
 SignatureOutflow_Resume
 Sine of angle, in degrees (0 -> 0, 90 -> 1)
 Skip this node after the limit. Check Type does not apply, the limit will always be checked.
 SoftCancel
-SoundEvent Handle
+SoundEvent
+SoundEvent Instance Handle
 SourceTS
 SourceTS Exception during %s
 SourceTSInstance[%d]::CallHook(%s)\n
@@ -994,16 +1021,15 @@ TRIANGLE
 Tag Cursor
 Terminate()
 TernaryConditional
-Test Compiled Params_ After Type Changes
-Test Compiled Params_ Before Type Changes
+Test Compiled Params  After Type Changes
+Test Compiled Params  Before Type Changes
 Test Domain
 Test Handle
 Test Mode Assert True
-Test Optional Parameters_ After Defaults Added
-Test Optional Parameters_ After Reorder Sparse Defaults
-Test Optional Parameters_ Before Defaults Added
-Test Optional Parameters_ Before Reorder Sparse Defaults
-Test functions for the derived test domain.
+Test Optional Parameters  After Defaults Added
+Test Optional Parameters  After Reorder Sparse Defaults
+Test Optional Parameters  Before Defaults Added
+Test Optional Parameters  Before Reorder Sparse Defaults
 Test node that just generates the integer 50. Nothing to see here!
 Test node that picks between two outflows as specified in the test domain.
 Test node that randomly picks between two outflows.
@@ -1087,8 +1113,6 @@ cell_info
 close
 control_storage
 cspointscript
-cursor_state
-dlsym CreateSyntheticModule failed: %s\n
 expr
 fakeEnt.m_nHandle.WeakHandle() == GAP_WEAK_HANDLE_INVALID
 fake_derived_a
@@ -1115,6 +1139,7 @@ is also the end of the line, so you must check your lexer rules\n
 lexer->mTokens(): Error: No lexer rules were added to the lexer yet!\n
 libpulse_system.so
 libv8.so
+listeners
 looks like this:\n\t\t%.*s\n
 m_AsyncChild1
 m_AsyncChild2
@@ -1177,6 +1202,7 @@ m_TargetEntity
 m_TargetInput
 m_TimelineEvents
 m_Tracepoints
+m_UnknownKeys
 m_UnyieldResume
 m_Vars
 m_WaitComplete
@@ -1194,6 +1220,7 @@ m_bIsPublic
 m_bIsRunningUnitTests
 m_bPauseForPreviousEvents
 m_bPenUp
+m_bSelfReference
 m_bTagSelfWhenComplete
 m_bTestYesOrNoPath
 m_bWaitForChildOutflows
@@ -1324,6 +1351,7 @@ result_set
 s_Instance
 s_flExplicitCurTime
 schemasystem
+self
 serverpointentity
 shape
 show_vpulse_file
@@ -1343,6 +1371,7 @@ tools/images/pulse_editor/cursor_tag.png
 tools/images/pulse_editor/cursor_wait_zone.png
 tools/images/pulse_editor/exit_cycle_random.png
 tools/images/pulse_editor/inflow_wait.png
+tools/images/pulse_editor/kill_cursor_with_tag.png
 unFlags
 v8::Array::Length() const
 v8::Array::New(v8::Isolate*, int)
@@ -1363,7 +1392,7 @@ v8::Isolate::Exit()
 v8::Isolate::GetCurrent()
 v8::Isolate::ThrowException(v8::Local<v8::Value>)
 v8::Message::Get() const
-v8::Module::CreateSyntheticModule(v8::Isolate*, v8::Local<v8::String>, std::Cr::vector<v8::Local<v8::String>, std::Cr::allocator<v8::Local<v8::String>>> const&, v8::MaybeLocal<v8::Value> (*)(v8::Local<v8::Context>, v8::Local<v8::Module>))
+v8::Module::CreateSyntheticModule(v8::Isolate*, v8::Local<v8::String>, v8::MemorySpan<v8::Local<v8::String> const> const&, v8::MaybeLocal<v8::Value> (*)(v8::Local<v8::Context>, v8::Local<v8::Module>))
 v8::Module::Evaluate(v8::Local<v8::Context>)
 v8::Module::InstantiateModule(v8::Local<v8::Context>, v8::MaybeLocal<v8::Module> (*)(v8::Local<v8::Context>, v8::Local<v8::String>, v8::Local<v8::FixedArray>, v8::Local<v8::Module>))
 v8::Module::SetSyntheticModuleExport(v8::Isolate*, v8::Local<v8::String>, v8::Local<v8::Value>)
@@ -1371,7 +1400,7 @@ v8::Number::New(v8::Isolate*, double)
 v8::Object::Get(v8::Local<v8::Context>, unsigned int)
 v8::Object::InternalFieldCount() const
 v8::Object::Set(v8::Local<v8::Context>, unsigned int, v8::Local<v8::Value>)
-v8::Object::SetInternalField(int, v8::Local<v8::Value>)
+v8::Object::SetInternalField(int, v8::Local<v8::Data>)
 v8::Object::SlowGetInternalField(int)
 v8::ObjectTemplate::New(v8::Isolate*, v8::Local<v8::FunctionTemplate>)
 v8::ObjectTemplate::NewInstance(v8::Local<v8::Context>)
@@ -1405,7 +1434,7 @@ v8::Value::ToObject(v8::Local<v8::Context>) const
 v8::Value::ToString(v8::Local<v8::Context>) const
 v8::Value::Uint32Value(v8::Local<v8::Context>) const
 v8::api_internal::DisposeGlobal(unsigned long*)
-v8::api_internal::GlobalizeReference(v8::internal::Isolate*, unsigned long*)
+v8::api_internal::GlobalizeReference(v8::internal::Isolate*, unsigned long)
 v8::api_internal::MakeWeak(unsigned long*, void*, void (*)(v8::WeakCallbackInfo<void> const&), v8::WeakCallbackType)
 v8::api_internal::ToLocalEmpty()
 v8::internal::IsolateFromNeverReadOnlySpaceObject(unsigned long)

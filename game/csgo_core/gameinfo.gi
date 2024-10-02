@@ -192,7 +192,8 @@
 		"GpuLightBinnerSupportViewModelCascade" "1"
 		"DefaultShadowTextureWidth" "4096"
 		"DefaultShadowTextureHeight" "4096"
-	//	"ShadowTextureImageFormat_D16" "1"
+		"ShadowTextureImageFormat_D16" "1"		// would like to enable this for CS2 soon to test D16 shadows (separately from SparseShadowTrees)
+		"SparseShadowTrees" "1"					// enable this to experiment with Sparse Shadow Trees as a drop in replacement for static geo shadow rendering into cascades
 		"PointLightShadowsEnabled" "1"
 		"Tonemapping"	"1"
 		"NonTexturedGradientFog" "1"
@@ -219,7 +220,7 @@
 		}
 
 		"TransformTextureRowCount" "512"
-		"TransformTextureRowCountToolsMode" "4096"
+		"TransformTextureRowCountToolsMode" "8192"
 		"CMTAtlasWidth" "1024"
 		"CMTAtlasHeight" "512"
 		"CMTAtlasChunkSize" "128"

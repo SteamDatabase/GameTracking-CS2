@@ -28,10 +28,16 @@ var CapabilityHeader;
             return;
         if (m_itemid != undefined && m_itemid != null && m_itemid !== '') {
             let itemDefName = InventoryAPI.GetItemDefinitionName(m_itemid);
-            if (itemDefName && itemDefName.indexOf("spray") != -1)
-                m_itemtype = "_graffiti";
-            else if (itemDefName && itemDefName.indexOf("tournament_pass_") != -1)
-                m_itemtype = "_fantoken";
+            if (m_worktype === 'decodeable') {
+                if (itemDefName && itemDefName.indexOf("spray") != -1)
+                    m_itemtype = "_graffiti";
+                else if (itemDefName && itemDefName.indexOf("tournament_pass_") != -1)
+                    m_itemtype = "_fantoken";
+            }
+            else if (m_worktype === 'useitem') {
+                if (itemDefName && itemDefName.startsWith('Remove Keychain Tool'))
+                    m_itemtype = "_getkeychaincharges";
+            }
         }
         m_bShowWarning = (funcGetSettingCallback("asyncworkitemwarning", "yes") !== 'no');
         m_strWarningText = funcGetSettingCallback("asyncworkitemwarningtext", '');
@@ -41,7 +47,7 @@ var CapabilityHeader;
     }
     CapabilityHeader.Init = Init;
     function _SetDialogVariables(elPanel, itemId) {
-        elPanel.SetDialogVariable("itemname", $.HTMLEscape(InventoryAPI.GetItemName(itemId)));
+        elPanel.SetDialogVariable("itemname", InventoryAPI.GetItemNameUncustomized(itemId));
     }
     function _SetUpHeaders(elPanel) {
         _SetUpTitle(elPanel);
@@ -73,16 +79,14 @@ var CapabilityHeader;
             if (defName === 'casket' && m_worktype === 'nameable')
                 elTitle.text = '#popup_newcasket_title';
             else
-                elTitle.text = '#popup_' + m_worktype + '_title';
+                elTitle.text = '#popup_' + m_worktype + '_title' + m_itemtype;
         }
     }
     function _SetUpWarning(elPanel) {
         let elWarn = elPanel.FindChildInLayoutFile('CapabilityWarning');
         let sWarnLocString = '';
         if (m_bShowWarning) {
-            sWarnLocString = '#popup_' + m_worktype + '_warning';
-            if (m_worktype === 'decodeable')
-                sWarnLocString = sWarnLocString + m_itemtype;
+            sWarnLocString = '#popup_' + m_worktype + '_warning' + m_itemtype;
         }
         if (m_worktype === 'decodeable') {
             let sRestriction = m_storeItemid ? '' : InventoryAPI.GetDecodeableRestriction(m_itemid);
@@ -117,10 +121,7 @@ var CapabilityHeader;
             sDescString = '#popup_' + m_worktype + '_xray_desc';
         }
         else {
-            sDescString = '#popup_' + m_worktype + '_desc';
-            if (m_worktype === 'decodeable') {
-                sDescString = sDescString + m_itemtype;
-            }
+            sDescString = '#popup_' + m_worktype + '_desc' + m_itemtype;
         }
         elPanel.FindChildInLayoutFile('CapabilityDesc').text = sDescString;
     }

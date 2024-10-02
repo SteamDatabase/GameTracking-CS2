@@ -4,8 +4,6 @@
 //
 //==================================================================================================
 
-@mapsize(-16384, 16384)
-
 
 //--------------------------------------------------------------------------------------------------
 // Auto vis groups
@@ -32,6 +30,7 @@
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsoccluder.vmat"			group =	"Occluder"			parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsprecipitation.vmat"	group =	"Precipitation"		parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsblockbullets.vmat"		group =	"Bullets"			parent_group = "Clip" }
+@VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsnavspaceclip.vmat"		group =	"Nav Space Clip"	parent_group = "Clip" }
 
 @VisGroupFilter { filter_type = "entityTag"		tag = "Lighting"		group = "Lighting"			parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "Sound"			group = "Sound"				parent_group = "Entities" }
@@ -49,7 +48,7 @@
 @VisGroupFilter { filter_type = "entityTag"		tag = "PropDynamic"		group = "Dynamic Props"		parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "Overlay"			group = "Dynamic Overlays"	parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "PostProcessing"	group = "Post Processing"	parent_group = "Entities" }
-
+@VisGroupFilter { filter_type = "entityTag"		tag = "PlayerPosition"	group = "Player Positions"	parent_group = "Entities" }
 
 
 //-------------------------------------------------------------------------
@@ -109,6 +108,7 @@
 [
 	input Kill(void) : "Removes this entity from the world."
 	input KillHierarchy(void) : "Removes this entity and all its children from the world."
+	input KillConstrained(void) : "Removes this entity, all its children, and anything constrained to it, from the world."
 
 	// Inputs
 	input AddOutput(string) : "Adds an entity I/O connection to this entity. Parameter format: outputname>targetname>inputname>parameter>delay>max times to fire (-1 == infinite). Very dangerous, use with care."
@@ -387,6 +387,8 @@
 		"PM_REDUCED_GIBS" : "Reduced gibs"
 	]
 
+	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
+
 	// Inputs
 	input Break(void) : "Breaks the breakable."
 	input SetHealth(integer) : "Sets a new value for the breakable's health. If the breakable's health reaches zero it will break."
@@ -512,7 +514,7 @@
 	]
 ]
 
-@BaseClass base(Breakable) vecline_local( burstlocation, 255, 200, 200 ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero )
+@BaseClass base(Breakable) vecline_local( burstlocation, 255, 200, 200, requires_breakable_model ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero, requires_breakable_model )
 	= BreakableProp
 [
 	spawnflags(flags) =
@@ -523,6 +525,17 @@
 	pressuredelay(float) [ group="Breakable Properties" ] : "Pressure Delay" : 0 : "Delay, in seconds, after 'broken' by pressure before breaking apart (allows for sound to play before breaking apart)."
 	burstscale(float) [ group="Breakable Properties" ] : "Burst Force Scale" : 100 : "Radial force applied to our pieces when we break."
 	burstlocation(local_point) [ group="Breakable Properties" ] : "Burst Force Location" : : "Location in local space where the burst force is applied."
+
+	
+	BreakableContentsType(choices) [ group="Break Contents" ] : "Contents Type" : "BC_DEFAULT" : "Set the type of contents inside this breakable." =
+	[
+		"BC_DEFAULT" : "Default"
+		"BC_EMPTY" : "Empty"
+		"BC_PROP_GROUP_OVERRIDE" : "Prop Group Override"
+		"BC_PARTICLE_SYSTEM_OVERRIDE" : "Particle System Override"
+	]
+	BreakableContentsPropGroupOverride( vdata_choice:scripts/misc.vdata ) [ group="Break Contents" ] : "Breakable Contents Prop Group Override" : "" : "Prop Group to use when the prop is broken"
+	BreakableContentsParticleOverride(particlesystem) [ group="Break Contents" ] : "Breakable Contents Particle Override" : ""
 
 	// Outputs
 	output OnTakeDamage(void) : "Fired each time this breakable takes any damage."
@@ -1293,6 +1306,7 @@
 	solidbsp(boolean) : "Solid BSP" : 0 : "Set this if this brush is in hierarchy with a moving object of some kind, and the player can stand on this brush."
 	ScriptedMovement(boolean) : "Scripted Movement" : 0 : "Set this to allow vscript code to move the brush via SetVelocity() calls."
 	vrad_brush_cast_shadows(boolean) : "Shadows" : 0 : "Set this if this brush casts lightmap shadows."
+	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
 	
 	input Alpha(integer) : "Sets the brush's alpha value."
 	input SetExcluded( string ) : "Change the NPC class excluded from collisions"
@@ -2479,17 +2493,15 @@
 	input Activate(void) : "Force the decal to apply itself to the world."
 ]
 
-@PointClass base(Targetname, EnableDisable, PlayerClass) tags( Info ) editormodel("models/editor/playerstart.vmdl", fixedbounds) = info_player_start :
+@PointClass base(Targetname, EnableDisable, PlayerClass) tags( Info, PlayerPosition ) editormodel("models/editor/playerstart.vmdl", fixedbounds) = info_player_start :
 	"This entity indicates the position and facing direction at which the player will spawn. Any number of "+
 	"info_player_start entities may be placed in a map for when working in cordoned-off portions of the map. "+
 	"When multiple info_player_start entities are present in a map, set the 'Master' spawnflag on one of them "+
 	"to indicate which one should be used when running the entire map."
 [
-	spawnflags(flags) =
-	[
-		1: "Master (Has priority if multiple info_player_starts exist)" : 0
-		2: "VR Anchor location (vs player location)" : 0
-	]
+	StartDisabled(boolean) : "Start Disabled" : 0
+	IsMaster(boolean) : "Master" : 0 : "Master has priority if multiple info_player_starts exist"
+	PawnSubclass( vdata_choice:scripts/player.vdata ) : "Pawn Subclass" : "" : "Subclass of the player pawn to spawn."
 
 	input Toggle(void) : "Toggle the enable/disable state of this player spawn position."
 ]
@@ -2547,6 +2559,7 @@
 	"Entities will transition to the next level at the same relative offset from the info_landmark entity.<br><br>"+
 	"Note that only entities in same the PVS as the info_landmark are considered for transitioning, so it should generally be placed inside the transition space."
 [
+	input SetPosition(vector) : "Set position of landmark."
 ]
 
 @PointClass tags( Info ) base(Targetname) color(0 255 0) iconsprite("editor/info_target.vmat") = info_spawngroup_load_unload : "Logical entity that starts async loading or unloading a level."
@@ -2690,6 +2703,9 @@
 	input StopPlayEndCap(void) : "Tell the particle system to stop emitting and play its End Cap Effect."
 	input DestroyImmediately(void) : "Destroy the particle system and remove all particles immediately."
 	input SetControlPoint(string) : "Set a Control Point via format - CP: X Y Z"
+	input SetDataControlPointX(float) : "Set X Component of Data Control Point"
+	input SetDataControlPointY(float) : "Set Y Component of Data Control Point"
+	input SetDataControlPointZ(float) : "Set Z Component of Data Control Point"
 ]
 
 
@@ -2880,6 +2896,9 @@
 		1 : "Open position (position = 1)"
 		2 : "Closed position (position = 0)"
 	]
+	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
+	MoveWithoutPushingBlockers(boolean) [ group="Misc" ] : "Move Without Pushing Blockers" : 0 : "Just moves the entity and anything attached to it, without going the expensive process of finding and pushing potentially blocking brush entities and NPCs. Will still push dynamic physics entities."
+
 	speed(integer) : "Speed" : 100 : "The speed that the brush moves, in inches per second."
 	movedistance(float) : "Move Distance" : 100 : "The distance from the starting point that the brush should move, in inches."
 	blockdamage(float) : "Block Damage" : 0 : "The amount of damage to do to any entity that blocks the brushes, per frame."
@@ -2927,6 +2946,8 @@
 	]
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	dmg(integer) : "Blocking Damage" : 0 : "Damage done to any entity that blocks the rotation, per frame."
+	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
+	MoveWithoutPushingBlockers(boolean) [ group="Misc" ] : "Move Without Pushing Blockers" : 0 : "Just rotates the entity and anything attached to it, without going the expensive process of finding and pushing potentially blocking brush entities and NPCs. Will still push dynamic physics entities."
 
 	solidbsp(choices) : "Solid Type" : 0 =
 	[
@@ -2935,9 +2956,9 @@
 	]
 
 	// Inputs
-	input SetSpeed(float) : "Set the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards."
+	input SetSpeed(float) : "Sets the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards. Any non-zero values with this call will cause rotating to start"
 	input SnapToStartPos(void) : "Snap to the initial position and stop moving."
-	input Start(void) : "Start the rotator rotating."
+	input Start(void) : "Start the rotator rotating at maximum Speed"
 	input Stop(void) : "Stop the rotator from rotating."
 	input StopAtStartPos(void) : "Stop the rotator from rotating when it gets around to the start position again (on its rotation axis)."
 	input SetStartPos(vector) : "Set angles that can be snapped back to."
@@ -5515,6 +5536,23 @@
 	forcenpcexclude(boolean) [ group="Physics Properties" ] : "Force NPC Exclude" : "0" : "If set, NPC movement will ignore this prop"
 	nonavmeshblocker(boolean) [ group="Physics Properties" ] : "No Navmesh Blocker" : "0" : "If set, don't auto-create a navmesh blocker."
 	auto_convert_back_from_debris(boolean) [ group="Physics Properties" ] : "Auto Convert back from Debris" : "1" : "If set, this prop will automatically convert back to interactive debris after coming to rest as Debris."
+	updatenavwhenmoving(boolean) [ group="Physics Properties" ] : "Update Nav When Moving" : "0" : "If set, nav mesh will be constantly updated while this obstacle is moving, and not just when this obstacle is settled."
+	forcenavcut(boolean) [ group = "Physics Properties" ] : "Force Nav Cut " : "0" : "If set, this obstacle will cut the mesh causing NPC's to avoid it regardless of its mass."
+
+	ammobalancing_removable(choices) [ group="Break Contents" ] : "Removal Allowed for Ammo Balancing" : "0" =
+	[
+		"0" : "No"
+		"1" : "Yes"
+	]
+
+	ItemClass1( vdata_choice:scripts/misc.vdata&scripts/grenades.vdata ) [ group="Break Contents" ] : "Item Subclass 1" : "" : "Subclass name of the entity to spawn when the crate is broken"
+	ItemCount1(integer) [ group="Break Contents" ] : "Item Count 1" : 1 : "Number of items to emit upon breakage"
+	ItemClass2( vdata_choice:scripts/misc.vdata&scripts/grenades.vdata ) [ group="Break Contents" ] : "Item Subclass 2" : "" : "Subclass name of the entity to spawn when the crate is broken"
+	ItemCount2(integer) [ group="Break Contents" ] : "Item Count 2" : 1 : "Number of items to emit upon breakage"
+	ItemClass3( vdata_choice:scripts/misc.vdata&scripts/grenades.vdata ) [ group="Break Contents" ] : "Item Subclass 3" : "" : "Subclass name of the entity to spawn when the crate is broken"
+	ItemCount3(integer) [ group="Break Contents" ] : "Item Count 3" : 1 : "Number of items to emit upon breakage"
+	ItemClass4( vdata_choice:scripts/misc.vdata&scripts/grenades.vdata ) [ group="Break Contents" ] : "Item Subclass 4" : "" : "Subclass name of the entity to spawn when the crate is broken"
+	ItemCount4(integer) [ group="Break Contents" ] : "Item Count 4" : 1 : "Number of items to emit upon breakage"
 
 	// Inputs
 	input Wake(void) : "Wake up this physics object, if it is sleeping."
@@ -5553,7 +5591,7 @@
 	input IgniteHitboxFireScale(float) : "Ignite, with a parameter hitbox fire scale."
 ]
 
-@PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) vecline_local( burstlocation, 255, 200, 200 ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero )
+@PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) vecline_local( burstlocation, 255, 200, 200, requires_breakable_model ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero, requires_breakable_model )
 	metadata
 	{
 		model_archetypes = [ "physics_prop_model", "breakable_prop_model" ]
@@ -6444,12 +6482,17 @@
 [
 	target(target_destination) : "Remote Destination" : : "The entity specifying the point to which entities should be teleported."
 	landmark(target_destination) : "Local Destination Landmark" : : "If specified, then teleported entities are offset from the target by their initial offset from the landmark."
-
 	use_landmark_angles(boolean) : "Use Landmark Orientations" : 0 : "Rotate around landmark by relative landmark orientations"
 	mirror_player(boolean) : "Mirror Player" : 0 : "Mirror the player teleport position through the plane defined by the trigger's origin and up vector"
+	check_if_dest_clear_for_player(boolean) : "Only Spawn-Valid Destinations" : 0 : "Only teleport if there is a clear teleport destination."
 ]
 
-@SolidClass base(Targetname) tags( Trigger ) = trigger_transition : 
+@SolidClass base(Targetname) tags( Trigger ) 
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolstrigger.vmat"
+	}
+= trigger_transition : 
 	"A volume that's used to control which entities go through the level transition. Create one or more trigger_transitions and "+
 	"give them the same name as the changelevel landmark. Any entities within the trigger_transition(s) will go to the next map."+
 	"See trigger_changelevel for more info."
@@ -6962,7 +7005,7 @@
 	message(text_block) : "Message"
 	enabled(boolean) : "Start Enabled" : "1"
 	fullbright(boolean) : "Draw Fullbright" : "0"
-	color(color255) : "Color" : "0 0 0 255"
+	color(color255alpha) : "Color" : "0 0 0 255"
 	world_units_per_pixel(float) : "World Units Per Pixel" : "0.25"
 	font_size(float) : "Font Size" : "20"
 	font_name(string) : "Font Name" : "Arial Black"
@@ -7266,7 +7309,7 @@
 
 	GlassNavIgnore(boolean) : "Nav Ignore" : "1" : "Nav Ignore"
 	GlassThickness(float) : "Thickness" : "0.6"
-	GlassInFrame(boolean) : "Is in a frame" : "1" : "In in a frame"
+	GlassInFrame(boolean) : "Is in a frame" : "1" : "Is in a frame"
 	SpawnInvulnerability(float) : "Spawn Invulnerability" : "3"
 	StartBroken(boolean) : "Start Broken" : "0" : "Spawn in a broken state"
 	BreakShardless(boolean) : "Start Break Shardless" : "0" : "If starting broken, have no shards"
@@ -7282,11 +7325,8 @@
 	DamagePositioningEntity02(target_destination) : "Damage Position 02" : : "If set, this helper position is used for Hit input damage."
 	DamagePositioningEntity03(target_destination) : "Damage Position 03" : : "If set, this helper position is used for Hit input damage."
 	DamagePositioningEntity04(target_destination) : "Damage Position 04" : : "If set, this helper position is used for Hit input damage."
-	surface_type(choices) : "Surface Type" : 0 =
-	[
-		0: "Glass"
-		1: "Concrete"
-	]
+	
+	DamagedMaterial(material) : "Damaged Material" : "" : "Material to swap to when damaged (optional)"
 ]
 
 @PointClass base(Targetname, Parentname, EnableDisable) tags( Lighting ) sphere() 
@@ -7297,6 +7337,10 @@
 	
 	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
 	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
+
+    volume_depth_override( int ) { group="Resolution" min="0" max="256" } : "Volume Depth" : "0" : "Sets the number of slices in the fog volume.  Increasing from default (128) will increase resolution at the expense of GPU time and memory"
+    volume_first_slice_thickness( float ) { group="Resolution" min="0" max="8" } : "Resolution at Camera" : "0" : "Thickness of the first slice in the volume at the camera.  The remaining slices will be warped to maintain this resolution as the draw distance is increased"
+
 	FadeInStart( float ) : "Fade-in start" : "20.0" : "Distance from the eye at which fog starts to fade in." 
 	FadeInEnd( float ) : "Fade-in end" : "100.0" : "Distance from the eye at which fog finishes fading in and is at full strength." 
 	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
@@ -7333,7 +7377,13 @@
 
 
 @PointClass base(Targetname, Parentname, EnableDisable) tags( Lighting ) sphere() 
-	box_world_aligned( box_mins, box_maxs, autoCenter )
+	box_oriented
+	{
+		box_min = "box_mins"
+		box_max = "box_maxs"
+		auto_center = false
+		toggle_faces_with_selection_overlay = true
+	}
 	iconsprite( "materials/editor/fog_volume.vmat" )
 = env_volumetric_fog_volume : "Sets a user bounding volume for volumetric fog - if one of these are in the map then all fog will get clamped to it. More than one then fog gets rendered if it's inside any of them."
 [
@@ -7351,6 +7401,7 @@
 	HeightFogDepth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Vertical Depth" : 48 : "Vertical depth before height fog is maximum intensity"
 	HeightFogEdgeWidth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Edge Width" : 96 : "Horizonal fade width of height fog"
 
+    AllowLPVIndirect(bool) : "Allow LPV Indirect" : "1" : "Allow using LPVs for indirect lighting: higher resolution, but will not honor fog lighting enable/disable on lights"
 	OverrideFogIndirectStrength(bool) : "Override Fog Indirect Lighting Strength" : "0"
 	FogIndirectStrength(float) { min="0.0" enabled={ variable="OverrideFogIndirectStrength" value="1" } } : "Fog Indirect Lighting Strength" : "1.0" : "Volume-local scalar for indirect lighting strength"
 
@@ -7361,14 +7412,22 @@
 	FogNoiseStrength(float) { min="0.0" enabled={ variable="OverrideFogNoiseStrength" value="1" } } : "Fog Noise Strength" : "1.0" : "Volume-local fog noise strength"
 ]
 
-@PointClass tags( Info, VisPreview ) iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
+@PointClass tags( Info, VisPreview ) iconsprite( "materials/editor/visibility_hint.vmat" ) 
+box_world_aligned
+{
+	box_min = "box_mins"
+	box_max = "box_maxs"
+	toggle_faces_with_selection_overlay = true
+}
+= visibility_hint
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
 	hintType(choices) : "Hint Type" : 3 =
 	[
 		0: "Use High Resolution (8 unit grid)"
-		1: "Use Normal Resolution (16 unit grid)"
+		1: "Use Normal Resolution (8 unit grid)"
+		10: "Use Reduced Resolution (16 unit grid)"
 		2: "Use Medium Resolution (32 unit grid)"
 		3: "Use Low Resolution (64 unit grid)"
 		8: "Use Lower Resolution (64 unit grid, fewer intial clusters)"
@@ -7379,7 +7438,13 @@
 	]
 ]
 
-@PointClass base(Targetname, EnableDisable) tags( Info ) iconsprite( "materials/editor/info_visibility_box.vmat" ) centered_box_oriented( box_size ) 
+
+@PointClass base(Targetname, EnableDisable) tags( Info ) iconsprite( "materials/editor/info_visibility_box.vmat" ) 
+centered_box_oriented
+{
+	box_size = "box_size"
+	toggle_faces_with_selection_overlay = true
+}
 = info_visibility_box : "A dynamic visibility culling box which can be used to hide objects at runtime and can be toggled on and off by entity I/O."
 [
 	box_size(vector) : "Box Size" : "128 128 128"
@@ -7445,6 +7510,7 @@
 	}
 = path_node_particle_rope
 [
+	node_name(string) : "Node Name" : "" : "A name to assign to the node that can be used to refer to the node on the path to toggle pinning on specific path nodes via entity I/O."
 	radius_scale(float) : "Radius Scale" : "1.0" : "Radius multiplier value"
 	color_tint(color255) : "Color Tint" : "255 255 255"
 	pin_enabled(bool) : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."

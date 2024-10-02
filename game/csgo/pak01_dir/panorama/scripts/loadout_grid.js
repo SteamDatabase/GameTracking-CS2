@@ -83,6 +83,8 @@ var LoadoutGrid;
         UpdateItemList();
         FillOutRowItems('ct');
         FillOutRowItems('t');
+        UpdateCharModel('ct');
+        UpdateCharModel('t');
     }
     function OnUnreadyForDisplay() {
         if (m_equipSlotChangedHandler) {
@@ -306,7 +308,7 @@ var LoadoutGrid;
             TintSprayImage(itemImage, itemid);
         }
         if (bUseIcon) {
-            itemImage.itemid = 0;
+            itemImage.itemid = '';
             itemImage.SetImage('file://{images}/icons/equipment/' + GetDefName(itemid, slot) + '.svg');
         }
         else {

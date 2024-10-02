@@ -23,19 +23,32 @@ var CanApplyHeader;
         m_cP.SetDialogVariable("CanApplyTitle", $.Localize(title, m_cP));
     }
     function _SetUpDesc(oTitleSettings) {
-        let currentName = InventoryAPI.GetItemName(oTitleSettings.itemId);
+        let currentName = InventoryAPI.GetItemNameUncustomized(oTitleSettings.itemId);
         m_cP.SetDialogVariable('tool_target_name', currentName);
         let desc = oTitleSettings.isRemove ? '#popup_can_stick_scrape_full_' + oTitleSettings.type : '#popup_can_stick_desc';
         m_cP.SetDialogVariable("CanApplyDesc", $.Localize(desc, m_cP));
     }
     function _SetUpWarning(oTitleSettings) {
         let elLabel = m_cP.FindChildInLayoutFile('id-can-apply-warning');
+        if (oTitleSettings.isRemove && oTitleSettings.worktype == 'remove_keychain') {
+            elLabel.visible = true;
+            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+            elLabel.SetDialogVariableInt('item_count', numKeychainRemoveToolChargesRemaining);
+            elLabel.FindChildInLayoutFile('id-can-apply-warning-text').SetLocString('#Notify_KeychainRemoveTool_ChargesUseToRemove');
+            return;
+        }
         elLabel.visible = !oTitleSettings.isRemove;
         if (oTitleSettings.isRemove) {
             return;
         }
         let warningText = _GetWarningTradeRestricted(oTitleSettings.type, oTitleSettings.toolId, oTitleSettings.itemId);
         warningText = !warningText ? '#SFUI_InvUse_Warning_use_can_stick_' + oTitleSettings.type : warningText;
+        if ((oTitleSettings.toolId && oTitleSettings.toolId.length == 19
+            && oTitleSettings.toolId.startsWith('922323129721890'))
+            || InventoryAPI.IsFauxItemID(oTitleSettings.toolId)) {
+            warningText = '#SFUI_InvUse_Warning_use_can_stick_previewonly_' + oTitleSettings.type;
+            m_cP.GetParent().AddClass('can_apply_previewonly_phantom_display');
+        }
         warningText = $.Localize(warningText, elLabel);
         m_cP.SetDialogVariable("CanApplyWarning", warningText);
     }

@@ -119,17 +119,25 @@ var ItemTile;
     }
     ;
     function _SetStickers(id) {
+        let elParentStickers = $.GetContextPanel().FindChildInLayoutFile('StickersOnWeapon');
+        elParentStickers.RemoveAndDeleteChildren();
+        let elParentKeychains = $.GetContextPanel().FindChildInLayoutFile('KeychainsOnWeapon');
+        elParentKeychains.RemoveAndDeleteChildren();
         let listStickers = ItemInfo.GetitemStickerList(id);
-        let elParent = $.GetContextPanel().FindChildInLayoutFile('StickersOnWeapon');
-        elParent.RemoveAndDeleteChildren();
-        if (listStickers.length > 0) {
-            for (let entry of listStickers) {
-                $.CreatePanel('Image', elParent, 'ItemImage' + entry.image, {
-                    src: 'file://{images}' + entry.image + '.png',
-                    scaling: 'stretch-to-fit-preserve-aspect',
-                    class: 'item-tile__stickers__image'
-                });
-            }
+        for (let entry of listStickers) {
+            $.CreatePanel('Image', elParentStickers, 'ItemImage' + entry.image, {
+                src: 'file://{images}' + entry.image + '.png',
+                scaling: 'stretch-to-fit-preserve-aspect',
+                class: 'item-tile__stickers__image'
+            });
+        }
+        let listKeychains = ItemInfo.GetitemKeychainList(id);
+        for (let entry of listKeychains) {
+            $.CreatePanel('Image', elParentKeychains, 'ItemImage' + entry.image, {
+                src: 'file://{images}' + entry.image + '.png',
+                scaling: 'stretch-to-fit-preserve-aspect',
+                class: 'item-tile__stickers__image'
+            });
         }
     }
     ;
@@ -138,18 +146,18 @@ var ItemTile;
         let isUpdatedValue = InventoryAPI.GetItemSessionPropertyValue(id, 'updated');
         let elLabel = $.GetContextPanel().FindChildInLayoutFile('JsRecent');
         if (isUpdatedValue === '1' || isRecentValue === '1') {
-            let locString = '#inv_session_prop_recent';
+            let locString = 'recent';
             if (isRecentValue === '1') {
                 let strItemPickupMethod = InventoryAPI.GetItemSessionPropertyValue(id, 'item_pickup_method');
-                if (strItemPickupMethod === 'quest_reward') {
-                    locString = '#inv_session_prop_quest_reward';
+                if (strItemPickupMethod && ['xpshopredeem', 'quest_reward'].includes(strItemPickupMethod)) {
+                    locString = strItemPickupMethod;
                 }
             }
             else {
-                locString = '#inv_session_prop_updated';
+                locString = 'updated';
             }
             elLabel.RemoveClass('hidden');
-            elLabel.text = $.Localize(locString);
+            elLabel.text = $.Localize('#inv_session_prop_' + locString);
             return;
         }
         elLabel.AddClass('hidden');
@@ -168,11 +176,15 @@ var ItemTile;
         else if (capabilityInfo && capabilityInfo.capability === 'can_patch' && !ItemInfo.IsPatch(id)) {
             $.GetContextPanel().enabled = (InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id));
         }
+        else if (capabilityInfo && capabilityInfo.capability === 'can_keychain' && !ItemInfo.IsKeychain(id)) {
+            $.GetContextPanel().enabled = (InventoryAPI.GetItemKeychainSlotCount(id) > InventoryAPI.GetItemKeychainCount(id));
+        }
     }
     ;
     function _SetRentalTime(id) {
         let elLabel = $.GetContextPanel().FindChildInLayoutFile('JsItemRental');
-        if (!InventoryAPI.IsRental(id)) {
+        let bHide = !InventoryAPI.IsRental(id);
+        if (bHide) {
             elLabel.AddClass('hidden');
             return;
         }
@@ -213,6 +225,12 @@ var ItemTile;
             }
             else if (capabilityInfo.capability === 'can_sticker') {
                 _CapabilityCanStickerAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId), capabilityInfo.bWorkshopItemPreview);
+            }
+            else if (capabilityInfo.capability === 'can_keychain') {
+                _CapabilityCanKeychainAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId), capabilityInfo.bWorkshopItemPreview);
+            }
+            else if (capabilityInfo.capability === 'remove_keychain') {
+                _CapabilityRemoveKeychainAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
             }
             else if (capabilityInfo.capability === 'can_patch') {
                 _CapabilityCanPatchAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
@@ -266,8 +284,9 @@ var ItemTile;
     }
     ;
     function SortIdsIntoToolAndItemID(id, initalId) {
-        let toolId = InventoryAPI.IsTool(id) ? id : initalId;
-        let itemID = InventoryAPI.IsTool(id) ? initalId : id;
+        let bIdIsTool = InventoryAPI.IsTool(id);
+        let toolId = bIdIsTool ? id : initalId;
+        let itemID = bIdIsTool ? initalId : id;
         return {
             tool: toolId,
             item: itemID
@@ -284,6 +303,18 @@ var ItemTile;
         UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=can_sticker' +
             '&' + 'workshopPreview=' + workshopPreview);
+    }
+    ;
+    function _CapabilityCanKeychainAction(idsToUse, bWorkshopItemPreview) {
+        const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
+            '&' + 'asyncworktype=can_keychain' +
+            '&' + 'workshopPreview=' + workshopPreview);
+    }
+    ;
+    function _CapabilityRemoveKeychainAction(idsToUse) {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + idsToUse.item +
+            '&' + 'asyncworktype=remove_keychain');
     }
     ;
     function _CapabilityCanPatchAction(idsToUse) {
@@ -325,7 +356,7 @@ var ItemTile;
             '&' + 'inspectonly=true' +
             '&' + 'insidecasketid=' + idCasket +
             '&' + 'capability=' + capabilityInfo.capability +
-            '&' + 'showequip=false' +
+            '&' + 'showallitemactions=false' +
             '&' + 'allowsave=false' +
             '&' + 'isselected=' + $.GetContextPanel().BHasClass('capability_multistatus_selected') +
             '&' + 'callback=' + jsUpdateItemListCallback);

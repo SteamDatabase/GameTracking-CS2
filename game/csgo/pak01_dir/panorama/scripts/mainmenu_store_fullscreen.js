@@ -6,6 +6,7 @@
 /// <reference path="common/prime_button_action.ts" />
 /// <reference path="itemtile_store.ts" />
 /// <reference path="generated/items_event_current_generated_store.d.ts" />
+/// <reference path="popups/popup_acknowledge_item.ts" />
 var MainMenuStore;
 (function (MainMenuStore) {
     const _m_cp = $.GetContextPanel();
@@ -16,7 +17,7 @@ var MainMenuStore;
         if (!ConnectedToGcCheck()) {
             return;
         }
-        _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', ShowPrimePanelOnHomePage);
+        _m_inventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', InventoryUpdated);
         if (_m_activePanelId === '' ||
             !_m_activePanelId ||
             (StoreItems.GetStoreItems().coupon && StoreItems.GetStoreItems().coupon.length < 1)) {
@@ -33,7 +34,28 @@ var MainMenuStore;
         }
         AccountWalletUpdated();
     }
+    let jsAcknowledgeDelayHandle = null;
+    function InventoryUpdated() {
+        const aNewItems = AcknowledgeItems.GetItems().filter(item => (item.pickuptype
+            && ['xpshopredeem', 'quest_reward'].includes(item.pickuptype)));
+        if (aNewItems.length > 0) {
+            jsAcknowledgeDelayHandle = null;
+            jsAcknowledgeDelayHandle = $.Schedule(1.5, () => {
+                $.DispatchEvent('ShowAcknowledgePopup', '', '');
+                $.DispatchEvent('UpdateXpShop');
+            });
+        }
+        else {
+            $.DispatchEvent('UpdateXpShop');
+        }
+        ShowPrimePanelOnHomePage();
+    }
     function UnreadyForDisplay() {
+        if (jsAcknowledgeDelayHandle) {
+            $.CancelScheduled(jsAcknowledgeDelayHandle);
+            jsAcknowledgeDelayHandle = null;
+        }
+        $.DispatchEvent('UpdateXpShop');
         if (_m_inventoryUpdatedHandler) {
             $.UnregisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', _m_inventoryUpdatedHandler);
             _m_inventoryUpdatedHandler = null;
@@ -66,7 +88,6 @@ var MainMenuStore;
         }
         if (navBtn) {
             $.DispatchEvent("Activated", navBtn, "mouse");
-            navBtn.checked = true;
         }
     }
     function NavigateToTab(panelId, keyType = '') {
@@ -74,12 +95,15 @@ var MainMenuStore;
             panelId = _m_pagePrefix + keyType;
         }
         if (_m_activePanelId !== panelId) {
-            if (panelId === 'id-store-page-home') {
+            if (panelId === _m_pagePrefix + 'home') {
                 UpdateItemsInHomeSection('coupon', 'id-store-popular-items', 6);
                 UpdateItemsInHomeSection('tournament', 'id-store-tournament-items', 4);
             }
             else {
                 MakePageFromStoreData(keyType);
+                if (panelId === _m_pagePrefix + 'xpshop') {
+                    $.DispatchEvent('UpdateXpShop');
+                }
             }
             if (_m_activePanelId) {
                 _m_cp.FindChildInLayoutFile(_m_activePanelId).SetHasClass('Active', false);
@@ -134,20 +158,39 @@ var MainMenuStore;
                 });
             }
         }
+        let elButton = elParent.FindChildInLayoutFile('id-store-nav-xpshop');
+        if (!elButton) {
+            elButton = $.CreatePanel('RadioButton', elParent, 'id-store-nav-xpshop', {
+                group: 'store-top-nav',
+                class: 'content-navbar__tabs__btn'
+            });
+            $.CreatePanel('Label', elButton, '', {
+                text: '#store_tab_xpshop'
+            });
+            elButton.SetPanelEvent('onactivate', () => {
+                NavigateToTab(_m_pagePrefix + 'xpshop', 'xpshop');
+            });
+        }
     }
     function MakePageFromStoreData(typeKey) {
         let panelIdString = _m_pagePrefix + typeKey;
         let elParent = _m_cp.FindChildInLayoutFile('id-store-pages');
         let elPanel = elParent.FindChildInLayoutFile(panelIdString);
         if (!elPanel) {
-            elPanel = $.CreatePanel('JSDelayLoadList', elParent, panelIdString, {
-                class: 'store-dynamic-lister',
-                itemwidth: "178px",
-                itemheight: "280px",
-                spacersize: "4px",
-                spacerperiod: "4px"
-            });
-            UpdateDynamicLister(elPanel, typeKey);
+            if (typeKey === 'xpshop') {
+                elPanel = $.CreatePanel('Panel', elParent, panelIdString, {});
+                elPanel.BLoadLayout("file://{resources}/layout/xpshop.xml", false, false);
+            }
+            else {
+                elPanel = $.CreatePanel('JSDelayLoadList', elParent, panelIdString, {
+                    class: 'store-dynamic-lister',
+                    itemwidth: "178px",
+                    itemheight: "280px",
+                    spacersize: "4px",
+                    spacerperiod: "4px"
+                });
+                UpdateDynamicLister(elPanel, typeKey);
+            }
         }
     }
     function UpdateDynamicLister(elList, typeKey) {

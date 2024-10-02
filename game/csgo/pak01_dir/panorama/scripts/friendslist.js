@@ -206,28 +206,23 @@ var FriendsList;
         elSection.SetHasClass('hide-notification', false);
     }
     function _MakeOrUpdateTiles(elList, oSettings) {
-        let xuidsFromUpdate = [];
-        for (let i = 0; i < oSettings.count; i++) {
-            let xuid = oSettings.xuid_func(i);
-            xuidsFromUpdate.push(xuid);
-        }
-        _DeleteTilesNotInUpdate(elList, xuidsFromUpdate);
-        for (let i = 0; i < xuidsFromUpdate.length; i++) {
-            let xuid = xuidsFromUpdate[i];
-            let elTile = elList.FindChildTraverse(xuid);
-            let children = elList.Children();
-            if (!elTile)
-                _AddTile(elList, children, xuid, i, oSettings.xml, oSettings.type);
-            else
-                _UpdateTilePosition(elList, children, elTile, xuid, i, oSettings.xml);
-        }
-    }
-    function _DeleteTilesNotInUpdate(elList, xuidsFromUpdate) {
-        let children = elList.Children();
-        let sectionChildrenCount = children.length;
-        for (let i = 0; i < sectionChildrenCount; i++) {
-            if (xuidsFromUpdate.indexOf(children[i].id) < 0)
-                children[i].DeleteAsync(0);
+        elList.SetLoadListItemFunction((parent, nPanelIdx, reusePanel) => {
+            let xuid = oSettings.xuid_func(nPanelIdx);
+            if (!reusePanel || !reusePanel.IsValid()) {
+                reusePanel = _AddTile(elList, null, xuid, nPanelIdx, oSettings.xml, oSettings.type);
+            }
+            else {
+                reusePanel.SetAttributeString("xuid", xuid);
+                _InitTile(reusePanel, oSettings.xml);
+            }
+            return reusePanel;
+        });
+        if (oSettings.count) {
+            elList.UpdateListItemsNonDestructive(oSettings.count);
+            for (let i = 0; i < oSettings.count; ++i) {
+                if (elList.TryGetListItemAtIndex(i))
+                    elList.ReloadListItem(i);
+            }
         }
     }
     function _AddTile(elList, children, xuid, index, tileXmlToUse, type) {
@@ -245,11 +240,6 @@ var FriendsList;
         _AddTransitionEndEventHandler(elTile);
         _InitTile(elTile, tileXmlToUse);
         return elTile;
-    }
-    function _UpdateTilePosition(elList, children, elTile, xuid, index, tileXmlToUse) {
-        if (children[index])
-            elList.MoveChildBefore(elTile, children[index]);
-        _InitTile(elTile, tileXmlToUse);
     }
     function _InitTile(elTile, tileXmlToUse) {
         if (tileXmlToUse === "friendtile") {

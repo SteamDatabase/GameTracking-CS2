@@ -12,20 +12,34 @@ var CapabilityNameable;
     let m_elRemoveConfirm = $.GetContextPanel().FindChildInLayoutFile('NameableRemoveConfirm');
     let m_elValidBtn = $.GetContextPanel().FindChildInLayoutFile('NameableValidBtn');
     let m_elRemoveBtn = $.GetContextPanel().FindChildInLayoutFile('NameableRemoveBtn');
-    let m_itemId = '';
     let m_toolId = '';
+    let m_itemIdRealOwned = '';
+    let m_itemIdCreatedTemp = '';
+    let m_strOriginalItemName = '';
     function Init() {
         let strMsg = $.GetContextPanel().GetAttributeString("nametag-and-itemtoname", "(not found)");
         let idList = strMsg.split(',');
         m_toolId = idList[0];
-        m_itemId = idList[1];
-        let defName = InventoryAPI.GetItemDefinitionName(m_itemId);
+        m_itemIdRealOwned = idList[1];
+        if (ItemInfo.IsWeapon(m_itemIdRealOwned)) {
+            m_itemIdCreatedTemp = InventoryAPI.CreateTempCombinedItemWithTool(m_itemIdRealOwned, _GetNameTagFauxItemID());
+        }
+        else {
+            m_itemIdCreatedTemp = m_itemIdRealOwned;
+        }
+        m_strOriginalItemName = InventoryAPI.HasCustomName(m_itemIdRealOwned) ? InventoryAPI.GetItemNameCustomized(m_itemIdRealOwned) : '';
+        let defName = InventoryAPI.GetItemDefinitionName(m_itemIdRealOwned);
         $.GetContextPanel().SetHasClass('isstorageunit', (defName === 'casket'));
         _SetUpPanelElements();
         $.DispatchEvent('CapabilityPopupIsOpen', true);
     }
     CapabilityNameable.Init = Init;
     ;
+    function _GetNameTagFauxItemID() {
+        let nameTagStoreId = InventoryAPI.GetItemDefinitionIndexFromDefinitionName("Name Tag");
+        let fakeItem = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(nameTagStoreId, 0);
+        return fakeItem;
+    }
     function _SetItemModel(id) {
         let elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectModelOrImage');
         InspectModelImage.Init(elItemModelImagePanel, id);
@@ -38,6 +52,21 @@ var CapabilityNameable;
         }
     }
     ;
+    function _RefreshItemPresentationWithUpdatedName(bNameTagModelVisible, strTextForTempItem) {
+        if (m_itemIdCreatedTemp === m_itemIdRealOwned)
+            return;
+        let elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectModelOrImage');
+        if (elItemModelImagePanel && elItemModelImagePanel.IsValid()) {
+            let elItemPanel = elItemModelImagePanel.FindChildInLayoutFile('ItemPreviewPanel');
+            if (elItemPanel && elItemPanel.IsValid()) {
+                elItemPanel.RefreshWeaponItemNameTag(m_itemIdCreatedTemp, strTextForTempItem);
+            }
+        }
+        let elNameTagModel = $.GetContextPanel().FindChildInLayoutFile('id-inspect-nametag-model');
+        if (elNameTagModel && elNameTagModel.IsValid()) {
+            elNameTagModel.visible = bNameTagModelVisible;
+        }
+    }
     function _SetUpPanelElements() {
         if (!m_toolId) {
             $.GetContextPanel().SetAttributeString('asyncworkitemwarning', 'no');
@@ -45,14 +74,14 @@ var CapabilityNameable;
         else {
             $.GetContextPanel().SetAttributeString('toolid', m_toolId);
         }
-        _SetUpAsyncActionBar(m_itemId);
+        _SetUpAsyncActionBar(m_itemIdRealOwned);
         _ShowPurchase(m_toolId);
-        _SetupHeader(m_itemId);
-        _SetItemModel(m_itemId);
+        _SetupHeader(m_itemIdRealOwned);
+        _SetItemModel(m_itemIdCreatedTemp);
         let noTool = (m_toolId === '');
-        let hasName = InventoryAPI.HasCustomName(m_itemId);
-        _SetUpButtonStates(m_itemId, hasName, noTool);
-        _UpdateAcceptState();
+        let hasName = InventoryAPI.HasCustomName(m_itemIdRealOwned);
+        _SetUpButtonStates(m_itemIdRealOwned, hasName, noTool);
+        _UpdateAcceptState(false);
     }
     ;
     function _SetUpAsyncActionBar(itemId) {
@@ -64,8 +93,7 @@ var CapabilityNameable;
         let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
         let fakeItem = '';
         if (!toolId) {
-            let nameTagStoreId = 1200;
-            fakeItem = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(nameTagStoreId, 0);
+            fakeItem = _GetNameTagFauxItemID();
             $.GetContextPanel().SetAttributeString('purchaseItemId', fakeItem);
         }
         InspectPurchaseBar.Init(elPurchase, fakeItem, _GetSettingCallback);
@@ -94,6 +122,7 @@ var CapabilityNameable;
             m_elTextEntry.enabled = false;
             m_elRemoveBtn.SetHasClass('hidden', false);
             m_elValidBtn.SetHasClass('hidden', true);
+            _UpdateAcceptState(true);
         });
         m_elRemoveBtn.SetPanelEvent('onactivate', _RemoveButtonAction);
         m_elRemoveConfirm.SetPanelEvent('onactivate', _OnRemoveConfirm.bind(undefined, itemId));
@@ -112,6 +141,10 @@ var CapabilityNameable;
         m_elRemoveBtn.SetHasClass('hidden', true);
         m_elValidBtn.SetHasClass('hidden', false);
         m_elTextEntry.text = '';
+        if (m_itemIdCreatedTemp !== m_itemIdRealOwned) {
+            InventoryAPI.SetNameToolString(m_strOriginalItemName, '');
+            _RefreshItemPresentationWithUpdatedName(true, m_strOriginalItemName);
+        }
     }
     function _SetDefaultTextForTextEntry(hasName, itemId) {
         if (m_elTextEntry.text !== '') {
@@ -144,13 +177,15 @@ var CapabilityNameable;
         if (elNameTagModel && elNameTagModel.IsValid()) {
             elNameTagModel.SetItemLabel(m_elTextEntry.text);
             $.DispatchEvent("CSGOPlaySoundEffect", "rename_teletype", "MOUSE");
-            _UpdateAcceptState();
+            _UpdateAcceptState(false);
         }
     }
     CapabilityNameable.OnEntryChanged = OnEntryChanged;
     ;
-    function _UpdateAcceptState() {
-        let isValid = InventoryAPI.SetNameToolString(m_elTextEntry.text);
+    function _UpdateAcceptState(bApplyToItem) {
+        if (m_itemIdCreatedTemp === m_itemIdRealOwned)
+            bApplyToItem = false;
+        let isValid = InventoryAPI.SetNameToolString(m_elTextEntry.text, '');
         m_elValidBtn.enabled = isValid;
         m_elValidBtn.SetPanelEvent('onmouseover', () => {
             if (!isValid)
@@ -159,6 +194,9 @@ var CapabilityNameable;
         m_elValidBtn.SetPanelEvent('onmouseout', () => {
             UiToolkitAPI.HideTextTooltip();
         });
+        if (bApplyToItem) {
+            _RefreshItemPresentationWithUpdatedName(false, m_elTextEntry.text);
+        }
     }
     ;
     function _NameTagAcquired(ItemId) {

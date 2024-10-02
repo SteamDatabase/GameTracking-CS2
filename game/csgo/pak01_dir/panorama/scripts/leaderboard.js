@@ -420,7 +420,7 @@ var Leaderboard;
             }
             elList.SetLoadListItemFunction((parent, nPanelIdx, reusePanel) => {
                 let oPlayer = GetPartyLBRow(nPanelIdx);
-                if (!reusePanel || reusePanel.IsValid()) {
+                if (!reusePanel || !reusePanel.IsValid()) {
                     reusePanel = $.CreatePanel("Button", elList, oPlayer ? oPlayer.XUID : '');
                     reusePanel.BLoadLayoutSnippet("leaderboard-entry");
                 }

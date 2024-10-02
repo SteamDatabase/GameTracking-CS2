@@ -150,15 +150,8 @@ $@stack.c
 , %sdeg
 - %s (%d refs)\n
 -----------------------------------------------------------------------\n
--all_languages
--immediate_language_change
--noime
--nojoy
--nopanoramajoy
 -panorama_nosinglecontext
--panoramajoy
 -s2-mix-blend-mode
--use_panel_id_in_rt_name
 .apng
 .gif
 .jpeg
@@ -417,6 +410,8 @@ CTopLevelWindow::PerformLayout - 2nd Pass
 CUIEngine::CompileScript
 CUIEngine::DispatchEvent - Find Unhandled
 CUIEngine::DispatchQueuedEvent
+CUIEngine::GetContextForPanel
+CUIEngine::GetScriptOrigin
 CUIEngine::InvokeJSGenericCallback
 CUIEngine::PaintWindows
 CUIEngine::PaintWindows - Requeue paint
@@ -430,6 +425,8 @@ CUIEngine::RunFunction
 CUIEngine::RunScheduledDelegates
 CUIEngine::RunScript (compile+run)
 CUIEngine::RunScript (pre-compiled)
+CUIEngine::RunScript Run
+CUIEngine::RunScript::Compile
 CUIEngine::UnregisterEventHandler
 CUIEngine::UnregisterForUnhandledEvent
 CUIEngine::UnregisterJSForUnhandledEvent
@@ -589,6 +586,7 @@ EXPRESSION_URL
 Each
 Each requires 2 parameters, an object or array and a function to call on each element
 Enable panorama joystick input
+Enable script caching to speed up recompiling scripts multiple times.
 Enable sending minidumps on JS Exceptions.
 EndFrame - opacity lru
 EndFrame - rt cache cleanup
@@ -700,7 +698,7 @@ GOST R 34.11-94 with GOST R 34.10-94 Cryptocom
 GOST R 3410-2001 Parameter Set Cryptocom
 GSets the x, y, z position for a panel. Must not be in a flowing layout.<br><br><b>Example:</b><pre>position: 3% 20px 0px;</pre>
 Ga=o
-Ga>-joy
+Ga>XInput Controller
 GamepadInput
 Generate the Layout XML Schema Definition for the current run-time (types are dependent on which game DLL is running).
 Get the current language
@@ -764,6 +762,7 @@ InternalLambdaEvent
 InternalMakeSymbol
 International Organizations
 Invalid @keyframe name (missing quotes or empty)
+Invalid Panel ID "%s"; %s
 Invalid XML format: %s
 Invalid basic quad material\n
 Invalid button: %s
@@ -1171,6 +1170,7 @@ PanelStylesInvalidated
 Panorama
 Panorama Cache Summary:\n
 Panorama Image Decode
+Panorama Panel IDs must only contain letters, numbers, underscores, and hyphens.
 Panorama Required Manifest
 Panorama Symbol table %d filled, couldn't add new symbol '%s'
 Panorama context panel stack overflow. Increase PANEL_STACK_SIZE in uiengine.cpp
@@ -1291,7 +1291,6 @@ SCRIPT_BODY
 SDL3_0.0.0
 SDL_AddEventWatch
 SDL_CloseJoystick
-SDL_DelEventWatch
 SDL_GUIDToString
 SDL_GetGamepadMapping
 SDL_GetGamepadPowerInfo
@@ -1305,6 +1304,7 @@ SDL_GetNumJoystickAxes
 SDL_GetNumJoystickButtons
 SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS
 SDL_OpenJoystick
+SDL_RemoveEventWatch
 SDL_RumbleGamepad
 SDL_ShowSimpleMessageBox
 SEED-CBC
@@ -1609,7 +1609,6 @@ X9.42 DH
 X9.57
 X9.57 CM ?
 X9cm
-XInput Controller
 XInputControllerPresent
 Y?unset
 You must turn on panorama_track_render_commands to track command usage.\n
@@ -3016,6 +3015,7 @@ margin-left
 margin-right
 margin-top
 maroon
+mat_viewportscale
 materials/panorama/panorama.vmat
 materials/panorama/panorama_fancyquad.vmat
 max-height
@@ -3280,6 +3280,7 @@ panorama_rt_%s.vtex
 panorama_rt_composition_atlas%i.vtex
 panorama_rt_ds_%s.vtex
 panorama_rt_pp_%s.vtex
+panorama_script_cache_enabled
 panorama_show_fps
 panorama_show_fps_scale
 panorama_simple_borders_no_comp_layer
@@ -3771,6 +3772,7 @@ thistle
 thread=%lu, 
 time stamp routines
 timeStamping
+title
 tomato
 tooltip-arrow-position
 tooltip-body-position
@@ -3868,7 +3870,7 @@ v8::Object::GetPropertyNames(v8::Local<v8::Context>)
 v8::Object::InternalFieldCount() const
 v8::Object::Set(v8::Local<v8::Context>, unsigned int, v8::Local<v8::Value>)
 v8::Object::Set(v8::Local<v8::Context>, v8::Local<v8::Value>, v8::Local<v8::Value>)
-v8::Object::SetInternalField(int, v8::Local<v8::Value>)
+v8::Object::SetInternalField(int, v8::Local<v8::Data>)
 v8::Object::SlowGetInternalField(int)
 v8::ObjectTemplate::New(v8::Isolate*, v8::Local<v8::FunctionTemplate>)
 v8::ObjectTemplate::NewInstance(v8::Local<v8::Context>)
@@ -3879,6 +3881,9 @@ v8::ObjectTemplate::SetInternalFieldCount(int)
 v8::Script::Compile(v8::Local<v8::Context>, v8::Local<v8::String>, v8::ScriptOrigin*)
 v8::Script::GetUnboundScript()
 v8::Script::Run(v8::Local<v8::Context>)
+v8::ScriptCompiler::CachedData::~CachedData()
+v8::ScriptCompiler::Compile(v8::Local<v8::Context>, v8::ScriptCompiler::Source*, v8::ScriptCompiler::CompileOptions, v8::ScriptCompiler::NoCacheReason)
+v8::ScriptCompiler::ConsumeCodeCacheTask::~ConsumeCodeCacheTask()
 v8::ScriptOrigin::VerifyHostDefinedOptions() const
 v8::StackFrame::GetFunctionName() const
 v8::StackFrame::GetLocation() const
@@ -3913,7 +3918,7 @@ v8::Value::ToUint32(v8::Local<v8::Context>) const
 v8::Value::Uint32Value(v8::Local<v8::Context>) const
 v8::api_internal::DisposeGlobal(unsigned long*)
 v8::api_internal::FromJustIsNothing()
-v8::api_internal::GlobalizeReference(v8::internal::Isolate*, unsigned long*)
+v8::api_internal::GlobalizeReference(v8::internal::Isolate*, unsigned long)
 v8::api_internal::ToLocalEmpty()
 v8::internal::IsolateFromNeverReadOnlySpaceObject(unsigned long)
 v8system

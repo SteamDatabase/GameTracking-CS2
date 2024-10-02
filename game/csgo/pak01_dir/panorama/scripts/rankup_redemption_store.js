@@ -52,7 +52,7 @@ var RankUpRedemptionStore;
     }
     ;
     function CheckForPopulateItems(bFirstTime = false, claimedItemId = '') {
-        const objStore = InventoryAPI.GetCacheTypeElementJSOByIndex("PersonalStore", 0);
+        const objStore = GetPersonalStore();
         const genTime = objStore ? objStore.generation_time : 0;
         if (genTime != m_timeStamp || claimedItemId) {
             if (genTime != m_timeStamp) {
@@ -63,7 +63,7 @@ var RankUpRedemptionStore;
         }
     }
     function _CreateItemPanel(itemId, index, bFirstTime, claimedItemId = '') {
-        let bNoDropsEarned = itemId === '-';
+        const bNoDropsEarned = itemId === '-';
         if (itemId !== '-' && (!InventoryAPI.IsItemInfoValid(itemId) || !InventoryAPI.IsValidItemID(itemId))) {
             _msg('item ' + itemId + ' is invalid');
             return;
@@ -73,13 +73,14 @@ var RankUpRedemptionStore;
         elGhostItem = $.CreatePanel('Panel', elItemContainer, 'itemdrop-' + index + '-' + itemId);
         elGhostItem.BLoadLayout('file://{resources}/layout/itemtile_store.xml', false, false);
         _AddTileToBlurPanel(elGhostItem);
-        let oItemData = {
+        const oItemData = {
             id: itemId,
             isDropItem: true,
             noDropsEarned: bNoDropsEarned,
         };
         ItemTileStore.Init(elGhostItem, oItemData);
         elGhostItem.Data().itemid = itemId;
+        elGhostItem.Data().cost = 1;
         elGhostItem.Data().index = index;
         if (bNoDropsEarned)
             return;
@@ -102,8 +103,7 @@ var RankUpRedemptionStore;
         }
     }
     function _OnGhostItemActivate(elGhostItem, itemId) {
-        const bIsFauxItem = InventoryAPI.IsFauxItemID(itemId);
-        if (!bIsFauxItem) {
+        if (!InventoryAPI.IsClaimedItem(itemId)) {
             elGhostItem.SetPanelEvent('onactivate', () => _OnItemSelected(elGhostItem));
             const elInspect = elGhostItem.FindChildTraverse('id-itemtile-store-inspect-btn');
             elInspect.SetPanelEvent('onactivate', () => {
@@ -118,17 +118,21 @@ var RankUpRedemptionStore;
                 else {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
                         '&' + 'inspectonly=true' +
-                        '&' + 'showequip=false' +
+                        '&' + 'showallitemactions=false' +
                         '&' + 'allowsave=false' +
                         'none');
                 }
             });
         }
     }
+    function GetPersonalStore() {
+        let oStore = InventoryAPI.GetCacheTypeElementJSOByIndex("PersonalStore", 0);
+        return oStore;
+    }
     function PopulateItems(bFirstTime = false, claimedItemId = '') {
         _msg('PopulateItems');
         _msg('claimedItemId:' + claimedItemId);
-        const objStore = InventoryAPI.GetCacheTypeElementJSOByIndex("PersonalStore", 0);
+        const objStore = GetPersonalStore();
         $.GetContextPanel().RemoveClass('waiting');
         if (bFirstTime) {
             $.GetContextPanel().TriggerClass('reveal-store');
@@ -145,6 +149,7 @@ var RankUpRedemptionStore;
         for (let i = 0; i < arrItemIds.length; i++) {
             _CreateItemPanel(arrItemIds[i], i, bFirstTime, claimedItemId);
         }
+        _UpdateAllItemStyles();
         elItemContainer.Children().forEach((element, idx) => {
             if (claimedItemId) {
                 aSelectedItems.forEach(selectedIndex => {
@@ -170,7 +175,7 @@ var RankUpRedemptionStore;
         m_schTimer = $.Schedule(30, _UpdateTime);
     }
     function _UpdateStoreState() {
-        const objStore = InventoryAPI.GetCacheTypeElementJSOByIndex("PersonalStore", 0);
+        const objStore = GetPersonalStore();
         m_redeemableBalance = objStore ? objStore.redeemable_balance : 0;
         const elClaimButton = $.GetContextPanel().FindChildTraverse('jsRrsClaimButton');
         elClaimButton.enabled = m_redeemableBalance !== 0;
@@ -204,16 +209,18 @@ var RankUpRedemptionStore;
         const elItemContainer = $.GetContextPanel().FindChildTraverse('jsRrsItemContainer');
         for (let panel of elItemContainer.Children()) {
             if (panel.BHasClass('selected')) {
-                arrItems.push(panel.Data().itemid);
+                arrItems.push({ item_id: panel.Data().itemid, cost: panel.Data().cost });
             }
         }
         return arrItems;
     }
+    function _CalcPendingBalance() {
+        return _GetSelectedItems().reduce((sum, item) => sum + item.cost, 0);
+    }
     function _OnItemSelected(elPanel) {
         const elItemContainer = $.GetContextPanel().FindChildTraverse('jsRrsItemContainer');
         let aItemIds = _GetSelectedItems();
-        let nSelected = _GetSelectedItems().length;
-        if (nSelected < m_redeemableBalance) {
+        if ((_CalcPendingBalance() + elPanel.Data().cost) <= m_redeemableBalance) {
             elPanel.SetHasClass('selected', !elPanel.BHasClass('selected'));
             if (!elPanel.BHasClass('selected')) {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.gift_select', 'MOUSE');
@@ -223,7 +230,7 @@ var RankUpRedemptionStore;
             }
         }
         else {
-            if (aItemIds.find(element => element === elPanel.Data().itemid)) {
+            if (aItemIds.find(element => element.item_id === elPanel.Data().itemid)) {
                 elPanel.SetHasClass('selected', !elPanel.BHasClass('selected'));
                 if (!elPanel.BHasClass('selected')) {
                     $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.gift_select', 'MOUSE');
@@ -233,14 +240,23 @@ var RankUpRedemptionStore;
                 }
             }
         }
-        nSelected = _GetSelectedItems().length;
         for (let element of elItemContainer.Children()) {
-            if (!elPanel.BHasClass('selected') && nSelected >= m_redeemableBalance) {
+            const bCantAffordClicked = !elPanel.BHasClass('selected') && _CalcPendingBalance() + elPanel.Data().cost > m_redeemableBalance;
+            if (bCantAffordClicked) {
                 if (element.BHasClass('selected')) {
                     element.TriggerClass('pulse-me');
                     $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.buymenu_failure', 'MOUSE');
                 }
             }
+        }
+        _UpdateAllItemStyles();
+    }
+    function _UpdateAllItemStyles() {
+        const elItemContainer = $.GetContextPanel().FindChildTraverse('jsRrsItemContainer');
+        for (let element of elItemContainer.Children()) {
+            const bCantAfford = !element.BHasClass('selected') && !element.BHasClass('item-claimed') && _CalcPendingBalance() + element.Data().cost > m_redeemableBalance;
+            element.SetHasClass('cant-afford', bCantAfford);
+            element.SetHasClass('disabled', bCantAfford || element.BHasClass('item-claimed'));
         }
     }
     function _CloseStore(bHasStore) {
@@ -286,7 +302,7 @@ var RankUpRedemptionStore;
             _PulseItems();
             return;
         }
-        let szItemList = _GetSelectedItems().join(',');
+        let szItemList = _GetSelectedItems().map(item => item.item_id).join(',');
         StoreAPI.StoreRedeemFreeRewards(szItemList);
         $.GetContextPanel().AddClass('waiting');
         _EnableDisableStorePanels(true);

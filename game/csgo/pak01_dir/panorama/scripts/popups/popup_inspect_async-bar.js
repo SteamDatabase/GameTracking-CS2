@@ -21,7 +21,7 @@ var InspectAsyncActionBar;
     let m_panel = null;
     let _m_PanelRegisteredForEvents = undefined;
     let m_isWorkshopPreview = false;
-    function Init(elPanel, itemId, funcGetSettingCallback, funcCallbackOnAction) {
+    function Init(elPanel, itemId, funcGetSettingCallback, funcCallbackOnAction, funcCallbackOnActionNegative) {
         m_itemid = itemId;
         m_worktype = funcGetSettingCallback('asyncworktype', '');
         m_toolid = funcGetSettingCallback('toolid', '');
@@ -34,6 +34,7 @@ var InspectAsyncActionBar;
         m_inspectOnly = (funcGetSettingCallback('inspectonly', 'false') === 'true');
         m_isSeasonPass = (funcGetSettingCallback('seasonpass', 'false') === 'true');
         m_isWorkshopPreview = (funcGetSettingCallback('workshopPreview', 'false') === 'true');
+        m_panel = elPanel;
         if (m_asynActionForceHide ||
             !m_worktype ||
             (m_allowRental && !m_showXrayMachineUi) ||
@@ -42,11 +43,10 @@ var InspectAsyncActionBar;
             elPanel.AddClass('hidden');
             return;
         }
-        m_panel = elPanel;
         elPanel.RemoveClass('hidden');
         m_okButtonClass = funcGetSettingCallback('asyncworkbtnstyle', m_okButtonClass);
         _SetUpDescription(elPanel);
-        _SetUpButtonStates(elPanel, funcGetSettingCallback, funcCallbackOnAction);
+        _SetUpButtonStates(elPanel, funcGetSettingCallback, funcCallbackOnAction, funcCallbackOnActionNegative);
         m_panel.FindChildInLayoutFile('InspectWeaponBtn').checked = true;
         _ShowHideInspectViewButtons();
         _ShowZoomBtn();
@@ -91,14 +91,19 @@ var InspectAsyncActionBar;
         }
         else if (m_worktype === 'remove_patch') {
             let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
+            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
+            funcCallbackOnAction(m_itemid, m_toolid, selectedSlot);
+        }
+        else if (m_worktype === 'remove_keychain') {
+            let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
+            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
             funcCallbackOnAction(m_itemid, m_toolid, selectedSlot);
         }
         else if (m_worktype === 'remove_sticker') {
             let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
-            $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_scratchOff', 'MOUSE');
             funcCallbackOnAction(m_itemid, m_toolid, selectedSlot);
         }
-        else if (m_worktype === 'can_sticker' || m_worktype === 'can_patch') {
+        else if (m_worktype === 'can_sticker' || m_worktype === 'can_patch' || m_worktype === 'can_keychain') {
             $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applyConfirm', 'MOUSE');
             let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
             funcCallbackOnAction(m_itemid, m_toolid, selectedSlot);
@@ -118,10 +123,13 @@ var InspectAsyncActionBar;
             }
         }
     }
-    function _SetUpButtonStates(elPanel, funcGetSettingCallback, funcCallbackOnAction) {
+    function _SetUpButtonStates(elPanel, funcGetSettingCallback, funcCallbackOnAction, funcCallbackOnActionNegative) {
         let elOK = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
+        let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
         if (m_isWorkshopPreview) {
             elOK.AddClass('hidden');
+            if (elNegative)
+                elNegative.AddClass('hidden');
         }
         function _SetPanelEventOnAccept() {
             elOK.SetPanelEvent('onactivate', () => _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnAction));
@@ -174,9 +182,24 @@ var InspectAsyncActionBar;
         if (m_worktype === 'nameable' && itemDefName === 'casket') {
             sOkButtonText = '#popup_newcasket_button';
         }
+        if (m_worktype === 'useitem') {
+            if (itemDefName && itemDefName.startsWith('Remove Keychain Tool')) {
+                elOK.SetDialogVariableInt('item_count', Number(InventoryAPI.GetItemAttributeValue(m_itemid, '{uint32}items count')));
+                sOkButtonText = '#popup_useitem_button_getkeychaincharges';
+            }
+            if (itemDefName && itemDefName.startsWith('XpShopTicket')) {
+                let bHasPrime = FriendsListAPI.GetFriendPrimeEligible(MyPersonaAPI.GetXuid());
+                sOkButtonText = bHasPrime ? '#xpshop_pass_activate_open_armory' : '#SFUI_Elevated_Status_upgrade_status';
+            }
+        }
         elOK.text = sOkButtonText;
         elOK.AddClass(m_okButtonClass);
         _SetPanelEventOnAccept();
+        if (funcCallbackOnActionNegative && elNegative) {
+            elNegative.SetPanelEvent('onactivate', () => _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnActionNegative));
+            elNegative.text = '#popup_' + m_worktype + '_button_negative';
+            elNegative.RemoveClass('AsyncItemWorkAcceptNegativeHidden');
+        }
     }
     function _SetUpDescription(elPanel) {
         let elDescLabel = elPanel.FindChildInLayoutFile('AsyncItemWorkDesc');
@@ -195,35 +218,70 @@ var InspectAsyncActionBar;
     }
     function EnableDisableOkBtn(elPanel, bEnable) {
         let elOK = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
-        if (!elOK.visible)
-            return;
-        if (elOK.enabled !== bEnable)
-            elOK.TriggerClass('popup-capability-update-anim');
-        elOK.enabled = bEnable;
+        if (elOK.visible) {
+            if (elOK.enabled !== bEnable)
+                elOK.TriggerClass('popup-capability-update-anim');
+            elOK.enabled = bEnable;
+        }
+        let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
+        if (elNegative && elNegative.visible) {
+            if (elNegative.enabled !== bEnable)
+                elNegative.TriggerClass('popup-capability-update-anim');
+            elNegative.enabled = bEnable;
+        }
     }
     InspectAsyncActionBar.EnableDisableOkBtn = EnableDisableOkBtn;
     function ShowHideOkBtn(elPanel, bShow) {
         let elOK = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
         elOK.SetHasClass('move-down', !bShow);
+        let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
+        if (elNegative)
+            elNegative.SetHasClass('move-down', !bShow);
     }
     InspectAsyncActionBar.ShowHideOkBtn = ShowHideOkBtn;
+    function ShowHideBackBtn(elPanel, bShow) {
+    }
+    InspectAsyncActionBar.ShowHideBackBtn = ShowHideBackBtn;
     function _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnAction) {
         ResetTimeouthandle();
+        if (m_worktype === 'useitem') {
+            if (ItemInfo.ItemDefinitionNameSubstrMatch(m_itemid, 'XpShopTicket')) {
+                let bHasPrime = FriendsListAPI.GetFriendPrimeEligible(MyPersonaAPI.GetXuid());
+                if (!bHasPrime) {
+                    UiToolkitAPI.ShowCustomLayoutPopup('prime_status', 'file://{resources}/layout/popups/popup_prime_status.xml');
+                    return;
+                }
+                let oXpShopTrackProgress = InventoryAPI.GetCacheTypeElementJSOByIndex('XpShop', 0);
+                let bTooManyTracks = (oXpShopTrackProgress && (oXpShopTrackProgress.xp_tracks.length >= StoreAPI.GetXpShopMaxTracks()));
+                if (bTooManyTracks) {
+                    UiToolkitAPI.ShowGenericPopupOk('#CSGO_Purchasable_XpShop_Ticket', '#CSGO_Purchasable_XpShop_Ticket_TooManyTracks', '', () => { });
+                    return;
+                }
+                ResetTimeouthandle();
+                _ClosePopup();
+                $.DispatchEvent('MainMenuGoToStore', 'id-store-nav-xpshop');
+                return;
+            }
+        }
         elPanel.FindChildInLayoutFile('NameableSpinner').RemoveClass('hidden');
         elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm').AddClass('hidden');
-        if (m_worktype !== 'remove_patch' && m_worktype !== 'remove_sticker') {
+        let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
+        if (elNegative)
+            elNegative.AddClass('hidden');
+        if (m_worktype !== 'remove_patch' && m_worktype !== 'remove_sticker' && m_worktype !== 'remove_keychain') {
             m_scheduleHandle = $.Schedule(5, () => _CancelWaitforCallBack(elPanel));
         }
         _PerformAsyncAction(funcGetSettingCallback, funcCallbackOnAction);
     }
     function _ShowHideInspectViewButtons() {
-        if (m_worktype === 'can_sticker') {
+        if (m_worktype === 'can_sticker' || m_worktype === 'can_keychain') {
             m_panel.FindChildInLayoutFile('InspectWeaponBtn').SetPanelEvent('onactivate', () => {
                 InspectModelImage.EndWeaponLookat();
                 CanApplyPickSlot.ShowHideInfoPanel(false);
                 CanApplyPickSlot.IsContinueEnabled();
                 ShowHideOkBtn(m_panel, true);
                 EnableDisableOkBtn(m_panel, !CanApplyPickSlot.IsContinueEnabled());
+                m_panel.FindChildInLayoutFile('AsyncItemWorkCancelBtn').text = "#GameUI_Close";
                 if (m_panel.FindChildInLayoutFile('InspectItemModelZoom').visible) {
                     m_panel.FindChildInLayoutFile('InspectItemModelZoom').enabled = true;
                 }
@@ -233,11 +291,16 @@ var InspectAsyncActionBar;
                 CanApplyPickSlot.ShowHideInfoPanel(true);
                 ShowHideOkBtn(m_panel, false);
                 EnableDisableOkBtn(m_panel, false);
+                m_panel.FindChildInLayoutFile('AsyncItemWorkCancelBtn').text = "#SFUI_Back";
                 m_panel.FindChildInLayoutFile('InspectItemModelZoom').enabled = false;
             });
+            m_panel.FindChildInLayoutFile('InspectWeaponBtn').GetParent().SetHasClass('hidden', false);
         }
-        m_panel.FindChildInLayoutFile('ChangeScenery').SetHasClass('hidden', m_worktype === 'decodeable' || m_worktype === 'remove_patch' || m_worktype === 'remove_sticker');
-        m_panel.FindChildInLayoutFile('InspectWeaponBtn').GetParent().SetHasClass('hidden', m_worktype !== 'can_sticker');
+        else {
+            m_panel.FindChildInLayoutFile('InspectWeaponBtn').GetParent().SetHasClass('hidden', true);
+        }
+        m_panel.FindChildInLayoutFile('ChangeScenery').SetHasClass('hidden', m_worktype === 'decodeable' || m_worktype === 'remove_patch'
+            || m_worktype === 'remove_sticker' || m_worktype === 'remove_keychain');
     }
     function UpdateScenery() {
         UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('id-inspect-contextmenu-maps', '', 'file://{resources}/layout/context_menus/context_menu_mainmenu_vanity.xml', 'type=maps' +
@@ -281,6 +344,9 @@ var InspectAsyncActionBar;
         if (m_panel.IsValid()) {
             m_panel.FindChildInLayoutFile('NameableSpinner').AddClass('hidden');
             m_panel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm').RemoveClass('hidden');
+            let elNegative = m_panel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
+            if (elNegative)
+                elNegative.RemoveClass('hidden');
         }
     }
     InspectAsyncActionBar.OnCloseRemove = OnCloseRemove;
@@ -303,6 +369,15 @@ var InspectAsyncActionBar;
         UiToolkitAPI.ShowGenericPopupOk($.Localize('#SFUI_SteamConnectionErrorTitle'), $.Localize('#SFUI_InvError_Item_Not_Given'), '', () => { });
     }
     function OnEventToClose(bCloseForLootlistPreview = false) {
+        if (m_panel && (m_worktype === 'can_sticker' || m_worktype === 'can_keychain')) {
+            let elLookatBtn = m_panel.FindChildInLayoutFile('LookatWeaponBtn');
+            if (elLookatBtn && elLookatBtn.IsValid()
+                && elLookatBtn.checked
+                && m_scheduleHandle === null) {
+                $.DispatchEvent("Activated", m_panel.FindChildInLayoutFile('InspectWeaponBtn'), "mouse");
+                return;
+            }
+        }
         ResetTimeouthandle();
         _ClosePopup();
     }
@@ -320,7 +395,17 @@ var InspectAsyncActionBar;
             return;
         }
         OnEventToClose();
-        $.DispatchEvent('ShowAcknowledgePopup', type, itemid);
+        if (type === 'xp_shop_use_ticket' || type === 'xp_shop_ack_tracks') {
+        }
+        else if (type === 'keychain_tool_charges' && m_worktype === 'useitem') {
+            let defidxContract = InventoryAPI.GetItemDefinitionIndexFromDefinitionName("Remove Keychain Tool");
+            let fauxItemID = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxContract, 0);
+            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + fauxItemID +
+                '&' + 'inspectonly=true');
+        }
+        else {
+            $.DispatchEvent('ShowAcknowledgePopup', type, itemid);
+        }
     }
     function _IgnoreClose() {
         return m_worktype === 'decodeable';
@@ -331,8 +416,11 @@ var InspectAsyncActionBar;
         }
         if (m_worktype === "remove_sticker" ||
             m_worktype === "remove_patch" ||
+            m_worktype === "remove_keychain" ||
             m_worktype === "can_sticker" ||
             m_worktype === "can_patch" ||
+            m_worktype === "can_keychain" ||
+            m_worktype === "useitem" ||
             m_worktype === "nameable") {
             return;
         }

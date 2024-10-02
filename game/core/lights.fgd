@@ -6,70 +6,6 @@
 
 @include "lights_base.fgd"
 
-@PointClass light() base(light_base, light_base_legacy_params, light_base_attenuation_params, CanBeClientOnly) leansphere(lightsourceradius,255,255,255) sphere(range,255,255,0)
-	iconsprite
-	{
-		image = "materials/editor/light_omni.vmat"
-		tintKey = "color"
-	}
-	metadata
-	{
-		entity_tool_name = "Point Light"
-		entity_tool_tip = "Omni directional point light source"
-		entity_tool_group = "Lighting"
-		entity_tool_sortname = "lights"
-	}
-= light_omni : "A point light source."
-[
-	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "0" : "Whether this light casts shadow" =
-	[
-		"0" : "No"
-		"1" : "Yes"
-		"2" : "Baked Only"
-	]
-]
-
-
-@PointClass light() base(light_base, light_base_legacy_params, light_base_attenuation_params, CanBeClientOnly) editormodel( "models/editor/spot", lightModeTint2, "124 255 157", "255 196 64", "255 64 64" ) leansphere(lightsourceradius,255,255,255) lightcone()
-	iconsprite
-	{
-		image = "materials/editor/light_spot_icon.vmat"
-		tintKey = "color"
-	}
-	metadata
-	{
-		entity_tool_name = "Spot Light"
-		entity_tool_tip = "Spot light source"
-		entity_tool_group = "Lighting"
-		entity_tool_sortname = "lights"
-		view_attach_offset = [ -10.0, 0.0, 0.0 ]
-	}
-= light_spot : "A spot light source."
-[
-	lightcookie(resource:vtex) : "Light Cookie" : ""
-
-	falloff(float) : "Falloff" : "1" : "angular falloff exponent for spot lights"
-	innerconeangle(float) { min="1" max="89" } : "Inner Cone Angle" : "45" : "inner cone angle. no angular falloff within this cone"
-	outerconeangle(float) { min="1" max="89" } : "Outer Cone Angle" : "60" : "outer cone angle"
-
-	shadowfademindist(float) : "Shadow Start Fade Dist" : -250 : "Distance at which the shadow starts to fade (<0 = use fademaxdist)."
-	shadowfademaxdist(float) : "Shadow End Fade Dist" : 1000 : "Maximum distance at which the shadow is visible (0 = don't fade out)."
-
-	shadowtexturewidth(integer) [ group = "Shadows" ] : "Shadow Texture Width" : 0 : "0 = use default texture resolution"
-	shadowtextureheight(integer) [ group = "Shadows" ] : "Shadow Texture Height" : 0 : "0 = use default texture resolution"
-]
-
-@PointClass light() base(light_base, light_base_legacy_params, CanBeClientOnly) editormodel( "models/editor/spot", lightModeTint2, "0 255 192", "255 196 64", "255 64 64" ) lightortho() = light_ortho : "An orthographic spot light source."
-[
-	lightcookie(resource:vtex) : "Light Cookie" : ""
-
-	ortholightwidth(float) { min="1" } : "Width" : "512.0" : "Ortho light rectangle width"
-	ortholightheight(float) { min="1" } : "Height" : "512.0" : "Ortho light rectangle height"
-	range(float) { min="0" } : "Range" : "2048.0" : "Distance range for light. 0=infinite"
-	angulardiameter(float) : "Sun Spread Angle" : "1.0" : "The angular extent of the sun for casting soft shadows. Higher numbers are more diffuse. 1 is a good starting value."
-	shadowtexturewidth(integer) [ group = "Shadows" ] : "Shadow Texture Width" : 0 : "0 = use default texture resolution"
-]
-
 @BaseClass = IndoorOutdoorLevel
 [
 	indoor_outdoor_level(choices) : "Priority" : "0" : "If multiple volumes contain an object, the highest priority volume takes precedence." = 
@@ -129,6 +65,7 @@
 		box_min = "box_mins"
 		box_max = "box_maxs"
 		is_light_probe_volume = true
+		toggle_faces_with_selection_overlay = true
 	}
 	bakeresource( lightprobetexture, vtex, env_light_probe_volume, "ToolObjects/LightProbeVolume" )
 = env_light_probe_volume : "A grid of precomputed light probes."
@@ -164,6 +101,7 @@
 		auto_center = false
 		edge_fades = "edge_fade_dists"
 		single_edge_fade = "edge_fade_dist"
+		toggle_faces_with_selection_overlay = true
 	}
 	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
 = env_cubemap_box : "An env_cubemap with box projection."
@@ -185,6 +123,7 @@
 		auto_center = false
 		is_light_probe_volume = true
 		edge_fades = "edge_fade_dists"
+		toggle_faces_with_selection_overlay = true
 	}
 	bakeresource( lightprobetexture, vtex, env_light_probe_volume, "ToolObjects/LightProbeVolume" )
 	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )

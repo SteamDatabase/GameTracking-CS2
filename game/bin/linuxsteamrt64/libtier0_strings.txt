@@ -2,16 +2,12 @@
                      ---\n
          Sum (%s)
         Avg Time/Call (%s)
-    %s %d: proc %d (group %u:%u)\n
     Max committed memory: %u KB out of %d KB\n
     Total committed memory: %d KB\n
     Total used memory:      %d KB\n
    Avg Time/Frame (%s)
   !!""##$$$$%%%%&&&&&&&&''''''''(((((((((((((((())))))))))))))))********************************
-  %02d: %u:0x%llx\n
-  %2u - proc %2u (grp %u:%-2u / phy %u / cor %u / smt %u): max freq %llu\n
   %52.52s%12d%12.3f%12.3f%7.2f%12.3f%7.2f%12.3f%12.3f%12.3f%12.3f\n
-  %s slot %d combined mask %u:0x%llx\n
   ---------- ------------  
   ------------ ----------  
   ------------ ------------  
@@ -25,7 +21,7 @@
  #%&(38:HJLPSUVXZ\^`cefksx}
  %%-%d.%ds 
  ( def. "%s" )
- (forced)
+ (%i core%s
  (including user space up to 63 bits)
  + %u header stack frames
  + full mem debug
@@ -81,8 +77,78 @@
 #include is NULL 
 #int#
 #nyf
+$@Unable to seek to module section at file offset 0x%x\n
 $ORIGIN
+$eax
+$ebp
+$ebx
+$ecx
+$edi
+$edx
+$eflags
+$eip
+$esi
+$esp
+$fcw
 $ffn
+$fs.base
+$fsw
+$gs.base
+$ldtr
+$mm0
+$mm1
+$mm2
+$mm3
+$mm4
+$mm5
+$mm6
+$mm7
+$mxcsr
+$r10
+$r11
+$r12
+$r13
+$r14
+$r15
+$rax
+$rbp
+$rbx
+$rcx
+$rdi
+$rdx
+$rflags
+$rip
+$rsi
+$rsp
+$st0
+$st1
+$st2
+$st3
+$st4
+$st5
+$st6
+$st7
+$unused1
+$unused2
+$unused3
+$unused4
+$unused5
+$xmm0
+$xmm1
+$xmm10
+$xmm11
+$xmm12
+$xmm13
+$xmm14
+$xmm15
+$xmm2
+$xmm3
+$xmm4
+$xmm5
+$xmm6
+$xmm7
+$xmm8
+$xmm9
 %-120s - %s\n
 %-120s\n
 %-4d    %-32s    %-10s    
@@ -102,7 +168,6 @@ $ffn
 %12.3f %12.2f
 %14.3f %12.2f
 %14s %10s
-%3d - grp %u:%u / phy %d / cor %d / smt %d, max freq %llu\n
 %3u:%3u bytes at pos %8u, savings %7u bytes |
 %6.3f: ThreadPoolTest: Testing with %d jobs! Sleep %d, interleave %d, prioritized %d \n
 %8.4f / %9.2f:  %s\n
@@ -117,7 +182,6 @@ $ffn
 %f %f %f %f
 %i.%i.%i.%i
 %i.%i.%i.%i:%i
-%lld
 %llu,%u,%u,%s\r\n
 %ls [wstring, len = %d]
 %s %s %s %s\n
@@ -139,17 +203,16 @@ $ffn
 %s not expected here.  Missing ':'?
 %s not expected here; expected string for key name or '}'
 %s not expected here; missing value?
-%s test: multithread interleaved push/pop, %s
-%s test: multithread push, multithread pop, %s
-%s test: multithread push, sequential pop, %s
-%s test: multithread push, single thread pop, %s
-%s test: sequential push, multithread pop, %s
-%s test: single thread push, multithread pop, %s
+%s test: multithread interleaved push/pop, no affinity...
+%s test: multithread push, multithread pop, no affinity...
+%s test: multithread push, sequential pop, no affinity...
+%s test: multithread push, single thread pop, no affinity...
+%s test: sequential push, multithread pop, no affinity...
+%s test: single thread push, multithread pop, no affinity...
 %s test: single thread push/pop, in order... 
 %s test: single thread push/pop, interleaved... 
 %s total bytes in user-space regions (%s bytes in kernel-space regions)\n
 %s unable to allocate %u bytes\n
-%s%s%s_%d_%02d%02d_%02d%02d%02d_%d%s%s.mdmp
 %s.exe
 %s/source_engine_%u.lock
 %s: CDwarfVector count overflow\n
@@ -186,6 +249,7 @@ $ffn
 %s: string length overflows (is %d, need %d unused)\n
 %s: unable to find %s in '%s'\n
 %s: unable to load '%s', error %d\n
+%u CPU%s
 &AElig;
 &Aacute;
 &Acirc;
@@ -311,7 +375,10 @@ $ffn
 (m_pMemory=%p, m_nNumBytesAvailable=%d, NONPOOLED)
 (main)
 (no name set)
+(no subprocess output produced)\n
 (none)
+(omitted %u following lines...)\n
+(omitted %u previous lines...)\n
 (unknown)
 (wPu@
 )14:;EFIJ^de
@@ -320,7 +387,6 @@ $ffn
 )EVs
 )n/h%fPn
 ***** OUT OF MEMORY! /+/ attempted allocation size: %llu ****\n
-***** OUT OF MEMORY! attempted allocation size: %llu ****\n
 ******** BEGIN VPROF REPORT ********\n
 ******** END VPROF REPORT ********\n
 *5KS
@@ -352,6 +418,12 @@ $ffn
 +inf
 +tPOu
 +~xY6
+,  Features: 
+, %uP/%uE cores
+, Frequency: %.01f %s
+, SMT/HT index %d
+, efficiency class %lld
+, max frequency %.01f %s
 ,!MbDg[
 ,%03d
 - %%%d.%ds 
@@ -376,58 +448,13 @@ $ffn
 -. +0123456789.
 -0123456789
 -RestartSelfFromAlternateLocation_RelaunchTime
--allowmultiple
--assertbreak
 -attachtodebugger
--break_on_crash
 -breakimmediately
--clearassertstate
 -debug_exitprocess
--debugbreak
--dedicated
--disable_affinity_preferences
--emaildumps
--emaildumps_notes
--etwprofile
--fake_mixed_cpu_mode
--force_battery_level
--force_battery_level_battery
--force_dpi
--ignorecontentasserts
--ignoresortcheck
 -inf
--inset_bottom
--inset_left
--inset_right
--inset_top
--lmvlow
--lmvmax
--lmvmemgb
--lmvmemmb
--lmvmin
--lmvnoguard
--load_string_token_database
--memstackstats_disable_pools
--memstacktraceframes
--memstd_force_passthrough
--no_assert_dialog
--noassert
 -noautoargs
--nocustomermachine
--nohibernate
--norestart
--nowatchdog
--profile
--retail
--spew_detailed_cpu_info
--start_resource_profiling
--testmode
 -testscript
 -testscript_inline
--teststringtokencollision
--threads
--tools
--uselmv
 .%x.%x.copy_tmp
 ............| 
 ../public/tier0/globallist.h
@@ -442,12 +469,14 @@ $ffn
 .DZP(7'
 .Ncp
 .build-id/
+.cfa
 .dSYM
 .dbg
 .eh_frame
 .gnu_debuglink
 .gnu_debuglink doesn't have a filename\n
 .gnu_debuglink doesn't have string terminator\n
+.mdmp
 .so.zip
 /8R:5
 /P8i
@@ -677,7 +706,9 @@ $ffn
 9IPipeRead
 9QX*r
 9a&g
+9q\rVEngineCvar007
 9z\u@
+: proc group %u:%u, physical ID %d, core ID %d
 ::string literal
 ::{ default arg#
 :R;uD
@@ -693,6 +724,7 @@ $ffn
 <No name>
 <array: %u elements>
 <binary blob: %u bytes>
+<built-in>
 <dS\fH\t\nFE
 <g9;c
 <img src="
@@ -737,9 +769,11 @@ $ffn
 <number>
 <pointer>
 <pre>
+<stdin>
 <stdout>
 <string>
 <table: %u members>
+<unable to create unique minidump file>
 <undefined>
 <unknown KV3 basic type '%s' (%d)>
 <unknown>
@@ -754,7 +788,6 @@ $ffn
 ?events
 @@not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugs
 @aQY
-@diff buffer overrun
 AA40J6
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ACThreadNullVerificationMutex: Thread %llu acquiring null-mutex while thread %llu is still holding it, indicates unexpected thread-safety issue
@@ -801,6 +834,8 @@ APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!\n
 ASCII
 ASCII//TRANSLIT
 ATTEMPTED TO DECOMMIT OWNED MEMORY STACK SPACE\n
+AVX 
+AVX2 
 A]DG
 AbsolutePoseControl
 Abstract origin attr value (0x%llx) out of range\n
@@ -810,19 +845,6 @@ Acceleration_Heading
 Acceleration_Magnitude
 Acceleration_Sideways
 Address range refers to non-existent CU at 0x%llx\n
-Affinity preferences: %d logical processors, limiting to %d\n
-Affinity preferences: %d speeds, preference split at sort index %d\n
-Affinity preferences: '%s' thread assigned to all-procs mask %u:0x%llx\n
-Affinity preferences: '%s' thread assigned to proc mask %u:0x%llx (index %d)%s, next proc mask %u:0x%llx (index %d)\n
-Affinity preferences: all-procs gather crossed group boundary\n
-Affinity preferences: disabled (%u physical procs, %u logical)\n
-Affinity preferences: explicitly disabled\n
-Affinity preferences: no logical processor speed variation\n
-Affinity preferences: no logical processor split fit\n
-Affinity preferences: no per-logical-processor information\n
-Affinity preferences: no preferences, skipping assignment\n
-Affinity preferences: no-pref all-procs does not set affinity\n
-Affinity preferences: only one logical processor\n
 AllocUnlocked
 Allocated: %zu, active: %zu, metadata: %zu (n_thp %zu), resident: %zu, mapped: %zu, retained: %zu\n
 Allocation error : not enough memory
@@ -873,15 +895,13 @@ ApplyDiffs
 April
 Arenas
 Assert
-AssertValidStringPtr
-AssertValidWStringPtr
 Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&)
 Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&, char const*, ...)
 Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&, int*, char const*, ...)
 Assert_ConditionFailed(char const*, unsigned int, char const*, char const*, AssertionType_t, unsigned int)
 Assert_ConditionFailed(char const*, unsigned int, char const*, char const*, AssertionType_t, unsigned int, char const*, ...)
 Assertion Failed
-Assertion Failed in function %s():\n%s
+Assertion Failed in function %s():
 Assertion Failure: %s (%d)\n\t%s\n
 AssertionFailureListenerMiniDumpContext_t
 AssertsGetCount
@@ -1373,7 +1393,7 @@ CCycleCondition
 CCycleControlAnimNode
 CCycleControlClipAnimNode
 CDampedPathAnimMotor
-CDeferredCallStackMarker::Insert()
+CDeferredCallStackMarker::Insert_NoStackCheck()
 CDeferredCallStackMarker::Remove()
 CDirIterator::CDirIterator()
 CDirIterator::CDirIterator(char const*, char const*, unsigned int)
@@ -1403,9 +1423,22 @@ CDirWatcher::Stop()
 CDirectPlaybackAnimNode
 CDirectionalBlendAnimNode
 CDistanceRemainingMetric
+CDwarfModule::GetSuggestedSymbolPath()
+CDwarfModule::GetValveSymbolPaths(CBufferString*)
 CDwarfVector capacity overflow\n
 CEmitTagAction
 CEnumAnimParameter
+CEnvironmentBlock::CEnvironmentBlock()
+CEnvironmentBlock::CaptureProcessEnvironment()
+CEnvironmentBlock::Copy(CEnvironmentBlock const&)
+CEnvironmentBlock::FindEntry(char const*, char const**, bool) const
+CEnvironmentBlock::GetVarKey(int, CBufferString*) const
+CEnvironmentBlock::GetVarKeyAndValue(int) const
+CEnvironmentBlock::GetVarKeyAndValue(int, CBufferString*) const
+CEnvironmentBlock::GetVarValue(int) const
+CEnvironmentBlock::Remove(char const*)
+CEnvironmentBlock::Set(char const*, char const*)
+CEnvironmentBlock::ValidateStorage()
 CEventDispatcher_Base::CEventDispatcher_Base()
 CEventDispatcher_Base::FindInsertionPoint(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int>> const&, int)
 CEventDispatcher_Base::GetListenerNames_Base(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int>> const&, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int>>*)
@@ -1679,7 +1712,8 @@ COM_TimestampedLog
 CONTENT
 COneTimeEvent::Allocate()
 COrCondition
-CPU information: physical %u, logical %u (fake mode %u)\n
+CPUInformation::GetAMDFamily(unsigned int*)
+CPUInformation::GetDescription(CBufferString*, unsigned int) const
 CPUInformation::GetIAFamilyModelStepping(unsigned int*, unsigned int*, unsigned int*)
 CPUInformation::GetWinLevelRevision(unsigned short*, unsigned short*)
 CPU_MHZ
@@ -1720,6 +1754,13 @@ CRigidBodyWeightList
 CRigidBodyWeightListConstPtr
 CRigidBodyWeightListPtr
 CRootAnimNode
+CRunProcess::CRunProcess()
+CRunProcess::CRunProcess(char const*, int)
+CRunProcess::Close()
+CRunProcess::LogFailureOutput(int, int)
+CRunProcess::ReadPipeOutput(unsigned int)
+CRunProcess::Run(char const*, int)
+CRunProcess::RunWait()
 CSHA1::Final()
 CSHA1::GetHashHex(char*, int)
 CSHA1::HashFile(char const*)
@@ -1807,7 +1848,8 @@ CSmartPropSelectionCriteria_ChoiceWeight
 CSmartPropSelectionCriteria_LinearLength
 CSolveIKChainAnimNode
 CSpeedScaleAnimNode
-CSplitString::Construct(char const*, char const**, int, bool)
+CSplitString::SetPacked(char const*, char const*, bool, int)
+CSplitString::Split(char const*, int, char const**, int, bool)
 CStableSymbolTable::GetId(char const*, bool*)
 CStableSymbolTable::Insert(int, char const*)
 CStackStatsStructInfo::WriteStructDescription(unsigned char*, unsigned long)
@@ -1871,7 +1913,9 @@ CTSQueue
 CTSQueue corruption
 CTagCondition
 CTestScriptMgr: not initialized.
+CTestScriptMgr::InsertCommandsBeforeCheckpoint() adding to tail\n
 CTestScriptMgr::InsertCommandsBeforeCheckpoint() before checkpoint "%s"\n
+CTestScriptMgr::InsertCommandsBeforeCheckpoint() currently waiting on checkpoint "%s", executing commands now\n
 CTestScriptMgr::InsertCommandsBeforeCheckpoint()\n
 CTestScriptMgr::LoopCount( %s ): no loop with this name exists.
 CTestScriptMgr::LoopForNumSeconds( %s ): no loop with this name exists.
@@ -2140,7 +2184,6 @@ CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::SetPageSize(unsigned int)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
-CUtlMemoryPoolBase: Cannot specify 0 elements to grow each time!\n
 CUtlMemoryPoolBase::AddNewBlob()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::AllocZero()
@@ -2233,6 +2276,7 @@ CUtlString::operator[](int) const
 CUtlStringFormatOutputStream::PutC(char)
 CUtlStringFormatOutputStream::PutChars(char const*, int)
 CUtlStringFormatOutputStream::~CUtlStringFormatOutputStream()
+CUtlStringList::SplitString(char const*, char const* const*, int)
 CUtlStringToken::FormatTo(IFormatOutputStream*, CFormatStringElement) const
 CUtlStringToken::TrackTokenCreation(char const*, char const*)
 CUtlStringTokenSystem could not open database file "%s" for writing. Aborting update operation\n
@@ -2255,6 +2299,9 @@ CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
 CV@@R
 CVAR_
+CVDwarfSymbolModule::CVDwarfSymbolModule()
+CVDwarfSymbolModule::Init(char const*, unsigned int, VWMD_CPU_ARCHITECTURE, unsigned long long, unsigned long long, StackTools_ModuleIDFormat_t, void const*, int)
+CVDwarfSymbolModule::OpenAndParseSymbols(char const*, unsigned int, char const*)
 CVProfNode::CVProfNode(char const*, CVProfNode*, VProfBudgetGroupCallSite&)
 CVProfNode::CVProfNode(char const*, VProfBudgetGroupCallSite&, double)
 CVProfNode::EnterScope()
@@ -2300,6 +2347,10 @@ CVProfile::SumTimes(CVProfNode const*, int, CVProfSummingContext&)
 CVProfile::SumTimes(char const*, int, CVProfSummingContext&)
 CVProfile::Term()
 CVProfile::~CVProfile()
+CVSymbolModule::GetSourceServerPathForFile(char const*, CBufferString*)
+CVSymbolModule::ResolveInlineCallInfo(VSymbolInlineInfo_t*, unsigned long long, unsigned int, CBufferString*, unsigned long long*, CBufferString*, unsigned int*, unsigned long long*)
+CVSymbolModule::ResolveSymbolInfo(unsigned long long, unsigned int, CBufferString*, VSymbolKind_t*, unsigned long long*, CBufferString*, unsigned int*, unsigned long long*)
+CVSymbolModule::UpdateSourceIndex(void const*, int, bool, bool*)
 CVariableBitStringBase::AllocInts(int)
 CVariableBitStringBase::FreeInts()
 CVariableBitStringBase::ReallocInts(int)
@@ -2314,6 +2365,8 @@ CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&,
 CVertexKDTree::ForEachInBox(Vec3D<float> const&, Vec3D<float> const&, std::function<void (float const*)> const&, int) const
 CVertexKDTree::ForEachInSphere(Vec3D<float> const&, float, std::function<void (float const*)> const&, int) const
 CVertexKDTree::Nearest(Vec3D<float> const&) const
+CVertexKDTree::Nearest(Vec3D<float> const&, CUtlVectorFixedGrowable<float const*, 64ul, int>&) const
+CVertexKDTree::NearestInternal(Vec3D<float> const&, float&, CUtlVectorFixedGrowable<float const*, 64ul, int>&, int) const
 CVertexKDTree::NearestInternal(Vec3D<float> const&, float&, float const**, int) const
 CVirtualMachineCallStackTranslationEncoder::CVirtualMachineCallStackTranslationEncoder(char const*)
 CVirtualMachineCallStackTranslationEncoder::DecodeFromNativePointer(void const*, CBufferString*, CBufferString*, unsigned int*)
@@ -2489,6 +2542,8 @@ Can't convert an empty string to float64\n
 Can't convert an empty string to int64\n
 Can't convert an empty string to uint64\n
 Can't open file (%s) passed to -testscript
+Can't specify a specific multi-arch slice for a non-multi-arch binary\n
+Can't specify both a CPU architecture and slice index\n
 Can't write binary data to a text buffer.
 Cannot Start Process '%s'
 Cannot copy '%s' to '%s'. 
@@ -2598,6 +2653,7 @@ Coroutine_Create
 Coroutine_Finish
 Coroutine_GetCurrentlyActive
 Coroutine_IsActive()
+Coroutine_Launch_ASM
 Coroutine_YieldToMain
 Could not execute the command:\n   %s\nOS error message:\n   "%s"\n
 Could not read from pipe associated with command %s\nOS error message:\n   "%s"\n
@@ -2606,10 +2662,10 @@ Couldn't window icon! %s\n
 Count of realloc(non-null-ptr, 0) calls: %zu\n
 Cover must have at least one input file\n
 Cover parameters incorrect\n
-CrackSmokingCompiler
 CreateCommandLine
 CreateDisposableKeyValuesSystem
 CreateInterface
+CreateNewMiniDumpFile
 CreateNewThreadPool
 CreateSimpleProcess
 CreateSimpleThread
@@ -2657,6 +2713,7 @@ DWARF:   can't parse debug info from %s\n
 DWARF:   can't read header from %s\n
 DWARF:   found matching build ID in %s\n
 DWARF:   no files match prefix %s\n
+DWARF: %s %s\n
 DWARF: %s does not have debug info, ignoring\n
 DWARF: '%s' is already in cache as '%s' but cache lookup failed?\n
 DWARF: Attempt %d to find debug info for %s:\n
@@ -2666,10 +2723,10 @@ DWARF: FAILURE: debug info could not be found for %s, result %d\n
 DWARF: a matching primary %s was found for %s, using for extra info\n
 DWARF: a matching primary could not be found for %s, result %d\n
 DWARF: cache required to query '%s', ignoring\n
+DWARF: explicit primary %s does not have debug info, failing\n
 DWARF: found matching debug info in %s\n
 DWARF: separate debug info file is stripped, try and find the primary file\n
 DWARF: starting prefix match for %s\n
-DWARF: trying file %s\n
 DWARF: unable to find debug info for %s, attempting to fall back to the primary file regardless of debug info\n
 DWARF: unable to find matching separate debug info for %s, check the primary file for debug info\n
 DWARF_LOCAL_TRANSLATE
@@ -2703,6 +2760,7 @@ Dictionary mismatch
 Diff
 Dk(s
 DmeC
+DoAssertDialog
 DoAssertDialog: invalid Assert response returned from dialog/vxconsole - breaking to debugger
 Double-register of KV3 conversion (from '%s' to '%s')
 Download process succeeded but didn't write a local file
@@ -2723,6 +2781,7 @@ ENGLISH
 ERROR: %s\n
 ERROR: Alloc exceeded allocation limit /+/ %llu > %llu
 ERROR: CUtlSymbolTableLarge element limit of %u exceeded\n
+ERROR: DWARF breakpad CFI is incomplete, breakpad symbols are incomplete\n
 ERROR: Virtual reservation exceeded limit /+/ %llu > %llu
 EVICTb:
 EVICTs:
@@ -2737,6 +2796,7 @@ EmptyAnim
 Enabling flag '%s' on channel '%s'.\n
 End of input was reached and '[' was not matched by ']'
 End of input was reached and '{' was not matched by '}'
+Engine2/MapMaxCoord
 EngineServiceMgr001
 EnsureAddedCapacity
 EnsureCapacity
@@ -2782,6 +2842,7 @@ Expected }
 External sequences are not valid
 E}aj
 F#47
+F/M/S %u/%u/%u 
 FAIL: !IsEmpty()\n
 FAIL: !Validate()\n
 FAIL: Not all items popped\n
@@ -2795,6 +2856,7 @@ FATAL ERROR: unable to create temp directory under '%s'\n
 FATAL ERROR: unable to create temp file under '%s'\n
 FATAL: %s called on a pool context (no root available)\n
 FAYz
+FCMOV 
 FCVAR_ARCHIVE
 FCVAR_CHEAT
 FCVAR_DONTRECORD
@@ -2818,6 +2880,7 @@ FSE_normalizeCount error with offcodeCount \n
 FSE_writeNCount error with litlengthNCount \n
 FSE_writeNCount error with matchLengthNCount \n
 FSE_writeNCount error with offcodeNCount \n
+F\tt\nn\rr""\\
 FaceTo
 Facing_Heading
 Failed during call to CDirWatcher::SetDirToWatch for directory '%s'\n
@@ -2879,8 +2942,8 @@ FioFlush(int)
 FioGetActualFilenameCase(char const*, CBufferString*, bool)
 FioGetBaseFileInfo(char const*, FioBaseFileInfo_t*, unsigned int)
 FioGetDiskInfo(char const*, FioDiskInfo_t*)
-FioGetFileCRC32(char const*, unsigned int*, int)
-FioGetFileCRC32Buffer(char const*, unsigned int*, unsigned char*, int)
+FioGetFileCRC32(char const*, unsigned int*, int, unsigned long long*)
+FioGetFileCRC32Buffer(char const*, unsigned int*, unsigned char*, int, unsigned long long*)
 FioGetFileIdentity(char const*, unsigned long long*, unsigned long long*)
 FioGetFileIdentity(int, unsigned long long*, unsigned long long*)
 FioGetFileType
@@ -3000,8 +3063,10 @@ GetJSONCharConversion
 GetJobManualEventFromPool
 GetKV3LoadFlags()
 GetLocalHostname
+GetMiniDumpDirectory
 GetModuleNameFromAddress
 GetNameFromOSType
+GetNewMiniDumpFileName
 GetPerfSortedLogicalProcessors
 GetPlatformName
 GetQuantizedFloatEncoderByReg
@@ -3325,7 +3390,6 @@ JJK1
 JSON error, unterminated element: 
 January
 Jjw[Sc
-JmpToAlternateStack
 Jobs/Coroutines
 JsonEscape(char const*)
 July
@@ -3411,7 +3475,7 @@ KeyValues::ReadTemporaryAsBinary(bool, CUtlBuffer&)
 KeyValues::RecursiveSaveToFile(CUtlBuffer&, int, bool, bool) const
 KeyValues::RecursiveSaveToLocalizationFile(IFileSystem*, void*, int, bool)
 KeyValues::RemoveSubKey(KeyValues*, bool, bool)
-KeyValues::SaveToFile(IFileSystem*, char const*, char const*, bool)
+KeyValues::SaveToFile(IFileSystem*, char const*, char const*, bool, bool)
 KeyValues::SaveToFile: couldn't open file "%s" in path "%s".\n
 KeyValues::SetColor(char const*, Color)
 KeyValues::SetFloat(char const*, float)
@@ -3466,6 +3530,8 @@ LOG_GENERAL
 LOG_SYMBOLS
 LOG_VPROF
 LOWVIOLENCE
+Last %u output lines:\n
+Last %u stderr lines:\n
 Launch Debugger
 LengthOfMatchingPaths
 LerpCPs
@@ -3608,6 +3674,7 @@ MENUBAR_ITEM
 MERGE:
 MFUL
 MGiI
+MMX 
 MOBILE
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 Mac OS
@@ -3787,6 +3854,7 @@ NetworkServerService_001
 NetworkService_001
 NetworkSystemVersion001
 NeverNetwork
+New FDs were %d and %d\n
 Newline in string literal
 NextBot
 Nl9\
@@ -3885,6 +3953,7 @@ PARTICLE_VRHAND_CP
 PARTICLE_VRHAND_CP_OBJECT
 PARTICLE_VRHAND_LEFT
 PARTICLE_VRHAND_RIGHT
+PCLMULQDQ 
 PF_BIAS_TYPE_EXPONENTIAL
 PF_BIAS_TYPE_STANDARD
 PF_MAP_TYPE_CURVE
@@ -4014,11 +4083,11 @@ Plat_GetCurrentHibernationState
 Plat_GetCurrentRSS
 Plat_GetDPI
 Plat_GetDebugMonitor
-Plat_GetDefaultMonitorIndex
 Plat_GetDesktopBounds
 Plat_GetDesktopResolution
 Plat_GetDocumentDirectory
 Plat_GetEnv
+Plat_GetExeModule
 Plat_GetExecutablePathUTF8
 Plat_GetFileType
 Plat_GetFullscreenDisplayModes
@@ -4070,7 +4139,6 @@ Plat_GetWindowMonitorIndex
 Plat_GetWindowSafeAreaInsets
 Plat_GlobalMemoryStatus
 Plat_HasClipboardText
-Plat_HasDefaultMonitorIndexChanged
 Plat_HasEnteredFatalState
 Plat_HasEnv
 Plat_HookSpecialThread
@@ -4122,7 +4190,6 @@ Plat_MinimizeWindow
 Plat_NeedsLowFragmentation
 Plat_NonFatalErrorFunc
 Plat_OnExecutableExitingMain
-Plat_OpenPath
 Plat_OsSpecificHandleToPlatWindow
 Plat_Printf
 Plat_QueueSteamLoginWithAccessCode
@@ -4158,7 +4225,6 @@ Plat_SetCPUTicksAreReliable
 Plat_SetClipboardText
 Plat_SetCurrentDirectory
 Plat_SetCurrentFrame
-Plat_SetDefaultMonitorIndex
 Plat_SetDenormalsAreZero
 Plat_SetDesktopNotifyIconPath
 Plat_SetEnv
@@ -4175,7 +4241,6 @@ Plat_SetVirtualReserveFailLimit
 Plat_SetVirtualReserveWarnLimit
 Plat_SetWatchdogHandlerFunction
 Plat_SetWindowBorder
-Plat_SetWindowFullscreenState
 Plat_SetWindowIcon
 Plat_SetWindowPos
 Plat_SetWindowSize
@@ -4225,6 +4290,7 @@ PreviewBoneAttachedModel
 PreviewBoneMergedModel
 PreviewPreset
 PreviewPresetList
+Print the current number of FDs reported by getrlimit
 Program launched from bad shortcut. Please delete this shortcut or unpin from the taskbar.
 PropertyEditorSystem_001
 PulseEntFireMode_t::HANDLE
@@ -4239,6 +4305,8 @@ Quantum size
 R1h58
 R4|i
 RD?4KF?=GH?9FJ?8HL?
+RDTSC 
+RDTSCP 
 RELEASE
 RUSSIAN
 RVfQp
@@ -4346,6 +4414,13 @@ S>T7W>
 SCAN UNWIND: found reasonable frame pointer 0x%llx below retaddr, using\n
 SCAN UNWIND: found reasonable return address 0x%llx on the stack at 0x%llx\n
 SCHINESE
+SDL.window.create.flags
+SDL.window.create.height
+SDL.window.create.title
+SDL.window.create.vulkan
+SDL.window.create.width
+SDL.window.create.x
+SDL.window.create.y
 SDL.window.x11.window
 SDL_AudioDevicePaused
 SDL_BlitSurfaceScaled
@@ -4385,7 +4460,6 @@ SDL_GetCurrentAudioDriver
 SDL_GetCurrentDisplayMode
 SDL_GetCursor
 SDL_GetDefaultCursor
-SDL_GetDefaultKeyFromScancode
 SDL_GetDesktopDisplayMode
 SDL_GetDisplayBounds
 SDL_GetDisplayContentScale
@@ -4410,7 +4484,6 @@ SDL_GetNumberProperty
 SDL_GetPointerProperty
 SDL_GetPowerInfo
 SDL_GetPropertyType
-SDL_GetRelativeMouseMode
 SDL_GetScancodeFromKey
 SDL_GetScancodeFromName
 SDL_GetScancodeName
@@ -4422,10 +4495,10 @@ SDL_GetWindowMouseGrab
 SDL_GetWindowPixelDensity
 SDL_GetWindowPosition
 SDL_GetWindowProperties
+SDL_GetWindowRelativeMouseMode
 SDL_GetWindowSize
 SDL_GetWindowSizeInPixels
 SDL_GetWindowTitle
-SDL_GetWindows
 SDL_HasClipboardText
 SDL_HasScreenKeyboardSupport
 SDL_HideCursor
@@ -4463,7 +4536,6 @@ SDL_SetCursor
 SDL_SetHint
 SDL_SetNumberProperty
 SDL_SetPointerProperty
-SDL_SetRelativeMouseMode
 SDL_SetStringProperty
 SDL_SetTextInputArea
 SDL_SetThreadPriority
@@ -4473,6 +4545,7 @@ SDL_SetWindowFullscreenMode
 SDL_SetWindowIcon
 SDL_SetWindowMouseGrab
 SDL_SetWindowPosition
+SDL_SetWindowRelativeMouseMode
 SDL_SetWindowSize
 SDL_SetWindowTitle
 SDL_ShowCursor
@@ -4499,7 +4572,7 @@ SDL_free
 SDL_iconv_string
 SDL_modff
 SDL_roundf
-SDL_setenv
+SDL_setenv_unsafe
 SDL_wcslen
 SEQUENCE_COMBINE_MODE_ALPHA_FROM0_RGB_FROM_1
 SEQUENCE_COMBINE_MODE_ALPHA_FROM1_RGB_FROM_0
@@ -4552,6 +4625,12 @@ SPRITECARD_TEXTURE_CHANNEL_MIX_A
 SPRITECARD_TEXTURE_CHANNEL_MIX_RGB
 SPRITECARD_TEXTURE_CHANNEL_MIX_RGBA
 SPRITECARD_TEXTURE_NORMALMAP
+SSE 
+SSE2 
+SSE4.1 
+SSE4.2 
+STACK CFI %x
+STACK CFI INIT %x %x
 STATETAGBEHAVIOR_ACTIVE_WHILE_CURRENT
 STATETAGBEHAVIOR_FIRE_ON_ENTER
 STATETAGBEHAVIOR_FIRE_ON_ENTER_AND_EXIT
@@ -4575,6 +4654,7 @@ SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CUtlString*, unsigned int)
 SaveKV3Text_ToString(KV3ID_t const&, KeyValues3 const*, CUtlString*, CBufferString*, unsigned int)
 SaveKV3Text_ToString(KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlString*, unsigned int)
 SaveKV3ToFile(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, char const*, char const*, unsigned int)
+SaveNonVolatileRegs
 SaveStack
 SceneSystem_002
 SceneUtils_001
@@ -4653,6 +4733,7 @@ Source2EngineToServerStringTable001
 Source2GameClients001
 Source2GameEntities001
 Source2Host001
+Source2Launcher
 Source2Server001
 Source2V8System001
 SourceStateBlendWeight
@@ -4782,6 +4863,7 @@ St9money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEE
 St9time_base
 St9type_info
 Stack unwinding
+StackContext_SetContextReturn_To_JmpToAlternateStack
 StackContext_StartData_t::ReplaceReturnContext(JmpBuf_AlternateStack_t*)
 StackContext_StartData_t::UnlinkFromLongJumpHierarchy()
 StackMarkup_RestoreState
@@ -4802,6 +4884,7 @@ StackTools_RemoveModuleMappingListener
 StackTools_VerifyLoadedModuleMappings
 Standard memory allocator initialized with non-pass-through options\n
 Start a test script running..
+StartProcessInfo_t::CloseIo()
 StateComparisonValue_FixedValue
 StateComparisonValue_Parameter
 StateComparisonValue_StateValue
@@ -4824,6 +4907,7 @@ String value for Quaternion only had %u components\n
 String value for Vector only had %u components\n
 String value for Vector2D only had %u components\n
 String value for Vector4D only had %u components\n
+Subprocess '%s' failed with exit code %d\n
 Sunday
 Symbol name index invalid (%lld)\n
 Symbol name index too large\n
@@ -4843,7 +4927,6 @@ Table has potentially invalid member names and cannot be persisted
 TargetStateBlendWeight
 Target_Move_Speed
 Test bucket %d has an invalid value %d\n
-TestAffinityPreferenceSlotInfo
 TestFormatA
 TestFormatB
 TestFormatC
@@ -4851,6 +4934,8 @@ TestFormatD
 TestFormatE
 TestKeyValuesJSONParser
 TestScriptMgr001
+TestStackPointerAlignment_ASM
+TestStackVolatility_ASM
 Test_Checkpoint
 Test_Checkpoint: requires checkpoint name\n
 Test_ExitProcess
@@ -4914,17 +4999,14 @@ ThreadMultiWaitObjectSetGetCount
 ThreadNanoSleep
 ThreadOpenProcess
 ThreadPoolTest:         %d threads -- %d (%d) jobs processed in %fms, %fms to suspend (%f/%f)\n
-ThreadPoolTest:     Distribute NO Sleep\n
-ThreadPoolTest:     Distribute\n
 ThreadPoolTest:     NO Sleep\n
-ThreadPoolTest:     Non-distribute\n
 ThreadPoolTest:   NOT to completion\n
 ThreadPoolTest:   To completion\n
 ThreadPoolTest: Job distribution speed\n
 ThreadPoolTest: Jobs doing work, %s main thread\n
 ThreadReadProcessMemory
-ThreadSetAffinityPreference
 ThreadSetDebugNameS2
+ThreadSetPerfSetAffinity
 ThreadSetPriority
 ThreadSetProcessPriority
 ThreadShellExecute
@@ -5006,6 +5088,7 @@ Uint value %llu below minimum %llu\n
 UnRegisterGlobalObject
 Unable to convert flags 0x%x
 Unable to convert value type and flags 0x%x
+Unable to create a pipe, %d\n
 Unable to create event, error %d\n
 Unable to create semaphore, error %d\n
 Unable to create thread in %s\n
@@ -5014,6 +5097,7 @@ Unable to determine ELF default base address\n
 Unable to determine Mach-O default base address\n
 Unable to determine buffer encoding.
 Unable to exec '%s'\n
+Unable to find CPU arch %u slice in Mach-O fat binary\n
 Unable to read .gnu_debuglink\n
 Unable to read ELF note\n
 Unable to read ELF program headers\n
@@ -5022,13 +5106,14 @@ Unable to read ELF section headers\n
 Unable to read ELF32 header\n
 Unable to read ELF64 header\n
 Unable to read Mach-O load commands\n
-Unable to read fat arch header\n
+Unable to read fat arch headers\n
 Unable to read fat header\n
 Unable to read format UUID
 Unable to read header
 Unable to read module header\n
 Unable to read module magic\n
 Unable to read module section at file offset 0x%x\n
+Unable to reload DWARF module for '%s'\n
 Unable to run '%s', error %u
 Unable to seek to .gnu_debuglink\n
 Unable to seek to ELF note\n
@@ -5037,17 +5122,16 @@ Unable to seek to ELF section header strings\n
 Unable to seek to ELF shoff\n
 Unable to seek to Mach-O load commands\n
 Unable to seek to Macho-O slice base\n
-Unable to seek to module section at file offset 0x%x\n
 Unable to traverse directory '%s' - check permissions
 Unable to write file '%s'\n
 Unaccounted
 Unexpected EOF while parsing number
-Unexpected Mach-O UUID length\n
 Unexpected augmentation string byte 0x%x (shouldn't have augmentation data)\n
 Unexpected augmentation string byte 0x%x\n
 Unexpected character 0x%02x
 Unexpected character 0x%02x ('%c')
 Unexpected data at the end of .gnu_debuglink\n
+Unexpected duplicate table entry name '%s'\n
 Unexpected end of file
 Unexpected high PC attr in addition to ranges\n
 Unexpected high PC attr without a low PC attr\n
@@ -5131,7 +5215,8 @@ VDebug -
 VECTOR2
 VECTOR3
 VECTOR4
-VEngineCvar007
+VERSION=1\n
+VERSIONCONTROL=p4\n
 VFileSystem017
 VGAME
 VMaterialSystem2_001
@@ -5207,9 +5292,10 @@ VTT for std::iostream
 VTT for std::istream
 VTT for std::ostream
 VTT structure for 
-VWMD_tier0_MiniDumpWriteDump(CVDebugProcess*, char const*, bool, _VWMD_MINIDUMP_TYPE, _VWMD_MINIDUMP_EXCEPTION_INFORMATION*, _VWMD_MINIDUMP_USER_STREAM_INFORMATION*, _VWMD_MINIDUMP_CALLBACK_INFORMATION*)
-VWMD_tier0_MiniDumpWriteDump(unsigned int, char const*, bool, _VWMD_MINIDUMP_TYPE, _VWMD_MINIDUMP_EXCEPTION_INFORMATION*, _VWMD_MINIDUMP_USER_STREAM_INFORMATION*, _VWMD_MINIDUMP_CALLBACK_INFORMATION*)
-VWMD_tier0_MiniDumpWriteDump(void*, unsigned int, int, _VWMD_MINIDUMP_TYPE, _VWMD_MINIDUMP_EXCEPTION_INFORMATION*, _VWMD_MINIDUMP_USER_STREAM_INFORMATION*, _VWMD_MINIDUMP_CALLBACK_INFORMATION*)
+VWMD_tier0_MiniDumpWriteDump(CVDebugProcess*, char const*, bool, VWMD_MINIDUMP_TYPE, _VWMD_MINIDUMP_EXCEPTION_INFORMATION*, _VWMD_MINIDUMP_USER_STREAM_INFORMATION*, _VWMD_MINIDUMP_CALLBACK_INFORMATION*)
+VWMD_tier0_MiniDumpWriteDump(unsigned int, char const*, bool, VWMD_MINIDUMP_TYPE, _VWMD_MINIDUMP_EXCEPTION_INFORMATION*, _VWMD_MINIDUMP_USER_STREAM_INFORMATION*, _VWMD_MINIDUMP_CALLBACK_INFORMATION*)
+VWMD_tier0_MiniDumpWriteDump(void*, unsigned int, int, VWMD_MINIDUMP_TYPE, _VWMD_MINIDUMP_EXCEPTION_INFORMATION*, _VWMD_MINIDUMP_USER_STREAM_INFORMATION*, _VWMD_MINIDUMP_CALLBACK_INFORMATION*)
+VWebm001
 V\rD8
 V_AbbreviatePathInPlace
 V_AddBackSlashesToSpecialChars
@@ -5219,8 +5305,10 @@ V_AreSlashesCorrect
 V_BBCodeToHTML
 V_BasicHtmlEntityEncode
 V_BoyerMooreSearch
+V_CommonPrefixToUnderscore
 V_CompareNameWithWildcards
 V_CopyMemory3D
+V_CountTextLines
 V_DecodeBackslashSequencesInString
 V_DoubleToString_Unsafe
 V_ExtractDomainFromURL
@@ -5298,10 +5386,10 @@ V_PrettifyFloat
 V_PrettifyMem
 V_PrettifyNum
 V_RandomString(int)
+V_ReadLine
 V_RemoveDotSlashes
 V_RemoveFormatSpecifications
 V_SanitizeTextForCommandLine(char const*, CBufferString*, bool)
-V_SanitizeTextForCommandLine(char const*, char*, int)
 V_SetErrno
 V_SplitNumbers(char const*, char, CUtlVector<double, int, CUtlMemory<double, int>>&)
 V_SplitNumbers(char const*, char, CUtlVector<float, int, CUtlMemory<float, int>>&)
@@ -5310,14 +5398,7 @@ V_SplitNumbers(char const*, char, CUtlVector<long long, int, CUtlMemory<long lon
 V_SplitNumbers(char const*, char, CUtlVector<unsigned int, int, CUtlMemory<unsigned int, int>>&)
 V_SplitNumbers(char const*, char, CUtlVector<unsigned long long, int, CUtlMemory<unsigned long long, int>>&)
 V_SplitString(char const*, char const*, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int>>&, bool)
-V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int>>&)
-V_SplitString2(char const*, char const**, int, CUtlVector<char*, int, CUtlMemory<char*, int>>&)
-V_SplitString2InPlace(char*, char const**, int, CUtlVector<char const*, int, CUtlMemory<char const*, int>>&)
 V_SplitStringInPlace(char*, char const*, CUtlVector<char const*, int, CUtlMemory<char const*, int>>&)
-V_SplitStringOnSeparators(char const*, char const*, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int>>&, bool)
-V_SplitStringOnSeparators(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int>>&)
-V_SplitWString
-V_SplitWString2
 V_StrTrim
 V_StringParseError
 V_StringToBool
@@ -5610,6 +5691,7 @@ V_towlower
 V_towlower32
 V_towupper
 V_towupper32
+V_ungetc
 V_vfprintf
 V_vscprintf
 V_vsnprintf
@@ -5646,6 +5728,7 @@ Vtube
 W/q#IX
 W4vC
 WARNING: %s Denied a request to load '%s'\n
+WARNING: %u CFI problems encountered\n
 WARNING: CDirWatcher not implemented\n
 WARNING: Command buffer full... ignoring!\n%s\n
 WARNING: Command too long... ignoring!\n%s\n
@@ -5656,6 +5739,7 @@ WARNING: Suffix '%s' is a current-drive-root path (has a leading slash), cannot 
 WARNING: Suffix '%s' is a drive-relative path, cannot be prefixed with '%s'\n
 WARNING: Suffix '%s' is an absolute path, cannot be prefixed with '%s'\n
 WARNING: The maximum dictionary size %u is too large compared to the source size %u! size(source)/size(dictionary) = %f, but it should be >= 10! This may lead to a subpar dictionary! We recommend training on sources at least 10x, and preferably 100x the size of the dictionary! \n
+WARNING: Unable to build frame unwind table for FDE at 0x%x\n
 WARNING: Unable to copy '%s' into symbol cache at '%s', error %u\n
 WARNING: Unable to initialize verifier allocator\n
 WARNING: Unable to rename temporary symbol cache file '%s' to final '%s'\n
@@ -5679,6 +5763,7 @@ WatchDog! Server took too long to process (probably infinite loop)
 Waypoint_Distance
 Waypoint_Heading
 Wednesday
+Windows
 Windows 10
 Windows 11
 Windows 2000
@@ -5702,6 +5787,7 @@ Windows Vista
 Windows XP
 Working set: %s\n
 WorldRendererMgr001
+Worldsize_Init
 Wrote
 X360
 X360GUEST
@@ -5714,7 +5800,7 @@ XXXXXX: found leading plus sign while parsing string '%s' as float64, ignoring i
 Xi#/H
 XsBI
 Y5us
-Y@-2GB
+Y@CUtlMemoryPoolBase: Cannot specify 0 elements to grow each time!\n
 YBJ\t
 Y\trH5
 YieldWait
@@ -5919,11 +6005,11 @@ Zjz\v
 \nOS malloc info:\n
 \nOS memory stats:\n
 \n\nCMiniDumpComment encountered an error while generating the comment
+\n\v\fresource
 \r%4.2f %% \r
 \r%u%%       
 \rmj>zjZ
 \t6RtcZO"
-\t\n\vresource
 \t\t\t\n\n\n\n\v\v\v\f\f\f\r\r\r\r
 \t`M1k
 \u must be followed by exactly 4 hex digits
@@ -5932,12 +6018,10 @@ Zjz\v
 ]xEc
 ^oEZ_
 ^p8G
+_%d_%02d%02d_%02d%02d%02d_%d
 _-report-_
 _33s?
 _Accum
-_AssertValidReadPtr
-_AssertValidReadWritePtr
-_AssertValidWritePtr
 _CCallStackStatsGatherer_GetSharedGlobalInstance
 _CCallStackStatsGatherer_Internal_DumpStatsToFile
 _CCallStackStatsGatherer_ReleaseSharedGlobalInstance
@@ -6175,6 +6259,7 @@ always [madvise] never\n
 always madvise [never]\n
 anchor_angles
 anchor_position
+android*
 anim_name
 anim_name_a
 anim_name_b
@@ -6233,6 +6318,7 @@ argument not found
 array
 asctime_r
 asin
+assert
 assigned threads
 atan
 atan2
@@ -6387,6 +6473,7 @@ char8
 char8_t
 chdir
 cheat
+check_nofilefd
 chest
 cl_language
 client
@@ -6431,6 +6518,8 @@ corrupted entry
 cosh
 covariant return thunk to 
 covariant virtual thunk to 
+cpsr
+crash
 create_particle
 curl --connect-timeout 5 --no-progress-meter --max-time %u -s -o "%s" %s
 curlextents
@@ -6479,14 +6568,15 @@ devonly
 dgettext
 dictBufferCapacity must be at least %u\n
 diff buff needs increase
+diff buffer overrun
 differences
 differences 
 dioxXu
 dirty:
 dirty_bytes
+dirty_decay_ms:30000,muzzy_decay_ms:30000
 disabling
 disconnected
-distributed...
 diuoxXfFeEgGaAcsp?
 dixXu
 dl_iterate_phdr
@@ -6525,6 +6615,7 @@ enabled
 encoding
 end_frame
 end_time
+engine_sleep_busy_waits
 english
 entity_name
 epoch
@@ -6561,6 +6652,9 @@ extents:
 extents_dirty
 extents_muzzy
 extents_retained
+extractbuildid -multi %u -getsrcmapopt - "%s"
+extractbuildid -multi %u -setdbg "%s" "%s"
+extractbuildid -multi %u -setsrcmap "%s" "%s"
 fP~V
 faceMergeAngle
 false
@@ -6623,6 +6717,7 @@ g_VProfNodeSpikeReporting
 g_VProfSignalSpike
 g_bPlatCPUTicksAreReliable
 g_bUpdateStringTokenDatabase
+g_flConfigMaxCoord
 g_pFiberJobPool
 g_pMemAlloc
 g_pPerfTraceDepot
@@ -6643,6 +6738,8 @@ getloadavg
 getpid
 getpriority
 getpwuid
+getrlimit failed, %d\n
+getrlimit reports a soft max of %s FDs, hard max of %s\n
 getrlimit64
 getrusage
 getsockname
@@ -6713,13 +6810,11 @@ header crc mismatch
 headtype
 health
 health_override
-height
 help
 help text
 help:  no cvar or command named %s\n
 hibernate.cpp
 hidden alias for 
-higher
 hljztL
 hm~iD
 holdevent
@@ -6787,6 +6882,7 @@ invalid type specifier
 invalid window size
 invert_orientation
 ioctl
+ios*
 ios_base::_M_grow_words allocation failed
 ios_base::_M_grow_words is not valid
 iostream error
@@ -6848,6 +6944,7 @@ libtier0.so
 libuuid.so.1
 linked
 linux
+linux*
 linux/
 list %u best segments \n
 live process inspection, process 
@@ -6857,6 +6954,7 @@ locale::facet::_S_create_c_locale name not valid
 locale::facet::_S_lc_ctype_c_locale duplocale error
 locale::facet::_S_lc_ctype_c_locale newlocale error
 localhost
+localize
 localtime_r
 lockRotationAlpha
 lock_facing
@@ -7557,7 +7655,6 @@ nfill
 nflush
 nhugifies
 nmuzzy
-no affinity...
 no guard
 no results\n
 no symbols
@@ -7571,7 +7668,6 @@ non-virtual thunk to std::basic_fstream<wchar_t, std::char_traits<wchar_t>>::~ba
 non-virtual thunk to std::basic_iostream<char, std::char_traits<char>>::~basic_iostream()
 non-virtual thunk to std::basic_iostream<wchar_t, std::char_traits<wchar_t>>::~basic_iostream()
 none
-nopref-all
 norecord
 not enough space to write RepOffsets \n
 not in a module
@@ -7601,6 +7697,7 @@ numsegments
 o21o
 once
 open
+open primary file
 open(%s) failed\n
 opendir
 operation
@@ -7683,6 +7780,7 @@ opt.zero
 opt.zero_realloc
 origin_max_delta
 origin_relative
+osx*
 out of order
 p4 add -t binary "%s"
 p4 edit -t binary "%s"
@@ -7826,6 +7924,7 @@ release
 remainder
 remove
 rename
+reopening cached debug file
 replicated
 resident:
 resource_name
@@ -10736,7 +10835,6 @@ tier0
 tier0_strtools.cpp
 timegm
 timestamped.log
-title
 too many length or distance symbols
 tools_stall_monitor_break_on_unknown_cause
 total:
@@ -10780,6 +10878,7 @@ transaction clone for std::underflow_error::~underflow_error()
 transform
 true
 trust_madvise
+trying split debug file
 tsc\n
 tsd_nominal_tsds_lock
 turn_rate
@@ -11162,7 +11261,6 @@ uint8
 ujQD
 uname
 uname -mrsv
-ungetc
 ungetwc
 unholsterweapon
 uninitialized __any_string
@@ -11529,7 +11627,6 @@ vtable for std::type_info
 vtable for std::underflow_error
 vtest
 vtune
-vulkan
 w!hy
 w+OQvr
 w3Xc
@@ -11548,8 +11645,6 @@ wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wc
 wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<wchar_t*>(wchar_t*, wchar_t*, std::allocator<wchar_t> const&, std::forward_iterator_tag)
 wcrtomb
 wcscoll
-wcsncat
-wcsncpy
 wcsnlen
 wcsnrtombs
 wcstoll

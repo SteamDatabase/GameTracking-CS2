@@ -1,14 +1,16 @@
   %s / %s MB (non-evictable: %s MB)\n
   %s / %s MB\n
   CB: %u buffers, %.2f MB\n
+  DEVICE POOL: %.2f MB\n
   EXTERNAL: %.2f MB\n
   FRAGMENTATION: %.2f MB\n
-  IB: %d buffers, %.2f MB\n
+  IB: %d buffers, %.2f MB
   TEX: %u textures, %.2f MB\n
   TOTAL: %.2f MB\n
-  VB: %d buffers, %.2f MB\n
+  VB: %d buffers, %.2f MB
  -shadowTargetSize forcing nPoolSizeInMb size to %d from %d, bLarge %d, avail %lld\n
  Can't specify initial state of dynamic constant buffers at creation time!\n
+ [Pool: %.1fmb of %.1fmb]
  print
 "channels" attribute not found in the header.
 "compression" attribute not found in the header.
@@ -19,6 +21,7 @@
 "screenWindowCenter" attribute not found in the header.
 "screenWindowWidth" attribute not found in the header.
 # of channels is zero.\n
+%-100s %-6s %-6s\n
 %llu
 (%s): ADD %s = %s\n
 (%s): Setting %s to %s\n
@@ -28,23 +31,9 @@
 *ZN19CTextureManagerBase31MN_AddAsyncTextureBitsHookupJobEP12CTextureBaseRKNS_24AsyncTextureHookupData_tEEUlvE_
 , channels = 
 , height = 
--autoconfig
--autoconfig_level
--deferTextureLoads
--dontEvictTextures
+--------------------------------------------\n
 -dx11
 -empty
--ignoredxsupportcfg
--maxdxlevel
--maxtextureres
--maxtextureres_2gb
--noinitfallbacktextures
--preloadtextures
--r_max_device_threads
--renderdoc
--renderdoc_capture_validation_errors
--shaderstats
--shadowTargetSize
 .bak
 0: Bilinear, 1: Trilinear, 2: Aniso 2x, 3: Aniso 4x, 4: Aniso 8x, 5: Aniso 16x
 12CDeviceFence
@@ -73,6 +62,7 @@
 18CEmptyShaderBuffer
 18CPooledIndexBuffer
 18CRenderDeviceEmpty
+19CPooledVertexBuffer
 19CTextureManagerBase
 19IReadBufferCallback
 20CRenderDeviceMgrBase
@@ -154,6 +144,7 @@ Found %d streaming textures in array, but in-flight count is %d\n
 GetGPUFrameTimeMS called without setting RENDERDEBUGFLAG_ENABLE_GPU_TIMESTAMPS.\n
 Graphics Device changed, resetting video config\n
 Green
+IB Size: %s (Count: %d)\n
 IBPool
 INPUT_LAYOUT_VARIATION_DEFAULT
 INPUT_LAYOUT_VARIATION_MAX
@@ -206,6 +197,7 @@ PERF WARNING: Texture pool size set to more than 80%% of total GPU memory.\n
 ParseEXRHeaderFromMemory() failed! Error message: %s\n
 PooledDynamicConstantBuffer
 PreloadTextureBits
+Print Vertex/Index/GPU buffers.
 RENDERDOC_GetAPI
 RENDER_BUFFER_ACCELERATION_STRUCTURE
 RENDER_BUFFER_APPEND_CONSUME_BUFFER
@@ -263,18 +255,13 @@ RenderSystem/MaxPreloadTextureResolution
 RenderSystem/MinDXLevel
 RenderSystem/MinStreamingPoolSizeMB
 RenderSystem/MinStreamingPoolSizeMBTools
-Rendering/Constant Buffers (MB)
-Rendering/Index Buffers (MB)
-Rendering/Texture Non-Evictable Size (MB)
-Rendering/Texture Pool Size (MB)
-Rendering/Texture Resident Size (MB)
-Rendering/Texture Unthrottle Streaming
-Rendering/Vertex Buffers (MB)
+RenderSystem/VertexBufferPoolSizeMB
 Rendersystem/SheetCacheTextureCols
 Rendersystem/SheetCacheTextureRows
 Saved video settings config to '%s'\n
 Screen Gamma (only in fullscreen modes)
 Setting max texture resolution to: %dx%d\n
+Size
 Streaming Validation: %s 
 TEXMAN: %s LoadStreamingData (%s)\n
 TEXMAN: %s MarkTextureBitsLoaded (%s)\n
@@ -292,6 +279,7 @@ Texture data resident:  %s (panorama_rt %s; panorama_tex %s)\n
 Texture manager out of space! Can't allocate new texture!\n
 Texture streaming validation OK (%d texture loads in flight).\n
 The minimum amount of GPU memory for streaming textures is set to %d MB.\n
+Total Size: %s (Count: %d)\n
 Total size of the texture pool in MB
 Triggers a RenderDoc capture
 Triggers a RenderDoc capture of a specific Window
@@ -307,6 +295,8 @@ Unknown compression type.
 Unsupported PSD color mode!\n
 Upper limit on texture pool size.
 Usage: %s <window_name>
+VB Size: %s (Count: %d)\n
+VBPool
 Version
 Video Card %s (%04x : %04x)\n
 Video config version number changed ( '%s' is version %i, current version is %i ). Resetting video config.\n
@@ -343,11 +333,6 @@ data_with or data_height too large. data_width:
 displayWindow
 dxsupport
 dxsupport.cfg
-fallback2d.vtex
-fallback2darray.vtex
-fallback3d.vtex
-fallbackcube.vtex
-fallbackcubearray.vtex
 fclose
 fopen
 free
@@ -390,6 +375,7 @@ r_flush_on_pooled_ib_resize
 r_fullscreen_gamma
 r_gpu_mem_stats
 r_max_texture_pool_size
+r_print_buffers
 r_renderdoc_capture_frame
 r_renderdoc_capture_window_vulkan
 r_renderdoc_open_captures
@@ -406,6 +392,7 @@ r_validate_texture_streaming
 r_wait_on_present
 read
 renderdevicebase.cpp
+renderdoc
 renderstatehelper.h
 rendersystem (%s) tracked resources:\n
 rendersystemempty
@@ -427,6 +414,7 @@ setting.SuppressPixelShaderCentroidHackFixup
 setting.Unsupported
 setting.knowndevice
 setting.maxdxlevel
+setting.monitor_index
 setting.recommendedheight
 setting.recommendedwidth
 setting.resettodefaults
@@ -434,15 +422,15 @@ setting.shaderquality
 sheetcachetexture_.vtex
 strcmp
 texturebase.cpp
-texturebase.cpp(2414):Error loading texture: %s\n
-texturebase.cpp(3431):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3463):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3483):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(2423):Error loading texture: %s\n
+texturebase.cpp(3449):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
 texturebase.cpp(3501):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3520):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3541):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3552):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3563):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3519):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3538):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3559):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3570):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3581):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
 tiles
 transparency
 vector::_M_range_check: __n (which is %zu) >= this->size() (which is %zu)

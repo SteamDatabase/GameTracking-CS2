@@ -91,12 +91,13 @@ var PlayerStatsCard;
             if (elCard) {
                 const newPlayerData = oSkillgroupData[xuid];
                 if (newPlayerData && newPlayerData.hasOwnProperty('new_rank') &&
-                    newPlayerData.hasOwnProperty('rank_type') && (newPlayerData.rank_type === 'Premier')) {
+                    newPlayerData.hasOwnProperty('rank_type')) {
+                    const wins = newPlayerData.hasOwnProperty('num_wins') ? newPlayerData.num_wins : 0;
                     const options = {
                         root_panel: elCard.FindChildTraverse('jsRatingEmblem'),
                         do_fx: true,
                         full_details: false,
-                        leaderboard_details: { score: newPlayerData.new_rank },
+                        leaderboard_details: { score: newPlayerData.new_rank, matchesWon: wins },
                         rating_type: newPlayerData.rank_type,
                         local_player: xuid === MyPersonaAPI.GetXuid()
                     };
@@ -124,7 +125,7 @@ var PlayerStatsCard;
             leaderboard_details: { score: score, matchesWon: wins },
             local_player: xuid === MyPersonaAPI.GetXuid()
         };
-        const bShowSkillGroup = (rating_type === 'Premier') && RatingEmblem.SetXuid(options);
+        const bShowSkillGroup = RatingEmblem.SetXuid(options);
         if (bShowSkillGroup) {
             elCard.RemoveClass('show-skillgroup');
             $.Schedule(0, () => elCard && elCard.IsValid() ? elCard.AddClass('show-skillgroup') : '');

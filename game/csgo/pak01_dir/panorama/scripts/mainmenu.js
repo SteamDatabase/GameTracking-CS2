@@ -420,6 +420,7 @@ var MainMenu;
                         $.GetContextPanel().FindChildInLayoutFile(tab).SetAttributeString('set-active-section', setActiveSection);
                     }
                     soundName = 'UIPanorama.tab_mainmenu_shop';
+                    $.DispatchEvent('UpdateXpShop');
                 }
                 else if (XmlName === 'loadout_grid') {
                     soundName = 'UIPanorama.tab_mainmenu_loadout';
@@ -557,19 +558,13 @@ var MainMenu;
     }
     function _ShowFloatingPanels() {
         $.FindChildInContext('#JsLeftColumn').SetHasClass('hidden', false);
+        $.FindChildInContext('#JsRightColumn').SetHasClass('hidden', false);
         $.FindChildInContext('#MainMenuVanityInfo').SetHasClass('hidden', false);
-        const elVanityButton = $.FindChildInContext('#VanityControls');
-        if (elVanityButton) {
-            elVanityButton.visible = true;
-        }
     }
     function _HideFloatingPanels() {
         $.FindChildInContext('#JsLeftColumn').SetHasClass('hidden', true);
+        $.FindChildInContext('#JsRightColumn').SetHasClass('hidden', true);
         $.FindChildInContext('#MainMenuVanityInfo').SetHasClass('hidden', true);
-        const elVanityButton = $.FindChildInContext('#VanityControls');
-        if (elVanityButton) {
-            elVanityButton.visible = false;
-        }
     }
     function _OnSteamIsPlaying() {
         const elNewsContainer = $.FindChildInContext('#JsNewsContainer');
@@ -844,7 +839,8 @@ var MainMenu;
     function _OpenPlayMenu() {
         if (MatchStatsAPI.GetUiExperienceType())
             return;
-        _InsureSessionCreated();
+        if (_m_bPreLoadedTabs)
+            _InsureSessionCreated();
         NavigateToTab('JsPlay', 'mainmenu_play');
     }
     function _OpenWatchMenu() {
@@ -853,8 +849,8 @@ var MainMenu;
     function _OpenInventory() {
         NavigateToTab('JsInventory', 'mainmenu_inventory');
     }
-    function _OpenFullscreenStore(openToSection) {
-        NavigateToTab('JsMainMenuStore', 'mainmenu_store_fullscreen', 'id-store-nav-coupon');
+    function _OpenFullscreenStore(openToSection = '') {
+        NavigateToTab('JsMainMenuStore', 'mainmenu_store_fullscreen', openToSection !== '' ? openToSection : 'id-store-nav-coupon');
     }
     function _OpenStatsMenu() {
         NavigateToTab('JsPlayerStats', 'mainmenu_playerstats');
@@ -937,6 +933,9 @@ var MainMenu;
         let inspectviewfunc = contextmenuparam ? contextmenuparam : 'primary';
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', `itemid=${id}&inspectonly=true&viewfunc=${inspectviewfunc}`);
     }
+    function _OnShowCustomLayoutPopupParametersAsEvent(dimstyle, xmlname, panelparams) {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters(dimstyle, xmlname, panelparams);
+    }
     function _OnShowXrayCasePopup(toolid, caseId, bShowPopupWarning = false) {
         const showpopup = bShowPopupWarning ? 'yes' : 'no';
         UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + caseId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + toolid + ',' + caseId +
@@ -955,22 +954,26 @@ var MainMenu;
         const caseId = ParamsList[0];
         const storeId = ParamsList[1];
         const showRentalItems = (!ParamsList[2] && ParamsList[2] !== '') ? ParamsList[2] : 'false';
+        const lootlistNameOverride = ParamsList[3] && ParamsList[3] !== '' ? ParamsList[3] : 'false';
         const showMarketLinkDefault = _m_bPerfectWorld ? 'false' : 'true';
         JsInspectCallback = UiToolkitAPI.RegisterJSCallback(() => {
             let idtoUse = storeId ? storeId : caseId;
             let elPanel = $.GetContextPanel().FindChildInLayoutFile('PopupManager').FindChildInLayoutFile('popup-inspect-' + idtoUse);
-            elPanel.visible = true;
-            elPanel.SetHasClass('hide-for-lootlist', false);
+            if (elPanel && elPanel.IsValid()) {
+                elPanel.visible = true;
+                elPanel.SetHasClass('hide-for-lootlist', false);
+            }
         });
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'allowsave=false' +
-            '&' + 'showequip=false' +
+            '&' + 'showallitemactions=false' +
             '&' + 'showitemcert=false' +
             '&' + 'showmarketlink=' + showMarketLinkDefault +
             '&' + 'callback=' + JsInspectCallback +
             '&' + 'caseidforlootlist=' + caseId +
-            '&' + 'showRentalItems=' + showRentalItems);
+            '&' + 'showRentalItems=' + showRentalItems +
+            '&' + 'lootlistNameOverride=' + lootlistNameOverride);
     }
     function _WeaponPreviewRequest(id, bWorkshopItemPreview = false) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
@@ -978,7 +981,7 @@ var MainMenu;
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'allowsave=false' +
-            '&' + 'showequip=false' +
+            '&' + 'showallitemactions=false' +
             '&' + 'showitemcert=true' +
             '&' + 'workshopPreview=' + workshopPreview);
     }
@@ -1413,6 +1416,7 @@ var MainMenu;
         $.RegisterForUnhandledEvent('PanoramaComponent_GC_Hello', _UpdateUnlockCompAlert);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', _InventoryUpdated);
         $.RegisterForUnhandledEvent('InventoryItemPreview', _OnInventoryInspect);
+        $.RegisterForUnhandledEvent('ShowCustomLayoutPopupParametersAsEvent', _OnShowCustomLayoutPopupParametersAsEvent);
         $.RegisterForUnhandledEvent('LootlistItemPreview', _OnLootlistItemPreview);
         $.RegisterForUnhandledEvent('ShowXrayCasePopup', _OnShowXrayCasePopup);
         $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_WeaponPreviewRequest', _WeaponPreviewRequest);

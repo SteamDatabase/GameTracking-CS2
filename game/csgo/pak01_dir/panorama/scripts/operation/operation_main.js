@@ -761,7 +761,7 @@ var OperationMain = ( function()
 						'file://{resources}/layout/popups/popup_inventory_inspect.xml',
 						'itemid=' + selectedId +
 						'&' + 'inspectonly=true' +
-						'&' + 'showequip=false' +
+						'&' + 'showallitemactions=false' +
 						'&' + 'allowsave=false' +
 						'&' + 'bluroperationpanel=true' +
 						'&' + 'showitemcert=false',

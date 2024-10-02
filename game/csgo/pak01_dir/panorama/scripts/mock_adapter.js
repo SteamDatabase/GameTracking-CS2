@@ -8,6 +8,7 @@ var MockAdapter = (function () {
     const k_GetPlayerName = "k_GetPlayerName";
     const k_IsFakePlayer = "k_IsFakePlayer";
     const k_XpDataJSO = "k_XpDataJSO";
+    const k_XpShopDataJSO = "k_XpShopDataJSO";
     const k_GetGameModeInternalName = "k_GetGameModeInternalName";
     const k_GetGameModeName = "k_GetGameModeName";
     const k_SkillgroupDataJSO = "k_SkillgroupDataJSO";
@@ -73,6 +74,7 @@ var MockAdapter = (function () {
     const k_GetPipRankCount = "k_GetPipRankCount";
     const k_GetPlayerPremierRankStatsObject = "k_GetPlayerPremierRankStatsObject";
     const k_bXpDataReady = "k_bXpDataReady";
+    const k_bXpShopDataReady = "k_bXpShopDataReady";
     var _m_mockData = _GetMockData();
     function _msg(msg) {
     }
@@ -404,6 +406,7 @@ var MockAdapter = (function () {
         GetPlayerNameWithNoHTMLEscapes: function GetPlayerNameWithNoHTMLEscapes(xuid) { return _APIAccessor(GameStateAPI.GetPlayerNameWithNoHTMLEscapes(xuid), k_GetPlayerName, xuid); },
         IsFakePlayer: function _IsFakePlayer(xuid) { return _APIAccessor(GameStateAPI.IsFakePlayer(xuid), k_IsFakePlayer); },
         XPDataJSO: function _XPDataJSO(panel) { return _APIAccessor(panel.XpDataJSO, k_XpDataJSO); },
+        XPShopDataJSO: function _XPShopDataJSO(panel) { return _APIAccessor(panel.XpShopDataJSO, k_XpShopDataJSO); },
         GetGameModeInternalName: function _GetGameModeInternalName(bUseSkirmishName) { return _APIAccessor(GameStateAPI.GetGameModeInternalName(bUseSkirmishName), k_GetGameModeInternalName); },
         GetGameModeName: function _GetGameModeName(bUseSkirmishName) { return _APIAccessor(GameStateAPI.GetGameModeName(bUseSkirmishName), k_GetGameModeName); },
         SkillgroupDataJSO: function _SkillgroupDataJSO(panel) { return _APIAccessor(panel.SkillgroupDataJSO, k_SkillgroupDataJSO); },
@@ -474,6 +477,7 @@ var MockAdapter = (function () {
         GetPlayerCompetitiveRankType: function _GetPlayerCompetitiveRankType(xuid) { return _APIAccessor(GameStateAPI.GetPlayerCompetitiveRankType(xuid), k_GetPlayerCompetitiveRankType, xuid); },
         bSkillgroupDataReady: function _bSkillgroupDataReady(panel) { return _APIAccessor(panel.bSkillgroupDataReady, k_bSkillgroupDataReady); },
         bXpDataReady: function _bXpDataReady(panel) { return _APIAccessor(panel.bXpDataReady, k_bXpDataReady); },
+        bXpShopDataReady: function _bXpShopDataReady(panel) { return _APIAccessor(panel.bXpShopDataReady, k_bXpShopDataReady); },
         GetPipRankCount: function _GetPipRankCount(type) { return _APIAccessor(MyPersonaAPI.GetPipRankCount(type), k_GetPipRankCount); },
         GetPlayerPremierRankStatsObject: function (xuid) { return _APIAccessor(GameStateAPI.GetPlayerPremierRankStatsObject(xuid), k_GetPlayerPremierRankStatsObject, xuid); },
         SetMockData: _SetMockData,
