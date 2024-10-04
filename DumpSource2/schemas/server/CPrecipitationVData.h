@@ -7,4 +7,4 @@ class CPrecipitationVData : public CEntitySubclassVDataBase
 	int32 m_nRTEnvCP;
 	int32 m_nRTEnvCPComponent;
 	CUtlString m_szModifier;
-}
+};

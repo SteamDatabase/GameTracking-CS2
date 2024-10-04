@@ -1,0 +1,6 @@
+enum ParticleLightingQuality_t : uint32_t
+{
+	PARTICLE_LIGHTING_PER_PARTICLE = 0,
+	PARTICLE_LIGHTING_PER_VERTEX = 1,
+	PARTICLE_LIGHTING_PER_PIXEL = -1,
+};

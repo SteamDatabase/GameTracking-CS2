@@ -37,4 +37,4 @@ class CBasePropDoor : public CDynamicProp
 	CEntityIOOutput m_OnOpen;
 	CEntityIOOutput m_OnLockedUse;
 	CEntityIOOutput m_OnAjarOpen;
-}
+};

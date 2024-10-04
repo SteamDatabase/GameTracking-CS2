@@ -14,4 +14,4 @@ class CTriggerHurt : public CBaseTrigger
 	CEntityIOOutput m_OnHurt;
 	CEntityIOOutput m_OnHurtPlayer;
 	CUtlVector< CHandle< CBaseEntity > > m_hurtEntities;
-}
+};

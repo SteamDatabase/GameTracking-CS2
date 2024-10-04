@@ -18,4 +18,4 @@ class FootLockPoseOpFixedSettings
 	bool m_bEnableStretching;
 	float32 m_flMaxStretchAmount;
 	float32 m_flStretchExtensionScale;
-}
+};

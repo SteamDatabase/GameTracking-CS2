@@ -1,0 +1,31 @@
+class C_OP_RenderSprites : public CBaseRendererSource2
+{
+	CParticleCollectionRendererFloatInput m_nSequenceOverride;
+	ParticleOrientationChoiceList_t m_nOrientationType;
+	int32 m_nOrientationControlPoint;
+	bool m_bUseYawWithNormalAligned;
+	CParticleCollectionRendererFloatInput m_flMinSize;
+	CParticleCollectionRendererFloatInput m_flMaxSize;
+	CParticleCollectionRendererFloatInput m_flAlphaAdjustWithSizeAdjust;
+	CParticleCollectionRendererFloatInput m_flStartFadeSize;
+	CParticleCollectionRendererFloatInput m_flEndFadeSize;
+	float32 m_flStartFadeDot;
+	float32 m_flEndFadeDot;
+	bool m_bDistanceAlpha;
+	bool m_bSoftEdges;
+	float32 m_flEdgeSoftnessStart;
+	float32 m_flEdgeSoftnessEnd;
+	bool m_bOutline;
+	Color m_OutlineColor;
+	int32 m_nOutlineAlpha;
+	float32 m_flOutlineStart0;
+	float32 m_flOutlineStart1;
+	float32 m_flOutlineEnd0;
+	float32 m_flOutlineEnd1;
+	ParticleLightingQuality_t m_nLightingMode;
+	CParticleCollectionRendererFloatInput m_flLightingTessellation;
+	CParticleCollectionRendererFloatInput m_flLightingDirectionality;
+	bool m_bParticleShadows;
+	float32 m_flShadowDensity;
+	CReplicationParameters m_replicationParameters;
+};

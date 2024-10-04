@@ -8,4 +8,4 @@ class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 	int32 m_nPersonaDataPublicCommendsFriendly;
 	int32 m_nPersonaDataXpTrailLevel;
 	C_UtlVectorEmbeddedNetworkVar< ServerAuthoritativeWeaponSlot_t > m_vecServerAuthoritativeWeaponSlots;
-}
+};

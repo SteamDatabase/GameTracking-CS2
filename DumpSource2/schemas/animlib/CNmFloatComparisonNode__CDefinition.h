@@ -5,4 +5,4 @@ class CNmFloatComparisonNode::CDefinition : public CNmBoolValueNode::CDefinition
 	CNmFloatComparisonNode::Comparison_t m_comparison;
 	float32 m_flEpsilon;
 	float32 m_flComparisonValue;
-}
+};

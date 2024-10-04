@@ -10,4 +10,4 @@ class CBaseAnimGraph : public CBaseModelEntity
 	int32 m_nForceBone;
 	PhysicsRagdollPose_t m_RagdollPose;
 	bool m_bRagdollClientSide;
-}
+};

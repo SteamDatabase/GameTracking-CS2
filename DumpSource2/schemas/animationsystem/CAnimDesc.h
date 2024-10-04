@@ -15,4 +15,4 @@ class CAnimDesc
 	CUtlVector< Vector > m_vecBoneWorldMin;
 	CUtlVector< Vector > m_vecBoneWorldMax;
 	CAnimSequenceParams m_sequenceParams;
-}
+};

@@ -12,4 +12,4 @@ class C_EnvSky : public C_BaseModelEntity
 	float32 m_flFogMaxStart;
 	float32 m_flFogMaxEnd;
 	bool m_bEnabled;
-}
+};

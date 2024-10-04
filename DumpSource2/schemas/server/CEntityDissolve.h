@@ -10,4 +10,4 @@ class CEntityDissolve : public CBaseModelEntity
 	EntityDisolveType_t m_nDissolveType;
 	Vector m_vDissolverOrigin;
 	uint32 m_nMagnitude;
-}
+};

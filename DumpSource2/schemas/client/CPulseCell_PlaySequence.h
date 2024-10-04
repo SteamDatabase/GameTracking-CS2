@@ -4,4 +4,4 @@ class CPulseCell_PlaySequence : public CPulseCell_BaseYieldingInflow
 	PulseNodeDynamicOutflows_t m_PulseAnimEvents;
 	CPulse_ResumePoint m_OnFinished;
 	CPulse_ResumePoint m_OnCanceled;
-}
+};

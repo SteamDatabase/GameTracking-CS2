@@ -1,3 +1,3 @@
 class CInfoLadderDismount : public CBaseEntity
 {
-}
+};

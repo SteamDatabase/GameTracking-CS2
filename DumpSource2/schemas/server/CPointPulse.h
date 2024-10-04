@@ -1,3 +1,3 @@
 class CPointPulse : public CBaseEntity
 {
-}
+};

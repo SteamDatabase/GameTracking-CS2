@@ -10,4 +10,4 @@ class CChoiceUpdateNode : public CAnimUpdateNodeBase
 	bool m_bCrossFade;
 	bool m_bResetChosen;
 	bool m_bDontResetSameSelection;
-}
+};

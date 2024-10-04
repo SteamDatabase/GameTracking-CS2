@@ -6,4 +6,4 @@ class CTurnHelperUpdateNode : public CUnaryUpdateNode
 	bool m_bMatchChildDuration;
 	float32 m_manualTurnOffset;
 	bool m_bUseManualTurnOffset;
-}
+};

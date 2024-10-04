@@ -9,4 +9,4 @@ class CEconEntity : public CBaseFlex
 	int32 m_nFallbackStatTrak;
 	CHandle< CBaseEntity > m_hOldProvidee;
 	int32 m_iOldOwnerClass;
-}
+};

@@ -1,3 +1,3 @@
 class CPrecipitationBlocker : public CBaseModelEntity
 {
-}
+};

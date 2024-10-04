@@ -48,4 +48,4 @@ class CLogicNPCCounter : public CBaseEntity
 	int32 m_nMinFactor_3;
 	int32 m_nMaxFactor_3;
 	float32 m_flDefaultDist_3;
-}
+};

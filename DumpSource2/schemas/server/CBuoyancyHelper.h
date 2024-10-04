@@ -6,4 +6,4 @@ class CBuoyancyHelper
 	CUtlVector< float32 > m_vecWheelFrictionScales;
 	CUtlVector< float32 > m_vecFractionOfWheelSubmergedForWheelDrag;
 	CUtlVector< float32 > m_vecWheelDrag;
-}
+};

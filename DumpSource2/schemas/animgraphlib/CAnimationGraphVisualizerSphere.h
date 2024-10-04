@@ -3,4 +3,4 @@ class CAnimationGraphVisualizerSphere : public CAnimationGraphVisualizerPrimitiv
 	VectorAligned m_vWsPosition;
 	float32 m_flRadius;
 	Color m_Color;
-}
+};

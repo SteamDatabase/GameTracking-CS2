@@ -13,4 +13,4 @@ class CEconItemView : public IEconItemInterface
 	CAttributeList m_NetworkedDynamicAttributes;
 	char[161] m_szCustomName;
 	char[161] m_szCustomNameOverride;
-}
+};

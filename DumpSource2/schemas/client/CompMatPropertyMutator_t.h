@@ -28,4 +28,4 @@ class CompMatPropertyMutator_t
 	Color m_colDrawText_Color;
 	CUtlString m_strDrawText_Font;
 	CUtlVector< CompMatMutatorCondition_t > m_vecConditions;
-}
+};

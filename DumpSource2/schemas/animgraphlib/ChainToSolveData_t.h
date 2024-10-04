@@ -6,4 +6,4 @@ class ChainToSolveData_t
 	SolveIKChainAnimNodeDebugSetting m_DebugSetting;
 	float32 m_flDebugNormalizedValue;
 	VectorAligned m_vDebugOffset;
-}
+};

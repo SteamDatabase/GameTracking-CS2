@@ -5,4 +5,4 @@ class CEnvSpark : public CPointEntity
 	int32 m_nTrailLength;
 	int32 m_nType;
 	CEntityIOOutput m_OnSpark;
-}
+};

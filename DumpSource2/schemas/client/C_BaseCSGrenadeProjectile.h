@@ -16,4 +16,4 @@ class C_BaseCSGrenadeProjectile : public C_BaseGrenade
 	CUtlVector< Vector > m_arrTrajectoryTrailPoints;
 	CUtlVector< float32 > m_arrTrajectoryTrailPointCreationTimes;
 	float32 m_flTrajectoryTrailEffectCreationTime;
-}
+};

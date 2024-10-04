@@ -65,4 +65,4 @@ class C_CSPlayerPawnBase : public C_BasePlayerPawn
 	Vector m_vecLastAliveLocalVelocity;
 	bool m_bGuardianShouldSprayCustomXMark;
 	CHandle< CCSPlayerController > m_hOriginalController;
-}
+};

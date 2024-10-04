@@ -1,3 +1,3 @@
 class CPointServerCommand : public CPointEntity
 {
-}
+};

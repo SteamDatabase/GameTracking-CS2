@@ -5,4 +5,4 @@ class CAnimBoneDifference
 	Vector m_posError;
 	bool m_bHasRotation;
 	bool m_bHasMovement;
-}
+};

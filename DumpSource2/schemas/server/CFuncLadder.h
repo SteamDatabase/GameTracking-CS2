@@ -12,4 +12,4 @@ class CFuncLadder : public CBaseModelEntity
 	CUtlSymbolLarge m_surfacePropName;
 	CEntityIOOutput m_OnPlayerGotOnLadder;
 	CEntityIOOutput m_OnPlayerGotOffLadder;
-}
+};

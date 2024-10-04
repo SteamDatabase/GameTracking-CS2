@@ -1,3 +1,3 @@
 class IGapHost_GameEntity
 {
-}
+};

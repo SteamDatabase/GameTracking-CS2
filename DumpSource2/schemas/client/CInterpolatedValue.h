@@ -5,4 +5,4 @@ class CInterpolatedValue
 	float32 m_flStartValue;
 	float32 m_flEndValue;
 	int32 m_nInterpType;
-}
+};

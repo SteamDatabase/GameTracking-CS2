@@ -1,3 +1,3 @@
 class FakeEntityDerivedA_tAPI
 {
-}
+};

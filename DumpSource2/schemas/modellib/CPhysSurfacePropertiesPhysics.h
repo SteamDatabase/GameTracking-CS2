@@ -9,4 +9,4 @@ class CPhysSurfacePropertiesPhysics
 	float32 m_wheelDrag;
 	float32 m_heatConductivity;
 	float32 m_flashpoint;
-}
+};

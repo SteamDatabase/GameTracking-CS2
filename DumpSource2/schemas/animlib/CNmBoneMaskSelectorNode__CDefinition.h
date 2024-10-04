@@ -6,4 +6,4 @@ class CNmBoneMaskSelectorNode::CDefinition : public CNmBoneMaskValueNode::CDefin
 	CUtlVectorFixedGrowable< int16, 7 > m_maskNodeIndices;
 	CUtlVectorFixedGrowable< CGlobalSymbol, 7 > m_parameterValues;
 	float32 m_flBlendTimeSeconds;
-}
+};

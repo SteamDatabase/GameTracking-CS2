@@ -8,4 +8,4 @@ class C_RagdollProp : public CBaseAnimGraph
 	float32 m_flBlendWeightCurrent;
 	CUtlVector< int32 > m_parentPhysicsBoneIndices;
 	CUtlVector< int32 > m_worldSpaceBoneComputationOrder;
-}
+};

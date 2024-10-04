@@ -29,4 +29,4 @@ class C_EnvWindShared
 	float32 m_flWindAngleVariation;
 	float32 m_flWindSpeedVariation;
 	CHandle< C_BaseEntity > m_hEntOwner;
-}
+};

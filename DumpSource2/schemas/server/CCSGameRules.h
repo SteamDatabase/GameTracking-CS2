@@ -189,4 +189,4 @@ class CCSGameRules : public CTeamplayRules
 	int32 m_iRoundStartRoundNumber;
 	uint8 m_nRoundStartCount;
 	float64 m_flLastPerfSampleTime;
-}
+};

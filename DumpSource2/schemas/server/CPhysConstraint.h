@@ -13,4 +13,4 @@ class CPhysConstraint : public CLogicalEntity
 	float32 m_minTeleportDistance;
 	bool m_bSnapObjectPositions;
 	CEntityIOOutput m_OnBreak;
-}
+};

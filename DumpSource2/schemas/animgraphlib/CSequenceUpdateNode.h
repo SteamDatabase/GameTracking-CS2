@@ -4,4 +4,4 @@ class CSequenceUpdateNode : public CSequenceUpdateNodeBase
 	float32 m_duration;
 	CParamSpanUpdater m_paramSpans;
 	CUtlVector< TagSpan_t > m_tags;
-}
+};

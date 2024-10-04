@@ -14,4 +14,4 @@ class C_fogplayerparams_t
 	float32 m_flNewMaxDensity;
 	float32 m_flNewHDRColorScale;
 	float32 m_flNewFarZ;
-}
+};

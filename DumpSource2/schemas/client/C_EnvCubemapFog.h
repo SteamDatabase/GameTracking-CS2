@@ -18,4 +18,4 @@ class C_EnvCubemapFog : public C_BaseEntity
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_hFogCubemapTexture;
 	bool m_bHasHeightFogEnd;
 	bool m_bFirstTime;
-}
+};

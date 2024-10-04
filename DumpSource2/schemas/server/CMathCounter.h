@@ -11,4 +11,4 @@ class CMathCounter : public CLogicalEntity
 	CEntityIOOutput m_OnHitMax;
 	CEntityIOOutput m_OnChangedFromMin;
 	CEntityIOOutput m_OnChangedFromMax;
-}
+};

@@ -24,4 +24,4 @@ class CSoundOpvarSetPointEntity : public CSoundOpvarSetPointBase
 	Vector m_vPathingListenerPos;
 	Vector m_vPathingDirection;
 	int32 m_nPathingSourceIndex;
-}
+};

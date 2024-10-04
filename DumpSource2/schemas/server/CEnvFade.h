@@ -4,4 +4,4 @@ class CEnvFade : public CLogicalEntity
 	float32 m_Duration;
 	float32 m_HoldDuration;
 	CEntityIOOutput m_OnBeginFade;
-}
+};

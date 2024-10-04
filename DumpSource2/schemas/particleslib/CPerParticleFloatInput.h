@@ -1,0 +1,3 @@
+class CPerParticleFloatInput : public CParticleFloatInput
+{
+};

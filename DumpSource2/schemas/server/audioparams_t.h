@@ -5,4 +5,4 @@ class audioparams_t
 	uint8 localBits;
 	int32 soundscapeEntityListIndex;
 	uint32 soundEventHash;
-}
+};

@@ -8,4 +8,4 @@ class CSoundOpvarSetEntity : public CBaseEntity
 	float32 m_flOpvarValue;
 	CUtlSymbolLarge m_OpvarValueString;
 	bool m_bSetOnSpawn;
-}
+};

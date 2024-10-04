@@ -4,4 +4,4 @@ class CPulseCell_Timeline : public CPulseCell_BaseYieldingInflow
 	bool m_bWaitForChildOutflows;
 	CPulse_ResumePoint m_OnFinished;
 	CPulse_ResumePoint m_OnCanceled;
-}
+};

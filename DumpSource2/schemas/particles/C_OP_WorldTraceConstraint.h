@@ -1,0 +1,30 @@
+class C_OP_WorldTraceConstraint : public CParticleFunctionConstraint
+{
+	int32 m_nCP;
+	Vector m_vecCpOffset;
+	ParticleCollisionMode_t m_nCollisionMode;
+	ParticleCollisionMode_t m_nCollisionModeMin;
+	ParticleTraceSet_t m_nTraceSet;
+	char[128] m_CollisionGroupName;
+	bool m_bWorldOnly;
+	bool m_bBrushOnly;
+	bool m_bIncludeWater;
+	int32 m_nIgnoreCP;
+	float32 m_flCpMovementTolerance;
+	float32 m_flRetestRate;
+	float32 m_flTraceTolerance;
+	float32 m_flCollisionConfirmationSpeed;
+	float32 m_nMaxTracesPerFrame;
+	CPerParticleFloatInput m_flRadiusScale;
+	CPerParticleFloatInput m_flBounceAmount;
+	CPerParticleFloatInput m_flSlideAmount;
+	CPerParticleFloatInput m_flRandomDirScale;
+	bool m_bDecayBounce;
+	bool m_bKillonContact;
+	float32 m_flMinSpeed;
+	bool m_bSetNormal;
+	ParticleAttributeIndex_t m_nStickOnCollisionField;
+	CPerParticleFloatInput m_flStopSpeed;
+	ParticleAttributeIndex_t m_nEntityStickDataField;
+	ParticleAttributeIndex_t m_nEntityStickNormalField;
+};

@@ -7,4 +7,4 @@ class CNmSkeleton
 	CUtlVector< CTransform > m_modelSpaceReferencePose;
 	int32 m_numBonesToSampleAtLowLOD;
 	CUtlLeanVector< CNmBoneMask > m_boneMasks;
-}
+};

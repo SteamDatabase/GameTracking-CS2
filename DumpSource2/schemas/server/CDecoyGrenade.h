@@ -1,3 +1,3 @@
 class CDecoyGrenade : public CBaseCSGrenade
 {
-}
+};

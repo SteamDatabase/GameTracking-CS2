@@ -4,4 +4,4 @@ class CEntityComponentHelper
 	EntComponentInfo_t* m_pInfo;
 	int32 m_nPriority;
 	CEntityComponentHelper* m_pNext;
-}
+};

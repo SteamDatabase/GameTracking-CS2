@@ -7,4 +7,4 @@ class EntComponentInfo_t
 	int32 m_nRuntimeIndex;
 	uint32 m_nFlags;
 	CEntityComponentHelper* m_pBaseClassComponentHelper;
-}
+};

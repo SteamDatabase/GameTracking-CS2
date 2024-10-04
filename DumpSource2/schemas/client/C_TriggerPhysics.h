@@ -13,4 +13,4 @@ class C_TriggerPhysics : public C_BaseTrigger
 	Vector m_vecLinearForcePointAtWorld;
 	Vector m_vecLinearForceDirection;
 	bool m_bConvertToDebrisWhenPossible;
-}
+};

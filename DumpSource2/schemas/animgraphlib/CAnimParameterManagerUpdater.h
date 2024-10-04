@@ -6,4 +6,4 @@ class CAnimParameterManagerUpdater
 	CUtlVector< CAnimParamHandle > m_indexToHandle;
 	CUtlVector< CUtlPair< CAnimParamHandle, CAnimVariant > > m_autoResetParams;
 	CUtlHashtable< CAnimParamHandle, int16 > m_autoResetMap;
-}
+};

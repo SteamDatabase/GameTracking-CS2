@@ -10,4 +10,4 @@ class PostProcessingBloomParameters_t
 	float32 m_flBloomStartValue;
 	float32[5] m_flBlurWeight;
 	Vector[5] m_vBlurTint;
-}
+};

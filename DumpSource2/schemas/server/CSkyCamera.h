@@ -4,4 +4,4 @@ class CSkyCamera : public CBaseEntity
 	CUtlStringToken m_skyboxSlotToken;
 	bool m_bUseAngles;
 	CSkyCamera* m_pNext;
-}
+};

@@ -12,4 +12,4 @@ class C_BaseGrenade : public C_BaseFlex
 	CHandle< C_CSPlayerPawn > m_hThrower;
 	GameTime_t m_flNextAttack;
 	CHandle< C_CSPlayerPawn > m_hOriginalThrower;
-}
+};

@@ -7,4 +7,4 @@ class CNmBlend2DNode::CDefinition : public CNmPoseNode::CDefinition
 	CUtlVectorFixedGrowable< uint8, 30 > m_indices;
 	CUtlVectorFixedGrowable< uint8, 10 > m_hullIndices;
 	bool m_bAllowLooping;
-}
+};

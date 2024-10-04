@@ -16,4 +16,4 @@ class CEnvVolumetricFogVolume : public CBaseEntity
 	bool m_bOverrideSunLightStrength;
 	bool m_bOverrideNoiseStrength;
 	bool m_bAllowLPVIndirect;
-}
+};

@@ -6,4 +6,4 @@ class CLogicBranchList : public CLogicalEntity
 	CEntityIOOutput m_OnAllTrue;
 	CEntityIOOutput m_OnAllFalse;
 	CEntityIOOutput m_OnMixed;
-}
+};

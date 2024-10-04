@@ -7,4 +7,4 @@ class CBoneMaskUpdateNode : public CBinaryUpdateNode
 	bool m_bUseBlendScale;
 	AnimValueSource m_blendValueSource;
 	CAnimParamHandle m_hBlendParameter;
-}
+};

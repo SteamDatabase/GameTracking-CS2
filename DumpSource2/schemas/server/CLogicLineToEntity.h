@@ -4,4 +4,4 @@ class CLogicLineToEntity : public CLogicalEntity
 	CUtlSymbolLarge m_SourceName;
 	CHandle< CBaseEntity > m_StartEntity;
 	CHandle< CBaseEntity > m_EndEntity;
-}
+};

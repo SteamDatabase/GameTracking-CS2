@@ -10,4 +10,4 @@ class CAmbientGeneric : public CPointEntity
 	CUtlSymbolLarge m_sSourceEntName;
 	CHandle< CBaseEntity > m_hSoundSource;
 	CEntityIndex m_nSoundSourceEntIndex;
-}
+};

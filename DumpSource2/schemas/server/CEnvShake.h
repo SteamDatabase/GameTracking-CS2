@@ -10,4 +10,4 @@ class CEnvShake : public CPointEntity
 	float32 m_currentAmp;
 	Vector m_maxForce;
 	CPhysicsShake m_shakeCallback;
-}
+};

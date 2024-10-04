@@ -8,4 +8,4 @@ class CInfoWorldLayer : public C_BaseEntity
 	bool m_bCreateAsChildSpawnGroup;
 	uint32 m_hLayerSpawnGroup;
 	bool m_bWorldLayerActuallyVisible;
-}
+};

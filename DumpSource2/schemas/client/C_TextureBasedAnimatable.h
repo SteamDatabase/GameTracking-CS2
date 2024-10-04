@@ -8,4 +8,4 @@ class C_TextureBasedAnimatable : public C_BaseModelEntity
 	Vector m_vAnimationBoundsMax;
 	float32 m_flStartTime;
 	float32 m_flStartFrame;
-}
+};

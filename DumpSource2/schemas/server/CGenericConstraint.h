@@ -48,4 +48,4 @@ class CGenericConstraint : public CPhysConstraint
 	CEntityIOOutput m_NotifyForceReachedX;
 	CEntityIOOutput m_NotifyForceReachedY;
 	CEntityIOOutput m_NotifyForceReachedZ;
-}
+};

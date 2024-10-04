@@ -5,4 +5,4 @@ class SoundeventPathCornerPairNetworked_t
 	float32 flPathLengthSqr;
 	float32 flP1Pct;
 	float32 flP2Pct;
-}
+};

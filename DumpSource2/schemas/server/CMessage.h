@@ -6,4 +6,4 @@ class CMessage : public CPointEntity
 	float32 m_Radius;
 	CUtlSymbolLarge m_sNoise;
 	CEntityIOOutput m_OnShowMessage;
-}
+};

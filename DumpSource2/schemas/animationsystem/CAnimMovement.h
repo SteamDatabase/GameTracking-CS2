@@ -7,4 +7,4 @@ class CAnimMovement
 	float32 angle;
 	Vector vector;
 	Vector position;
-}
+};

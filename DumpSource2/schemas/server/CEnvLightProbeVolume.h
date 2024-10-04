@@ -17,4 +17,4 @@ class CEnvLightProbeVolume : public CBaseEntity
 	int32 m_Entity_nLightProbeAtlasY;
 	int32 m_Entity_nLightProbeAtlasZ;
 	bool m_Entity_bEnabled;
-}
+};

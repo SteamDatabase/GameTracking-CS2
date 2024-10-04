@@ -12,4 +12,4 @@ class C_PointWorldText : public C_ModelPointEntity
 	PointWorldTextJustifyHorizontal_t m_nJustifyHorizontal;
 	PointWorldTextJustifyVertical_t m_nJustifyVertical;
 	PointWorldTextReorientMode_t m_nReorientMode;
-}
+};

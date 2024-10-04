@@ -1,3 +1,3 @@
 class CNavWalkable : public CPointEntity
 {
-}
+};

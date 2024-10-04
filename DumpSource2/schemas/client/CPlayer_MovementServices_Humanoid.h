@@ -12,4 +12,4 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 	float32 m_flSurfaceFriction;
 	CUtlStringToken m_surfaceProps;
 	int32 m_nStepside;
-}
+};

@@ -1,3 +1,3 @@
 class CNavVolumeMarkupVolume : public CNavVolume
 {
-}
+};

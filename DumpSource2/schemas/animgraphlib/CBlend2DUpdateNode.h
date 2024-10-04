@@ -15,4 +15,4 @@ class CBlend2DUpdateNode : public CAnimUpdateNodeBase
 	bool m_bLockBlendOnReset;
 	bool m_bLockWhenWaning;
 	bool m_bAnimEventsAndTagsOnMostWeightedOnly;
-}
+};

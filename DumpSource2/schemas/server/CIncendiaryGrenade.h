@@ -1,3 +1,3 @@
 class CIncendiaryGrenade : public CMolotovGrenade
 {
-}
+};

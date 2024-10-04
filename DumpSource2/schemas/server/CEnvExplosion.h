@@ -16,4 +16,4 @@ class CEnvExplosion : public CModelPointEntity
 	Class_T m_iClassIgnore2;
 	CUtlSymbolLarge m_iszEntityIgnoreName;
 	CHandle< CBaseEntity > m_hEntityIgnore;
-}
+};

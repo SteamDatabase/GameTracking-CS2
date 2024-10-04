@@ -18,4 +18,4 @@ class C_Sun : public C_BaseModelEntity
 	float32 m_flAlphaScale;
 	float32 m_flAlphaHdr;
 	float32 m_flFarZScale;
-}
+};

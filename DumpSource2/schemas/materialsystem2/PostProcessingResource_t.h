@@ -11,4 +11,4 @@ class PostProcessingResource_t
 	int32 m_nColorCorrectionVolumeDim;
 	CUtlBinaryBlock m_colorCorrectionVolumeData;
 	bool m_bHasColorCorrection;
-}
+};

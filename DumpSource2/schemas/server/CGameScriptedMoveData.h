@@ -18,4 +18,4 @@ class CGameScriptedMoveData
 	bool m_bSuccess;
 	ForcedCrouchState_t m_nForcedCrouchState;
 	bool m_bIgnoreCollisions;
-}
+};

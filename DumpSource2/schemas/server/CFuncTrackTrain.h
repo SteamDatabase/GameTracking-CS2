@@ -37,4 +37,4 @@ class CFuncTrackTrain : public CBaseModelEntity
 	float32 m_flDecelSpeed;
 	bool m_bAccelToSpeed;
 	GameTime_t m_flNextMPSoundTime;
-}
+};

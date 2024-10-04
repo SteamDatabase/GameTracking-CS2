@@ -12,4 +12,4 @@ class CBaseTrigger : public CBaseToggle
 	CEntityIOOutput m_OnNotTouching;
 	CUtlVector< CHandle< CBaseEntity > > m_hTouchingEntities;
 	bool m_bClientSidePredicted;
-}
+};

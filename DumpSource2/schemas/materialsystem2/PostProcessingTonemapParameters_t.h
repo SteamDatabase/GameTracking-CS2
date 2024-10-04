@@ -15,4 +15,4 @@ class PostProcessingTonemapParameters_t
 	float32 m_flMaxShadowLum;
 	float32 m_flMinHighlightLum;
 	float32 m_flMaxHighlightLum;
-}
+};

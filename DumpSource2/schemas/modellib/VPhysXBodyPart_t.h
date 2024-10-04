@@ -10,4 +10,4 @@ class VPhysXBodyPart_t
 	float32 m_flAngularDamping;
 	bool m_bOverrideMassCenter;
 	Vector m_vMassCenterOverride;
-}
+};

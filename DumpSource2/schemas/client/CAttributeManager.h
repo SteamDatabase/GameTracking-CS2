@@ -6,4 +6,4 @@ class CAttributeManager
 	bool m_bPreventLoopback;
 	attributeprovidertypes_t m_ProviderType;
 	CUtlVector< CAttributeManager::cached_attribute_float_t > m_CachedResults;
-}
+};

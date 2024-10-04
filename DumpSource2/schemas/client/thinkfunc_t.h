@@ -4,4 +4,4 @@ class thinkfunc_t
 	CUtlStringToken m_nContext;
 	GameTick_t m_nNextThinkTick;
 	GameTick_t m_nLastThinkTick;
-}
+};

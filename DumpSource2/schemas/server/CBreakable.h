@@ -15,4 +15,4 @@ class CBreakable : public CBaseModelEntity
 	PerformanceMode_t m_PerformanceMode;
 	CHandle< CBasePlayerPawn > m_hPhysicsAttacker;
 	GameTime_t m_flLastPhysicsInfluenceTime;
-}
+};

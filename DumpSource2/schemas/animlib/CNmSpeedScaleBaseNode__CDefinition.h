@@ -2,4 +2,4 @@ class CNmSpeedScaleBaseNode::CDefinition : public CNmPassthroughNode::CDefinitio
 {
 	int16 m_nInputValueNodeIdx;
 	float32 m_flDefaultInputValue;
-}
+};

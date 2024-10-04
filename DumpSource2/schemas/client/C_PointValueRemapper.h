@@ -25,4 +25,4 @@ class C_PointValueRemapper : public C_BaseEntity
 	float32 m_flPreviousValue;
 	GameTime_t m_flPreviousUpdateTickTime;
 	Vector m_vecPreviousTestPoint;
-}
+};

@@ -30,4 +30,4 @@ class C_TeamRoundTimer : public C_BaseEntity
 	bool m_bFire1SecRemain;
 	int32 m_nOldTimerLength;
 	int32 m_nOldTimerState;
-}
+};

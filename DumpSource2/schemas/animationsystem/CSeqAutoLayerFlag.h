@@ -8,4 +8,4 @@ class CSeqAutoLayerFlag
 	bool m_bPose;
 	bool m_bFetchFrame;
 	bool m_bSubtract;
-}
+};

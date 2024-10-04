@@ -18,4 +18,4 @@ class C_EnvCubemap : public C_BaseEntity
 	bool m_Entity_bIndoorCubeMap;
 	bool m_Entity_bCopyDiffuseFromDefaultCubemap;
 	bool m_Entity_bEnabled;
-}
+};

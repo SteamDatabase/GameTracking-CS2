@@ -7,4 +7,4 @@ class CMoverPathNode : public CPointEntity
 	CEntityIOOutput m_OnPassThroughForward;
 	CEntityIOOutput m_OnPassThroughReverse;
 	CHandle< CPathMover > m_hMover;
-}
+};

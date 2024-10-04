@@ -12,4 +12,4 @@ class CEnvEntityMaker : public CPointEntity
 	CUtlSymbolLarge m_iszTemplate;
 	CEntityIOOutput m_pOutputOnSpawned;
 	CEntityIOOutput m_pOutputOnFailedSpawn;
-}
+};

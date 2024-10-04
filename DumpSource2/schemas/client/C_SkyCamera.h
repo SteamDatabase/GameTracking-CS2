@@ -4,4 +4,4 @@ class C_SkyCamera : public C_BaseEntity
 	CUtlStringToken m_skyboxSlotToken;
 	bool m_bUseAngles;
 	C_SkyCamera* m_pNext;
-}
+};

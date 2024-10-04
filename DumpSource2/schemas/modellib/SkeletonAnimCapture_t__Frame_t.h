@@ -9,4 +9,4 @@ class SkeletonAnimCapture_t::Frame_t
 	CUtlVector< CTransform > m_FeModelAnims;
 	CUtlVector< VectorAligned > m_FeModelPos;
 	CUtlVector< float32 > m_FlexControllerWeights;
-}
+};

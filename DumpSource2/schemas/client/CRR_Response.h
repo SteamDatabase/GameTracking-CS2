@@ -11,4 +11,4 @@ class CRR_Response
 	CUtlSymbol m_recipientFilter;
 	CUtlVector< CUtlSymbol > m_pchCriteriaNames;
 	CUtlVector< char* > m_pchCriteriaValues;
-}
+};

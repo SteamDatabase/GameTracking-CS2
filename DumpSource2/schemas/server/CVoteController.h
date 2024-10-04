@@ -14,4 +14,4 @@ class CVoteController : public CBaseEntity
 	int32 m_nHighestCountIndex;
 	CUtlVector< CBaseIssue* > m_potentialIssues;
 	CUtlVector< char* > m_VoteOptions;
-}
+};

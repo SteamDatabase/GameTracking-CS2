@@ -4,4 +4,4 @@ class CAnimComponentUpdater
 	AnimComponentID m_id;
 	AnimNodeNetworkMode m_networkMode;
 	bool m_bStartEnabled;
-}
+};

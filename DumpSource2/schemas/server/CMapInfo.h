@@ -8,4 +8,4 @@ class CMapInfo : public CPointEntity
 	float32 m_flBotMaxVisionDistance;
 	int32 m_iHostageCount;
 	bool m_bFadePlayerVisibilityFarZ;
-}
+};

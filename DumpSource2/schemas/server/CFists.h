@@ -7,4 +7,4 @@ class CFists : public CCSWeaponBase
 	CHandle< CBasePlayerWeapon > m_hWeaponPrevious;
 	bool m_bDelayedHardPunchIncoming;
 	bool m_bDestroyAfterTaunt;
-}
+};

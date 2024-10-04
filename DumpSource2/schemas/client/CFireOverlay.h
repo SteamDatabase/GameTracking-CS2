@@ -4,4 +4,4 @@ class CFireOverlay : public CGlowOverlay
 	Vector[4] m_vBaseColors;
 	float32 m_flScale;
 	int32 m_nGUID;
-}
+};

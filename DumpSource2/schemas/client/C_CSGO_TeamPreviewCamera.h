@@ -7,4 +7,4 @@ class C_CSGO_TeamPreviewCamera : public C_CSGO_MapPreviewCameraPath
 	float32 m_flDofFarCrisp;
 	float32 m_flDofFarBlurry;
 	float32 m_flDofTiltToGround;
-}
+};

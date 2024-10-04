@@ -22,4 +22,4 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	int32 m_iSlot;
 	int32 m_iPosition;
 	CUtlOrderedMap< WeaponSound_t, CSoundEventName > m_aShootSounds;
-}
+};

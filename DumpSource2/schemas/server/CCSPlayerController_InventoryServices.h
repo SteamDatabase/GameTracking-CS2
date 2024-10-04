@@ -9,4 +9,4 @@ class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 	int32 m_nPersonaDataXpTrailLevel;
 	uint32[1] m_unEquippedPlayerSprayIDs;
 	CUtlVectorEmbeddedNetworkVar< ServerAuthoritativeWeaponSlot_t > m_vecServerAuthoritativeWeaponSlots;
-}
+};

@@ -62,4 +62,4 @@ class CCSPlayerController : public CBasePlayerController
 	int32 m_iMusicKitMVPs;
 	int32 m_iMVPs;
 	bool m_bIsPlayerNameDirty;
-}
+};

@@ -1,3 +1,3 @@
 class CWeaponFamas : public CCSWeaponBaseGun
 {
-}
+};

@@ -1,0 +1,3 @@
+class CPulseTestFuncs_LibraryA
+{
+};

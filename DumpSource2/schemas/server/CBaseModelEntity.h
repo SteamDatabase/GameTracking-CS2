@@ -26,4 +26,4 @@ class CBaseModelEntity : public CBaseEntity
 	float32 m_flDecalHealHeightRate;
 	CNetworkUtlVectorBase< CHandle< CBaseModelEntity > > m_ConfigEntitiesToPropagateMaterialDecalsTo;
 	CNetworkViewOffsetVector m_vecViewOffset;
-}
+};

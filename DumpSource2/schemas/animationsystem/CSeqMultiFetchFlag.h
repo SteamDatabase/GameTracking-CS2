@@ -6,4 +6,4 @@ class CSeqMultiFetchFlag
 	bool m_b1D;
 	bool m_b2D;
 	bool m_b2D_TRI;
-}
+};

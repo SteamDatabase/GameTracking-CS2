@@ -25,4 +25,4 @@ class CBaseButton : public CBaseToggle
 	CHandle< CBaseModelEntity > m_glowEntity;
 	bool m_usable;
 	CUtlSymbolLarge m_szDisplayText;
-}
+};

@@ -2,4 +2,4 @@ class CAnimationGraphVisualizerAxis : public CAnimationGraphVisualizerPrimitiveB
 {
 	CTransform m_xWsTransform;
 	float32 m_flAxisSize;
-}
+};

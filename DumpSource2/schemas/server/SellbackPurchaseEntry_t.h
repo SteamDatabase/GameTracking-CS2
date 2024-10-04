@@ -5,4 +5,4 @@ class SellbackPurchaseEntry_t
 	int32 m_nPrevArmor;
 	bool m_bPrevHelmet;
 	CEntityHandle m_hItem;
-}
+};

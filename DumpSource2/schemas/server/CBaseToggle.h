@@ -16,4 +16,4 @@ class CBaseToggle : public CBaseModelEntity
 	QAngle m_vecFinalAngle;
 	int32 m_movementType;
 	CUtlSymbolLarge m_sMaster;
-}
+};

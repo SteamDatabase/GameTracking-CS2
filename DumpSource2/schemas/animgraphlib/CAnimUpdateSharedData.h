@@ -10,4 +10,4 @@ class CAnimUpdateSharedData
 	CSmartPtr< CStaticPoseCacheBuilder > m_pStaticPoseCache;
 	CSmartPtr< CAnimSkeleton > m_pSkeleton;
 	CAnimNodePath m_rootNodePath;
-}
+};

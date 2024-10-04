@@ -13,4 +13,4 @@ class CNavHullVData
 	int32 m_agentBorderErosion;
 	bool m_flowMapGenerationEnabled;
 	float32 m_flowMapNodeMaxRadius;
-}
+};

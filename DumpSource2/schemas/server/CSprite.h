@@ -23,4 +23,4 @@ class CSprite : public CBaseModelEntity
 	GameTime_t m_flBrightnessTimeStart;
 	int32 m_nSpriteWidth;
 	int32 m_nSpriteHeight;
-}
+};

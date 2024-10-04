@@ -9,4 +9,4 @@ class CFootDefinition
 	float32 m_flBindPoseDirectionMS;
 	float32 m_flTraceHeight;
 	float32 m_flTraceRadius;
-}
+};

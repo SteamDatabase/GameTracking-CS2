@@ -6,4 +6,4 @@ class BlendItem_t
 	Vector2D m_vPos;
 	float32 m_flDuration;
 	bool m_bUseCustomDuration;
-}
+};

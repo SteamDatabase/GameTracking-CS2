@@ -8,4 +8,4 @@ class C_Precipitation : public C_BaseTrigger
 	bool m_bParticlePrecipInitialized;
 	bool m_bHasSimulatedSinceLastSceneObjectUpdate;
 	int32 m_nAvailableSheetSequencesMaxIndex;
-}
+};

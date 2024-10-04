@@ -5,4 +5,4 @@ class CAnimTagBase
 	CGlobalSymbol m_group;
 	AnimTagID m_tagID;
 	bool m_bIsReferenced;
-}
+};

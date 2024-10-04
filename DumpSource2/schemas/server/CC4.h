@@ -11,4 +11,4 @@ class CC4 : public CCSWeaponBase
 	int32 m_nSpotRules;
 	bool[7] m_bPlayedArmingBeeps;
 	bool m_bBombPlanted;
-}
+};

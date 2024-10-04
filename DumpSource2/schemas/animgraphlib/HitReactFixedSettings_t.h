@@ -17,4 +17,4 @@ class HitReactFixedSettings_t
 	float32 m_flHipDipSpringStrength;
 	float32 m_flHipDipImpactScale;
 	float32 m_flHipDipDelay;
-}
+};

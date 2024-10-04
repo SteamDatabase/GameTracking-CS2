@@ -8,4 +8,4 @@ class EventSetTime_t
 	float64 m_flRenderFrameTimeUnbounded;
 	float64 m_flRenderFrameTimeUnscaled;
 	float64 m_flTickRemainder;
-}
+};

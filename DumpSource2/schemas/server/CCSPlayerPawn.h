@@ -118,4 +118,4 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	Vector[2] m_vecVelocityHistory;
 	CUtlVectorEmbeddedNetworkVar< PredictedDamageTag_t > m_PredictedDamageTags;
 	int32 m_nHighestAppliedDamageTagTick;
-}
+};

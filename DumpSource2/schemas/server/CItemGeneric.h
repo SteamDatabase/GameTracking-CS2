@@ -32,4 +32,4 @@ class CItemGeneric : public CItem
 	Color m_glowColor;
 	bool m_bUseable;
 	CHandle< CItemGenericTriggerHelper > m_hTriggerHelper;
-}
+};

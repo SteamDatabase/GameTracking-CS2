@@ -5,4 +5,4 @@ class CAddUpdateNode : public CBinaryUpdateNode
 	bool m_bApplyChannelsSeparately;
 	bool m_bUseModelSpace;
 	bool m_bApplyScale;
-}
+};

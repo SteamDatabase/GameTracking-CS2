@@ -8,4 +8,4 @@ class C_SmokeGrenadeProjectile : public C_BaseCSGrenadeProjectile
 	CUtlVector< uint8 > m_VoxelFrameData;
 	bool m_bSmokeVolumeDataReceived;
 	bool m_bSmokeEffectSpawned;
-}
+};

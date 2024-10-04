@@ -8,4 +8,4 @@ class CPhysicsSpring : public CBaseEntity
 	Vector m_start;
 	Vector m_end;
 	uint32 m_teleportTick;
-}
+};

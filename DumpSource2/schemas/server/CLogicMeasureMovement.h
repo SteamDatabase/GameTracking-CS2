@@ -9,4 +9,4 @@ class CLogicMeasureMovement : public CLogicalEntity
 	CHandle< CBaseEntity > m_hTargetReference;
 	float32 m_flScale;
 	int32 m_nMeasureType;
-}
+};

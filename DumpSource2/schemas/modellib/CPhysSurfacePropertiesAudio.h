@@ -8,4 +8,4 @@ class CPhysSurfacePropertiesAudio
 	float32 m_hardVelocityThreshold;
 	float32 m_flStaticImpactVolume;
 	float32 m_flOcclusionFactor;
-}
+};

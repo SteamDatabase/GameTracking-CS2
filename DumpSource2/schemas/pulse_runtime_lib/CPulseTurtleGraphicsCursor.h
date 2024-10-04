@@ -4,4 +4,4 @@ class CPulseTurtleGraphicsCursor : public CPulseExecCursor
 	Vector2D m_vPos;
 	float32 m_flHeadingDeg;
 	bool m_bPenUp;
-}
+};

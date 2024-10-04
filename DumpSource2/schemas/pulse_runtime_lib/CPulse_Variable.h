@@ -7,4 +7,4 @@ class CPulse_Variable
 	bool m_bIsPublic;
 	bool m_bIsObservable;
 	PulseDocNodeID_t m_nEditorNodeID;
-}
+};

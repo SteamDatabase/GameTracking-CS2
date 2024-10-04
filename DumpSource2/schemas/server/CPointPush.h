@@ -7,4 +7,4 @@ class CPointPush : public CPointEntity
 	float32 m_flConeOfInfluence;
 	CUtlSymbolLarge m_iszFilterName;
 	CHandle< CBaseFilter > m_hFilter;
-}
+};

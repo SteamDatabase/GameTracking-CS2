@@ -14,4 +14,4 @@ class CTriggerLook : public CTriggerOnce
 	CEntityIOOutput m_OnTimeout;
 	CEntityIOOutput m_OnStartLook;
 	CEntityIOOutput m_OnEndLook;
-}
+};

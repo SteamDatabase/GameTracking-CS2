@@ -1,3 +1,3 @@
 class CBreachChargeProjectile : public CBaseGrenade
 {
-}
+};

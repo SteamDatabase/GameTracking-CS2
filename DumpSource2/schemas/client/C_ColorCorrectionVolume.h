@@ -9,4 +9,4 @@ class C_ColorCorrectionVolume : public C_BaseTrigger
 	float32 m_FadeDuration;
 	float32 m_Weight;
 	char[512] m_lookupFilename;
-}
+};

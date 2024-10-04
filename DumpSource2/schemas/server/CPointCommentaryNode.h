@@ -30,4 +30,4 @@ class CPointCommentaryNode : public CBaseAnimGraph
 	int32 m_iNodeNumber;
 	int32 m_iNodeNumberMax;
 	bool m_bListenedTo;
-}
+};

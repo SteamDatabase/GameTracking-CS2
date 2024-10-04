@@ -5,4 +5,4 @@ class CPulseCell_Step_CallExternalMethod : public CPulseCell_BaseYieldingInflow
 	CUtlLeanVector< CPulseRuntimeMethodArg > m_ExpectedArgs;
 	PulseMethodCallMode_t m_nAsyncCallMode;
 	CPulse_ResumePoint m_OnFinished;
-}
+};

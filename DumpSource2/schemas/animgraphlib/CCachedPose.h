@@ -4,4 +4,4 @@ class CCachedPose
 	CUtlVector< float32 > m_morphWeights;
 	HSequence m_hSequence;
 	float32 m_flCycle;
-}
+};

@@ -8,4 +8,4 @@ class CAnimSkeleton
 	CUtlVector< CAnimFoot > m_feet;
 	CUtlVector< CUtlString > m_morphNames;
 	CUtlVector< int32 > m_lodBoneCounts;
-}
+};

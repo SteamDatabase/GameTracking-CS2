@@ -7,4 +7,4 @@ class CFishPool : public CBaseEntity
 	bool m_isDormant;
 	CUtlVector< CHandle< CFish > > m_fishes;
 	CountdownTimer m_visTimer;
-}
+};

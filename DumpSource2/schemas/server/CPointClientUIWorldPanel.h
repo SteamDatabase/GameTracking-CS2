@@ -23,4 +23,4 @@ class CPointClientUIWorldPanel : public CBaseClientUIEntity
 	bool m_bOnlyRenderToTexture;
 	bool m_bDisableMipGen;
 	int32 m_nExplicitImageLayout;
-}
+};

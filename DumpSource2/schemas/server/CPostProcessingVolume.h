@@ -16,4 +16,4 @@ class CPostProcessingVolume : public CBaseTrigger
 	float32 m_flTonemapPercentTarget;
 	float32 m_flTonemapPercentBrightPixels;
 	float32 m_flTonemapMinAvgLum;
-}
+};

@@ -10,4 +10,4 @@ class CCommentarySystem
 	CHandle< CPointCommentaryNode > m_hActiveCommentaryNode;
 	CHandle< CPointCommentaryNode > m_hLastCommentaryNode;
 	CUtlVector< CHandle< CPointCommentaryNode > > m_vecNodes;
-}
+};

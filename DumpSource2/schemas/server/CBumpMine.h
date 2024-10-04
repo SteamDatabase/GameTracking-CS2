@@ -1,3 +1,3 @@
 class CBumpMine : public CCSWeaponBase
 {
-}
+};

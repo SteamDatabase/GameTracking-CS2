@@ -6,4 +6,4 @@ class CSeqSynthAnimDesc
 	int16 m_nLocalBaseReference;
 	int16 m_nLocalBoneMask;
 	CUtlVector< CAnimActivity > m_activityArray;
-}
+};

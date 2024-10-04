@@ -20,4 +20,4 @@ class CFootLockUpdateNode : public CUnaryUpdateNode
 	bool m_bResetChild;
 	bool m_bEnableVerticalCurvedPaths;
 	bool m_bEnableRootHeightDamping;
-}
+};

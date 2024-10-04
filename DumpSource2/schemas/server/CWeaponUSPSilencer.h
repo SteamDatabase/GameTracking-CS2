@@ -1,3 +1,3 @@
 class CWeaponUSPSilencer : public CCSWeaponBaseGun
 {
-}
+};

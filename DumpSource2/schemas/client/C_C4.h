@@ -11,4 +11,4 @@ class C_C4 : public C_CSWeaponBase
 	int32 m_nSpotRules;
 	bool[7] m_bPlayedArmingBeeps;
 	bool m_bBombPlanted;
-}
+};

@@ -2,4 +2,4 @@ class CModelConfigElement_SetBodygroupOnAttachedModels : public CModelConfigElem
 {
 	CUtlString m_GroupName;
 	int32 m_nChoice;
-}
+};

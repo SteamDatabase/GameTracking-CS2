@@ -4,4 +4,4 @@ class CMotionMetricEvaluator
 	CUtlVector< float32 > m_standardDeviations;
 	float32 m_flWeight;
 	int32 m_nDimensionStartIndex;
-}
+};

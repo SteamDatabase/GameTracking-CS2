@@ -16,4 +16,4 @@ class C_GradientFog : public C_BaseEntity
 	bool m_bStartDisabled;
 	bool m_bIsEnabled;
 	bool m_bGradientFogNeedsTextures;
-}
+};

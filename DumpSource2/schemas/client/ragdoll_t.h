@@ -4,4 +4,4 @@ class ragdoll_t
 	CUtlVector< int32 > boneIndex;
 	bool allowStretch;
 	bool unused;
-}
+};

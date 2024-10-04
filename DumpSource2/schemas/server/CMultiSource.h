@@ -5,4 +5,4 @@ class CMultiSource : public CLogicalEntity
 	CEntityIOOutput m_OnTrigger;
 	int32 m_iTotal;
 	CUtlSymbolLarge m_globalstate;
-}
+};

@@ -5,4 +5,4 @@ class CStateMachineUpdateNode : public CAnimUpdateNodeBase
 	CUtlVector< CStateNodeTransitionData > m_transitionData;
 	bool m_bBlockWaningTags;
 	bool m_bLockStateWhenWaning;
-}
+};

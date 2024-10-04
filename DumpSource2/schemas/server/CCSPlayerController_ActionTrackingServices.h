@@ -5,4 +5,4 @@ class CCSPlayerController_ActionTrackingServices : public CPlayerControllerCompo
 	int32 m_iNumRoundKills;
 	int32 m_iNumRoundKillsHeadshots;
 	uint32 m_unTotalRoundDamageDealt;
-}
+};

@@ -4,4 +4,4 @@ class CMorphConstraint : public CBaseConstraint
 	int32 m_nSlaveChannel;
 	float32 m_flMin;
 	float32 m_flMax;
-}
+};

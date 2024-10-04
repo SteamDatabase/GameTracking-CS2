@@ -12,4 +12,4 @@ class MoodAnimationLayer_t
 	CRangeFloat m_flEndOffset;
 	float32 m_flFadeIn;
 	float32 m_flFadeOut;
-}
+};

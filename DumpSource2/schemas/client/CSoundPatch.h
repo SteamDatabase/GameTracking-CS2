@@ -13,4 +13,4 @@ class CSoundPatch
 	float32 m_flCloseCaptionDuration;
 	bool m_bUpdatedSoundOrigin;
 	CUtlSymbolLarge m_iszClassName;
-}
+};

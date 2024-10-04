@@ -67,4 +67,4 @@ class CLightComponent : public CEntityComponent
 	float32 m_flCapsuleLength;
 	float32 m_flMinRoughness;
 	bool m_bPvsModifyEntity;
-}
+};

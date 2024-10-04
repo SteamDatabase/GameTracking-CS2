@@ -28,4 +28,4 @@ class C_BasePlayerPawn : public C_BaseCombatCharacter
 	int32 m_nLastExecutedCommandTick;
 	CHandle< CBasePlayerController > m_hController;
 	bool m_bIsSwappingToPredictableController;
-}
+};

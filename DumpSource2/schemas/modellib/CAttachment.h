@@ -8,4 +8,4 @@ class CAttachment
 	bool[3] m_bInfluenceRootTransform;
 	uint8 m_nInfluences;
 	bool m_bIgnoreRotation;
-}
+};

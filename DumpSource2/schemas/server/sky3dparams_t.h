@@ -6,4 +6,4 @@ class sky3dparams_t
 	float32 flClip3DSkyBoxNearToWorldFarOffset;
 	fogparams_t fog;
 	WorldGroupId_t m_nWorldGroupID;
-}
+};

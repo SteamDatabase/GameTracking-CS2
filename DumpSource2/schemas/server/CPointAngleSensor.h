@@ -12,4 +12,4 @@ class CPointAngleSensor : public CPointEntity
 	CEntityIOOutput m_OnNotFacingLookat;
 	CEntityOutputTemplate< Vector > m_TargetDir;
 	CEntityOutputTemplate< float32 > m_FacingPercentage;
-}
+};

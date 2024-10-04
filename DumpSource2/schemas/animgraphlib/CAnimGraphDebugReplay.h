@@ -5,4 +5,4 @@ class CAnimGraphDebugReplay
 	int32 m_startIndex;
 	int32 m_writeIndex;
 	int32 m_frameCount;
-}
+};

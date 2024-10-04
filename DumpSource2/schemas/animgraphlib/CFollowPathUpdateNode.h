@@ -13,4 +13,4 @@ class CFollowPathUpdateNode : public CUnaryUpdateNode
 	CAnimParamHandle m_hParam;
 	float32 m_flTurnToFaceOffset;
 	bool m_bTurnToFace;
-}
+};

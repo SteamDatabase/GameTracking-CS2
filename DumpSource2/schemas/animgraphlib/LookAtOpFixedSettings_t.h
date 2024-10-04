@@ -11,4 +11,4 @@ class LookAtOpFixedSettings_t
 	bool m_bMaintainUpDirection;
 	bool m_bTargetIsPosition;
 	bool m_bUseHysteresis;
-}
+};

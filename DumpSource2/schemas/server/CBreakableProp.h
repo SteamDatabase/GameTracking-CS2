@@ -33,4 +33,4 @@ class CBreakableProp : public CBaseProp
 	bool m_bUsePuntSound;
 	CUtlSymbolLarge m_iszPuntSound;
 	bool m_noGhostCollision;
-}
+};

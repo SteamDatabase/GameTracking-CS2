@@ -8,4 +8,4 @@ class NmCompressionSettings_t
 	bool m_bIsRotationStatic;
 	bool m_bIsTranslationStatic;
 	bool m_bIsScaleStatic;
-}
+};

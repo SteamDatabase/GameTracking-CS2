@@ -11,4 +11,4 @@ class CRenderGroom
 	int32 m_nAttachMeshIdx;
 	int32 m_nAttachMeshDrawCallIdx;
 	bool m_bEnableSimulation;
-}
+};

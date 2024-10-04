@@ -16,4 +16,4 @@ class C_BaseViewModel : public CBaseAnimGraph
 	int32 m_oldLayer;
 	float32 m_oldLayerStartTime;
 	CHandle< C_BaseEntity > m_hControlPanel;
-}
+};

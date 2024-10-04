@@ -8,4 +8,4 @@ class CPathKeyFrame : public CLogicalEntity
 	CPathKeyFrame* m_pNextKey;
 	CPathKeyFrame* m_pPrevKey;
 	float32 m_flMoveSpeed;
-}
+};

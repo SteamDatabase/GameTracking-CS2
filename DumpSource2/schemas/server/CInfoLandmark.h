@@ -1,3 +1,3 @@
 class CInfoLandmark : public CPointEntity
 {
-}
+};

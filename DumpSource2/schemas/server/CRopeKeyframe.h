@@ -21,4 +21,4 @@ class CRopeKeyframe : public CBaseModelEntity
 	CHandle< CBaseEntity > m_hEndPoint;
 	AttachmentHandle_t m_iStartAttachment;
 	AttachmentHandle_t m_iEndAttachment;
-}
+};

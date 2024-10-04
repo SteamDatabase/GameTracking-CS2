@@ -5,4 +5,4 @@ class CResponseQueue::CDeferredResponse
 	CHandle< CBaseEntity > m_hIssuer;
 	CRR_Response m_response;
 	bool m_bResponseValid;
-}
+};

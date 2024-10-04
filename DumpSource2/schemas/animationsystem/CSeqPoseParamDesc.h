@@ -5,4 +5,4 @@ class CSeqPoseParamDesc
 	float32 m_flEnd;
 	float32 m_flLoop;
 	bool m_bLooping;
-}
+};

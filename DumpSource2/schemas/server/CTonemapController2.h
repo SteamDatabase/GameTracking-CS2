@@ -8,4 +8,4 @@ class CTonemapController2 : public CBaseEntity
 	float32 m_flExposureAdaptationSpeedUp;
 	float32 m_flExposureAdaptationSpeedDown;
 	float32 m_flTonemapEVSmoothingRange;
-}
+};

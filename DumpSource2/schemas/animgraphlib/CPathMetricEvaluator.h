@@ -4,4 +4,4 @@ class CPathMetricEvaluator : public CMotionMetricEvaluator
 	float32 m_flDistance;
 	bool m_bExtrapolateMovement;
 	float32 m_flMinExtrapolationSpeed;
-}
+};

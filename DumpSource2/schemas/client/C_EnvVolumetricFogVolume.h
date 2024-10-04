@@ -16,4 +16,4 @@ class C_EnvVolumetricFogVolume : public C_BaseEntity
 	bool m_bOverrideSunLightStrength;
 	bool m_bOverrideNoiseStrength;
 	bool m_bAllowLPVIndirect;
-}
+};

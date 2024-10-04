@@ -66,4 +66,4 @@ class CLightComponent : public CEntityComponent
 	GameTime_t m_flLightStyleStartTime;
 	float32 m_flCapsuleLength;
 	float32 m_flMinRoughness;
-}
+};

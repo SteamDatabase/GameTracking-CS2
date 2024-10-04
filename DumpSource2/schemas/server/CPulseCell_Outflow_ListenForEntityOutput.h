@@ -5,4 +5,4 @@ class CPulseCell_Outflow_ListenForEntityOutput : public CPulseCell_BaseYieldingI
 	CGlobalSymbol m_strEntityOutput;
 	CUtlString m_strEntityOutputParam;
 	bool m_bListenUntilCanceled;
-}
+};

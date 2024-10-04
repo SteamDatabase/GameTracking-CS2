@@ -29,4 +29,4 @@ class C_EconItemView : public IEconItemInterface
 	char[161] m_szCustomName;
 	char[161] m_szCustomNameOverride;
 	bool m_bInitializedTags;
-}
+};

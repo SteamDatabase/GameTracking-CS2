@@ -10,4 +10,4 @@ class CColorCorrectionVolume : public CBaseTrigger
 	GameTime_t m_LastEnterTime;
 	float32 m_LastExitWeight;
 	GameTime_t m_LastExitTime;
-}
+};

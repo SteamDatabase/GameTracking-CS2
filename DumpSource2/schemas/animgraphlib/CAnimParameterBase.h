@@ -7,4 +7,4 @@ class CAnimParameterBase
 	CUtlString m_componentName;
 	bool m_bNetworkingRequested;
 	bool m_bIsReferenced;
-}
+};

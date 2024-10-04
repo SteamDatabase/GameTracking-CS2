@@ -8,4 +8,4 @@ class CSoundOpvarSetOBBWindEntity : public CSoundOpvarSetPointBase
 	float32 m_flWindMax;
 	float32 m_flWindMapMin;
 	float32 m_flWindMapMax;
-}
+};

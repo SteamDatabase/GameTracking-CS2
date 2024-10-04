@@ -8,4 +8,4 @@ class CPhysSurfaceProperties
 	CPhysSurfacePropertiesPhysics m_physics;
 	CPhysSurfacePropertiesSoundNames m_audioSounds;
 	CPhysSurfacePropertiesAudio m_audioParams;
-}
+};

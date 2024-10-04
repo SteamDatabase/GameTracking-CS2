@@ -6,4 +6,4 @@ class CRagdollPropAttached : public CRagdollProp
 	Vector m_attachmentPointRagdollSpace;
 	bool m_bShouldDetach;
 	bool m_bShouldDeleteAttachedActivationRecord;
-}
+};

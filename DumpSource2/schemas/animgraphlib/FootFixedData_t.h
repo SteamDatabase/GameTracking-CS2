@@ -11,4 +11,4 @@ class FootFixedData_t
 	int32 m_nTagIndex;
 	float32 m_flMaxRotationLeft;
 	float32 m_flMaxRotationRight;
-}
+};

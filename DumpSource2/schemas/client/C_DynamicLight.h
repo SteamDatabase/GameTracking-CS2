@@ -7,4 +7,4 @@ class C_DynamicLight : public C_BaseModelEntity
 	float32 m_InnerAngle;
 	float32 m_OuterAngle;
 	float32 m_SpotRadius;
-}
+};

@@ -3,4 +3,4 @@ class CAnimationGraphVisualizerLine : public CAnimationGraphVisualizerPrimitiveB
 	VectorAligned m_vWsPositionStart;
 	VectorAligned m_vWsPositionEnd;
 	Color m_Color;
-}
+};

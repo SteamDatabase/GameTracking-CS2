@@ -4,4 +4,4 @@ class CFootPinningUpdateNode : public CUnaryUpdateNode
 	FootPinningTimingSource m_eTimingSource;
 	CUtlVector< CAnimParamHandle > m_params;
 	bool m_bResetChild;
-}
+};

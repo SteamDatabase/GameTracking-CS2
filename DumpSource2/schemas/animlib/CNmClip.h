@@ -9,4 +9,4 @@ class CNmClip
 	CNmSyncTrack m_syncTrack;
 	CNmRootMotionData m_rootMotion;
 	bool m_bIsAdditive;
-}
+};

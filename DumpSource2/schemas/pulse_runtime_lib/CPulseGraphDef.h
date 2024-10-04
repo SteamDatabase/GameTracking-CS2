@@ -14,4 +14,4 @@ class CPulseGraphDef
 	CUtlVector< CPulse_DomainValue > m_DomainValues;
 	CUtlVector< CPulse_BlackboardReference > m_BlackboardReferences;
 	CUtlVector< CPulse_OutputConnection* > m_OutputConnections;
-}
+};

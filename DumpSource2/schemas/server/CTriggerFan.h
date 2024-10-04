@@ -12,4 +12,4 @@ class CTriggerFan : public CBaseTrigger
 	bool m_bRampDown;
 	bool m_bAddNoise;
 	CountdownTimer m_RampTimer;
-}
+};

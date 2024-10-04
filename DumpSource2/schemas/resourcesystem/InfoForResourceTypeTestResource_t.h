@@ -1,3 +1,3 @@
 class InfoForResourceTypeTestResource_t
 {
-}
+};

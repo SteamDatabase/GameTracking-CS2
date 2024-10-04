@@ -4,4 +4,4 @@ class CPhysPulley : public CPhysConstraint
 	Vector[2] m_offset;
 	float32 m_addLength;
 	float32 m_gearRatio;
-}
+};

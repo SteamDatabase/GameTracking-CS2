@@ -5,4 +5,4 @@ class CConstraintSlave
 	uint32 m_nBoneHash;
 	float32 m_flWeight;
 	CUtlString m_sName;
-}
+};

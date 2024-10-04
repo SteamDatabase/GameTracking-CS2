@@ -13,4 +13,4 @@ class CClientAlphaProperty : public IClientAlphaProperty
 	float32 m_flFadeScale;
 	GameTime_t m_flRenderFxStartTime;
 	float32 m_flRenderFxDuration;
-}
+};

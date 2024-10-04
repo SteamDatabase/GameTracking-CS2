@@ -37,4 +37,4 @@ class CPhysicsProp : public CBreakableProp
 	int32[4] m_nItemCount;
 	bool m_bRemovableForAmmoBalancing;
 	bool m_bAwake;
-}
+};

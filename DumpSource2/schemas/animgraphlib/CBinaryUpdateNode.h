@@ -6,4 +6,4 @@ class CBinaryUpdateNode : public CAnimUpdateNodeBase
 	float32 m_flTimingBlend;
 	bool m_bResetChild1;
 	bool m_bResetChild2;
-}
+};

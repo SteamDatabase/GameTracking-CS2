@@ -14,4 +14,4 @@ class CBaseCSGrenade : public CCSWeaponBase
 	GameTick_t m_nNextHoldTick;
 	float32 m_flNextHoldFrac;
 	CHandle< CCSWeaponBase > m_hSwitchToWeaponAfterThrow;
-}
+};

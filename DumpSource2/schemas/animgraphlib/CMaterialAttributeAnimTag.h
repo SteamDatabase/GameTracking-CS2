@@ -4,4 +4,4 @@ class CMaterialAttributeAnimTag : public CAnimTagBase
 	MatterialAttributeTagType_t m_AttributeType;
 	float32 m_flValue;
 	Color m_Color;
-}
+};

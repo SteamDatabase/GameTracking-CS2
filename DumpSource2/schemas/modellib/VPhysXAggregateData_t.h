@@ -16,4 +16,4 @@ class VPhysXAggregateData_t
 	CUtlVector< VPhysXCollisionAttributes_t > m_collisionAttributes;
 	CUtlVector< CUtlString > m_debugPartNames;
 	CUtlString m_embeddedKeyvalues;
-}
+};

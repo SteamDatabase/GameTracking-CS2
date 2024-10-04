@@ -10,4 +10,4 @@ class C_CSGO_MapPreviewCameraPathNode : public C_BaseEntity
 	float32 m_flEaseOut;
 	Vector m_vInTangentWorld;
 	Vector m_vOutTangentWorld;
-}
+};

@@ -5,4 +5,4 @@ class CAnimEncodedFrames
 	int32 m_nFramesPerBlock;
 	CUtlVector< CAnimFrameBlockAnim > m_frameblockArray;
 	CAnimEncodeDifference m_usageDifferences;
-}
+};

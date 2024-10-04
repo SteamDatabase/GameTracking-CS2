@@ -11,4 +11,4 @@ class CInfoSpawnGroupLoadUnload : public CLogicalEntity
 	float32 m_flTimeoutInterval;
 	bool m_bStreamingStarted;
 	bool m_bUnloadingStarted;
-}
+};

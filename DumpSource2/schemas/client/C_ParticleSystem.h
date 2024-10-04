@@ -24,4 +24,4 @@ class C_ParticleSystem : public C_BaseModelEntity
 	Color m_clrTint;
 	bool m_bOldActive;
 	bool m_bOldFrozen;
-}
+};

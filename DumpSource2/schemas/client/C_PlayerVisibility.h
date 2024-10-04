@@ -6,4 +6,4 @@ class C_PlayerVisibility : public C_BaseEntity
 	float32 m_flFadeTime;
 	bool m_bStartDisabled;
 	bool m_bIsEnabled;
-}
+};

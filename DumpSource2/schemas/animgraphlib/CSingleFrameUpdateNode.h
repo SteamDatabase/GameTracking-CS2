@@ -4,4 +4,4 @@ class CSingleFrameUpdateNode : public CLeafUpdateNode
 	CPoseHandle m_hPoseCacheHandle;
 	HSequence m_hSequence;
 	float32 m_flCycle;
-}
+};

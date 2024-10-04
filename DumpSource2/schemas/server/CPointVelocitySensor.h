@@ -6,4 +6,4 @@ class CPointVelocitySensor : public CPointEntity
 	float32 m_fPrevVelocity;
 	float32 m_flAvgInterval;
 	CEntityOutputTemplate< float32 > m_Velocity;
-}
+};

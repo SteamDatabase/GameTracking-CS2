@@ -16,4 +16,4 @@ class CGradientFog : public CBaseEntity
 	bool m_bStartDisabled;
 	bool m_bIsEnabled;
 	bool m_bGradientFogNeedsTextures;
-}
+};

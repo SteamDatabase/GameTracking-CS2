@@ -6,4 +6,4 @@ class CCSPlayerController_InGameMoneyServices : public CPlayerControllerComponen
 	int32 m_iStartAccount;
 	int32 m_iTotalCashSpent;
 	int32 m_iCashSpentThisRound;
-}
+};

@@ -5,4 +5,4 @@ class CMotionGraphConfig
 	MotionIndex m_nMotionIndex;
 	int32 m_nSampleStart;
 	int32 m_nSampleCount;
-}
+};

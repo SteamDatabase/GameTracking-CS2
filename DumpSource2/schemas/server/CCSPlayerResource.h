@@ -10,4 +10,4 @@ class CCSPlayerResource : public CBaseEntity
 	int32[4] m_hostageRescueZ;
 	bool m_bEndMatchNextMapAllVoted;
 	bool m_foundGoalPositions;
-}
+};

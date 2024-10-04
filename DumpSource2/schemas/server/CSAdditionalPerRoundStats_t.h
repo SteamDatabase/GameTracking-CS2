@@ -6,4 +6,4 @@ class CSAdditionalPerRoundStats_t
 	int32 m_iBurnDamageInflicted;
 	int32 m_iBlastDamageInflicted;
 	int32 m_iDinks;
-}
+};

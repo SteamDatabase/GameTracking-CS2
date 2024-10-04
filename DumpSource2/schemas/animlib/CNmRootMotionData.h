@@ -5,4 +5,4 @@ class CNmRootMotionData
 	float32 m_flAverageLinearVelocity;
 	float32 m_flAverageAngularVelocityRadians;
 	CTransform m_totalDelta;
-}
+};

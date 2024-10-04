@@ -1,3 +1,3 @@
 class CWeaponAWP : public CCSWeaponBaseGun
 {
-}
+};

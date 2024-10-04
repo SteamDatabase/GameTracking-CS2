@@ -5,4 +5,4 @@ class PulseGraphExecutionHistoryCursorDesc_t
 	PulseDocNodeID_t nRetiredAtNodeID;
 	float32 flLastReferenced;
 	int32 nLastValidEntryIdx;
-}
+};

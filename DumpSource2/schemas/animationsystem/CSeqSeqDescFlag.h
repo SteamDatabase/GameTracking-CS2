@@ -11,4 +11,4 @@ class CSeqSeqDescFlag
 	bool m_bLegacyCyclepose;
 	bool m_bLegacyRealtime;
 	bool m_bModelDoc;
-}
+};

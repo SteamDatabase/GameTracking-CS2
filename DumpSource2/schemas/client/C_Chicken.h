@@ -7,4 +7,4 @@ class C_Chicken : public C_DynamicProp
 	bool m_bAttributesInitialized;
 	ParticleIndex_t m_hWaterWakeParticles;
 	bool m_bIsPreviewModel;
-}
+};

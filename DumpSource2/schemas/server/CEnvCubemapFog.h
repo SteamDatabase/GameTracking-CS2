@@ -18,4 +18,4 @@ class CEnvCubemapFog : public CBaseEntity
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_hFogCubemapTexture;
 	bool m_bHasHeightFogEnd;
 	bool m_bFirstTime;
-}
+};

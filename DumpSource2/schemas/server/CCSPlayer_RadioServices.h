@@ -5,4 +5,4 @@ class CCSPlayer_RadioServices : public CPlayerPawnComponent
 	GameTime_t m_flC4PlantTalkTimer;
 	GameTime_t[3] m_flRadioTokenSlots;
 	bool m_bIgnoreRadio;
-}
+};

@@ -1,3 +1,3 @@
 class CCSMinimapBoundary : public CBaseEntity
 {
-}
+};

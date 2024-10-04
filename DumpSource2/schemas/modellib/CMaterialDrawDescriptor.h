@@ -12,4 +12,4 @@ class CMaterialDrawDescriptor
 	int32 m_nIndexCount;
 	CRenderBufferBinding m_indexBuffer;
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_material;
-}
+};

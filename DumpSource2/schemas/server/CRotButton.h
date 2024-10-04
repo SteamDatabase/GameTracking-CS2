@@ -1,3 +1,3 @@
 class CRotButton : public CBaseButton
 {
-}
+};

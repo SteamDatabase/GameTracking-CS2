@@ -1,3 +1,3 @@
 class CStaticPoseCacheBuilder : public CStaticPoseCache
 {
-}
+};

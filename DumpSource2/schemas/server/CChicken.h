@@ -28,4 +28,4 @@ class CChicken : public CDynamicProp
 	GameTime_t m_flActiveFollowStartTime;
 	CountdownTimer m_followMinuteTimer;
 	CountdownTimer m_BlockDirectionTimer;
-}
+};

@@ -6,4 +6,4 @@ class CAISound : public CPointEntity
 	int32 m_iSoundIndex;
 	float32 m_flDuration;
 	CUtlSymbolLarge m_iszProxyEntityName;
-}
+};

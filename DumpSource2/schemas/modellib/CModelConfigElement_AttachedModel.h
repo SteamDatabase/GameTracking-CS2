@@ -14,4 +14,4 @@ class CModelConfigElement_AttachedModel : public CModelConfigElement
 	bool m_bAcceptParentMaterialDrivenDecals;
 	CUtlString m_BodygroupOnOtherModels;
 	CUtlString m_MaterialGroupOnOtherModels;
-}
+};

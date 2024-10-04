@@ -1,3 +1,3 @@
 class CServerRagdollTrigger : public CBaseTrigger
 {
-}
+};

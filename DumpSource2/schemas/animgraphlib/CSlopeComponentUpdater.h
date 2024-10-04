@@ -7,4 +7,4 @@ class CSlopeComponentUpdater : public CAnimComponentUpdater
 	CAnimParamHandle m_hSlopeHeading;
 	CAnimParamHandle m_hSlopeNormal;
 	CAnimParamHandle m_hSlopeNormal_WorldSpace;
-}
+};

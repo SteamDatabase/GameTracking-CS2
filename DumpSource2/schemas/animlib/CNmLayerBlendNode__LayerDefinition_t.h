@@ -8,4 +8,4 @@ class CNmLayerBlendNode::LayerDefinition_t
 	bool m_bIgnoreEvents;
 	bool m_bIsStateMachineLayer;
 	NmPoseBlendMode_t m_blendMode;
-}
+};

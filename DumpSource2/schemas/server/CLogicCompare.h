@@ -6,4 +6,4 @@ class CLogicCompare : public CLogicalEntity
 	CEntityOutputTemplate< float32 > m_OnEqualTo;
 	CEntityOutputTemplate< float32 > m_OnNotEqualTo;
 	CEntityOutputTemplate< float32 > m_OnGreaterThan;
-}
+};

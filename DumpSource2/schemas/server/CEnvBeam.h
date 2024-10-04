@@ -19,4 +19,4 @@ class CEnvBeam : public CBeam
 	CHandle< CBaseEntity > m_hFilter;
 	CUtlSymbolLarge m_iszDecal;
 	CEntityIOOutput m_OnTouchedByEntity;
-}
+};

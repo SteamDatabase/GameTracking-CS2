@@ -11,4 +11,4 @@ class CLogicAuto : public CBaseEntity
 	CEntityIOOutput m_OnVREnabled;
 	CEntityIOOutput m_OnVRNotEnabled;
 	CUtlSymbolLarge m_globalstate;
-}
+};

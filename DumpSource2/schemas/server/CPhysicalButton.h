@@ -1,3 +1,3 @@
 class CPhysicalButton : public CBaseButton
 {
-}
+};

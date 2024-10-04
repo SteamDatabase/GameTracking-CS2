@@ -1,3 +1,3 @@
 class CLeafUpdateNode : public CAnimUpdateNodeBase
 {
-}
+};

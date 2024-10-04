@@ -6,4 +6,4 @@ class CPhysLength : public CPhysConstraint
 	float32 m_minLength;
 	float32 m_totalLength;
 	bool m_bEnableCollision;
-}
+};

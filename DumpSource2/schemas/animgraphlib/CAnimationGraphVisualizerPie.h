@@ -4,4 +4,4 @@ class CAnimationGraphVisualizerPie : public CAnimationGraphVisualizerPrimitiveBa
 	VectorAligned m_vWsStart;
 	VectorAligned m_vWsEnd;
 	Color m_Color;
-}
+};

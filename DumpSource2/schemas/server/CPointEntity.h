@@ -1,3 +1,3 @@
 class CPointEntity : public CBaseEntity
 {
-}
+};

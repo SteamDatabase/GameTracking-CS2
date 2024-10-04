@@ -7,4 +7,4 @@ class CLogicRelay : public CLogicalEntity
 	bool m_bTriggerOnce;
 	bool m_bFastRetrigger;
 	bool m_bPassthoughCaller;
-}
+};

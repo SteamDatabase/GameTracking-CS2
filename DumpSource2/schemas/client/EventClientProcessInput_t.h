@@ -4,4 +4,4 @@ class EventClientProcessInput_t
 	float32 m_flRealTime;
 	float32 m_flTickInterval;
 	float64 m_flTickStartTime;
-}
+};

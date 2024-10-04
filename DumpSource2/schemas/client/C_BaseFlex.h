@@ -19,4 +19,4 @@ class C_BaseFlex : public CBaseAnimGraph
 	matrix3x4_t m_mEyeOcclusionRendererCameraToBoneTransform;
 	Vector m_vEyeOcclusionRendererHalfExtent;
 	C_BaseFlex::Emphasized_Phoneme[3] m_PhonemeClasses;
-}
+};

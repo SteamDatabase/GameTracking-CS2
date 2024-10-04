@@ -7,4 +7,4 @@ class CInfoWorldLayer : public CBaseEntity
 	bool m_bEntitiesSpawned;
 	bool m_bCreateAsChildSpawnGroup;
 	uint32 m_hLayerSpawnGroup;
-}
+};

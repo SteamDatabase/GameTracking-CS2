@@ -1,0 +1,5 @@
+enum CompositeMaterialVarSystemVar_t : uint32_t
+{
+	COMPMATSYSVAR_COMPOSITETIME = 0,
+	COMPMATSYSVAR_EMPTY_RESOURCE_SPACER = 1,
+};

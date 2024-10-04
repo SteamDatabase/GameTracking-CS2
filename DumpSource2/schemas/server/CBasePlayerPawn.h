@@ -25,4 +25,4 @@ class CBasePlayerPawn : public CBaseCombatCharacter
 	float32 m_fHltvReplayEnd;
 	CEntityIndex m_iHltvReplayEntity;
 	CUtlVector< sndopvarlatchdata_t > m_sndOpvarLatchData;
-}
+};

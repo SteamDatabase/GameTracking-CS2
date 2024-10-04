@@ -1,3 +1,3 @@
 class CPointConstraint : public CBaseConstraint
 {
-}
+};

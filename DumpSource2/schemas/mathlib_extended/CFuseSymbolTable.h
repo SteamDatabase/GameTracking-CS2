@@ -6,4 +6,4 @@ class CFuseSymbolTable
 	CUtlHashtable< CUtlStringToken, int32 > m_constantMap;
 	CUtlHashtable< CUtlStringToken, int32 > m_variableMap;
 	CUtlHashtable< CUtlStringToken, int32 > m_functionMap;
-}
+};

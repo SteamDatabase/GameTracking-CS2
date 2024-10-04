@@ -1,3 +1,3 @@
 class CServerOnlyModelEntity : public CBaseModelEntity
 {
-}
+};

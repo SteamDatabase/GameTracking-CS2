@@ -1,3 +1,3 @@
 class CEntityBlocker : public CBaseModelEntity
 {
-}
+};

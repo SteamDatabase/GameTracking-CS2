@@ -14,4 +14,4 @@ class MaterialResourceData_t
 	CUtlVector< MaterialParamTexture_t > m_textureAttributes;
 	CUtlVector< MaterialParamString_t > m_stringAttributes;
 	CUtlVector< CUtlString > m_renderAttributesUsed;
-}
+};

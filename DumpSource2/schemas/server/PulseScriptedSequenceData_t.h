@@ -12,4 +12,4 @@ class PulseScriptedSequenceData_t
 	bool m_bLoopActionSequence;
 	bool m_bLoopPostIdleSequence;
 	bool m_bIgnoreLookAt;
-}
+};

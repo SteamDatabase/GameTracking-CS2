@@ -19,4 +19,4 @@ class CFire : public CBaseModelEntity
 	bool m_bDidActivate;
 	CEntityIOOutput m_OnIgnited;
 	CEntityIOOutput m_OnExtinguished;
-}
+};

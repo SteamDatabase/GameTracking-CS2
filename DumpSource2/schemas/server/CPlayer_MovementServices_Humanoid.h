@@ -14,4 +14,4 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 	int32 m_nStepside;
 	int32 m_iTargetVolume;
 	Vector m_vecSmoothedVelocity;
-}
+};

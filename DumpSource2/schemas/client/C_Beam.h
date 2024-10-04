@@ -24,4 +24,4 @@ class C_Beam : public C_BaseModelEntity
 	bool m_bTurnedOff;
 	Vector m_vecEndPos;
 	CHandle< C_BaseEntity > m_hEndEntity;
-}
+};

@@ -6,4 +6,4 @@ class lerpdata_t
 	Vector m_vecStartOrigin;
 	Quaternion m_qStartRot;
 	ParticleIndex_t m_nFXIndex;
-}
+};

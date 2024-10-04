@@ -4,4 +4,4 @@ class ActiveModelConfig_t
 	CUtlSymbolLarge m_Name;
 	C_NetworkUtlVectorBase< CHandle< C_BaseModelEntity > > m_AssociatedEntities;
 	C_NetworkUtlVectorBase< CUtlSymbolLarge > m_AssociatedEntityNames;
-}
+};

@@ -3,4 +3,4 @@ class CNmIDEventPercentageThroughNode::CDefinition : public CNmBoolValueNode::CD
 	int16 m_nSourceStateNodeIdx;
 	CNmBitFlags m_eventConditionRules;
 	CGlobalSymbol m_eventID;
-}
+};

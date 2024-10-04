@@ -12,4 +12,4 @@ class CPlayer_CameraServices : public CPlayerPawnComponent
 	float32 m_flOldPlayerZ;
 	float32 m_flOldPlayerViewOffsetZ;
 	CUtlVector< CHandle< CEnvSoundscapeTriggerable > > m_hTriggerSoundscapeList;
-}
+};

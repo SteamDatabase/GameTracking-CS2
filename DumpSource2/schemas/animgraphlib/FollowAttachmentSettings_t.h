@@ -4,4 +4,4 @@ class FollowAttachmentSettings_t
 	int32 m_boneIndex;
 	bool m_bMatchTranslation;
 	bool m_bMatchRotation;
-}
+};

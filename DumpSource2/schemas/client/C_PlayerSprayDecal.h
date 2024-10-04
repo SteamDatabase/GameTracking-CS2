@@ -16,4 +16,4 @@ class C_PlayerSprayDecal : public C_ModelPointEntity
 	uint8 m_nVersion;
 	uint8[128] m_ubSignature;
 	CPlayerSprayDecalRenderHelper m_SprayRenderHelper;
-}
+};

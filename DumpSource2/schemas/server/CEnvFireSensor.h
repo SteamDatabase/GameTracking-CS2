@@ -8,4 +8,4 @@ class CEnvFireSensor : public CBaseEntity
 	float32 m_levelTime;
 	CEntityIOOutput m_OnHeatLevelStart;
 	CEntityIOOutput m_OnHeatLevelEnd;
-}
+};

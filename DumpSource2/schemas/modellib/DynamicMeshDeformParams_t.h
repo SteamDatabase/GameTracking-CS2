@@ -5,4 +5,4 @@ class DynamicMeshDeformParams_t
 	bool m_bRecomputeSmoothNormalsAfterAnimation;
 	bool m_bComputeDynamicMeshTensionAfterAnimation;
 	bool m_bSmoothNormalsAcrossUvSeams;
-}
+};

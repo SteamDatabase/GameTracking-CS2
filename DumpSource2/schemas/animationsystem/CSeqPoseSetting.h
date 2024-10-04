@@ -8,4 +8,4 @@ class CSeqPoseSetting
 	bool m_bY;
 	bool m_bZ;
 	int32 m_eType;
-}
+};

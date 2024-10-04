@@ -25,4 +25,4 @@ class fogparams_t
 	bool blend;
 	bool m_bNoReflectionFog;
 	bool m_bPadding;
-}
+};

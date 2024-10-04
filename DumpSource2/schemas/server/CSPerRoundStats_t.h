@@ -13,4 +13,4 @@ class CSPerRoundStats_t
 	int32 m_iCashEarned;
 	int32 m_iUtilityDamage;
 	int32 m_iEnemiesFlashed;
-}
+};

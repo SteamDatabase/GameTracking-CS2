@@ -17,4 +17,4 @@ class CPropDoorRotating : public CBasePropDoor
 	Vector m_vecBackBoundsMax;
 	bool m_bAjarDoorShouldntAlwaysOpen;
 	CHandle< CEntityBlocker > m_hEntityBlocker;
-}
+};

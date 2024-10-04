@@ -4,4 +4,4 @@ class VPhysXConstraint2_t
 	uint16 m_nParent;
 	uint16 m_nChild;
 	VPhysXConstraintParams_t m_params;
-}
+};

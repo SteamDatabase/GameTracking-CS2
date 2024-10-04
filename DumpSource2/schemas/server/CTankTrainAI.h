@@ -7,4 +7,4 @@ class CTankTrainAI : public CPointEntity
 	CUtlSymbolLarge m_engineSoundName;
 	CUtlSymbolLarge m_movementSoundName;
 	CUtlSymbolLarge m_targetEntityName;
-}
+};

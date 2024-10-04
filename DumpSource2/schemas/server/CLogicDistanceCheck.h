@@ -7,4 +7,4 @@ class CLogicDistanceCheck : public CLogicalEntity
 	CEntityIOOutput m_InZone1;
 	CEntityIOOutput m_InZone2;
 	CEntityIOOutput m_InZone3;
-}
+};

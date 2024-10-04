@@ -66,4 +66,4 @@ class CSceneEntity : public CPointEntity
 	CHandle< CBaseEntity > m_hActivator;
 	int32 m_BusyActor;
 	SceneOnPlayerDeath_t m_iPlayerDeathBehavior;
-}
+};

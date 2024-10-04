@@ -12,4 +12,4 @@ class CSound
 	int32 m_ownerChannelIndex;
 	Vector m_vecOrigin;
 	bool m_bHasOwner;
-}
+};

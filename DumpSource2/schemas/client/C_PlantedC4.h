@@ -30,4 +30,4 @@ class C_PlantedC4 : public CBaseAnimGraph
 	Vector m_vecC4ExplodeSpectatePos;
 	QAngle m_vecC4ExplodeSpectateAng;
 	float32 m_flC4ExplodeSpectateDuration;
-}
+};

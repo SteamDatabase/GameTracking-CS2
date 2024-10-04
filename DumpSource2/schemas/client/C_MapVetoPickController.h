@@ -17,4 +17,4 @@ class C_MapVetoPickController : public C_BaseEntity
 	int32 m_nPhaseDurationTicks;
 	int32 m_nPostDataUpdateTick;
 	bool m_bDisabledHud;
-}
+};

@@ -1,0 +1,38 @@
+class RnBodyDesc_t
+{
+	CUtlString m_sDebugName;
+	Vector m_vPosition;
+	QuaternionStorage m_qOrientation;
+	Vector m_vLinearVelocity;
+	Vector m_vAngularVelocity;
+	Vector m_vLocalMassCenter;
+	Vector[3] m_LocalInertiaInv;
+	float32 m_flMassInv;
+	float32 m_flGameMass;
+	float32 m_flInertiaScaleInv;
+	float32 m_flLinearDamping;
+	float32 m_flAngularDamping;
+	float32 m_flLinearDrag;
+	float32 m_flAngularDrag;
+	float32 m_flLinearBuoyancyDrag;
+	float32 m_flAngularBuoyancyDrag;
+	Vector m_vLastAwakeForceAccum;
+	Vector m_vLastAwakeTorqueAccum;
+	float32 m_flBuoyancyFactor;
+	float32 m_flGravityScale;
+	float32 m_flTimeScale;
+	int32 m_nBodyType;
+	uint32 m_nGameIndex;
+	uint32 m_nGameFlags;
+	int8 m_nMinVelocityIterations;
+	int8 m_nMinPositionIterations;
+	int8 m_nMassPriority;
+	bool m_bEnabled;
+	bool m_bSleeping;
+	bool m_bIsContinuousEnabled;
+	bool m_bDragEnabled;
+	bool m_bBuoyancyDragEnabled;
+	bool m_bGravityDisabled;
+	bool m_bSpeculativeEnabled;
+	bool m_bHasShadowController;
+};

@@ -24,4 +24,4 @@ class CMapVetoPickController : public CBaseEntity
 	CEntityOutputTemplate< int32 > m_OnSidesPicked;
 	CEntityOutputTemplate< int32 > m_OnNewPhaseStarted;
 	CEntityOutputTemplate< int32 > m_OnLevelTransition;
-}
+};

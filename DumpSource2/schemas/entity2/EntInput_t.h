@@ -1,3 +1,3 @@
 class EntInput_t
 {
-}
+};

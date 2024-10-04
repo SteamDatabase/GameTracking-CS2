@@ -10,4 +10,4 @@ class C_CSTeam : public C_Team
 	uint32 m_iClanID;
 	char[8] m_szTeamFlagImage;
 	char[8] m_szTeamLogoImage;
-}
+};

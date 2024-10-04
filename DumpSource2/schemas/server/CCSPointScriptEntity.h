@@ -1,3 +1,3 @@
 class CCSPointScriptEntity : public CBaseEntity
 {
-}
+};

@@ -4,4 +4,4 @@ class CPulseCell_Inflow_EntOutputHandler : public CPulseCell_Inflow_BaseEntrypoi
 	CUtlSymbolLarge m_SourceOutput;
 	CUtlSymbolLarge m_TargetInput;
 	CPulseValueFullType m_ExpectedParamType;
-}
+};

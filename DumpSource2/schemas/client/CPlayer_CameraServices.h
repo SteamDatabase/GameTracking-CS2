@@ -20,4 +20,4 @@ class CPlayer_CameraServices : public CPlayerPawnComponent
 	float32[5] m_fOverrideFogEnd;
 	CHandle< C_PostProcessingVolume > m_hActivePostProcessingVolume;
 	QAngle m_angDemoViewAngles;
-}
+};

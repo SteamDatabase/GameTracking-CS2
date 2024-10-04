@@ -5,4 +5,4 @@ class CNmFloatMathNode::CDefinition : public CNmFloatValueNode::CDefinition
 	bool m_bReturnAbsoluteResult;
 	CNmFloatMathNode::Operator_t m_operator;
 	float32 m_flValueB;
-}
+};

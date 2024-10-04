@@ -13,4 +13,4 @@ class CTimerEntity : public CLogicalEntity
 	float32 m_flUpperRandomBound;
 	float32 m_flRemainingTime;
 	bool m_bPaused;
-}
+};

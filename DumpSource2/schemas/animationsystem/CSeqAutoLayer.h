@@ -7,4 +7,4 @@ class CSeqAutoLayer
 	float32 m_peak;
 	float32 m_tail;
 	float32 m_end;
-}
+};

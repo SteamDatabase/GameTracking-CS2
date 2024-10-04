@@ -7,4 +7,4 @@ class C_LightGlowOverlay : public CGlowOverlay
 	int32 m_nOuterMaxDist;
 	bool m_bOneSided;
 	bool m_bModulateByDot;
-}
+};

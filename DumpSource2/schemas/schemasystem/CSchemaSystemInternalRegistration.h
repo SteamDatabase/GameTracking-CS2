@@ -22,4 +22,4 @@ class CSchemaSystemInternalRegistration
 	CUtlStringTokenWithStorage m_stringTokenWithStorage;
 	CResourceArray< CResourcePointer< CResourceString > > m_ResourceTypes;
 	KeyValues3 m_KV3;
-}
+};

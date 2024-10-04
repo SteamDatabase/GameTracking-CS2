@@ -5,4 +5,4 @@ class CWayPointHelperUpdateNode : public CUnaryUpdateNode
 	bool m_bOnlyGoals;
 	bool m_bPreventOvershoot;
 	bool m_bPreventUndershoot;
-}
+};

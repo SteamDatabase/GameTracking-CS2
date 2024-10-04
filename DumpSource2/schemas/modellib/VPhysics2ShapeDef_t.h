@@ -5,4 +5,4 @@ class VPhysics2ShapeDef_t
 	CUtlVector< RnHullDesc_t > m_hulls;
 	CUtlVector< RnMeshDesc_t > m_meshes;
 	CUtlVector< uint16 > m_CollisionAttributeIndices;
-}
+};

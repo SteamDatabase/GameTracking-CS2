@@ -39,4 +39,4 @@ class CHostage : public CHostageExpresserShim
 	int32 m_nPickupEventCount;
 	Vector m_vecSpawnGroundPos;
 	Vector m_vecHostageResetPosition;
-}
+};

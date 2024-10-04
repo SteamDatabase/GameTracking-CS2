@@ -5,4 +5,4 @@ class CTriggerProximity : public CBaseTrigger
 	float32 m_fRadius;
 	int32 m_nTouchers;
 	CEntityOutputTemplate< float32 > m_NearestEntityDistance;
-}
+};

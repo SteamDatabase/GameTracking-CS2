@@ -4,4 +4,4 @@ class SummaryTakeDamageInfo_t
 	CTakeDamageInfo info;
 	CTakeDamageResult result;
 	CHandle< C_BaseEntity > hTarget;
-}
+};

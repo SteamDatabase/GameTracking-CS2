@@ -9,4 +9,4 @@ class C_EnvDecal : public C_BaseModelEntity
 	bool m_bProjectOnCharacters;
 	bool m_bProjectOnWater;
 	float32 m_flDepthSortBias;
-}
+};

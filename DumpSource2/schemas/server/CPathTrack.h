@@ -9,4 +9,4 @@ class CPathTrack : public CPointEntity
 	int32 m_nIterVal;
 	TrackOrientationType_t m_eOrientationType;
 	CEntityIOOutput m_OnPass;
-}
+};

@@ -13,4 +13,4 @@ class C_FireSmoke : public C_BaseFire
 	bool m_bFadingOut;
 	TimedEvent m_tParticleSpawn;
 	CFireOverlay* m_pFireOverlay;
-}
+};

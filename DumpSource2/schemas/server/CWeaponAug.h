@@ -1,3 +1,3 @@
 class CWeaponAug : public CCSWeaponBaseGun
 {
-}
+};

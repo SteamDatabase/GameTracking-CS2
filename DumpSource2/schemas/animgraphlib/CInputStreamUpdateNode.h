@@ -1,3 +1,3 @@
 class CInputStreamUpdateNode : public CLeafUpdateNode
 {
-}
+};

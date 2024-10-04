@@ -5,4 +5,4 @@ class ModelBoneFlexDriverControl_t
 	uint32 m_flexControllerToken;
 	float32 m_flMin;
 	float32 m_flMax;
-}
+};

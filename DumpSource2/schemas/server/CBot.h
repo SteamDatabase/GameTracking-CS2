@@ -13,4 +13,4 @@ class CBot
 	float32 m_jumpTimestamp;
 	Vector m_viewForward;
 	int32 m_postureStackIndex;
-}
+};

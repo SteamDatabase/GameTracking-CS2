@@ -7,4 +7,4 @@ class CTriggerPush : public CBaseTrigger
 	CUtlSymbolLarge m_iszPathSimpleName;
 	CPathSimple* m_PathSimple;
 	uint32 m_splinePushType;
-}
+};

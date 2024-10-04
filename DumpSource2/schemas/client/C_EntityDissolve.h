@@ -13,4 +13,4 @@ class C_EntityDissolve : public C_BaseModelEntity
 	uint32 m_nMagnitude;
 	bool m_bCoreExplode;
 	bool m_bLinkedToServerEnt;
-}
+};

@@ -6,4 +6,4 @@ class CPulseGraphComponentBase
 	CUtlSymbolLarge m_sNameFixupParent;
 	CUtlSymbolLarge m_sNameFixupLocal;
 	CUtlSymbolLarge m_sProceduralWorldNameForRelays;
-}
+};

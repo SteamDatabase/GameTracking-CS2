@@ -7,4 +7,4 @@ class CPhysMotor : public CLogicalEntity
 	float32 m_angularAcceleration;
 	GameTime_t m_lastTime;
 	CMotorController m_motor;
-}
+};

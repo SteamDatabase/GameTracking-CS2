@@ -4,4 +4,4 @@ class CTeam : public CBaseEntity
 	CNetworkUtlVectorBase< CHandle< CBasePlayerPawn > > m_aPlayers;
 	int32 m_iScore;
 	char[129] m_szTeamname;
-}
+};

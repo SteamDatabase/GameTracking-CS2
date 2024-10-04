@@ -27,4 +27,4 @@ class CPlantedC4 : public CBaseAnimGraph
 	GameTime_t m_flNextBotBeepTime;
 	QAngle m_angCatchUpToPlayerEye;
 	GameTime_t m_flLastSpinDetectionTime;
-}
+};

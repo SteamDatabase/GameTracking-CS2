@@ -8,4 +8,4 @@ class CompositeMaterialEditorPoint_t
 	CResourceName m_ChildModelName;
 	CUtlVector< CompositeMaterialAssemblyProcedure_t > m_vecCompositeMaterialAssemblyProcedures;
 	CUtlVector< CompositeMaterial_t > m_vecCompositeMaterials;
-}
+};

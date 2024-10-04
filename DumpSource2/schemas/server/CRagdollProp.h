@@ -27,4 +27,4 @@ class CRagdollProp : public CBaseAnimGraph
 	CUtlVector< Vector > m_ragdollMaxs;
 	bool m_bShouldDeleteActivationRecord;
 	bool m_bValidatePoweredRagdollPose;
-}
+};

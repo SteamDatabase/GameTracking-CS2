@@ -7,4 +7,4 @@ class CNmRootMotionOverrideNode::CDefinition : public CNmPassthroughNode::CDefin
 	float32 m_maxLinearVelocity;
 	float32 m_maxAngularVelocityRadians;
 	CNmBitFlags m_overrideFlags;
-}
+};

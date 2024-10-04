@@ -6,4 +6,4 @@ class CFuncBrush : public CBaseModelEntity
 	CUtlSymbolLarge m_iszExcludedClass;
 	bool m_bInvertExclusion;
 	bool m_bScriptedMovement;
-}
+};

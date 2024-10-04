@@ -11,4 +11,4 @@ class CEntityFlame : public CBaseEntity
 	int32 m_iDangerSound;
 	float32 m_flDirectDamagePerSecond;
 	int32 m_iCustomDamageType;
-}
+};

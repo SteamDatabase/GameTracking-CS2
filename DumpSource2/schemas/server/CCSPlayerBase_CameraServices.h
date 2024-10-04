@@ -7,4 +7,4 @@ class CCSPlayerBase_CameraServices : public CPlayer_CameraServices
 	CHandle< CBaseEntity > m_hZoomOwner;
 	CUtlVector< CHandle< CBaseEntity > > m_hTriggerFogList;
 	CHandle< CBaseEntity > m_hLastFogTrigger;
-}
+};

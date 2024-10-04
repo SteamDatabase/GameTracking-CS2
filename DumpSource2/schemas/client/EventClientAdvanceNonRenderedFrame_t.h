@@ -1,3 +1,3 @@
 class EventClientAdvanceNonRenderedFrame_t
 {
-}
+};

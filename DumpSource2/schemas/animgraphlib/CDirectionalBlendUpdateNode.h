@@ -8,4 +8,4 @@ class CDirectionalBlendUpdateNode : public CLeafUpdateNode
 	float32 m_duration;
 	bool m_bLoop;
 	bool m_bLockBlendOnReset;
-}
+};

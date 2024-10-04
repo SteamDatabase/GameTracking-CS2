@@ -92,4 +92,4 @@ class CCSWeaponBaseVData : public CBasePlayerWeaponVData
 	float32 m_flThrowVelocity;
 	Vector m_vSmokeColor;
 	CGlobalSymbol m_szAnimClass;
-}
+};

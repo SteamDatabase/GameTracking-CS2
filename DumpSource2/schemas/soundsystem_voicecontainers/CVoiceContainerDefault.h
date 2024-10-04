@@ -1,0 +1,3 @@
+class CVoiceContainerDefault : public CVoiceContainerBase
+{
+};

@@ -8,4 +8,4 @@ class CCitadelSoundOpvarSetOBB : public C_BaseEntity
 	Vector m_vDistanceOuterMins;
 	Vector m_vDistanceOuterMaxs;
 	int32 m_nAABBDirection;
-}
+};

@@ -9,4 +9,4 @@ class CFootAdjustmentUpdateNode : public CUnaryUpdateNode
 	float32 m_flStepHeightMaxAngle;
 	bool m_bResetChild;
 	bool m_bAnimationDriven;
-}
+};

@@ -72,4 +72,4 @@ class C_CSWeaponBase : public C_BasePlayerWeapon
 	int32 m_iNumEmptyAttacks;
 	GameTime_t m_flLastMagDropRequestTime;
 	float32 m_flWatTickOffset;
-}
+};

@@ -10,4 +10,4 @@ class CInfoOffscreenPanoramaTexture : public CPointEntity
 	CNetworkUtlVectorBase< CUtlSymbolLarge > m_vecCSSClasses;
 	CUtlSymbolLarge m_szTargetsName;
 	CUtlVector< CHandle< CBaseModelEntity > > m_AdditionalTargetEntities;
-}
+};

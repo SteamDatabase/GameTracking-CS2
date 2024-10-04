@@ -12,4 +12,4 @@ class CPointTemplate : public CLogicalEntity
 	CUtlVector< CEntityHandle > m_SpawnedEntityHandles;
 	HSCRIPT m_ScriptSpawnCallback;
 	HSCRIPT m_ScriptCallbackScope;
-}
+};

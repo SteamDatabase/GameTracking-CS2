@@ -10,4 +10,4 @@ class PermModelInfo_t
 	float32 m_flMaxEyeDeflection;
 	CUtlString m_sSurfaceProperty;
 	CUtlString m_keyValueText;
-}
+};

@@ -25,4 +25,4 @@ class dynpitchvol_base_t
 	int32 volfrac;
 	int32 lfofrac;
 	int32 lfomult;
-}
+};

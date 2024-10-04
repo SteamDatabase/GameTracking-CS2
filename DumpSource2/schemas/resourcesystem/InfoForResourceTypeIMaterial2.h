@@ -1,3 +1,3 @@
 class InfoForResourceTypeIMaterial2
 {
-}
+};

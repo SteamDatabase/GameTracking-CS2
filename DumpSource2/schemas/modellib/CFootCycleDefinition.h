@@ -9,4 +9,4 @@ class CFootCycleDefinition
 	CFootCycle m_footOffCycle;
 	CFootCycle m_footStrikeCycle;
 	CFootCycle m_footLandCycle;
-}
+};

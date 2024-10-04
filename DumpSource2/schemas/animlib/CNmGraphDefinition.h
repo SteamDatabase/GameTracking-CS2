@@ -9,4 +9,4 @@ class CNmGraphDefinition
 	CUtlVector< CNmGraphDefinition::ExternalGraphSlot_t > m_externalGraphSlots;
 	CUtlVector< CUtlString > m_nodePaths;
 	V_uuid_t m_runtimeVersionID;
-}
+};

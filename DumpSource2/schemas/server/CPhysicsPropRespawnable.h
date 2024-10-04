@@ -5,4 +5,4 @@ class CPhysicsPropRespawnable : public CPhysicsProp
 	Vector m_vOriginalMins;
 	Vector m_vOriginalMaxs;
 	float32 m_flRespawnDuration;
-}
+};

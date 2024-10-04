@@ -5,4 +5,4 @@ class CSoundOpvarSetAutoRoomEntity : public CSoundOpvarSetPointEntity
 	float32 m_flSize;
 	float32 m_flHeightTolerance;
 	float32 m_flSizeSqr;
-}
+};

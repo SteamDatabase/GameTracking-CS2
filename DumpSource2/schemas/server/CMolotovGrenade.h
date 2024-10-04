@@ -1,3 +1,3 @@
 class CMolotovGrenade : public CBaseCSGrenade
 {
-}
+};

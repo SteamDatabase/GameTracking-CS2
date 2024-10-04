@@ -14,4 +14,4 @@ class CCSTeam : public CTeam
 	char[8] m_szTeamLogoImage;
 	float32 m_flNextResourceTime;
 	int32 m_iLastUpdateSentAt;
-}
+};

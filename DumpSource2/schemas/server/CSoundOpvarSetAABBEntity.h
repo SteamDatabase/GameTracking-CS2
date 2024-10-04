@@ -9,4 +9,4 @@ class CSoundOpvarSetAABBEntity : public CSoundOpvarSetPointEntity
 	Vector m_vInnerMaxs;
 	Vector m_vOuterMins;
 	Vector m_vOuterMaxs;
-}
+};

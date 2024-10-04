@@ -6,4 +6,4 @@ class CPhysForce : public CPointEntity
 	CHandle< CBaseEntity > m_attachedObject;
 	bool m_wasRestored;
 	CConstantForceController m_integrator;
-}
+};

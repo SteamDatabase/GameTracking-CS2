@@ -15,4 +15,4 @@ class TwoBoneIKSettings_t
 	bool m_bMatchTargetOrientation;
 	bool m_bConstrainTwist;
 	float32 m_flMaxTwist;
-}
+};

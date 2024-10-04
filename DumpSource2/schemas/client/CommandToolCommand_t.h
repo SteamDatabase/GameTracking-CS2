@@ -12,4 +12,4 @@ class CommandToolCommand_t
 	CUtlString m_Commands;
 	DebugOverlayBits_t m_SetDebugBits;
 	DebugOverlayBits_t m_ClearDebugBits;
-}
+};

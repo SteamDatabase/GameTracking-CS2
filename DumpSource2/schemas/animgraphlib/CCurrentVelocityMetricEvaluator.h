@@ -1,3 +1,3 @@
 class CCurrentVelocityMetricEvaluator : public CMotionMetricEvaluator
 {
-}
+};

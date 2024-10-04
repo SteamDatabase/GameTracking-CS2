@@ -10,4 +10,4 @@ class HullFlags_t
 	bool m_bHull_LargeCentered;
 	bool m_bHull_MediumTall;
 	bool m_bHull_Small;
-}
+};

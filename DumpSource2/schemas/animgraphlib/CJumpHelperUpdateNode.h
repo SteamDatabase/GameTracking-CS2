@@ -8,4 +8,4 @@ class CJumpHelperUpdateNode : public CSequenceUpdateNode
 	JumpCorrectionMethod m_eCorrectionMethod;
 	bool[3] m_bTranslationAxis;
 	bool m_bScaleSpeed;
-}
+};

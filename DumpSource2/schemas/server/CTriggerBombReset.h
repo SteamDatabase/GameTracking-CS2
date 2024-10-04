@@ -1,3 +1,3 @@
 class CTriggerBombReset : public CBaseTrigger
 {
-}
+};

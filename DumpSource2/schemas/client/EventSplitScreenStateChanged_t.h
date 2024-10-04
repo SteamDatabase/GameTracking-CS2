@@ -1,3 +1,3 @@
 class EventSplitScreenStateChanged_t
 {
-}
+};

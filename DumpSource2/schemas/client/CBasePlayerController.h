@@ -16,4 +16,4 @@ class CBasePlayerController : public C_BaseEntity
 	uint64 m_steamID;
 	bool m_bIsLocalPlayerController;
 	uint32 m_iDesiredFOV;
-}
+};

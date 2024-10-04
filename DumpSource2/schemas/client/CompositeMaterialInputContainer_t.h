@@ -8,4 +8,4 @@ class CompositeMaterialInputContainer_t
 	CUtlVector< CompositeMaterialInputLooseVariable_t > m_vecLooseVariables;
 	CUtlString m_strAttrNameForVar;
 	bool m_bExposeExternally;
-}
+};

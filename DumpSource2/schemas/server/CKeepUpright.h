@@ -7,4 +7,4 @@ class CKeepUpright : public CPointEntity
 	float32 m_angularLimit;
 	bool m_bActive;
 	bool m_bDampAllRotation;
-}
+};

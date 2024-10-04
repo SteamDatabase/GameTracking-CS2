@@ -5,4 +5,4 @@ class CMathColorBlend : public CLogicalEntity
 	Color m_OutColor1;
 	Color m_OutColor2;
 	CEntityOutputTemplate< Color > m_OutValue;
-}
+};

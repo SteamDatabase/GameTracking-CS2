@@ -2,4 +2,4 @@ class CNmParameterizedClipSelectorNode::CDefinition : public CNmPoseNode::CDefin
 {
 	CUtlLeanVectorFixedGrowable< int16, 5 > m_optionNodeIndices;
 	int16 m_parameterNodeIdx;
-}
+};

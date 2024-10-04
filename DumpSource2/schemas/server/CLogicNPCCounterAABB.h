@@ -4,4 +4,4 @@ class CLogicNPCCounterAABB : public CLogicNPCCounter
 	Vector m_vDistanceOuterMaxs;
 	Vector m_vOuterMins;
 	Vector m_vOuterMaxs;
-}
+};

@@ -8,4 +8,4 @@ class ResponseFollowup
 	char* followup_entityioinput;
 	float32 followup_entityiodelay;
 	bool bFired;
-}
+};

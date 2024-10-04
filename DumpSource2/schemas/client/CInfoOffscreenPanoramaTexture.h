@@ -9,4 +9,4 @@ class CInfoOffscreenPanoramaTexture : public C_PointEntity
 	int32 m_nTargetChangeCount;
 	C_NetworkUtlVectorBase< CUtlSymbolLarge > m_vecCSSClasses;
 	bool m_bCheckCSSClasses;
-}
+};

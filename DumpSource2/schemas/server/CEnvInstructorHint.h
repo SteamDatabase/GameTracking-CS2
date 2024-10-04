@@ -24,4 +24,4 @@ class CEnvInstructorHint : public CPointEntity
 	bool m_bAllowNoDrawTarget;
 	bool m_bAutoStart;
 	bool m_bLocalPlayerOnly;
-}
+};

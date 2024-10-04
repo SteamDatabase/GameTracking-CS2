@@ -1,3 +1,3 @@
 class CTeamplayRules : public CMultiplayRules
 {
-}
+};

@@ -11,4 +11,4 @@ class CBaseMoveBehavior : public CPathKeyFrame
 	CPathKeyFrame* m_pPostKeyFrame;
 	float32 m_flTimeIntoFrame;
 	int32 m_iDirection;
-}
+};

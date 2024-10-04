@@ -5,4 +5,4 @@ class CNmClipNode::CDefinition : public CNmPoseNode::CDefinition
 	bool m_bSampleRootMotion;
 	bool m_bAllowLooping;
 	int16 m_nDataSlotIdx;
-}
+};

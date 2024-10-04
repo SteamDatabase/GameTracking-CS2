@@ -5,4 +5,4 @@ class CNmFloatEaseNode::CDefinition : public CNmFloatValueNode::CDefinition
 	int16 m_nInputValueNodeIdx;
 	NmEasingOperation_t m_easingOp;
 	bool m_bUseStartValue;
-}
+};

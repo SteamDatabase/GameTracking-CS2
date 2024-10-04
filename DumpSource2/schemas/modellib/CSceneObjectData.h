@@ -6,4 +6,4 @@ class CSceneObjectData
 	CUtlLeanVector< AABB_t > m_drawBounds;
 	CUtlLeanVector< CMeshletDescriptor > m_meshlets;
 	Vector4D m_vTintColor;
-}
+};

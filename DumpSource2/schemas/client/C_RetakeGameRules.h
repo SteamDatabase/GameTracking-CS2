@@ -5,4 +5,4 @@ class C_RetakeGameRules
 	bool m_bRoundInProgress;
 	int32 m_iFirstSecondHalfRound;
 	int32 m_iBombSite;
-}
+};

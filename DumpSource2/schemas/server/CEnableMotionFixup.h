@@ -1,3 +1,3 @@
 class CEnableMotionFixup : public CBaseEntity
 {
-}
+};

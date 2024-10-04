@@ -5,4 +5,4 @@ class CMessageEntity : public CPointEntity
 	bool m_drawText;
 	bool m_bDeveloperOnly;
 	bool m_bEnabled;
-}
+};

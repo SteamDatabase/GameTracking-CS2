@@ -14,4 +14,4 @@ class CBtActionMoveTo : public CBtNode
 	float32 m_flAdditionalArrivalEpsilon2D;
 	float32 m_flHidingSpotCheckDistanceThreshold;
 	float32 m_flNearestAreaDistanceThreshold;
-}
+};

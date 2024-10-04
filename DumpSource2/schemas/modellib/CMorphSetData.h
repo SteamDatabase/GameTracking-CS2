@@ -8,4 +8,4 @@ class CMorphSetData
 	CUtlVector< CFlexDesc > m_FlexDesc;
 	CUtlVector< CFlexController > m_FlexControllers;
 	CUtlVector< CFlexRule > m_FlexRules;
-}
+};

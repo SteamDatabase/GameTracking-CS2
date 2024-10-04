@@ -14,4 +14,4 @@ class CMomentaryRotButton : public CRotButton
 	int32 m_direction;
 	float32 m_returnSpeed;
 	float32 m_flStartPosition;
-}
+};

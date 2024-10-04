@@ -7,4 +7,4 @@ class ModelSkeletonData_t
 	CUtlVector< Vector > m_bonePosParent;
 	CUtlVector< QuaternionStorage > m_boneRotParent;
 	CUtlVector< float32 > m_boneScaleParent;
-}
+};

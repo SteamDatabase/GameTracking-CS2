@@ -5,4 +5,4 @@ class PulseGraphExecutionHistoryEntry_t
 	float32 flExecTime;
 	uint32 unFlags;
 	CUtlSymbolLarge tagName;
-}
+};

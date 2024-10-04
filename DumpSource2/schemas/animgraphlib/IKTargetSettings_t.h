@@ -5,4 +5,4 @@ class IKTargetSettings_t
 	AnimParamID m_AnimgraphParameterNamePosition;
 	AnimParamID m_AnimgraphParameterNameOrientation;
 	IKTargetCoordinateSystem m_TargetCoordSystem;
-}
+};

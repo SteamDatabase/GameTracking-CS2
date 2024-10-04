@@ -6,4 +6,4 @@ class CPlayerInputAnimMotorUpdater : public CAnimMotorUpdaterBase
 	CAnimParamHandle m_hAnticipationPosParam;
 	CAnimParamHandle m_hAnticipationHeadingParam;
 	bool m_bUseAcceleration;
-}
+};

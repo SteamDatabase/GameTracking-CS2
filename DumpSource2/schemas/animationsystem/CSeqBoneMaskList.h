@@ -5,4 +5,4 @@ class CSeqBoneMaskList
 	CUtlVector< float32 > m_flBoneWeightArray;
 	float32 m_flDefaultMorphCtrlWeight;
 	CUtlVector< CUtlPair< CBufferString, float32 > > m_morphCtrlWeightArray;
-}
+};

@@ -9,4 +9,4 @@ class CAnimDataChannelDesc
 	CUtlVector< CBufferString > m_szElementNameArray;
 	CUtlVector< int32 > m_nElementIndexArray;
 	CUtlVector< uint32 > m_nElementMaskArray;
-}
+};

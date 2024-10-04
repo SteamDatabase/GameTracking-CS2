@@ -28,4 +28,4 @@ class CShatterGlassShard
 	GameTime_t m_flPhysicsEntitySpawnedAtTime;
 	CHandle< CBaseEntity > m_hEntityHittingMe;
 	CUtlVector< uint32 > m_vecNeighbors;
-}
+};

@@ -9,4 +9,4 @@ class CDynamicLight : public CBaseModelEntity
 	float32 m_InnerAngle;
 	float32 m_OuterAngle;
 	float32 m_SpotRadius;
-}
+};

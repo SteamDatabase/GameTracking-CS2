@@ -8,4 +8,4 @@ class C_FuncMonitor : public C_FuncBrush
 	CHandle< C_BaseEntity > m_hTargetCamera;
 	bool m_bEnabled;
 	bool m_bDraw3DSkybox;
-}
+};

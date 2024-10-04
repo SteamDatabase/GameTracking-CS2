@@ -22,4 +22,4 @@ class CCSPlayerPawnBase : public CBasePlayerPawn
 	bool m_wasNotKilledNaturally;
 	bool m_bCommittingSuicideOnTeamChange;
 	CHandle< CCSPlayerController > m_hOriginalController;
-}
+};

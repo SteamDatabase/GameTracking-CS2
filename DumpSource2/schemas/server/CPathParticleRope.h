@@ -16,4 +16,4 @@ class CPathParticleRope : public CBaseEntity
 	CNetworkUtlVectorBase< Vector > m_PathNodes_Color;
 	CNetworkUtlVectorBase< bool > m_PathNodes_PinEnabled;
 	CNetworkUtlVectorBase< float32 > m_PathNodes_RadiusScale;
-}
+};

@@ -14,4 +14,4 @@ class CTriggerLerpObject : public CBaseTrigger
 	CHandle< CBaseEntity > m_hEntityToWaitForDisconnect;
 	CEntityIOOutput m_OnLerpStarted;
 	CEntityIOOutput m_OnLerpFinished;
-}
+};

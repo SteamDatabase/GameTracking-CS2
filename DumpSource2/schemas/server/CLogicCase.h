@@ -6,4 +6,4 @@ class CLogicCase : public CLogicalEntity
 	uint8[32] m_uchShuffleCaseMap;
 	CEntityIOOutput[32] m_OnCase;
 	CEntityOutputTemplate< CVariantBase< CVariantDefaultAllocator > > m_OnDefault;
-}
+};

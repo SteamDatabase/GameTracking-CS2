@@ -6,4 +6,4 @@ class CCSPlayerBase_CameraServices : public CPlayer_CameraServices
 	float32 m_flFOVRate;
 	CHandle< C_BaseEntity > m_hZoomOwner;
 	float32 m_flLastShotFOV;
-}
+};

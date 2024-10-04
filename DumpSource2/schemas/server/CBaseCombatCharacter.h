@@ -10,4 +10,4 @@ class CBaseCombatCharacter : public CBaseFlex
 	CUtlSymbolLarge m_strRelationships;
 	Hull_t m_eHull;
 	uint32 m_nNavHullIdx;
-}
+};

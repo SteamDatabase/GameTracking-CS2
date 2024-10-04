@@ -73,4 +73,4 @@ class CBarnLight : public CBaseModelEntity
 	Vector m_vPrecomputedOBBExtent5;
 	bool m_bPvsModifyEntity;
 	CNetworkUtlVectorBase< uint16 > m_VisClusters;
-}
+};

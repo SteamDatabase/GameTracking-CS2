@@ -33,4 +33,4 @@ class CGameSceneNode
 	float32 m_flZOffset;
 	float32 m_flClientLocalScale;
 	Vector m_vRenderOrigin;
-}
+};

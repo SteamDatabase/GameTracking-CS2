@@ -4,4 +4,4 @@ class CAnimFrameSegment
 	uint32 m_nLocalElementMasks;
 	int32 m_nLocalChannel;
 	CUtlBinaryBlock m_container;
-}
+};

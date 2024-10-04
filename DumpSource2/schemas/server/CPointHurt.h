@@ -6,4 +6,4 @@ class CPointHurt : public CPointEntity
 	float32 m_flDelay;
 	CUtlSymbolLarge m_strTarget;
 	CHandle< CBaseEntity > m_pActivator;
-}
+};

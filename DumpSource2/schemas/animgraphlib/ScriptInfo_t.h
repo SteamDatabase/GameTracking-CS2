@@ -5,4 +5,4 @@ class ScriptInfo_t
 	CUtlVector< int32 > m_proxyReadParams;
 	CUtlVector< int32 > m_proxyWriteParams;
 	AnimScriptType m_eScriptType;
-}
+};

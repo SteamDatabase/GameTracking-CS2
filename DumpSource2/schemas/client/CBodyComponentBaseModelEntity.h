@@ -1,3 +1,3 @@
 class CBodyComponentBaseModelEntity : public CBodyComponentSkeletonInstance
 {
-}
+};

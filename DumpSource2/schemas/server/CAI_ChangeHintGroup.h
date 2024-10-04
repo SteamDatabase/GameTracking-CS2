@@ -4,4 +4,4 @@ class CAI_ChangeHintGroup : public CBaseEntity
 	CUtlSymbolLarge m_strSearchName;
 	CUtlSymbolLarge m_strNewHintGroup;
 	float32 m_flRadius;
-}
+};

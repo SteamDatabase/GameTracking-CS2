@@ -41,4 +41,4 @@ class C_RopeKeyframe : public C_BaseModelEntity
 	bitfield:1 m_bEndPointAttachmentAnglesDirty;
 	bitfield:1 m_bNewDataThisFrame;
 	bitfield:1 m_bPhysicsInitted;
-}
+};

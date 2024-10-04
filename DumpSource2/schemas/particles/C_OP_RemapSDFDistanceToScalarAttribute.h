@@ -1,0 +1,11 @@
+class C_OP_RemapSDFDistanceToScalarAttribute : public CParticleFunctionOperator
+{
+	ParticleAttributeIndex_t m_nFieldOutput;
+	ParticleAttributeIndex_t m_nVectorFieldInput;
+	CParticleCollectionFloatInput m_flMinDistance;
+	CParticleCollectionFloatInput m_flMaxDistance;
+	CParticleCollectionFloatInput m_flValueBelowMin;
+	CParticleCollectionFloatInput m_flValueAtMin;
+	CParticleCollectionFloatInput m_flValueAtMax;
+	CParticleCollectionFloatInput m_flValueAboveMax;
+};

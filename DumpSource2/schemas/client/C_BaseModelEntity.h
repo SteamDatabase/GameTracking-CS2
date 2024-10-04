@@ -32,4 +32,4 @@ class C_BaseModelEntity : public C_BaseEntity
 	CClientAlphaProperty* m_pClientAlphaProperty;
 	Color m_ClientOverrideTint;
 	bool m_bUseClientOverrideTint;
-}
+};

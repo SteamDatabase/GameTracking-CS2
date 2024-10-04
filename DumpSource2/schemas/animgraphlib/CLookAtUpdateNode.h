@@ -6,4 +6,4 @@ class CLookAtUpdateNode : public CUnaryUpdateNode
 	CAnimParamHandle m_weightParamIndex;
 	bool m_bResetChild;
 	bool m_bLockWhenWaning;
-}
+};

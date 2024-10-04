@@ -4,4 +4,4 @@ class CSubtractUpdateNode : public CBinaryUpdateNode
 	bool m_bApplyToFootMotion;
 	bool m_bApplyChannelsSeparately;
 	bool m_bUseModelSpace;
-}
+};

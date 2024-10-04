@@ -1,3 +1,3 @@
 class CPhysicsPropOverride : public CPhysicsProp
 {
-}
+};

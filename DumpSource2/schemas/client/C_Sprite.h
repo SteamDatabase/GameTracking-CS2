@@ -24,4 +24,4 @@ class C_Sprite : public C_BaseModelEntity
 	CWeakHandle< InfoForResourceTypeIMaterial2 > m_hOldSpriteMaterial;
 	int32 m_nSpriteWidth;
 	int32 m_nSpriteHeight;
-}
+};

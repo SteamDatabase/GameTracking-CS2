@@ -34,4 +34,4 @@ class CEnvVolumetricFogController : public CBaseEntity
 	float32 m_fNoiseStrength;
 	Vector m_vNoiseScale;
 	bool m_bFirstTime;
-}
+};

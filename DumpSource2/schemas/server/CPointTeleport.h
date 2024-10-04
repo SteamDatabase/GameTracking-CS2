@@ -4,4 +4,4 @@ class CPointTeleport : public CServerOnlyPointEntity
 	QAngle m_vSaveAngles;
 	bool m_bTeleportParentedEntities;
 	bool m_bTeleportUseCurrentAngle;
-}
+};

@@ -14,4 +14,4 @@ class CTriggerSndSosOpvar : public CBaseTrigger
 	char[256] m_operatorNameChar;
 	Vector m_VecNormPos;
 	float32 m_flNormCenterSize;
-}
+};

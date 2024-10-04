@@ -8,4 +8,4 @@ class CAnimDesc_Flag
 	bool m_bModelDoc;
 	bool m_bImplicitSeqIgnoreDelta;
 	bool m_bAnimGraphAdditive;
-}
+};

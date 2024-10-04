@@ -5,4 +5,4 @@ class CLogicPlayerProxy : public CLogicalEntity
 	CEntityIOOutput m_PlayerHasNoAmmo;
 	CEntityIOOutput m_PlayerDied;
 	CEntityOutputTemplate< int32 > m_RequestedPlayerHealth;
-}
+};

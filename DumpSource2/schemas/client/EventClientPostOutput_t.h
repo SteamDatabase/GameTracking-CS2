@@ -5,4 +5,4 @@ class EventClientPostOutput_t
 	float32 m_flRenderFrameTime;
 	float32 m_flRenderFrameTimeUnbounded;
 	bool m_bRenderOnly;
-}
+};

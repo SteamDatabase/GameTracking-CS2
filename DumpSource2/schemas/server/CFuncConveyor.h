@@ -9,4 +9,4 @@ class CFuncConveyor : public CBaseModelEntity
 	int32 m_nTransitionDurationTicks;
 	float32 m_flTransitionStartSpeed;
 	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_hConveyorModels;
-}
+};

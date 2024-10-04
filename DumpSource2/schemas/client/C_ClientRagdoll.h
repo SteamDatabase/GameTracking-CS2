@@ -14,4 +14,4 @@ class C_ClientRagdoll : public CBaseAnimGraph
 	float32[10] m_flScaleEnd;
 	GameTime_t[10] m_flScaleTimeStart;
 	GameTime_t[10] m_flScaleTimeEnd;
-}
+};

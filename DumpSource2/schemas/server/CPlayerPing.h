@@ -5,4 +5,4 @@ class CPlayerPing : public CBaseEntity
 	int32 m_iType;
 	bool m_bUrgent;
 	char[18] m_szPlaceName;
-}
+};

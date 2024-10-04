@@ -6,4 +6,4 @@ class CConcreteAnimParameter : public CAnimParameterBase
 	bool m_bAutoReset;
 	bool m_bGameWritable;
 	bool m_bGraphWritable;
-}
+};

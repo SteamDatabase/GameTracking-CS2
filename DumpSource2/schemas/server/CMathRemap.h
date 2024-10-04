@@ -11,4 +11,4 @@ class CMathRemap : public CLogicalEntity
 	CEntityIOOutput m_OnRoseAboveMax;
 	CEntityIOOutput m_OnFellBelowMin;
 	CEntityIOOutput m_OnFellBelowMax;
-}
+};

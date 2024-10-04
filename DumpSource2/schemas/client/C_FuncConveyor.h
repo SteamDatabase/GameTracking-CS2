@@ -8,4 +8,4 @@ class C_FuncConveyor : public C_BaseModelEntity
 	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_hConveyorModels;
 	float32 m_flCurrentConveyorOffset;
 	float32 m_flCurrentConveyorSpeed;
-}
+};

@@ -18,4 +18,4 @@ class CPhysHinge : public CPhysConstraint
 	float32 m_flAngleSpeedThreshold;
 	CEntityIOOutput m_OnStartMoving;
 	CEntityIOOutput m_OnStopMoving;
-}
+};

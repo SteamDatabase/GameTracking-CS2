@@ -6,4 +6,4 @@ class CNmTarget
 	bool m_bIsUsingBoneSpaceOffsets;
 	bool m_bHasOffsets;
 	bool m_bIsSet;
-}
+};

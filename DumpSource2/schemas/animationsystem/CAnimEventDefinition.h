@@ -7,4 +7,4 @@ class CAnimEventDefinition
 	KeyValues3 m_EventData;
 	CBufferString m_sLegacyOptions;
 	CGlobalSymbol m_sEventName;
-}
+};

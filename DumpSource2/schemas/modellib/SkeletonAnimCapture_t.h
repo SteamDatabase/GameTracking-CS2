@@ -10,4 +10,4 @@ class SkeletonAnimCapture_t
 	int32 m_nFlexControllers;
 	bool m_bPredicted;
 	CUtlVector< SkeletonAnimCapture_t::Frame_t > m_Frames;
-}
+};

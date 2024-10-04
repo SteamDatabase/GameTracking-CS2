@@ -5,4 +5,4 @@ class CMarkupVolumeTagged : public CMarkupVolume
 	bool m_bGroupByVolume;
 	bool m_bGroupOtherGroups;
 	bool m_bIsInGroup;
-}
+};

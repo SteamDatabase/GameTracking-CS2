@@ -17,4 +17,4 @@ class CColorCorrection : public CBaseEntity
 	float32 m_flCurWeight;
 	char[512] m_netlookupFilename;
 	CUtlSymbolLarge m_lookupFilename;
-}
+};

@@ -7,4 +7,4 @@ class BoneDemoCaptureSettings_t
 	float32 m_flErrorQuantizationRotationMax;
 	float32 m_flErrorQuantizationTranslationMax;
 	float32 m_flErrorQuantizationScaleMax;
-}
+};

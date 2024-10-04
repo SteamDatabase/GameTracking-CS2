@@ -27,4 +27,4 @@ class CBaseDoor : public CBaseToggle
 	bool m_bCreateNavObstacle;
 	bool m_isChaining;
 	bool m_bIsUsable;
-}
+};

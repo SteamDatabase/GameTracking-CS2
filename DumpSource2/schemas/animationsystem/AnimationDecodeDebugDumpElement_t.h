@@ -6,4 +6,4 @@ class AnimationDecodeDebugDumpElement_t
 	CUtlVector< CUtlString > m_decodeOps;
 	CUtlVector< CUtlString > m_internalOps;
 	CUtlVector< CUtlString > m_decodedAnims;
-}
+};

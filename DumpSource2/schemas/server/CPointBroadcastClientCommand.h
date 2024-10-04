@@ -1,3 +1,3 @@
 class CPointBroadcastClientCommand : public CPointEntity
 {
-}
+};

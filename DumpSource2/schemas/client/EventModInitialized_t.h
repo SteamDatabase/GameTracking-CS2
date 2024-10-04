@@ -1,3 +1,3 @@
 class EventModInitialized_t
 {
-}
+};

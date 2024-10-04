@@ -1,3 +1,3 @@
 class CRuleBrushEntity : public CRuleEntity
 {
-}
+};

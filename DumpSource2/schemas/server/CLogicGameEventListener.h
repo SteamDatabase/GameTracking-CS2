@@ -5,4 +5,4 @@ class CLogicGameEventListener : public CLogicalEntity
 	CUtlSymbolLarge m_iszGameEventItem;
 	bool m_bEnabled;
 	bool m_bStartDisabled;
-}
+};

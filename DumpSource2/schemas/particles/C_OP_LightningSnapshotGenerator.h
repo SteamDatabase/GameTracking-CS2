@@ -1,0 +1,18 @@
+class C_OP_LightningSnapshotGenerator : public CParticleFunctionPreEmission
+{
+	int32 m_nCPSnapshot;
+	int32 m_nCPStartPnt;
+	int32 m_nCPEndPnt;
+	CParticleCollectionFloatInput m_flSegments;
+	CParticleCollectionFloatInput m_flOffset;
+	CParticleCollectionFloatInput m_flOffsetDecay;
+	CParticleCollectionFloatInput m_flRecalcRate;
+	CParticleCollectionFloatInput m_flUVScale;
+	CParticleCollectionFloatInput m_flUVOffset;
+	CParticleCollectionFloatInput m_flSplitRate;
+	CParticleCollectionFloatInput m_flBranchTwist;
+	ParticleLightnintBranchBehavior_t m_nBranchBehavior;
+	CParticleCollectionFloatInput m_flRadiusStart;
+	CParticleCollectionFloatInput m_flRadiusEnd;
+	CParticleCollectionFloatInput m_flDedicatedPool;
+};

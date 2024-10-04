@@ -1,0 +1,6 @@
+enum PropDoorRotatingOpenDirection_e : uint32_t
+{
+	DOOR_ROTATING_OPEN_BOTH_WAYS = 0,
+	DOOR_ROTATING_OPEN_FORWARD = 1,
+	DOOR_ROTATING_OPEN_BACKWARD = 2,
+};

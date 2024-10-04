@@ -11,4 +11,4 @@ class CEntityIdentity
 	CEntityIdentity* m_pNext;
 	CEntityIdentity* m_pPrevByClass;
 	CEntityIdentity* m_pNextByClass;
-}
+};

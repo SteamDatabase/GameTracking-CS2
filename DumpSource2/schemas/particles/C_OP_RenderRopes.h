@@ -1,0 +1,33 @@
+class C_OP_RenderRopes : public CBaseRendererSource2
+{
+	bool m_bEnableFadingAndClamping;
+	float32 m_flMinSize;
+	float32 m_flMaxSize;
+	float32 m_flStartFadeSize;
+	float32 m_flEndFadeSize;
+	float32 m_flStartFadeDot;
+	float32 m_flEndFadeDot;
+	float32 m_flRadiusTaper;
+	int32 m_nMinTesselation;
+	int32 m_nMaxTesselation;
+	float32 m_flTessScale;
+	CParticleCollectionRendererFloatInput m_flTextureVWorldSize;
+	CParticleCollectionRendererFloatInput m_flTextureVScrollRate;
+	CParticleCollectionRendererFloatInput m_flTextureVOffset;
+	int32 m_nTextureVParamsCP;
+	bool m_bClampV;
+	int32 m_nScaleCP1;
+	int32 m_nScaleCP2;
+	float32 m_flScaleVSizeByControlPointDistance;
+	float32 m_flScaleVScrollByControlPointDistance;
+	float32 m_flScaleVOffsetByControlPointDistance;
+	bool m_bUseScalarForTextureCoordinate;
+	ParticleAttributeIndex_t m_nScalarFieldForTextureCoordinate;
+	float32 m_flScalarAttributeTextureCoordScale;
+	bool m_bReverseOrder;
+	bool m_bClosedLoop;
+	ParticleOrientationChoiceList_t m_nOrientationType;
+	ParticleAttributeIndex_t m_nVectorFieldForOrientation;
+	bool m_bDrawAsOpaque;
+	bool m_bGenerateNormals;
+};

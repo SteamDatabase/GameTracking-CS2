@@ -14,4 +14,4 @@ class CBaseClientUIEntity : public CBaseModelEntity
 	CEntityIOOutput m_CustomOutput7;
 	CEntityIOOutput m_CustomOutput8;
 	CEntityIOOutput m_CustomOutput9;
-}
+};

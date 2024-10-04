@@ -4,4 +4,4 @@ class PredictedDamageTag_t
 	float32 flFlinchModSmall;
 	float32 flFlinchModLarge;
 	float32 flFriendlyFireDamageReductionRatio;
-}
+};

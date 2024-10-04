@@ -10,4 +10,4 @@ class CParticleAnimTag : public CAnimTagBase
 	ParticleAttachment_t m_attachmentType;
 	CUtlString m_attachmentCP1Name;
 	ParticleAttachment_t m_attachmentCP1Type;
-}
+};

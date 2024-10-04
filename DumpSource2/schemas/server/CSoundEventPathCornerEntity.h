@@ -7,4 +7,4 @@ class CSoundEventPathCornerEntity : public CSoundEventEntity
 	float32 m_flDotProductMax;
 	bool m_bPlaying;
 	CNetworkUtlVectorBase< SoundeventPathCornerPairNetworked_t > m_vecCornerPairsNetworked;
-}
+};

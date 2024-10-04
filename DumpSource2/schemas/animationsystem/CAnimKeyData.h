@@ -6,4 +6,4 @@ class CAnimKeyData
 	CUtlVector< CBufferString > m_morphArray;
 	int32 m_nChannelElements;
 	CUtlVector< CAnimDataChannelDesc > m_dataChannelArray;
-}
+};

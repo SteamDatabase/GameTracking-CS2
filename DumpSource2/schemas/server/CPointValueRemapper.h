@@ -44,4 +44,4 @@ class CPointValueRemapper : public CBaseEntity
 	CEntityIOOutput m_OnReachedValueCustom;
 	CEntityIOOutput m_OnEngage;
 	CEntityIOOutput m_OnDisengage;
-}
+};

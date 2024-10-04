@@ -4,4 +4,4 @@ class CStanceOverrideUpdateNode : public CUnaryUpdateNode
 	CAnimUpdateNodeRef m_pStanceSourceNode;
 	CAnimParamHandle m_hParameter;
 	StanceOverrideMode m_eMode;
-}
+};

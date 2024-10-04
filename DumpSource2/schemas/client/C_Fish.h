@@ -23,4 +23,4 @@ class C_Fish : public CBaseAnimGraph
 	int32 m_errorHistoryIndex;
 	int32 m_errorHistoryCount;
 	float32 m_averageError;
-}
+};

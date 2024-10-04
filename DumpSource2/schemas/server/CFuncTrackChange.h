@@ -9,4 +9,4 @@ class CFuncTrackChange : public CFuncPlatRot
 	TRAIN_CODE m_code;
 	int32 m_targetState;
 	int32 m_use;
-}
+};

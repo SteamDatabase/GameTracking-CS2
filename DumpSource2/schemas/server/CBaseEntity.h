@@ -77,4 +77,4 @@ class CBaseEntity : public CEntityInstance
 	float32 m_flLocalTime;
 	float32 m_flVPhysicsUpdateLocalTime;
 	BloodType m_nBloodType;
-}
+};

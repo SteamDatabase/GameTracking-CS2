@@ -23,4 +23,4 @@ class C_Hostage : public C_BaseCombatCharacter
 	AttachmentHandle_t m_chestAttachment;
 	CBasePlayerController* m_pPredictionOwner;
 	GameTime_t m_fNewestAlphaThinkTime;
-}
+};

@@ -12,4 +12,4 @@ class CFuncMoveLinear : public CBaseToggle
 	CEntityIOOutput m_OnFullyClosed;
 	bool m_bCreateMovableNavMesh;
 	bool m_bCreateNavObstacle;
-}
+};

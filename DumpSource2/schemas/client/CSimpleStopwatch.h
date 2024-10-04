@@ -1,3 +1,3 @@
 class CSimpleStopwatch : public CStopwatchBase
 {
-}
+};

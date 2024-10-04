@@ -13,4 +13,4 @@ class C_IronSightController
 	Vector2D m_vecDotCoords;
 	float32 m_flDotBlur;
 	float32 m_flSpeedRatio;
-}
+};

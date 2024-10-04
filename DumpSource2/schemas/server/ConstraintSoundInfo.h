@@ -8,4 +8,4 @@ class ConstraintSoundInfo
 	CUtlSymbolLarge[3] m_iszReversalSounds;
 	bool m_bPlayTravelSound;
 	bool m_bPlayReversalSound;
-}
+};

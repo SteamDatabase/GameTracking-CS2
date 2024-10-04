@@ -4,4 +4,4 @@ class CRagdollMagnet : public CPointEntity
 	float32 m_radius;
 	float32 m_force;
 	Vector m_axis;
-}
+};

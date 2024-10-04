@@ -1,0 +1,3 @@
+class InfoForResourceTypeVMapResourceData_t
+{
+};

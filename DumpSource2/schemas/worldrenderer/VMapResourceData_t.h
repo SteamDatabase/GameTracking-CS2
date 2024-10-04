@@ -1,0 +1,3 @@
+class VMapResourceData_t
+{
+};

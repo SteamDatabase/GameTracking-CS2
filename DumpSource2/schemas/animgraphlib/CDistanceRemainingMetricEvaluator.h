@@ -7,4 +7,4 @@ class CDistanceRemainingMetricEvaluator : public CMotionMetricEvaluator
 	bool m_bFilterFixedMinDistance;
 	bool m_bFilterGoalDistance;
 	bool m_bFilterGoalOvershoot;
-}
+};

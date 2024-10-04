@@ -7,4 +7,4 @@ class CAnimBone
 	float32 m_scale;
 	QuaternionStorage m_qAlignment;
 	int32 m_flags;
-}
+};

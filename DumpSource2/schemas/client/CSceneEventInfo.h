@@ -13,4 +13,4 @@ class CSceneEventInfo
 	SceneEventId_t m_nSceneEventId;
 	bool m_bClientSide;
 	bool m_bStarted;
-}
+};

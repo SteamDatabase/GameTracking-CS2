@@ -17,4 +17,4 @@ class CBaseCSGrenadeProjectile : public CBaseGrenade
 	int32 m_nTicksAtZeroVelocity;
 	bool m_bHasEverHitPlayer;
 	bool m_bClearFromPlayers;
-}
+};

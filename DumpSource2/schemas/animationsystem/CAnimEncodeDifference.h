@@ -7,4 +7,4 @@ class CAnimEncodeDifference
 	CUtlVector< uint8 > m_bHasMovementBitArray;
 	CUtlVector< uint8 > m_bHasMorphBitArray;
 	CUtlVector< uint8 > m_bHasUserBitArray;
-}
+};

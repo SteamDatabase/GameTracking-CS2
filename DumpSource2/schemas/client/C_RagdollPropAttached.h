@@ -7,4 +7,4 @@ class C_RagdollPropAttached : public C_RagdollProp
 	Vector m_vecOffset;
 	float32 m_parentTime;
 	bool m_bHasParent;
-}
+};

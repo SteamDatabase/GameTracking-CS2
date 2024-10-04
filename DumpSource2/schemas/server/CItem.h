@@ -8,4 +8,4 @@ class CItem : public CBaseAnimGraph
 	Vector m_vOriginalSpawnOrigin;
 	QAngle m_vOriginalSpawnAngles;
 	bool m_bPhysStartAsleep;
-}
+};

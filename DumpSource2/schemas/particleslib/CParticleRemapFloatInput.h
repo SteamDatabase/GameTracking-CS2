@@ -1,0 +1,3 @@
+class CParticleRemapFloatInput : public CParticleFloatInput
+{
+};

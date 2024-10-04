@@ -14,4 +14,4 @@ class CSoundEventEntity : public CBaseEntity
 	CUtlSymbolLarge m_iszSoundName;
 	CEntityHandle m_hSource;
 	int32 m_nEntityIndexSelection;
-}
+};

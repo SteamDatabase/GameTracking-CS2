@@ -4,4 +4,4 @@ class CHitBoxSet
 	uint32 m_nNameHash;
 	CUtlVector< CHitBox > m_HitBoxes;
 	CUtlString m_SourceFilename;
-}
+};

@@ -7,4 +7,4 @@ class CInstancedSceneEntity : public CSceneEntity
 	bool m_bIsBackground;
 	bool m_bRemoveOnCompletion;
 	CHandle< CBaseEntity > m_hTarget;
-}
+};

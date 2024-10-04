@@ -8,4 +8,4 @@ class C_LightGlow : public C_BaseModelEntity
 	float32 m_flGlowProxySize;
 	float32 m_flHDRColorScale;
 	C_LightGlowOverlay m_GlowOverlay;
-}
+};

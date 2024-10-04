@@ -4,4 +4,4 @@ class CBaseConstraint : public CBoneConstraintBase
 	Vector m_vUpVector;
 	CUtlLeanVector< CConstraintSlave > m_slaves;
 	CUtlVector< CConstraintTarget > m_targets;
-}
+};

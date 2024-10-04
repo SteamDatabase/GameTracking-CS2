@@ -8,4 +8,4 @@ class VPhysXCollisionAttributes_t
 	CUtlVector< CUtlString > m_InteractAsStrings;
 	CUtlVector< CUtlString > m_InteractWithStrings;
 	CUtlVector< CUtlString > m_InteractExcludeStrings;
-}
+};

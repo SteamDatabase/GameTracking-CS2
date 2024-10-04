@@ -36,4 +36,4 @@ class CompositeMaterialInputLooseVariable_t
 	CUtlString m_strString;
 	CUtlString m_strPanoramaPanelPath;
 	int32 m_nPanoramaRenderRes;
-}
+};

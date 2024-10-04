@@ -4,4 +4,4 @@ class CNavLinkMovementVData
 	bool m_bIsInterpolated;
 	uint32 m_unRecommendedDistance;
 	CUtlVector< CNavLinkAnimgraphVar > m_vecAnimgraphVars;
-}
+};

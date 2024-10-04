@@ -1,3 +1,3 @@
 class CHandleDummy : public CBaseEntity
 {
-}
+};

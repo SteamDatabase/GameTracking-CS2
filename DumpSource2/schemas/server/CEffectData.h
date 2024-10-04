@@ -21,4 +21,4 @@ class CEffectData
 	CUtlStringToken m_nAttachmentName;
 	uint16 m_iEffectName;
 	uint8 m_nExplosionType;
-}
+};

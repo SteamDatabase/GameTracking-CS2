@@ -7,4 +7,4 @@ class JiggleBoneSettings_t
 	Vector m_vBoundsMaxLS;
 	Vector m_vBoundsMinLS;
 	JiggleBoneSimSpace m_eSimSpace;
-}
+};

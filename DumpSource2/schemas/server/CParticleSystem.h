@@ -22,4 +22,4 @@ class CParticleSystem : public CBaseModelEntity
 	Vector m_vecDataCPValue;
 	int32 m_nTintCP;
 	Color m_clrTint;
-}
+};

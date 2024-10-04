@@ -5,4 +5,4 @@ class C_SoundOpvarSetPointBase : public C_BaseEntity
 	CUtlSymbolLarge m_iszOpvarName;
 	int32 m_iOpvarIndex;
 	bool m_bUseAutoCompare;
-}
+};

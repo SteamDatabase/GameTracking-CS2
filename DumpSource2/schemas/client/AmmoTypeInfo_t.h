@@ -5,4 +5,4 @@ class AmmoTypeInfo_t
 	AmmoFlags_t m_nFlags;
 	float32 m_flMass;
 	CRangeFloat m_flSpeed;
-}
+};

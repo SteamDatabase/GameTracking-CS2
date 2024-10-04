@@ -14,4 +14,4 @@ class CSun : public CBaseModelEntity
 	float32 m_flAlphaScale;
 	float32 m_flHDRColorScale;
 	float32 m_flFarZScale;
-}
+};

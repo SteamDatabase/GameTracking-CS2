@@ -6,4 +6,4 @@ class hudtextparms_t
 	uint8 channel;
 	float32 x;
 	float32 y;
-}
+};

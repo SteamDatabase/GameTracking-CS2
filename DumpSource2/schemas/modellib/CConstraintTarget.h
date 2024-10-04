@@ -6,4 +6,4 @@ class CConstraintTarget
 	CUtlString m_sName;
 	float32 m_flWeight;
 	bool m_bIsAttachment;
-}
+};

@@ -10,4 +10,4 @@ class CNmStateNode::CDefinition : public CNmPoseNode::CDefinition
 	int16 m_nLayerRootMotionWeightNodeIdx;
 	int16 m_nLayerBoneMaskNodeIdx;
 	bool m_bIsOffState;
-}
+};

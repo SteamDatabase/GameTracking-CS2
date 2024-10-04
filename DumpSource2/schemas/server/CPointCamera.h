@@ -26,4 +26,4 @@ class CPointCamera : public CBaseEntity
 	float32 m_DegreesPerSecond;
 	bool m_bIsOn;
 	CPointCamera* m_pNext;
-}
+};

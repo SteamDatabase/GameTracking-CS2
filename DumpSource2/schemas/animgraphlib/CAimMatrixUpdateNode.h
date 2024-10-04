@@ -6,4 +6,4 @@ class CAimMatrixUpdateNode : public CUnaryUpdateNode
 	HSequence m_hSequence;
 	bool m_bResetChild;
 	bool m_bLockWhenWaning;
-}
+};

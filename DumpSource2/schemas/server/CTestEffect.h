@@ -5,4 +5,4 @@ class CTestEffect : public CBaseEntity
 	CBeam*[24] m_pBeam;
 	GameTime_t[24] m_flBeamTime;
 	GameTime_t m_flStartTime;
-}
+};

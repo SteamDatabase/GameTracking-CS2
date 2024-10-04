@@ -5,4 +5,4 @@ class CStopAtGoalUpdateNode : public CUnaryUpdateNode
 	float32 m_flMaxScale;
 	float32 m_flMinScale;
 	CAnimInputDamping m_damping;
-}
+};

@@ -24,4 +24,4 @@ class CAnimGraphNetworkedVariables
 	int32 m_nOwnerOnlyBoolVariablesCount;
 	int32 m_nRandomSeedOffset;
 	float32 m_flLastTeleportTime;
-}
+};

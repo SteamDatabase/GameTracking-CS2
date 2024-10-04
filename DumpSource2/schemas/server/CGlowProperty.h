@@ -11,4 +11,4 @@ class CGlowProperty
 	float32 m_flGlowStartTime;
 	bool m_bEligibleForScreenHighlight;
 	bool m_bGlowing;
-}
+};

@@ -8,4 +8,4 @@ class CMovementComponentUpdater : public CAnimComponentUpdater
 	bool m_bNetworkPath;
 	bool m_bNetworkFacing;
 	CAnimParamHandle[30] m_paramHandles;
-}
+};

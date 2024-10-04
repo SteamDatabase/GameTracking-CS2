@@ -9,4 +9,4 @@ class CRagdollConstraint : public CPhysConstraint
 	float32 m_xfriction;
 	float32 m_yfriction;
 	float32 m_zfriction;
-}
+};

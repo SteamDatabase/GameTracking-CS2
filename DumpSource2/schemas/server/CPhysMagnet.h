@@ -12,4 +12,4 @@ class CPhysMagnet : public CBaseAnimGraph
 	float32 m_flRadius;
 	GameTime_t m_flNextSuckTime;
 	int32 m_iMaxObjectsAttached;
-}
+};

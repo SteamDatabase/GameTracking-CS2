@@ -5,4 +5,4 @@ class CompMatMutatorCondition_t
 	CUtlString m_strMutatorConditionContainerVarName;
 	CUtlString m_strMutatorConditionContainerVarValue;
 	bool m_bPassWhenTrue;
-}
+};

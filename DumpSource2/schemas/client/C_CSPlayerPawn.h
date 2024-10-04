@@ -103,4 +103,4 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	C_UtlVectorEmbeddedNetworkVar< PredictedDamageTag_t > m_PredictedDamageTags;
 	GameTick_t m_nPrevHighestReceivedDamageTagTick;
 	int32 m_nHighestAppliedDamageTagTick;
-}
+};

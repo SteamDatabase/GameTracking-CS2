@@ -5,4 +5,4 @@ class CEconItemAttribute
 	float32 m_flInitialValue;
 	int32 m_nRefundableCurrency;
 	bool m_bSetBonus;
-}
+};

@@ -5,4 +5,4 @@ class CPulseCell_Inflow_Method : public CPulseCell_Inflow_BaseEntrypoint
 	bool m_bIsPublic;
 	CPulseValueFullType m_ReturnType;
 	CUtlLeanVector< CPulseRuntimeMethodArg > m_Args;
-}
+};

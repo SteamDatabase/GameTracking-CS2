@@ -1,3 +1,3 @@
 class CAnimEventQueueListener : public CAnimEventListenerBase
 {
-}
+};

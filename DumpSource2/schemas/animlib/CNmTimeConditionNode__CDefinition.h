@@ -5,4 +5,4 @@ class CNmTimeConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
 	float32 m_flComparand;
 	CNmTimeConditionNode::ComparisonType_t m_type;
 	CNmTimeConditionNode::Operator_t m_operator;
-}
+};

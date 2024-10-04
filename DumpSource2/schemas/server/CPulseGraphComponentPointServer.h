@@ -1,3 +1,3 @@
 class CPulseGraphComponentPointServer : public CPulseGraphComponentBase
 {
-}
+};

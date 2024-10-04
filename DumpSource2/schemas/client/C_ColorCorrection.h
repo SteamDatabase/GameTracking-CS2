@@ -18,4 +18,4 @@ class C_ColorCorrection : public C_BaseEntity
 	float32[1] m_flFadeStartWeight;
 	float32[1] m_flFadeStartTime;
 	float32[1] m_flFadeDuration;
-}
+};

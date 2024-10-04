@@ -6,4 +6,4 @@ class CBaseIssue
 	int32 m_iNumNoVotes;
 	int32 m_iNumPotentialVotes;
 	CVoteController* m_pVoteController;
-}
+};

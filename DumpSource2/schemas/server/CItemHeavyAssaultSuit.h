@@ -1,3 +1,3 @@
 class CItemHeavyAssaultSuit : public CItemAssaultSuit
 {
-}
+};

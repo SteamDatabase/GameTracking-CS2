@@ -9,4 +9,4 @@ class CBombTarget : public CBaseTrigger
 	CUtlSymbolLarge m_szMountTarget;
 	CHandle< CBaseEntity > m_hInstructorHint;
 	int32 m_nBombSiteDesignation;
-}
+};

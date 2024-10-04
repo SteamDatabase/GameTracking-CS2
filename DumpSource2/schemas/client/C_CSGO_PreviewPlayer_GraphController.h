@@ -8,4 +8,4 @@ class C_CSGO_PreviewPlayer_GraphController : public CAnimGraphControllerBase
 	CAnimGraphParamOptionalRef< char* > m_pszWeaponState;
 	CAnimGraphParamOptionalRef< char* > m_pszWeaponType;
 	CAnimGraphParamOptionalRef< bool > m_bCT;
-}
+};

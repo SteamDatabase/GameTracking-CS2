@@ -11,4 +11,4 @@ class CNmTransitionNode::CDefinition : public CNmPoseNode::CDefinition
 	int16 m_targetSyncIDNodeIdx;
 	NmEasingOperation_t m_blendWeightEasing;
 	NmRootMotionBlendMode_t m_rootMotionBlend;
-}
+};

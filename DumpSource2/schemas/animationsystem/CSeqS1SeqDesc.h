@@ -11,4 +11,4 @@ class CSeqS1SeqDesc
 	CBufferString m_LegacyKeyValueText;
 	CUtlVector< CAnimActivity > m_activityArray;
 	CUtlVector< CFootMotion > m_footMotion;
-}
+};

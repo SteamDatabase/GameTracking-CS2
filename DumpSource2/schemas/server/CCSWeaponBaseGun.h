@@ -9,4 +9,4 @@ class CCSWeaponBaseGun : public CCSWeaponBase
 	bool m_bSkillReloadLiftedReloadKey;
 	bool m_bSkillBoltInterruptAvailable;
 	bool m_bSkillBoltLiftedFireKey;
-}
+};

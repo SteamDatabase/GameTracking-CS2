@@ -8,4 +8,4 @@ class CAnimationGroup
 	CAnimKeyData m_decodeKey;
 	CUtlVector< CBufferString > m_szScripts;
 	CUtlVector< CStrongHandleVoid > m_AdditionalExtRefs;
-}
+};

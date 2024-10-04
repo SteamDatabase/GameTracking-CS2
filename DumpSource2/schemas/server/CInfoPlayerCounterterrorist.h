@@ -1,3 +1,3 @@
 class CInfoPlayerCounterterrorist : public SpawnPoint
 {
-}
+};

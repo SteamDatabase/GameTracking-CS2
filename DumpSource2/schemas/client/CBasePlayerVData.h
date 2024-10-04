@@ -14,4 +14,4 @@ class CBasePlayerVData : public CEntitySubclassVDataBase
 	float32 m_flUseRange;
 	float32 m_flUseAngleTolerance;
 	float32 m_flCrouchTime;
-}
+};

@@ -43,4 +43,4 @@ class CGlobalLightBase
 	Vector2D m_vFogOffsetLayer1;
 	CHandle< C_BaseEntity > m_hEnvWind;
 	CHandle< C_BaseEntity > m_hEnvSky;
-}
+};

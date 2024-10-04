@@ -1,3 +1,3 @@
 class CBtNodeComposite : public CBtNode
 {
-}
+};

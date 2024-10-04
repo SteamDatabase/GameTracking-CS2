@@ -73,4 +73,4 @@ class C_BarnLight : public C_BaseModelEntity
 	Vector m_vPrecomputedOBBExtent5;
 	bool m_bInitialBoneSetup;
 	C_NetworkUtlVectorBase< uint16 > m_VisClusters;
-}
+};

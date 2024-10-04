@@ -46,4 +46,4 @@ class VPhysXConstraintParams_t
 	int32 m_solverIterationCount;
 	float32 m_projectionLinearTolerance;
 	float32 m_projectionAngularTolerance;
-}
+};

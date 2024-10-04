@@ -17,4 +17,4 @@ class CCollisionProperty
 	Vector m_vCapsuleCenter1;
 	Vector m_vCapsuleCenter2;
 	float32 m_flCapsuleRadius;
-}
+};

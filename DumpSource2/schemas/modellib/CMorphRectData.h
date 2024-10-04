@@ -5,4 +5,4 @@ class CMorphRectData
 	float32 m_flUWidthSrc;
 	float32 m_flVHeightSrc;
 	CUtlVector< CMorphBundleData > m_bundleDatas;
-}
+};

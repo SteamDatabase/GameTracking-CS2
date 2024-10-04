@@ -9,4 +9,4 @@ class CFuncMonitor : public CFuncBrush
 	bool m_bEnabled;
 	bool m_bDraw3DSkybox;
 	bool m_bStartEnabled;
-}
+};

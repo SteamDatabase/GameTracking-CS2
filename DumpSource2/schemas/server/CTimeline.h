@@ -7,4 +7,4 @@ class CTimeline : public IntervalTimer
 	float32 m_flFinalValue;
 	TimelineCompression_t m_nCompressionType;
 	bool m_bStopped;
-}
+};

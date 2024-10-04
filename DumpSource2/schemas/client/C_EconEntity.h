@@ -20,4 +20,4 @@ class C_EconEntity : public C_BaseFlex
 	int32 m_iNumOwnerValidationRetries;
 	CHandle< C_BaseEntity > m_hOldProvidee;
 	CUtlVector< C_EconEntity::AttachedModelData_t > m_vecAttachedModels;
-}
+};

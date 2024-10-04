@@ -24,4 +24,4 @@ class CBasePlayerController : public CBaseEntity
 	bool m_bHasAnySteadyStateEnts;
 	uint64 m_steamID;
 	uint32 m_iDesiredFOV;
-}
+};

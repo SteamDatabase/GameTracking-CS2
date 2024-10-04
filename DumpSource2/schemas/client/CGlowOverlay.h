@@ -15,4 +15,4 @@ class CGlowOverlay
 	int16 m_bActivated;
 	uint16 m_ListIndex;
 	int32 m_queryHandle;
-}
+};

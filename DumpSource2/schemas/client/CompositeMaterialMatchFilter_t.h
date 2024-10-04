@@ -4,4 +4,4 @@ class CompositeMaterialMatchFilter_t
 	CUtlString m_strMatchFilter;
 	CUtlString m_strMatchValue;
 	bool m_bPassWhenTrue;
-}
+};

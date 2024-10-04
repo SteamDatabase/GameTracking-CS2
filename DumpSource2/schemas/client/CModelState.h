@@ -7,4 +7,4 @@ class CModelState
 	int8 m_nIdealMotionType;
 	int8 m_nForceLOD;
 	int8 m_nClothUpdateFlags;
-}
+};

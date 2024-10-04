@@ -15,4 +15,4 @@ class C_SoundEventEntity : public C_BaseEntity
 	CEntityHandle m_hSource;
 	int32 m_nEntityIndexSelection;
 	bitfield:1 m_bClientSideOnly;
-}
+};

@@ -5,4 +5,4 @@ class CAnimFoot
 	Vector m_vHeelOffset;
 	int32 m_ankleBoneIndex;
 	int32 m_toeBoneIndex;
-}
+};

@@ -4,4 +4,4 @@ class CIronSightController
 	float32 m_flIronSightAmount;
 	float32 m_flIronSightAmountGained;
 	float32 m_flIronSightAmountBiased;
-}
+};

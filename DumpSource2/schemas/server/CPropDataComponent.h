@@ -10,4 +10,4 @@ class CPropDataComponent : public CEntityComponent
 	bool m_bSpawnMotionDisabled;
 	int32 m_nDisableTakePhysicsDamageSpawnFlag;
 	int32 m_nMotionDisabledSpawnFlag;
-}
+};

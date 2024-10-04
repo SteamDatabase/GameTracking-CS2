@@ -6,4 +6,4 @@ class C_BulletHitModel : public CBaseAnimGraph
 	bool m_bIsHit;
 	float32 m_flTimeCreated;
 	Vector m_vecStartPos;
-}
+};

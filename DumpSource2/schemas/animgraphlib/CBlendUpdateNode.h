@@ -11,4 +11,4 @@ class CBlendUpdateNode : public CAnimUpdateNodeBase
 	bool m_bSyncCycles;
 	bool m_bLoop;
 	bool m_bLockWhenWaning;
-}
+};

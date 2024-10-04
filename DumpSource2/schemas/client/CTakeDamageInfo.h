@@ -22,4 +22,4 @@ class CTakeDamageInfo
 	float32 m_flFriendlyFireDamageReductionRatio;
 	HSCRIPT m_hScriptInstance;
 	bool m_bInTakeDamageFlow;
-}
+};

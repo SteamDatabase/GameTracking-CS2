@@ -8,4 +8,4 @@ class CMultiLightProxy : public CLogicalEntity
 	float32 m_flTargetBrightnessMultiplier;
 	float32 m_flCurrentBrightnessMultiplier;
 	CUtlVector< CHandle< CLightEntity > > m_vecLights;
-}
+};

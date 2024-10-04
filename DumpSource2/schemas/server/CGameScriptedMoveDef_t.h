@@ -6,4 +6,4 @@ class CGameScriptedMoveDef_t
 	QAngle m_angDest;
 	float32 m_flDuration;
 	float32 m_flAngRate;
-}
+};

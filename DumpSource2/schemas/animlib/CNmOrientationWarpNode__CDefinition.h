@@ -5,4 +5,4 @@ class CNmOrientationWarpNode::CDefinition : public CNmPoseNode::CDefinition
 	bool m_bIsOffsetNode;
 	bool m_bIsOffsetRelativeToCharacter;
 	CNmRootMotionData::SamplingMode_t m_samplingMode;
-}
+};

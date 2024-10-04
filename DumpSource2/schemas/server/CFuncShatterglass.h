@@ -26,4 +26,4 @@ class CFuncShatterglass : public CBaseModelEntity
 	CEntityIOOutput m_OnBroken;
 	uint8 m_iSurfaceType;
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hMaterialDamageBase;
-}
+};

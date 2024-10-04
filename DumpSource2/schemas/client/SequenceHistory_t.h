@@ -6,4 +6,4 @@ class SequenceHistory_t
 	AnimLoopMode_t m_nSeqLoopMode;
 	float32 m_flPlaybackRate;
 	float32 m_flCyclesPerSecond;
-}
+};

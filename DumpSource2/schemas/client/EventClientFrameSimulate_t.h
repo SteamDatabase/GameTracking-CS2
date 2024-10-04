@@ -4,4 +4,4 @@ class EventClientFrameSimulate_t
 	float32 m_flRealTime;
 	float32 m_flFrameTime;
 	bool m_bScheduleSendTickPacket;
-}
+};

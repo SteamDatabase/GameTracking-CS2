@@ -8,4 +8,4 @@ class CNetworkedSequenceOperation
 	bool m_bDiscontinuity;
 	float32 m_flPrevCycleFromDiscontinuity;
 	float32 m_flPrevCycleForAnimEventDetection;
-}
+};

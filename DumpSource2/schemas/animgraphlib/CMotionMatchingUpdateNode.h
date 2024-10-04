@@ -23,4 +23,4 @@ class CMotionMatchingUpdateNode : public CLeafUpdateNode
 	float32 m_flDistanceScale_MaxScale;
 	float32 m_flDistanceScale_MinScale;
 	bool m_bEnableDistanceScaling;
-}
+};

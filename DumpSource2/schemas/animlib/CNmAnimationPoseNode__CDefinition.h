@@ -5,4 +5,4 @@ class CNmAnimationPoseNode::CDefinition : public CNmPoseNode::CDefinition
 	Range_t m_inputTimeRemapRange;
 	float32 m_flUserSpecifiedTime;
 	bool m_bUseFramesAsInput;
-}
+};

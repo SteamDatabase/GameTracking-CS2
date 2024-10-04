@@ -6,4 +6,4 @@ class RenderHairStrandInfo_t
 	uint16[2] m_nPackedBaseUv;
 	uint32 m_nPackedSurfaceNormalOs;
 	uint32 m_nPackedSurfaceTangentOs;
-}
+};

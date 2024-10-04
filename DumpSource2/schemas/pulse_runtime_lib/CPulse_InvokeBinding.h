@@ -5,4 +5,4 @@ class CPulse_InvokeBinding
 	PulseRuntimeCellIndex_t m_nCellIndex;
 	PulseRuntimeChunkIndex_t m_nSrcChunk;
 	int32 m_nSrcInstruction;
-}
+};

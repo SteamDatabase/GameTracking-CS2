@@ -139,4 +139,4 @@ class CCSBot : public CBot
 	Vector m_radioPosition;
 	float32 m_voiceEndTimestamp;
 	int32 m_lastValidReactionQueueFrame;
-}
+};

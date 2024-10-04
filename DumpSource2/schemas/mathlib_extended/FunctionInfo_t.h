@@ -5,4 +5,4 @@ class FunctionInfo_t
 	int32 m_nParamCount;
 	FuseFunctionIndex_t m_nIndex;
 	bool m_bIsPure;
-}
+};

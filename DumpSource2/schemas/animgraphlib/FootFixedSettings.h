@@ -10,4 +10,4 @@ class FootFixedSettings
 	float32 m_flTraceAngleBlend;
 	int32 m_nDisableTagIndex;
 	int32 m_nFootIndex;
-}
+};

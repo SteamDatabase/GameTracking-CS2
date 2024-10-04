@@ -4,4 +4,4 @@ class CChicken_GraphController : public CAnimGraphControllerBase
 	CAnimGraphParamRef< bool > m_paramEndActivityImmediately;
 	CAnimGraphTagRef m_sActivityFinished;
 	CAnimGraphParamRef< float32 > m_paramTurnAngle;
-}
+};

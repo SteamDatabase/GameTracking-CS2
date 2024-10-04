@@ -15,4 +15,4 @@ class CAnimDemoCaptureSettings
 	EDemoBoneSelectionMode m_boneSelectionMode;
 	CUtlVector< BoneDemoCaptureSettings_t > m_bones;
 	CUtlVector< IKDemoCaptureSettings_t > m_ikChains;
-}
+};

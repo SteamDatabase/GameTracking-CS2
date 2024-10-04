@@ -9,4 +9,4 @@ class CNmTargetWarpNode::CDefinition : public CNmPoseNode::CDefinition
 	float32 m_flLerpFallbackDistanceThreshold;
 	float32 m_flTargetUpdateDistanceThreshold;
 	float32 m_flTargetUpdateAngleThresholdRadians;
-}
+};

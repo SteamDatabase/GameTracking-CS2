@@ -5,4 +5,4 @@ class CFilterEnemy : public CBaseFilter
 	float32 m_flOuterRadius;
 	int32 m_nMaxSquadmatesPerEnemy;
 	CUtlSymbolLarge m_iszPlayerName;
-}
+};

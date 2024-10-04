@@ -1,3 +1,3 @@
 class InfoForResourceTypeProceduralTestResource_t
 {
-}
+};

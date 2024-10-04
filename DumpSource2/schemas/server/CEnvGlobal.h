@@ -5,4 +5,4 @@ class CEnvGlobal : public CLogicalEntity
 	int32 m_triggermode;
 	int32 m_initialstate;
 	int32 m_counter;
-}
+};

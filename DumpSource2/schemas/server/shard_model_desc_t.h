@@ -13,4 +13,4 @@ class shard_model_desc_t
 	bool m_bHasParent;
 	bool m_bParentFrozen;
 	CUtlStringToken m_SurfacePropStringToken;
-}
+};

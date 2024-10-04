@@ -5,4 +5,4 @@ class CAnimReplayFrame
 	CTransform m_startingLocalToWorldTransform;
 	CTransform m_localToWorldTransform;
 	float32 m_timeStamp;
-}
+};

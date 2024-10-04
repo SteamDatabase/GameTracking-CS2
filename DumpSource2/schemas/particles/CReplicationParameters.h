@@ -1,0 +1,10 @@
+class CReplicationParameters
+{
+	ParticleReplicationMode_t m_nReplicationMode;
+	bool m_bScaleChildParticleRadii;
+	CParticleCollectionFloatInput m_flMinRandomRadiusScale;
+	CParticleCollectionFloatInput m_flMaxRandomRadiusScale;
+	CParticleCollectionVecInput m_vMinRandomDisplacement;
+	CParticleCollectionVecInput m_vMaxRandomDisplacement;
+	CParticleCollectionFloatInput m_flModellingScale;
+};

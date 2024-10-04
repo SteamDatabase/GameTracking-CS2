@@ -1,3 +1,3 @@
 class CPhysicsPropMultiplayer : public CPhysicsProp
 {
-}
+};

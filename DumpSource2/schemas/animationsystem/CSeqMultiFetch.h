@@ -10,4 +10,4 @@ class CSeqMultiFetch
 	bool m_bCalculatePoseParameters;
 	bool m_bFixedBlendWeight;
 	float32[2] m_flFixedBlendWeightVals;
-}
+};

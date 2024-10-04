@@ -9,4 +9,4 @@ class CPhysExplosion : public CPointEntity
 	float32 m_flPushScale;
 	bool m_bConvertToDebrisWhenPossible;
 	CEntityIOOutput m_OnPushedPlayer;
-}
+};

@@ -7,4 +7,4 @@ class CLightGlow : public CBaseModelEntity
 	uint32 m_nOuterMaxDist;
 	float32 m_flGlowProxySize;
 	float32 m_flHDRColorScale;
-}
+};

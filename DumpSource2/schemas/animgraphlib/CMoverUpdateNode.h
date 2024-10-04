@@ -12,4 +12,4 @@ class CMoverUpdateNode : public CUnaryUpdateNode
 	bool m_bOrientMovement;
 	bool m_bApplyRotation;
 	bool m_bLimitOnly;
-}
+};

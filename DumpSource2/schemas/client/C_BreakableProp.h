@@ -29,4 +29,4 @@ class C_BreakableProp : public CBaseProp
 	CHandle< C_BaseEntity > m_hLastAttacker;
 	CHandle< C_BaseEntity > m_hFlareEnt;
 	bool m_noGhostCollision;
-}
+};

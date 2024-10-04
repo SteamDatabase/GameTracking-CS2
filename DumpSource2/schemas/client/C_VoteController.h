@@ -7,4 +7,4 @@ class C_VoteController : public C_BaseEntity
 	bool m_bVotesDirty;
 	bool m_bTypeDirty;
 	bool m_bIsYesNoVote;
-}
+};

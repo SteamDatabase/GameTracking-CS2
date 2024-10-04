@@ -14,4 +14,4 @@ class CPhysBox : public CBreakable
 	CEntityIOOutput m_OnPlayerUse;
 	CEntityIOOutput m_OnStartTouch;
 	CHandle< CBasePlayerPawn > m_hCarryingPlayer;
-}
+};

@@ -4,4 +4,4 @@ class CPulseCell_Timeline::TimelineEvent_t
 	bool m_bPauseForPreviousEvents;
 	bool m_bCallModeSync;
 	CPulse_OutflowConnection m_EventOutflow;
-}
+};

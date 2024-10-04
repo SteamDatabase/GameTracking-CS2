@@ -10,4 +10,4 @@ class CSelectorUpdateNode : public CAnimUpdateNodeBase
 	bool m_bResetOnChange;
 	bool m_bLockWhenWaning;
 	bool m_bSyncCyclesOnChange;
-}
+};

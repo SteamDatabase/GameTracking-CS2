@@ -64,4 +64,4 @@ class CCSWeaponBase : public CBasePlayerWeapon
 	GameTime_t m_flLastLOSTraceFailureTime;
 	int32 m_iNumEmptyAttacks;
 	float32 m_flWatTickOffset;
-}
+};

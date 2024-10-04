@@ -16,4 +16,4 @@ class CPointAngularVelocitySensor : public CPointEntity
 	CEntityIOOutput m_OnGreaterThan;
 	CEntityIOOutput m_OnGreaterThanOrEqualTo;
 	CEntityIOOutput m_OnEqualTo;
-}
+};

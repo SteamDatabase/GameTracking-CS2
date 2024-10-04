@@ -9,4 +9,4 @@ class C_FuncLadder : public C_BaseModelEntity
 	bool m_bDisabled;
 	bool m_bFakeLadder;
 	bool m_bHasSlack;
-}
+};

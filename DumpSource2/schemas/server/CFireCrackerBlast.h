@@ -1,3 +1,3 @@
 class CFireCrackerBlast : public CInferno
 {
-}
+};

@@ -12,4 +12,4 @@ class C_SceneEntity : public C_PointEntity
 	bool m_bWasPlaying;
 	CUtlVector< C_SceneEntity::QueuedEvents_t > m_QueuedEvents;
 	float32 m_flCurrentTime;
-}
+};

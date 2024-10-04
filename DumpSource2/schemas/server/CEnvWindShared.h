@@ -31,4 +31,4 @@ class CEnvWindShared
 	float32 m_flWindAngleVariation;
 	float32 m_flWindSpeedVariation;
 	CHandle< CBaseEntity > m_hEntOwner;
-}
+};

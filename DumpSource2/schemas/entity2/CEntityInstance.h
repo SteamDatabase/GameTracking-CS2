@@ -4,4 +4,4 @@ class CEntityInstance
 	CEntityIdentity* m_pEntity;
 	CScriptComponent* m_CScriptComponent;
 	bool m_bVisibleinPVS;
-}
+};

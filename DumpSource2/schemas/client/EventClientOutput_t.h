@@ -5,4 +5,4 @@ class EventClientOutput_t
 	float32 m_flRealTime;
 	float32 m_flRenderFrameTimeUnbounded;
 	bool m_bRenderOnly;
-}
+};

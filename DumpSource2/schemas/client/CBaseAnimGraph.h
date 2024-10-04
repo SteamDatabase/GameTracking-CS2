@@ -13,4 +13,4 @@ class CBaseAnimGraph : public C_BaseModelEntity
 	PhysicsRagdollPose_t m_RagdollPose;
 	bool m_bRagdollClientSide;
 	bool m_bHasAnimatedMaterialAttributes;
-}
+};

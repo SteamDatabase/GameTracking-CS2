@@ -12,4 +12,4 @@ class CSeqCmdSeqDesc
 	CUtlVector< CAnimEventDefinition > m_eventArray;
 	CUtlVector< CAnimActivity > m_activityArray;
 	CUtlVector< CSeqPoseSetting > m_poseSettingArray;
-}
+};

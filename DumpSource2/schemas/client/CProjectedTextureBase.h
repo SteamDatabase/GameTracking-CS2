@@ -30,4 +30,4 @@ class CProjectedTextureBase
 	float32 m_flProjectionSize;
 	float32 m_flRotation;
 	bool m_bFlipHorizontal;
-}
+};

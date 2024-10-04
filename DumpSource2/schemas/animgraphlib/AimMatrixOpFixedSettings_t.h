@@ -13,4 +13,4 @@ class AimMatrixOpFixedSettings_t
 	float32 m_flBiasAndClampYawOffset;
 	float32 m_flBiasAndClampPitchOffset;
 	CBlendCurve m_biasAndClampBlendCurve;
-}
+};

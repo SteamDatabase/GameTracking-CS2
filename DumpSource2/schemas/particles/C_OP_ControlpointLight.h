@@ -1,0 +1,36 @@
+class C_OP_ControlpointLight : public CParticleFunctionOperator
+{
+	float32 m_flScale;
+	int32 m_nControlPoint1;
+	int32 m_nControlPoint2;
+	int32 m_nControlPoint3;
+	int32 m_nControlPoint4;
+	Vector m_vecCPOffset1;
+	Vector m_vecCPOffset2;
+	Vector m_vecCPOffset3;
+	Vector m_vecCPOffset4;
+	float32 m_LightFiftyDist1;
+	float32 m_LightZeroDist1;
+	float32 m_LightFiftyDist2;
+	float32 m_LightZeroDist2;
+	float32 m_LightFiftyDist3;
+	float32 m_LightZeroDist3;
+	float32 m_LightFiftyDist4;
+	float32 m_LightZeroDist4;
+	Color m_LightColor1;
+	Color m_LightColor2;
+	Color m_LightColor3;
+	Color m_LightColor4;
+	bool m_bLightType1;
+	bool m_bLightType2;
+	bool m_bLightType3;
+	bool m_bLightType4;
+	bool m_bLightDynamic1;
+	bool m_bLightDynamic2;
+	bool m_bLightDynamic3;
+	bool m_bLightDynamic4;
+	bool m_bUseNormal;
+	bool m_bUseHLambert;
+	bool m_bClampLowerRange;
+	bool m_bClampUpperRange;
+};

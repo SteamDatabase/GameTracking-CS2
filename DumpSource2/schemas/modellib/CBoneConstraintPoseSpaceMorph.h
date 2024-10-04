@@ -5,4 +5,4 @@ class CBoneConstraintPoseSpaceMorph : public CBoneConstraintBase
 	CUtlVector< CUtlString > m_outputMorph;
 	CUtlVector< CBoneConstraintPoseSpaceMorph::Input_t > m_inputList;
 	bool m_bClamp;
-}
+};

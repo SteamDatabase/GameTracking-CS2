@@ -6,4 +6,4 @@ class CRagdollAnimTag : public CAnimTagBase
 	float32 m_flDecayDuration;
 	float32 m_flDecayBias;
 	bool m_bDestroy;
-}
+};

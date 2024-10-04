@@ -5,4 +5,4 @@ class CCycleControlClipUpdateNode : public CLeafUpdateNode
 	float32 m_duration;
 	AnimValueSource m_valueSource;
 	CAnimParamHandle m_paramIndex;
-}
+};

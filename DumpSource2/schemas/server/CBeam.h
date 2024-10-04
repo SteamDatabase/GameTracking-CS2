@@ -24,4 +24,4 @@ class CBeam : public CBaseModelEntity
 	Vector m_vecEndPos;
 	CHandle< CBaseEntity > m_hEndEntity;
 	int32 m_nDissolveType;
-}
+};

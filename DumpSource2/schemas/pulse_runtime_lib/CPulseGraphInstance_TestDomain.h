@@ -6,4 +6,4 @@ class CPulseGraphInstance_TestDomain : public CBasePulseGraphInstance
 	int32 m_nNextValidateIndex;
 	CUtlVector< CUtlString > m_Tracepoints;
 	bool m_bTestYesOrNoPath;
-}
+};

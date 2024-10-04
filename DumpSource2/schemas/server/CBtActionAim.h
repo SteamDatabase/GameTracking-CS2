@@ -12,4 +12,4 @@ class CBtActionAim : public CBtNode
 	CountdownTimer m_SniperHoldTimer;
 	CountdownTimer m_FocusIntervalTimer;
 	bool m_bAcquired;
-}
+};

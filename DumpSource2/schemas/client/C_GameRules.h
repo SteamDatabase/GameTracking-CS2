@@ -4,4 +4,4 @@ class C_GameRules
 	int32 m_nTotalPausedTicks;
 	int32 m_nPauseStartTick;
 	bool m_bGamePaused;
-}
+};

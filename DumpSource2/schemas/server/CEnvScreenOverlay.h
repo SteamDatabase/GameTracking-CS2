@@ -5,4 +5,4 @@ class CEnvScreenOverlay : public CPointEntity
 	GameTime_t m_flStartTime;
 	int32 m_iDesiredOverlay;
 	bool m_bIsActive;
-}
+};

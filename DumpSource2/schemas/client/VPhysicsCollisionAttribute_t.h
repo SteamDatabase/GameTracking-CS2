@@ -8,4 +8,4 @@ class VPhysicsCollisionAttribute_t
 	uint16 m_nHierarchyId;
 	uint8 m_nCollisionGroup;
 	uint8 m_nCollisionFunctionMask;
-}
+};

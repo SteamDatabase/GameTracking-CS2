@@ -11,4 +11,4 @@ class CEnvSoundscape : public CServerOnlyEntity
 	CUtlSymbolLarge[8] m_positionNames;
 	CHandle< CEnvSoundscape > m_hProxySoundscape;
 	bool m_bDisabled;
-}
+};

@@ -13,4 +13,4 @@ class C_PointClientUIHUD : public C_BaseClientUIEntity
 	uint32 m_unOrientation;
 	bool m_bAllowInteractionFromAllSceneWorlds;
 	C_NetworkUtlVectorBase< CUtlSymbolLarge > m_vecCSSClasses;
-}
+};

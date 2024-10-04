@@ -14,4 +14,4 @@ class CDamageRecord
 	int32 m_iLastBulletUpdate;
 	bool m_bIsOtherEnemy;
 	EKillTypes_t m_killType;
-}
+};

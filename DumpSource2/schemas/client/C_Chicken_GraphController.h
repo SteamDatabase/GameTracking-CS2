@@ -5,4 +5,4 @@ class C_Chicken_GraphController : public CAnimGraphControllerBase
 	CAnimGraphParamRef< bool > m_paramSnapToSquatting;
 	CAnimGraphTagRef m_sActivityFinished;
 	float32 m_flSquatProbability;
-}
+};

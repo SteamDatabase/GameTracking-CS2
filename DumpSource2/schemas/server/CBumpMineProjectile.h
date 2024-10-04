@@ -1,3 +1,3 @@
 class CBumpMineProjectile : public CBaseGrenade
 {
-}
+};

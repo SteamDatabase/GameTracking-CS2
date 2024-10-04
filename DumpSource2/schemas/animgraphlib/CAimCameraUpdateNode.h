@@ -10,4 +10,4 @@ class CAimCameraUpdateNode : public CUnaryUpdateNode
 	CAnimParamHandle m_hParameterWeaponDepenetrationDelta;
 	CAnimParamHandle m_hParameterCameraClearanceDistance;
 	AimCameraOpFixedSettings_t m_opFixedSettings;
-}
+};

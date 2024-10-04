@@ -9,4 +9,4 @@ class CSeqCmdLayer
 	float32 m_flVar1;
 	float32 m_flVar2;
 	int16 m_nLineNumber;
-}
+};

@@ -24,4 +24,4 @@ class CFish : public CBaseAnimGraph
 	CountdownTimer m_disperseTimer;
 	CountdownTimer m_proximityTimer;
 	CUtlVector< CFish* > m_visible;
-}
+};

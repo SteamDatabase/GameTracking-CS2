@@ -9,4 +9,4 @@ class C_EnvScreenOverlay : public C_PointEntity
 	int32 m_iCachedDesiredOverlay;
 	int32 m_iCurrentOverlay;
 	GameTime_t m_flCurrentOverlayTime;
-}
+};

@@ -1,0 +1,3 @@
+class CParticleFunctionOperator : public CParticleFunction
+{
+};

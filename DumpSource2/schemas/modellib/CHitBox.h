@@ -13,4 +13,4 @@ class CHitBox
 	uint32 m_CRC;
 	Color m_cRenderColor;
 	uint16 m_nHitBoxIndex;
-}
+};

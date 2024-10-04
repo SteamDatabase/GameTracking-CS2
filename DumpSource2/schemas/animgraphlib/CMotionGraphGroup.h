@@ -5,4 +5,4 @@ class CMotionGraphGroup
 	CUtlVector< CMotionGraphConfig > m_motionGraphConfigs;
 	CUtlVector< int32 > m_sampleToConfig;
 	AnimScriptHandle m_hIsActiveScript;
-}
+};

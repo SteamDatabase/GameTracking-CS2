@@ -28,4 +28,4 @@ class C_PointClientUIWorldPanel : public C_BaseClientUIEntity
 	bool m_bOnlyRenderToTexture;
 	bool m_bDisableMipGen;
 	int32 m_nExplicitImageLayout;
-}
+};

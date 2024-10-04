@@ -5,4 +5,4 @@ class CGameChoreoServices : public IChoreoServices
 	IChoreoServices::ScriptState_t m_scriptState;
 	IChoreoServices::ChoreoState_t m_choreoState;
 	GameTime_t m_flTimeStartedState;
-}
+};

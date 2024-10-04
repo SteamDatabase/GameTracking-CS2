@@ -6,4 +6,4 @@ class PostProcessingVignetteParameters_t
 	float32 m_flRoundness;
 	float32 m_flFeather;
 	Vector m_vColorTint;
-}
+};

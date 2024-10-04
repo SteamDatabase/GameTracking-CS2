@@ -1,3 +1,3 @@
 class CShower : public CModelPointEntity
 {
-}
+};

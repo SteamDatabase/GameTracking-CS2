@@ -18,4 +18,4 @@ class CEnvMicrophone : public CPointEntity
 	CEntityIOOutput m_OnHeardSound;
 	char[256] m_szLastSound;
 	int32 m_iLastRoutedFrame;
-}
+};

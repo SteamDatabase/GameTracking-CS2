@@ -7,4 +7,4 @@ class FootPinningPoseOpFixedData_t
 	int32 m_nHipBoneIndex;
 	bool m_bApplyLegTwistLimits;
 	bool m_bApplyFootRotationLimits;
-}
+};

@@ -8,4 +8,4 @@ class CLookComponentUpdater : public CAnimComponentUpdater
 	CAnimParamHandle m_hLookTarget;
 	CAnimParamHandle m_hLookTargetWorldSpace;
 	bool m_bNetworkLookTarget;
-}
+};

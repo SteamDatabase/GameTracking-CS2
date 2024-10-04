@@ -9,4 +9,4 @@ class CEnvInstructorVRHint : public CPointEntity
 	CUtlSymbolLarge m_iszCustomLayoutFile;
 	int32 m_iAttachType;
 	float32 m_flHeightOffset;
-}
+};

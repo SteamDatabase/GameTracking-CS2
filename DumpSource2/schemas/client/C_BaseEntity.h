@@ -82,4 +82,4 @@ class C_BaseEntity : public CEntityInstance
 	bool m_bSimulationTimeChanged;
 	CUtlString m_sUniqueHammerID;
 	BloodType m_nBloodType;
-}
+};

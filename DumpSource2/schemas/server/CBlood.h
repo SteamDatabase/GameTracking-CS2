@@ -4,4 +4,4 @@ class CBlood : public CPointEntity
 	Vector m_vecSprayDir;
 	float32 m_flAmount;
 	BloodType m_Color;
-}
+};

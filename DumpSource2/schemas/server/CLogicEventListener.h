@@ -4,4 +4,4 @@ class CLogicEventListener : public CLogicalEntity
 	bool m_bIsEnabled;
 	int32 m_nTeam;
 	CEntityIOOutput m_OnEventFired;
-}
+};

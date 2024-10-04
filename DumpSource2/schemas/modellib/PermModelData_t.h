@@ -23,4 +23,4 @@ class PermModelData_t
 	CUtlVector< CUtlString > m_BodyGroupsHiddenInTools;
 	CUtlVector< CStrongHandle< InfoForResourceTypeCModel > > m_refAnimIncludeModels;
 	CUtlVector< PermModelDataAnimatedMaterialAttribute_t > m_AnimatedMaterialAttributes;
-}
+};

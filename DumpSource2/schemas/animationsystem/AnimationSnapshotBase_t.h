@@ -9,4 +9,4 @@ class AnimationSnapshotBase_t
 	AnimationSnapshotType_t m_SnapshotType;
 	bool m_bHasDecodeDump;
 	AnimationDecodeDebugDumpElement_t m_DecodeDump;
-}
+};

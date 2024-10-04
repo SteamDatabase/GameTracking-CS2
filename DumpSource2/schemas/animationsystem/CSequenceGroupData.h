@@ -14,4 +14,4 @@ class CSequenceGroupData
 	CUtlVector< CSeqPoseParamDesc > m_localPoseParamArray;
 	KeyValues3 m_keyValues;
 	CUtlVector< CSeqIKLock > m_localIKAutoplayLockArray;
-}
+};

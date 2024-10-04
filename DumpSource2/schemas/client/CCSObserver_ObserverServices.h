@@ -8,4 +8,4 @@ class CCSObserver_ObserverServices : public CPlayer_ObserverServices
 	Quaternion m_qObsInterp_OrientationTravelDir;
 	ObserverInterpState_t m_obsInterpState;
 	bool m_bObserverInterpolationNeedsDeferredSetup;
-}
+};

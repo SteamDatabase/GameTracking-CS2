@@ -21,4 +21,4 @@ class CSMatchStats_t : public CSPerRoundStats_t
 	int32 m_i1v2Wins;
 	int32 m_iEntryCount;
 	int32 m_iEntryWins;
-}
+};

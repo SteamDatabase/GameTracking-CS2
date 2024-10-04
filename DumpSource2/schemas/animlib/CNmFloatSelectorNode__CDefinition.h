@@ -5,4 +5,4 @@ class CNmFloatSelectorNode::CDefinition : public CNmFloatValueNode::CDefinition
 	float32 m_flDefaultValue;
 	float32 m_flEaseTime;
 	NmEasingOperation_t m_easingOp;
-}
+};

@@ -15,4 +15,4 @@ class CPlayerSprayDecal : public CModelPointEntity
 	int32 m_nTintID;
 	uint8 m_nVersion;
 	uint8[128] m_ubSignature;
-}
+};

@@ -6,4 +6,4 @@ class CPlayer_ObserverServices : public CPlayerPawnComponent
 	bool m_bForcedObserverMode;
 	float32 m_flObserverChaseDistance;
 	GameTime_t m_flObserverChaseDistanceCalcTime;
-}
+};

@@ -17,4 +17,4 @@ class CCompressorGroup
 	CUtlVector< CCompressor< Color >* > m_colorCompressor;
 	CUtlVector< CCompressor< Vector2D >* > m_vector2DCompressor;
 	CUtlVector< CCompressor< Vector4D >* > m_vector4DCompressor;
-}
+};

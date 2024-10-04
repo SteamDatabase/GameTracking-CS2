@@ -4,4 +4,4 @@ class CFootstepLandedAnimTag : public CAnimTagBase
 	CUtlString m_OverrideSoundName;
 	CUtlString m_DebugAnimSourceString;
 	CUtlString m_BoneName;
-}
+};

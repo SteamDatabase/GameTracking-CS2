@@ -6,4 +6,4 @@ class C_PhysPropClientside : public C_BreakableProp
 	Vector m_vecDamagePosition;
 	Vector m_vecDamageDirection;
 	DamageTypes_t m_nDamageType;
-}
+};

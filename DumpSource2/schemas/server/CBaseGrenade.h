@@ -14,4 +14,4 @@ class CBaseGrenade : public CBaseFlex
 	CHandle< CCSPlayerPawn > m_hThrower;
 	GameTime_t m_flNextAttack;
 	CHandle< CCSPlayerPawn > m_hOriginalThrower;
-}
+};

@@ -25,4 +25,4 @@ class CInferno : public CBaseModelEntity
 	CountdownTimer m_BookkeepingTimer;
 	CountdownTimer m_NextSpreadTimer;
 	uint16 m_nSourceItemDefIndex;
-}
+};

@@ -4,4 +4,4 @@ class CTimeRemainingMetricEvaluator : public CMotionMetricEvaluator
 	float32 m_flMaxTimeRemaining;
 	bool m_bFilterByTimeRemaining;
 	float32 m_flMinTimeRemaining;
-}
+};

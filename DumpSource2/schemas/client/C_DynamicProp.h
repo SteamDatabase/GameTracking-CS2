@@ -23,4 +23,4 @@ class C_DynamicProp : public C_BreakableProp
 	int32 m_iCachedFrameCount;
 	Vector m_vecCachedRenderMins;
 	Vector m_vecCachedRenderMaxs;
-}
+};

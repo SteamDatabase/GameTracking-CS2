@@ -1,0 +1,8 @@
+enum C_BaseCombatCharacter::WaterWakeMode_t : uint32_t
+{
+	WATER_WAKE_NONE = 0,
+	WATER_WAKE_IDLE = 1,
+	WATER_WAKE_WALKING = 2,
+	WATER_WAKE_RUNNING = 3,
+	WATER_WAKE_WATER_OVERHEAD = 4,
+};

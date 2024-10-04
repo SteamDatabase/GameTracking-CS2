@@ -8,4 +8,4 @@ class CStateUpdateData
 	bitfield:1 m_bIsStartState;
 	bitfield:1 m_bIsEndState;
 	bitfield:1 m_bIsPassthrough;
-}
+};

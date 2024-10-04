@@ -6,4 +6,4 @@ class CLogicDistanceAutosave : public CLogicalEntity
 	bool m_bCheckCough;
 	bool m_bThinkDangerous;
 	float32 m_flDangerousTime;
-}
+};

@@ -1,3 +1,3 @@
 class EntOutput_t
 {
-}
+};

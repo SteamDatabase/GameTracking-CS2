@@ -1,3 +1,3 @@
 class CDEagle : public CCSWeaponBaseGun
 {
-}
+};

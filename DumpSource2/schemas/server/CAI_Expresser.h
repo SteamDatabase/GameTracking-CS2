@@ -10,4 +10,4 @@ class CAI_Expresser
 	bool m_bSceneEntityDisabled;
 	int32 m_nLastSpokenPriority;
 	CBaseFlex* m_pOuter;
-}
+};

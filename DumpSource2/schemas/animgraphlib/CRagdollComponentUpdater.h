@@ -8,4 +8,4 @@ class CRagdollComponentUpdater : public CAnimComponentUpdater
 	float32 m_flSpringFrequencyMax;
 	float32 m_flMaxStretch;
 	bool m_bSolidCollisionAtZeroWeight;
-}
+};

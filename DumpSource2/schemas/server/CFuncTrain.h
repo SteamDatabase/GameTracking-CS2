@@ -6,4 +6,4 @@ class CFuncTrain : public CBasePlatTrain
 	float32 m_flBlockDamage;
 	GameTime_t m_flNextBlockTime;
 	CUtlSymbolLarge m_iszLastTarget;
-}
+};

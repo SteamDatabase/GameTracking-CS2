@@ -5,4 +5,4 @@ class CRenderMesh
 	CRenderSkeleton m_skeleton;
 	DynamicMeshDeformParams_t m_meshDeformParams;
 	CRenderGroom* m_pGroomData;
-}
+};

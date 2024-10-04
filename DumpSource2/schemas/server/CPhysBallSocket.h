@@ -6,4 +6,4 @@ class CPhysBallSocket : public CPhysConstraint
 	bool m_bEnableTwistLimit;
 	float32 m_flMinTwistAngle;
 	float32 m_flMaxTwistAngle;
-}
+};

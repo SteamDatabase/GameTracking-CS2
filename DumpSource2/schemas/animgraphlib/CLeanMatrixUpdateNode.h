@@ -10,4 +10,4 @@ class CLeanMatrixUpdateNode : public CLeafUpdateNode
 	HSequence m_hSequence;
 	float32 m_flMaxValue;
 	int32 m_nSequenceMaxFrame;
-}
+};

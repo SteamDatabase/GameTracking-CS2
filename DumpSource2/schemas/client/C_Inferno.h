@@ -24,4 +24,4 @@ class C_Inferno : public C_BaseModelEntity
 	Vector m_minBounds;
 	Vector m_maxBounds;
 	float32 m_flLastGrassBurnThink;
-}
+};

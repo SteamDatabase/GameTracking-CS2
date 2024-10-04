@@ -8,4 +8,4 @@ class CHitReactUpdateNode : public CUnaryUpdateNode
 	CAnimParamHandle m_hitStrengthParam;
 	float32 m_flMinDelayBetweenHits;
 	bool m_bResetChild;
-}
+};

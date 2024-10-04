@@ -4,4 +4,4 @@ class CFilterMultiple : public CBaseFilter
 	CUtlSymbolLarge[10] m_iFilterName;
 	CHandle< CBaseEntity >[10] m_hFilter;
 	int32 m_nFilterCount;
-}
+};

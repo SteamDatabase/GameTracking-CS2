@@ -13,4 +13,4 @@ class CFlashlightEffect
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_FlashlightTexture;
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_MuzzleFlashTexture;
 	char[64] m_textureName;
-}
+};

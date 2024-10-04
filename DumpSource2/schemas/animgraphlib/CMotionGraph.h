@@ -7,4 +7,4 @@ class CMotionGraph
 	int32 m_nConfigStartIndex;
 	int32 m_nConfigCount;
 	bool m_bLoop;
-}
+};

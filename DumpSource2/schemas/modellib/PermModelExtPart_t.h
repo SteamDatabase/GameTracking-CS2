@@ -4,4 +4,4 @@ class PermModelExtPart_t
 	CUtlString m_Name;
 	int32 m_nParent;
 	CStrongHandle< InfoForResourceTypeCModel > m_refModel;
-}
+};

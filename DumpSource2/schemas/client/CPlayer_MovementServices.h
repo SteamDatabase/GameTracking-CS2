@@ -15,4 +15,4 @@ class CPlayer_MovementServices : public CPlayerPawnComponent
 	float32 m_flUpMove;
 	Vector m_vecLastMovementImpulses;
 	QAngle m_vecOldViewAngles;
-}
+};

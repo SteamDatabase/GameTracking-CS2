@@ -5,4 +5,4 @@ class CInfoDynamicShadowHint : public CPointEntity
 	int32 m_nImportance;
 	int32 m_nLightChoice;
 	CHandle< CBaseEntity > m_hLight;
-}
+};

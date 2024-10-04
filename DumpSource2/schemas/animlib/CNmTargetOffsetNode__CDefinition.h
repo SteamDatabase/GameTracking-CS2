@@ -4,4 +4,4 @@ class CNmTargetOffsetNode::CDefinition : public CNmTargetValueNode::CDefinition
 	bool m_bIsBoneSpaceOffset;
 	Quaternion m_rotationOffset;
 	Vector m_translationOffset;
-}
+};

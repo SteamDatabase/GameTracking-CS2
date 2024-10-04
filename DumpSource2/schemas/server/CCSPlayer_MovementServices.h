@@ -41,4 +41,4 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	float32 m_flHeightAtJumpStart;
 	float32 m_flMaxJumpHeightThisJump;
 	float32 m_flMaxJumpHeightLastJump;
-}
+};

@@ -5,4 +5,4 @@ class ParamSpan_t
 	AnimParamType_t m_eParamType;
 	float32 m_flStartCycle;
 	float32 m_flEndCycle;
-}
+};
