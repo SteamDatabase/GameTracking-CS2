@@ -1,0 +1,3 @@
+class CLogicalEntity : public CServerOnlyEntity
+{
+}

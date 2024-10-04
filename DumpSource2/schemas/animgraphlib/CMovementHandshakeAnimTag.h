@@ -1,0 +1,3 @@
+class CMovementHandshakeAnimTag : public CHandshakeAnimTagBase
+{
+}

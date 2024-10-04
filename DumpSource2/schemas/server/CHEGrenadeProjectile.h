@@ -1,0 +1,3 @@
+class CHEGrenadeProjectile : public CBaseCSGrenadeProjectile
+{
+}

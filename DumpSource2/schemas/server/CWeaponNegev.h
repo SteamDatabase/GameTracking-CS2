@@ -1,0 +1,3 @@
+class CWeaponNegev : public CCSWeaponBaseGun
+{
+}

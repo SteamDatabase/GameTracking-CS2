@@ -1,0 +1,3 @@
+class EventSplitScreenStateChanged_t
+{
+}

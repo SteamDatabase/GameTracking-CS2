@@ -1,0 +1,3 @@
+class CItemSoda : public CBaseAnimGraph
+{
+}

@@ -1,0 +1,3 @@
+class WrappedPhysicsJoint_t
+{
+}

@@ -1,0 +1,3 @@
+class CPointClientCommand : public CPointEntity
+{
+}

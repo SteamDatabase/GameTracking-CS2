@@ -1,0 +1,3 @@
+class CPairedSequenceComponentUpdater : public CAnimComponentUpdater
+{
+}

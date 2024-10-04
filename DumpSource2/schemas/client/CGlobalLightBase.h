@@ -1,0 +1,46 @@
+class CGlobalLightBase
+{
+	bool m_bSpotLight;
+	Vector m_SpotLightOrigin;
+	QAngle m_SpotLightAngles;
+	Vector m_ShadowDirection;
+	Vector m_AmbientDirection;
+	Vector m_SpecularDirection;
+	Vector m_InspectorSpecularDirection;
+	float32 m_flSpecularPower;
+	float32 m_flSpecularIndependence;
+	Color m_SpecularColor;
+	bool m_bStartDisabled;
+	bool m_bEnabled;
+	Color m_LightColor;
+	Color m_AmbientColor1;
+	Color m_AmbientColor2;
+	Color m_AmbientColor3;
+	float32 m_flSunDistance;
+	float32 m_flFOV;
+	float32 m_flNearZ;
+	float32 m_flFarZ;
+	bool m_bEnableShadows;
+	bool m_bOldEnableShadows;
+	bool m_bBackgroundClearNotRequired;
+	float32 m_flCloudScale;
+	float32 m_flCloud1Speed;
+	float32 m_flCloud1Direction;
+	float32 m_flCloud2Speed;
+	float32 m_flCloud2Direction;
+	float32 m_flAmbientScale1;
+	float32 m_flAmbientScale2;
+	float32 m_flGroundScale;
+	float32 m_flLightScale;
+	float32 m_flFoWDarkness;
+	bool m_bEnableSeparateSkyboxFog;
+	Vector m_vFowColor;
+	Vector m_ViewOrigin;
+	QAngle m_ViewAngles;
+	float32 m_flViewFoV;
+	Vector[8] m_WorldPoints;
+	Vector2D m_vFogOffsetLayer0;
+	Vector2D m_vFogOffsetLayer1;
+	CHandle< C_BaseEntity > m_hEnvWind;
+	CHandle< C_BaseEntity > m_hEnvSky;
+}

@@ -1,0 +1,3 @@
+class CFilterLOS : public CBaseFilter
+{
+}

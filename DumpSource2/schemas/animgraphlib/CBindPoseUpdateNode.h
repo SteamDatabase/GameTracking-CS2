@@ -1,0 +1,3 @@
+class CBindPoseUpdateNode : public CLeafUpdateNode
+{
+}

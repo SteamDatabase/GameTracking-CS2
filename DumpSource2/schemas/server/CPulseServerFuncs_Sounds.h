@@ -1,0 +1,3 @@
+class CPulseServerFuncs_Sounds
+{
+}

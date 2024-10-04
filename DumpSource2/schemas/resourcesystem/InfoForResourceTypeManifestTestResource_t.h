@@ -1,0 +1,3 @@
+class InfoForResourceTypeManifestTestResource_t
+{
+}

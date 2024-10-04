@@ -1,0 +1,3 @@
+class CLogicScript : public CPointEntity
+{
+}

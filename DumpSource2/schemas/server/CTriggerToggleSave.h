@@ -1,0 +1,3 @@
+class CTriggerToggleSave : public CBaseTrigger
+{
+}

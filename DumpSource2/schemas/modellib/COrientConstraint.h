@@ -1,0 +1,3 @@
+class COrientConstraint : public CBaseConstraint
+{
+}

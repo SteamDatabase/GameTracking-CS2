@@ -1,0 +1,3 @@
+class CWaterBullet : public CBaseAnimGraph
+{
+}

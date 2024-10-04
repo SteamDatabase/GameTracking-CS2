@@ -1,0 +1,3 @@
+class CSmokeGrenade : public CBaseCSGrenade
+{
+}

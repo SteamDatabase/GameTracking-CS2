@@ -1,0 +1,3 @@
+class FakeEntityDerivedA_tAPI
+{
+}

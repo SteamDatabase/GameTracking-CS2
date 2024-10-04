@@ -1,0 +1,3 @@
+class CHEGrenade : public CBaseCSGrenade
+{
+}

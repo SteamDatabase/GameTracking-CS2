@@ -1,0 +1,42 @@
+class CHostage : public CHostageExpresserShim
+{
+	CEntityIOOutput m_OnHostageBeginGrab;
+	CEntityIOOutput m_OnFirstPickedUp;
+	CEntityIOOutput m_OnDroppedNotRescued;
+	CEntityIOOutput m_OnRescued;
+	EntitySpottedState_t m_entitySpottedState;
+	int32 m_nSpotRules;
+	uint32 m_uiHostageSpawnExclusionGroupMask;
+	uint32 m_nHostageSpawnRandomFactor;
+	bool m_bRemove;
+	Vector m_vel;
+	bool m_isRescued;
+	bool m_jumpedThisFrame;
+	int32 m_nHostageState;
+	CHandle< CBaseEntity > m_leader;
+	CHandle< CCSPlayerPawnBase > m_lastLeader;
+	CountdownTimer m_reuseTimer;
+	bool m_hasBeenUsed;
+	Vector m_accel;
+	bool m_isRunning;
+	bool m_isCrouching;
+	CountdownTimer m_jumpTimer;
+	bool m_isWaitingForLeader;
+	CountdownTimer m_repathTimer;
+	CountdownTimer m_inhibitDoorTimer;
+	CountdownTimer m_inhibitObstacleAvoidanceTimer;
+	CountdownTimer m_wiggleTimer;
+	bool m_isAdjusted;
+	bool m_bHandsHaveBeenCut;
+	CHandle< CCSPlayerPawn > m_hHostageGrabber;
+	GameTime_t m_fLastGrabTime;
+	Vector m_vecPositionWhenStartedDroppingToGround;
+	Vector m_vecGrabbedPos;
+	GameTime_t m_flRescueStartTime;
+	GameTime_t m_flGrabSuccessTime;
+	GameTime_t m_flDropStartTime;
+	int32 m_nApproachRewardPayouts;
+	int32 m_nPickupEventCount;
+	Vector m_vecSpawnGroundPos;
+	Vector m_vecHostageResetPosition;
+}

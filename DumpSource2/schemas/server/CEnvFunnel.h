@@ -1,0 +1,3 @@
+class CEnvFunnel : public CBaseEntity
+{
+}

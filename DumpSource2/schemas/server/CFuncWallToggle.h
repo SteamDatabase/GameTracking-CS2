@@ -1,0 +1,3 @@
+class CFuncWallToggle : public CFuncWall
+{
+}

@@ -1,0 +1,3 @@
+class CSpriteOriented : public CSprite
+{
+}

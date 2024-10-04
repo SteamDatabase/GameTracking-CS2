@@ -1,0 +1,3 @@
+class CBlockSelectionMetricEvaluator : public CMotionMetricEvaluator
+{
+}

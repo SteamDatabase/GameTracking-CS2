@@ -1,0 +1,3 @@
+class CTriggerOnce : public CTriggerMultiple
+{
+}

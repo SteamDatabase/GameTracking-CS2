@@ -1,0 +1,3 @@
+class InfoForResourceTypeIMaterial2
+{
+}

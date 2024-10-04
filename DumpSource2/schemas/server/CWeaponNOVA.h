@@ -1,0 +1,3 @@
+class CWeaponNOVA : public CCSWeaponBase
+{
+}

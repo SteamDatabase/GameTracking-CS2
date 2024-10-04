@@ -1,0 +1,3 @@
+class CStringAnimTag : public CAnimTagBase
+{
+}

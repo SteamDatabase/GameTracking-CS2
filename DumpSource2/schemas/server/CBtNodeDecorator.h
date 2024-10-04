@@ -1,0 +1,3 @@
+class CBtNodeDecorator : public CBtNode
+{
+}

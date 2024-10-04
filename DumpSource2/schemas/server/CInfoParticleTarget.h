@@ -1,0 +1,3 @@
+class CInfoParticleTarget : public CPointEntity
+{
+}

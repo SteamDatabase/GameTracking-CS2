@@ -1,0 +1,3 @@
+class CInfoDeathmatchSpawn : public SpawnPoint
+{
+}

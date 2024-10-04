@@ -1,0 +1,3 @@
+class CLightSpotEntity : public CLightEntity
+{
+}

@@ -1,0 +1,3 @@
+class CWeaponGalilAR : public CCSWeaponBaseGun
+{
+}

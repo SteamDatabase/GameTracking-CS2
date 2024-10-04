@@ -1,0 +1,3 @@
+class CHostageRescueZone : public CHostageRescueZoneShim
+{
+}

@@ -1,0 +1,3 @@
+class CTablet : public CCSWeaponBase
+{
+}

@@ -1,0 +1,3 @@
+class IGapHost_ExecLog
+{
+}

@@ -1,0 +1,3 @@
+class CHostageRescueZoneShim : public CBaseTrigger
+{
+}

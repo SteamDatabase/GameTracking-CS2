@@ -1,0 +1,3 @@
+class CMolotovGrenade : public CBaseCSGrenade
+{
+}

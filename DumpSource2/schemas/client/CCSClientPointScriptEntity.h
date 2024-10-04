@@ -1,0 +1,3 @@
+class CCSClientPointScriptEntity : public CCSPointScriptEntity
+{
+}

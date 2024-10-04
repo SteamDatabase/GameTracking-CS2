@@ -1,0 +1,3 @@
+class CCSPointScriptExtensions_entity
+{
+}

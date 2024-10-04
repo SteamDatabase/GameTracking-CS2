@@ -1,0 +1,44 @@
+class C_RopeKeyframe : public C_BaseModelEntity
+{
+	CBitVec< 10 > m_LinksTouchingSomething;
+	int32 m_nLinksTouchingSomething;
+	bool m_bApplyWind;
+	int32 m_fPrevLockedPoints;
+	int32 m_iForcePointMoveCounter;
+	bool[2] m_bPrevEndPointPos;
+	Vector[2] m_vPrevEndPointPos;
+	float32 m_flCurScroll;
+	float32 m_flScrollSpeed;
+	uint16 m_RopeFlags;
+	CStrongHandle< InfoForResourceTypeIMaterial2 > m_iRopeMaterialModelIndex;
+	Vector[10] m_LightValues;
+	uint8 m_nSegments;
+	CHandle< C_BaseEntity > m_hStartPoint;
+	CHandle< C_BaseEntity > m_hEndPoint;
+	AttachmentHandle_t m_iStartAttachment;
+	AttachmentHandle_t m_iEndAttachment;
+	uint8 m_Subdiv;
+	int16 m_RopeLength;
+	int16 m_Slack;
+	float32 m_TextureScale;
+	uint8 m_fLockedPoints;
+	uint8 m_nChangeCount;
+	float32 m_Width;
+	C_RopeKeyframe::CPhysicsDelegate m_PhysicsDelegate;
+	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hMaterial;
+	int32 m_TextureHeight;
+	Vector m_vecImpulse;
+	Vector m_vecPreviousImpulse;
+	float32 m_flCurrentGustTimer;
+	float32 m_flCurrentGustLifetime;
+	float32 m_flTimeToNextGust;
+	Vector m_vWindDir;
+	Vector m_vColorMod;
+	Vector[2] m_vCachedEndPointAttachmentPos;
+	QAngle[2] m_vCachedEndPointAttachmentAngle;
+	bool m_bConstrainBetweenEndpoints;
+	bitfield:1 m_bEndPointAttachmentPositionsDirty;
+	bitfield:1 m_bEndPointAttachmentAnglesDirty;
+	bitfield:1 m_bNewDataThisFrame;
+	bitfield:1 m_bPhysicsInitted;
+}

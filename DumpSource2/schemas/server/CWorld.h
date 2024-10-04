@@ -1,0 +1,3 @@
+class CWorld : public CBaseModelEntity
+{
+}

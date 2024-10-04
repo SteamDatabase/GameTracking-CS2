@@ -1,0 +1,3 @@
+class CTriggerHostageReset : public CBaseTrigger
+{
+}

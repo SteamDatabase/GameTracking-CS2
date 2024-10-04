@@ -1,0 +1,3 @@
+class CParentConstraint : public CBaseConstraint
+{
+}

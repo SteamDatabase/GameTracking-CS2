@@ -1,0 +1,3 @@
+class CWeaponGlock : public CCSWeaponBaseGun
+{
+}

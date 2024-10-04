@@ -1,0 +1,3 @@
+class CPointConstraint : public CBaseConstraint
+{
+}

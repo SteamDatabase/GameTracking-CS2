@@ -1,0 +1,3 @@
+class CWeaponSawedoff : public CCSWeaponBase
+{
+}

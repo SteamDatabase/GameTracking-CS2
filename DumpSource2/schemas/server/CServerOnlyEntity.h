@@ -1,0 +1,3 @@
+class CServerOnlyEntity : public CBaseEntity
+{
+}

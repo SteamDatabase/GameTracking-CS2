@@ -1,0 +1,3 @@
+class InfoForResourceTypeTestResource_t
+{
+}

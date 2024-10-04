@@ -1,0 +1,3 @@
+class CNmOverlayBlendTask : public CNmBlendTaskBase
+{
+}

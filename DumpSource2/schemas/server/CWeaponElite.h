@@ -1,0 +1,3 @@
+class CWeaponElite : public CCSWeaponBaseGun
+{
+}

@@ -1,0 +1,3 @@
+class CItemKevlar : public CItem
+{
+}

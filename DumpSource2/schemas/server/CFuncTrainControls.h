@@ -1,0 +1,3 @@
+class CFuncTrainControls : public CBaseModelEntity
+{
+}

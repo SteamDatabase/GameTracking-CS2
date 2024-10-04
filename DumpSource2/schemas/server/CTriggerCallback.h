@@ -1,0 +1,3 @@
+class CTriggerCallback : public CBaseTrigger
+{
+}

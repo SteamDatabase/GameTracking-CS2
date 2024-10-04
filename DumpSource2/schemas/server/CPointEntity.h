@@ -1,0 +1,3 @@
+class CPointEntity : public CBaseEntity
+{
+}

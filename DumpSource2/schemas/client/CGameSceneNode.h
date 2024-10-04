@@ -1,0 +1,36 @@
+class CGameSceneNode
+{
+	CTransform m_nodeToWorld;
+	CEntityInstance* m_pOwner;
+	CGameSceneNode* m_pParent;
+	CGameSceneNode* m_pChild;
+	CGameSceneNode* m_pNextSibling;
+	CGameSceneNodeHandle m_hParent;
+	CNetworkOriginCellCoordQuantizedVector m_vecOrigin;
+	QAngle m_angRotation;
+	float32 m_flScale;
+	Vector m_vecAbsOrigin;
+	QAngle m_angAbsRotation;
+	float32 m_flAbsScale;
+	int16 m_nParentAttachmentOrBone;
+	bool m_bDebugAbsOriginChanges;
+	bool m_bDormant;
+	bool m_bForceParentToBeNetworked;
+	bitfield:1 m_bDirtyHierarchy;
+	bitfield:1 m_bDirtyBoneMergeInfo;
+	bitfield:1 m_bNetworkedPositionChanged;
+	bitfield:1 m_bNetworkedAnglesChanged;
+	bitfield:1 m_bNetworkedScaleChanged;
+	bitfield:1 m_bWillBeCallingPostDataUpdate;
+	bitfield:1 m_bBoneMergeFlex;
+	bitfield:2 m_nLatchAbsOrigin;
+	bitfield:1 m_bDirtyBoneMergeBoneToRoot;
+	uint8 m_nHierarchicalDepth;
+	uint8 m_nHierarchyType;
+	uint8 m_nDoNotSetAnimTimeInInvalidatePhysicsCount;
+	CUtlStringToken m_name;
+	CUtlStringToken m_hierarchyAttachName;
+	float32 m_flZOffset;
+	float32 m_flClientLocalScale;
+	Vector m_vRenderOrigin;
+}

@@ -1,0 +1,3 @@
+class CLogicProximity : public CPointEntity
+{
+}

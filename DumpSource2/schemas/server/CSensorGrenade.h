@@ -1,0 +1,3 @@
+class CSensorGrenade : public CBaseCSGrenade
+{
+}

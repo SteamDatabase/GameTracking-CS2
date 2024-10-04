@@ -1,0 +1,3 @@
+class CInfoPlayerCounterterrorist : public SpawnPoint
+{
+}

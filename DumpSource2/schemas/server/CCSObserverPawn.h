@@ -1,0 +1,3 @@
+class CCSObserverPawn : public CCSPlayerPawnBase
+{
+}

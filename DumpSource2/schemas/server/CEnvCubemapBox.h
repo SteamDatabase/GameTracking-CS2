@@ -1,0 +1,3 @@
+class CEnvCubemapBox : public CEnvCubemap
+{
+}

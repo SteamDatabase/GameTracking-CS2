@@ -1,0 +1,3 @@
+class CBtNodeComposite : public CBtNode
+{
+}

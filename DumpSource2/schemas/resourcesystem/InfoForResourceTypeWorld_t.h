@@ -1,0 +1,3 @@
+class InfoForResourceTypeWorld_t
+{
+}

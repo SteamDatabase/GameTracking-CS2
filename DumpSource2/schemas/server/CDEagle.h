@@ -1,0 +1,3 @@
+class CDEagle : public CCSWeaponBaseGun
+{
+}

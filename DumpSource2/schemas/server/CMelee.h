@@ -1,0 +1,3 @@
+class CMelee : public CCSWeaponBase
+{
+}

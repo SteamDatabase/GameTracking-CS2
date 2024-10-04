@@ -1,0 +1,3 @@
+class CTaskStatusAnimTag : public CAnimTagBase
+{
+}

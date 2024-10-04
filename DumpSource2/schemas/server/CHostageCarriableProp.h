@@ -1,0 +1,3 @@
+class CHostageCarriableProp : public CBaseAnimGraph
+{
+}

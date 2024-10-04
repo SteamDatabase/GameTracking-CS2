@@ -1,0 +1,3 @@
+class CItemHeavyAssaultSuit : public CItemAssaultSuit
+{
+}

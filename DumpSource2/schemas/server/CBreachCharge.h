@@ -1,0 +1,3 @@
+class CBreachCharge : public CCSWeaponBase
+{
+}

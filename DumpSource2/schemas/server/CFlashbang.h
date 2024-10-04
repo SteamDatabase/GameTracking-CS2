@@ -1,0 +1,3 @@
+class CFlashbang : public CBaseCSGrenade
+{
+}

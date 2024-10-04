@@ -1,0 +1,3 @@
+class CAnimCycle : public CCycleBase
+{
+}

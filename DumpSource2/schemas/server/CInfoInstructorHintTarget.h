@@ -1,0 +1,3 @@
+class CInfoInstructorHintTarget : public CPointEntity
+{
+}

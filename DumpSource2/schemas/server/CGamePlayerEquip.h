@@ -1,0 +1,3 @@
+class CGamePlayerEquip : public CRulePointEntity
+{
+}

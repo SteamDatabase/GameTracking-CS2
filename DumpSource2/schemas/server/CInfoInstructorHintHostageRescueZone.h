@@ -1,0 +1,3 @@
+class CInfoInstructorHintHostageRescueZone : public CPointEntity
+{
+}

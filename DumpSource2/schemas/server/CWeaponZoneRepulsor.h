@@ -1,0 +1,3 @@
+class CWeaponZoneRepulsor : public CCSWeaponBaseGun
+{
+}

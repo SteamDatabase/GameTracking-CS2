@@ -1,0 +1,3 @@
+class CNmOrientationWarpEvent : public CNmEvent
+{
+}

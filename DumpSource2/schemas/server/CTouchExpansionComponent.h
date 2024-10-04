@@ -1,0 +1,3 @@
+class CTouchExpansionComponent : public CEntityComponent
+{
+}

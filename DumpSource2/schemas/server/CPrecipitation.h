@@ -1,0 +1,3 @@
+class CPrecipitation : public CBaseTrigger
+{
+}

@@ -1,0 +1,3 @@
+class CPredictedViewModel : public CBaseViewModel
+{
+}

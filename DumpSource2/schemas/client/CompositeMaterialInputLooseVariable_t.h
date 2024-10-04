@@ -1,0 +1,39 @@
+class CompositeMaterialInputLooseVariable_t
+{
+	CUtlString m_strName;
+	bool m_bExposeExternally;
+	CUtlString m_strExposedFriendlyName;
+	CUtlString m_strExposedFriendlyGroupName;
+	bool m_bExposedVariableIsFixedRange;
+	CUtlString m_strExposedVisibleWhenTrue;
+	CUtlString m_strExposedHiddenWhenTrue;
+	CompositeMaterialInputLooseVariableType_t m_nVariableType;
+	bool m_bValueBoolean;
+	int32 m_nValueIntX;
+	int32 m_nValueIntY;
+	int32 m_nValueIntZ;
+	int32 m_nValueIntW;
+	bool m_bHasFloatBounds;
+	float32 m_flValueFloatX;
+	float32 m_flValueFloatX_Min;
+	float32 m_flValueFloatX_Max;
+	float32 m_flValueFloatY;
+	float32 m_flValueFloatY_Min;
+	float32 m_flValueFloatY_Max;
+	float32 m_flValueFloatZ;
+	float32 m_flValueFloatZ_Min;
+	float32 m_flValueFloatZ_Max;
+	float32 m_flValueFloatW;
+	float32 m_flValueFloatW_Min;
+	float32 m_flValueFloatW_Max;
+	Color m_cValueColor4;
+	CompositeMaterialVarSystemVar_t m_nValueSystemVar;
+	CResourceName m_strResourceMaterial;
+	CUtlString m_strTextureContentAssetPath;
+	CResourceName m_strTextureRuntimeResourcePath;
+	CUtlString m_strTextureCompilationVtexTemplate;
+	CompositeMaterialInputTextureType_t m_nTextureType;
+	CUtlString m_strString;
+	CUtlString m_strPanoramaPanelPath;
+	int32 m_nPanoramaRenderRes;
+}
