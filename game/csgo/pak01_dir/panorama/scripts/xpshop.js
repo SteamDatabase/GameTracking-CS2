@@ -371,8 +371,6 @@ var XpShop;
                 let numScrollingTilesToAdd = (ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") ? Math.floor((ShopEntry.lootlist.length + numItemsPerTile - 1) / numItemsPerTile) : 6;
                 let shuffledArray = [...ShopEntry.lootlist];
                 shuffledArray.sort((a, b) => 0.5 - Math.random());
-                if (ShopEntry.lootlist_item_type == "weapon") {
-                }
                 for (let iScrollingTile = 0; iScrollingTile < numScrollingTilesToAdd; ++iScrollingTile) {
                     for (let iTileItem = 0; iTileItem < numItemsPerTile; ++iTileItem) {
                         if (ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") {
@@ -496,6 +494,12 @@ var XpShop;
         else {
             $.Schedule(.1, () => PlaceTiles(elGrid.FindChildInLayoutFile('id-xpshop-grid-tiles'), ShopEntry));
             _SetUpRedeemBar(elGrid.FindChildInLayoutFile('id-xpshop-item-redeem-bar'), elGrid.FindChildInLayoutFile('id-xpshop-item-confirm-bar'), ShopEntry);
+            if (ShopEntry.lootlist && ShopEntry.lootlist_item_type === 'weapon' && ShopEntry.lootlist.length == 1) {
+                let elLimitedItem = elGrid.FindChildInLayoutFile(ShopEntry.lootlist[0]);
+                if (elLimitedItem && elLimitedItem.IsValid()) {
+                    InspectModelImage.Init(elLimitedItem, ShopEntry.lootlist[0]);
+                }
+            }
         }
         _UpdateVisibleInspectGrid(elInspectContainer, ShopEntry.item_name + '-grid');
     }

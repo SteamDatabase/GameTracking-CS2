@@ -8,6 +8,7 @@ class CDamageRecord
 	CUtlString m_szPlayerRecipientName;
 	uint64 m_DamagerXuid;
 	uint64 m_RecipientXuid;
+	int32 m_iBulletsDamage;
 	int32 m_iDamage;
 	int32 m_iActualHealthRemoved;
 	int32 m_iNumHits;
