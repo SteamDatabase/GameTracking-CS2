@@ -358,7 +358,7 @@ var PremierPickBan;
             elAvatar.BLoadLayoutSnippet('small-avatar');
             let avatarImage = elAvatar.FindChildTraverse('JsAvatarImage');
             avatarImage.PopulateFromSteamID(xuid);
-            const teamColorIdx = PartyListAPI.GetPartyMemberSetting(xuid, 'game/teamcolor');
+            const teamColorIdx = PartyListAPI.GetPartyMemberTeammateColor(xuid);
             const teamColorRgb = TeamColor.GetTeamColor(Number(teamColorIdx));
             avatarImage.style.border = '2px solid rgb(' + teamColorRgb + ')';
             elAvatar.SetDialogVariable('teammate_name', FriendsListAPI.GetFriendName(xuid));

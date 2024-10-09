@@ -311,6 +311,9 @@ var InventoryPanel;
         if (_m_activeCategory === "search") {
             $('#InvSearchPanel').AddClass(_m_HiddenContentClassname);
         }
+        else if (_m_activeCategory === "tradeup") {
+            $('#InvCraftingPanel').AddClass(_m_HiddenContentClassname);
+        }
         else {
             _m_elInventoryMain.AddClass(_m_HiddenContentClassname);
         }
@@ -318,6 +321,9 @@ var InventoryPanel;
     function _ShowInventoryMainListers() {
         if (_m_activeCategory === "search") {
             $('#InvSearchPanel').RemoveClass(_m_HiddenContentClassname);
+        }
+        else if (_m_activeCategory === "tradeup") {
+            $('#InvCraftingPanel').RemoveClass(_m_HiddenContentClassname);
         }
         else {
             _m_elInventoryMain.RemoveClass(_m_HiddenContentClassname);

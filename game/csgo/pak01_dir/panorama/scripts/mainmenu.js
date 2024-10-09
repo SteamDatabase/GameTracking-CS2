@@ -212,6 +212,7 @@ var MainMenu;
         _UpdateInventoryBtnAlert();
         _UpdateStoreAlert();
         _GcLogonNotificationReceived();
+        _CheckPopupNotificationsAtLogon();
         _UpdateUnlockCompAlert();
         _FetchTournamentData();
         _ShowFloatingPanels();
@@ -229,6 +230,22 @@ var MainMenu;
     function _TournamentDraftUpdate() {
         if (!m_TournamentPickBanPopup || !m_TournamentPickBanPopup.IsValid()) {
             m_TournamentPickBanPopup = UiToolkitAPI.ShowCustomLayoutPopup('tournament_pickban_popup', 'file://{resources}/layout/popups/popup_tournament_pickban.xml');
+        }
+    }
+    let _m_bPopupNotificationAtLogonShown = false;
+    function _CheckPopupNotificationsAtLogon() {
+        if (_m_bPopupNotificationAtLogonShown)
+            return;
+        const strNotification = MyPersonaAPI.GetTradeBanNotification();
+        if (strNotification) {
+            const refTS = 1695849359;
+            const numSTill = -NewsAPI.GetNumSecondsTillGcTimestamp(refTS);
+            const valSnooze = GameInterfaceAPI.GetSettingString('ui_notification_tb_snooze');
+            const numSnooze = valSnooze ? parseInt(valSnooze) : 0;
+            if (numSTill && (!numSnooze || Math.abs(numSTill - numSnooze) > (30 * 24 * 3600))) {
+                _m_bPopupNotificationAtLogonShown = true;
+                UiToolkitAPI.ShowGenericPopupOneOptionBgStyle("#SFUI_LoginPerfectWorld_Title_Info", strNotification, "", "#UI_OK", () => { GameInterfaceAPI.SetSettingString('ui_notification_tb_snooze', '' + numSTill); }, "dim");
+            }
         }
     }
     let _m_bGcLogonNotificationReceivedOnce = false;
@@ -1164,6 +1181,16 @@ var MainMenu;
             }
             return notification;
         }
+        const strNotification = MyPersonaAPI.GetTradeBanNotification();
+        if (strNotification) {
+            notification.color_class = "NotificationYellow";
+            const idxspace = strNotification.indexOf(' ', 60);
+            notification.title = (idxspace > 0)
+                ? strNotification.substring(0, idxspace) + '...'
+                : $.Localize('#SFUI_LoginPerfectWorld_Title_Info');
+            notification.tooltip = strNotification;
+            return notification;
+        }
         return null;
     }
     function _UpdateNotificationBar() {
@@ -1278,6 +1305,10 @@ var MainMenu;
         particle_container.SetHasClass("mainmenu-party-search-particle--slide-out", bSlidout);
         particle_container.SetControlPoint(3, 0, 0, 0);
         particle_container.SetControlPoint(3, 1, 0, 0);
+    }
+    function _OnGcHelloReceived() {
+        _CheckPopupNotificationsAtLogon();
+        _UpdateUnlockCompAlert();
     }
     function _UpdateUnlockCompAlert() {
         const btn = $.GetContextPanel().FindChildInLayoutFile('MainMenuNavBarPlay');
@@ -1413,7 +1444,7 @@ var MainMenu;
         $.RegisterForUnhandledEvent('OpenSidebarPanel', ExpandSidebar);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_GameMustExitNowForAntiAddiction', _GameMustExitNowForAntiAddiction);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_GcLogonNotificationReceived', _GcLogonNotificationReceived);
-        $.RegisterForUnhandledEvent('PanoramaComponent_GC_Hello', _UpdateUnlockCompAlert);
+        $.RegisterForUnhandledEvent('PanoramaComponent_GC_Hello', _OnGcHelloReceived);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', _InventoryUpdated);
         $.RegisterForUnhandledEvent('InventoryItemPreview', _OnInventoryInspect);
         $.RegisterForUnhandledEvent('ShowCustomLayoutPopupParametersAsEvent', _OnShowCustomLayoutPopupParametersAsEvent);
