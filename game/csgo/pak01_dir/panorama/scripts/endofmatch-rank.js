@@ -271,22 +271,23 @@ var EOM_Rank;
                 XpShopTrack.XpShopInit({
                     xpshop_track_frame_panel: elTrack,
                     xpshop_track_value: track,
-                    show_star_count: false,
                 });
             });
             _AnimSequenceNext(() => {
-                elRoot.AddClass('reveal');
+                if (elRoot && elRoot.IsValid())
+                    elRoot.AddClass('reveal');
             }, 0.3);
             if (oXpShopData.hasOwnProperty('postmatch')) {
                 _AnimPause(1.0);
                 _AnimSequenceNext(() => {
                     oXpShopData.postmatch.xp_tracks.forEach(function (track, idx) {
-                        const elTrack = elXpShopContainer.FindChildTraverse('id-xpshop_track_' + idx);
-                        XpShopTrack.XpShopUpdate({
-                            xpshop_track_frame_panel: elTrack,
-                            xpshop_track_value: track,
-                            show_star_count: false,
-                        });
+                        const elTrack = (elXpShopContainer && elXpShopContainer.IsValid()) ? elXpShopContainer.FindChildTraverse('id-xpshop_track_' + idx) : undefined;
+                        if (elTrack) {
+                            XpShopTrack.XpShopUpdate({
+                                xpshop_track_frame_panel: elTrack,
+                                xpshop_track_value: track,
+                            });
+                        }
                     });
                 }, 2);
             }

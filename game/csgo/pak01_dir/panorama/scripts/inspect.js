@@ -446,6 +446,8 @@ var InspectModelImage;
         return elPanel;
     }
     function GetExistingItemPanel(panelId) {
+        if (!m_elContainer || !m_elContainer.IsValid())
+            return null;
         for (let elChild of m_elContainer.Children()) {
             if (elChild && elChild.IsValid() && elChild.id === panelId && !elChild.Data().bPreviousLootlistItemPanel) {
                 return elChild;

@@ -5,6 +5,8 @@ cd "${0%/*}"
 
 echo "Processing CS2..."
 
+../tools/dump_source2.sh csgo csgo
+
 ProcessDepot ".so"
 ProcessDepot ".dll"
 DeduplicateStringsFrom ".so" "game/bin/linuxsteamrt64/libengine2_strings.txt" "game/bin/linuxsteamrt64/libtier0_strings.txt" "DumpSource2/.stringsignore"
@@ -30,8 +32,6 @@ do
 done <   <(find . -type f -name "*.js" -print0)
 
 ProcessToolAssetInfo
-
-../tools/dump_source2.sh csgo csgo
 
 FixUCS2
 
