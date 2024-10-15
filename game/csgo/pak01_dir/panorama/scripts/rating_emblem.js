@@ -109,7 +109,7 @@ var RatingEmblem;
                 elSkillGroupImage.SetImage('file://{images}/icons/skillgroups/' + imagePath + '_none.svg');
                 if (!isloading && options.local_player) {
                     const winsneeded = Math.max(0, winsNeededForRank - wins);
-                    elSkillGroupImage.SetImage('file://{images}/icons/skillgroups/' + imagePath + '_need_wins.svg');
+                    elSkillGroupImage.SetImage('file://{images}/icons/skillgroups/skillgroup_need_wins.svg');
                     elSkillGroupImage.SetDialogVariableInt('wins', wins);
                     elSkillGroupImage.SetDialogVariableInt('wins-needed', winsneeded);
                     if (bFullDetails) {

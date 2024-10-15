@@ -1032,6 +1032,8 @@ var MainMenu;
         MyPersonaAPI.ActionAcknowledgeNotifications();
         _m_bHasPopupNotification = false;
     }
+    let _m_bCheckHasLowAvailableVirtualMemory = true;
+    let _m_bCheckHasInsufficientPagefile = true;
     function _GetPopupNotification() {
         const popupNotification = {
             title: "",
@@ -1041,6 +1043,18 @@ var MainMenu;
             html: false,
             rental_id: "",
         };
+        if (_m_bCheckHasLowAvailableVirtualMemory && GameInterfaceAPI.HasLowAvailableVirtualMemory()) {
+            popupNotification.title = "#GameUI_SystemInfo_Title";
+            popupNotification.msg = $.Localize("#GameUI_SystemInfo_Attention_Low_System_Memory");
+            popupNotification.callback = () => _m_bCheckHasLowAvailableVirtualMemory = _m_bHasPopupNotification = false;
+            return popupNotification;
+        }
+        if (_m_bCheckHasInsufficientPagefile && GameInterfaceAPI.HasInsufficientPagefile()) {
+            popupNotification.title = "#GameUI_SystemInfo_Title";
+            popupNotification.msg = $.Localize("#GameUI_SystemInfo_Attention_LowDiskSpaceForSwapfile");
+            popupNotification.callback = () => _m_bCheckHasInsufficientPagefile = _m_bHasPopupNotification = false;
+            return popupNotification;
+        }
         const nBanRemaining = CompetitiveMatchAPI.GetCooldownSecondsRemaining();
         if (nBanRemaining < 0) {
             popupNotification.title = "#SFUI_MainMenu_Competitive_Ban_Confirm_Title";

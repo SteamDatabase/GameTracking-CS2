@@ -569,8 +569,6 @@ $tLVRenderDeviceSetupV001
 %s:  RegisterLoadingSpawnGroups %s\n
 %s:  Sending creation tick for group to client '%s\n
 %s:  Sending load completed message to server\n
-%s:  Sending load group to client '%s'\n
-%s:  Sending load spawn group\n
 %s:  Sending spawn group manifest update to client '%s'\n
 %s:  Sending unload group to client '%s'\n
 %s:  Shutdown [%x] [%x]\n
@@ -795,7 +793,6 @@ $tLVRenderDeviceSetupV001
 -adapter
 -all
 -allocfailmb
--allocwarnmb
 -allow_non_tools_paths
 -appidoverride
 -auto -title "auto_bug %04d-%02d-%02d %02d:%02d:%02d"
@@ -818,7 +815,6 @@ $tLVRenderDeviceSetupV001
 -game
 -gpuraytracing
 -gtpoollimitexec
--highdpi
 -inf
 -instance
 -launcherlanguage
@@ -840,6 +836,7 @@ $tLVRenderDeviceSetupV001
 -publiccontent
 -rendersystemdll
 -report
+-reservewarnmb
 -rs_recommend_gen
 -rs_reset
 -safe_mode
@@ -1063,9 +1060,13 @@ $tLVRenderDeviceSetupV001
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_16DisconnectCall_tE7empty_tE
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_20SendNetMessageCall_tE7empty_tE
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_20SignonStateNewCall_tE7empty_tE
+13CDelayedCall2I21CServerSideClientBaseS0_NS0_22OnSpawnGroupLoadCall_tE36CNetworkGameServerSpawnGroupAutoLockE
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_24ProcessBaselineAckCall_tE7empty_tE
+13CDelayedCall2I21CServerSideClientBaseS0_NS0_26OnSpawnGroupActivateCall_tE36CNetworkGameServerSpawnGroupAutoLockE
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_26SignonStateNewFailedCall_tE7empty_tE
+13CDelayedCall2I21CServerSideClientBaseS0_NS0_28OnSpawnGroupDeactivateCall_tE36CNetworkGameServerSpawnGroupAutoLockE
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_29BuildServerInfoMessageAsync_tE36CNetworkGameServerSpawnGroupAutoLockE
+13CDelayedCall2I21CServerSideClientBaseS0_NS0_34SendSpawnGroupManifestUpdateCall_tE36CNetworkGameServerSpawnGroupAutoLockE
 13CDelayedCall2I21CServerSideClientBaseS0_NS0_34UpdateAcknowledgedFramecountCall_tE7empty_tE
 13CDelayedCall2I22CNetworkGameServerBase11CHLTVServerNS1_19PrintTVStatusCall_tE7empty_tE
 13CDelayedCall2I22CNetworkGameServerBaseS0_N15ITvStreamSource20StartRecordingCall_tE7empty_tE
@@ -1540,6 +1541,7 @@ $tLVRenderDeviceSetupV001
 1wsHp
 2%sT5
 200000
+20:55:26
 20CCLCMsg_ClientInfo_t
 20CCLCMsg_CmdKeyValues
 20CCLCMsg_Diagnostic_t
@@ -1602,7 +1604,6 @@ $tLVRenderDeviceSetupV001
 21IUGCAddonPathResolver
 21IVConCommDataReceived
 21NetMessagePacketStart
-22:18:22
 22C2S_CONNECTION_Message
 22CCLCMsg_CmdKeyValues_t
 22CCLCMsg_FileCRCCheck_t
@@ -1993,6 +1994,7 @@ $tLVRenderDeviceSetupV001
 >6uu?L
 >6uu?uj
 >>> %s: %s\n
+>Client %02d - '%s' - rate is %d\n
 >K7z6
 >O-p?A6
 >Rdx
@@ -2390,6 +2392,7 @@ AssetSystemTest001
 AssignRangeMultipler with bitcount=32!\n
 AssignRangeMultiplier
 Assume that a reliable entity delta will be ack'ed and send future deltas relative to the last reliable delta.
+Async
 Async tick packet send callback is %.1fms late!\n
 AsyncAddViewsToSceneSystem
 AsyncBeginRenderingViews
@@ -2538,6 +2541,12 @@ Build: %d (revision %s)\n
 BuildClientClassDictionary
 BuildFullFrameSplit LONG buildTime=%4.2fms client=%d, tick=%d, chunks=%d, chunkSize=%d, total compressed size=%d\n
 BuildFullFrameSplit: buildTime=%4.2fms client=%d, tick=%d, chunks=%d, chunkSize=%d, total compressed size=%d\n
+BuildServerInfoMessageAsync_t: Failed to serialize CNETMsg_SetConVar_t\n
+BuildServerInfoMessageAsync_t: Failed to serialize CNETMsg_SignonState_t\n
+BuildServerInfoMessageAsync_t: Failed to serialize CNETMsg_Tick_t\n
+BuildServerInfoMessageAsync_t: Failed to serialize CSVCMsg_ClearAllStringTables_t\n
+BuildServerInfoMessageAsync_t: Failed to serialize CSVCMsg_Print_t\n
+BuildServerInfoMessageAsync_t: Failed to serialize CSVCMsg_ServerInfo_t\n
 BuildSpawnGroupLoadMessage 
 BuildVersion
 Bvirtual void Etc::Block4x4Encoding_R11::SetEncodingBits()
@@ -3302,12 +3311,6 @@ CServerSideClient::ActivatePlayer -start
 CServerSideClient::Await took %.1f ms\n
 CServerSideClientBase::ActivatePlayer
 CServerSideClientBase::Connect( name='%s', userid=%d, fake=%d, chan->addr=%s )\n
-CServerSideClientBase::ExecuteDelayedCall: Failed to serialize CNETMsg_SetConVar_t\n
-CServerSideClientBase::ExecuteDelayedCall: Failed to serialize CNETMsg_SignonState_t\n
-CServerSideClientBase::ExecuteDelayedCall: Failed to serialize CNETMsg_Tick_t\n
-CServerSideClientBase::ExecuteDelayedCall: Failed to serialize CSVCMsg_ClearAllStringTables_t\n
-CServerSideClientBase::ExecuteDelayedCall: Failed to serialize CSVCMsg_Print_t\n
-CServerSideClientBase::ExecuteDelayedCall: Failed to serialize CSVCMsg_ServerInfo_t\n
 CServerSideClientBase::ProcessServerInfo(done)
 CServerSideClientBase::ShouldSendMessages: Send delayed due to !CanPacket, tick=%d\n
 CServerSideClientBase::SpawnPlayer
@@ -3609,7 +3612,6 @@ ClearField
 ClearLayer
 Client "%s" SteamID %s userinfo ignored: "%s" = "%s"\n
 Client #%d "%s" connected @ %s\n
-Client %02d - '%s' - rate is %d\n
 Client %d '%s' setting rate to %d\n
 Client %d '%s' signon state %s -> %s\n
 Client %d (eidx %d, user id %d) %s - aborting wait for ack for tick %d, stopping replay at %d>=%d\n
@@ -4063,6 +4065,7 @@ Escape key allowed to show game UI
 Escape key doesn't hide game UI
 Escape key doesn't show game UI
 Escape key pressed.
+EstimatedMaxCPUMemUsageMB
 Etc::DifferentialTrys::DifferentialTrys(Etc::ColorFloatRGBA, Etc::ColorFloatRGBA, const unsigned int*, const unsigned int*, unsigned int, int, int)
 Etc::Image::EncodingStatus Etc::Image::Encode(Etc::Image::Format, Etc::ErrorMetric, float, unsigned int, unsigned int)
 Etc::IndividualTrys::IndividualTrys(Etc::ColorFloatRGBA, Etc::ColorFloatRGBA, const unsigned int*, const unsigned int*, unsigned int)
@@ -5258,6 +5261,8 @@ LoopTypeInit
 Lost RCON connection, please retry command (%s)\n
 Lost RCON connection, please retry command.\n
 Lost RCON connection, please retry command\n
+Low Memory
+Low available system memory detected, please close any unnecessary open programs to increase system memory availability.
 Lycian
 Lydian
 M$4tu=
@@ -5945,7 +5950,7 @@ OV{O
 OZw3(?
 Obtained EMS handle %u
 Obtained XMS handle %u
-Oct 10 2024
+Oct 15 2024
 October
 Ogham
 Ol_Chiki
@@ -5996,6 +6001,10 @@ OnServerPostSimulate
 OnServerProcessNetworking
 OnServerSimulate
 OnSimpleLoopFrameUpdate
+OnSpawnGroupActivateCall_t
+OnSpawnGroupDeactivateCall_t
+OnSpawnGroupLoadCall_t
+OnSpawnGroupLoadCall_t %s\n
 OnStatusFinished for %s\n
 OnTickBoundary
 Oneof must have at least one field.
@@ -6231,6 +6240,8 @@ Plat_UUIDFromString
 Plat_UUIDToString
 Plat_UnloadModule
 Plat_UnloadSDL
+Plat_VirtualAlloc
+Plat_VirtualFree
 Plat_WindowToOsSpecificHandle
 Plat_localtime64
 Platform the engine is running on.
@@ -7034,6 +7045,7 @@ SendMessageToUser failed with result %d sending %d byte message %s to %s!\n
 SendMovePacket overflowed trying to send %d commands, will try using %d!\n
 SendSignonData
 SendSnapshot_BeforeJobRuns
+SendSpawnGroupManifestUpdateCall_t
 Sending A2S_RESERVE_CHECK [%u protocol] %08X:%08X [%llu] to %s\n
 Sending C2S_CONNECT [%u protocol %u auth %d] to %s\n
 Sending S2A_RESERVE_CHECK_RESPONSE %08X:%08X [%d/%d] to %s @ %s\n
@@ -7191,6 +7203,7 @@ Show user data.
 Show user info for players on server.
 Show/hide the console.
 Show/hide the vis debug visualization
+ShowLowAvailableVirtualMemoryMessageBox
 Showing clusters for sun/csm rendering. Red (full sun csm & lighting), Orange (no viewmodel sun or csm), Green (no sun at all)
 Shows list of connected SourceTV clients.
 Shows the game UI
@@ -7200,6 +7213,7 @@ Shutdown request received when no network service exists.\n
 Shutdown request received while server is hibernating. Shutting down right now\n
 Shutdown request received. Server will shutdown when empty.\n
 ShutdownSource2Logging\n
+Signon Connected (Build)
 Signon Message %s [%d]\n
 Signon buffer overflowed %i bytes!!!\n
 SignonState
@@ -7740,6 +7754,10 @@ Threshold of screen size percentage below which objects get culled
 Threshold of shadow map size percentage below which objects get culled
 Thursday
 Tibetan
+Tick %d. Async schedule %s\n
+Tick %d. Thread %lld. %s:  Queuing load SpawnGroup to client '%s' (not sent initial spawngroup yet)\n
+Tick %d. Thread %lld. %s:  Sending load SpawnGroup to client '%s'\n
+Tick %d. Thread %lld. SendInitialSpawnGroups {%s} to '%s' %s\n
 Tier0GenericMiniDumpHandler_SetOptions
 Tifinagh
 Time before we consider a mic stalled out and need to reset it.
@@ -8436,6 +8454,7 @@ Zq",9\fB
 \nDLL load denials: %u, last '%s'\n
 \nEnd mem_test\n
 \nGame: "%s"\nMap: "%s"\nPlayers: %i (%i bots) / %i humans\nBuild: %u (revision %s)\nServer Number: %i\n\n
+\nHasInsufficientPagefile() detection: %s\nHasLowAvailableVirtualMemory() detection: %s\n
 \nParsing attempt:  
 \nProcess Memory:\nWorking set: %.2f MiB\nPeak working set: %.2f MiB\n
 \nRegistered comments:\n

@@ -517,4 +517,10 @@
         "cl_joystick_enabled" "0"
         "panorama_joystick_enabled" "0"
 	}
+
+	Memory
+	{
+		"EstimatedMaxCPUMemUsageMB"	"3388"
+		"EstimatedMinGPUMemUsageMB"	"1246"
+	}
 }

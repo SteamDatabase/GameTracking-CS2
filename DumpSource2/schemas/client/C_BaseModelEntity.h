@@ -2,6 +2,7 @@ class C_BaseModelEntity : public C_BaseEntity
 {
 	CRenderComponent* m_CRenderComponent;
 	CHitboxComponent m_CHitboxComponent;
+	HitGroup_t m_LastHitGroup;
 	bool m_bInitModelEffects;
 	bool m_bIsStaticProp;
 	int32 m_nLastAddDecal;

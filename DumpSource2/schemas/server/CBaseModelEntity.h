@@ -2,6 +2,13 @@ class CBaseModelEntity : public CBaseEntity
 {
 	CRenderComponent* m_CRenderComponent;
 	CHitboxComponent m_CHitboxComponent;
+	HitGroup_t m_nDestructiblePartInitialStateDestructed0;
+	HitGroup_t m_nDestructiblePartInitialStateDestructed1;
+	HitGroup_t m_nDestructiblePartInitialStateDestructed2;
+	HitGroup_t m_nDestructiblePartInitialStateDestructed3;
+	HitGroup_t m_nDestructiblePartInitialStateDestructed4;
+	int32 m_nLastHitDestructiblePartIndex;
+	HitGroup_t m_LastHitGroup;
 	GameTime_t m_flDissolveStartTime;
 	CEntityIOOutput m_OnIgnite;
 	RenderMode_t m_nRenderMode;

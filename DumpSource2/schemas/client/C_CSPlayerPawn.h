@@ -5,6 +5,7 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	CCSPlayer_BuyServices* m_pBuyServices;
 	CCSPlayer_GlowServices* m_pGlowServices;
 	CCSPlayer_ActionTrackingServices* m_pActionTrackingServices;
+	CCSPlayer_DamageReactServices* m_pDamageReactServices;
 	GameTime_t m_flHealthShotBoostExpirationTime;
 	GameTime_t m_flLastFiredWeaponTime;
 	bool m_bHasFemaleVoice;

@@ -2761,6 +2761,12 @@ $taser_charge
 +(#\v&dbF:xrJ'$#
 ++CLoopModeGame::SetWorldSession
 +D5X
++Hitgroup
++Model Setup
++Model Setup/Animgraph
++Model Setup/Body Group
++Runtime Data
++Runtime Data/Death
 +Sgs
 +attack
 +attack2
@@ -3167,6 +3173,7 @@ $taser_charge
 10CMsgTEFizz
 10CP2P_Voice
 10CPASFilter
+10CPVSFilter
 10CSoundArea
 10CTEBubbles
 10CUI_Canvas
@@ -3765,6 +3772,7 @@ $taser_charge
 15CMsgTEExplosion
 15CMsgTERadioIcon
 15CPulseCell_Base
+15CRagdollManager
 15CSGO_AudioMeter
 15CSGO_BaseSlider
 15CSOItemCriteria
@@ -3926,7 +3934,6 @@ $taser_charge
 16C_MultiplayRules
 16C_ParticleSystem
 16C_PointWorldText
-16C_RagdollManager
 16C_StattrakModule
 16C_TeamRoundTimer
 16C_TempEntsSystem
@@ -4026,6 +4033,7 @@ $taser_charge
 17CUtlVectorDataOpsI10CUtlVectorI14globalentity_ti10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI15CUtlSymbolLargei10CUtlMemoryIS1_iEELi2EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI24SaveRestoreBlockHeader_ti10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
+17CUtlVectorDataOpsI10CUtlVectorI28CDestructiblePartRuntimeDatai10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI7CHandleI12C_BaseEntityEi10CUtlMemoryIS3_iEELi13EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorIfi10CUtlMemoryIfiEELi1EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorIii10CUtlMemoryIiiEELi5EL14ETypeDescFlags0EE
@@ -4186,6 +4194,7 @@ $taser_charge
 18CPhysicsGameSystem
 18CPropDataComponent
 18CPulseCell_Unknown
+18CRagdollGameSystem
 18CReloadMatchFilter
 18CRenderingPipeline
 18CSaveRestoreShared
@@ -5239,6 +5248,7 @@ $taser_charge
 26CCSUsrMsg_CallVoteFailed_t
 26CCSUsrMsg_CurrentRoundOdds
 26CCSUsrMsg_CurrentTimescale
+26CCSUsrMsg_DamagePrediction
 26CCSUsrMsg_DesiredTimescale
 26CCSUsrMsg_MatchStatsUpdate
 26CCSUsrMsg_ServerRankUpdate
@@ -5285,7 +5295,6 @@ $taser_charge
 26CPulseInstanceLoadAPI_NoOp
 26CPulseInstanceSaveAPI_NoOp
 26CPulseSharedEHandleService
-26CRagdollLowViolenceManager
 26CSGOInterpolationInfoPB_CL
 26CSchemaAttributeType_Float
 26CSchemaRegistration_client
@@ -5475,6 +5484,7 @@ $taser_charge
 29CCSGO_HudWeaponSelectionDebug
 29CCSObserver_ViewModelServices
 29CCSPlayerControllerGameSystem
+29CCSPlayer_DamageReactServices
 29CCSUsrMsg_DisconnectToLobby_t
 29CCSUsrMsg_PlayerStatsUpdate_t
 29CCSUsrMsg_SendPlayerItemDrops
@@ -5578,6 +5588,7 @@ $taser_charge
 30CGameSystemReallocatingFactoryI17CPrecacheRegisterS0_E
 30CGameSystemReallocatingFactoryI17CRenderGameSystemS0_E
 30CGameSystemReallocatingFactoryI18CPhysicsGameSystemS0_E
+30CGameSystemReallocatingFactoryI18CRagdollGameSystemS0_E
 30CGameSystemReallocatingFactoryI18C_SoundscapeSystemS0_E
 30CGameSystemReallocatingFactoryI20CAnimGraphGameSystemS0_E
 30CGameSystemReallocatingFactoryI20CDebugOverlayBulletsS0_E
@@ -5600,7 +5611,6 @@ $taser_charge
 30CGameSystemReallocatingFactoryI26CDebugOverlayEntityBrowserS0_E
 30CGameSystemReallocatingFactoryI26CDebugOverlayEntityCatalogS0_E
 30CGameSystemReallocatingFactoryI26CDebugOverlayExampleWindowS0_E
-30CGameSystemReallocatingFactoryI26CRagdollLowViolenceManagerS0_E
 30CGameSystemReallocatingFactoryI26CSoundOpvarSetPointManagerS0_E
 30CGameSystemReallocatingFactoryI26C_GameInstructorGameSystemS0_E
 30CGameSystemReallocatingFactoryI27CCSMinimapCreatorGameSystemS0_E
@@ -6781,9 +6791,10 @@ $taser_charge
 >yhP
 >ztq
 ?22CSimpleLoggingListener
-?333@
+?333@CPlayerPing
 ???CRR_Response bogus index
 ?AnimatedImageStrip
+?CGlowHelperSceneObjectDesc
 ?CHTML::Paint
 ?CUtlBlockMemory overflow!\n
 ?HAI\t81\t9dcG'
@@ -6793,7 +6804,6 @@ $taser_charge
 ?MatchStatsAPI
 ?N6embree3avx12BVHNRefitterILi4EE19LeafBoundsInterfaceE
 ?PaginationButton
-?SOURCE2 SAVE COMMENT
 ?TestCheckpoint: %s
 ?TopArrow
 ?VBH;
@@ -7295,12 +7305,13 @@ AnimationEnd
 AnimationName
 AnimationStart
 AnimationSystem: IK
-Animgraph
 Animgraph Navlink Type
 Animgraph Parameters (%d)
 Animgraph Parameters (%d)###AnimGraphParams
 Animgraph Variables
 Animgraph debugging entity '%s' (class='%s', index='%d')\n
+Animgraph parameter (boolean) to set when this part is destroyed.
+Animgraph parameter (float) with the normalized (0-1) health of this part.
 Animgraph-based models
 Announcer.BombDefused
 Announcer.BombPlanted.%s
@@ -7779,6 +7790,7 @@ BlurOperationPanel
 BlurVert
 BoX5
 Body Component Scriptdesc
+Body group to set when this part is broken.
 BodyGameSystem
 BombAbove
 BombBelow
@@ -8396,7 +8408,6 @@ CGameSceneNode::m_hParent
 CGameSceneNode::m_hierarchyAttachName
 CGameSceneNode::m_vecOrigin
 CGlobalLightBase::UpdateState
-CGlowHelperSceneObjectDesc
 CGrid::CGrid
 CGrid::EventInputFocusSet
 CGrid::GetFocusedChildVisibleIndex
@@ -10012,6 +10023,7 @@ Cursor[ ptr:%p | id:%d | graph:%p ]: Register observer:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Yielded at cell ptr:%p id:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: ~CPulseExecCursor()\n
 Custom Paint Job
+Custom death handshake to set when this part is destroyed.
 CustomCharacter
 CustomFontFiles
 CustomGameEventManager
@@ -10047,7 +10059,6 @@ D32_FLOAT
 D32_FLOAT_S8X24_UINT
 D4tp
 D514p
-D5jz
 D@D/lcO+hcK
 D@Dz
 DAE!
@@ -10376,6 +10387,7 @@ Data Encipherment
 Data breakpoint [%s]
 Data breakpoint [%s] - %s
 Data breakpoint hit
+Data for this destructible part.
 DataDesc
 DataDescSchemaInit
 DataDesc_AddComponentFieldUnserializer
@@ -10606,6 +10618,7 @@ DestroyFakeEntity( handle %d)\n
 DestroyImmediately
 DestroyParticle
 Destroying
+Destructible Parts
 Destructing
 Detach from its parent
 DetachFromParent
@@ -10680,6 +10693,7 @@ Div R%d <- R%d / R%d
 Dizzy
 DnRv
 Do not stop the current yielding node, but do not continue to the next node afterwards.
+Do we disable the hitgroup when all sub parts are destroyed?
 DoAllocateEntity failed\n
 DoAllocateEntity pEntity->m_pInstance != NULL %d\n
 DoEntityDebugOverlayBits
@@ -13066,6 +13080,8 @@ HasCommandLineParm
 HasCustomName
 HasHalfTime
 HasInput
+HasInsufficientPagefile
+HasLowAvailableVirtualMemory
 HasOngoingMatch
 HasOption
 HasPrestige
@@ -13195,6 +13211,7 @@ HotKey_ReplayLastKill
 HotKey_XRay
 Hours
 HoveringOverKeychain
+How damage to this part is handled.
 How many bullets this gun can fire before it reloads (0 if no clip)
 How many secondary bullets this gun can fire before it reloads (0 if no clip)
 HowManyMinutesAgoCached
@@ -14287,6 +14304,7 @@ MLG Columbus 2016 CS:GO Championship
 ML_COMMENT
 MMStatus
 MM[%.1f]ANC[%d]
+MModelGameData
 MNetworkAlias
 MNetworkEncodeFlags
 MNetworkExcludeByName
@@ -14325,6 +14343,7 @@ MPropertyHideField
 MPropertyStartGroup
 MPropertySuppressBaseClassField
 MPropertySuppressEnumerator
+MPropertySuppressExpr
 MPulseAdvanced
 MPulseArgDesc
 MPulseCellInflow
@@ -16633,6 +16652,8 @@ N[iY
 N\v7e_
 N`UaK
 Name Tag
+Name for this destructible part.
+Name of the breakable part to trigger breaking on when health reaches zero.
 NameOfButton
 Name\t\t\t\t\tCount\t\tParticle Count\n
 Named camera '%s' not found in map '%s'\n
@@ -18307,7 +18328,7 @@ RadioTextHeading
 RadioTextOptions
 RadioTextOptionsExit
 Ragdoll PreSolve
-RagdollLowViolenceManager
+RagdollGameSystem
 Rails
 Raise pen.
 RaiseChangeEvents
@@ -18797,6 +18818,7 @@ SNtu
 SOCache
 SOS: GetOpvar %s, %f\n
 SOUND I/O
+SOURCE2 SAVE COMMENT
 SO~c
 SPAWNGROUP_HEADER
 SQ8_d`\
@@ -19665,6 +19687,7 @@ Shorttrain
 Shotgun
 ShotsOnTarget
 Should both primary and secondary attacks be cooled down together (so cooling down primary attack would cooldown both primary + secondary attacks)?
+Should the NPC die when this part is destroyed?
 ShouldForceNewUserTraining
 ShouldOverrideReprediction()
 ShouldShow
@@ -20154,14 +20177,14 @@ Stick_Snd
 Sticker kit '%s' rotate range is not valid %f:%f
 Sticker kit '%s' scale range is not valid %f:%f
 Sticker kit '%s' wear range is not valid %f:%f
+Sticker0Offset
 Sticker0Rotation
+Sticker0Scale
 Sticker0Wear
 Sticker1Rotation
 Sticker2Rotation
-Sticker2Wear
 Sticker3Rotation
 Sticker3Scale
-Sticker3Wear
 Sticker4Rotation
 StickerMarkup
 Stop Waiting
@@ -20335,6 +20358,7 @@ TODO show view offset
 TODO take damage but don't die
 TODO the npc is current selected SOURCE2_UNSUPPORTED?
 TOK_COLON
+TOOLS/TOOLSBLOCKBOMB
 TOOLS_VIS_
 TOOLS_VIS_MODE_
 TOOLS_VIS_MODE_ALBEDO
@@ -20709,6 +20733,7 @@ TopPipBlack
 Total %d entities (%d empty)\n
 Total Players: %i
 Total client think time: %f\n
+Total health of this part. When it reaches 0, the part is 'broken' using the breakable prop system.
 TotalLevelTime
 Tournament Event
 Tournament Submission
@@ -21184,9 +21209,13 @@ V@CPlayerVisibilityDataColorSceneObjectDesc
 VAC banned
 VALVw
 VDPr
+VDataAnimGraphParamBool( m_sModelName )
 VDataAnimGraphParamEnumValue( m_sToolsOnlyOwnerModelName; literal; e_navlink_type; e_navlink_type_shared )
+VDataAnimGraphParamFloat( m_sModelName )
 VDataChoice( scripts/ammo.vdata )
 VDataModelAttachment( m_szWorldModel )
+VDataModelBodyGroup( m_sModelName )
+VDataModelBreakPiece( m_sModelName )
 VF+c
 VGG@
 VGuiPaintSurfaceLayout
@@ -21209,7 +21238,6 @@ VSCRIPT: Started VScript virtual machine using script language '%s'\n
 VSMapPreviewPanel
 VScript error: Invalid entity handle passed to IsMarkedForDelete.\n 
 VScriptScripts
-VUiD
 VY5[;o
 V\rKk
 V_a|I
@@ -21218,6 +21246,7 @@ Val : voiced labialdental fricative
 Valid options: 1 = Desktop, 2 = Classic.\n
 ValidateDirectChallengeCode
 Value set w/o name
+Value to set for the body group when the part is broken.
 Valve Pre-Event Test
 ValveBiped.Bip01_Head
 Vanity Background
@@ -25342,6 +25371,7 @@ e\tcCPtH
 e_Hit_BodyPart
 e_aes.c
 e_camellia.c
+e_destructible_part_destroyed_hitgroup
 ease-in
 ease-in-ease-out
 ease-in-out
@@ -25607,9 +25637,6 @@ enveloped-data
 environmentMaps
 envmaparray_%d.vtex
 eom-scoreboard
-ep1_citadel_02
-ep1_citadel_02b
-ep1_citadel_03
 equip_conflicts
 equip_region
 equip_regions
@@ -25939,7 +25966,6 @@ file://{images}/map_icons/screenshots/720p/de_nuke.png
 file://{images}/map_icons/screenshots/720p/de_overpass.png
 file://{images}/map_icons/screenshots/720p/de_vertigo.png
 file://{images}/overheadmaps/%s_radar.%s
-file://{images}/overheadmaps/%s_radar_spectate.%s
 file://{resources}/layout/base_globalpopups.xml
 file://{resources}/layout/base_hud.xml
 file://{resources}/layout/base_loadingscreen.xml
@@ -26470,6 +26496,7 @@ game_interactions
 game_license
 game_phase_changed
 game_radio_team_prefix_%d
+game_ragdoll_manager
 game_sensitivity
 game_vars
 gamedir
@@ -27041,6 +27068,7 @@ iPercentage
 iSXc
 iU[&l
 iVY2L
+i_destructible_part_destroyed_part_index
 ia5org
 ia7@\t H9
 iana
@@ -28644,6 +28672,7 @@ m_bIsJumping: %s\n
 m_bIsNotMatchedToMaterial
 m_bIsTickRateLockedToDisplayRate=%d
 m_bIsViewmodelCascade
+m_bKillNPCOnDestruction == false
 m_bLFootDown
 m_bLFootForceUp
 m_bLFootForward
@@ -29278,6 +29307,7 @@ materials/tools/show_collision_geometry_wire_nodepth.vmat
 materials\
 mathlib_extended
 matrix3x4_t
+max ragdoll count: %d
 max-height
 max-maps
 max-weapon-kd
@@ -33181,8 +33211,6 @@ taken--%s
 takepoint
 takingfire
 tangent
-tangents
-tangentt
 tangentu_signv
 tank
 tank_projectile
@@ -34381,6 +34409,7 @@ vzcrR
 w+Ce
 w-g2
 w0A4k
+w8#VUiD
 w8i_q
 w=Zk
 w?6r

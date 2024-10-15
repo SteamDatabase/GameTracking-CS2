@@ -27,6 +27,16 @@ var CommonUtil;
         zh: 'cn',
         zu: 'za',
     };
+    const valid_country_codes = [
+        "ae", "ar", "asia", "at", "au", "be", "bg", "br", "by", "ca",
+        "cc", "ch", "cl", "cn", "cz", "de", "dk", "dz", "ee", "es",
+        "eu", "fi", "fr", "gb", "gp", "gr", "hk", "hr", "hu", "id",
+        "ie", "il", "in", "ir", "is", "it", "jp", "kr", "kz", "lt",
+        "lu", "lv", "ly", "mk", "mo", "mx", "my", "nam", "nl", "no",
+        "nz", "oce", "pe", "ph", "pk", "pl", "pt", "re", "ro", "rs",
+        "ru", "sa", "sam", "se", "sg", "si", "sk", "sq", "th", "tr",
+        "tw", "ua", "us", "ve", "vn", "za",
+    ];
     function SetRegionOnLabel(isoCode, elPanel, tooltip = true) {
         let tooltipString = "";
         if (isoCode) {
@@ -61,6 +71,8 @@ var CommonUtil;
         elLabel.AddClass('visible-if-not-perfectworld');
         if (isoCode) {
             elLabel.text = isoCode.toUpperCase();
+            imgCode = imgCode.toLowerCase();
+            imgCode = valid_country_codes.indexOf(imgCode) > -1 ? imgCode : "world";
             elLabel.style.backgroundImage = 'url("file://{images}/regions/' + imgCode + '.png")';
             let elTTAnchor = elLabel.FindChildTraverse('region-tt-anchor');
             if (!elTTAnchor) {

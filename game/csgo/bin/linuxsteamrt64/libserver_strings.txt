@@ -35,6 +35,7 @@
     size: %f
    %4d     %s\n
    '%s' : '%s' (entindex %d) \n
+   - %d:%s %d/%d (%.1f)
    NoteSpeaking( %f, %f ) (stop at %f)\n
    Num items: %d\n
    mismatched!!!\n
@@ -115,8 +116,8 @@
  : unexpected input...\n  expected one of : 
  <-- Arg '%s'
  <-- Retval '%s'
+ @BaseNPCs and hint groups do not exist in this mod.\n
  ACTIVE GROUP
- Bff
  CCSGameRules::Think bHalftime SwitchTeamsAtRoundReset() CTMDBG, %.2f \n
  FL_FULL_EDICT_CHANGED
  HeadPos: %.3f, %.3f, %.3f
@@ -277,6 +278,7 @@
 #Chat_SavePlayer_Spectator
 #Chatwheel_aplan
 #Chatwheel_bplan
+#Chatwheel_ping_CDamageRecord
 #Cstrike_TitlesTXT_Accept_Radio
 #Cstrike_TitlesTXT_Affirmative
 #Cstrike_TitlesTXT_Alias_Not_Avail
@@ -960,6 +962,7 @@ $tFa\v
 %d hooked %s\n
 %d humans and %d bots in game\n
 %d instruction(s)\n
+%d queries, %d misses (%d free) suc spec = %d wasted spec=%d\n
 %d register(s) %d byte(s)\n
 %d spawn groups:\n
 %d unhooked %s\n
@@ -1527,7 +1530,12 @@ $tFa\v
 +++++Bot %s with Max Difficulty %d will become Bot %s with Max Difficulty %d\n
 ++CLoopModeGame::SetWorldSession
 +2m_Stops
-+>animTimeSerializer
++Hitgroup
++Model Setup
++Model Setup/Animgraph
++Model Setup/Body Group
++Runtime Data
++Runtime Data/Death
 +lookatweapon\n
 , at offset %d
 , loss in/out = %.2f%%/%.2f%%
@@ -2706,6 +2714,7 @@ $tFa\v
 17CUtlVectorDataOpsI10CUtlVectorI22AutoRoomDoorwayPairs_ti10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI23SoundOpvarTraceResult_ti10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI24SaveRestoreBlockHeader_ti10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
+17CUtlVectorDataOpsI10CUtlVectorI28CDestructiblePartRuntimeDatai10CUtlMemoryIS1_iEELi10EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI5Vec3DIfEi10CUtlMemoryIS2_iEELi3EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI5Vec4DIfEi10CUtlMemoryIS2_iEELi27EL14ETypeDescFlags0EE
 17CUtlVectorDataOpsI10CUtlVectorI7CHandleI11CBaseEntityEi10CUtlMemoryIS3_iEELi13EL14ETypeDescFlags0EE
@@ -2889,6 +2898,7 @@ $tFa\v
 18CPropDataComponent
 18CPulseCell_Unknown
 18CRagdollConstraint
+18CRagdollGameSystem
 18CReloadMatchFilter
 18CSaveRestoreShared
 18CScriptTriggerHurt
@@ -3253,8 +3263,10 @@ $tFa\v
 21TEBubbles_GameEvent_t
 21WeaponPurchaseCount_t
 22CAnimGraphParamRefBaseIPKc22IAnimParameterInstance23IAnimationGraphInstanceLb0EE
+22CAnimGraphParamRefBaseIPKc22IAnimParameterInstance23IAnimationGraphInstanceLb1EE
 22CAnimGraphParamRefBaseIb22IAnimParameterInstance23IAnimationGraphInstanceLb0EE
 22CAnimGraphParamRefBaseIf22IAnimParameterInstance23IAnimationGraphInstanceLb0EE
+22CAnimGraphParamRefBaseIi22IAnimParameterInstance23IAnimationGraphInstanceLb1EE
 22CAnimTagListenerHelperI16IParticleAnimTagE
 22CAnimTagListenerHelperI17IBodyGroupAnimTagE
 22CAnimTagListenerHelperI21IClothSettingsAnimTagE
@@ -3689,6 +3701,8 @@ $tFa\v
 25TEMuzzleFlash_GameEvent_t
 25TEPhysicsProp_GameEvent_t
 25TEPlayerDecal_GameEvent_t
+26CAnimGraphParamOptionalRefIPKcE
+26CAnimGraphParamOptionalRefIiE
 26CBtActionCombatPositioning
 26CBtDecoratorPickerMaxScore
 26CBtNodeConditionComparison
@@ -3701,6 +3715,7 @@ $tFa\v
 26CCSUsrMsg_CallVoteFailed_t
 26CCSUsrMsg_CurrentRoundOdds
 26CCSUsrMsg_CurrentTimescale
+26CCSUsrMsg_DamagePrediction
 26CCSUsrMsg_DesiredTimescale
 26CCSUsrMsg_MatchStatsUpdate
 26CCSUsrMsg_ServerRankUpdate
@@ -3741,7 +3756,6 @@ $tFa\v
 26CPulseInstanceLoadAPI_NoOp
 26CPulseInstanceSaveAPI_NoOp
 26CPulseSharedEHandleService
-26CRagdollLowViolenceManager
 26CSGOInterpolationInfoPB_CL
 26CSchemaAttributeType_Float
 26CSchemaRegistration_navlib
@@ -3974,6 +3988,7 @@ $tFa\v
 30CGameSystemReallocatingFactoryI17CRenderGameSystemS0_E
 30CGameSystemReallocatingFactoryI17CSoundscapeSystemS0_E
 30CGameSystemReallocatingFactoryI18CPhysicsGameSystemS0_E
+30CGameSystemReallocatingFactoryI18CRagdollGameSystemS0_E
 30CGameSystemReallocatingFactoryI20CAnimGraphGameSystemS0_E
 30CGameSystemReallocatingFactoryI20CDebugOverlayBulletsS0_E
 30CGameSystemReallocatingFactoryI20CGameRulesGameSystemS0_E
@@ -3993,7 +4008,6 @@ $tFa\v
 30CGameSystemReallocatingFactoryI26CDebugOverlayEntityBrowserS0_E
 30CGameSystemReallocatingFactoryI26CDebugOverlayEntityCatalogS0_E
 30CGameSystemReallocatingFactoryI26CDebugOverlayExampleWindowS0_E
-30CGameSystemReallocatingFactoryI26CRagdollLowViolenceManagerS0_E
 30CGameSystemReallocatingFactoryI26CSoundOpvarSetPointManagerS0_E
 30CGameSystemReallocatingFactoryI28CDebugOverlayNavEditorWindowS0_E
 30CGameSystemReallocatingFactoryI29CSoundOpvarSetPointManager_MPS0_E
@@ -4647,20 +4661,21 @@ $tFa\v
 ===Spans==\n
 =GMU\c6BIR\c/:@LYc'08CTc
 =HNV]c7=EQ\c04>IYc(*2?Qc
+>333?
 >Default Game Description
 >JRZ`c4DLV_c*8AN\c
 >KS[ac5>IU^c+0<LZc
 >sao
 ?22CSimpleLoggingListener
-?333@
+?333@CPlayerPing
 ?33S@y
 ?33s?
 ???CRR_Response bogus index
-?BaseNPCs and hint groups do not exist in this mod.\n
 ?CAK47
 ?CBasePlayerWeaponVData
-?CFuncElectrifiedVolume
 ?CHostage
+?Capture
+?Hltv Replay
 ?TestCheckpoint: %s
 ?autosave\n
 ?nav_pathfind_debug_log
@@ -4690,6 +4705,7 @@ A testing-only domain that doesn't correspond to any in-engine use case.
 A testing-only domain that draws on a 2D canvas with a LOGO-like 'turtle' cursor.
 A uniform random number generator.
 A33'
+A33s?
 A@d0I
 ABS BBox
 ACCOLADE, FINAL: {%s},\t%s<%i>,\tVALUE: %f,\tPOS: %i,\tSCORE: %f\n
@@ -4891,12 +4907,13 @@ AnimateUntilDead
 Animated characters who have vertex flex capability.
 Animation/AccumulatePose
 AnimationSystem: IK
-Animgraph
 Animgraph Navlink Type
 Animgraph Parameters (%d)
 Animgraph Parameters (%d)###AnimGraphParams
 Animgraph Variables
 Animgraph debugging entity '%s' (class='%s', index='%d')\n
+Animgraph parameter (boolean) to set when this part is destroyed.
+Animgraph parameter (float) with the normalized (0-1) health of this part.
 Animgraph-based models
 Any Extended Key Usage
 Any language
@@ -5135,6 +5152,7 @@ Bloodlvl4
 Bloodlvl5
 Bloodlvl6
 Body Component Scriptdesc
+Body group to set when this part is broken.
 BodyGameSystem
 Bogus constraint %s (attaches %s to ENTITY NOT FOUND:%s)\n
 Bogus constraint %s (attaches ENTITY NOT FOUND:%s to %s)\n
@@ -5701,6 +5719,7 @@ CMsgSosSetSoundEventParams_t
 CMsgSosStartSoundEvent_t
 CMsgSosStopSoundEventHash_t
 CMsgSosStopSoundEvent_t
+CMultiLightProxy::ApproachBrightnessThink
 CNativeOutputs
 CNavArea::PostLoad: Corrupt navigation data. Cannot connect Navigation Areas.\n
 CNavArea::PostLoad: Corrupt navigation ladder data. Cannot connect Navigation Areas.\n
@@ -6129,6 +6148,7 @@ Cannot create an entity because entity class is NULL %d\n
 Cannot create hierarchy constraint between %s and %s : cannot find physics part with attachment name\n
 Cannot create hierarchy constraint between %s and %s because the parent has no physics aggregate\n
 Cannot create physics for %s "%s" (%s) @{%g,%g,%g}\n
+Cannot deallocate abstract class
 Cannot deduce for class
 Cannot destruct abstract class
 Cannot execute "%s", no player\n
@@ -6190,6 +6210,7 @@ ClampHealth
 ClanTagChanged
 Class does not allow allocation from its schema binding
 Class does not allow construction from its schema binding
+Class does not allow deallocation from its schema binding
 Class does not allow destruction from its schema binding
 Class: %s (%d)\n
 Classification: %s
@@ -6405,9 +6426,9 @@ Cursor[ ptr:%p | id:%d | graph:%p ]: Completed with result:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Register observer:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Yielded at cell ptr:%p id:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: ~CPulseExecCursor()\n
+Custom death handshake to set when this part is destroyed.
 Custom time span %d
 CustomCharacter
-D#Chatwheel_ping_weapons/models/shared/stattrak/stattrak_module.vmdl
 D16_UNORM
 D24_UNORM_S8_UINT
 D32_FLOAT
@@ -6476,6 +6497,7 @@ Dangling
 Data breakpoint [%s]
 Data breakpoint [%s] - %s
 Data breakpoint hit
+Data for this destructible part.
 DataDesc
 DataDescSchemaInit
 DataDesc_AddComponentFieldUnserializer
@@ -6555,6 +6577,7 @@ DestroyEntities
 DestroyFakeEntity( handle %d)\n
 DestroyImmediately
 DestroyParticle
+Destructible Parts
 Detach from its parent
 DetachFromParent
 Detected %i func_bomb_target entities, but only 2 are supported!\n
@@ -6592,6 +6615,7 @@ DissolveThink
 Distance to surface: %d\n
 Div R%d <- R%d / R%d
 Do not stop the current yielding node, but do not continue to the next node afterwards.
+Do we disable the hitgroup when all sub parts are destroyed?
 DoAllocateEntity failed\n
 DoAllocateEntity pEntity->m_pInstance != NULL %d\n
 DoEntFire
@@ -6869,10 +6893,13 @@ Entity %s does not have an animgraph parameters!
 Entity %s does not have an animgraph!
 Entity %s does not have sequence '%s'
 Entity %s does not support animations
+Entity %s has remaining hit groups:\n%s
+Entity %s is not a base AI!\n
 Entity %s is not a model entity\n
 Entity %s uses animgraph - does not support PlaySequence
 Entity %s(%s) has bad parent %s\n
 Entity %s(%s) is ambiguously parented to %s, because there is more than one entity by that name.\n
+Entity '%s' has no destructible parts (is not a base NPC).\n
 Entity Handle
 Entity Hierarchy For %d:\n
 Entity I/O attempted to invoke unknown global script function "%s"!\n
@@ -7036,6 +7063,7 @@ Failed to allocate a parser for '%s'. (Out of memory?)
 Failed to allocate a token stream for '%s'. (Out of memory?)
 Failed to allocate an instance of a class
 Failed to compute mesh tangents for mesh using material %s -- %s\n
+Failed to destroy destructible part(s) in hit group %d for entity %s. Remaining hit groups: %s\n
 Failed to find a visible soundscape along the soundcast ray! Are soundscapes properly set up?\n
 Failed to find custom physics damage table name: %s\n
 Failed to find entity %s during an autosave at distance from!\n
@@ -7301,7 +7329,6 @@ GameDebugVisualizer
 GameEvent_RegisterHookupGameSystem
 GameHeader
 GameInit - PreCache - Finish
-GameInit - PreCache - Start
 GameModelInfo001
 GameRulesGameSystem
 GameSessionManifest
@@ -7490,6 +7517,7 @@ GetEquippedWeapons() : Returns an array of all the equipped weapons
 GetFieldPriority
 GetFloat(name) : returns the convar as a float. May return null if no such convar.
 GetForwardVector
+GetGameDataClass error for %s: %s\n
 GetHealth
 GetInlineConst R%d <- C%d (%s)
 GetInputsForScriptClass
@@ -7670,6 +7698,7 @@ Head pos sv: %.4f, %.4f, %.4f - abs pos sv: %.4f, %.4f, %.4f - abs ang sv: %.4f,
 Header | 
 Health: %d, collision group: %d, motion: %s %s
 Health: %d, collision group: %d, nav ignore: %s
+Health: %d/%d
 Health: %d\n
 Health: %i
 Healthshot.Success
@@ -7759,6 +7788,7 @@ HostageUse
 HostagesBeingTaken
 HostagesTaken
 Hours
+How damage to this part is handled.
 How many bullets this gun can fire before it reloads (0 if no clip)
 How many secondary bullets this gun can fire before it reloads (0 if no clip)
 HullDesc_tiny
@@ -8702,6 +8732,7 @@ MGetKV3ClassDefaults
 MIME MHS
 MIsStringAndTokenType
 ML_COMMENT
+MModelGameData
 MNetworkAlias
 MNetworkEncodeFlags
 MNetworkExcludeByName
@@ -8734,6 +8765,7 @@ MPropertyGroupName
 MPropertyStartGroup
 MPropertySuppressBaseClassField
 MPropertySuppressEnumerator
+MPropertySuppressExpr
 MPulseAdvanced
 MPulseArgDesc
 MPulseCellInflow
@@ -9340,6 +9372,8 @@ NULL
 NULL CELL
 NULL Ent in GiveNamedItem: %s!\n
 NULL entity in global entity list!\n
+Name for this destructible part.
+Name of the breakable part to trigger breaking on when health reaches zero.
 NativeFunctions
 Nav Area: %d (%s)
 Nav Hulls
@@ -9434,6 +9468,7 @@ No %s found.\n
 No 'skirmish_rank_info' key found in items schema\n
 No Blinking
 No Connected Areas
+No Data
 No Fired Inputs
 No Fog Volume found at given position (%f %f %f)
 No Host Name
@@ -9693,7 +9728,7 @@ OverrideFriction
 OvertimeScore/OvertimeID
 OvertimeScore/team1
 OvertimeScore/team2
-P@%d queries, %d misses (%d free) suc spec = %d wasted spec=%d\n
+P@GameInit - PreCache - Start
 PARALYZE
 PARAMETER NAME: %s | OPTIONAL: %s, TYPE: %s, BOUND: %s, REFERENCED: %s\n
 PASSABLE
@@ -9712,6 +9747,7 @@ PBE-SHA1-RC4-40
 PBES2
 PBKDF2
 PBMAC1
+PCG\n
 PC_NETWORKED_ONLY
 PC_NON_NETWORKED_ONLY
 PEM lib
@@ -10216,7 +10252,7 @@ Radius of navigating agent capsule.
 Ragdoll PreSolve
 Ragdoll magnet adding %f inches/sec to %s\n
 RagdollFadeOutContext
-RagdollLowViolenceManager
+RagdollGameSystem
 RagdollTouch
 Ragdoll_Prop with %d bones != %d shapes (%s)\n
 Raise pen.
@@ -11070,6 +11106,7 @@ Short Height of navigating agent capsules if enabled.
 Short height
 Shotgun
 Should both primary and secondary attacks be cooled down together (so cooling down primary attack would cooldown both primary + secondary attacks)?
+Should the NPC die when this part is destroyed?
 ShouldClientReceiveStringTableUserData called with nullptr GameRules() on table %s, string %d\n
 Show
 Show Unreferenced Params (%d)
@@ -11497,6 +11534,7 @@ Too many shards (%d), skipping any above (%d)\n
 Too many vertical sections for minimap (> %d), skipping.\n
 Tool '%s' missing required type.
 Total %d entities (%d empty)\n
+Total health of this part. When it reaches 0, the part is 'broken' using the breakable prop system.
 Touch Expansion: %s(%d)
 TouchExpansionComponent_SetTouchEventsEnabled (ent %s [%d]) - %s\n
 TouchExpansionComponent_SetUp (ent %s [%d])%s\n
@@ -11673,6 +11711,7 @@ Usage: %s <markup_group name>\n
 Usage: animgraph_set_parameter* <entity> <parameter name> <value>\n
 Usage: breakable_force_break <entity index/target-name/etc> [breakable_name]
 Usage: create_radius_damage <radius> <damage>\n
+Usage: destructible_parts_force_destroy <entity index/target-name/etc> <hitgroup> <part_index>\n
 Usage: ds_workshop_changelevel <mapname>\n
 Usage: ent_list_report [-a] [-class name] [-name name] [-pos]\n
 Usage: ent_spew_derived_classes <classname>\n
@@ -11703,10 +11742,14 @@ Using model "%s"\n
 Using spawn points configuration 0x%08X\n
 VALVw
 VData:%s
+VDataAnimGraphParamBool( m_sModelName )
 VDataAnimGraphParamEnumValue( m_sToolsOnlyOwnerModelName; literal; e_navlink_type; e_navlink_type_shared )
+VDataAnimGraphParamFloat( m_sModelName )
 VDataChoice( scripts/ammo.vdata )
 VDataChoice( scripts/nav_hulls.vdata )
 VDataModelAttachment( m_szWorldModel )
+VDataModelBodyGroup( m_sModelName )
+VDataModelBreakPiece( m_sModelName )
 VIP_ESCAPE
 VM Did not start!\n
 VNotify
@@ -11724,6 +11767,7 @@ V_strcmp( pDataMap->dataClassName, pCodeClass ) == 0
 ValidatePrivateScriptScope
 Validates the private script scope and creates it if one doesn't exist.
 Validating navmesh\n
+Value to set for the body group when the part is broken.
 Value: DEAD
 Value: OFF
 Value: ON
@@ -11937,7 +11981,6 @@ X9.57
 X9.57 CM ?
 X9cm
 XUID
-Y?333?33s?
 YYYY
 YYYY-MM-DD
 YYYY-MM-DD hh:mm:ss
@@ -12230,7 +12273,6 @@ Zooming
 [unknown type %i]
 \_`bccV[^accNTX]acBGMU^c069CRc
 \`acccW[_bccOSX^bcCDKT^c1/3>Pc
-\f@Capture
 \fFblendindices
 \n    near %s\n    
 \n------- SERVER SOUNDSCAPES -------\n
@@ -12303,7 +12345,6 @@ _builtins
 _builtins._delay
 _builtins._delay_override
 _dummyBaseFireClass
-_ent_text_filter 
 _entname_fixup_local
 _entname_fixup_parent
 _entname_fixup_prefix
@@ -12575,6 +12616,7 @@ angular_velocity_cp
 angulardampingratio
 angularfrequency
 anim
+animTimeSerializer
 anim_bounds_max
 anim_bounds_min
 anim_class
@@ -13802,6 +13844,7 @@ eRunMode
 eRunWalkCrouch
 e_Hit_BodyPart
 e_body_idle
+e_destructible_part_destroyed_hitgroup
 e_face_idle
 earliestoccupytime
 easein
@@ -13897,6 +13940,7 @@ ent_setang: no entity %d\n
 ent_setpos: no entity %d\n
 ent_spew_derived_classes: Could not find entity class %s\n
 ent_spew_derived_classes: Found %d entities deriving from %s\n
+ent_text_filter 
 ent_text_filter %s
 enter_bombzone
 enter_buyzone
@@ -14008,9 +14052,6 @@ env_viewpunch
 env_volumetric_fog_controller
 env_volumetric_fog_volume
 env_wind
-ep1_citadel_02
-ep1_citadel_02b
-ep1_citadel_03
 equip_conflicts
 equip_region
 equip_regions
@@ -14803,6 +14844,7 @@ iPercentage
 iSkin
 iTeamNum
 iValue
+i_destructible_part_destroyed_part_index
 iana
 icon display model
 icon_default_image
@@ -15643,6 +15685,7 @@ m_bHasBakedLightingFromLightMap
 m_bHasBakedLightingFromVertexStream
 m_bIsJumping: %s\n
 m_bIsNotMatchedToMaterial
+m_bKillNPCOnDestruction == false
 m_bNoShadow
 m_bOnGround: %s\n
 m_bOnLadder: %s\n
@@ -16961,8 +17004,6 @@ pszOrgValue
 pszParam
 pszScene
 pszTagName
-public.aabb_max
-public.aabb_min
 public.attachment
 public.broadcast_distance_override
 public.display_broadcast
@@ -16972,6 +17013,7 @@ public.dsp_preset
 public.pitch
 public.position
 public.progress
+public.relevant_player
 public.scrape_amount_input
 public.scrape_surface_roughness_input
 public.source_soundscape
@@ -18476,7 +18518,6 @@ uses_range
 utilities
 utilitydamage
 uvs are all identical
-v@CEnvSky
 v@_multibase
 vDefault
 vHingeAxis
@@ -18786,6 +18827,7 @@ weapons/models/grenade/incendiary/weapon_incendiarygrenade.vmdl
 weapons/models/grenade/molotov/weapon_molotov.vmdl
 weapons/models/grenade/smokegrenade/weapon_smokegrenade.vmdl
 weapons/models/shared/nametag/nametag_module.vmdl
+weapons/models/shared/stattrak/stattrak_module.vmdl
 weapons/models/shared/stattrak/stattrak_module_knife.vmdl
 wear_remap_max
 wear_remap_min

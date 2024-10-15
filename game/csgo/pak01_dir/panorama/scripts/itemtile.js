@@ -59,7 +59,7 @@ var ItemTile;
             $.GetContextPanel().GetParent().GetAttributeInt("capability_multistatus_selected", 0) != 0 &&
             InventoryPanel.GetCapabilityInfo().multiselectItemIds &&
             InventoryPanel.GetCapabilityInfo().multiselectItemIds.hasOwnProperty(id));
-        $.GetContextPanel().SetHasClass('capability_multistatus_selected', bSelectedInMultiSelect && !$.GetContextPanel().BHasClass('capability_multistatus_selected'));
+        $.GetContextPanel().SetHasClass('capability_multistatus_selected', bSelectedInMultiSelect);
     }
     ;
     function _UpdatePopUpCapabilityList() {

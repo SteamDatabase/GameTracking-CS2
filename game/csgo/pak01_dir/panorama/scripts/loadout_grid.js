@@ -274,6 +274,9 @@ var LoadoutGrid;
             elBtn.SetPanelEvent('onactivate', () => OnActivateSideItem(slotName, team));
         }
     }
+    function BTeamHasIconForSlot(team, slot) {
+        return (team == "t" && slot == "equipment3") ? false : true;
+    }
     function UpdateSlotItemImage(team, elPanel, bUseIcon, bReplacable, bIsEquipment = false) {
         let slot = elPanel.GetAttributeString('data-slot', '');
         team = OverrideTeam(team, slot);
@@ -307,7 +310,7 @@ var LoadoutGrid;
         if (!bIsEquipment) {
             TintSprayImage(itemImage, itemid);
         }
-        if (bUseIcon) {
+        if (bUseIcon && BTeamHasIconForSlot(team, slot)) {
             itemImage.itemid = '';
             itemImage.SetImage('file://{images}/icons/equipment/' + GetDefName(itemid, slot) + '.svg');
         }

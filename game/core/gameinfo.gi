@@ -93,4 +93,10 @@
 		"models_gamedata"	"models_base.fgd"
 		"features"			"animgraph"
 	}
+
+	Memory
+	{
+		"EstimatedMaxCPUMemUsageMB"	"1"
+		"EstimatedMinGPUMemUsageMB"	"1"
+	}
 }
