@@ -429,7 +429,10 @@ var XpShop;
                         let sIndex = (idx + 1).toString();
                         let elCrateHoverTarget = $.CreatePanel('Panel', elShopTile, 'id-crate-item-hover-' + sIndex, { class: 'crate-item-info' + ' crate-item-' + sIndex });
                         elCrateHoverTarget.SetHasClass('hidden', true);
-                        $.Schedule(2.5, () => elCrateHoverTarget.SetHasClass('hidden', false));
+                        $.Schedule(2.5, () => {
+                            if (elCrateHoverTarget.IsValid())
+                                elCrateHoverTarget.SetHasClass('hidden', false);
+                        });
                         let elRarity = $.CreatePanel('Panel', elCrateHoverTarget, '', { class: 'crate-item__rarity' });
                         let color = InventoryAPI.GetItemRarityColor(id);
                         if (!color)
@@ -502,6 +505,20 @@ var XpShop;
             }
         }
         _UpdateVisibleInspectGrid(elInspectContainer, ShopEntry.item_name + '-grid');
+    }
+    function _DeleteInspectGrid() {
+        if (!m_nTrack || m_nTrack === 0) {
+            return;
+        }
+        let nCount = MissionsAPI.GetSeasonalOperationRedeemableGoodsCount(m_nTrack);
+        for (let i = 0; i < nCount; i++) {
+            let item_name = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(m_nTrack, i, 'item_name');
+            let elInspectContainer = m_elContentPanel.FindChildInLayoutFile('id-xpshop-inspect-container');
+            let elGrid = elInspectContainer.FindChildInLayoutFile(item_name + '-grid');
+            if (elGrid) {
+                elGrid.DeleteAsync(1.0);
+            }
+        }
     }
     function _SetUpRedeemBar(elRedeemBar, elConfirmBar, ShopEntry) {
         let RedeemBtn = elRedeemBar.FindChildInLayoutFile('id-xpshop-item-redeem-btn-' + ShopEntry.shop_index);
@@ -797,5 +814,15 @@ var XpShop;
             m_showTimeoutScheduleHandle = null;
         }
     }
+    function _OnHideMainMenu() {
+        _CancelTimeoutForRewardItem();
+        _DeleteInspectGrid();
+    }
+    function _OnHidePauseMenu() {
+        _CancelTimeoutForRewardItem();
+        _DeleteInspectGrid();
+    }
     $.RegisterForUnhandledEvent('UpdateXpShop', InventoryUpdate);
+    $.RegisterForUnhandledEvent('CSGOHideMainMenu', _OnHideMainMenu);
+    $.RegisterForUnhandledEvent('CSGOHidePauseMenu', _OnHidePauseMenu);
 })(XpShop || (XpShop = {}));

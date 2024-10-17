@@ -1046,13 +1046,19 @@ var MainMenu;
         if (_m_bCheckHasLowAvailableVirtualMemory && GameInterfaceAPI.HasLowAvailableVirtualMemory()) {
             popupNotification.title = "#GameUI_SystemInfo_Title";
             popupNotification.msg = $.Localize("#GameUI_SystemInfo_Attention_Low_System_Memory");
-            popupNotification.callback = () => _m_bCheckHasLowAvailableVirtualMemory = _m_bHasPopupNotification = false;
+            popupNotification.callback = () => {
+                _m_bCheckHasLowAvailableVirtualMemory = _m_bHasPopupNotification = false;
+                GameInterfaceAPI.Acknowledged_HasLowAvailableVirtualMemory();
+            };
             return popupNotification;
         }
         if (_m_bCheckHasInsufficientPagefile && GameInterfaceAPI.HasInsufficientPagefile()) {
             popupNotification.title = "#GameUI_SystemInfo_Title";
             popupNotification.msg = $.Localize("#GameUI_SystemInfo_Attention_LowDiskSpaceForSwapfile");
-            popupNotification.callback = () => _m_bCheckHasInsufficientPagefile = _m_bHasPopupNotification = false;
+            popupNotification.callback = () => {
+                _m_bCheckHasInsufficientPagefile = _m_bHasPopupNotification = false;
+                GameInterfaceAPI.Acknowledged_HasInsufficientPagefile();
+            };
             return popupNotification;
         }
         const nBanRemaining = CompetitiveMatchAPI.GetCooldownSecondsRemaining();
