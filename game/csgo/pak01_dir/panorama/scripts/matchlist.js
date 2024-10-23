@@ -1,368 +1,265 @@
-'use strict';
-
-var matchList = ( function ()
-{
-
-    var _m_myXuid = MyPersonaAPI.GetXuid();
-
-    function _ShowListSpinner ( value, tab )
-    {
-        if ( tab )
-        {
-            var elSpinner = tab.FindChildInLayoutFile( "id-list-spinner" );
-            _ShowInfoPanel( false, tab );
-            _ShowListPanel( false, tab );
-            if ( elSpinner )
-            {
-                if ( value )
-                {
-                    elSpinner.RemoveClass( 'hide' );
+"use strict";
+/// <reference path="csgo.d.ts" />
+/// <reference path="mainmenu_watch.ts" />
+/// <reference path="matchinfo.ts" />
+var matchList;
+(function (matchList) {
+    let _m_myXuid = MyPersonaAPI.GetXuid();
+    function ShowListSpinner(value, tab) {
+        if (tab) {
+            let elSpinner = tab.FindChildInLayoutFile("id-list-spinner");
+            ShowInfoPanel(false, tab);
+            _ShowListPanel(false, tab);
+            if (elSpinner) {
+                if (value) {
+                    elSpinner.RemoveClass('hide');
                 }
-                else
-                {
-                    elSpinner.AddClass( 'hide' );
+                else {
+                    elSpinner.AddClass('hide');
                 }
             }
         }
     }
-
-    function _SetListMessage ( value, show, tab = undefined )
-    {
-        if ( tab )
-        {
-            var elMessage = tab.FindChildInLayoutFile( "id-list-message" );
-            if ( elMessage )
-            {
+    matchList.ShowListSpinner = ShowListSpinner;
+    function SetListMessage(value, show, tab = null) {
+        if (tab) {
+            let elMessage = tab.FindChildInLayoutFile("id-list-message");
+            if (elMessage) {
                 elMessage.text = value;
             }
-            var elMessageContainer = tab.FindChildInLayoutFile( "id-list-message-container" );
-            if ( elMessageContainer )
-            {
-                if ( show )
-                {
-                    elMessageContainer.RemoveClass( 'hide' );
+            let elMessageContainer = tab.FindChildInLayoutFile("id-list-message-container");
+            if (elMessageContainer) {
+                if (show) {
+                    elMessageContainer.RemoveClass('hide');
                 }
-                else
-                {
-                    elMessageContainer.AddClass( 'hide' );
+                else {
+                    elMessageContainer.AddClass('hide');
                 }
             }
         }
     }
-
-    function _ShowInfoPanel ( value, tab = undefined )
-    {
-        if ( tab )
-        {
-            var elInfoPanel = tab.FindChildInLayoutFile( "Info" );
-            var elMatchList = tab.FindChildInLayoutFile( "JsMatchList" );
-            if ( elInfoPanel )
-            {
-                if ( value )
-                {
-                    elInfoPanel.AddClass( 'subsection-content__background-color--dark' );
-                    if ( tab.activeMatchInfoPanel )
-                    {
-                        matchInfo.Refresh( tab.activeMatchInfoPanel );
+    matchList.SetListMessage = SetListMessage;
+    function ShowInfoPanel(value, tab = null) {
+        if (tab) {
+            let elInfoPanel = tab.FindChildInLayoutFile("Info");
+            let elMatchList = tab.FindChildInLayoutFile("JsMatchList");
+            if (elInfoPanel) {
+                if (value) {
+                    elInfoPanel.AddClass('subsection-content__background-color--dark');
+                    if (tab.Data().activeMatchInfoPanel) {
+                        matchInfo.Refresh(tab.Data().activeMatchInfoPanel);
                     }
                 }
-                else
-                {
-                    elInfoPanel.RemoveClass( 'subsection-content__background-color--dark' );
-                    if ( tab.activeMatchInfoPanel )
-                    {
-                        matchInfo.Hide( tab.activeMatchInfoPanel );
+                else {
+                    elInfoPanel.RemoveClass('subsection-content__background-color--dark');
+                    if (tab.Data().activeMatchInfoPanel) {
+                        matchInfo.Hide(tab.Data().activeMatchInfoPanel);
                     }
                 }
             }
-            if ( elMatchList )
-            {
-                if ( value )
-                {
-                    elMatchList.AddClass( "MatchList--Filled" );
+            if (elMatchList) {
+                if (value) {
+                    elMatchList.AddClass("MatchList--Filled");
                 }
-                else
-                {
-                    elMatchList.RemoveClass( "MatchList--Filled" );
+                else {
+                    elMatchList.RemoveClass("MatchList--Filled");
                 }
             }
         }
     }
-
-    function _ShowListPanel ( value, tab = undefined )
-    {
-        if ( tab )
-        {
-            var elMatchList = tab.FindChildInLayoutFile( "JsMatchList" );
-
-            if ( elMatchList )
-            {
-                if ( !value )
-                {
-                    elMatchList.AddClass( 'hide' );
+    matchList.ShowInfoPanel = ShowInfoPanel;
+    function _ShowListPanel(value, tab = undefined) {
+        if (tab) {
+            let elMatchList = tab.FindChildInLayoutFile("JsMatchList");
+            if (elMatchList) {
+                if (!value) {
+                    elMatchList.AddClass('hide');
                 }
-                else
-                {
-                    elMatchList.RemoveClass( 'hide' );
+                else {
+                    elMatchList.RemoveClass('hide');
                 }
             }
         }
     }
-
-    function _ClearList ( elListPanel, tournament_id )
-    {
-        var activeTiles = elListPanel.Children();
-        for ( var i = activeTiles.length - 1; i >= 0; i-- )
-        {
-            if ( activeTiles[i].markForDelete )
-            {
-                if ( elListPanel.activeButton === activeTiles[i] )
-                {
-                    elListPanel.activeButton = undefined;
+    function _ClearList(elListPanel, tournament_id) {
+        let activeTiles = elListPanel.Children();
+        for (let i = activeTiles.length - 1; i >= 0; i--) {
+            if (activeTiles[i].Data().markForDelete) {
+                if (elListPanel.Data().activeButton === activeTiles[i]) {
+                    elListPanel.Data().activeButton = undefined;
                 }
                 activeTiles[i].checked = false;
-                if ( watchTile.downloadStateHandler )
-                {
-                    $.UnregisterForUnhandledEvent( 'PanoramaComponent_MatchInfo_StateChange', watchTile.downloadStateHandler );
-                    watchTile.downloadStateHandler = undefined;
+                if (watchTile.GetDownloadHandler(activeTiles[i])) {
+                    $.UnregisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', watchTile.GetDownloadHandler(activeTiles[i]));
+                    watchTile.SetDownloadHandler(activeTiles[i], null);
                 }
-                if ( tournament_id )
-                {
-                    activeTiles[i].AddClass( 'MatchTile--Collapse' );
+                if (tournament_id) {
+                    activeTiles[i].AddClass('MatchTile--Collapse');
                 }
-                else
-                {
-                    watchTile.Delete( activeTiles[i] );
+                else {
+                    watchTile.Delete(activeTiles[i]);
                 }
             }
         }
     }
-
-    function _SelectFirstTile ( parentPanel, elMatchList, matchListDescriptor )
-    {
-        if ( elMatchList && !( elMatchList.activeButton ) && ( elMatchList.GetChildCount() > 0 ) )
-        {
-            var tileIsVisible = false;
-            var elFirstTile = undefined;
-            var n = 0;                                               
-            do
-            {
-                var elFirstTile = elMatchList.GetChild( n );
-                tileIsVisible = ( elFirstTile && !elFirstTile.BHasClass( 'MatchTile--Collapse' ) );
+    function _SelectFirstTile(parentPanel, elMatchList, matchListDescriptor) {
+        if (elMatchList && !(elMatchList.Data().activeButton) && (elMatchList.GetChildCount() > 0)) {
+            let tileIsVisible = false;
+            let elFirstTile = null;
+            let n = 0;
+            do {
+                elFirstTile = elMatchList.GetChild(n);
+                tileIsVisible = (elFirstTile && !elFirstTile.BHasClass('MatchTile--Collapse'));
                 n = n + 1;
-            } while ( ( !tileIsVisible ) && ( elFirstTile != undefined ) );
-            if ( elFirstTile )
-            {
+            } while ((!tileIsVisible) && (elFirstTile != undefined));
+            if (elFirstTile) {
                 elFirstTile.checked = true;
-                elMatchList.activeButton = elFirstTile;
-                elFirstTile.ScrollParentToMakePanelFit( 2, false );
-                _PopulateMatchInfo( parentPanel, matchListDescriptor, elFirstTile.matchId );
+                elMatchList.Data().activeButton = elFirstTile;
+                elFirstTile.ScrollParentToMakePanelFit(2, false);
+                _PopulateMatchInfo(parentPanel, matchListDescriptor, elFirstTile.Data().matchId);
             }
         }
     }
-
-    function _ReselectActiveTile ( elListRoot )
-    {
-        var elMatchList = elListRoot.FindChildTraverse( "JsMatchList" );
-        if ( elMatchList && elMatchList.activeButton )
-        {
-            elMatchList.activeButton.checked = true;
-            _PopulateMatchInfo( elListRoot, elListRoot.matchListDescriptor, elMatchList.activeButton.matchId );
+    function ReselectActiveTile(elListRoot) {
+        let elMatchList = elListRoot.FindChildTraverse("JsMatchList");
+        if (elMatchList && elMatchList.Data().activeButton) {
+            (elMatchList.Data().activeButton).checked = true;
+            _PopulateMatchInfo(elListRoot, elListRoot.Data().matchListDescriptor, elMatchList.Data().activeButton.Data().matchId);
         }
-        else
-        {
-            _SelectFirstTile( elListRoot, elMatchList, elListRoot.matchListDescriptor );
+        else {
+            _SelectFirstTile(elListRoot, elMatchList, elListRoot.Data().matchListDescriptor);
         }
     }
-
-    var _OnTournamentTeamSelected = function ( elParentPanel, elMatchList, matchListDescriptor )
-    {
-        elParentPanel.matchListIsPopulated = false;
-        _UpdateMatchList( elParentPanel, elParentPanel.tournament_id );
-        elMatchList.activeButton = undefined;
-        _SelectFirstTile( elParentPanel, elMatchList, matchListDescriptor );
+    matchList.ReselectActiveTile = ReselectActiveTile;
+    let _OnTournamentTeamSelected = function (elParentPanel, elMatchList, matchListDescriptor) {
+        elParentPanel.Data().matchListIsPopulated = false;
+        UpdateMatchList(elParentPanel, elParentPanel.Data().tournament_id);
+        elMatchList.Data().activeButton = undefined;
+        _SelectFirstTile(elParentPanel, elMatchList, matchListDescriptor);
     };
-
-    var _OnTournamentSectionSelected = function ( elParentPanel, elMatchList, matchListDescriptor )
-    {
-                                                       
-        _PopulateMatchTeamsDropdown( elParentPanel, elParentPanel.tournament_id );
-
-        elParentPanel.matchListIsPopulated = false;
-        _UpdateMatchList( elParentPanel, elParentPanel.tournament_id );
-        elMatchList.activeButton = undefined;
-        _SelectFirstTile( elParentPanel, elMatchList, matchListDescriptor );
+    let _OnTournamentSectionSelected = function (elParentPanel, elMatchList, matchListDescriptor) {
+        _PopulateMatchTeamsDropdown(elParentPanel, elParentPanel.Data().tournament_id);
+        elParentPanel.Data().matchListIsPopulated = false;
+        UpdateMatchList(elParentPanel, elParentPanel.Data().tournament_id);
+        elMatchList.Data().activeButton = undefined;
+        _SelectFirstTile(elParentPanel, elMatchList, matchListDescriptor);
     };
-
-    function MakeDropDownEntry ( index, sectionDesc, sectionName, elMatchlistDropdown )
-    {
-        var elSection = $.CreatePanel( 'Label', elMatchlistDropdown, 'group_' + sectionDesc, { text: sectionName } );
-        elSection.AddClass( "DropDownMenu" );
-        elSection.AddClass( "Width-300" );
-        elSection.AddClass( "White" );
-        elSection.SetAttributeString( 'value', index );
-        elSection.SetAttributeString( 'section_id', sectionDesc );
-        elMatchlistDropdown.AddOption( elSection );
+    function MakeDropDownEntry(index, sectionDesc, sectionName, elMatchlistDropdown) {
+        let elSection = $.CreatePanel('Label', elMatchlistDropdown, 'group_' + sectionDesc, { text: sectionName });
+        elSection.AddClass("DropDownMenu");
+        elSection.AddClass("Width-300");
+        elSection.AddClass("White");
+        elSection.SetAttributeString('value', index.toString());
+        elSection.SetAttributeString('section_id', sectionDesc.toString());
+        elMatchlistDropdown.AddOption(elSection);
     }
-
-    var _PopulateMatchlistDropdown = function ( elParentPanel, tournamentId )
-    {
-        var elMatchlistDropdown = elParentPanel.FindChildTraverse( "id-match-list-selector" );
-        elMatchlistDropdown.ClearPanelEvent( 'oninputsubmit' );
-        var nSections = PredictionsAPI.GetEventSectionsCount( tournamentId );
+    let _PopulateMatchlistDropdown = function (elParentPanel, tournamentId) {
+        let elMatchlistDropdown = elParentPanel.FindChildTraverse("id-match-list-selector");
+        elMatchlistDropdown.ClearPanelEvent('oninputsubmit');
+        let nSections = PredictionsAPI.GetEventSectionsCount(tournamentId);
         elMatchlistDropdown.RemoveAllOptions();
-
-        for ( var i = 0; i < nSections; i++ )
-        {
-            var sectionDesc = PredictionsAPI.GetEventSectionIDByIndex( tournamentId, i );
-            var sectionName = PredictionsAPI.GetSectionName( tournamentId, sectionDesc );
-            sectionName = $.Localize( "#CSGO_MatchInfo_Stage_" + sectionName.replace( /\s+/g, '' ) );
-            MakeDropDownEntry( i, sectionDesc, sectionName, elMatchlistDropdown );
+        for (let i = 0; i < nSections; i++) {
+            let sectionDesc = PredictionsAPI.GetEventSectionIDByIndex(tournamentId, i);
+            let sectionName = PredictionsAPI.GetSectionName(tournamentId, sectionDesc);
+            sectionName = $.Localize("#CSGO_MatchInfo_Stage_" + sectionName.replace(/\s+/g, ''));
+            MakeDropDownEntry(i, sectionDesc.toString(), sectionName, elMatchlistDropdown);
         }
-
-        var sectionsCount = PredictionsAPI.GetEventSectionsCount( tournamentId );
-        var activeIndex = sectionsCount - 1;
-        for ( var i = 0; i < sectionsCount; i++ )
-        {
-            var sectionId = PredictionsAPI.GetEventSectionIDByIndex( tournamentId, i );
-            if ( PredictionsAPI.GetSectionIsActive( tournamentId, sectionId ) )
-            {
+        let sectionsCount = PredictionsAPI.GetEventSectionsCount(tournamentId);
+        let activeIndex = sectionsCount - 1;
+        for (let i = 0; i < sectionsCount; i++) {
+            let sectionId = PredictionsAPI.GetEventSectionIDByIndex(tournamentId, i);
+            if (PredictionsAPI.GetSectionIsActive(tournamentId, sectionId)) {
                 activeIndex = i;
                 break;
             }
         }
-
-        elMatchlistDropdown.SetSelectedIndex( activeIndex );
-
-        elMatchlistDropdown.RemoveClass( 'hide' );
-        var elMatchList = elParentPanel.FindChildTraverse( "JsMatchList" );
-        elMatchlistDropdown.SetPanelEvent( 'oninputsubmit', _OnTournamentSectionSelected.bind( undefined, elParentPanel, elMatchList, tournamentId ) );
+        elMatchlistDropdown.SetSelectedIndex(activeIndex);
+        elMatchlistDropdown.RemoveClass('hide');
+        let elMatchList = elParentPanel.FindChildTraverse("JsMatchList");
+        elMatchlistDropdown.SetPanelEvent('oninputsubmit', _OnTournamentSectionSelected.bind(undefined, elParentPanel, elMatchList, tournamentId));
     };
-
-    var _PopulateMatchTeamsDropdown = function ( elParentPanel, tournamentId )
-    {
-        var elMatchistTeamDropdown = elParentPanel.FindChildTraverse( "id-match-list-selector-teams" );
-        elMatchistTeamDropdown.ClearPanelEvent( 'oninputsubmit' );
+    let _PopulateMatchTeamsDropdown = function (elParentPanel, tournamentId) {
+        let elMatchistTeamDropdown = elParentPanel.FindChildTraverse("id-match-list-selector-teams");
+        elMatchistTeamDropdown.ClearPanelEvent('oninputsubmit');
         elMatchistTeamDropdown.RemoveAllOptions();
-
-        var elStageDropdown = elParentPanel.FindChildTraverse( "id-match-list-selector" );
-        var sectionId = elStageDropdown.GetSelected().GetAttributeString( 'section_id', 0 );
-
-        var teamsList = [];
-        var numGroups = PredictionsAPI.GetSectionGroupsCount( tournamentId, sectionId );
-
-        MakeDropDownEntry( 0, 'allteams', '#Matchlist_Team_Selection', elMatchistTeamDropdown );
-        teamsList.push( 'allteams' );
-
-        for ( var j = 0; j < numGroups; j++ )
-        {
-            var numGroupId = PredictionsAPI.GetSectionGroupIDByIndex( tournamentId, sectionId, j );
-            var count = PredictionsAPI.GetGroupTeamsPickableCount( tournamentId, numGroupId );
-
-            for ( var h = 0; h < count; h++ )
-            {
-                var teamId = PredictionsAPI.GetGroupTeamIDByIndex( tournamentId, numGroupId, h );
-
-                if ( teamsList.indexOf( teamId ) === -1 && teamId )
-                {
-                    teamsList.push( teamId );
-                    var teamName = PredictionsAPI.GetTeamName( teamId );
-                    MakeDropDownEntry( ( teamsList.length - 1 ), teamId, teamName, elMatchistTeamDropdown );
+        let elStageDropdown = elParentPanel.FindChildTraverse("id-match-list-selector");
+        let sectionId = elStageDropdown.GetSelected().GetAttributeString('section_id', '');
+        let teamsList = [];
+        let numGroups = PredictionsAPI.GetSectionGroupsCount(tournamentId, parseInt(sectionId));
+        MakeDropDownEntry(0, 'allteams', '#Matchlist_Team_Selection', elMatchistTeamDropdown);
+        teamsList.push('allteams');
+        for (let j = 0; j < numGroups; j++) {
+            let numGroupId = PredictionsAPI.GetSectionGroupIDByIndex(tournamentId, parseInt(sectionId), j);
+            let count = PredictionsAPI.GetGroupTeamsPickableCount(tournamentId, numGroupId);
+            for (let h = 0; h < count; h++) {
+                let teamId = PredictionsAPI.GetGroupTeamIDByIndex(tournamentId, numGroupId, h);
+                if (teamsList.indexOf(teamId) === -1 && teamId) {
+                    teamsList.push(teamId);
+                    let teamName = PredictionsAPI.GetTeamName(teamId);
+                    MakeDropDownEntry((teamsList.length - 1), teamId.toString(), teamName, elMatchistTeamDropdown);
                 }
             }
         }
-
-        elMatchistTeamDropdown.SetSelectedIndex( teamsList.indexOf( 'allteams' ) );
-
-        elMatchistTeamDropdown.RemoveClass( 'hide' );
-        elMatchistTeamDropdown.enabled = ( teamsList.length > 1 );
-        var elMatchList = elParentPanel.FindChildTraverse( "JsMatchList" );
-        elMatchistTeamDropdown.SetPanelEvent( 'oninputsubmit', _OnTournamentTeamSelected.bind( undefined, elParentPanel, elMatchList, tournamentId ) );
+        elMatchistTeamDropdown.SetSelectedIndex(teamsList.indexOf('allteams'));
+        elMatchistTeamDropdown.RemoveClass('hide');
+        elMatchistTeamDropdown.enabled = (teamsList.length > 1);
+        let elMatchList = elParentPanel.FindChildTraverse("JsMatchList");
+        elMatchistTeamDropdown.SetPanelEvent('oninputsubmit', _OnTournamentTeamSelected.bind(undefined, elParentPanel, elMatchList, tournamentId));
     };
-
-    function _UpdateMatchList ( elTab, matchListDescriptor, optbFromMatchListChangeEvent )
-    {
-        var listState = MatchListAPI.GetState( matchListDescriptor );
-
-        if ( listState === 'none' )
-        {
-            listState = _RequestMatchListUpdate( elTab, matchListDescriptor );
+    function UpdateMatchList(elTab, matchListDescriptor, optbFromMatchListChangeEvent = false) {
+        let listState = MatchListAPI.GetState(matchListDescriptor);
+        if (listState === 'none') {
+            listState = _RequestMatchListUpdate(elTab, matchListDescriptor);
         }
-        else if ( listState === 'ready' && !optbFromMatchListChangeEvent )
-        {
-                                                                                                            
-            listState = _RequestMatchListUpdate( elTab, matchListDescriptor );
-                                                                                                            
-                                                
-                                                                                                         
-                                                
+        else if (listState === 'ready' && !optbFromMatchListChangeEvent) {
+            listState = _RequestMatchListUpdate(elTab, matchListDescriptor);
         }
-
-        if ( elTab && ( listState !== "loading" ) )
-        {
-            _PopulateMatchList( elTab, matchListDescriptor );
+        if (elTab && (listState !== "loading")) {
+            _PopulateMatchList(elTab, matchListDescriptor);
         }
     }
-
-    function _PopulateMatchInfo ( parentPanel, matchListDescriptor, matchId )
-    {
-        var elMatchList = parentPanel.FindChildTraverse( "JsMatchList" );
-        var elButton = parentPanel.FindChildTraverse( matchListDescriptor + "_" + matchId );
-
-        if ( elMatchList.activeButton )
-        {
-            watchTile.SetParentActive( elMatchList.activeButton, false );
+    matchList.UpdateMatchList = UpdateMatchList;
+    function _PopulateMatchInfo(parentPanel, matchListDescriptor, matchId) {
+        let elMatchList = parentPanel.FindChildTraverse("JsMatchList");
+        let elButton = parentPanel.FindChildTraverse(matchListDescriptor + "_" + matchId);
+        if (elMatchList.Data().activeButton) {
+            watchTile.SetParentActive(elMatchList.Data().activeButton, false);
         }
-        if ( elButton )
-        {
-            elMatchList.activeButton = elButton;
+        if (elButton) {
+            elMatchList.Data().activeButton = elButton;
         }
-
-        if ( ( parentPanel.activeMatchInfoPanel ) && ( parentPanel.activeMatchInfoPanel.matchId === matchId ) && ( matchId != 'gotv' ) )
-        {
-            matchInfo.Refresh( parentPanel.activeMatchInfoPanel );
+        if ((parentPanel.Data().activeMatchInfoPanel) && (parentPanel.Data().activeMatchInfoPanel.Data().matchId === matchId) && (matchId != 'gotv')) {
+            matchInfo.Refresh(parentPanel.Data().activeMatchInfoPanel);
             return;
         }
-
-        if ( ( parentPanel.activeMatchInfoPanel ) && ( parentPanel.activeMatchInfoPanel.matchId != matchId ) )
-        {
-            matchInfo.Hide( parentPanel.activeMatchInfoPanel );
-            parentPanel.activeMatchInfoPanel = undefined;
+        if ((parentPanel.Data().activeMatchInfoPanel) && (parentPanel.Data().activeMatchInfoPanel.Data().matchId != matchId)) {
+            matchInfo.Hide(parentPanel.Data().activeMatchInfoPanel);
+            parentPanel.Data().activeMatchInfoPanel = undefined;
         }
-
-        var parentInfoPanel = parentPanel.FindChildTraverse( 'Info' );
-        parentPanel.activeMatchInfoPanel = parentInfoPanel.FindChild( 'info_' + matchId );
-        if ( parentPanel.activeMatchInfoPanel == undefined )
-        {
-            parentPanel.activeMatchInfoPanel = $.CreatePanel( 'Panel', parentInfoPanel, 'info_' + matchId );
-            parentPanel.activeMatchInfoPanel.matchId = matchId;
-            parentPanel.activeMatchInfoPanel.matchListDescriptor = matchListDescriptor;
-            parentPanel.activeMatchInfoPanel.BLoadLayout( "file://{resources}/layout/matchinfo.xml", false, false );
-            parentPanel.activeMatchInfoPanel.tournament_id = parentPanel.tournament_id;
-            parentPanel.activeMatchInfoPanel.tournamentIndex = parentPanel.tournamentIndex;
-
-            matchInfo.Init( parentPanel.activeMatchInfoPanel );
+        let parentInfoPanel = parentPanel.FindChildTraverse('Info');
+        parentPanel.Data().activeMatchInfoPanel = parentInfoPanel.FindChild('info_' + matchId);
+        if (parentPanel.Data().activeMatchInfoPanel == undefined) {
+            parentPanel.Data().activeMatchInfoPanel = $.CreatePanel('Panel', parentInfoPanel, 'info_' + matchId);
+            parentPanel.Data().activeMatchInfoPanel.Data().matchId = matchId;
+            parentPanel.Data().activeMatchInfoPanel.Data().matchListDescriptor = matchListDescriptor;
+            parentPanel.Data().activeMatchInfoPanel.BLoadLayout("file://{resources}/layout/matchinfo.xml", false, false);
+            parentPanel.Data().activeMatchInfoPanel.Data().tournament_id = parentPanel.Data().tournament_id;
+            parentPanel.Data().activeMatchInfoPanel.Data().tournamentIndex = parentPanel.Data().tournamentIndex;
+            matchInfo.Init(parentPanel.Data().activeMatchInfoPanel);
         }
-        else
-        {
-            matchInfo.Refresh( parentPanel.activeMatchInfoPanel );
+        else {
+            matchInfo.Refresh(parentPanel.Data().activeMatchInfoPanel);
         }
     }
-
-    function _RequestMatchListUpdate ( elTab, matchListDescriptor )
-    {
-        function _ShowLoadingError ( elBoundTab )
-        {
-            _ShowListSpinner( false, elBoundTab );
-            var msg = "";
-            if ( elBoundTab.tournament_id )
-            {
-                msg = "#CSGO_Watch_NoMatch_Tournament_" + elBoundTab.tournament_id.split( ':' )[1];
+    function _RequestMatchListUpdate(elTab, matchListDescriptor) {
+        function _ShowLoadingError(elBoundTab) {
+            ShowListSpinner(false, elBoundTab);
+            let msg = "";
+            if (elBoundTab.Data().tournament_id) {
+                msg = "#CSGO_Watch_NoMatch_Tournament_" + elBoundTab.Data().tournament_id.split(':')[1];
             }
-            else
-            {
-                switch ( elTab.id )
-                {
+            else {
+                switch (elTab.id) {
                     case "JsLive":
                         msg = "#CSGO_Watch_NoMatch_live";
                         break;
@@ -371,195 +268,133 @@ var matchList = ( function ()
                         break;
                 }
             }
-            _SetListMessage( $.Localize( msg ), true, elBoundTab );
-            elBoundTab.downloadFailedHandler = undefined;
+            SetListMessage($.Localize(msg), true, elBoundTab);
+            elBoundTab.Data().downloadFailedHandler = undefined;
         }
-
-        if ( elTab )
-        {
-            MatchListAPI.Refresh( matchListDescriptor );
-
-            var newState = MatchListAPI.GetState( matchListDescriptor );
-            if ( newState === "loading" )
-            {
-                  
-                                               
-                                                                                                       
-                                                                                                              
-                                                 
-                                                                                                                  
-                _ShowListSpinner( true, elTab );
-                _SetListMessage( "", false, elTab );
-                elTab.matchListIsPopulated = false;
-
-                                                                                 
-                if ( elTab.downloadFailedHandler )
-                {
-                    $.CancelScheduled( elTab.downloadFailedHandler );
-                    elTab.downloadFailedHandler = undefined;
+        if (elTab) {
+            MatchListAPI.Refresh(matchListDescriptor);
+            let newState = MatchListAPI.GetState(matchListDescriptor);
+            if (newState === "loading") {
+                ShowListSpinner(true, elTab);
+                SetListMessage("", false, elTab);
+                elTab.Data().matchListIsPopulated = false;
+                if (elTab.Data().downloadFailedHandler) {
+                    $.CancelScheduled(elTab.Data().downloadFailedHandler);
+                    elTab.Data().downloadFailedHandler = undefined;
                 }
-                elTab.downloadFailedHandler = $.Schedule( 3.0, _ShowLoadingError.bind( undefined, elTab ) );
+                elTab.Data().downloadFailedHandler = $.Schedule(3.0, _ShowLoadingError.bind(undefined, elTab));
             }
             return newState;
         }
     }
-
-    function _MarkActiveTabUnpopulated ()
-    {
-        _m_activeTab.matchListIsPopulated = false;
+    function _MarkActiveTabUnpopulated() {
+        mainmenu_watch.GetActiveTab().Data().matchListIsPopulated = false;
     }
-
-    function _PopulateMatchList( parentPanel, matchListDescriptor )
-    {
-        if ( !parentPanel ) return;
-
-        function OnMouseOverButton ( currentParentPanel, buttonId )
-        {
-            var elButton = currentParentPanel.FindChildTraverse( buttonId );
-            watchTile.SetParentActive( elButton, true );
+    function _PopulateMatchList(parentPanel, matchListDescriptor) {
+        if (!parentPanel)
+            return;
+        function OnMouseOverButton(currentParentPanel, buttonId) {
+            let elButton = currentParentPanel.FindChildTraverse(buttonId);
+            watchTile.SetParentActive(elButton, true);
         }
-
-        function OnMouseOutButton ( currentParentPanel, buttonId )
-        {
-            var elButton = currentParentPanel.FindChildTraverse( buttonId );
-            if ( !elButton.IsSelected() )
-            {
-                watchTile.SetParentActive( elButton, false );
+        function OnMouseOutButton(currentParentPanel, buttonId) {
+            let elButton = currentParentPanel.FindChildTraverse(buttonId);
+            if (!elButton.IsSelected()) {
+                watchTile.SetParentActive(elButton, false);
             }
         }
-
-        function _ClearMatchInfo ()
-        {
-            if ( parentPanel.activeMatchInfoPanel )
-            {
-                matchInfo.Hide( parentPanel.activeMatchInfoPanel );
-                parentPanel.activeMatchInfoPanel = undefined;
+        function _ClearMatchInfo() {
+            if (parentPanel.Data().activeMatchInfoPanel) {
+                matchInfo.Hide(parentPanel.Data().activeMatchInfoPanel);
+                parentPanel.Data().activeMatchInfoPanel = undefined;
             }
         }
-
-        function _ShowGOTVConfirmPopup ( elListRoot )
-        {
+        function _ShowGOTVConfirmPopup(elListRoot) {
             _ClearMatchInfo();
-            UiToolkitAPI.ShowGenericPopupOkCancel( $.Localize( '#CSGO_Watch_Gotv_Theater' ), $.Localize( '#CSGO_Watch_Gotv_Theater_tip' ), '', function () { MatchListAPI.StartGOTVTheater( "live" ); }, _ReselectActiveTile.bind( undefined, elListRoot ) );
+            UiToolkitAPI.ShowGenericPopupOkCancel($.Localize('#CSGO_Watch_Gotv_Theater'), $.Localize('#CSGO_Watch_Gotv_Theater_tip'), '', function () { MatchListAPI.StartGOTVTheater("live"); }, ReselectActiveTile.bind(undefined, elListRoot));
         }
-
-        if ( parentPanel.downloadFailedHandler )
-        {
-            $.CancelScheduled( parentPanel.downloadFailedHandler );
-            parentPanel.downloadFailedHandler = undefined;
+        if (parentPanel.Data().downloadFailedHandler) {
+            $.CancelScheduled(parentPanel.Data().downloadFailedHandler);
+            parentPanel.Data().downloadFailedHandler = undefined;
         }
-
-        function GetListOfMatchIds ( matchListDescriptor, tournamentIndex, unfilteredCount, sectionDesc, teamId = undefined )
-        {
-            var MatchIds = [];
-
-            for ( var i = 0; i < unfilteredCount; i++ )
-            {
-                var matchId = '';
-                if ( tournamentIndex > 3 )
-                {
-                    matchId = PredictionsAPI.GetSectionMatchByIndex( matchListDescriptor, sectionDesc, i );
+        function GetListOfMatchIds(matchListDescriptor, tournamentIndex, unfilteredCount, sectionDesc, teamId = null) {
+            let MatchIds = [];
+            for (let i = 0; i < unfilteredCount; i++) {
+                let matchId = '';
+                if (tournamentIndex > 3) {
+                    matchId = PredictionsAPI.GetSectionMatchByIndex(matchListDescriptor, sectionDesc, i);
                 }
-                else if ( tournamentIndex <= 3 || !tournamentIndex )
-                {
-                                                                                      
-                    matchId = MatchListAPI.GetMatchByIndex( matchListDescriptor, i );
+                else if (tournamentIndex <= 3 || !tournamentIndex) {
+                    matchId = MatchListAPI.GetMatchByIndex(matchListDescriptor, i).toString();
                 }
-
-                if ( tournamentIndex && teamId && teamId != 0 )
-                {
-                    if ( IsTeamInMatch( teamId, matchId ) )
-                    {
-                        MatchIds.push( matchId );
+                if (tournamentIndex && teamId && teamId != 0) {
+                    if (IsTeamInMatch(teamId, matchId)) {
+                        MatchIds.push(matchId);
                     }
                 }
-                else
-                {
-                    MatchIds.push( matchId );
+                else {
+                    MatchIds.push(matchId);
                 }
             }
-
             return MatchIds;
         }
-
-        function IsTeamInMatch ( teamId, matchId )
-        {
-            for ( i = 0; i <= 1; i++ )
-            {
-                if ( MatchInfoAPI.GetMatchTournamentTeamID( matchId, i ) === teamId )
-                {
+        function IsTeamInMatch(teamId, matchId) {
+            for (let i = 0; i <= 1; i++) {
+                if (MatchInfoAPI.GetMatchTournamentTeamID(matchId, i) === teamId) {
                     return true;
                 }
             }
             return false;
         }
-
-        var unfilteredCount = MatchListAPI.GetCount( matchListDescriptor );
-        var nCount = 0;
-                                                                                                      
-        var sectionDesc = 0;
-        var tournamentIndex = 0;
-        var MatchIdsFiltered = [];
-
-        if ( ( unfilteredCount > 0 ) && ( parentPanel.tournament_id ) )
-        {
-            tournamentIndex = parentPanel.tournament_id.split( ':' )[1];
-            parentPanel.tournamentIndex = tournamentIndex;
-            if ( !parentPanel.matchListDropdownIsPopulated )
-            {
-                if ( tournamentIndex > 3 )
-                {
-                    _PopulateMatchlistDropdown( parentPanel, parentPanel.tournament_id );
-                    _PopulateMatchTeamsDropdown( parentPanel, parentPanel.tournament_id );
+        let unfilteredCount = MatchListAPI.GetCount(matchListDescriptor);
+        let nCount = 0;
+        let sectionDesc = 0;
+        let tournamentIndex = 0;
+        let MatchIdsFiltered = [];
+        if ((unfilteredCount > 0) && (parentPanel.Data().tournament_id)) {
+            tournamentIndex = parentPanel.Data().tournament_id.split(':')[1];
+            parentPanel.Data().tournamentIndex = tournamentIndex;
+            if (!parentPanel.Data().matchListDropdownIsPopulated) {
+                if (tournamentIndex > 3) {
+                    _PopulateMatchlistDropdown(parentPanel, parentPanel.Data().tournament_id);
+                    _PopulateMatchTeamsDropdown(parentPanel, parentPanel.Data().tournament_id);
                 }
-                parentPanel.matchListDropdownIsPopulated = true;
+                parentPanel.Data().matchListDropdownIsPopulated = true;
             }
-
-            if ( tournamentIndex > 3 )
-            {
-                var elDropdown = parentPanel.FindChildTraverse( "id-match-list-selector" );
-                sectionDesc = elDropdown.GetSelected().GetAttributeString( 'section_id', 0 );
-                unfilteredCount = PredictionsAPI.GetSectionMatchesCount( parentPanel.tournament_id, sectionDesc );
-
-                var elStageDropdown = parentPanel.FindChildTraverse( "id-match-list-selector-teams" );
-                var strTeamId = elStageDropdown.GetSelected().GetAttributeString( 'section_id', 0 );
-                var nteamId = strTeamId === 'allteams' ? 0 : Number( strTeamId );
-
-                MatchIdsFiltered = GetListOfMatchIds( parentPanel.tournament_id, tournamentIndex, unfilteredCount, sectionDesc, nteamId );
+            if (tournamentIndex > 3) {
+                let elDropdown = parentPanel.FindChildTraverse("id-match-list-selector");
+                sectionDesc = parseInt(elDropdown.GetSelected().GetAttributeString('section_id', ''));
+                unfilteredCount = PredictionsAPI.GetSectionMatchesCount(parentPanel.Data().tournament_id, sectionDesc);
+                let elStageDropdown = parentPanel.FindChildTraverse("id-match-list-selector-teams");
+                ;
+                let strTeamId = elStageDropdown.GetSelected().GetAttributeString('section_id', '');
+                let nteamId = strTeamId === 'allteams' ? 0 : Number(strTeamId);
+                MatchIdsFiltered = GetListOfMatchIds(parentPanel.Data().tournament_id, tournamentIndex, unfilteredCount, sectionDesc, nteamId);
                 nCount = MatchIdsFiltered.length;
             }
-            else if ( tournamentIndex == 1 )
-            {
-                MatchIdsFiltered = GetListOfMatchIds( parentPanel.tournament_id, tournamentIndex, unfilteredCount, sectionDesc, undefined );
-                nCount = MatchIdsFiltered.length - 3;                                       
+            else if (tournamentIndex == 1) {
+                MatchIdsFiltered = GetListOfMatchIds(parentPanel.Data().tournament_id, tournamentIndex, unfilteredCount, sectionDesc, null);
+                nCount = MatchIdsFiltered.length - 3;
             }
-            else if ( tournamentIndex == 3 )
-            {
-                MatchIdsFiltered = GetListOfMatchIds( parentPanel.tournament_id, tournamentIndex, unfilteredCount, sectionDesc, undefined );
-                nCount = MatchIdsFiltered.length - 1;                   
+            else if (tournamentIndex == 3) {
+                MatchIdsFiltered = GetListOfMatchIds(parentPanel.Data().tournament_id, tournamentIndex, unfilteredCount, sectionDesc, null);
+                nCount = MatchIdsFiltered.length - 1;
             }
         }
-        else
-        {
-            MatchIdsFiltered = GetListOfMatchIds( matchListDescriptor, null, unfilteredCount, '', undefined );
+        else {
+            MatchIdsFiltered = GetListOfMatchIds(matchListDescriptor, null, unfilteredCount, null, null);
             nCount = unfilteredCount;
         }
-
-        _ShowListSpinner( false, parentPanel );
-                                                     
-        if ( nCount <= 0 )
-        {
-            _ShowInfoPanel( false, parentPanel );
-            _ShowListPanel( false, parentPanel );
-            var msg = "";
-            if ( parentPanel.tournament_id )
-            {
-                msg = "#CSGO_Watch_NoMatch_Tournament_" + parentPanel.tournament_id.split( ':' )[1];
+        ShowListSpinner(false, parentPanel);
+        if (nCount <= 0) {
+            ShowInfoPanel(false, parentPanel);
+            _ShowListPanel(false, parentPanel);
+            let msg = "";
+            if (parentPanel.Data().tournament_id) {
+                msg = "#CSGO_Watch_NoMatch_Tournament_" + parentPanel.Data().tournament_id.split(':')[1];
             }
-            else 
-            {
-                switch ( parentPanel.id )
-                {
+            else {
+                switch (parentPanel.id) {
                     case "JsLive":
                         msg = "#CSGO_Watch_NoMatch_live";
                         break;
@@ -571,140 +406,86 @@ var matchList = ( function ()
                         break;
                 }
             }
-            _SetListMessage( $.Localize( msg ), true, parentPanel );
+            SetListMessage($.Localize(msg), true, parentPanel);
         }
-
-        var displayedMatches = new Array();
-        var elMatchList = parentPanel.FindChildTraverse( "JsMatchList" );
-        if ( !elMatchList )
-        {
+        let displayedMatches = new Array();
+        let elMatchList = parentPanel.FindChildTraverse("JsMatchList");
+        if (!elMatchList) {
             return;
         }
-
-        for ( var i = 0; i < elMatchList.GetChildCount(); i++ )
-        {
-            elMatchList.GetChild( i ).markForDelete = true;
+        for (let i = 0; i < elMatchList.GetChildCount(); i++) {
+            elMatchList.GetChild(i).Data().markForDelete = true;
         }
-
-        function _CreateOrValidateMatchTile ( matchId )
-        {
-            var elMatchButton = elMatchList.FindChildInLayoutFile( matchListDescriptor + "_" + matchId );
-            if ( !elMatchButton || matchListDescriptor === 'live' )
-            {
-                                                                                         
-                if ( matchListDescriptor === 'live' )
-                {
-                    if ( elMatchButton )
-                    {
-                        elMatchButton.DeleteAsync( 0.0 );
+        function _CreateOrValidateMatchTile(matchId) {
+            let elMatchButton = elMatchList.FindChildInLayoutFile(matchListDescriptor + "_" + matchId);
+            if (!elMatchButton || matchListDescriptor === 'live') {
+                if (matchListDescriptor === 'live') {
+                    if (elMatchButton) {
+                        elMatchButton.DeleteAsync(0.0);
                     }
                 }
-
-                elMatchButton = $.CreatePanel( 'RadioButton', elMatchList, matchListDescriptor + "_" + matchId );
-                elMatchButton.downloadStateHandler = undefined;
-                elMatchButton.group = parentPanel.id;
-                elMatchButton.myXuid = _m_myXuid;
-                elMatchButton.matchId = matchId;
-                elMatchButton.matchListDescriptor = matchListDescriptor;
-                if ( matchId != 'gotv' )
-                {
-                    elMatchButton.SetPanelEvent( 'onactivate', _PopulateMatchInfo.bind( undefined, parentPanel, matchListDescriptor, matchId ) );
+                elMatchButton = $.CreatePanel('RadioButton', elMatchList, matchListDescriptor + "_" + matchId);
+                elMatchButton.Data().downloadStateHandler = undefined;
+                elMatchButton.Data().group = parentPanel.id;
+                elMatchButton.Data().myXuid = _m_myXuid;
+                elMatchButton.Data().matchId = matchId;
+                elMatchButton.Data().matchListDescriptor = matchListDescriptor;
+                if (matchId != 'gotv') {
+                    elMatchButton.SetPanelEvent('onactivate', _PopulateMatchInfo.bind(undefined, parentPanel, matchListDescriptor, matchId));
                 }
-                else
-                {
-                    elMatchButton.SetPanelEvent( 'onactivate', _ShowGOTVConfirmPopup.bind( undefined, parentPanel ) );
+                else {
+                    elMatchButton.SetPanelEvent('onactivate', _ShowGOTVConfirmPopup.bind(undefined, parentPanel));
                 }
-                elMatchButton.SetPanelEvent( 'onmouseover', OnMouseOverButton.bind( undefined, parentPanel, matchListDescriptor + "_" + matchId ) );
-                elMatchButton.SetPanelEvent( 'onmouseout', OnMouseOutButton.bind( undefined, parentPanel, matchListDescriptor + "_" + matchId ) );
-                watchTile.Init( elMatchButton );
-                elMatchButton.RemoveClass( 'MatchTile--Collapse' );
+                elMatchButton.SetPanelEvent('onmouseover', OnMouseOverButton.bind(undefined, parentPanel, matchListDescriptor + "_" + matchId));
+                elMatchButton.SetPanelEvent('onmouseout', OnMouseOutButton.bind(undefined, parentPanel, matchListDescriptor + "_" + matchId));
+                watchTile.Init(elMatchButton);
+                elMatchButton.RemoveClass('MatchTile--Collapse');
             }
-            else
-            {
-                watchTile.Refresh( elMatchButton );
+            else {
+                watchTile.Refresh(elMatchButton);
             }
-            elMatchButton.markForDelete = false;
-
-            function _UpdateDownloadState ( elBoundMatchButton )
-            {
-                if ( ( elBoundMatchButton ) && ( !elBoundMatchButton.markForDelete ) )
-                {
-                    var elDownloadIndicator = elBoundMatchButton.FindChildInLayoutFile( 'id-download-state' );
-                    if ( elDownloadIndicator )
-                    {
-                        var isDownloading = Boolean( ( MatchInfoAPI.GetMatchState( elBoundMatchButton.matchId ) === "downloading" ) );
-                        var canWatch = Boolean( MatchInfoAPI.CanWatch( elBoundMatchButton.matchId ) );
-                        var isLive = Boolean( MatchInfoAPI.IsLive( elBoundMatchButton.matchId ) );
-                        elDownloadIndicator.SetHasClass( "download-animation", isDownloading );
-                        elDownloadIndicator.SetHasClass( "watchlive", isLive );
-                        elDownloadIndicator.SetHasClass( "downloaded", canWatch && !isLive );
+            elMatchButton.Data().markForDelete = false;
+            function _UpdateDownloadState(elBoundMatchButton) {
+                if ((elBoundMatchButton) && (!elBoundMatchButton.Data().markForDelete)) {
+                    let elDownloadIndicator = elBoundMatchButton.FindChildInLayoutFile('id-download-state');
+                    if (elDownloadIndicator) {
+                        let isDownloading = Boolean((MatchInfoAPI.GetMatchState(elBoundMatchButton.Data().matchId) === "downloading"));
+                        let canWatch = Boolean(MatchInfoAPI.CanWatch(elBoundMatchButton.Data().matchId));
+                        let isLive = Boolean(MatchInfoAPI.IsLive(elBoundMatchButton.Data().matchId));
+                        elDownloadIndicator.SetHasClass("download-animation", isDownloading);
+                        elDownloadIndicator.SetHasClass("watchlive", isLive);
+                        elDownloadIndicator.SetHasClass("downloaded", canWatch && !isLive);
                     }
                 }
             }
-
-            if ( ( elMatchButton.downloadStateHandler == undefined ) && elMatchButton.FindChildInLayoutFile( 'id-download-state' ) )
-            {
-                elMatchButton.downloadStateHandler = $.RegisterForUnhandledEvent( 'PanoramaComponent_MatchInfo_StateChange', _UpdateDownloadState.bind( undefined, elMatchButton ) );
+            if ((elMatchButton.Data().downloadStateHandler == undefined) && elMatchButton.FindChildInLayoutFile('id-download-state')) {
+                elMatchButton.Data().downloadStateHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', _UpdateDownloadState.bind(undefined, elMatchButton));
             }
-
-                                                                                                                                                
-            _UpdateDownloadState( elMatchButton );
-
-
-            elMatchButton.RemoveClass( 'MatchTile--Collapse' );
+            _UpdateDownloadState(elMatchButton);
+            elMatchButton.RemoveClass('MatchTile--Collapse');
         }
-
-        for ( i = 0; i < nCount; i++ )
-        {
-            if ( ( parentPanel.tournament_id ) && ( tournamentIndex > 3 ) )
-            {
-                _CreateOrValidateMatchTile( MatchIdsFiltered[i] );
+        for (let i = 0; i < nCount; i++) {
+            if ((parentPanel.Data().tournament_id) && (tournamentIndex > 3)) {
+                _CreateOrValidateMatchTile(MatchIdsFiltered[i]);
             }
-            else
-            {
-                var matchbyindex = MatchListAPI.GetMatchByIndex( matchListDescriptor, i );
-                                                                                                   
-                _CreateOrValidateMatchTile( MatchIdsFiltered[i] );
+            else {
+                let matchbyindex = MatchListAPI.GetMatchByIndex(matchListDescriptor, i);
+                _CreateOrValidateMatchTile(MatchIdsFiltered[i]);
             }
         }
-
-
-        if ( ( matchListDescriptor === 'live' ) && elMatchList.FindChildInLayoutFile( "live_gotv" ) )
-        {
-            elMatchList.FindChildInLayoutFile( "live_gotv" ).markForDelete = true;
+        if ((matchListDescriptor === 'live') && elMatchList.FindChildInLayoutFile("live_gotv")) {
+            elMatchList.FindChildInLayoutFile("live_gotv").Data().markForDelete = true;
         }
-        _ClearList( elMatchList, parentPanel.tournament_id );
-        _SelectFirstTile( parentPanel, elMatchList, matchListDescriptor );
-
-        if ( nCount > 0 )
-        {
-            _ShowListPanel( true, parentPanel );
-            _ShowInfoPanel( true, parentPanel );
-            _SetListMessage( "", false, parentPanel );
+        _ClearList(elMatchList, parentPanel.Data().tournament_id);
+        _SelectFirstTile(parentPanel, elMatchList, matchListDescriptor);
+        if (nCount > 0) {
+            _ShowListPanel(true, parentPanel);
+            ShowInfoPanel(true, parentPanel);
+            SetListMessage("", false, parentPanel);
         }
-
-                                                       
-        if ( ( matchListDescriptor === 'live' ) && ( nCount > 0 ) )
-        {
-            _CreateOrValidateMatchTile( 'gotv' );
+        if ((matchListDescriptor === 'live') && (nCount > 0)) {
+            _CreateOrValidateMatchTile('gotv');
         }
-
-
-        parentPanel.matchListIsPopulated = true;
+        parentPanel.Data().matchListIsPopulated = true;
     }
-
-                          
-    return {
-        UpdateMatchList: _UpdateMatchList,
-        ShowListSpinner: _ShowListSpinner,
-        SetListMessage: _SetListMessage,
-        ShowInfoPanel: _ShowInfoPanel,
-        ReselectActiveTile: _ReselectActiveTile
-    };
-
-} )();
-
-( function ()
-{
-
-} )();
+})(matchList || (matchList = {}));

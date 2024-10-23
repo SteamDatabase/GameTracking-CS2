@@ -32,7 +32,7 @@ var PopupRedeemSouvenir = ( function()
             }
         );
 
-        elMatchtile.matchId = m_matchId;
+        elMatchtile.Data().matchId = m_matchId;
         
         elMatchtile.BLoadLayout( 'file://{resources}/layout/matchtiles/tournament.xml', false, false );
         elMatchtile.RemoveClass( 'MatchTile--Collapse' );
