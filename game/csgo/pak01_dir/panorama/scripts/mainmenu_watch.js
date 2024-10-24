@@ -97,7 +97,7 @@ var mainmenu_watch;
         if (!elTournamentList.FindChildTraverse("other-tournaments")) {
             elTournamentList.BLoadLayout("file://{resources}/layout/matchtiles/tournament_page.xml", false, false);
             let pastTournamentPanel = elTournamentList.FindChildTraverse("other-tournaments");
-            let maxTournaments = g_ActiveTournamentInfo.eventid - 1;
+            let maxTournaments = g_ActiveTournamentInfo.eventid;
             for (let i = maxTournaments; i >= 1; i--) {
                 if (i == 2)
                     continue;
