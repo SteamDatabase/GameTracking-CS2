@@ -55,6 +55,7 @@ class C_CSWeaponBase : public C_BasePlayerWeapon
 	bool m_bOldFirstPersonSpectatedState;
 	bool m_bUIWeapon;
 	int32 m_nCustomEconReloadEventId;
+	GameTime_t m_nextPrevOwnerUseTime;
 	CHandle< C_CSPlayerPawn > m_hPrevOwner;
 	GameTick_t m_nDropTick;
 	bool m_donated;

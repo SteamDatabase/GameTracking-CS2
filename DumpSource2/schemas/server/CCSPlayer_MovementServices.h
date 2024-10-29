@@ -1,6 +1,5 @@
 class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 {
-	float32 m_flMaxFallVelocity;
 	Vector m_vecLadderNormal;
 	int32 m_nLadderSurfacePropIndex;
 	float32 m_flDuckAmount;
@@ -31,8 +30,6 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	int32 m_iFootsteps;
 	bool m_bOldJumpPressed;
 	float32 m_flJumpPressedTime;
-	float32 m_flJumpUntil;
-	float32 m_flJumpVel;
 	GameTime_t m_fStashGrenadeParameterWhen;
 	uint64 m_nButtonDownMaskPrev;
 	float32 m_flOffsetTickCompleteTime;
@@ -41,4 +38,6 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	float32 m_flHeightAtJumpStart;
 	float32 m_flMaxJumpHeightThisJump;
 	float32 m_flMaxJumpHeightLastJump;
+	float32 m_flStaminaAtJumpStart;
+	float32 m_flAccumulatedJumpError;
 };

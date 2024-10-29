@@ -51,6 +51,7 @@ class CCSWeaponBase : public CBasePlayerWeapon
 	bool m_bUseCanOverrideNextOwnerTouchTime;
 	GameTime_t m_nextOwnerTouchTime;
 	GameTime_t m_nextPrevOwnerTouchTime;
+	GameTime_t m_nextPrevOwnerUseTime;
 	CHandle< CCSPlayerPawn > m_hPrevOwner;
 	GameTick_t m_nDropTick;
 	bool m_donated;

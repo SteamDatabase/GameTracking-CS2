@@ -66,7 +66,9 @@ class CCSPlayerController : public CBasePlayerController
 	int32 m_iScore;
 	int32 m_iRoundScore;
 	int32 m_iRoundsWon;
-	CNetworkUtlVectorBase< EKillTypes_t > m_vecKills;
+	uint8[8] m_recentKillQueue;
+	uint8 m_nFirstKill;
+	uint8 m_nKillCount;
 	bool m_bMvpNoMusic;
 	int32 m_eMvpReason;
 	int32 m_iMusicKitID;
