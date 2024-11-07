@@ -55,13 +55,24 @@ var TooltipLobby;
                 // @ts-ignore
                 p.SetDialogVariableInt('stat', matchmakeingStats[statType]);
             }
+            if (statType === 'playersLockedIn') {
+                let totalPlayers = SessionUtil.GetMaxLobbySlotsForGameMode(m_GameSettings.mode);
+                totalPlayers *= 2;
+                p.SetDialogVariableInt('total_stat', totalPlayers);
+            }
             p.FindChildInLayoutFile('SettingText').text = $.Localize('#matchmaking_stat_' + statType, p);
             p.FindChildInLayoutFile('SettingImage').SetImage('file://{images}/icons/ui/' + iconName + '.svg');
             p.FindChildInLayoutFile('SettingImage').AddClass('tint');
         }
         MakeStatsRow('avgSearchTimeSeconds', 'clock');
         MakeStatsRow('playersOnline', 'lobby');
-        MakeStatsRow('playersSearching', 'find');
+        if (matchmakeingStats.hasOwnProperty('playersLockedIn') && matchmakeingStats.playersLockedIn
+            && !["cooperative", "coopmission"].includes(m_GameSettings.mode)) {
+            MakeStatsRow('playersLockedIn', 'find');
+        }
+        else {
+            MakeStatsRow('playersSearching', 'find');
+        }
         MakeStatsRow('serversOnline', 'servers');
     }
     function _GetLobbySettings() {

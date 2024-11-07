@@ -116,7 +116,7 @@
  : unexpected input...\n  expected one of : 
  <-- Arg '%s'
  <-- Retval '%s'
- @BaseNPCs and hint groups do not exist in this mod.\n
+ @Current sound patches: %d\n
  ACTIVE GROUP
  CCSGameRules::Think bHalftime SwitchTeamsAtRoundReset() CTMDBG, %.2f \n
  FL_FULL_EDICT_CHANGED
@@ -278,6 +278,7 @@
 #Chat_SavePlayer_Spectator
 #Chatwheel_aplan
 #Chatwheel_bplan
+#Chatwheel_ping_
 #Cstrike_TitlesTXT_Accept_Radio
 #Cstrike_TitlesTXT_Affirmative
 #Cstrike_TitlesTXT_Alias_Not_Avail
@@ -4458,6 +4459,7 @@ $tFa\v
 50CMsgGCCStrike15_v2_MatchListRequestRecentUserGames
 50CMsgGCCStrike15_v2_MatchListRequestTournamentGames
 50CMsgGCCStrike15_v2_MatchListTournamentOperatorMgmt
+50CMsgGCCStrike15_v2_MatchmakingGC2ClientSearchStats
 50CMsgGCCStrike15_v2_MatchmakingGC2ClientUpdate_Note
 50CQuest_PublisherAddCommunityItemsToPlayer_Response
 50CUserMessageCameraTransition_Transition_DataDriven
@@ -4653,7 +4655,6 @@ $tFa\v
 <unconnected>
 <unhandled field type %s>
 <weaponclass>
-=#Chatwheel_ping_
 == PulseGraphDef ==\n
 ========================================\n
 ========================================\n\n
@@ -4668,7 +4669,6 @@ $tFa\v
 >sao
 ?22CSimpleLoggingListener
 ?333@CPlayerPing
-?33S@y
 ?33s?
 ???CRR_Response bogus index
 ?CAK47
@@ -5105,6 +5105,7 @@ BaseGrenade.Explode
 BaseGrenade.JumpThrowF
 BaseGrenade.JumpThrowM
 BaseInstance%d
+BaseNPCs and hint groups do not exist in this mod.\n
 BasePawn
 BaseSmokeEffect.Sound
 BaseTextureOverride
@@ -5894,6 +5895,7 @@ CRLReason
 CRYPTO lib
 CRagdollLRURetirement
 CRagdollPoseControlSystem
+CRagdollProp::SettleThink
 CRagdollProp::Teleport( ) for ragdoll without root object\n
 CRecipientFilter::AddAllPlayers - no recipients for this message, but %d player in process of connecting was not included.\n
 CRenderComponent::Storage_t
@@ -6415,7 +6417,6 @@ Current Pos:   %3.3f
 Current Pos: %3.3f
 Current Sub Directory : Save\%s\n
 Current backup file prefix is not set, use mp_backup_round_file to set it.\n
-Current sound patches: %d\n
 Current time: %6.3f\n
 CurrentPunchAnglePitch
 CurrentPunchAngleYaw
@@ -7328,6 +7329,7 @@ GameDebugVisualizer
 GameEvent_RegisterHookupGameSystem
 GameHeader
 GameInit - PreCache - Finish
+GameInit - PreCache - Start
 GameModelInfo001
 GameRulesGameSystem
 GameSessionManifest
@@ -8536,6 +8538,7 @@ ItemGenericTouch
 ItemGenericTriggerHelperTouch
 ItemSoda.Bounce
 ItemTouch
+J@33S@
 JOINT-ISO-ITU-T
 JQW[_c=DNV]c,3>JWc
 JRX\`c>HQX_c-7AMYc
@@ -9727,7 +9730,7 @@ OverrideFriction
 OvertimeScore/OvertimeID
 OvertimeScore/team1
 OvertimeScore/team2
-P@GameInit - PreCache - Start
+P@CPropDoorRotating
 PARALYZE
 PARAMETER NAME: %s | OPTIONAL: %s, TYPE: %s, BOUND: %s, REFERENCED: %s\n
 PASSABLE
@@ -11086,7 +11089,6 @@ Sets the value of the given cvar, as a float.
 Sets this entity's owner
 Setting an animgraph parameter via Pulse is only supported on prop_dynamic!
 Setting mapgroup to '%s'\n
-SettleThink
 SetupModel
 SetupSequences
 ShakeRopes
@@ -12379,7 +12381,6 @@ absorigin_follow
 ac-auditEntity
 ac-proxying
 ac-targeting
-accel_magnitude_damped_16
 acceleration
 acceptableResponses
 acceptdamagefromheldobjects
@@ -12763,8 +12764,6 @@ b_RFootInFront
 b_SlopeDrop
 b_TAG_LFOOT_FORCE_UP
 b_TAG_RFOOT_FORCE_UP
-b_WASDOnlyJustPressed
-b_WASDPressed
 b_backstab
 b_fidget_autoclear
 b_grenade_thrown
@@ -13842,7 +13841,6 @@ eJumpType
 eMoverBonemaskChoice
 eRunMode
 eRunWalkCrouch
-e_Hit_BodyPart
 e_body_idle
 e_destructible_part_destroyed_hitgroup
 e_face_idle
@@ -14135,10 +14133,7 @@ fPitch
 fRoll
 fValue
 fYaw
-f_Hit_Heading
-f_Hit_Strength
 f_first_third_head_dist
-f_hit_speed_modifier
 f_sequence_start_time
 f_slope_drop
 f_throw_start_time
@@ -14302,7 +14297,6 @@ flScaleAmount
 flScreenX
 flScreenY
 flSearchRadius
-flTurnBlendAmplitude
 flValue
 flVerticalOffset
 flVolume
@@ -15337,7 +15331,6 @@ joy_autoaimdampen
 jump_autoclear
 jump_down
 jump_down_previous
-jump_fall
 jump_recently_pressed
 jumpfactor
 jurisdictionC
@@ -15393,8 +15386,6 @@ ladderSurfaceProperties
 ladder_cycle
 ladder_yaw
 land_%s
-land_heavy
-land_light
 landmarkModelSpace
 large car
 last history
@@ -16152,8 +16143,6 @@ move_mode
 move_rope has TextureScale greater than 10 at (%2.2f, %2.2f, %2.2f)\n
 move_rope has TextureScale less than 0.1 at (%2.2f, %2.2f, %2.2f)\n
 move_speed_blend_value
-move_speed_blend_value_after_turn_speed_min_walk_value
-move_speed_damped_8
 move_speed_for_aims_blend_value
 move_to_gait
 move_type
@@ -17806,7 +17795,6 @@ special3
 spectype
 speed_range
 speed_scale_for_runs_with_turning
-speed_scale_for_runs_with_turning_n_accel
 sphere.radius
 spin_axis_friction
 spin_none
@@ -18522,15 +18510,14 @@ uses_range
 utilities
 utilitydamage
 uvs are all identical
-v@WP=
 v@_multibase
+v@gA=
 vDefault
 vHingeAxis
 vPoint
 vPoint1
 vPoint2
 vValue
-v_Hit_Direction
 v_glove_
 v_slope_normal_smoothed
 v_viewmodel_fov

@@ -530,6 +530,7 @@ var PopupMajorHub;
         $.RegisterForUnhandledEvent('PanoramaComponent_MatchList_StateChange', LoadPickEmData);
         $.RegisterForUnhandledEvent('PanoramaComponent_MatchList_PredictionUploaded', RefreshActivePage);
         $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', ItemAcquired);
+        $.RegisterForUnhandledEvent('OpenInventory', ClosePopup);
         $.RegisterEventHandler('ReadyForDisplay', _m_cp, ReadyForDisplay);
         $.RegisterEventHandler('UnreadyForDisplay', _m_cp, UnreadyForDisplay);
     }

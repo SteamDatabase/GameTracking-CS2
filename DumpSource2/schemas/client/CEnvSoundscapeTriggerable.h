@@ -1,0 +1,3 @@
+class CEnvSoundscapeTriggerable : public CEnvSoundscape
+{
+};
