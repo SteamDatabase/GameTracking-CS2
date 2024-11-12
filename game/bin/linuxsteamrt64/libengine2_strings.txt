@@ -56,6 +56,7 @@
    Total time: %3f\n
   %d classes, %d bytes\n
   %s = %s was changed between from/to ticks but is missed by CalcDelta (i.e., encoded values are same)\n
+  (And we were not able to hide it using interpolation!)
   * (No VConComm)\n
   * (No toolframework)\n
   * ToolFramework.AlwaysRenderAllWindows = %d\n
@@ -70,6 +71,7 @@
   Comment started here.
   Currently playing %d of %d ticks. Minutes:%.2f File:%s\n
   Expected : 
+  Jitter=%.1fms
   Queued   :  %s\n
   Receiving server updates. :%s\n
   Requested:  %s\n
@@ -369,7 +371,8 @@ $tLVRenderDeviceSetupV001
 %-32s: %6.3f ms (+/- %6.3f) ms%s\n
 %-32s: %6.3f ms (+/- %6.3f) ms\n
 %-40s %-12s %-12s %-12s %-12s %-12s\n
-%.1fms
+%.1f%% server ticks missed due to network (%d dropped, %d late)   Good:%d   BadOther:%d    Fixed: %d dropped, %d late\n
+%.1f%% user commands missed due to network (%d dropped, %d late)   Good:%d   BadOther:%d    Fixed: %d dropped, %d late\n
 %.2f GB
 %.2f. Broadcast IO error. Please try again later.\n
 %.2f. Broadcast Streaming error %d %s\n
@@ -6294,6 +6297,7 @@ Present_RenderDevice
 PreserveEnt
 Print CPU configuration information
 Print a message about problems with ticks and interpolation.  0=never, 1=warnings, 2=all, even if hidden by interpolation
+Print a message if network issues cause problems with server snapshots of user commands not being available when needed, if the percentage (0...100) exceeds this value.  A value of 0 will cause the message to always print each time it is calculated
 Print a performance report from the current data in the vprof 'lite' profiler
 Print callstack every time CNetworkGameServerBase::WriteEntityUpdate takes more than this amount of milliseconds
 Print connection status
@@ -7097,11 +7101,16 @@ Server shutting down because of using %lluMB with an sv_memory_limit of %dMB\n
 Server shutting down because sv_shutdown was done and a game has ended.\n
 Server tags. Used to provide extra information to clients when they're browsing for servers. Separate tags with a comma.
 Server tick %d arrived %.1fms after deadline (hidden by interpolation)\n
-Server tick %d dropped and we were not able to hide it using interpolation\n
+Server tick %d delayed by %.1fms jitter (hidden by interpolation)\n
+Server tick %d delivered out of order (hidden by interpolation)\n
+Server tick %d dropped.%s\n
+Server tick %d never received, but no missing network frame (checked seqnum %d, status %d); assuming that server never sent it\n
+Server tick %d received out of order.%s\n
 Server tick %d was long (%.1fms) due to '%s'\n
 Server tick %d was long (%.1fms)\n
-Server tick %d was not available when we needed it, arrived %.1fms too late\n
-Server tick %d was was slow (%.1fms) and not available when we needed it, arrived %.1fms too late\n
+Server tick %d was not available when we needed it, arrived %.1fms too late due to network reordering\n
+Server tick %d was not available when we needed it, arrived %.1fms too late%s\n
+Server tick %d was was slow (%.1fms) and not available when we needed it, arrived %.1fms too late%s\n
 Server using sv_pure 2.\n
 Server waking up from hibernation\n
 Server was reserved for %d more seconds.  Reservation cleared.\n
@@ -9040,7 +9049,7 @@ cl_chat_active
 cl_checkdeclareclasses
 cl_clock_buffer_ticks
 cl_clock_correction
-cl_clock_recvmargin: %s, running at %.3f%%\n
+cl_clock_recvmargin: running at %.3f%% %s\n
 cl_clock_recvmargin_adjust_limit_slowdown
 cl_clock_recvmargin_adjust_limit_speedup
 cl_clock_recvmargin_desired
@@ -9092,6 +9101,7 @@ cl_tickpacket_recvmargin_spew_interval
 cl_tickpacket_recvmargin_timeconstant
 cl_tickpacket_recvmargin_window
 cl_tickpacket_send_every_tick
+cl_ticks_net_print_threshold
 cl_ticks_warning_level
 cl_ticktiming
 cl_ticktiming usage:\n
@@ -10001,7 +10011,7 @@ l`UROM=;98310-*)(&$"
 landmarkname
 last_cmd_number_executed going in reverse from server!  (Out of order delivery?)  %d -> %d
 later than desired
-latest=%.2f, min=%.2f, target=%.2f, excess=%.2f, samples=%d (%d)
+latest=%.2f   Excess:%6.2f   Margin:%.2f...%.2f   Actual:%.2f..%.2f   DeadlineVar:%.2f...%.2f   RecvVar:%.2f...%.2f   Samples:%d (%d)   Target:%.2f
 launch_url
 launchoptions
 layer0
