@@ -8,12 +8,12 @@
 /// <reference path="particle_controls.ts" />
 var XpShop;
 (function (XpShop) {
-    let m_tileWidth = 260;
-    let m_tileHeight = 120;
-    let m_keychainTileWidth = 180;
-    let m_keychainTileHeight = m_keychainTileWidth - 10;
-    let m_stickerTileWidth = 160;
-    let m_elContentPanel = $.GetContextPanel().FindChildInLayoutFile('id-xpshop-content');
+    const m_tileWidth = 260;
+    const m_tileHeight = 120;
+    const m_keychainTileWidth = 180;
+    const m_keychainTileHeight = m_keychainTileWidth - 10;
+    const m_stickerTileWidth = 160;
+    const m_elContentPanel = $.GetContextPanel().FindChildInLayoutFile('id-xpshop-content');
     let m_nTrack;
     let m_nPass;
     let m_activeTracks = 0;
@@ -186,6 +186,10 @@ var XpShop;
                             xpshop_track_value: 0,
                         };
                         XpShopTrack.XpShopInit(oSettings);
+                        let elTrackProgress = elTrack.FindChildInLayoutFile('id-xpshop-active-tracks-progress-icons');
+                        elTrackProgress.Children().forEach((element) => {
+                            element.SetHasClass('complete', false);
+                        });
                         elTrack.visible = true;
                         elActivateBtn.SetHasClass('hidden', false);
                         elActivateBtn.SwitchClass('type', 'activate-pass-btn');

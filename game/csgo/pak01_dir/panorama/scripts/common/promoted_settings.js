@@ -180,6 +180,30 @@ var g_PromotedSettings = [
         start_date: new Date('June 1, 2024'),
         end_date: new Date('July 1, 2024')
     },
+    {
+        id: "RadarBackgroundOpacity",
+        loc_name: "#SFUI_Settings_HUD_Radar_Background_Alpha",
+        loc_desc: "#SFUI_Settings_HUD_Radar_Background_Alpha_Info",
+        section: "GameSettings",
+        start_date: new Date('November 1, 2024'),
+        end_date: new Date('January 1, 2025')
+    },
+    {
+        id: "RadarMapBlend",
+        loc_name: "#SFUI_Settings_HUD_Radar_Map_Additive",
+        loc_desc: "#SFUI_Settings_HUD_Radar_Map_Additive_Info",
+        section: "GameSettings",
+        start_date: new Date('November 1, 2024'),
+        end_date: new Date('January 1, 2025')
+    },
+    {
+        id: "SettingsDamagePrediction",
+        loc_name: "#settings_damage_prediction",
+        loc_desc: "#settings_damage_prediction_info",
+        section: "GameSettings",
+        start_date: new Date('November 1, 2024'),
+        end_date: new Date('January 1, 2025')
+    },
 ]
     .reverse();
 var PromotedSettingsUtil;

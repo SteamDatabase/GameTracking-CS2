@@ -17,6 +17,7 @@ var MainMenu;
     let _m_sideBarElementContextMenuActive = false;
     const _m_elContentPanel = $('#JsMainMenuContent');
     let _m_playedInitalFadeUp = false;
+    const _m_maxMainMenuDisplayAgents = 5;
     const _m_elNotificationsContainer = $('#NotificationsContainer');
     let _m_notificationSchedule = false;
     let _m_bVanityAnimationAlreadyStarted = false;
@@ -686,15 +687,20 @@ var MainMenu;
         }
         _UpdateLocalPlayerVanity();
     }
+    function _ShowDebugLobbyModels() {
+    }
     function _UpdateLocalPlayerVanity() {
         const oSettings = ItemInfo.GetOrUpdateVanityCharacterSettings();
         const oLocalPlayer = m_aDisplayLobbyVanityData.filter(storedEntry => { return storedEntry.isLocalPlayer === true; });
+        if (oLocalPlayer.length > 0 && (oLocalPlayer[0].playeridx > (_m_maxMainMenuDisplayAgents - 1))) {
+            return;
+        }
         oSettings.playeridx = oLocalPlayer.length > 0 ? oLocalPlayer[0].playeridx : 0;
         oSettings.xuid = MyPersonaAPI.GetXuid();
         oSettings.isLocalPlayer = true;
         _ApplyVanitySettingsToLobbyMetadata(oSettings);
         _UpdatePlayerVanityModel(oSettings);
-        _CreatUpdateVanityInfo(oSettings);
+        _CreateUpdateVanityInfo(oSettings);
     }
     function _ApplyVanitySettingsToLobbyMetadata(oSettings) {
         PartyListAPI.SetLocalPlayerVanityPresence(oSettings.team, oSettings.charItemId, oSettings.glovesItemId, oSettings.loadoutSlot, oSettings.weaponItemId);
@@ -706,7 +712,7 @@ var MainMenu;
         _msg("_InitVanity: successfully parsed vanity info: " + oSettings);
         CharacterAnims.PlayAnimsOnPanel(oSettings);
     }
-    function _CreatUpdateVanityInfo(oSettings) {
+    function _CreateUpdateVanityInfo(oSettings) {
         $.Schedule(.1, () => {
             const elVanityPlayerInfo = VanityPlayerInfo.CreateOrUpdateVanityInfoPanel($.GetContextPanel().FindChildInLayoutFile('MainMenuVanityInfo'), oSettings);
             if (elVanityPlayerInfo) {
@@ -738,10 +744,9 @@ var MainMenu;
             $.Schedule(.1, _InitVanity);
             return;
         }
-        const maxSlots = 5;
         const aCurrentLobbyVanityData = [];
         if (numPlayersActuallyInParty > 0) {
-            numPlayersActuallyInParty = (numPlayersActuallyInParty > maxSlots) ? maxSlots : numPlayersActuallyInParty;
+            numPlayersActuallyInParty = (numPlayersActuallyInParty > _m_maxMainMenuDisplayAgents) ? _m_maxMainMenuDisplayAgents : numPlayersActuallyInParty;
             for (let k = 0; k < numPlayersActuallyInParty; k++) {
                 const xuid = PartyListAPI.GetXuidByIndex(k);
                 aCurrentLobbyVanityData.push({
@@ -761,8 +766,7 @@ var MainMenu;
         }
     }
     function _CompareLobbyPlayers(aCurrentLobbyVanityData) {
-        const maxSlots = 5;
-        for (let i = 0; i < maxSlots; i++) {
+        for (let i = 0; i < _m_maxMainMenuDisplayAgents; i++) {
             if (aCurrentLobbyVanityData[i]) {
                 if (!m_aDisplayLobbyVanityData[i]) {
                     m_aDisplayLobbyVanityData[i] = {
@@ -786,7 +790,7 @@ var MainMenu;
                         _UpdateVanityFromLobbyUpdate(aCurrentLobbyVanityData[i].vanity_data, aCurrentLobbyVanityData[i].playeridx, aCurrentLobbyVanityData[i].xuid);
                     }
                 }
-                _CreatUpdateVanityInfo(aCurrentLobbyVanityData[i]);
+                _CreateUpdateVanityInfo(aCurrentLobbyVanityData[i]);
                 m_aDisplayLobbyVanityData[i].vanity_data = aCurrentLobbyVanityData[i].vanity_data;
             }
             else if (m_aDisplayLobbyVanityData[i]) {
@@ -830,11 +834,10 @@ var MainMenu;
         }
     }
     function _OnUISceneFrameBoundary() {
-        const maxSlots = 5;
         const elVanityPanel = $('#JsMainmenu_Vanity');
         if (elVanityPanel && elVanityPanel.IsValid()) {
             const elVanityPlayerInfoParent = $.GetContextPanel().FindChildInLayoutFile('MainMenuVanityInfo');
-            for (let i = 0; i < maxSlots; i++) {
+            for (let i = 0; i < _m_maxMainMenuDisplayAgents; i++) {
                 if (elVanityPanel.SetActiveCharacter(i) === true) {
                     const oPanelPos = elVanityPanel.GetBonePositionInPanelSpace('pelvis');
                     oPanelPos.y -= 0.0;

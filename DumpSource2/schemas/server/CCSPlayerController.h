@@ -88,4 +88,5 @@ class CCSPlayerController : public CBasePlayerController
 	GameTime_t m_LastTimePlayerWasDisconnectedForPawnsRemove;
 	uint32 m_nSuspiciousHitCount;
 	uint32 m_nNonSuspiciousHitStreak;
+	bool m_bFireBulletsSeedSynchronized;
 };

@@ -190,6 +190,7 @@
 		"GpuLightBinnerBinEnvMaps" "1"
 		"GpuLightBinnerBinLPVs" "0"
 		"GpuLightBinnerSupportViewModelCascade" "1"
+		"DynamicShadowResolution" "1"
 		"DefaultShadowTextureWidth" "4096"
 		"DefaultShadowTextureHeight" "4096"
 		"ShadowTextureImageFormat_D16" "1"		// would like to enable this for CS2 soon to test D16 shadows (separately from SparseShadowTrees)

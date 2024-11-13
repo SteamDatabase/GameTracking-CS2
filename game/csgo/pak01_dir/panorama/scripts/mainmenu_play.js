@@ -29,6 +29,7 @@ var PlayMenu;
     let m_jsTimerUpdateHandle = false;
     let m_challengeKey = '';
     let m_bDidShowActiveMapSelectionTab = false;
+    let m_selectedPracticeMap = '';
     const k_workshopModes = {
         classic: 'casual,competitive',
         casual: 'casual',
@@ -172,6 +173,7 @@ var PlayMenu;
                 const newSettings = { update: { options: {} } };
                 newSettings.update.options[setting] = newvalue;
                 LobbyAPI.UpdateSessionSettings(newSettings);
+                GameInterfaceAPI.SetSettingString('ui_playsettings_listen_' + strFeatureName, newvalue ? '1' : '0');
             });
         }
         const btnStartSearch = $('#StartMatchBtn');
@@ -1346,11 +1348,15 @@ var PlayMenu;
         _PopulateQuickSelectBar(isSearching, isHost);
     }
     function _SelectMapButtonsFromSettings(settings) {
+        m_selectedPracticeMap = '';
         const mapsGroups = settings.game.mapgroupname.split(',');
         const aListMaps = _GetMapListForServerTypeAndGameMode(m_activeMapGroupSelectionPanelID);
         for (let e of aListMaps) {
             const mapName = e.GetAttributeString("mapname", "invalid");
             e.checked = mapsGroups.includes(mapName);
+            if (m_serverSetting === 'listen' && e.checked) {
+                m_selectedPracticeMap = mapName.replace(/^mg_/, '');
+            }
         }
     }
     function _ShowHideStartSearchBtn(isSearching, isHost) {
@@ -1388,10 +1394,25 @@ var PlayMenu;
                 elChild.visible = false;
                 continue;
             }
+            if (strFeatureName === "annotations" && !GameInterfaceAPI.IsMapAnnotationAvailable(m_selectedPracticeMap)) {
+                elChild.visible = false;
+                continue;
+            }
             elChild.visible = true;
             elFeatureSliderBtn.enabled = isHost && !isSearching;
-            let curvalue = (sessionSettings && sessionSettings.options && sessionSettings.options.hasOwnProperty('practicesettings_' + strFeatureName))
-                ? sessionSettings.options['practicesettings_' + strFeatureName] : 0;
+            let curvalue = 0;
+            if (sessionSettings && sessionSettings.options && sessionSettings.options.hasOwnProperty('practicesettings_' + strFeatureName)) {
+                curvalue = sessionSettings.options['practicesettings_' + strFeatureName];
+            }
+            else {
+                curvalue = GameInterfaceAPI.GetSettingString('ui_playsettings_listen_' + strFeatureName) === '1' ? 1 : 0;
+                if (curvalue === 1) {
+                    const setting = 'practicesettings_' + strFeatureName;
+                    const newSettings = { update: { options: {} } };
+                    newSettings.update.options[setting] = curvalue;
+                    LobbyAPI.UpdateSessionSettings(newSettings);
+                }
+            }
             elFeatureSliderBtn.checked = curvalue ? true : false;
         }
     }

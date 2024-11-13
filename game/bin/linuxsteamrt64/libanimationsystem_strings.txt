@@ -37,6 +37,7 @@
  Aconst char* Reflection::Internal::GetFuncName() [with T = CWayPointHelperUpdateNode]
  LinePos:
  \t\n\r@()[]{}=&,:*|;'!
+"Forward And Backward Reaching Inverse Kinematics" solver - A solver that can handle any number of bones and works by iteratively solving for the position of each bone in the chain.
 #################################\n
 #Angle
 #Position
@@ -335,6 +336,7 @@
 19CUnregisterReceipt2I9CSmartPtrI23CAnimTagManagerInstance17CRefCountAccessorEMS1_FvN10Reflection6TypeIDEP16IAnimTagListenerES5_S7_E
 19CZeroPoseUpdateNode
 1:1: Tokens : ( T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | TOK_COLON | OPEN_BRACE | CLOSE_BRACE | OPEN_PAREN | CLOSE_PAREN | OPEN_BRACKET | CLOSE_BRACKET | SEMICOLON | OP_EQUAL | COMMA | DOUBLE_AND | NEGATIVE_TOK | DOUBLE_OR | LITERAL_TRUE | LITERAL_FALSE | POS_INTLITERAL | POS_FLOATLITERAL | ID | DOUBLE_QUOTED_STRING | SINGLE_QUOTED_STRING | SINGLE_LINE_COMMENT | ML_COMMENT | WS | UNRECOGNIZED );
+2-bone solver that does not have singularities that Perlin does, and should be used as a default starting point for 2 bone solves.
 20CAimCameraUpdateNode
 20CAimMatrixUpdateNode
 20CChoreoPoseOperation
@@ -735,6 +737,7 @@
 @Failed to select a valid option!
 @V@const char* Reflection::Internal::GetFuncName() [with T = CMovementComponentInstance]
 @const char* Reflection::Internal::GetFuncName() [with T = IPairedSequenceComponentInstance]
+A 3-bone solver that uses two 2-bone solves under the hood to emulate a dog leg.
 ACT_NEUTRAL_REF_POSE
 AE_ACTION_ALLOW_COMBO
 AE_ACTION_PREVENT_COMBO
@@ -1025,6 +1028,7 @@ ChoiceNode
 ChoreoNode
 Class does not allow allocation from its schema binding
 Class does not allow construction from its schema binding
+Classic perlin 2-bone solver
 Client Simulate
 Cloth Settings Tag
 Conditionally Allowed
@@ -1036,6 +1040,7 @@ Current Rotation Velocity
 Current Velocity
 CurrentStateID
 CycleControlClipNode
+Cyclic Coordinate Descent solver - A solver that can handle any number of bones and works by iteratively solving for the rotation of each bone in the chain.
 D16_UNORM
 D24_UNORM_S8_UINT
 D32_FLOAT
@@ -1076,7 +1081,6 @@ Disables Handshake
 Disallowed variable name: %s
 Distance Remaining
 Dividing by zero in CNmFloatMathNode
-Dog Leg (3 Bone)
 Dog Leg (3-Bone)
 Dpad Down
 Dpad Left
@@ -1091,6 +1095,7 @@ Enable Networking
 Enable Replication
 End Bone
 End Effector Post Solve
+End Effector Rotation Behaviour
 Ending
 Entity_Facing_Mode_Use_Path
 Enum Parameter
@@ -1197,6 +1202,7 @@ HELPER_BONE
 Hinge Axis
 HitReact:m_hitCount
 HitReact:m_resetCount
+However the end effector ends up after the solve, it's rotation will remain unchanged.
 I could not work out what I was expecting, like so many of us these days!\n
 ID_CHAR
 IK Chains
@@ -1250,6 +1256,7 @@ Linking WeightLists To Data Channels :: %s\n
 List of animations to choose from
 LoadKV3Object error: %s\n
 Local Space
+Look At Target Forward
 Look Component
 Look Direction
 Look Distance
@@ -1285,11 +1292,14 @@ MPropertySuppressField
 MVDataOverlayType
 MVDataRoot
 Magnitude Only
+Maintain Parent Orientation
 Managers
 Manual Direction
 Manual Facing Direction
 Manual Position
 Manual Target World Space
+Match Target Forward Only
+Match Target Orientation
 Material Attribute Tag
 Max IK Rotation Error
 Max IK Translation Error
@@ -2232,6 +2242,8 @@ TargetSelectorInstanceData_t
 Task Handshake Tag
 TernaryConditional
 TextBlock()
+The targets forward vector will be used to build a look orientation while preserving the rotation of the end effector after the solve as much as possible.
+The targets orientation will be stamped onto the end effector.
 Tilt bone after tilt.
 Tilt delta from up offset
 Time Remaining
@@ -2271,6 +2283,7 @@ Unwanted token '%s' %s
 UpdateContext
 Use Child1
 Use Child2
+Use the parent bone's orientation as the end effector's orientation.
 User Defined Values
 VDataModelAnim( m_sModelName; include_deltas )
 V_uuid_t
