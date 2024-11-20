@@ -116,9 +116,9 @@ var PlayerCard;
         let elBgImage = $.GetContextPanel().FindChildInLayoutFile('AnimBackground');
         elBgImage.style.backgroundImage = (imagePath) ? 'url("file://{images}' + imagePath + '.png")' : 'none';
         elBgImage.style.backgroundPosition = '50% 50%';
-        elBgImage.style.backgroundSize = '155% 185%';
+        elBgImage.style.backgroundSize = 'auto 165%';
         elBgImage.style.backgroundRepeat = 'no-repeat';
-        elBgImage.style.blur = 'gaussian(1,1,1)';
+        elBgImage.style.blur = 'gaussian(2,2,1)';
         elBgImage.AddClass('player-card-bg-anim');
     }
     function _SetRank() {

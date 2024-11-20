@@ -7,6 +7,11 @@
         %3d %3d %3d %3d %3d %3d %3d %3d
         %4u %4u %4u %4u %4u %4u %4u %4u
         %s\n        {\n
+     %d msec ago, tick=%d, force_wait=%d, old_delta=%d\n
+     Finished logging most recent client ticks for %s.\n
+     Prepared tick #%d\n
+     ^ dropped %d msec ago\n
+     ^ sent %d msec ago\n
      frame snapshots      : %12s allocated     -> %12s bytes\n               ticks      : %d = %d - %d\n
      packed entity list   : %s (refs:%s) -> %12s bytes, %s in changeframelists\n                    max   : %s bytes in entindex %d\n                          : %s snapshots (%s-%s) in entindex %d\n
     %12s %-32s %6d %4d\n
@@ -558,6 +563,7 @@ $tLVRenderDeviceSetupV001
 %s:  CNetworkServerSpawnGroup_WaitForChildSpawnGroups completed...\n
 %s:  CNetworkServerSpawnGroup_WaitForClients completed...\n
 %s:  Can't send spawn group manifest update because haven't sent initial spawn groups to '%s'\n
+%s:  Disconnecting - Client delta ticks out of order!\n
 %s:  Entity Group loaded\n
 %s:  LoadEntities\n
 %s:  Not sending unload group to client '%s' due to not being sent\n
@@ -2614,6 +2620,7 @@ CChangeFrameList CUtlMemoryPool
 CChangelevelGameClientPrerequisite
 CCircularBuffer::Advance(int)
 CCircularBuffer::CCircularBuffer()
+CCircularBuffer::CCircularBuffer(unsigned int)
 CCircularBuffer::Read(void*, int)
 CCircularBuffer::Resize(int)
 CCircularBuffer::Write(void const*, int)
@@ -3119,10 +3126,12 @@ CL:  Connection to %s failed, server requires a password\n
 CL:  Connection to '%s' failed\n
 CL:  Connection to server '%s' timed out, disconnecting\n
 CL:  Deferring SIGNONSTATE_SPAWN (spawn count %d) message\n
+CL:  Disconnected - Client delta ticks out of order!\n
 CL:  Disconnecting from server: %s\n
 CL:  Disconnecting from server: changelevel\n
 CL:  FCVAR_CHEAT and FCVAR_REPLICATED cvars reverted to defaults (remote connection).\n
 CL:  Failed to successfully serialize connect message\n
+CL:  Finished logging most recent client ticks.\n
 CL:  Forcing %s to blocking load during demo playback due to having incomplete/updateable manifest\n
 CL:  Got pure server whitelist: sv_pure = 1.\n
 CL:  Got pure server whitelist: sv_pure = 2.\n
@@ -6086,6 +6095,7 @@ POSIX
 POSIX collating elements are not supported
 POSIX named classes are supported only within a class
 PQ${ZM
+PREP
 PRUNE
 PS_FAILED %s in sequence for %s\n
 PS_SATISFIED %s in sequence for %s\n
@@ -6206,6 +6216,7 @@ Plat_IsWindowMinimized
 Plat_LoadModule
 Plat_LoadModuleRaw
 Plat_LoadSDL
+Plat_MSTime
 Plat_MessageBox
 Plat_MilliSecTickDiff
 Plat_MinimizeWindow
@@ -6671,6 +6682,7 @@ SDL_VIDEO_ALLOW_SCREENSAVER
 SDL_VIDEO_DRIVER
 SDL_WINDOWS_GAMEINPUT
 SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN
+SENT
 SHADER_SOURCE
 SHADER_SOURCE_MOD
 SHADER_SOURCE_ROOT
