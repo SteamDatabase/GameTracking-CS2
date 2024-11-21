@@ -563,7 +563,7 @@ $tLVRenderDeviceSetupV001
 %s:  CNetworkServerSpawnGroup_WaitForChildSpawnGroups completed...\n
 %s:  CNetworkServerSpawnGroup_WaitForClients completed...\n
 %s:  Can't send spawn group manifest update because haven't sent initial spawn groups to '%s'\n
-%s:  Disconnecting - Client delta ticks out of order!\n
+%s:  Client delta ticks out of order!\n
 %s:  Entity Group loaded\n
 %s:  LoadEntities\n
 %s:  Not sending unload group to client '%s' due to not being sent\n
@@ -1779,6 +1779,7 @@ $tLVRenderDeviceSetupV001
 2Hax
 2NK?
 2Ogx
+2RT.
 2Z4\nf
 2\f8Kf
 2i0/
@@ -2560,6 +2561,7 @@ BuildSpawnGroupLoadMessage
 BuildVersion
 Bvirtual void Etc::Block4x4Encoding_R11::SetEncodingBits()
 Bvirtual void Etc::Block4x4Encoding_RGBA8_Transparent::PerformIteration(float)
+By default, player must ack delta ticks in order. How to enforce it: 2 = kick all clients, 1 = kick only TV clients, 0 = do not kick.
 By default, player must maintain a reliable connection to Steam servers. When player Steam session drops, enforce it: 2 = instantly kick, 1 = kick at next spawn, 0 = do not kick.
 Bypass secure challenge on TV port
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of 
@@ -4675,9 +4677,11 @@ Hit rate
 Hits/m
 Hltv Replay
 Hltv Replay failure: HLTV frame is not ready\n
+Hltv Replay failure: Hltv replay is not allowed in this game\n
 Hltv Replay failure: already in replay\n
 Hltv Replay failure: requests are rate limited to no more than 1 per %g seconds\n
 Hltv replay delay %u cannot match the requested delay %u\n
+HltvReplayAllowed
 Host SourceTV[0] port
 Host SourceTV[1] port
 Host activate: %s\n
@@ -6528,6 +6532,7 @@ Received S2C_CONNECTION from %s [addons:'%s']\n
 Received acknowledgement tick=%d after the full frame of %d, discarding current fullframe and rebuilding\n
 Received connection rejection that didn't match my challenge, ignoring.\n
 Received new full frame at tick %d!  Had %d chunks of previous frame %d!\n
+Received out-of-order tick from server during hltv replay\n
 Received section %d but wanted section %d, removing full frame\n
 Received signon %i when at %i\n
 Received wrong spawn count %i when at %i\n
@@ -8317,6 +8322,7 @@ When the client is catching up in low frame rate situations, should we run tick 
 When true, elapsed time given to the input processing will be the time elapsed since the last input processing. This is only relevant when input is processed multiple times per frame ( i.e. multiple ticks per frame)
 When upstream packet jitter in a frame exceeds this threshold (ms), the frame is considered to have 'irregular delivery'.  This is a derived value and should not be modified manually
 Whether dedicated server is pausable when running -dev and playing solo against bots
+Whether diagnostic logging is enabled when clients ack delta ticks out of order. Policy: 2 = log all out of order acks, 1 = log only when disconnect is triggered, 0 = do not log.
 Whether listen server is pausable when running -dev and playing solo against bots
 Whether server supports banid command
 Whether we should ignore the user config file for reading/writing.
@@ -14163,6 +14169,8 @@ sv_cluster
 sv_cq_min_queue
 sv_debug_overlays_bandwidth
 sv_debug_overlays_broadcast
+sv_deltaticks_enforce
+sv_deltaticks_log
 sv_dev_entitydeltapadding_extra_max
 sv_dev_entitydeltapadding_extra_min
 sv_dev_entitydeltapadding_min_size

@@ -24,6 +24,8 @@ var HudDemoController;
     $.RegisterForUnhandledEvent("DemoToggleUI", () => {
         if (!cp.IsPlayingDemo())
             return;
+        if (lastState && lastState.bIsPlayingBroadcast)
+            return;
         if (lastState && lastState.bIsOverwatch)
             return;
         if (hud.BHasClass("DemoControllerMinimal")) {
@@ -94,12 +96,18 @@ var HudDemoController;
             if (nSlashIndex !== -1)
                 sFileName = sFileName.substring(nSlashIndex + 1);
             cp.SetDialogVariable("total_time", TicksToTimeText(state.nTotalTicks, state.nSecondsPerTick));
-            let nUIMode = Number(GameInterfaceAPI.GetSettingString("demo_ui_mode"));
-            if (nUIMode == 1) {
-                hud.SetHasClass("DemoControllerMinimal", true);
+            if (state?.bIsPlayingBroadcast) {
+                hud.SetHasClass("DemoControllerMinimal", false);
+                hud.SetHasClass("DemoControllerFull", false);
             }
-            else if (nUIMode == 2) {
-                hud.SetHasClass("DemoControllerFull", true);
+            else {
+                let nUIMode = Number(GameInterfaceAPI.GetSettingString("demo_ui_mode"));
+                if (nUIMode == 1) {
+                    hud.SetHasClass("DemoControllerMinimal", true);
+                }
+                else if (nUIMode == 2) {
+                    hud.SetHasClass("DemoControllerFull", true);
+                }
             }
             OnHighlightsModeChanged(state.bIsPlayingHighlights);
             bHighlightsMode = state.bIsPlayingHighlights;
