@@ -77,6 +77,9 @@ var PopupMajorHub;
         }
         _m_eventId = eventId;
         _m_tournamentId = 'tournament:' + _m_eventId;
+        if (_m_eventId > 22) {
+            _m_cp.SetHasClass('major-' + _m_eventId, true);
+        }
         SetUpHubBasedOnEventId();
     }
     function UnreadyForDisplay() {
@@ -198,14 +201,19 @@ var PopupMajorHub;
         let oSouvenirs = g_ActiveTournamentInfo.souvenirs;
         let elModelPanel = _m_cp.FindChildInLayoutFile('id-major-hub-souvenir-model');
         Object.keys(oSouvenirs).forEach((key, index) => {
-            elModelPanel.SetActiveItem(0);
+            elModelPanel.SetActiveItem(7);
             let idForCharges = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(oSouvenirs[key], 0);
             elModelPanel.SetItemItemId(idForCharges, '');
         });
     }
     function _UpdateStoreTiles() {
+        let elStore = _m_cp.FindChildInLayoutFile('id-major-store-block');
         if (StoreItems.GetStoreItems().coupon && StoreItems.GetStoreItems().coupon.length < 1) {
             StoreItems.MakeStoreItemList();
+            elStore.SetHasClass('no-store', false);
+        }
+        else {
+            elStore.SetHasClass('no-store', true);
         }
         let oItemsByCategory = StoreItems.GetStoreItems();
         let aItemsList = oItemsByCategory['tournament'];
@@ -283,11 +291,17 @@ var PopupMajorHub;
             _RedemptionChargesRemaining(tournamentCoinItemId);
             _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetActiveItem(0);
             _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetItemItemId(tournamentCoinItemId, '');
+            _m_cp.FindChildInLayoutFile('id-major-hub-coin-model').SetPanelEvent('onactivate', () => {
+                $.DispatchEvent("InventoryItemPreview", tournamentCoinItemId, '');
+            });
         }
         else {
             let passIndex = g_ActiveTournamentInfo.itemid_pass;
             let passId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(passIndex, 0);
             _m_cp.FindChildInLayoutFile('id-pass-upsell-image').itemid = passId;
+            let coinIndex = g_ActiveTournamentInfo.itemid_coins[0];
+            let coinId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(coinIndex, 0);
+            _m_cp.FindChildInLayoutFile('id-pass-upsell-image-coin').itemid = coinId;
             _SetPassBtnAction();
         }
     }

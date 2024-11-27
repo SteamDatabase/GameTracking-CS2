@@ -31,9 +31,9 @@ var PredictionsGroup;
         elClearBtn.visible = isActiveSection && canPick;
         if (isActiveSection && !oPageData.hasAlreadyInit.includes(oPageData.panel.id)) {
             elRandomBtn.SetPanelEvent('onactivate', () => {
-                _UpdateDragTargets(oPageData, true);
                 _UpdateDragSourceTeams(oPageData);
                 _FillOutPicksRandom();
+                elRandomBtn.enabled = false;
             });
             elRandomBtn.SetPanelEvent('onmouseover', () => {
                 UiToolkitAPI.ShowTextTooltip('id-fill-random', '#pickem_teams_fill_tooltip');
@@ -98,8 +98,11 @@ var PredictionsGroup;
         }
         SavePicksButton.UpdateBtn(aLocalPicks);
         if (isActiveSection) {
+            let groupPickCount = PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
             oPageData.panel.FindChildInLayoutFile('id-fill-random').enabled =
-                aLocalPicks.length < PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
+                nActualTeams > 0 &&
+                    (aLocalPicks.length < groupPickCount) &&
+                    (nActualTeams >= groupPickCount);
             oPageData.panel.FindChildInLayoutFile('id-clear-all-picks').enabled =
                 aLocalPicks.length > 0;
         }
@@ -279,7 +282,6 @@ var PredictionsGroup;
                 _UpdateDropTarget(elOldTarget, null);
             }
         }
-        let oPageData = PopupMajorHub.GetActivePageData();
         _UpdateDropTarget(elTarget, elDragImage.Data().teamId);
         _UpdateDragSourceTeams(PopupMajorHub.GetActivePageData());
         $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_item_putdown', 'MOUSE');
@@ -315,6 +317,9 @@ var PredictionsGroup;
             aTeams.push(PredictionsAPI.GetGroupTeamIDByIndex(oPageData.tournamentId, oPageData.groupId, i));
             aTeams = aTeams.filter(value => value !== 0);
         }
+        if (aTeams.length === 0) {
+            return;
+        }
         let aUnpickedTeams = aTeams.filter((value, index) => !aLocalPicks.find(p => p.teamId == value));
         let top = aUnpickedTeams.length;
         while (--top) {
@@ -324,8 +329,8 @@ var PredictionsGroup;
             aUnpickedTeams[top] = tmp;
         }
         let aEmptySlotsToFill = [];
-        aLocalPicks.forEach((teamId, index) => {
-            if (!teamId) {
+        aLocalPicks.forEach((pick, index) => {
+            if (!pick.teamId && index < aTeams.length) {
                 aEmptySlotsToFill.push(index);
             }
         });

@@ -169,11 +169,11 @@ var PlayMenu;
                 const curvalue = (sessionSettings && sessionSettings.options && sessionSettings.options.hasOwnProperty('practicesettings_' + strFeatureName))
                     ? sessionSettings.options['practicesettings_' + strFeatureName] : 0;
                 const newvalue = curvalue ? 0 : 1;
+                GameInterfaceAPI.SetSettingString('ui_playsettings_listen_' + strFeatureName, newvalue ? '1' : '0');
                 const setting = 'practicesettings_' + strFeatureName;
                 const newSettings = { update: { options: {} } };
                 newSettings.update.options[setting] = newvalue;
                 LobbyAPI.UpdateSessionSettings(newSettings);
-                GameInterfaceAPI.SetSettingString('ui_playsettings_listen_' + strFeatureName, newvalue ? '1' : '0');
             });
         }
         const btnStartSearch = $('#StartMatchBtn');
@@ -1382,6 +1382,8 @@ var PlayMenu;
         let elPracticeSettingsContainer = $('#id-play-menu-practicesettings-container');
         let sessionSettings = LobbyAPI.GetSessionSettings();
         let bForceHidden = (m_serverSetting !== 'listen') || m_isWorkshop || !LobbyAPI.IsSessionActive() || !sessionSettings;
+        let bAnnotationAvailable = GameInterfaceAPI.IsMapAnnotationAvailable(m_selectedPracticeMap);
+        let bAnnotationSelected = GameInterfaceAPI.GetSettingString('ui_playsettings_listen_annotations') === '1';
         for (let elChild of elPracticeSettingsContainer.Children()) {
             if (!elChild.id.startsWith('id-play-menu-practicesettings-'))
                 continue;
@@ -1394,8 +1396,10 @@ var PlayMenu;
                 elChild.visible = false;
                 continue;
             }
-            if (strFeatureName === "annotations" && !GameInterfaceAPI.IsMapAnnotationAvailable(m_selectedPracticeMap)) {
-                elChild.visible = false;
+            if (strFeatureName === "annotations" && !bAnnotationAvailable) {
+                elChild.visible = true;
+                elFeatureSliderBtn.enabled = false;
+                elFeatureSliderBtn.checked = false;
                 continue;
             }
             elChild.visible = true;
@@ -1414,6 +1418,12 @@ var PlayMenu;
                 }
             }
             elFeatureSliderBtn.checked = curvalue ? true : false;
+            if (strFeatureName === "grenades" || strFeatureName === "infammo" || strFeatureName === "infwarmup") {
+                if (bAnnotationAvailable && bAnnotationSelected) {
+                    elFeatureSliderBtn.enabled = false;
+                    elFeatureSliderBtn.checked = true;
+                }
+            }
         }
     }
     function _UpdatePrimeBtn(isSearching, isHost) {

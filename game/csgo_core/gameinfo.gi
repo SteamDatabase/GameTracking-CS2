@@ -142,7 +142,6 @@
 										// than the default KEY_BACKQUOTE, then it only works for opening the console, not closing.
 										// ESC can always be used to close the console regardless of this setting.
 										// This matches csgo src1 behaviour.
-		"HltvReplayAllowed" "0"
 	}
 
 	NetworkSystem
@@ -518,6 +517,12 @@
 	{
         "cl_joystick_enabled" "0"
         "panorama_joystick_enabled" "0"
+
+		"spec_replay_enable"
+		{
+			"min"		"0"
+			"max"		"0"
+		}
 	}
 
 	Memory
