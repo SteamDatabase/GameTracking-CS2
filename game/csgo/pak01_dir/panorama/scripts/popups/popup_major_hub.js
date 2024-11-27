@@ -43,7 +43,7 @@ var PopupMajorHub;
     }
     PopupMajorHub.ClosePopup = ClosePopup;
     function LeaderboardPopup() {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_leaderboards.xml', 'type=official_leaderboard_pickem_cph2024_team.friends' +
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_leaderboards.xml', 'type=official_leaderboard_pickem_sha2024_team.friends' +
             '&' + 'titleoverride=#CSGO_PickEm_Leaderboard_Title' +
             '&' + 'points-title=#tournament_coin_completed_challenges' +
             '&' + 'popup-style=major-hub-popup-leaderboard');
