@@ -189,6 +189,7 @@ var PredictionsGroup;
         return null;
     }
     function OnDragStart(elDragSource, drag) {
+        PopupMajorHub.DeleteDragItem();
         let elDragImage = $.CreatePanel('ItemImage', $.GetContextPanel(), '', {
             class: 'group-stage-drag-icon',
             textureheight: '48',
@@ -205,6 +206,7 @@ var PredictionsGroup;
         drag.removePositionBeforeDrop = false;
         $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_item_pickup', 'MOUSE');
         UiToolkitAPI.HideTextTooltip();
+        elDragImage.SetPanelEvent('onmouseout', () => { PopupMajorHub.DeleteDragItem(); });
     }
     function OnDragEnd(elDragImage) {
         elDragImage.AddClass('drag-end');

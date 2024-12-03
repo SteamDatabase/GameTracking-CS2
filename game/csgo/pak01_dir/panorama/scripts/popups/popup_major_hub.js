@@ -34,7 +34,7 @@ var PopupMajorHub;
                 }
             }
         });
-        DeleteDragItem();
+        PopupMajorHub.DeleteDragItem();
         $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_close', 'MOUSE');
         _m_cp.SetReadyForDisplay(false);
         $.DispatchEvent('UIPopupButtonClicked', '');
