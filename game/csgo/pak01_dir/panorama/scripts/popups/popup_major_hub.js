@@ -76,6 +76,7 @@ var PopupMajorHub;
             return;
         }
         _m_eventId = eventId;
+        SavePicksButton._m_eventId = eventId;
         _m_tournamentId = 'tournament:' + _m_eventId;
         if (_m_eventId > 22) {
             _m_cp.SetHasClass('major-' + _m_eventId, true);
@@ -498,6 +499,7 @@ var PopupMajorHub;
     function OnInventoryUpdated() {
         _SetUpSpray();
         _UpdateChallenges();
+        SavePicksButton.ShowHideNoActivePassWarning(m_oPageData, false);
     }
     function RefreshActivePage() {
         PredictionsTimer.UpdateTimer();
@@ -556,10 +558,13 @@ var SavePicksButton;
         ResetTimeoutHandle();
         let oPageData = PopupMajorHub.GetActivePageData();
         let elBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-apply-btn');
+        let elWarning = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-apply-warning');
+        elWarning.SetDialogVariable('pass-name', InventoryAPI.GetItemName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0)));
         let bThisSectionIsNoLongerActive = !PredictionsAPI.GetSectionIsActive(oPageData.tournamentId, oPageData.sectionId);
         if (!PredictionsAPI.GetGroupCanPick(oPageData.tournamentId, oPageData.groupId)) {
             elBtn.enabled = false;
             elBtn.visible = false;
+            ShowHideNoActivePassWarning(oPageData, true);
             let elToggleBtn = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-toggle-correct-btn');
             elToggleBtn.visible = true;
             elToggleBtn.SetPanelEvent('onactivate', () => {
@@ -572,9 +577,11 @@ var SavePicksButton;
         if (bThisSectionIsNoLongerActive) {
             elBtn.enabled = false;
             elBtn.visible = false;
+            ShowHideNoActivePassWarning(oPageData, true);
             return;
         }
         elBtn.visible = true;
+        ShowHideNoActivePassWarning(oPageData, false);
         let nCount = oPageData.sectionIndex >= 2 ? 7 : PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
         if (aLocalPicks.length === nCount) {
             let bPicksDifferent = false;
@@ -603,6 +610,12 @@ var SavePicksButton;
         }
     }
     SavePicksButton.UpdateBtn = UpdateBtn;
+    function ShowHideNoActivePassWarning(oPageData, bHide = false) {
+        let elWarning = oPageData.panel.FindChildInLayoutFile('id-predictions-apply-btn').FindChild('id-apply-warning');
+        let tournamentCoinItemId = InventoryAPI.GetActiveTournamentCoinItemId(SavePicksButton._m_eventId);
+        elWarning.visible = (!tournamentCoinItemId || tournamentCoinItemId === '0') && !bHide;
+    }
+    SavePicksButton.ShowHideNoActivePassWarning = ShowHideNoActivePassWarning;
     function _SetPicks(elBtn, oPageData, nCount, aLocalPicks) {
         if (elBtn.enabled) {
             var args = [oPageData.tournamentId];
@@ -611,25 +624,54 @@ var SavePicksButton;
             }
             elBtn.SetPanelEvent('onactivate', () => {
                 let tournamentCoinItemId = InventoryAPI.GetActiveTournamentCoinItemId(oPageData.eventId);
+                let passItemId = InventoryAPI.GetActiveTournamentCoinItemId(SavePicksButton._m_eventId * -1);
                 let bHasActiveCoin = tournamentCoinItemId && tournamentCoinItemId !== '0';
                 let bIsPrime = (MyPersonaAPI.GetElevatedState() === 'elevated');
-                if (!bIsPrime && !bHasActiveCoin) {
-                    if (!elBtn.BHasClass('activated-by-program')) {
-                        UiToolkitAPI.ShowGenericPopupTwoOptions('#CSGO_official_leaderboard_pickem_' + g_ActiveTournamentInfo.location + '_team', '#CSGO_PickEm_Leaderboards_PassOrPrime_Message', '', '#SFUI_ConfirmBtn_GetPassNow', () => { }, '#SFUI_Elevated_Status_Sale_action', () => { UiToolkitAPI.ShowCustomLayoutPopup('prime_status', 'file://{resources}/layout/popups/popup_prime_status.xml'); });
+                if (!elBtn.BHasClass('activated-by-program')) {
+                    if (!bIsPrime && !bHasActiveCoin) {
+                        if (!elBtn.BHasClass('activated-by-program')) {
+                            UiToolkitAPI.ShowGenericPopupTwoOptions('#CSGO_official_leaderboard_pickem_' + g_ActiveTournamentInfo.location + '_team', '#CSGO_PickEm_Leaderboards_PassOrPrime_Message', '', '#SFUI_ConfirmBtn_GetPassNow', () => { }, '#SFUI_Elevated_Status_Sale_action', () => { UiToolkitAPI.ShowCustomLayoutPopup('prime_status', 'file://{resources}/layout/popups/popup_prime_status.xml'); });
+                        }
+                        return;
                     }
-                    return;
+                    if (!bHasActiveCoin && (passItemId && passItemId !== '0')) {
+                        let elPopup = UiToolkitAPI.ShowGenericPopupTwoOptions('#pickem_submit_warning_popup_title', '#pickem_submit_warning_popup_desc', '', '#pickem_submit_warning_popup_action2', () => {
+                            InventoryAPI.UseTool(passItemId, '');
+                            _SubmitPicks(elBtn, args);
+                        }, '#pickem_submit_warning_popup_action', () => { _SubmitPicks(elBtn, args); });
+                        elPopup.SetDialogVariable('pass-name', InventoryAPI.GetItemName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0)));
+                        return;
+                    }
+                    if (!bHasActiveCoin) {
+                        let elPopup = UiToolkitAPI.ShowGenericPopupTwoOptions('#pickem_submit_warning_popup_title', '#pickem_submit_warning_popup_desc', '', '#SFUI_ConfirmBtn_GetPassNow', () => {
+                            $.DispatchEvent('UIPopupButtonClicked', elPopup, '');
+                            $.DispatchEvent('ContextMenuEvent', '');
+                            UiToolkitAPI.HideTextTooltip();
+                            var contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParameters('', '', 'file://{resources}/layout/context_menus/context_menu_store_linked_items.xml', 'itemids=' + InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0) +
+                                ',' + InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pack, 0) +
+                                '&' + 'linkedWarning=#tournament_items_notice');
+                            contextMenuPanel.AddClass("ContextMenu_NoArrow");
+                            contextMenuPanel.SetFocus();
+                        }, '#pickem_submit_warning_popup_action', () => { _SubmitPicks(elBtn, args); });
+                        elPopup.SetDialogVariable('pass-name', InventoryAPI.GetItemName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_pass, 0)));
+                        return;
+                    }
                 }
-                elBtn.enabled = false;
-                elBtn.SwitchClass('btn_state', 'waiting-for-update');
-                $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.tab_mainmenu_shop', 'MOUSE');
-                PredictionsAPI.SetMyPredictionUsingItemID.apply(PredictionsAPI, args);
-                ResetTimeoutHandle();
-                _m_timeoutApplyHandle = $.Schedule(7, () => {
-                    _CancelWaitForCallBack(elBtn);
-                });
+                _SubmitPicks(elBtn, args);
             });
         }
     }
+    function _SubmitPicks(elBtn, args) {
+        elBtn.enabled = false;
+        elBtn.SwitchClass('btn_state', 'waiting-for-update');
+        $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.tab_mainmenu_shop', 'MOUSE');
+        PredictionsAPI.SetMyPredictionUsingItemID.apply(PredictionsAPI, args);
+        ResetTimeoutHandle();
+        _m_timeoutApplyHandle = $.Schedule(7, () => {
+            _CancelWaitForCallBack(elBtn);
+        });
+    }
+    SavePicksButton._SubmitPicks = _SubmitPicks;
     function ResetTimeoutHandle() {
         if (_m_timeoutApplyHandle) {
             $.CancelScheduled(_m_timeoutApplyHandle);
