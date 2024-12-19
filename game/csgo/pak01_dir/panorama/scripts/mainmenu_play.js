@@ -160,8 +160,8 @@ var PlayMenu;
             let strFeatureName = elChild.id;
             strFeatureName = strFeatureName.replace('id-play-menu-practicesettings-', '');
             strFeatureName = strFeatureName.replace('-tooltip', '');
-            const elFeatureFrame = elChild.FindChild('id-play-menu-practicesettings-' + strFeatureName);
-            const elFeatureSliderBtn = elFeatureFrame.FindChild('id-slider-btn');
+            const elFeatureFrame = elChild.FindChildTraverse('id-play-menu-practicesettings-' + strFeatureName);
+            const elFeatureSliderBtn = elFeatureFrame.FindChildTraverse('id-slider-btn');
             elFeatureSliderBtn.text = $.Localize('#practicesettings_' + strFeatureName + '_button');
             elFeatureSliderBtn.SetPanelEvent('onactivate', () => {
                 UiToolkitAPI.HideTextTooltip();
@@ -861,6 +861,10 @@ var PlayMenu;
     function _GetMapTileContainer() {
         return $.GetContextPanel().FindChildInLayoutFile(_GetMapGroupPanelID());
     }
+    function CSGOOpenSteamWorkshop_helper(tag) {
+        $.DispatchEvent('CSGOOpenSteamWorkshop', tag);
+    }
+    PlayMenu.CSGOOpenSteamWorkshop_helper = CSGOOpenSteamWorkshop_helper;
     function OnMapQuickSelect(mgName) {
         const arrMapsToSelect = _GetMapsFromQuickSelectMapGroup(mgName);
         let bScrolled = false;
@@ -1384,14 +1388,20 @@ var PlayMenu;
         let bForceHidden = (m_serverSetting !== 'listen') || m_isWorkshop || !LobbyAPI.IsSessionActive() || !sessionSettings;
         let bAnnotationAvailable = GameInterfaceAPI.IsMapAnnotationAvailable(m_selectedPracticeMap);
         let bAnnotationSelected = GameInterfaceAPI.GetSettingString('ui_playsettings_listen_annotations') === '1';
+        let elAnnotationDropDown = $('#id-play-menu-practicesettings-annotations-dropdown');
+        elAnnotationDropDown.RebuildOptions(m_selectedPracticeMap);
+        let elAnnotationsDropDown = elPracticeSettingsContainer.FindChildTraverse('id-play-menu-practicesettings-annotations-dropdown');
         for (let elChild of elPracticeSettingsContainer.Children()) {
             if (!elChild.id.startsWith('id-play-menu-practicesettings-'))
                 continue;
             let strFeatureName = elChild.id;
             strFeatureName = strFeatureName.replace('id-play-menu-practicesettings-', '');
             strFeatureName = strFeatureName.replace('-tooltip', '');
-            let elFeatureFrame = elChild.FindChild('id-play-menu-practicesettings-' + strFeatureName);
-            let elFeatureSliderBtn = elFeatureFrame.FindChild('id-slider-btn');
+            let elFeatureFrame = elChild.FindChildTraverse('id-play-menu-practicesettings-' + strFeatureName);
+            let elFeatureSliderBtn = elFeatureFrame.FindChildTraverse('id-slider-btn');
+            if (strFeatureName === "annotations") {
+                elAnnotationsDropDown.enabled = bAnnotationAvailable && bAnnotationSelected;
+            }
             if (bForceHidden || (sessionSettings.game.type !== 'classic')) {
                 elChild.visible = false;
                 continue;
@@ -2056,7 +2066,7 @@ var PlayMenu;
         const elSelectedMaps = _GetSelectedWorkshopMapButtons();
         let modes = [];
         if (elSelectedMaps.length === 0) {
-            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Maps_Workshop_Title'), $.Localize('#SFUI_No_Subscribed_Maps_Desc'), '', '#CSGO_Workshop_Visit', () => $.DispatchEvent('CSGOOpenSteamWorkshop'), "OK", () => { });
+            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Maps_Workshop_Title'), $.Localize('#SFUI_No_Subscribed_Maps_Desc'), '', '#CSGO_Workshop_Visit', () => $.DispatchEvent('CSGOOpenSteamWorkshop', 'Map'), "OK", () => { });
             $('#StartMatchBtn').RemoveClass('pressed');
             return;
         }
@@ -2148,6 +2158,9 @@ var PlayMenu;
             _SetPlayDropdownToWorkshop();
         }
     }
+    function _WorkshopAnnotationSubscriptionsChanged() {
+        _UpdatePracticeSettingsBtns(_IsSearching(), LobbyAPI.BIsHost());
+    }
     function _InventoryUpdated() {
         _UpdatePrimeBtn(_IsSearching(), LobbyAPI.BIsHost());
         _UpdatePracticeSettingsBtns(_IsSearching(), LobbyAPI.BIsHost());
@@ -2175,6 +2188,7 @@ var PlayMenu;
         $.RegisterForUnhandledEvent("CSGOShowMainMenu", _OnShowMainMenu);
         $.RegisterForUnhandledEvent("CSGOShowPauseMenu", _OnShowMainMenu);
         $.RegisterForUnhandledEvent("CSGOWorkshopSubscriptionsChanged", _WorkshopSubscriptionsChanged);
+        $.RegisterForUnhandledEvent("CSGOWorkshopAnnotationSubscriptionsChanged", _WorkshopAnnotationSubscriptionsChanged);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_ClansInfoUpdated', _ClansInfoUpdated);
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', _OnPlayerNameChangedUpdate);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_PipRankUpdate', _PipRankUpdate);

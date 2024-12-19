@@ -713,6 +713,7 @@
 #SFUI_Notice_CTs_Surrender
 #SFUI_Notice_CTs_Win
 #SFUI_Notice_CannotDropWeapon
+#SFUI_Notice_CannotDropWeaponDuringWarmup
 #SFUI_Notice_Escaping_Terrorists_Neutralized
 #SFUI_Notice_Game_Commencing
 #SFUI_Notice_Game_teammate_kills
@@ -1583,6 +1584,7 @@ $tFa\v
 -class
 -classes
 -end of input-(
+-keep_gear
 -lookatweapon\n
 -loose
 -memory-
@@ -1616,6 +1618,7 @@ $tFa\v
 ../../game/shared/animgraphcontroller.h
 ../../game/shared/baseentity_shared.cpp
 ../../game/shared/cstrike15/bot/bot_manager.cpp:213
+../../game/shared/cstrike15/cs_observer_pawn_shared.cpp
 ../../game/shared/cstrike15/decoy_projectile.cpp
 ../../game/shared/cstrike15/flashbang_projectile.cpp
 ../../game/shared/cstrike15/hegrenade_projectile.cpp
@@ -5917,6 +5920,7 @@ CSGO: Compute Encounter spots
 CSGO: Compute Encounter spots [ disabled for survival maps ]\n
 CSGO: Compute Hiding spots 
 CSGOVScriptGameSystem
+CSObserverStartup
 CSPName
 CSPlayerController_SwitchTeam
 CSPointScriptExtensions
@@ -11736,6 +11740,7 @@ Usage:\n\t%s <subclassname> [additional arguments]\n
 Usage:\n\tgive <subclassname> [additional arguments]\n
 Usage:\n\tremove_weapon <item subclass name>\n
 Usage:\n\tsubclass_change <new subclass name> [ent index/name]\n
+Usage:\n\tsv_annotation_remove_weapon <item subclass name>\n
 Use entity
 UseMoveDone
 UseWind
@@ -11920,6 +11925,7 @@ WoodenDoor.Lock
 WoodenDoor.Pound
 Work Item for Work Pool %s completed but job no longer existed to notify\n
 Workshop
+WorkshopAnnotationMgr001
 World contexts: '%s', 
 World id %u: %d active entities enumerated (with possible duplicates). %d of them have softbodies, %d have rigid bodies. %d more softbodies were dormant.\n
 World triggered "%s" (CT "%i") (T "%i")\n
@@ -12289,6 +12295,7 @@ Zooming
 \nSimulating Entities:\n\n
 \nVisMon: Polling now. (Frequency: %f)\n
 \n\v\f../public/tier0/utlrbtree.h
+\t %s additional argument will keep existing held weapon if the gear\n
 \t %s: %d/%d\n
 \t The lexer was matching from line %d, offset %d, which\n\t 
 \t"%s" "%.2f"\n
@@ -12315,6 +12322,8 @@ Zooming
 \tWhen giving modifiers, the additional arguments are additional keys [{ "key1" "value1" "key2" "value2" }]\n
 \t[%4d]: %s%s\n
 \t\t defaults are: <distance 1024> <flags 0> <magnitude 0> <scale 0>\n
+\t\t drop to the ground instead of being directly given (legacy behaviour)\n
+\t\t slot of the new weapon is already occupied, so the new weapon will\n
 \t\t%32s:\t%d/%d (%.3f%%) EvaluatePoses Used, %dx using bones without eval [Ave Eval/tick: %.3f]\n
 \t\t%s - %i refs\n
 \tdormant
@@ -12369,6 +12378,7 @@ _tk0%d
 _to_curve_
 _tools_event_desc
 _var
+`Afile://{resources}/layout/weapon_c4_view_panel.vxml
 a trigger_changelevel doesn't have a map
 a world layer in a dota map
 aRecord
@@ -12636,8 +12646,6 @@ animgraph_param
 animgraph_value
 animgraphcontroller
 annotation_auto_load 1\n
-annotations/local/%s/%s%s
-annotations/official/%s/%s%s
 announce_phase_end
 announcer
 announcer_preview
@@ -13118,6 +13126,7 @@ characters/models/shared/arms/glove_motorcycle/w_glove_motorcycle.vmdl
 characters/models/shared/arms/glove_slick/w_glove_slick.vmdl
 characters/models/shared/arms/glove_specialist/w_glove_specialist.vmdl
 characters/models/shared/arms/glove_sporty/w_glove_sporty.vmdl
+characters/models/shared/observer/cs_observer.vmdl
 characters/models/tm_heavy/tm_phoenix_heavy.vmdl
 characters/models/tm_phoenix/tm_phoenix.vmdl
 chatter_outnumbered_threshold
@@ -14203,7 +14212,6 @@ fetched: %s : %.3f\n
 fff?\n
 fieldName
 file://{resources}/layout/weapon_c4_panel.vxml
-file://{resources}/layout/weapon_c4_view_panel.vxml
 file://{resources}/layout/world_hint.xml
 filename
 filepos
@@ -15195,9 +15203,9 @@ info_target_server_only
 info_teleport_destination
 info_visibility_box
 info_world_layer
+inherit_all_joints
 inherit_owner
 inherit_owner_index
-inherit_owner_joints
 inherit_owner_name
 inhibitAnyPolicy
 initial_rotation
@@ -16719,6 +16727,7 @@ physaggregatedata.cpp
 physdamagescale
 physicalDeliveryOfficeName
 physics_entity_solver
+physics_joint_modification_type
 physics_prop_ragdoll
 pick
 pick_%s
@@ -18005,7 +18014,6 @@ sv_auto_cstrafe_logging: overlap threshold for this best success sequence: %f%%\
 sv_auto_cstrafe_logging: player %d: %s\n
 sv_cheats must be set to 1\n
 sv_game_mode_flags %d\n
-sv_give_item weapon_smokegrenade\n
 sv_grenade_trajectory_prac_pipreview 1\n
 sv_grenade_trajectory_prac_trailtime 8\n
 sv_infinite_ammo 1\n
@@ -18532,7 +18540,6 @@ uses_range
 utilities
 utilitydamage
 uvs are all identical
-v@W0=
 v@_multibase
 vDefault
 vHingeAxis

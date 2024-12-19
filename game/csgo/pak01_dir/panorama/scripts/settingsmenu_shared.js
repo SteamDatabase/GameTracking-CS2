@@ -24,6 +24,7 @@ var SettingsMenuShared;
         }
     }
     function ResetControls() {
+        GameInterfaceAPI.ResetThreadPoolOptions();
         _ResetControlsRecursive($.GetContextPanel());
         InventoryAPI.StopItemPreviewMusic();
     }

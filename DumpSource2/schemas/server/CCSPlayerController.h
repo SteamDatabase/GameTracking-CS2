@@ -19,6 +19,7 @@ class CCSPlayerController : public CBasePlayerController
 	bool m_bJustBecameSpectator;
 	bool m_bSwitchTeamsOnNextRoundReset;
 	bool m_bRemoveAllItemsOnNextRoundReset;
+	GameTime_t m_flLastJoinTeamTime;
 	CUtlSymbolLarge m_szClan;
 	char[32] m_szClanName;
 	int32 m_iCoachingTeam;

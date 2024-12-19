@@ -10,6 +10,17 @@ var SettingsMenuGameSettings;
         else {
             $("#enableconsoledropdowncmdline-container").visible = false;
         }
+        if (!GameInterfaceAPI.ShowThreadPoolOptions()) {
+            $("#ThreadPoolOptions").visible = false;
+            $("#ThreadPoolOptionsQuit").visible = false;
+            GameInterfaceAPI.SetSettingString('thread_pool_option', '3');
+        }
+        else {
+            let option = parseInt(GameInterfaceAPI.GetSettingString('thread_pool_option'));
+            if (option !== 0 && option !== 2 && option !== 3) {
+                GameInterfaceAPI.SetSettingString('thread_pool_option', '3');
+            }
+        }
         _RefreshDatacentersList();
     }
     function _RefreshDatacentersList() {

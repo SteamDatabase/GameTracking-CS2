@@ -15,6 +15,5 @@ class CBaseCSGrenadeProjectile : public CBaseGrenade
 	RotationVector m_vecGrenadeSpin;
 	Vector m_vecLastHitSurfaceNormal;
 	int32 m_nTicksAtZeroVelocity;
-	bool m_bHasEverHitPlayer;
-	bool m_bClearFromPlayers;
+	bool m_bHasEverHitEnemy;
 };

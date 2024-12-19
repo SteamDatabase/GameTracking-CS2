@@ -524,9 +524,11 @@ $tLVRenderDeviceSetupV001
 %s appended
 %s client
 %s code, bind name '%s' (%u), scan code '%s' (%u)\n
+%s console spew to %s\n
 %s is not a valid demo file\n
 %s is too big.  Asks for %d user commands, but our history only holds %d\n
 %s kicked by %s (%s)\n
+%s screenshot to %s\n
 %s serializer on %s\n
 %s server
 %s server-side manifest
@@ -801,7 +803,9 @@ $tLVRenderDeviceSetupV001
 -JCN
 -NE2
 -adapter
+-addon
 -all
+-allocfailmb
 -allocwarnmb
 -allow_non_tools_paths
 -appidoverride
@@ -813,8 +817,6 @@ $tLVRenderDeviceSetupV001
 -consoleapp
 -consolelog
 -consolelog_append
--consolelog_notimestamp
--consolelog_rotate
 -contentroot
 -diff
 -enablepassiveasserts
@@ -822,16 +824,13 @@ $tLVRenderDeviceSetupV001
 -full_memory_dumps
 -game
 -gpuraytracing
--gtpoollimitexec
 -highdpi
 -inf
 -instance
--launcherlanguage
--launchersublanguage
 -msaa
--noPriorityBoost
 -no_tools_ignorechildprocess_env
 -nodedicatedconsole
+-nodev
 -noperfectworld
 -notoolsdev
 -novalveds
@@ -841,26 +840,23 @@ $tLVRenderDeviceSetupV001
 -pdiff
 -perfectworld
 -product
--promptperfectworld
 -publiccontent
 -rendersystemdll
 -report
 -reservewarnmb
--rs_recommend_gen
 -rs_reset
 -safe_mode
--set_locale_disable
--set_power_qos_disable
 -showasserts
 -skip_driver_check
 -snap
 -steamhdl_immediatelogin
 -steamhdl_password
 -steamhdl_steamguard
--steamhdl_steamguard_email
 -steamlogin_accesscode
 -steamlogin_authority
+-tool
 -tools
+-toolsonly
 -usebuildversion
 -vconport
 -vconsole
@@ -971,6 +967,7 @@ $tLVRenderDeviceSetupV001
 0(D7
 00000000-0000-0000-0000-000000000000
 00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899
+00:00:39
 00A+
 0123456789abcdef
 0: Force z prepass off. 1: Force on. -1: Don't force
@@ -1584,7 +1581,6 @@ $tLVRenderDeviceSetupV001
 20ISource2ServerConfig
 20ISource2WorldSession
 20PacketEntitiesFilter
-21:41:26
 21C2S_CONNECT_Message_t
 21CCLCMsg_BaselineAck_t
 21CEngineGotvSyncPacket
@@ -2019,7 +2015,6 @@ $tLVRenderDeviceSetupV001
 ?456789:;<=
 ???\f???????\n???\r?\t?\v
 ?KxO
-?Server sent CSVCMsg_PacketEntities with first cmd_recv_status=%d
 ?SimpleEngineLoopService_001
 ?detexConvertPixels: Unable to find conversion path
 ?google/protobuf/wire_format_lite.cc
@@ -3319,6 +3314,7 @@ CScriptComponentReferencedPtr
 CSendJob_Empty
 CSequentialPrerequisite
 CSequentialPrerequisite:  Bogus PrerequisiteStatus_t detected!
+CServer sent CSVCMsg_PacketEntities with first cmd_recv_status=%d
 CServerRemoteAccess::ScreenshotJPEG failed to CreateZipZ\n
 CServerSideClient::ActivatePlayer -end
 CServerSideClient::ActivatePlayer -start
@@ -3825,6 +3821,7 @@ DebugDrawObjects
 DebugInfo
 DebugUI
 DebugVisualizerMgr
+Dec 19 2024
 December
 DeclareCurrentThreadIsMainThread
 DecodeClassBaseline
@@ -4013,6 +4010,7 @@ Engine2/RenderingPipeline/SupportsMSAA
 Engine2/RestrictConsoleCloseKey
 Engine2/SaveClientStateInSaveGames
 Engine2/SinglePlayerAsyncRendering
+Engine2/ThreadPoolCoreTypeRequest
 Engine2PreBreakpadDumpFunction
 EngineGameUI
 EngineGameUI001
@@ -4326,6 +4324,7 @@ Failed to parse spawn group message.  %s\n
 Failed to parse spawn group messaqge.  %s\n
 Failed to read demo header on '%s'.\n
 Failed to read file %s, configFileType %d, nSlot %d\n
+Failed to save
 Failed to save unsupported class
 Failed to serialize KV3 to JSON.  %s\n
 Failed to serialize one usercommand?
@@ -4587,6 +4586,7 @@ Gf95)1&!\ry9I
 Giz{~z
 Glagolitic
 GlobPool
+GlobalThreadPoolMode
 Going to tick %u...\n
 Got net_Disconnect_Legacy ?  Set pending disconnect %d:%s\n
 Gothic
@@ -5942,7 +5942,6 @@ Not supported.
 Note that enum values use C++ scoping rules, meaning that enum values are siblings of their type, not children of it.  Therefore, "
 Note: Changes to sv_pure take effect when the next map is loaded.\n
 Note: should use "addip" instead of "banip".\n
-Nov 14 2024
 November
 Now recording to "%s", immediate mode, recorded length so far is %s.\n
 Now recording to "%s", recorded length so far is %s.\n
@@ -6816,8 +6815,6 @@ Save the ban list to file.
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*, unsigned int)
 SaveKV3AsJSON(KeyValues3 const*, CUtlString*, CUtlBuffer*)
 Saved '%s' to SteamRemoteStorage, %d bytes OK\n
-Saved console spew to %s\n
-Saved screenshot to %s\n
 Saved user config file '%s': type %d\n
 Saves current key bindings to disk.
 Saves out the user config values.
@@ -7659,6 +7656,7 @@ StringPrintfVector currently only supports up to
 StringTable %s
 Successfully disabled priority boost.\n
 Successfully enabled priority boost.\n
+Successfully saved
 Suffix to append to the console log, may be changed to reopen the log
 Suggested field numbers for 
 Summary of %d frames.  (%d frames excluded from analysis.)\n
@@ -7764,6 +7762,7 @@ This server is password protected for console access. Must send PASS command\n\r
 This shouldn't be called if all the sizes are equal.
 This soundevent is called to stop the desired soundevents when the game is disconnected.
 This value, multiplied by the tick interval, is added to cl_tickpacket_recvmargin_desired to obtain the effective desired recv margin.
+Thread pool option
 ThreadGetCurrentId
 ThreadGetCurrentProcessHandle
 ThreadGetMainThreadId
@@ -8041,6 +8040,7 @@ Use fast frame skipping when available for demo_goto commands.
 Use fog_override convars instead of world fog data
 Use networkvar system.
 Use parallel processing of snapshot reading if above this many entries.
+Use this to tell Steam to relaunch the app right after existing
 Used by the client to inform the server of their desired queue length.  Derived from cl_tickpacket_recvmargin_desired and cl_tickpacket_desired_queuelength
 User Messages
 User command %d recv on server %s, tick %d, margin %.1fms. (%s)  frame time=%.1fms, LastCommandRecv=%d, LastCommandExecuted=%d\n
@@ -8192,6 +8192,7 @@ V_logf
 V_powf
 V_qsort
 V_qsort_s
+V_roundd
 V_roundf
 V_sincosf
 V_sinf
@@ -8769,7 +8770,6 @@ addip
 addip %i %s\n
 addip 0 %i.%i.%i.%i\r\n
 addip:  IP filter list is full\n
-addon
 addondownload
 addoninfo.txt
 addonroot
@@ -8815,6 +8815,7 @@ auto-%04i%02i%02i-%02i%02i-%s-%s.dem
 auto:
 auto_bug
 auto_bug : create non-interactive bug report.
+auto_threads
 autoexec.cfg
 autosave
 autosavedangerous
@@ -9376,6 +9377,7 @@ ec_laplace_encode
 ec_tell_frac
 echoln
 edem
+efficiency
 effortblocks = %d\n
 eh?o
 elerp
@@ -9407,6 +9409,7 @@ engine_no_focus_sleep
 engine_no_focus_sleep_vconsole_suppress
 engine_ostype
 engine_platform_name_extended
+engine_relaunch_app_before_exiting
 engine_render_only
 engine_rendersystem_init
 engine_rendersystem_shader_model
@@ -9431,6 +9434,7 @@ eu?u
 evidence
 ewh/?y
 exclamation-mark
+exec
 exec autoexec.cfg\n
 exec_async
 exec_async_wait
@@ -9977,7 +9981,6 @@ js_raw_args
 js_value
 json_name = "
 jstype is only allowed on int64, uint64, sint64, fixed64 or sfixed64 fields.
-k,R^ed
 k;J;J;J;J;J;J;J;J;J;J;J;J;J;J;J;Jx
 k=E.x=i
 k?n_m?P
@@ -10251,6 +10254,7 @@ materialsystem2
 matrix3x4
 matrix3x4-world
 max number of CUserCmds to send in one client move message
+max_threads
 maxtick
 mbrtowc
 mbsnrtowcs
@@ -10523,6 +10527,7 @@ pbucket->plinkLast->GetNext() == nullptr
 pending
 percent-sign
 perforce.inf
+performance
 perfstats_
 period
 permanent
@@ -11124,6 +11129,7 @@ spec_replay_message_time
 spec_replay_on_death
 spec_replay_rate_base
 spec_replay_rate_limit
+split
 splitscreen_mode
 splitscreen_testreadconfigconflict
 spreading_decision
@@ -14301,6 +14307,7 @@ this
 this version of PCRE is compiled without UTF support
 this version of PCRE is not compiled with Unicode property support
 thread initialization failed.
+thread_pool_option
 threaded_logger.cpp
 three
 throw 
@@ -15063,6 +15070,7 @@ unbind: no inputsystem for bindings\n
 unbindall
 unbindall [splitscreen player] : unbind all commands for a particular splitscreen player\n
 underscore
+undifferentiated
 ungetc
 ungetwc
 unimplemented type: 

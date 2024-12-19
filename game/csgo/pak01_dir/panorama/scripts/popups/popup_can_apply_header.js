@@ -47,7 +47,8 @@ var CanApplyHeader;
             && oTitleSettings.toolId.startsWith('922323129721890'))
             || InventoryAPI.IsFauxItemID(oTitleSettings.toolId)) {
             warningText = '#SFUI_InvUse_Warning_use_can_stick_previewonly_' + oTitleSettings.type;
-            m_cP.GetParent().AddClass('can_apply_previewonly_phantom_display');
+            let bPhantomDisplayItemCannotApply = true;
+            m_cP.GetParent().SetHasClass('can_apply_previewonly_phantom_display', bPhantomDisplayItemCannotApply);
         }
         warningText = $.Localize(warningText, elLabel);
         m_cP.SetDialogVariable("CanApplyWarning", warningText);
