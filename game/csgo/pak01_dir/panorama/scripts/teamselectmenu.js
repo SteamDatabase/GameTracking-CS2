@@ -95,7 +95,7 @@ var TeamSelectMenu;
     function _OnServerForcingTeamJoin(nTimeout) {
         let bUnassigned = $.GetContextPanel().GetTeamNumber() == 0;
         $("#TeamSelectCancel").visible = !bUnassigned;
-        if (bUnassigned && nTimeout > 0) {
+        if (bUnassigned && isFinite(nTimeout) && nTimeout > 0) {
             let elTimer = $("#AutojoinTimer");
             let elTimerBar = elTimer.FindChildInLayoutFile("AutojoinTimerBar");
             if (elTimerBar) {

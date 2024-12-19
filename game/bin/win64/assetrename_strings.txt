@@ -483,6 +483,7 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 %s will be DELETED
 %s%s: FGD Parse error: %s %s\n
 %s(%d) : %s\n
+%s(%d): error: %s
 %s(%s) = %s
 %s/%s.vmdl
 %s2-d encoding
@@ -538,9 +539,16 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 %s: cannot handle zero scanline size
 %s: cannot handle zero strip size
 %s: cannot handle zero tile size
+%s: element count overflow (%u)\n
 %s: invalid TIFF directory; tags are not sorted in ascending order
+%s: invalid array remove count %u (current count %u)\n
+%s: invalid array remove point %u (current count %u)\n
+%s: invalid insert point %u (current count %u)\n
 %s: invalid nBeforeIndex %d\n
 %s: invalid nSize %d\n
+%s: max element overflow, cur count %u + %u\n
+%s: maximum vector size exceeded, currently %u, adding %u\n
+%s: member count overflow (%u)\n
 %s: unknown field with tag %d (0x%x) encountered
 %s: wrong data type %d for "%s"; tag ignored
 %s: zlib error: %s
@@ -642,70 +650,58 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 ((%s.x %s %f) && (%s.y %s %f) && (%s.z %s %f))
 ((6"8(:,<*>
 (0`hpx
-(1Oc
-(1ba
-(1ca
-(5ja
-(9sc
-(9ta
+(14c
+(1Nc
+(5Hc
+(9Mb
+(9nb
 (?SetName@FbxObject@fbxsdk@@QEAAXPEBD@Z
-(AAa
-(ALc
-(Adc
+(AJc
+(AKd
 (Advanced Feature) Used to specify special interaction rules or exclusions. References a name in scripts/collision_properties.txt.
-(Afa
-(Ahc
+(Atb
 (Blend1D):m_flBlendValue
 (Blend1D):m_resetCount
 (CONFLICT): %s
 (CRITICAL ERROR): %s
 (Debug Feature) Used to draw collision with the same material in Physics Debugger as in Hammer.
-(E5a
 (ERROR): %s
-(ERc
-(EYc
 (Edges to Faces)
 (Edges to Vertices)
-(Ekc
-(Enc
-(Eoc
+(Ehb
 (Expecting %s)
 (Expecting EOF)
 (Faces to Edges)
 (Faces to Vertices)
-(I4c
-(IHc
-(Irc
-(M4a
-(MDa
-(MMa
+(IDd
+(Igd
+(M2d
+(MKc
+(MNd
+(Mgb
 (Missing Content File)
-(Mmc
-(Mtc
-(Myc
+(Mwb
 (No class selected)
 (None)
 (P,f*Z,\2b0T2(
-(Q5c
-(QCa
-(QNc
-(Qjc
-(U7a
-(Uha
+(Q8d
+(QIb
+(QOc
+(QQd
+(Qhd
+(Qrb
+(Qvb
+(UHb
+(UVb
+(Ujb
 (Vertices to Edges)
 (Vertices to Faces)
-(YEc
-(YHa
-(YLa
+(Y1d
+(Y3d
+(YLd
 (YUc
-(YWc
-(Yia
-(Yma
-(Yna
-(Yoa
-(Yqa
-(Yqc
-(Ywa
+(YUd
+(Yxd
 (\f?focusOutEvent@QAbstractButton@@MEAAXPEAVQFocusEvent@@@Z
 (\n\fstring_table
 (\n\vCCSGameInfo
@@ -734,28 +730,33 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 (\v2\f.CDemoPacket"S\n\rCDemoSaveGame
 (\v2\n.CGameInfo"
 (\v?enterEvent@QToolButton@@MEAAXPEAVQEvent@@@Z
-(aKc
-(alc
+(aHd
+(aJb
 (cannot determine missing fields for lite message)
 (channel = 
+(e1c
+(eGb
+(ePc
+(eXb
 (end of input).\n\t This indicates a poorly specified lexer RULE\n\t or unterminated input element such as: "STRING["]\n
-(ira
+(iRc
 (knN(kn
-(mPc
+(m2b
+(mAd
+(mOd
 (merge 
-(mla
 (null)
-(q3a
-(qHc
-(qMc
-(uDa
-(uSa
-(uaa
-(unc
-(y4c
-(yGa
-(yOa
-(yrc
+(q6d
+(qJd
+(qNb
+(qWd
+(qfb
+(qmb
+(uYd
+(uwb
+(yFb
+(ygd
+(yzb
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using a leading '.'(i.e., "(.
 )\f?focusOutEvent@QAbstractItemView@@MEAAXPEAVQFocusEvent@@@Z
 )\t?buddy@QAbstractItemModel@@UEBA?AVQModelIndex@@AEBV2@@Z
@@ -11114,7 +11115,7 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 08@HPX`h
 08@HR
 08@J
-08@N|5
+08F 
 08\fj
 0:<\n\fdelta_ignore
 0E>X
@@ -11126,7 +11127,6 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 0^*.."4"6t*Z8X*>:P*:<(>j<V*FB0DlBH* H
 0e\f6v8L:$&$
 0iN>/
-0v|5
 0x%llx
 1 64
 1 additional asset reference to a moved asset was found:<br>
@@ -11227,6 +11227,7 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 2/.google.protobuf.MethodOptions.IdempotencyLevel:
 224j6:0
 255 255 255 255
+28SG
 2AssetSelectionChanged()
 2AssetsRightClicked()
 2D Aim
@@ -11248,10 +11249,7 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 2\f?focusOutEvent@QLabel@@MEAAXPEAVQFocusEvent@@@Z
 2\r?hideEvent@QWidget@@MEAAXPEAVQHideEvent@@@Z
 2\rU2t
-2\rp\f`\vPd3
 2\v?event@QAction@@MEAA_NPEAVQEvent@@@Z
-2\vpd3
-2\vphN
 2_BONE_IK
 2accepted()
 2clicked()
@@ -11333,13 +11331,11 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 8@HP:
 8@HPR
 8@HPX
-8@HPX`hp~|5
-8@HV|5
+8@HPX`hp~,`
+8@J2;
 8B:B<6>^4j6:00
-8B`e
 8BhHFL
 8Csinf
-8F|5
 8\n\textension
 8\r%8h
 8]?size@QPixmap@@QEBA?AVQSize@@XZ
@@ -11350,6 +11346,7 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 969p
 9>70
 9>powf
+9RBd
 9\f?focusOutEvent@QTextEdit@@MEAAXPEAVQFocusEvent@@@Z
 9\n\noneof_decl
 9\n\vplayer_info
@@ -11471,7 +11468,6 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 <font color = red>&nbsp;&nbsp;ERROR: %s:<br>&nbsp;&nbspFrom: %s<br>&nbsp;&nbsp;&nbsp;&nbsp;To: %s<br></font>\n
 <font color = red>&nbsp;&nbsp;ERROR: Invalid DMX Save %s<br></font>\n
 <font color = red>&nbsp;&nbsp;ERROR: Invalid FBX Save %s<br></font>\n
-<font color = red>&nbsp;&nbsp;ERROR: Invalid VTEX Save %s<br></font>\n
 <font color = red>&nbsp;&nbsp;ERROR: No CDmeModel found in %s!\n
 <font color = red>&nbsp;&nbsp;ERROR: Non-P4 Delete of GAME file:<br>&nbsp;&nbsp;%s<br></font>\n
 <font color = red>ERROR: Cannot read Modeldoc file %s<br></font>\n
@@ -11486,7 +11482,6 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 <font color = yellow>&nbsp;&nbsp;WARNING: Asset content file does not exist %s<br></font>\n
 <font color = yellow>&nbsp;&nbsp;WARNING: Missing DCC File %s<br></font>\n
 <font color = yellow><br>&nbsp;&nbsp;&nbsp;&nbsp;ABC ReMap DCC file: %s<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To: %s<br>\n
-<font color = yellow><br>&nbsp;&nbsp;&nbsp;&nbsp;NOTE: No file file reference fixup is performed on .lua files.</font><br>\n
 <font color = yellow><br>&nbsp;&nbsp;&nbsp;&nbsp;NOTE: No file file reference fixup is performed on .mdl files.</font><br>\n
 <font color = yellow><h2>WARNING: %d Assets OUTSIDE asset folders used IN vmap:</h2>\n
 <font color = yellow><h2>WARNING: %d Assets in asset folders used OUTSIDE OF asset folders and vmap:</h2>\n
@@ -11591,7 +11586,6 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 >`"*$t&n""(
 >cQ6
 >jtm}S
->xgK
 ?!5WOo
 ?1cb
 ?456789:;<=
@@ -12196,9 +12190,9 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 ?fromImage@QPixmap@@SA?AV1@AEBVQImage@@V?$QFlags@W4ImageConversionFlag@Qt@@@@@Z
 ?fromImageInPlace@QPixmap@@KA?AV1@AEAVQImage@@V?$QFlags@W4ImageConversionFlag@Qt@@@@@Z
 ?fromUtf8@QString@@SA?AV1@PEBDH@Z
+?ftF
 ?getAndRef@ExternalRefCountData@QtSharedPointer@@SAPEAU12@PEBVQObject@@@Z
 ?hammer_parallel_terrain_update
-?hammer_show_light_truncation_error
 ?hasChildren@QAbstractItemModel@@UEBA_NAEBVQModelIndex@@@Z
 ?hasFormat@QMimeData@@UEBA_NAEBVQString@@@Z
 ?hasIndex@QAbstractItemModel@@QEBA_NHHAEBVQModelIndex@@@Z
@@ -12733,11 +12727,7 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 @%s_lookFrame_2
 @(>8BBD2BJF
 @08@HPX`hpx
-@08@HV|5
-@08N|5
-@20s
-@8@HV|5
-@8F|5
+@2Ps
 @BBD2BJF
 @HPX
 @HPX&I
@@ -12747,10 +12737,9 @@ $x(<*L(^$*.d$40.2Z$D6@$Q
 @\v?event@QFrame@@MEAA_NPEAVQEvent@@@Z
 @^8U)zj
 @`hpx
-@ccg
 @const char *__cdecl Reflection::Internal::GetFuncName<class CSlopeComponent>(void)
 @fff>fff>fff>fff>
-@htP
+@ht0
 @m_flOffset
 @spawn
 @unnamed_%d
@@ -12823,6 +12812,7 @@ ADD_FLOAT
 ADD_INT
 ADD_STRING
 AE_CL_CLOTH_EFFECT
+AJv,`
 AK>(v
 ALIGN_TYPE is wrong, please fix
 ALL_IN_ORDER
@@ -12851,8 +12841,8 @@ ATI_TC_CalculateBufferSize_Wrapper
 ATI_TC_ConvertTexture_Wrapper
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 ATTR_NAME__ADD_CUSTOM_TAG
-A\fv|5
 A\n\nannotation
+A\rv0
 Aangle
 AbcGeom_FaceSet_v1
 AbcGeom_PolyMesh_v1
@@ -13698,7 +13688,6 @@ Bogus message code %d
 Bogus sampling factors
 Bogus virtual array access
 Bone
-Bone "%s" parent bone %d doesn't exist.  Only %d bones currently defined.\n
 Bone "%s" specified as bone %d but should be bone %d\n
 Bone %d to %d
 Bone '%s' already existed in the bind pose
@@ -14208,6 +14197,7 @@ CDmeDag::GetParentWorldMatrix called on a dag that has different rotation and tr
 CDmeDotaTileGrid
 CDmeDrawCallSnapshot
 CDmeImageProcessor
+CDmeInputTexture
 CDmeLog: interpolable type %s doesn't have an interpolation function!
 CDmeNavData
 CDmeNavEditMesh
@@ -14380,7 +14370,11 @@ CJumpHelperUpdateNode
 CKMeansClustering::AssignVectorsToClusters(), C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp:155
 CKV3MemberNameWithStorage
 CKV3TransferInterface_ModelDoc
+CKeyValues3Array::EnsureElementCapacity
+CKeyValues3Array::InsertMultipleBefore
+CKeyValues3Array::RemoveMultiple
 CKeyValues3Context::Root
+CKeyValues3Table::EnsureMemberCapacity
 CL:>8
 CLODComponent
 CLODComponentUpdater
@@ -15123,6 +15117,7 @@ CUndoManager::Redo
 CUndoManager::Undo
 CUtlBinaryBlock
 CUtlBlockMemory overflow!\n
+CUtlBlockVector<class CUtlReference<class CMapNode>,int>::AddVectorToTail
 CUtlDict<class CAttachment,class CDefFastCaselessStringLess>::Insert
 CUtlDict<class CDmElement *,class CDefFastCaselessStringLess>::Insert
 CUtlDict<class CDmElementFactoryHelper *,class CDefFastCaselessStringLess>::Insert
@@ -15146,7 +15141,6 @@ CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CConstraintSlave,int>,struct 
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CPulse_RegisterInfo,int>,struct CPulse_RegisterInfo,int>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct PGDInstruction_t,int>,struct PGDInstruction_t,int>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class CSceneObjectData,1,int>,class CSceneObjectData,int>::InsertBeforeGetPtr
-CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class KeyValues3 *,4,int>,class KeyValues3 *,int>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<struct VfxVariableIndexData_t,2,int>,struct VfxVariableIndexData_t,int>::AddMultipleToTail
 CUtlLinkedList overflow! (exhausted index range)\n
 CUtlLinkedList overflow! (exhausted memory allocator)\n
@@ -15961,6 +15955,7 @@ DXT3
 DXT5
 DXT5_NM
 D\*^*`&bl`p
+D\ftA
 D\v?event@QGraphicsView@@MEAA_NPEAVQEvent@@@Z
 D_BORDER
 D_COMPRESSED_NORMALS_AND_TANGENTS
@@ -17384,7 +17379,6 @@ FlsGetValue
 FlsSetValue
 FlushFileBuffers
 FnJbH>J"N P
-Fn|5
 FogEnabled
 FogFlowMap.vtex
 FogOpacity.vtex
@@ -17821,6 +17815,7 @@ HEX_DIGIT
 HH:mm:ss
 HLJ$L
 HSequence
+H\ftA
 H\tV_qsort
 HalfLife
 HalftoneHints
@@ -18533,6 +18528,7 @@ JawD
 JawH
 JawV
 JbH>J"N P
+JhxJ
 Jiggle Bone
 Jiggle Bone node (%s): No items defined; node will do nothing 
 Jiggle Bones
@@ -18585,6 +18581,8 @@ KeyValues2
 KeyValues2 (flat)
 KeyValues2 (no ids)
 KeyValues3
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KeyValues: Can't serialize attribute of type %s into KeyValues files!\n
 KeyValues: Element uses unknown element type %s\n
 Keychain Markup Preview
@@ -19618,6 +19616,7 @@ NULL CompoundPropertyReaderPtr
 NULL VP8Io parameter in VP8Decode().
 NULL parent passed into ISchema ctor
 NV_NULL
+N\ftA
 N\tV_roundf
 N_U9203
 Name
@@ -20098,9 +20097,7 @@ Overwriting existing wrinkle map data on mesh
 P'?SetBoolProp@FbxIOSettings@fbxsdk@@QEAAXPEBD_N@Z
 P."0$.p2:4*6&8>6
 P08@J
-P08J0
-P08~|5
-P2 2\r
+P08JP
 P4 Delete of GAME file
 P4 branch/copy and edit destination
 P4 branch/copy and edit successful
@@ -20111,8 +20108,6 @@ P4 delete of source successful
 P4 edit successful
 P4 integrate (overwrite) and edit
 P4 revert and delete of CONTENT file successful
-P6P`
-P6|5
 P?isValid@QColor@@QEBA_NXZ
 P?jumpToNextImage@QImageReader@@QEAA_NXZ
 P@HPX`hpx\f
@@ -20345,7 +20340,6 @@ PermModelInfo_t::FlagEnum
 Persistent
 Perturb vertex positions using sine waves.
 Pf\n%d %d\n-1.000000\n
-Pf|5
 Phase
 Photometric tag is missing, assuming data is YCbCr
 Photometric tag value assumed incorrect, assuming data is YCbCr instead of RGB
@@ -20857,11 +20851,7 @@ ROTATION
 RSDS;
 RST%d
 RT60 for low, mid, and high frequency bands for the probe.
-R\fphN
-R\rp\f`\vPd3
 R\t?canFetchMore@QAbstractItemModel@@UEBA_NAEBVQModelIndex@@@Z
-R\vpd3
-R\vphN
 R_T5Y
 Radial Basis Function Type
 Radius
@@ -23513,7 +23503,6 @@ X\tV_snprintf
 X\v?event@QPushButton@@MEAA_NPEAVQEvent@@@Z
 X`hr
 X`hu
-Xf|5
 XsBI
 Y (Green / Left)
 Y - Left
@@ -23535,9 +23524,10 @@ Yaw Friction
 Yaw Limit
 Yaw Offset Angle
 Yellow is a duplicate.  Original is green, %s with tag [D%d]
+Yf@q
+Yi<font color = yellow><br>&nbsp;&nbsp;&nbsp;&nbsp;NOTE: No file file reference fixup is performed on .lua files.</font><br>\n
 YiModelDoc
 Yield, Resume=%s
-Yivpulse
 YpU_Z
 Z (Blue  / Up)
 Z-Axis
@@ -23646,8 +23636,6 @@ Zpm"U
 \fV4U
 \f\f?focusInEvent@QLabel@@MEAAXPEAVQFocusEvent@@@Z
 \f\tV_fmodf
-\fp\vPd3
-\fpd3
 \n    Actual    : 
 \n    Field type: 
 \n    near %s\n    
@@ -23785,8 +23773,9 @@ Zpm"U
 \ndummyfilename.tif
 \ng default\n
 \nh?oT
+\nhab
 \nk>oB
-\r%s(%d): error: %s
+\r<font color = red>&nbsp;&nbsp;ERROR: Invalid VTEX Save %s<br></font>\n
 \r?darker@QColor@@QEBA?AV1@H@Z
 \r?event@QObject@@UEAA_NPEAVQEvent@@@Z
 \r?eventFilter@QObject@@UEAA_NPEAV1@PEAVQEvent@@@Z
@@ -23801,8 +23790,7 @@ Zpm"U
 \r?information@QMessageBox@@SA?AW4StandardButton@1@PEAVQWidget@@AEBVQString@@1V?$QFlags@W4StandardButton@QMessageBox@@@@W421@@Z
 \r?information@QMessageBox@@SA?AW4StandardButton@1@PEAVQWidget@@AEBVQString@@1W421@2@Z
 \r?initPainter@QWidget@@MEBAXPEAVQPainter@@@Z
-\rCDmeInputTexture
-\rXhF
+\rBone "%s" parent bone %d doesn't exist.  Only %d bones currently defined.\n
 \r\f?focusInEvent@QLineEdit@@MEAAXPEAVQFocusEvent@@@Z
 \r\f\v\v\n\n\t\t\t\t\t
 \r\n\tCODE_SIZE
@@ -23814,9 +23802,8 @@ Zpm"U
 \r\r?heightForWidth@QGridLayout@@UEBAHH@Z
 \r\tV_fopen
 \rfilesystem_stdio
+\rm_previewModel
 \rmj>zjZ
-\rsmartprop2
-\rvtex
 \t The lexer was matching from line %d, offset %d, which\n\t 
 \t$$$$$$$\n\v\f\r
 \t?addPixmap@QIcon@@QEAAXAEBVQPixmap@@W4Mode@1@W4State@1@@Z
@@ -23891,8 +23878,7 @@ Zpm"U
 \vA03>A|
 \v\f?focusInEvent@QGroupBox@@MEAAXPEAVQFocusEvent@@@Z
 \v\tV_fmodd
-\vpd3
-\vphN
+\vpp0
 ^$l0<6(4X&$$$.*
 ^<V7w
 ^L7B
@@ -24018,11 +24004,11 @@ _z00.
 _z000.
 _zero
 `0bb``*Ff6h
-`1Dc
-`20s
-`6P8
-`6Po
-`8@HV|5
+`1wd
+`2Ps
+`60h
+`6pb
+`And
 `RTTI
 `\f?defaultTypeFor@QTimer@@CA?AW4TimerType@Qt@@H@Z
 `\tV_stat
@@ -24037,8 +24023,7 @@ _zero
 `eh vector vbase constructor iterator'
 `eh vector vbase copy constructor iterator'
 `hp\nU
-`htP
-`hv|5
+`ht0
 `local static guard'
 `local static thread guard'
 `local vftable constructor closure'
@@ -24049,6 +24034,7 @@ _zero
 `omni callsig'
 `placement delete closure'
 `placement delete[] closure'
+`qAq
 `scalar deleting destructor'
 `string'
 `typeof'
@@ -24065,7 +24051,7 @@ _zero
 `vftable'
 `virtual displacement map'
 a6>r
-aBv|5
+aBv,`
 aaaaaaaazzzzzzzz
 abcdefghijklmnopqrrqponmlkjihgfedcba
 abcdefghijklmnopqrstuvwxyz
@@ -26503,7 +26489,7 @@ gs_5_0
 gs_6_0
 guide_hair_count
 gun_grunge.psd
-h)1a
+h)db
 h0'D
 h>1my
 hEntity
@@ -26547,6 +26533,7 @@ hammer_overlay_draw_projection_triangles
 hammer_preview_lighting
 hammer_raytrace_debug_draw
 hammer_render_model_bounding_spheres
+hammer_show_light_truncation_error
 hammer_tile_border_size
 hammer_use_minimum_element_count_for_loop
 hammer_vis_opacity
@@ -26619,7 +26606,8 @@ hitbox
 hitbox_maxs
 hitbox_mins
 hitbox_offset
-hjp\r\f
+hjP\r\f
+hm2b
 hold
 hold_left
 hold_right
@@ -26627,7 +26615,7 @@ horizontal differencing
 horizontal_pose_param_name
 host unreachable
 houdini
-hq3a
+hqfb
 hscript
 hscript_lightbinding
 hsequence
@@ -26639,10 +26627,8 @@ hullivr_edge_merge_tan
 hullivr_faceisland_merge_disp
 hullivr_faceisland_merge_tan
 hullivr_version
-hv|5
-hxB 
-hxJ 
-i)1a
+hyOc
+i)db
 i91k
 iOS SM 4.0 (VULKAN)
 iOS SM 4.1 (VULKAN)
@@ -28933,7 +28919,6 @@ m_positionSource
 m_prevLocalToWorld
 m_prevStateIndex
 m_previewButton
-m_previewModel
 m_previewModelName
 m_previewSequenceName
 m_previousChoice
@@ -29921,10 +29906,11 @@ owM&
 owner dead
 ownerlog
 owns_polymorphic_data
-p08@H^|5
+p0j0
 p0p@
-p2`e
-p6|5
+p22;
+p28;
+p2B:
 p@HPX`h\f
 pAsset
 pAsyncRet2
@@ -29951,12 +29937,8 @@ p\n?dragLeaveEvent@QAbstractItemView@@MEAAXPEAVQDragLeaveEvent@@@Z
 p\r0\fP
 p\r0\fP!b
 p\rP!E
-p\r`\f0\vPd3
-p\r`\fP\v0d3
-p\r`\fPd3
 p\tV_tanf
 p\v?event@QWidget@@MEAA_NPEAVQEvent@@@Z
-p`n|5
 package
 packed
 packet
@@ -30051,13 +30033,12 @@ per_material_options
 permission denied
 pervertexlighting
 pfmscale
-pf|5
 phase
 phonememap
 php_class_prefix
 php_generic_services
 php_metadata_namespace
-phv|5
+phv,`
 phys
 physics
 physicsGroup
@@ -30109,7 +30090,6 @@ playback_frames
 playback_ticks
 playerclip
 plugTypes
-pn|5
 point
 point0
 point0_key
@@ -30267,7 +30247,6 @@ purecall
 pushoff
 pushout_strength
 pvTarget
-pv|5
 py_generic_services
 qAdjust
 qS>g?h3
@@ -30290,8 +30269,6 @@ rZt@v*xDv
 r\n?dragLeaveEvent@QGraphicsItem@@MEAAXPEAVQGraphicsSceneDragDropEvent@@@Z
 r\tV_tanhf
 r\tVr.>T
-r\vpd3
-r\vphN
 r_freezeparticles
 r_limit_particle_job_duration
 r_particle_timescale
@@ -30731,6 +30708,7 @@ smartPropConfigurationHelper
 smartPropFilename
 smartPropPartSet
 smart_prop
+smartprop2
 smartprop_choice_options
 smartprops
 smooth_normals_across_uv_seams
@@ -31702,6 +31680,7 @@ vpcf61
 vphzc
 vpk:
 vpost
+vpulse
 vrad_brush_cast_shadows
 vsDmxIO SketchUpScene
 vsDmxIO houdiniSceneIO

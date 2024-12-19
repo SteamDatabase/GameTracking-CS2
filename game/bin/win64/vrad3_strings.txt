@@ -81,8 +81,6 @@ $timer
 %llx
 %s (%s -> %s)
 %s (%s) = remove( pos %i, count %i )
-%s allocation count overflow
-%s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s channel
 %s encoding %s %d format %s %d %s\n
 %s(%d) : %s\n
@@ -91,8 +89,12 @@ $timer
 %s: Element uses unknown element type %s\n
 %s: Invalid capacity %u\n
 %s: Invalid grow amount %d\n
-%s: invalid nBeforeIndex %d\n
-%s: invalid nSize %d\n
+%s: element count overflow (%u)\n
+%s: invalid add count %d\n
+%s: invalid insert point %u (current count %u)\n
+%s: max element overflow, cur count %u + %u\n
+%s: maximum vector size exceeded, currently %u, adding %u\n
+%s: member count overflow (%u)\n
 %s: nLoadError: %d, RequestModule: %s, RequestInterface: %s, Module: %s, Interface: %s
 %sEdgeActive
 %sEdgeCurveType
@@ -1093,7 +1095,6 @@ $timer
 2RD\n2
 2\rU2t
 2\v3x3\v+h4\v#
-2\vpL
 3 FB
 37>k
 3>N;kU
@@ -1101,7 +1102,6 @@ $timer
 3?tr
 3\tV_ldexpf
 4-byte data pool
-4z\fp
 51>W
 5J5J5J5J5J5J5J5J5J5J5J5J5J5J5J5Jx
 5a\v6;
@@ -1123,6 +1123,7 @@ $timer
 ;J;J;J;J;J;J;J;J;J;J;J;J;J;J;J;Jx
 ;\tV_logf
 <!-- DMXVersion
+<Hq4
 <no failure reason set>
 <undefined>
 <unknown>
@@ -1491,6 +1492,9 @@ CDmeTypedLogLayer::Decompress
 CHammerMesh
 CImagePlaneNode
 CKMeansClustering::AssignVectorsToClusters(), C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp:155
+CKeyValues3Array::EnsureElementCapacity
+CKeyValues3Array::InsertMultipleBefore
+CKeyValues3Table::EnsureMemberCapacity
 CL:>8
 CLightImportanceTree::Build(), C:\buildworker\csgo_rel_win64\build\src\public\lightinglib\streamingpathtracer.h:427
 CLightImportanceTree::MakeNode_R
@@ -1554,11 +1558,13 @@ CUndoDestroyElement
 CUndoManager::Redo
 CUndoManager::Undo
 CUtlBlockMemory overflow!\n
+CUtlBlockVector<struct CStreamingRandomWalkBase<class CPathTraceSceneInfoEmbree,class CEmbreeRayStream,class CAmbientCubeEstimate<class CScrambledHaltonSequenceSampler> >::Record_t,int>::AddMultipleToTail
+CUtlBlockVector<struct CStreamingRandomWalkBase<class CPathTraceSceneInfoEmbree,class CEmbreeRayStream,class CIrradianceEstimate<class CScrambledHaltonSequenceSampler,1> >::Record_t,int>::AddMultipleToTail
+CUtlBlockVector<struct CStreamingRandomWalkBase<class CPathTraceSceneInfoEmbree,class CEmbreeRayStream,class CSHRadianceEstimate<class CScrambledHaltonSequenceSampler> >::Record_t,int>::AddMultipleToTail
 CUtlDict<class CDmElement *,class CDefFastCaselessStringLess>::Insert
 CUtlDict<class CDmElementFactoryHelper *,class CDefFastCaselessStringLess>::Insert
 CUtlDict<enum DmElementHandle_t,class CDefFastCaselessStringLess>::Insert
 CUtlFixedMemory overflow!\n
-CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class KeyValues3 *,4,int>,class KeyValues3 *,int>::InsertBeforeGetPtr
 CUtlLinkedList overflow! (exhausted index range)\n
 CUtlLinkedList overflow! (exhausted memory allocator)\n
 CUtlMemory_RawAllocator<class CUtlHashtableEntry<unsigned int,struct empty_t> >::EnsureCapacity
@@ -2276,6 +2282,8 @@ KeyValues
 KeyValues2
 KeyValues2 (flat)
 KeyValues2 (no ids)
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KeyValues: Can't serialize attribute of type %s into KeyValues files!\n
 KeyValues: Element uses unknown element type %s\n
 KeyValuesSystem
@@ -4020,7 +4028,7 @@ path_trace_triangles_gpu_init
 path_trace_triangles_gpu_shutdown
 path_trajectory
 pattern
-pc64 Dec 18 2024 16:03:04
+pc64 Dec 19 2024 13:42:00
 permission denied
 pfmscale
 phonememap

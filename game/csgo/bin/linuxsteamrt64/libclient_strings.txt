@@ -2222,6 +2222,8 @@ $taser_charge
 %s Tick
 %s [%s%s%s]###%p
 %s algorithm "%s" unsupported\n
+%s allocation count overflow
+%s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s at %.0f %.0f %0.f uses model %s, which has an invalid prop_data type. DELETED.\n
 %s at %.0f %.0f %0.f uses model %s, which has no propdata which means it must be used on a prop_static. DELETED.\n
 %s at (%.3f, %.3f, %.3f) has no model name!\n
@@ -2415,6 +2417,10 @@ $taser_charge
 %s: data for '%s' v%s cannot be provided.\n
 %s: file too large (%llu bytes)\n
 %s: integrating data for '%s' v%s\n
+%s: invalid add count %d\n
+%s: invalid nBeforeIndex %d\n
+%s: invalid nSize %d\n
+%s: maximum vector size exceeded, currently %u, adding %u\n
 %s: nItemToSelect:%d\n
 %s: nLen:%d, nStart:%d, nEnd:%d\n
 %s: nLen:%d\n
@@ -7271,6 +7277,7 @@ AddItemToCart
 AddItemToFavorites
 AddKeyToUnserialize
 AddModel
+AddMultipleToTail
 AddOption
 AddOutput
 AddOutput fired on entity "%s" with unknown output name "%s"\n
@@ -7765,6 +7772,7 @@ BackfaceCulling
 BackgroundForShaderIDs
 BackupFileNamesReceived
 Bad FLC data for resource '%s': %s\n
+Bad KV3 data for '%s': %s\n
 Bad KV3 data for resource '%s': %s\n
 Bad boolean\n
 Bad coordinate entry in %s (%s).  Each entry needs 5 numbers, 'x y z pitch yaw'
@@ -13716,6 +13724,7 @@ InputUnPauseSound
 Inputs: startpos, endpos, ent, (optional mins, maxs) -- outputs: pos, fraction, startsolid
 Inputs: startpos, endpos, mask, ignore  -- outputs: pos, fraction, hit, enthit, startsolid
 Inputs: startpos, endpos, min, max, mask, ignore  -- outputs: pos, fraction, hit, enthit, startsolid
+InsertBeforeGetPtr
 InsertCommandsBeforeCheckpoint
 InsertFrameRowButton
 InsertRowButton
@@ -14075,6 +14084,7 @@ KISA
 KMBo8[
 KQSlB
 KSV<
+KV3 load transfer failed: %s\n
 KV3 save transfer failed: %s
 KV;-W
 KWjI
@@ -20322,12 +20332,12 @@ Sticker kit '%s' scale range is not valid %f:%f
 Sticker kit '%s' wear range is not valid %f:%f
 Sticker0Rotation
 Sticker0Wear
+Sticker1Offset
 Sticker1Rotation
-Sticker1Wear
 Sticker2Rotation
-Sticker2Scale
 Sticker2Wear
 Sticker3Rotation
+Sticker4Offset
 Sticker4Rotation
 StickerMarkup
 Stop Waiting
@@ -22270,7 +22280,6 @@ Z~wl
 \n\tIPSec/IKE/Oakley curve #3 over a 155 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
 \n\tIPSec/IKE/Oakley curve #4 over a 185 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
 \n\t\toptions {\n\t\t\tanytypemode 0\n\t\t\tserver tbd\n\t\t}\n\t\tgame {\n\t\t\ttype tbd\n\t\t\tmode tbd\n\t\t\tmode_ui tbd\n\t\t\tmapgroupname none\n\t\t\tgamemodeflags tbd\n\t\t}\n\t\tsystem {\n\t\t\tnetwork offline\n\t\t\taccess tbd\n\t\t}\n\t
-\n\v\f../public/tier0/utlrbtree.h
 \nplayerPanel.SetSceneAngles( %f, %f, %f );
 \nqYu
 \ntM(ie-V
@@ -22939,11 +22948,13 @@ annotation_create text "title" "text" float|surface [faceplayer]
 annotations/local
 annotations/local/%s
 annotations/local/%s/%s
+annotations/local/%s/%s%s
 annotations/local/%s/%s.png
 annotations/local/%s/%s.txt
 annotations/local/%s/*.txt
 annotations/local/*
 annotations/official/%s/%s
+annotations/official/%s/%s%s
 annotations/official/%s/*.txt
 annotations/official/*
 annotations_local

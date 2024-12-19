@@ -193,8 +193,6 @@ $xmm9
 %s (%i) : %s\n
 %s (before "%s")
 %s + 0x%llx
-%s allocation count overflow
-%s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s bytes used out of %s bytes available (%.2f%%)
 %s is out of range for KeyValues, which doesn't support signed 64-bit numbers
 %s not expected here.  A valid JSON document should be a single object, which begins with '{' and ends with '}'
@@ -228,9 +226,12 @@ $xmm9
 %s: capacity request for %d can't be satisfied (max %d)\n
 %s: different number of names and flags\n
 %s: different number of names and pointers\n
+%s: element count overflow (%u)\n
+%s: invalid array remove count %u (current count %u)\n
+%s: invalid array remove point %u (current count %u)\n
 %s: invalid capacity %d requested\n
 %s: invalid flag byte count\n
-%s: invalid nBeforeIndex %d\n
+%s: invalid insert point %u (current count %u)\n
 %s: invalid nBufferChars %d\n
 %s: invalid nByteIndex %d (string %d)\n
 %s: invalid nChars %d (index %d, string %d)\n
@@ -238,10 +239,11 @@ $xmm9
 %s: invalid nIndex %d (string %d)\n
 %s: invalid nNewChars %d\n
 %s: invalid nOldChars %d (string %d)\n
-%s: invalid nSize %d\n
 %s: invalid nStart %d (string %d)\n
 %s: invalid pointer byte count\n
 %s: invalid string pointer (string chars %d)\n
+%s: max element overflow, cur count %u + %u\n
+%s: member count overflow (%u)\n
 %s: out of memory, falling back to regular allocators\n
 %s: requested conversion of %d chars\n
 %s: string format requested %d chars\n
@@ -963,6 +965,7 @@ BreakCommand
 BreakPieceEmbedded
 BreakPieceExternal
 Breaking content into %u epochs of size %u\n
+Buffers extend past the end of the input (%llu bytes)\n
 Build ID too large, %d bytes\n
 Build ID too large\n
 Build-time option settings
@@ -2757,6 +2760,7 @@ DeveloperVerbose
 Dictionary is corrupted
 Dictionary mismatch
 Diff
+Discard data buffer mismatch\n
 Dk(s
 DmeC
 DoAssertDialog
@@ -2799,6 +2803,8 @@ Engine2/MapMaxCoord
 EngineServiceMgr001
 EnsureAddedCapacity
 EnsureCapacity
+EnsureElementCapacity
+EnsureMemberCapacity
 Entry '%s' already has a name (ignoring update to '%s')\n
 Error (generic)
 Error parsing string '%s' as double, parsed to: '%s'\n
@@ -3304,7 +3310,7 @@ InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
 Insert
-InsertBeforeGetPtr
+InsertMultipleBefore
 InstallProgressReportHandler
 Int array has extra '%s' after values\n
 Int array only parsed %u value(s) when expecting %u\n
@@ -3410,6 +3416,8 @@ KVPacker::WriteAsBinary(KeyValues*, CUtlBuffer&)
 Keeping "%s" cvar value, specified on cmdline\n
 KeyValueCache001
 KeyValues Error: %s in file %s\n
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KeyValues::AddFloat(char const*, float)
 KeyValues::AddInt(char const*, int)
 KeyValues::AddKey(char const*)
@@ -4363,6 +4371,7 @@ RecursiveLoadFromBuffer:  got conditional between key and value
 RecursiveLoadFromBuffer:  got empty keyname
 RecursiveLoadFromBuffer:  got } in key
 RecursiveLoadFromBuffer:  recursion overflow
+Reference data buffer mismatch\n
 Register offset set to invalid value (%llu)\n
 RegisterAssertionFailureListener
 RegisterConCommand: Unknown error registering con command "%s"!\n
@@ -4377,6 +4386,7 @@ RemoveAssertionCallback
 RemoveAt
 RemoveAtUTF8
 RemoveBoneAndChildren
+RemoveMultiple
 Removing string token database entry "%s" for reason "%s"\n
 RenderDevice003
 RenderDeviceMgr001
@@ -6012,7 +6022,6 @@ Zjz\v
 \nOS malloc info:\n
 \nOS memory stats:\n
 \n\nCMiniDumpComment encountered an error while generating the comment
-\n\v\fresource
 \r%4.2f %% \r
 \r%u%%       
 \rmj>zjZ
@@ -7944,6 +7953,7 @@ rename
 reopening cached debug file
 replicated
 resident:
+resource
 resource_name
 resumecondition
 retain_grow_limit

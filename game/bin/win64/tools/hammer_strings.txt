@@ -77,7 +77,7 @@
   Ss=%d, Se=%d, Ah=%d, Al=%d
   Top-level Mesh Op '%s' returning a cached result.\n
   V%d: '%s' (%s)\n
- !"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$X
+ !"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
  !"#$$$$$$\n\v\f\r
  !"#$%%&'()*+,-../0123456789:;<=>?@ABCDEFGHIJKLLMNOPQRSTUVWXY[]_`bdefhjlnprtvz|~
  !"#$%&'()*+,-./
@@ -1000,9 +1000,17 @@ $worldspacetype
 %s: cannot handle zero scanline size
 %s: cannot handle zero strip size
 %s: cannot handle zero tile size
+%s: element count overflow (%u)\n
 %s: invalid TIFF directory; tags are not sorted in ascending order
+%s: invalid add count %d\n
+%s: invalid array remove count %u (current count %u)\n
+%s: invalid array remove point %u (current count %u)\n
+%s: invalid insert point %u (current count %u)\n
 %s: invalid nBeforeIndex %d\n
 %s: invalid nSize %d\n
+%s: max element overflow, cur count %u + %u\n
+%s: maximum vector size exceeded, currently %u, adding %u\n
+%s: member count overflow (%u)\n
 %s: no targetname
 %s: unknown field with tag %d (0x%x) encountered
 %s: wrong data type %d for "%s"; tag ignored
@@ -14237,7 +14245,6 @@ $worldspacetype
 0:<\n\fdelta_ignore
 0;Q5[
 0<cz
-0>Iz+
 0E>X
 0M2~@p
 0T.Q
@@ -14251,7 +14258,6 @@ $worldspacetype
 0iN>/
 0pp@5tqE?|sO541
 0tU+xc:
-0vP0
 0x%1
 0x%llx
 0x%p
@@ -15222,6 +15228,7 @@ $worldspacetype
 3>N;kU
 3>fvw
 3?tr
+3@PQ
 3D Skybox
 3D Views
 3DES
@@ -15271,7 +15278,6 @@ $worldspacetype
 4)m1
 4*p0
 4-byte data pool
-40\t2
 456789:;<=
 474E4U4W4c4i4m4
 488:1: POS_FLOATLITERAL : ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT );
@@ -15347,7 +15353,6 @@ $worldspacetype
 6l13
 6lkc
 6myY;
-6pK+
 6qo~
 6r-m_v
 6r1ij
@@ -15400,7 +15405,6 @@ $worldspacetype
 8= zp
 8@HP:
 8A6j
-8B`8:
 8Csinf
 8GZS
 8SIffK5W
@@ -18287,7 +18291,7 @@ $worldspacetype
 @%s_lookFrame_1
 @%s_lookFrame_2
 @08@HPX`hpx
-@08NP0
+@08N
 @0pp
 @BH]f
 @HPX
@@ -18309,7 +18313,6 @@ $worldspacetype
 @i1V
 @lightcapsule
 @n2w
-@nP0
 @spawn
 @unnamed_%d
 A 0 to 1 parameter value of the path at which the camera frustum will be drawn when the camera path is selected. Adjusting this will update the time.
@@ -20451,7 +20454,11 @@ CIsosurfaceRayGrid pooled allocator
 CKMeansClustering::AssignVectorsToClusters(), C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp:155
 CKV3MemberNameWithStorage
 CKV3TransferInterface_ModelDoc
+CKeyValues3Array::EnsureElementCapacity
+CKeyValues3Array::InsertMultipleBefore
+CKeyValues3Array::RemoveMultiple
 CKeyValues3Context::Root
+CKeyValues3Table::EnsureMemberCapacity
 CKh/Q
 CL:>8
 CLIENT_CERTIFICATE
@@ -21562,6 +21569,8 @@ CUndoManager::Redo
 CUndoManager::Undo
 CUtlBinaryBlock
 CUtlBlockMemory overflow!\n
+CUtlBlockVector<class CUtlReference<class CMapNode>,int>::AddVectorToTail
+CUtlBlockVector<unsigned char,int>::AddMultipleToTail
 CUtlDict<class CAttachment,class CDefFastCaselessStringLess>::Insert
 CUtlDict<class CDmElement *,class CDefFastCaselessStringLess>::Insert
 CUtlDict<class CDmElementFactoryHelper *,class CDefFastCaselessStringLess>::Insert
@@ -21586,7 +21595,6 @@ CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CConstraintSlave,int>,struct 
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CPulse_RegisterInfo,int>,struct CPulse_RegisterInfo,int>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct PGDInstruction_t,int>,struct PGDInstruction_t,int>::InsertBeforeGetPtr
 CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class CSceneObjectData,1,int>,class CSceneObjectData,int>::InsertBeforeGetPtr
-CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class KeyValues3 *,4,int>,class KeyValues3 *,int>::InsertBeforeGetPtr
 CUtlLinkedList overflow! (exhausted index range)\n
 CUtlLinkedList overflow! (exhausted memory allocator)\n
 CUtlMemory_RawAllocator<class CUtlHashtableEntry<unsigned int,struct empty_t> >::EnsureCapacity
@@ -23125,7 +23133,7 @@ DebugWidgetUnderMouse
 DebugWidgetWithFocus
 Debuger Break With Widget
 Debugger break with widget: 0x%p\n
-Dec 18 2024
+Dec 19 2024
 Decals
 December
 Decipher Only
@@ -26948,6 +26956,8 @@ KeyValues2
 KeyValues2 (flat)
 KeyValues2 (no ids)
 KeyValues3
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KeyValues: Can't serialize attribute of type %s into KeyValues files!\n
 KeyValues: Element uses unknown element type %s\n
 KeyValuesSystem
@@ -29565,14 +29575,13 @@ P-256
 P-384
 P-521
 P08@J
-P08J`
-P08NP0
+P08J
+P08N
 P1\t98"
 P4CopyFile
 P4CopyFile: Couldn't copy "%s" to "%s"\n
 P4CopyFile: Couldn't deduce depot path for source file "%s"\n
 P5[1
-P60d+
 P?isValid@QColor@@QEBA_NXZ
 P?isValid@QTextCharFormat@@QEBA_NXZ
 P?item@QStandardItemModel@@QEBAPEAVQStandardItem@@HH@Z
@@ -30923,7 +30932,6 @@ R\n?background@QPainter@@QEBAAEBVQBrush@@XZ
 R\r1>Vp
 R\t?canFetchMore@QAbstractItemModel@@UEBA_NAEBVQModelIndex@@@Z
 R\v?event@QMenuBar@@MEAA_NPEAVQEvent@@@Z
-R\vpt<
 R]Di
 R^?supportedDropActions@QStandardItemModel@@UEBA?AV?$QFlags@W4DropAction@Qt@@@@XZ
 R_T5Y
@@ -35771,7 +35779,6 @@ X\v?event@QPushButton@@MEAA_NPEAVQEvent@@@Z
 X`hr
 Xd3h
 XfJ7
-XfPV+
 XjfR
 XqgA+
 XsBI
@@ -36110,6 +36117,7 @@ Z~wl
 \f]ne3
 \fdhWTh
 \fiaR
+\fp\vPL
 \ful2
 \fy&3Gl
 \game
@@ -36143,6 +36151,7 @@ Z~wl
 \n%12s%s
 \n)NETWORK_DISCONNECT_KICKED_INPUTAUTOMATION
 \n,?sReflection@FbxSurfaceMaterial@fbxsdk@@2PEBDEB
+\n0LE
 \n5a=Z
 \n:82H
 \n??AFbxColor@fbxsdk@@QEBAAEBNH@Z
@@ -36731,7 +36740,6 @@ _zero
 _zero_percent_distance
 _}eOk
 `28)fk
-`6P6+
 `:zQF
 `?validate@QDoubleValidator@@UEBA?AW4State@QValidator@@AEAVQString@@AEAH@Z
 `?validate@QIntValidator@@UEBA?AW4State@QValidator@@AEAVQString@@AEAH@Z
@@ -36757,7 +36765,6 @@ _}eOk
 `eh vector destructor iterator'
 `eh vector vbase constructor iterator'
 `eh vector vbase copy constructor iterator'
-`fP0
 `fPw.\vM
 `h9T~
 `hp\nU
@@ -36768,7 +36775,6 @@ _}eOk
 `managed vector constructor iterator'
 `managed vector copy constructor iterator'
 `managed vector destructor iterator'
-`nP0
 `o_je
 `omni callsig'
 `placement delete closure'
@@ -36805,7 +36811,6 @@ a?worldTransform@QPainter@@QEBAAEBVQTransform@@XZ
 a?write@QStandardItem@@UEBAXAEAVQDataStream@@@Z
 a@XZ
 aA0k
-aBvP0
 aD/x
 aDSS
 aECDH
@@ -39445,6 +39450,7 @@ fC\tc
 fD>b
 fL\ri
 fNewDefaultValueIn
+fO0,
 fP;y
 fP~V
 fSelectionOverlayAlpha
@@ -40466,7 +40472,6 @@ g|FeW\v
 g|MT
 h&eC
 h*Ax
-h,\n0C
 h0'D
 h0XB
 h2Wl
@@ -44554,17 +44559,14 @@ p.other
 p.ppBasis
 p.prime
 p.tpBasis
-p08@H^P0
+p08@H^
 p0p@
-p2`8:
 p2{l
 p4 fstat -Op %s
 p4Z3
 p5Z3
 p5\nL,
 p618
-p>P0
-p>uy+
 p@0pqE5tsO?|1
 p@HPX`h\f
 pAction
@@ -44889,7 +44891,6 @@ players_networkids
 plugId0
 plugId1
 plugTypes
-pnP0
 point
 point arithmetic failure
 point at infinity
@@ -45210,7 +45211,6 @@ rRfKR
 rX&O0
 rZ1VwGf5
 rZPM
-r\fpt<
 r\n?dragLeaveEvent@QGraphicsItem@@MEAAXPEAVQGraphicsSceneDragDropEvent@@@Z
 r\tV_tanhf
 r\tVr.>T
@@ -46659,11 +46659,11 @@ system lib
 system library
 szResolutionGate
 s{5F
+t(0p
 t(1pC
 t(ydU
 t+RW
 t0;?ZlP*m
-t1\nM
 t2U 
 t4O_
 t80z
@@ -47882,7 +47882,6 @@ vortex_max_speed_mph
 voume_random_min_scale
 voxel_size
 voxelize
-vpE+
 vparams
 vpcf
 vphzc

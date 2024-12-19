@@ -324,8 +324,6 @@ $hRh
 %s PARAMETERS
 %s PRIVATE KEY
 %s algorithm "%s" unsupported\n
-%s allocation count overflow
-%s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s%02X
 %s%04x - <SPACES/NULS>\n
 %s%08lx.%s%d
@@ -340,8 +338,12 @@ $hRh
 %s: Invalid capacity %u\n
 %s: Invalid grow amount %d\n
 %s: Invalid lock state %d\n
-%s: invalid nBeforeIndex %d\n
-%s: invalid nSize %d\n
+%s: element count overflow (%u)\n
+%s: invalid add count %d\n
+%s: invalid insert point %u (current count %u)\n
+%s: max element overflow, cur count %u + %u\n
+%s: maximum vector size exceeded, currently %u, adding %u\n
+%s: member count overflow (%u)\n
 %s:%d: rec->data != rec->input\n
 %s\publish_data.txt
 %s_%03d.vpk
@@ -979,6 +981,7 @@ $hRh
 2\r?hideEvent@QWidget@@MEAAXPEAVQHideEvent@@@Z
 2\rlhp
 2\v?event@QAction@@MEAA_NPEAVQEvent@@@Z
+2\vp\f7
 2^pV
 2a"l
 2accepted()
@@ -2440,6 +2443,9 @@ CHECK_NAME_CONSTRAINTS
 CHECK_PADDING_MD
 CHECK_POLICY
 CHECK_SUITEB_CIPHER_LIST
+CKeyValues3Array::EnsureElementCapacity
+CKeyValues3Array::InsertMultipleBefore
+CKeyValues3Table::EnsureMemberCapacity
 CKh/Q
 CLIENT_CERTIFICATE
 CLIENT_FINISHED
@@ -2606,8 +2612,8 @@ CT Precertificate Poison
 CT Precertificate SCTs
 CT Precertificate Signer
 CUtlBlockMemory overflow!\n
+CUtlBlockVector<unsigned char,int>::AddMultipleToTail
 CUtlDict<struct `public: void __cdecl CQWorkshopVPKManifestWidget::SetFromList(char const *,class CUtlVector<struct ManifestFile_t,int,class CUtlMemory<struct ManifestFile_t,int> > const &)'::`2'::extensionMetric_t,class CDefFastCaselessStringLess>::Insert
-CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<class KeyValues3 *,4,int>,class KeyValues3 *,int>::InsertBeforeGetPtr
 CUtlMemory_RawAllocator<class CUtlHashtableEntry<unsigned int,struct empty_t> >::EnsureCapacity
 CUtlMemory_RawAllocator<unsigned int>::EnsureCapacity
 CUtlMemory_RawAllocator<unsigned int>::Grow
@@ -3647,6 +3653,8 @@ Key Agreement
 Key Compromise
 Key Encipherment
 KeyValueCache001
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KlD#
 KsF8
 Ksg4X
@@ -4440,8 +4448,10 @@ RSA_verify_ASN1_OCTET_STRING
 RSA_verify_PKCS1_PSS
 RSA_verify_PKCS1_PSS_mgf1
 RSDS
+R\n0\f7
 R\r1>Vp
 R\t?canFetchMore@QAbstractItemModel@@UEBA_NAEBVQModelIndex@@@Z
+R\vp\f7
 R]Di
 RaiseException
 RandomFloat
@@ -5404,7 +5414,6 @@ Z~wl
 \n?dropMimeData@QTableWidget@@MEAA_NHHPEBVQMimeData@@W4DropAction@Qt@@@Z
 \n?edit@QAbstractItemView@@MEAA_NAEBVQModelIndex@@W4EditTrigger@1@PEAVQEvent@@@Z
 \n?editorDestroyed@QAbstractItemView@@MEAAXPEAVQObject@@@Z
-\nPT7
 \nThis will delete the submission from the workshop and users subscribed to it will no longer be able to access it.\n\nThis action cannot be undone!\n\nAre you sure you want to delete the submission?\n
 \n\r?heightForWidth@QBoxLayout@@UEBAHH@Z
 \n\tIPSec/IKE/Oakley curve #3 over a 155 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
@@ -5618,7 +5627,6 @@ aXvC
 a]?xG
 aaControls
 abcdefghijklmnopqrstuvwxyz
-abcg
 ac-auditEntity
 ac-proxying
 ac-targeting

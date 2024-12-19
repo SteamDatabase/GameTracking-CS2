@@ -519,8 +519,6 @@ $tLVRenderDeviceSetupV001
 %s SetCreationTick\n
 %s Unload\n
 %s [%s from %d to %d - %d entities]
-%s allocation count overflow
-%s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s appended
 %s client
 %s code, bind name '%s' (%u), scan code '%s' (%u)\n
@@ -620,10 +618,12 @@ $tLVRenderDeviceSetupV001
 %s: __pos (which is %zu) > this->size() (which is %zu)
 %s: couldn't exec '%s', missing file\n
 %s: couldn't exec '%s', unable to read file\n
+%s: element count overflow (%u)\n
 %s: execute perftest.cfg\n
+%s: invalid insert point %u (current count %u)\n
 %s: invalid millisecond count\n
-%s: invalid nBeforeIndex %d\n
-%s: invalid nSize %d\n
+%s: max element overflow, cur count %u + %u\n
+%s: member count overflow (%u)\n
 %s: nLoadError: %d, RequestModule: %s, RequestInterface: %s, Module: %s, Interface: %s
 %s: script is already waiting\n
 %s:%d reconnecting %s\n
@@ -809,6 +809,7 @@ $tLVRenderDeviceSetupV001
 -allocwarnmb
 -allow_non_tools_paths
 -appidoverride
+-asset
 -auto -title "auto_bug %04d-%02d-%02d %02d:%02d:%02d"
 -border
 -bugvoice
@@ -854,7 +855,6 @@ $tLVRenderDeviceSetupV001
 -steamhdl_steamguard
 -steamlogin_accesscode
 -steamlogin_authority
--tool
 -tools
 -toolsonly
 -usebuildversion
@@ -967,7 +967,6 @@ $tLVRenderDeviceSetupV001
 0(D7
 00000000-0000-0000-0000-000000000000
 00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899
-00:00:39
 00A+
 0123456789abcdef
 0: Force z prepass off. 1: Force on. -1: Don't force
@@ -1581,6 +1580,7 @@ $tLVRenderDeviceSetupV001
 20ISource2ServerConfig
 20ISource2WorldSession
 20PacketEntitiesFilter
+21:40:44
 21C2S_CONNECT_Message_t
 21CCLCMsg_BaselineAck_t
 21CEngineGotvSyncPacket
@@ -4025,8 +4025,10 @@ Engine_Startup
 Engine_SystemInfo_Attention_Low_System_Memory
 Engine_SystemInfo_Attention_Low_System_Memory_Title
 EnsureCapacity
+EnsureElementCapacity
 EnsureInstanceBaseline
 EnsureInstanceBaseline: g_pFlattenedSerializers->Encode false (ent %d : %s).\n
+EnsureMemberCapacity
 EntComponentInfo_t
 EntInput_t
 EntOutput_t
@@ -4974,8 +4976,8 @@ InputSystemVersion001
 Inscriptional_Pahlavi
 Inscriptional_Parthian
 Insert
-InsertBeforeGetPtr
 InsertIfNotFound
+InsertMultipleBefore
 Inserted tick %d with full packet\n
 Inserting client StringTable baselines in listenserver case, %d bits\n
 InstallAndInvokeClientStringTableCallbacks
@@ -5086,6 +5088,8 @@ Kayah_Li
 Key in map fields cannot be enum types.
 Key in map fields cannot be float/double, bytes or message types.
 KeyValueCache001
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KeyValues::AddInt(char const*, int)
 KeyValues::AddKey(char const*)
 KeyValues::AddString(char const*, char const*)
@@ -8491,7 +8495,6 @@ Zq",9\fB
 \nSystem Memory:\n
 \nUsage: blink [convar] [blinkDuration=1.0] [offValue=0.0 onValue=1.0]\n       (no arguments stops current blinking convar)\n\nExample: blink r_ssao           - toggles between 0 and 1 every second\n         blink r_ssao 0.5       - toggles between 0 and 1 every 0.5 seconds\n         blink r_ssao 4 16      - toggles between 4 and 16 every second\n         blink r_ssao 2.0 4 16  - toggles between 4 and 16 every 2 seconds\n\n
 \nYr&5
-\n\v\fresource_name
 \nbit length overflow\n
 \nbl code %2d 
 \nbl counts: 
@@ -10496,6 +10499,7 @@ output_color_texture
 output_depth_back_buffer
 output_depth_texture
 outputcolor
+overflow
 oversubscribed distance tree
 oversubscribed dynamic bit lengths tree
 oversubscribed literal/length tree
@@ -10778,6 +10782,7 @@ resource/%s_%%language%%_lv.txt
 resource/game-icon.bmp
 resource/keybindings_%language%.txt
 resource/vgui_%language%.txt
+resource_name
 resourcehandle
 restart: only valid when running a map, and only on the server\n
 restart\n
