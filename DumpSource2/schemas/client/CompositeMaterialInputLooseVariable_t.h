@@ -7,6 +7,7 @@ class CompositeMaterialInputLooseVariable_t
 	bool m_bExposedVariableIsFixedRange;
 	CUtlString m_strExposedVisibleWhenTrue;
 	CUtlString m_strExposedHiddenWhenTrue;
+	CUtlString m_strExposedValueList;
 	CompositeMaterialInputLooseVariableType_t m_nVariableType;
 	bool m_bValueBoolean;
 	int32 m_nValueIntX;
