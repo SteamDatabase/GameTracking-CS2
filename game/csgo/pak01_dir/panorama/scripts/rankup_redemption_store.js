@@ -112,8 +112,7 @@ var RankUpRedemptionStore;
                         '&' + 'asyncworkitemwarning=no' +
                         '&' + 'inspectonly=true' +
                         '&' + 'asyncworktype=decodeable' +
-                        '&' + 'asyncworkbtnstyle=hidden' +
-                        'none');
+                        '&' + 'onlyclosepurchasebar=true');
                 }
                 else {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +

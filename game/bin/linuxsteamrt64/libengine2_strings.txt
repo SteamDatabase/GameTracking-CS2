@@ -204,7 +204,6 @@
  wav = write .wav file\n
  webm = .webm video and audio\n
  with bitrate=%dMbps
-!!!FIXME:  SOSGetOpvarFloat API not ported\n
 !!!FIXME:  SOSSetOpvarFloat API not ported\n
 !)059=@BEGIKLNPRUWY[\^`begiklnpruwy{|~
 !3Mt
@@ -368,10 +367,10 @@ $tLVRenderDeviceSetupV001
 %%s%%-%d.%ds:  %%s%%s\n
 %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
 %*(+-166852+%
-%*s    Avg    P99        N    Avg    P99\n
-%*s  All frames         Active frames   \n
-%*s ------ ------   ------ ------ ------\n
-%*s%7.2f%7.2f%9d%7.2f%7.2f\n
+%*s    Avg    P99        N    Avg    P99      P50    P95        N    P50    P95\n
+%*s  All frames         Active frames       1s max (all)      1s max (active)  \n
+%*s ------ ------   ------ ------ ------   ------ ------   ------ ------ ------\n
+%*s%7.2f%7.2f%9d%7.2f%7.2f%9.2f%7.2f%9d%7.2f%7.2f\n
 %-32s: %6.3f ms (+/- %6.3f) ms (%6.3f ave fps)\n
 %-32s: %6.3f ms (+/- %6.3f) ms%s\n
 %-32s: %6.3f ms (+/- %6.3f) ms\n
@@ -430,8 +429,9 @@ $tLVRenderDeviceSetupV001
 %50.50s %32.32s %32.32s\n
 %50.50s: %2.2d bits == '%s'\n
 %6.1fms
+%6.2fms           %6.2fms  %s\n
+%6.2fms  %6.2f%%  %6.2fms  %s\n
 %6sms
-%7.2fms %s\n
 %8.8s: %-5d entries, '%s', ...
 %>>C@;Li_=)
 %A Is
@@ -596,6 +596,7 @@ $tLVRenderDeviceSetupV001
 %s: "%s" %s "%s" by "%s"
 %s: %0.3fMB\n
 %s: %5d:  DispatchEvent( %s )\n
+%s: %7.2fms, tolerance: %7.2fms\n
 %s: Building comment.\n
 %s: CNetworkStringTableContainer::RemoveAllTables:  removing %d tables\n
 %s: Detected non external addon: %s\n
@@ -786,6 +787,7 @@ $tLVRenderDeviceSetupV001
 --- Total %i connected clients ---\n
 ----- Status -----\n
 ------ gathering state\n
+--------  -------  --------  --------------\n
 ------------------- clients: %d -------------------\n
 ------------------- groups -------------------\n
 --------------------------------------------------------\n
@@ -1959,6 +1961,7 @@ $tLVRenderDeviceSetupV001
 ;J;J;J;J;J;J;J;J;J;J;J;J;J;J;J;Jx
 ;RGBA8888
 ;nGVKUTS[BXIWH\KbHi:k6s4r7p8
+<!!!FIXME:  SOSGetOpvarFloat API not ported\n
 <+alt
 <<unknown>>
 <Green
@@ -4446,6 +4449,8 @@ Frame rate warnings ENABLED after %d frames (%.1fms), most recent amnesty was '%
 Frame rate warnings ENABLED after %d+%d frames (%.1fms), most recent amnesty was '%s'\n
 Frame samples:\n
 Frame setup failed
+FrameRateSpikeDump
+Framerate spike report\n
 Free page file: %.2f MiB\n
 Free physical memory: %.2f MiB\n
 Freed EMS handle %u
@@ -7663,6 +7668,7 @@ Successfully enabled priority boost.\n
 Successfully saved
 Suffix to append to the console log, may be changed to reopen the log
 Suggested field numbers for 
+Summary of %d frames and %d 1-second intervals.  (%d frames excluded from analysis.)\n
 Summary of %d frames.  (%d frames excluded from analysis.)\n
 Sundanese
 Sunday
@@ -8093,7 +8099,7 @@ VProf reset.\n
 VProfLite_Clear
 VProfLite_DedicatedServerSleepBegin
 VProfLite_DedicatedServerSleepEnd
-VProfLite_GetBudgetGroupCurrentFrameTime
+VProfLite_GetBudgetGroupCurrentFrameStats
 VProfLite_GetEnabled
 VProfLite_GetHistoricalData
 VProfLite_NextFrame
@@ -9436,6 +9442,7 @@ es-8R
 eu?u
 evidence
 ewh/?y
+excl ms   excl %%   incl ms   group\n
 exclamation-mark
 exec
 exec autoexec.cfg\n
