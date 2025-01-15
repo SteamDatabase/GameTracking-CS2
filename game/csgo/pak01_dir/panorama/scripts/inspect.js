@@ -660,8 +660,10 @@ var InspectModelImage;
                     elPanel.SwitchMap(mapName);
                     elPanel.Data().loadedMap = mapName;
                     _AdditionalMapLoadSettings(elPanel, elPanel.Data().active_item_idx, elPanel.Data().loadedMap);
-                    if (ItemInfo.IsWeapon(elPanel.Data().itemId)) {
-                        SetItemCameraByWeaponType(elPanel.Data().itemId, elPanel, true);
+                    const itemId = elPanel.Data().itemId;
+                    const category = InventoryAPI.GetLoadoutCategory(itemId);
+                    if (ItemInfo.IsWeapon(itemId) && category !== 'melee') {
+                        SetItemCameraByWeaponType(itemId, elPanel, true);
                     }
                     else {
                         _TransitionCamera(elPanel, elPanel.Data().camera, true);

@@ -43,6 +43,12 @@
     with %d x %d thumbnail image
    %4.2f FPS %4.3f ms\n
    %i : %s\n
+   %u (%.1f%%) below desired recv margin
+   %u (%.1f%%) dropped
+   %u (%.1f%%) late
+   %u (%.1f%%) net-perfect
+   %u (%.1f%%) non-network
+   %u (%.1f%%) perfect
    (c)%i : %s\n
    --- Sample statistics after sorting and discarding the lowest and highest 10%% (20%% total discarded):\n
    --- Sample statistics:\n
@@ -54,11 +60,15 @@
    Header "%s": %s\n
    Maximum frame time: %f ms (%f FPS)\n
    Minimum frame time: %f ms (%f FPS)\n
+   P95:%.1f
+   P99:%.1f
+   Reliable:%.1fkb
    Settings: WarmTime: %f, BenchTime: %f, BenchFrames: %u\n
    Standard deviation: %f ms\n
    Total sample time: %f ms\n
    Total samples: %u\n
    Total time: %3f\n
+   Voice:%.1fkb
   %d classes, %d bytes\n
   %s = %s was changed between from/to ticks but is missed by CalcDelta (i.e., encoded values are same)\n
   (And we were not able to hide it using interpolation!)
@@ -73,10 +83,16 @@
   * r_always_render_all_windows = %d\n
   * r_vconsole_foregroundforcerender = %d\n
   Actual   : 
+  Arrived on time . . . : %u (%.1f%%)
   Comment started here.
+  Corrected/smoothed. . : %u (%.1f%%)
   Currently playing %d of %d ticks. Minutes:%.2f File:%s\n
+  Distribution. . . . . : 
   Expected : 
   Jitter=%.1fms
+  Kb/sec. . . . . . . . : Avg:%.1f
+  Messages/sec. . . . . : Avg:%.1f
+  Missed. . . . . . . . : %u (%.1f%%)
   Queued   :  %s\n
   Receiving server updates. :%s\n
   Requested:  %s\n
@@ -204,6 +220,7 @@
  wav = write .wav file\n
  webm = .webm video and audio\n
  with bitrate=%dMbps
+!!!FIXME:  SOSGetOpvarFloat API not ported\n
 !!!FIXME:  SOSSetOpvarFloat API not ported\n
 !)059=@BEGIKLNPRUWY[\^`begiklnpruwy{|~
 !3Mt
@@ -375,8 +392,7 @@ $tLVRenderDeviceSetupV001
 %-32s: %6.3f ms (+/- %6.3f) ms%s\n
 %-32s: %6.3f ms (+/- %6.3f) ms\n
 %-40s %-12s %-12s %-12s %-12s %-12s\n
-%.1f%% server ticks missed due to network (%d dropped, %d late)   Good:%d   BadOther:%d    Fixed: %d dropped, %d late\n
-%.1f%% user commands missed due to network (%d dropped, %d late)   Good:%d   BadOther:%d    Fixed: %d dropped, %d late\n
+%.1f%% %s missed due to network (%d dropped, %d late)   Good:%d   BadOther:%d    Fixed: %d dropped, %d late\n
 %.2f GB
 %.2f. Broadcast IO error. Please try again later.\n
 %.2f. Broadcast Streaming error %d %s\n
@@ -629,6 +645,15 @@ $tLVRenderDeviceSetupV001
 %s: script is already waiting\n
 %s:%d reconnecting %s\n
 %s<%i><%s><>
+%sP1:%d
+%sP25:%d
+%sP50:%d
+%sP5:%d
+%sP75:%.1f%%
+%sP75:%d
+%sP95:%.1f%%
+%sP95:%d
+%sP99:%.1f%%
 %s_%03i.log
 %s_%04d%s%s
 %s_%u_slot%d
@@ -744,6 +769,7 @@ $tLVRenderDeviceSetupV001
 *ZN13CSoundService19StartCapturingVoiceEvEUlP17IAudioInputStreamiE_
 *ZN14CRenderService33LaunchAsyncBeginRenderingViewsJobERK22EventClientPreOutput_tbEUlvE0_
 *ZN14CRenderService33LaunchAsyncBeginRenderingViewsJobERK22EventClientPreOutput_tbEUlvE_
+*ZN18CNetworkGameClient25PrintNetworkSummaryReportEvEUlPKcE_
 *ZN18CNetworkGameClient34ProcessReadPacketEntitiesWorkItemsE13RPEStatType_tR15CEntityReadInfoEUlvE0_
 *ZN18CScreenshotService15OnFrameBoundaryERK20EventFrameBoundary_tEUlvE_
 *ZN18CScreenshotService21WriteScreenshotToFileEPKcS1_R10CUtlBufferbbbEUlPKvE0_
@@ -1769,6 +1795,7 @@ $tLVRenderDeviceSetupV001
 29CMaterialSystem2AppSystemDict
 29CMiniDumpCommentConvarsWriter
 29CMsgServerNetworkStats_Player
+29CMsgSource2NetworkFlowQuality
 29CResourceManifestPrerequisite
 29CSVCMsg_FlattenedSerializer_t
 29CSimpleWindowsLoggingListener
@@ -1961,7 +1988,6 @@ $tLVRenderDeviceSetupV001
 ;J;J;J;J;J;J;J;J;J;J;J;J;J;J;J;Jx
 ;RGBA8888
 ;nGVKUTS[BXIWH\KbHi:k6s4r7p8
-<!!!FIXME:  SOSGetOpvarFloat API not ported\n
 <+alt
 <<unknown>>
 <Green
@@ -2412,6 +2438,7 @@ Attempted to switch to unknown loop "%s"!\n
 AudioLanguage
 AudioSubLanguage
 August
+Auth session response %d
 AutoBugComponent
 AutoBugProduct
 Automatically broadcasts all games as GOTV demos through Steam.
@@ -2462,6 +2489,7 @@ Bad type %d in saved CVariant\n
 BakedLODBuilderMgr001
 Balinese
 Bamum
+Bandwidth . . . . . . . : Total:%.1fkb
 Banning %s for rcon hacking attempts\n
 Base time scale of Killer Replay.Experimental.
 BaseLine
@@ -3120,7 +3148,6 @@ CL:  CSteam3Client::GetAuthSessionTicket to SteamID %llu\n
 CL:  CSteam3Client::GetAuthSessionTicket to localhost\n
 CL:  CWaitForGameServerStartupPrerequisite done waiting for server\n
 CL:  Connected to '%s'\n
-CL:  Connection failed after %i retries.\n
 CL:  Connection to %s failed, server requires a password\n
 CL:  Connection to '%s' failed\n
 CL:  Connection to server '%s' timed out, disconnecting\n
@@ -3129,13 +3156,11 @@ CL:  Disconnected - Client delta ticks out of order!\n
 CL:  Disconnecting from server: %s\n
 CL:  Disconnecting from server: changelevel\n
 CL:  FCVAR_CHEAT and FCVAR_REPLICATED cvars reverted to defaults (remote connection).\n
-CL:  Failed to successfully serialize connect message\n
 CL:  Finished logging most recent client ticks.\n
 CL:  Forcing %s to blocking load during demo playback due to having incomplete/updateable manifest\n
 CL:  Got pure server whitelist: sv_pure = 1.\n
 CL:  Got pure server whitelist: sv_pure = 2.\n
 CL:  Ignoring S2C_CHALLENGE [%u auth %d] from %s because SignonState (%s) != SIGNONSTATE_CHALLENGE\n
-CL:  Invalid S2C_CONNECTION packet.\n
 CL:  Loading groups %d\n
 CL:  Multiple calls to CNetworkGameClientBase::DeferActivate!!\n
 CL:  No pure server whitelist. sv_pure = 0\n
@@ -3148,15 +3173,12 @@ CL:  Received packet entities while connecting!\n
 CL:  Removing SuppressTransmit to allow 'disconnect' command to send\n
 CL:  SendMove(connecting)
 CL:  SendStringCmd(disconnect)
-CL:  Server disconnected: %d: %s\n
-CL:  SetSignonState changing from %s to %s\n
-CL:  SetSignonState( %s )\n
 CL:  Signon traffic "%s":  incoming %s [%d netframes], outgoing %s [%d netframes]\n
+CL:  SignonState %s -> %s\n
 CL:  Skipping suppress INetchannel::Transmit() in loopmode( %s )\n
 CL:  Successfully connected to %s\n
 CL:  Suppress INetchannel::Transmit() in loopmode( %s )\n
 CL:  TransmitNetChannel
-CL:  Unexpected authentication protocol %i!\n
 CL:  WARNING:  Connection Problem, not requesting uncompressed update due to sv_snapshot_unlimited == true\n
 CL:  WARNING:  Connection Problem, requesting uncompressed update\n
 CL:  [%s: %s | %s | %s] Load\n
@@ -3696,8 +3718,10 @@ Connect to a remote server.
 Connected [%s] [last packet %.3f sec ago]
 Connecting to %s\n
 Connection State: Connected=%s, Ever=%s\n
+Connection closed: %s.\n
 Connection lost: %s.\n
 Connection rejected by game\n
+Connection timeout detected at source engine layer after %i retries.
 Connection to Steam servers lost.\n
 Connection to Steam servers successful (SU).\n
 Connectionless
@@ -3807,9 +3831,11 @@ DEFINE
 DEFINE group contains more than one branch
 DELAYED COMMAND: %s\n
 DEMO
+DEM_Stop
 DEV_BUILD
 DEngine RenderingWorldSession
 DO NOT PARSE: fields may be stripped and missing.\n
+DOWNSTREAM (server->client)
 DXT1
 DXT1_ONEBITALPHA
 DXT3
@@ -3874,6 +3900,7 @@ DemoRecorder SpawnGroup Buffering: tick=%d storing message %s (spawn group %s)\n
 DemoUpconverterVersion001
 Describe current gametags.
 Deseret
+Destruct
 Detected log rotation.  Closing and reopening log\n
 DevMsg
 DevMsg(char const*, ...)
@@ -3886,9 +3913,11 @@ Disabling user config reading/writing due to -playtest\n
 DiscardMouseFocusClick
 Discarding pending request '%s, %u'\n
 Discarding queued request '%s, %u'\n
+Disconnect client '%s' from server: %s\n
 Disconnect from server
-Disconnect: %s.\n
 Disconnect: %s\n
+DisconnectAllClients
+Disconnected from server: %s\n
 Disconnection during connection phase. Sign-on state: %d (%s). Disconnect reason: %d (%s).\n
 Dispatch clients to relay proxies: 0=never, 1=if appropriate, 2=always
 DispatchEvent( %s ) took %f msecs
@@ -4296,7 +4325,7 @@ FYLh.o
 FZ?w
 Failed
 Failed To Load '%s'! VConsole Communication Disabled!\n
-Failed to connect to %s.  Reason code %d.  %s\n
+Failed to connect to %s. (%d) %s
 Failed to create temporary file %s
 Failed to determine base game directory from %s
 Failed to disable priority boost.\n
@@ -4335,6 +4364,7 @@ Failed to serialize KV3 to JSON.  %s\n
 Failed to serialize one usercommand?
 Failed to set network config: %s\n
 Failed to start recording movie: %s.*: %s\n
+Failed to successfully serialize connect message
 Failed to write file %s, configFileType %d, nSlot %d\n
 False
 FastHexToBuffer() wants non-negative integers, not 
@@ -4421,6 +4451,7 @@ Folder in the game directory where server logs will be stored.
 FontManager_001
 For debugging, don't throw away old snapshots so that if you break in debugger (on remote client or server) it won't require an uncompressed update to resume.  You may run out of memory of course...
 For debugging. Force the engine to flush an entity packet.
+For packet-level statistics, see net_connections_stats.\n
 Force StopHltvReplay on client
 Force a full update for all clients.
 Force a single render of the engine viewport.
@@ -4503,7 +4534,6 @@ Game Server is not running\n
 Game Time %s, Mod "%s", Map "%s"\n
 Game cannot launch without explicit commandline flag: %s
 Game does not support save/restore.\n
-Game indicated network version %d is incompatible.\n
 Game info file does not specify a steam app id!\n
 Game supporting (%d) split screen players\n
 GameData: Too many Steam groups set for sv_steamgroup, not advertising Steam groups affiliation.\n
@@ -4547,6 +4577,7 @@ GetARGBBlend
 GetAddonsContentDirectory: Failed to find CONTENTADDONS search path.\n
 GetAddonsDirectory: Failed to find ADDONS search path.\n
 GetAppWindow() returned NULL\n
+GetAuthSessionTicket failed
 GetAvailableAddonMaps failed to find any maps in the '%s' addon - trying fallback maps:
 GetBool
 GetCPUInformation
@@ -4557,7 +4588,7 @@ GetClassBaseline: NULL instance baseline table
 GetClassBaseline: m_BaselineHandles.Find(%d) failed for class %s.
 GetClassBaseline: missing instance baseline for class '%s'
 GetClientConVarValue: player invalid index %i\n
-GetConnectionInfo failed.  Did somebody else close the connection?\n
+GetConnectionInfo failed.  Did somebody else close the connection?
 GetDefaultMiniDumpTypeFlags
 GetDisableFocusBasedPriorityBoost
 GetDouble
@@ -4673,6 +4704,7 @@ Hello world!
 HelpSystem_001
 Hen\fM
 Hex and octal numbers must be integers.
+Hibernating
 Hide the console.
 Hides the game UI
 Highest unlocked game chapter.
@@ -4933,6 +4965,7 @@ If set, whenever a game ends, if the total memory used by the server is greater 
 If the binding doesn't work and you're not using a US English keyboard, you should try:
 If true when log when a query is blocked (can cause very large log files)
 If true, resets the input device when there was a long enough hitch between callbacks.
+Ignore VAC and auth errors for client connected via localhost address or in-engine loopback
 IgnoreAssertForADay
 IgnoreChildProcesses
 Ignoring P2PSessionRequest_t from %s\n
@@ -5007,11 +5040,12 @@ Invalid JPEG file structure: SOS before SOF
 Invalid JPEG file structure: missing SOS marker
 Invalid JPEG file structure: two SOF markers
 Invalid JPEG file structure: two SOI markers
+Invalid S2C_CONNECTION packet
 Invalid SOS parameters for sequential JPEG
-Invalid Steam key size.\n
+Invalid Steam key size
 Invalid binding:  Tried to GetConVarValue from ConCommand( %s )\n
 Invalid broadcast packet size %d in fragment buffer size %d\n
-Invalid challenge packet.\n
+Invalid challenge packet.
 Invalid color quantization mode change
 Invalid component ID %d in SOS
 Invalid control characters encountered in text.
@@ -5149,6 +5183,7 @@ Khmer
 Kick a player by name.
 Kick a player by userid or uniqueid, with a message.
 Kick a previously connected player with the same steamID if a replacement comes along
+Kicked to free up slot
 Known Peer State "%s"
 Known by handlers: 
 KuoW
@@ -5383,6 +5418,7 @@ Max SourceTV spectator bandwidth rate allowed, 0 == unlimited
 Max bandwidth rate allowed on server, 0 == unlimited
 Max number of broadcast http requests in flight. If there is a network issue, the requests may start piling up, degrading server performance. If more than the specified number of requests are in flight, the new requests are dropped.
 Max number of broadcast1 http requests in flight. If there is a network issue, the requests may start piling up, degrading server performance. If more than the specified number of requests are in flight, the new requests are dropped.
+Max number of messages that can be queued in a netchan receive buffer for an ordinary connection from a client.
 Max number of ticks to simulate per frame, after which simulation will start to slow down compared to real time.
 Max number of times a user can fail rcon authentication before being banned
 Maximum allowable entity delta size over unreliable delivery.
@@ -5748,6 +5784,7 @@ N9__gnu_cxx18stdio_sync_filebufIwSt11char_traitsIwEEE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
+NETWORK_DISCONNECT_%d
 NETWORK_DISCONNECT_REJECT to %s: rejected by game rules with code %d\n
 NETWORK_DISCONNECT_REJECT_SERVERFULL to %s: Cannot get free client\n
 NETWORK_DISCONNECT_REJECT_SERVERFULL to %s: GetNumClients()[%d] - GetNumFakeClients()[%d] + numSlotsRequested[%d] > m_numGameSlots[%d]\n
@@ -5896,7 +5933,9 @@ NavGameTest001
 Need space between identifier and decimal point.
 Need space between number and identifier.
 NetMessage %s
+Netchan messages. . . . : Total msgs:%u   Avg size:%.1fbytes
 Network Message %d
+Network version %d is incompatible.
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -5919,12 +5958,15 @@ No default value
 No demos in list, use startdemos <demoname> <demoname2> to specify\n
 No demos listed with startdemos\n
 No display adapters found. Falling back to software rasterizer. (nAdapterCount=%d, nAdapter=%d)\n
+No engine network summary data available -- running in loopback mode\n
+No engine network summary data available..\n
 No existing hint file %s\n
 No field named "uninterpreted_option" in the Options proto.
 No free conversion of %s variant to Vector right now\n
 No know mod!
 No mod specified! This is necessary to run!
 No movie started.\n
+No network game client\n
 No previous capture for %s\n
 No previous save\n
 No previous spawn group\n
@@ -5934,6 +5976,7 @@ No vprof lite data available?\n
 No vprof lite data recorded\n
 NoDefaultModPath
 NoKeyBindings
+NoLicenseOrExpired
 Non-primitive types can't be packed.
 Non-repeated Any specified multiple times.
 Non-repeated field "
@@ -6024,6 +6067,7 @@ OnServerPostAdvanceTick
 OnServerPostSimulate
 OnServerProcessNetworking
 OnServerSimulate
+OnShutdownChannel
 OnSimpleLoopFrameUpdate
 OnSpawnGroupActivateCall_t
 OnSpawnGroupDeactivateCall_t
@@ -6053,6 +6097,7 @@ Output file write error --- out of disk space?
 Output server networking statistics in json format
 Output text to test console
 Output unserialization of entities on map load. 0 - off, 1 - client/server, 2 - server, 3 - client
+Overflow sending send tables
 Overflowed failed to serialize CNETMsg_Tick_t\n
 Override Fog color: %f %f %f\n
 Overrides the SourceTV master root address.
@@ -6320,6 +6365,7 @@ Print CPU configuration information
 Print a message about problems with ticks and interpolation.  0=never, 1=warnings, 2=all, even if hidden by interpolation
 Print a message if network issues cause problems with server snapshots of user commands not being available when needed, if the percentage (0...100) exceeds this value.  A value of 0 will cause the message to always print each time it is calculated
 Print a performance report from the current data in the vprof 'lite' profiler
+Print a summary report of Source2 engine networking statistics.  (Ticks, netchan messages, etc.)
 Print callstack every time CNetworkGameServerBase::WriteEntityUpdate takes more than this amount of milliseconds
 Print connection status
 Print demo sequence list.
@@ -6533,6 +6579,7 @@ ReadPacketEntities
 ReadPacketEntities:  buffer read overflow\n
 ReadPreserveEnt: u.m_nNewEntity == MAX_SNAPSHOT_ENTITIES
 ReadUserCmd
+Receive margin (ms) . . : 
 Received S2C_CHALLENGE [%u auth %d] from %s\n
 Received S2C_CONNECTION from %s [addons:'%s']\n
 Received acknowledgement tick=%d after the full frame of %d, discarding current fullframe and rebuilding\n
@@ -6544,6 +6591,7 @@ Received signon %i when at %i\n
 Received wrong spawn count %i when at %i\n
 Receiving %.1fK non-incremental update from server\n
 Receiving C2S_CONNECT [protocol %u %u auth %d] from %s\n
+Reconnecting; disconnecting prior connection
 Reconnects the SourceTV relay proxy.
 Record a demo incrementally.
 Record a demo.
@@ -6734,6 +6782,7 @@ SRGBA8
 SSE and SSE2 are required.
 STEAMAPPS_INTERFACE_VERSION008
 STEAMAUTH: Client %s not immediately kicked because sv_steamauth_enforce=%d\n
+STEAMAUTH: Client %s received failure code %d; ignoring because local connection\n
 STEAMAUTH: Client %s received failure code %d\n
 STEAMHEADLESS_INTERFACE_VERSION001
 STEAMHTMLSURFACE_INTERFACE_VERSION_005
@@ -6768,7 +6817,6 @@ SV:  CNetworkStringTableContainer::WriteBaselines, overflowed writing uncompress
 SV:  CSVCMsg_FlattenedSerializer_t %s.\n
 SV:  ChangeLevel( "%s", "%s" ) failed, map is not valid\n
 SV:  Connection to Steam servers successful.\n
-SV:  Disconnect client '%s' from server(%d): %s\n
 SV:  Dropped client '%s' from server(%d): %s\n
 SV:  Forcing client reconnect (%s) for client '%s'\n
 SV:  Game started\n
@@ -7050,7 +7098,7 @@ Second argument to Swap() (of type "
 Second argument to SwapFields() (of type "
 Seconds after client connect during which extra frames are buffered to prevent non-delta'd update
 Seconds between full frame embeddeds
-Secure host does not allow insecure connection.\n
+Secure host does not allow insecure connection.
 Seek failed on temporary file
 Selected %d colors for quantization
 Send
@@ -7118,6 +7166,7 @@ Server requested tick interval of %g, but we are compiled with fixed value of %g
 Server sent bogus string index %i for table %s\n
 Server sent unknown recent usercommand encoded status %d\n
 Server set secure flag in handshake, but did not use auth PROTOCOL_STEAM?\n
+Server shutdown
 Server shutting down because of using %lluMB with an sv_memory_limit of %dMB\n
 Server shutting down because sv_shutdown was done and a game has ended.\n
 Server tags. Used to provide extra information to clients when they're browsing for servers. Separate tags with a comma.
@@ -7304,6 +7353,7 @@ Sounds
 Source of CopyFrom cannot be a descendant of the target.
 Source2 - Warning
 Source2 Benchmark Results\n\n
+Source2 engine networking summary.  %u seconds.\n
 Source2BenchV2.csv
 Source2Client002
 Source2ClientConfig001
@@ -7644,7 +7694,6 @@ SteamRun failed, error %d\n
 SteamServersDisconnected
 SteamUser023
 SteamUtils010
-Stop
 Stop Broadcast @frag %d\n
 Stop an existing remote VProf data request
 Stop looping demos (current demo will complete).
@@ -7791,6 +7840,8 @@ Tick %d. Async schedule %s\n
 Tick %d. Thread %lld. %s:  Queuing load SpawnGroup to client '%s' (not sent initial spawngroup yet)\n
 Tick %d. Thread %lld. %s:  Sending load SpawnGroup to client '%s'\n
 Tick %d. Thread %lld. SendInitialSpawnGroups {%s} to '%s' %s\n
+Tick messages . . . . . : %u total
+Tick miss rate. . . . . : %u measurement intervals
 Tier0GenericMiniDumpHandler_SetOptions
 Tifinagh
 Time before we consider a mic stalled out and need to reset it.
@@ -7811,6 +7862,7 @@ Toggles instant replay.
 Toggles specified convar value on and off.
 Toggles viewport size between small + full window.
 Too many color components: %d, max %d
+Too many move messages
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolService_001
@@ -7890,6 +7942,7 @@ UNAUTHENTICATED
 UNAVAILABLE
 UNIMPLEMENTED
 UNKNOWN_ENUM_VALUE_%s_%d
+UPSTREAM (client->server)
 URL of the broadcast relay
 URL of the broadcast relay1
 URLName
@@ -7963,6 +8016,7 @@ Unbind a key.
 Unbind all keys.
 Under memory limit. Limit is %llu but current usage is %llu.\n
 Unepxected spawn group %d, %d was expected.\n
+Unexpected authentication protocol %i!
 Unexpected end of string.
 Unexpected failure while serializing option submessage 
 Unexpected marker 0x%02x
@@ -9102,6 +9156,7 @@ cl_jitter_bad_threshold_up
 cl_language
 cl_log_tick
 cl_log_tick_skips
+cl_net_printsummary
 cl_parallel_readpacketentities
 cl_parallel_readpacketentities_threshold
 cl_playback_screenshots
@@ -9853,7 +9908,6 @@ import "$0";\n
 import public "$0";\n
 import weak "$0";\n
 impossible
-incoming
 incompatible version
 incomplete distance tree
 incomplete dynamic bit lengths tree
@@ -10086,7 +10140,6 @@ locale::_S_normalize_category category not found
 locale::facet::_S_create_c_locale name not valid
 locale::facet::_S_lc_ctype_c_locale duplocale error
 locale::facet::_S_lc_ctype_c_locale newlocale error
-localhost
 localize
 log10
 log:  unknown parameter %s, 'on' and 'off' are valid\n
@@ -10342,6 +10395,7 @@ netadr_t::SetType(netadrtype_t)
 netadr_t::ToSockadr(sockaddr*) const
 netadr_t::ToString(bool) const
 netadr_t::ToString(char*, unsigned int, bool) const
+netchan timeout: %.2fs since recv
 netmessages.proto
 netspike.txt
 netsupport
@@ -10494,7 +10548,6 @@ opus_repacketizer_out_range
 opus_repacketizer_out_range_impl
 opus_strerror
 os/type  : %s %s\n
-outgoing
 output buffer too small for in-memory compression
 output specified is nullptr
 outputColor
@@ -10736,6 +10789,7 @@ regular expression is too large
 reinterpret_cast
 reloadgame
 remote console password.
+remote disconnected
 remoteclient
 remoteconnect
 remove_doubling
@@ -10864,6 +10918,8 @@ server cvars start\n
 server has %d orphaned classes\n
 server orphan %s: client class associated %s\n
 server tick
+server ticks
+server-decided timeout: %.2fs since recv
 server_cmd_queue
 server_cmd_recv_margin
 server_cvar: "%s" "%s"\n
@@ -11110,7 +11166,6 @@ size too big:
 sizeof 
 sizeof...
 skipping %s during demo playback because haven't gotten sentinel yet\n
-slot
 slot %d
 snd_mute_losefocus
 socket
@@ -14174,7 +14229,6 @@ subpattern name is too long (maximum 32 characters)
 subtype mismatch
 success
 successfully
-summary
 support for \P, \p, and \X has not been compiled
 sv_alternatebaselinemgr.cpp
 sv_banid_dev_enabled
@@ -14252,6 +14306,7 @@ sv_rcon_log
 sv_rcon_maxfailures
 sv_rcon_minfailures
 sv_rcon_minfailuretime
+sv_recvbuf_messages
 sv_region
 sv_replaysdir
 sv_reserve_slots_for_reconnecting_players_kick_prior
@@ -14268,6 +14323,7 @@ sv_spewmeta
 sv_spewworldgroups
 sv_stats
 sv_steamauth_enforce
+sv_steamauth_ignore_localhost
 sv_steamgroup
 sv_steamgroup_exclusive
 sv_stressbots
@@ -15133,6 +15189,7 @@ usage: load savename\n
 usage: r_viewport [width] [height]\n
 useexactfilename
 usepreconnectlogic
+user commands
 user_convars
 user_keys
 user_keys_default

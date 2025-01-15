@@ -110,10 +110,6 @@
 %s:  value %u: count %d\n
 %s: !CanPacket() - SNPQueueTime=%.1fms.\n
 %s: !CanPacket() - m_bSuppressingTransmit.\n
-%s: ProcessPacket reliable failed with unreasonable nUncompressedSize (%d).
-%s: SendMessage %s failed with k_EResultLimitExceeded, crashing connection.
-%s: SendMessage reliable failed AllocateMessage (%d).
-%s: SendMessage unreliable failed AllocateMessage (%d).
 %s: field %s has MNetworkSendProxyRecipientsFilter but is not declared using CNetworkVarEmbeddedNotFlattened\n
 %s: field %s has MNetworkSendProxyRecipientsFilter but type '%s' is not declared DECLARE_EMBEDDED_NETWORKVAR_NOTFLATTENED()\n
 %s: max array count of %d, removing callback for invalid element %d\n
@@ -160,10 +156,11 @@
 - Packets: net total out  %.1f/s, in %.1f/s\n
 - Ping:    avg %.2fs\n
 - Ports: 
+- dropped: in %.1f%%, out %.1f%%\n
 - exclude
 - flow: in %.1f, out %.1f kB/s\n
+- late: in %.1f%%, out %.1f%%\n
 - latency: net %.0f  engine %.0f  local %.0f  peer %.0f\n
-- loss: in %.1f%%, out %.1f%%\n
 - online: %.3f seconds\n
 - packets: in %.1f/s, out %.1f/s\n
 - reliable: %s\n
@@ -172,7 +169,6 @@
 --- %s has duplicate fields\n
 -FLT_MAX
 ../public/networksystem/serializedentity.h
-.Afc=%d, m=%d, sum=%d (poly:%d), bits=%u
 0 bit issue, changes
 0 bit issue, spot 1
 0 bit issue, spot 2
@@ -227,10 +223,10 @@
 6?Generic
 8CNetChan
 <classname> <fieldname>:  spew why field was excluded from networking for classname.
->CNetworkMessages::AllocateAndCopyConstructNetMessageAbstract unable to allocate unknown message type!\n
 ?CNetworkUtlVectorBase
 @@regex_error
 @Capture active, %s samples written\nnet_captureculldata stop to stop the capture\n
+A33s?
 Accepting Steam Net connection %s\n
 Activates/deactivates net message validation
 AddMultipleToTail
@@ -254,7 +250,7 @@ Average Memory Usage Per Entity   :  %8.3f bytes\n
 Average Number of Field Paths     :  %8.3f\n
 BetaUniverse
 Bitfield
-Buffer overflow in net channel %s
+Buffer overflow
 BuildDelta
 BuildDeltaProperties fieldDataBuf
 BuildEntityClassNetworkSerializer
@@ -308,6 +304,7 @@ CNetChan::SendNetMessage: Unable to send message %s, buffer is full!\n
 CNetChan::Setup for %s\n
 CNetChan::UpdateMessageStats, bit counter about to roll over with addition of %d bits, resetting to zero\n
 CNetworkFieldChangedEventQueue::QueueChange:  ran out of scratch data space!!!\n
+CNetworkMessages::AllocateAndCopyConstructNetMessageAbstract unable to allocate unknown message type!\n
 CNetworkMessages::DeallocateUnserializedMessage unable to deallocate unknown message type!\n
 CNetworkMessages::FindOrCreateGroupId: Too many network groups!\n
 CNetworkMessages::FindOrCreateNetMessage: It is illegal to register new net messages after serialization!\n
@@ -399,7 +396,7 @@ ERROR: Field %s::%s unable to deduce unserializer for type (%s)!\n
 Enable optimization of slow path that makes HLTV CPU consumption high in AnimGraph-using mods. Will switch to this on by default soon.
 Encode
 Encountered 2 fields "%s" and "%s" in struct "%s" using the same change callback with different change callback types!\n
-Encountered message on net channel %s with an invalid network category! [net message %s]
+Encountered message with an invalid network category! [net message %s]
 End of stream
 Error
 Error installing message handlers into a net channel: missing handlers in channel %s!\n
@@ -522,7 +519,9 @@ NetChanTransmitUnreliable
 NetChannel '%s':\n
 NetMessage '%s' still using auto-assigned, has to generate id from name CUtlStringToken hashcode = %d\n
 NetSteamConn
+Netchan '%s' closed unexpectedly: %s\n
 Netchan [%s] already associated with hconn #%u, but now we are getting messages on new hconn #%u using the same 'from' address\n
+Netchan queued message new high water mark reached by %s at %d messages\n
 Network System Initialized\n
 Network field tried to use a priority that has not been registered!\n
 Network socket '%s' opened on port %d\n
@@ -627,6 +626,9 @@ SDR connect
 SDR ping location: %s\n
 SDR relay network status: %s (%d %d %d)\n
 Schema
+SendMessage %s failed with k_EResultLimitExceeded, crashing connection.
+SendMessage reliable failed AllocateMessage (%d).
+SendMessage unreliable failed AllocateMessage (%d).
 Server will not buffer more than N kb from connected clients
 Server will not buffer more than N messages from connected clients
 Server will reject message larger than N kb
@@ -684,6 +686,7 @@ TimeTable
 Toggle field path tracing to file\n
 Too many incoming messages on channel (%s) %d remain queued, limit per-frame is %d.\n
 Too many proxies for serializer %s.
+Too many queued messages (%d)
 Too many queued messages on channel (%s) %d queued, limit is %d.\n
 Total
 UDP -> %s: sz=%5i seq=%5i ack=%5i rel=%1i tm=%8.3f\n
@@ -696,6 +699,8 @@ Unable to unambiguously match %s::%s in %s, %d possible matches found\n
 Unexpected argument '%s'\n
 Unknown jitter profile '%s'.\n
 Unknown message type %u
+Unreasonable reliable nUncompressedSize (%d).
+Unreasonable unreliable nUncompressedSize (%d).
 Unreliable header too small
 Usage: net_captureculldata <file path>\n
 Usage: net_option <setting> [<value>]\n
@@ -724,6 +729,7 @@ WriteFields
 WriteToBuffer Message %s is not initialized! Probably missing required fields!\n
 Writing %d bits for path %s of serializer %s entity %d, this will fail to parse\n
 [ Net Message Info: %s ]\n
+[%s] Queued message count %d exceeds limit of %s=%d.  Allowing due to engine_frametime_warnings_enable=false\n
 [%s] high frame misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping\n
 [%s] misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping\n
 [%s] setting extremely high timeout\n
@@ -793,6 +799,7 @@ embedded field
 encoding_stats
 excluding
 failed to construct fake field from metadata %s::%s (%s) in %s\n
+fc=%d, m=%d, sum=%d (poly:%d), bits=%u
 fclose
 fflush
 field %s not present in %s\n
