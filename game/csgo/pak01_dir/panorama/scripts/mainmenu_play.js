@@ -396,6 +396,10 @@ var PlayMenu;
                         txtTooltip += '_nonprime';
                         showbar = false;
                     }
+                    else if (TournamentsAPI.IsPremierSeasonOffseason()) {
+                        txtTooltip += '_offseason';
+                        showbar = false;
+                    }
                 }
                 elTab.SetPanelEvent('onmouseover', () => {
                     UiToolkitAPI.ShowCustomLayoutParametersTooltip(elTab.id, 'GamemodesLockedneedPrime', 'file://{resources}/layout/tooltips/tooltip_title_progressbar.xml', 'titletext=' + '#PlayMenu_unavailable_locked_mode_title' +
@@ -439,7 +443,8 @@ var PlayMenu;
             LobbyAPI.BIsHost()) {
             if (gameMode === 'premier') {
                 isAvailable = ((MyPersonaAPI.GetElevatedState() === 'elevated') &&
-                    (MyPersonaAPI.HasPrestige() || MyPersonaAPI.GetCurrentLevel() >= 10));
+                    (MyPersonaAPI.HasPrestige() || MyPersonaAPI.GetCurrentLevel() >= 10)) &&
+                    !TournamentsAPI.IsPremierSeasonOffseason();
             }
             else if (MyPersonaAPI.HasPrestige()) {
                 isAvailable = true;
