@@ -204,6 +204,14 @@ var g_PromotedSettings = [
         start_date: new Date('November 1, 2024'),
         end_date: new Date('January 1, 2025')
     },
+    {
+        id: "RadarScaleDynamic",
+        loc_name: "#SFUI_Settings_Radar_Scale_Dynamic",
+        loc_desc: "#SFUI_Settings_Radar_Scale_Dynamic_Info",
+        section: "GameSettings",
+        start_date: new Date('January 27, 2025'),
+        end_date: new Date('March 1, 2025')
+    },
 ]
     .reverse();
 var PromotedSettingsUtil;

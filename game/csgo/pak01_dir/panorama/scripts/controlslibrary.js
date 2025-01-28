@@ -388,6 +388,34 @@ function CtrlLib_CreateSpiderGraph() {
         let vPos = spiderGraph.GraphPositionToUIPosition(s, 1.0);
     }
 }
+function gen_graph_data(i, max) {
+    return Math.random() * max;
+}
+function CtrlLib_CreateLineGraph() {
+    const lineGraph = $('#LineGraph');
+    const elNumVals = $('#num_points');
+    const numPoints = Math.floor(Number(4 + elNumVals.value * (15)));
+    const xvals = [...Array(numPoints).keys()];
+    const yvals = xvals.map(x => gen_graph_data(x, numPoints));
+    const options = {
+        draw_guidelines: true,
+        guideline_color: "#88888888",
+        guideline_thick: 4,
+        guideline_soft: .5,
+        line_color: "#aaffffaa",
+        line_thickness: 6,
+        line_softness: .5,
+        draw_points: true,
+        point_size: 8.5,
+        point_color: "#ff3344ff",
+        gradient_color: "#344d7333",
+    };
+    lineGraph.SetGraphOptions(options);
+    lineGraph.SetData(xvals, yvals);
+    lineGraph.Show();
+    const guidelineYPositions = lineGraph.GetGuidelinePositions();
+    const pointPositions = lineGraph.GetDataPointPositions();
+}
 (function () {
     OpenControlsLib();
     ControlsLibNavigateToTab('ControlLibStyleGuide', 'init');

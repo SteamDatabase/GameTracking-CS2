@@ -49,6 +49,19 @@ var ItemContextEntries;
             }
         },
         {
+            name: 'open_season_stats_panel',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            AvailableForItem: (id) => {
+                return (ItemInfo.ItemDefinitionNameStartsWith(id, 'premier season coin'));
+            },
+            OnSelected: (id) => {
+                const season = InventoryAPI.GetItemAttributeValue(id, 'premier season');
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('id-popup-season-stats', 'file://{resources}/layout/popups/popup_season_stats.xml', 'seasonid=' + season + '&' +
+                    'itemid=' + id);
+                $.DispatchEvent('ContextMenuEvent', '');
+            }
+        },
+        {
             name: 'bulkretrieve',
             populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => {

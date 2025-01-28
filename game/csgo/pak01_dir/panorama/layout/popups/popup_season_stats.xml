@@ -1,0 +1,217 @@
+<!-- xml reconstructed by Source 2 Viewer - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/gamestyles.vcss_c" />
+		<include src="s2r://panorama/styles/mainmenu.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_season_stats.vcss_c" />
+	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/common/formattext.vts_c" />
+		<include src="s2r://panorama/scripts/rating_emblem.vts_c" />
+		<include src="s2r://panorama/scripts/common/teamcolor.vts_c" />
+		<include src="s2r://panorama/scripts/popups/popup_season_stats.vts_c" />
+	</scripts>
+	<snippets>
+		<snippet name="stat-container-text-only">
+			<Panel class="stat-container">
+				<Label id="stat-title" class="stratum-regular stat-container-title" text="{s:stat-title}" />
+				<Label id="stat-value" class="stratum-medium stat-container-value" text="{s:stat-value}" />
+			</Panel>
+		</snippet>
+		<snippet name="stat-container-icon">
+			<Panel class="stat-container">
+				<Image id="stat-icon" textureheight="32px" texturewidth="-1" class="stat-container-icon" />
+				<Label id="stat-value" class="stratum-medium stat-container-value" text="{s:stat-value}" />
+			</Panel>
+		</snippet>
+		<snippet name="single-map-stats">
+			<Panel class="stats-panel-single-map">
+				<Panel class="full-width top-bottom-flow">
+					<Panel class="vertical-center horizontal-center left-right-flow top-margin-32 bottom-margin-32">
+						<Panel id="id-map-stat-matches-played" class="stat-container-matches">
+							<Label id="stat-title" class="stratum-medium stat-container-title" text="{s:stat-title}" />
+							<Label id="stat-value" class="stratum-bold-italic stat-container-value" text="{s:stat-value}" />
+						</Panel>
+						<Frame id="id-map-stat-win-percent" snippet="stat-container-text-only" />
+						<Panel class="stat-separator" />
+						<Frame id="id-map-stat-kills" snippet="stat-container-text-only" />
+						<Frame id="id-map-stat-deaths" snippet="stat-container-text-only" />
+						<Frame id="id-map-stat-assists" snippet="stat-container-text-only" />
+						<Frame id="id-map-stat-rounds" snippet="stat-container-text-only" />
+						<Panel class="stat-separator" />
+						<Frame id="id-map-stat-k-d" snippet="stat-container-text-only" />
+						<Frame id="id-map-stat-kpr" snippet="stat-container-text-only" />
+						<Frame id="id-map-stat-hs-percent" snippet="stat-container-text-only" />
+						<Panel class="stat-separator" />
+						<Frame id="id-map-stat-mvps" snippet="stat-container-icon" />
+						<Frame id="id-map-stat-rounds_5k" snippet="stat-container-icon" />
+						<Frame id="id-map-stat-rounds_4k" snippet="stat-container-icon" />
+						<Frame id="id-map-stat-rounds_3k" snippet="stat-container-icon" />
+					</Panel>
+					<Panel class="stat-bar-stats-container">
+						<Panel id="id-bar-container" class="stat-bar-containers">
+							<Panel id="id-bar-wins" class="stat-bar-wins" />
+							<Panel id="id-bar-ties" class="stat-bar-ties" />
+							<Panel id="id-bar-losses" class="stat-bar-losses" />
+						</Panel>
+						<Panel class="stat-wins-losses-container">
+							<Frame id="id-map-stat-wins" class="stat-map-wins-losses-ties wins" snippet="stat-container-text-only" />
+							<Frame id="id-map-stat-ties" class="stat-map-wins-losses-ties" snippet="stat-container-text-only" />
+							<Frame id="id-map-stat-losses" class="stat-map-wins-losses-ties" snippet="stat-container-text-only" />
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="snippet-mwr-map">
+			<Panel class="mwr-map">
+				<Image id="mwr-map__image" src="" texturewidth="52" textureheight="-1" scaling="stretch-to-fit-x-preserve-aspect" />
+			</Panel>
+		</snippet>
+		<snippet name="loading">
+			<Panel class="stats-loading-panel">
+				<Panel class="stats-loading-panel-bar" />
+				<Panel class="stats-loading-panel-bar short" />
+				<Panel class="stats-loading-panel-bar shorter" />
+			</Panel>
+		</snippet>
+		<snippet name="graph-bar">
+			<Panel class="stats-bar-graph-bar">
+				<Label class="stratum-light" text="{d:num-matches}" />
+				<Panel id="id-bar-inner" class="stats-bar-graph-bar-inner" />
+			</Panel>
+		</snippet>
+		<snippet name="grid-row-entry">
+			<Panel class="map-grid-row-box">
+				<Label id="stat-value" class="stratum-regular map-grid-row-value" text="{s:stat-value}" />
+			</Panel>
+		</snippet>
+		<snippet name="grid-row">
+			<Panel class="map-grid-row">
+				<Image id="map-icon" src="" texturewidth="22px" textureheight="-1" />
+			</Panel>
+		</snippet>
+	</snippets>
+	<PopupCustomLayout class="PopupPanel popup-season-stats Hidden" useglobalcontext="true" registerforreadyevents="true" popupbackground="blur" onload="PopupSeasonStats.Init();" oncancel="PopupSeasonStats.ClosePopup();">
+		<Panel class="model-panel-bg" />
+		<MapItemPreviewPanel id="id-season-medal-model" class="stats-medal-model" camera="cam_display_season_medal" initial_entity="item" map="ui/season_medal" rotation_limit_x="60" rotation_limit_y="30" mouse_rotate="true" auto_rotate_y="0" auto_rotate_x="20" auto_rotate_period_x="10" auto_rotate_period_y="20" require-composition-layer="true" transparent-background="true" hittest="true">
+			<Button id="id-medal-model-zoom-btn" class="IconButton stats-medal-model-zoom-btn">
+				<Image texturewidth="24" textureheight="24" src="s2r://panorama/images/icons/ui/zoom_in.vsvg" />
+			</Button>
+		</MapItemPreviewPanel>
+		<Panel class="stats-container">
+			<Panel class="left-right-flow">
+				<Panel class="top-bottom-flow">
+					<Panel class="stats-panel model-panel" />
+					<Panel class="stats-panel single-quarter-height-single-long rank-panel">
+						<Frame snippet="loading" />
+						<Panel class="full-width full-height vertical-center not-loaded">
+							<Panel class="left-right-flow vertical-center horizontal-center margin-16">
+								<Frame id="id-premier-rating" class="not-loaded" src="s2r://panorama/layout/rating_emblem.vxml_c" />
+								<Frame id="id-global-stat-week" class="not-loaded" snippet="stat-container-text-only" />
+							</Panel>
+						</Panel>
+					</Panel>
+					<Panel class="stats-panel spidergraph">
+						<Frame snippet="loading" />
+						<Label class="stats-panel-title" text="#season_section_rank_map_wins_graph" />
+						<SpiderGraph id="id-wins-spider-graph" class="mapwinrecord__graph not-loaded" />
+					</Panel>
+				</Panel>
+				<Panel class="top-bottom-flow">
+					<Panel class="stats-panel global-stats">
+						<Frame snippet="loading" />
+						<Label class="stats-panel-title" text="#season_section_season_stats" />
+						<Panel class="stats-global-container not-loaded">
+							<Panel class="stats-panel-season-stats">
+								<Panel id="id-global-stat-matches-played" class="stat-container-matches">
+									<Label id="stat-title" class="stratum-medium stat-container-title" text="{s:stat-title}" />
+									<Label id="stat-value" class="stratum-bold-italic stat-container-value" text="{s:stat-value}" />
+								</Panel>
+								<Frame id="id-global-stat-win-percent" snippet="stat-container-text-only" />
+								<Panel class="stat-separator" />
+								<Frame id="id-global-stat-kills" snippet="stat-container-text-only" />
+								<Frame id="id-global-stat-deaths" snippet="stat-container-text-only" />
+								<Frame id="id-global-stat-assists" snippet="stat-container-text-only" />
+								<Frame id="id-global-stat-rounds" snippet="stat-container-text-only" />
+								<Panel class="stat-separator" />
+								<Frame id="id-global-stat-k-d" snippet="stat-container-text-only" />
+								<Frame id="id-global-stat-kpr" snippet="stat-container-text-only" />
+								<Frame id="id-global-stat-hs-percent" snippet="stat-container-text-only" />
+								<Panel class="stat-separator" />
+								<Frame id="id-global-stat-mvps" snippet="stat-container-icon" />
+								<Frame id="id-global-stat-rounds_5k" snippet="stat-container-icon" />
+								<Frame id="id-global-stat-rounds_4k" snippet="stat-container-icon" />
+								<Frame id="id-global-stat-rounds_3k" snippet="stat-container-icon" />
+							</Panel>
+							<Panel class="stat-bar-stats-container">
+								<Panel id="id-global-bar-container" class="stat-bar-containers">
+									<Panel id="id-bar-wins" class="stat-bar-wins" />
+									<Panel id="id-bar-ties" class="stat-bar-ties" />
+									<Panel id="id-bar-losses" class="stat-bar-losses" />
+								</Panel>
+								<Panel id="id-global-bar-stats" class="stat-wins-losses-container">
+									<Frame id="id-global-stat-wins" class="stat-map-wins-losses-ties wins" snippet="stat-container-text-only" />
+									<Frame id="id-global-stat-ties" class="stat-map-wins-losses-ties" snippet="stat-container-text-only" />
+									<Frame id="id-global-stat-losses" class="stat-map-wins-losses-ties" snippet="stat-container-text-only" />
+								</Panel>
+							</Panel>
+						</Panel>
+					</Panel>
+					<Panel class="stats-panel single-half-size-long-panel rank-history">
+						<Frame snippet="loading" />
+						<Label class="stats-panel-title" text="#season_section_rank_history" />
+						<Panel id="id-line-graph-y-axis" class="y-axis-rating-container" />
+						<Panel class="top-bottom-flow vertical-align-bottom horizontal-align-right">
+							<LineGraph id="id-rank-history-line-graph" class="stats-rank-line-graph not-loaded" />
+							<Panel class="x-axis-labels">
+								<Label class="horizontal-align-left stratum-regular-condensed" text="#season_section_graph_x_axis_label_min" />
+								<Label class="horizontal-align-right stratum-regular-condensed" text="#season_section_graph_x_axis_label_max" />
+							</Panel>
+						</Panel>
+					</Panel>
+					<Panel class="stats-panel single-half-size-long-panel match-history">
+						<Frame snippet="loading" />
+						<Label class="stats-panel-title" text="#season_section_rank_activity" />
+						<Panel class="top-bottom-flow vertical-align-bottom horizontal-align-right">
+							<Panel id="stats-panel-matches-bar-graph" class="stats-rank-bar-graph not-loaded" />
+							<Panel class="x-axis-labels not-loaded">
+								<Label class="horizontal-align-left stratum-regular-condensed" text="#season_section_graph_x_axis_label_min" />
+								<Label class="horizontal-align-right stratum-regular-condensed" text="#season_section_graph_x_axis_label_max" />
+							</Panel>
+						</Panel>
+					</Panel>
+					<Panel class="stats-panel maps-panel">
+						<Frame snippet="loading" />
+						<Label id="id-map-stats-header" class="stats-panel-title" text="#season_section_rank_map_stats" />
+						<Panel class="stats-panel-maps-mode-btns not-loaded">
+							<RadioButton id="id-stats-mode-row-btn" class="stats-panel-mode-btn" group="maps-mode">
+								<Image textureheight="-1" texturewidth="20px" src="s2r://panorama/images/icons/ui/stats_row.vsvg" />
+							</RadioButton>
+							<RadioButton id="id-stats-mode-grid-btn" class="stats-panel-mode-btn" group="maps-mode">
+								<Image textureheight="-1" texturewidth="20px" src="s2r://panorama/images/icons/ui/stats_grid.vsvg" />
+							</RadioButton>
+						</Panel>
+						<Panel class="full-width fill-parent-flow-height not-loaded">
+							<Panel id="id-stats-mode-row" class="stats-map-type-container">
+								<Panel class="stats-panel-per-map-container">
+									<Panel class="stats-panel-per-map-btns-block">
+										<Panel id="id-stats-per-map-btns" class="stats-panel-per-map-btns" />
+									</Panel>
+									<Panel id="id-stats-panel-all-maps-container" class="stats-panel-all-maps-container" />
+								</Panel>
+							</Panel>
+							<Panel id="id-stats-mode-grid" class="stats-map-type-container">
+								<Panel id="id-stats-mode-grid-rows" class="stats-map-grid-container" />
+							</Panel>
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+		<Panel class="season-stats-bottom-bar">
+			<TextButton class="PopupButton" text="#GameUI_Close" onactivate="PopupSeasonStats.ClosePopup();" />
+		</Panel>
+	</PopupCustomLayout>
+</root>

@@ -264,6 +264,11 @@ var ItemInfo;
         return (!!itemDefName && (itemDefName.indexOf(defSubstr) != -1));
     }
     ItemInfo.ItemDefinitionNameSubstrMatch = ItemDefinitionNameSubstrMatch;
+    function ItemDefinitionNameStartsWith(id, defSubstr) {
+        const itemDefName = InventoryAPI.GetItemDefinitionName(id);
+        return (!!itemDefName && (itemDefName.startsWith(defSubstr)));
+    }
+    ItemInfo.ItemDefinitionNameStartsWith = ItemDefinitionNameStartsWith;
     function GetFauxReplacementItemID(id, purpose) {
         if (purpose === 'graffiti') {
             if (ItemDefinitionNameSubstrMatch(id, 'tournament_journal_')) {

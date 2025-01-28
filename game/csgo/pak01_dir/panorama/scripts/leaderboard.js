@@ -25,6 +25,8 @@ var Leaderboard;
     let m_LobbyPlayerUpdatedEventHandler;
     let m_NameLockEventHandler;
     let m_leaderboardName = '';
+    let m_onlyAvailableSeasonLeaderboard = '';
+    const IS_NEW_SEASON = true;
     function RegisterEventHandlers() {
         _msg('RegisterEventHandlers');
         if (!m_bEventsRegistered) {
@@ -89,22 +91,10 @@ var Leaderboard;
     function _SetTitle() {
         $.GetContextPanel().SetDialogVariable('leaderboard-title', $.Localize('#leaderboard_title_' + String(m_lbType)));
     }
-    function _InitSeasonDropdown() {
-        let elSeasonDropdown = $('#jsNavSeason');
-        elSeasonDropdown.visible = true;
-        elSeasonDropdown.RemoveAllOptions();
-        let lbs = LeaderboardsAPI.GetAllSeasonPremierLeaderboards();
-        for (let i = 0; i < lbs.length; i++) {
-            let szLb = lbs[i];
-            const elEntry = $.CreatePanel('Label', elSeasonDropdown, szLb, {
-                'class': ''
-            });
-            elEntry.SetAttributeString('leaderboard', szLb);
-            elEntry.SetAcceptsFocus(true);
-            elEntry.text = $.Localize('#' + szLb + '_name');
-            elSeasonDropdown.AddOption(elEntry);
-        }
-        elSeasonDropdown.SetSelected(LeaderboardsAPI.GetCurrentSeasonPremierLeaderboard());
+    function _InitSeason() {
+        m_onlyAvailableSeasonLeaderboard = LeaderboardsAPI.GetCurrentSeasonPremierLeaderboard();
+        let elSeason = $.GetContextPanel().FindChildTraverse('jsNavSeason');
+        elSeason.text = $.Localize('#' + m_onlyAvailableSeasonLeaderboard + '_name');
     }
     function _InitLocationDropdown() {
         let elLocationDropdown = $('#jsNavLocation');
@@ -119,7 +109,7 @@ var Leaderboard;
             const szRegion = regions[i];
             const elEntry = $.CreatePanel('Label', elLocationDropdown, szRegion);
             const bCurrentRegion = _FindLocalPlayerInRegion(szRegion);
-            elEntry.SetHasClass('of-interest', bCurrentRegion);
+            elEntry.SetHasClass('of-interest', bCurrentRegion && (szRegion != 'Friends') && !IS_NEW_SEASON);
             switch (szRegion) {
                 case 'World':
                     elEntry.SetAttributeString('leaderboard-class', szRegion.toLowerCase());
@@ -139,7 +129,7 @@ var Leaderboard;
             elEntry.text = $.Localize('#leaderboard_region_' + szRegion);
             elLocationDropdown.AddOption(elEntry);
         }
-        if (MyPersonaAPI.GetLauncherType() === "perfectworld") {
+        {
             defaultRegion = 'friends';
         }
         elLocationDropdown.SetSelected(defaultRegion);
@@ -152,13 +142,10 @@ var Leaderboard;
     }
     function _FindLocalPlayerInRegion(region) {
         let arrLBsOfInterest = LeaderboardsAPI.GetPremierLeaderboardsOfInterest();
-        let elSeasonDropdown = $('#jsNavSeason');
-        let elSeason = elSeasonDropdown.GetSelected();
-        let lb = elSeason.GetAttributeString('leaderboard', '');
         for (let i = 0; i < arrLBsOfInterest.length; i++) {
             switch (region) {
                 case 'World':
-                    if (arrLBsOfInterest[i] === lb)
+                    if (arrLBsOfInterest[i] === m_onlyAvailableSeasonLeaderboard)
                         return true;
                     break;
                 case 'Friends':
@@ -174,16 +161,14 @@ var Leaderboard;
     }
     function _UpdateLeaderboardName() {
         if (m_lbType === 'general') {
-            let elSeasonDropdown = $('#jsNavSeason');
             let elLocationDropdown = $('#jsNavLocation');
             let elregion = elLocationDropdown.GetSelected();
-            let elSeason = elSeasonDropdown.GetSelected();
-            if (elregion && elSeason) {
+            if (elregion) {
                 if (elregion.GetAttributeString('friendslb', '') === 'true') {
-                    m_leaderboardName = elSeason.GetAttributeString('leaderboard', '') + '.friends';
+                    m_leaderboardName = m_onlyAvailableSeasonLeaderboard + '.friends';
                 }
                 else {
-                    m_leaderboardName = elSeason.GetAttributeString('leaderboard', '') + elregion.GetAttributeString('location-suffix', '');
+                    m_leaderboardName = m_onlyAvailableSeasonLeaderboard + elregion.GetAttributeString('location-suffix', '');
                 }
                 $.GetContextPanel().SwitchClass('region', elregion.GetAttributeString('leaderboard-class', ''));
             }
@@ -232,13 +217,12 @@ var Leaderboard;
         elNameButton.SetDialogVariable('leaderboard_namelock_button', buttonText);
     }
     function _InitNavPanels() {
-        $('#jsNavSeason').visible = false;
         $('#jsNavLocation').visible = false;
         $('#jsGoToTop').visible = m_lbType === 'general';
         $('#jsGoToMe').visible = m_lbType === 'general';
         if (m_lbType === 'party')
             return;
-        _InitSeasonDropdown();
+        _InitSeason();
         _InitLocationDropdown();
     }
     function _ShowGlobalRank() {
@@ -250,44 +234,64 @@ var Leaderboard;
         let arrLBsOfInterest = LeaderboardsAPI.GetPremierLeaderboardsOfInterest();
         let myIndex = LeaderboardsAPI.GetIndexByXuid(lb, m_myXuid);
         let bPresent = arrLBsOfInterest.includes(lb) && myIndex !== -1;
-        $.GetContextPanel().FindChildInLayoutFile('jsGoToMe').enabled = bPresent;
+        $.GetContextPanel().FindChildInLayoutFile('jsGoToMe').enabled = bPresent && !IS_NEW_SEASON;
+    }
+    function _ShowNoData() {
+        $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = false;
+        $.GetContextPanel().SwitchClass('leaderboard-status', 'lb-status-nodata');
+    }
+    function _ShowNewSeason() {
+        $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = false;
+        $.GetContextPanel().SwitchClass('leaderboard-status', 'lb-status-newseason');
+    }
+    function _ShowNewSeasonFriends() {
+        $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = false;
+        $.GetContextPanel().SwitchClass('leaderboard-status', 'lb-status-newseason-friends');
+    }
+    function _ShowLoading() {
+        $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = false;
+        $.GetContextPanel().SwitchClass('leaderboard-status', 'lb-status-loading');
+    }
+    function _ShowLeaderboards() {
+        $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = true;
+        $.GetContextPanel().SwitchClass('leaderboard-status', 'lb-status-ready');
     }
     function UpdateLeaderboardList() {
         _msg('-------------- UpdateLeaderboardList ' + m_leaderboardName);
         _UpdateGoToMeButton();
+        let count = LeaderboardsAPI.GetCount(m_leaderboardName);
         let status = LeaderboardsAPI.GetState(m_leaderboardName);
         _msg(status + '');
-        let elStatus = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-loading');
-        let elData = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-nodata');
-        let elLeaderboardList = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list');
-        if ("none" == status) {
-            elStatus.SetHasClass('hidden', false);
-            elData.SetHasClass('hidden', true);
-            elLeaderboardList.SetHasClass('hidden', true);
+        let seasonName = $.Localize('#' + m_onlyAvailableSeasonLeaderboard + '_name');
+        $.GetContextPanel().SetDialogVariable('season_name', seasonName);
+        if ("ready" == status && count !== 0) {
+            _FillOutEntries();
+        }
+        if (1 <= LeaderboardsAPI.HowManyMinutesAgoCached(m_leaderboardName)) {
             LeaderboardsAPI.Refresh(m_leaderboardName);
             _msg('leaderboard status: requested');
         }
-        else if ("loading" == status) {
-            elStatus.SetHasClass('hidden', false);
-            elData.SetHasClass('hidden', true);
-            elLeaderboardList.SetHasClass('hidden', true);
-        }
-        else if ("ready" == status) {
-            let count = LeaderboardsAPI.GetCount(m_leaderboardName);
-            if (count === 0) {
-                elData.SetHasClass('hidden', false);
-                elStatus.SetHasClass('hidden', true);
-                elLeaderboardList.SetHasClass('hidden', true);
+        if (m_leaderboardName.includes('friends')) {
+            if (IS_NEW_SEASON && (count == 0)) {
+                _ShowNewSeasonFriends();
             }
             else {
-                elLeaderboardList.SetHasClass('hidden', false);
-                elStatus.SetHasClass('hidden', true);
-                elData.SetHasClass('hidden', true);
-                _FillOutEntries();
+                _ShowLeaderboards();
             }
-            if (1 <= LeaderboardsAPI.HowManyMinutesAgoCached(m_leaderboardName)) {
-                LeaderboardsAPI.Refresh(m_leaderboardName);
-                _msg('leaderboard status: requested');
+            return;
+        }
+        if (IS_NEW_SEASON) {
+            _ShowNewSeason();
+        }
+        else {
+            if (("none" == status) || ("ready" == status && count == 0)) {
+                _ShowNoData();
+            }
+            else if ("loading" == status) {
+                _ShowLoading();
+            }
+            else if ("ready" == status) {
+                _ShowLeaderboards();
             }
         }
     }
@@ -380,11 +384,11 @@ var Leaderboard;
         if (m_lbType !== 'party')
             return;
         let elStatus = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-loading');
-        let elData = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-nodata');
+        let elNoData = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-nodata');
         let elLeaderboardList = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list');
         elLeaderboardList.SetHasClass('hidden', false);
         elStatus.SetHasClass('hidden', true);
-        elData.SetHasClass('hidden', true);
+        elNoData.SetHasClass('hidden', true);
         function OnMouseOver(xuid) {
             $.DispatchEvent('LeaderboardHoverPlayer', xuid);
         }

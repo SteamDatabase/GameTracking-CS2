@@ -213,6 +213,9 @@ var PremierPickBan;
                 if (bNewPhase) {
                     elMapBtn.SetHasClass('is-ban-phase', false);
                     elMapBtn.SetHasClass('is-vote-phase', false);
+                    elMapBtn.checked = false;
+                    elMapBtn.SetHasClass('premier-pickban-veto', false);
+                    elMapBtn.SetHasClass('premier-pickban-pick', false);
                 }
                 let isMyTurn = MatchDraftAPI.GetPregameTeamToActNow() === MatchDraftAPI.GetPregameMyTeam();
                 if (btnSettings.isTeam) {
@@ -316,7 +319,13 @@ var PremierPickBan;
         return 0;
     }
     function UpdateWinningVote(elButton, voteId, isMyTurn) {
-        if (MatchDraftAPI.GetPregameXuidsForVote(parseInt(voteId)) && isMyTurn) {
+        let bTileWinningThisVote = false;
+        if (isMyTurn && ((elButton.Data().isTeamBtn && _m_nPhase == 5)
+            ||
+                (!elButton.Data().isTeamBtn && _m_nPhase < 5))) {
+            bTileWinningThisVote = !!MatchDraftAPI.GetPregameXuidsForVote(parseInt(voteId));
+        }
+        if (bTileWinningThisVote) {
             let statusText = elButton.Data().isTeamBtn ? $.Localize('#matchdraft_vote_status_pick') : $.Localize('#matchdraft_vote_status_ban');
             elButton.SetDialogVariable('status', statusText);
             let aVoteIds = MatchDraftAPI.GetPregameWinningVotes().split(',');

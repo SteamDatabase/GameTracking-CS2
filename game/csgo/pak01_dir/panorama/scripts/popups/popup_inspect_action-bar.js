@@ -39,6 +39,7 @@ var InspectActionBar;
         _ShowButtonsForCharacterInspect(elPanel, itemId);
         _SetCloseBtnAction(elPanel);
         _SetUpMarketLink(elPanel, itemId);
+        _SetUpOpenSeasonStatsAction(elPanel, itemId);
         const category = InventoryAPI.GetLoadoutCategory(itemId);
         if (category == "musickit") {
             InventoryAPI.PlayItemPreviewMusic(itemId, '');
@@ -88,6 +89,21 @@ var InspectActionBar;
             SteamOverlayAPI.OpenURL(ItemInfo.GetMarketLinkForLootlistItem(id));
             StoreAPI.RecordUIEvent("ViewOnMarket");
         });
+    }
+    function _SetUpOpenSeasonStatsAction(elPanel, id) {
+        if (!m_bShowAllItemActions)
+            return;
+        const elOpenSeasonPanel = elPanel.FindChildInLayoutFile('OpenSeasonStats');
+        if (ItemInfo.ItemDefinitionNameStartsWith(id, 'premier season coin')) {
+            const season = InventoryAPI.GetItemAttributeValue(id, 'premier season');
+            elOpenSeasonPanel.SetPanelEvent('onactivate', () => {
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('id-popup-season-stats', 'file://{resources}/layout/popups/popup_season_stats.xml', 'seasonid=' + season + '&' +
+                    'itemid=' + id);
+                CloseBtnAction();
+            });
+            $.DispatchEvent('ContextMenuEvent', '');
+            elOpenSeasonPanel.SetHasClass('hidden', false);
+        }
     }
     function _SetupEquipItemBtns(elPanel, id) {
         const elMoreActionsBtn = elPanel.FindChildInLayoutFile('InspectActionsButton');

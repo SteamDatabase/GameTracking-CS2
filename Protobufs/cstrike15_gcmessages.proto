@@ -108,6 +108,7 @@ enum ECsgoGCMsg {
 	k_EMsgGCCStrike15_v2_GC2ClientNotifyXPShop = 9221;
 	k_EMsgGCCStrike15_v2_Client2GcAckXPShopTracks = 9222;
 	k_EMsgGCCStrike15_v2_MatchmakingGC2ClientSearchStats = 9223;
+	k_EMsgGCCStrike15_v2_PremierSeasonSummary = 9224;
 }
 
 enum ECsgoSteamUserStat {
@@ -243,6 +244,7 @@ message PlayerRankingInfo {
 	optional uint32 rank_if_tie = 12;
 	repeated .PlayerRankingInfo.PerMapRank per_map_rank = 13;
 	optional uint32 leaderboard_name_status = 14;
+	optional uint32 highest_rank = 15;
 }
 
 message PlayerCommendationInfo {
@@ -820,6 +822,35 @@ message CMsgGCCStrike15_v2_ClientRequestPlayersProfile {
 message CMsgGCCStrike15_v2_PlayersProfile {
 	optional uint32 request_id = 1;
 	repeated .CMsgGCCStrike15_v2_MatchmakingGC2ClientHello account_profiles = 2;
+}
+
+message CMsgGCCStrike15_v2_PremierSeasonSummary {
+	message DataPerWeek {
+		optional uint64 week_id = 1;
+		optional uint32 rank_id = 2;
+		optional uint32 matches_played = 3;
+	}
+
+	message DataPerMap {
+		optional uint32 map_id = 1;
+		optional uint32 wins = 2;
+		optional uint32 ties = 3;
+		optional uint32 losses = 4;
+		optional uint32 rounds = 5;
+		optional uint32 kills = 6;
+		optional uint32 headshots = 7;
+		optional uint32 assists = 8;
+		optional uint32 deaths = 9;
+		optional uint32 mvps = 10;
+		optional uint32 rounds_3k = 11;
+		optional uint32 rounds_4k = 12;
+		optional uint32 rounds_5k = 13;
+	}
+
+	optional uint32 account_id = 1;
+	optional uint32 season_id = 2;
+	repeated .CMsgGCCStrike15_v2_PremierSeasonSummary.DataPerWeek data_per_week = 3;
+	repeated .CMsgGCCStrike15_v2_PremierSeasonSummary.DataPerMap data_per_map = 4;
 }
 
 message CMsgGCCStrike15_v2_PlayerOverwatchCaseUpdate {

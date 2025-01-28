@@ -942,6 +942,7 @@ $tLVRenderDeviceSetupV001
 .[\()*+?{|^$\n
 .arc
 .arj
+.bak
 .bsp
 .dummy
 .eB5
@@ -1108,6 +1109,7 @@ $tLVRenderDeviceSetupV001
 13CDelayedCall2I22CNetworkGameServerBaseS0_NS0_26ClientConnectDelayedCall_tE7empty_tE
 13CDemoFileInfo
 13CDemoRecorder
+13CDemoRecovery
 13CDemoSaveGame
 13CDemoSyncTick
 13CEngineClient
@@ -1242,6 +1244,7 @@ $tLVRenderDeviceSetupV001
 14CDemoMessagePBIL13EDemoCommands15E16CDemoSpawnGroupsE
 14CDemoMessagePBIL13EDemoCommands16E18CDemoAnimationDataE
 14CDemoMessagePBIL13EDemoCommands17E20CDemoAnimationHeaderE
+14CDemoMessagePBIL13EDemoCommands18E13CDemoRecoveryE
 14CDemoMessagePBIL13EDemoCommands1E15CDemoFileHeaderE
 14CDemoMessagePBIL13EDemoCommands2E13CDemoFileInfoE
 14CDemoMessagePBIL13EDemoCommands3E13CDemoSyncTickE
@@ -1600,6 +1603,7 @@ $tLVRenderDeviceSetupV001
 20CSVCMsg_UserCommands
 20CVConActivateMessage
 20IAudioStreamRecorder
+20IDemoMessageFileInfo
 20IFileLoggingListener
 20IGameResourceService
 20IMatchAsyncOperation
@@ -1876,6 +1880,7 @@ $tLVRenderDeviceSetupV001
 3y2\t
 4 uH
 40CBreakpadPassiveAssertionFailureListener
+40CDemoRecovery_DemoInitialSpawnGroupEntry
 40CGameInfo_CDotaGameInfo_CHeroSelectEvent
 40CRenderDevicePresentCallbackClientServer
 43CNetworkClientSpawnGroupCreatePrerequisites
@@ -2337,7 +2342,6 @@ AddMessage
 AddResourceInternal: %s\n
 AddSpawnMessageToDemoSpawnGroups storing message %s (spawn group %s)\n
 AddSpawnMessageToDemoSpawnGroups: Failed to serialize CNETMsg_SpawnGroup_Load_t\n
-AddSpawnMessageToDemoSpawnGroups: Failed to serialize spawn group\n
 AddString
 AddUGCResources: %s\n
 AddUInt32
@@ -2667,7 +2671,6 @@ CCommandBuffer::~CCommandBuffer()
 CConnectGameClientPrerequisite
 CConnectRelayPrerequisite
 CCreateGameClientPrerequisite
-CDemo::Play: failed to create demo net channel for %s\n
 CDemoFile: %s DemoCommand:%s tick:%d\n
 CDemoFile: %s FullPacketGoto returned NULL!\n
 CDemoFile: %s IsSkipping:%d\n
@@ -2676,6 +2679,7 @@ CDemoFile: %s Read DEM_StringTables at %d\n
 CDemoFile: %s Read stringtable DEM_FullPacket at %d\n
 CDemoFile: %s adjust m_nStartTick:%d\n
 CDemoFile: %s bStopReading tick:%d playbacktick:%d\n
+CDemoFile: %s handle packet :%d t=%d\n
 CDemoFile: %s iFullPacketGoto:%d (tick:%d) m_nSkipToTick:%d GetPlaybackTick():%d\n
 CDemoFile: %s return m_DemoPacket tick: %d\n
 CDemoFile: %s table:%s iCurrent:%d (tick:%d) iSkipTo:%d (tick:%d)\n
@@ -2683,6 +2687,9 @@ CDemoFile: %s tick:%d iFullPacketGoto:%d\n
 CDemoFile: %s tick:%d m_iFullPacketGoto:%d PlaybackTick:%d\n
 CDemoFile: %s: Not skipping svcmsg '%s'\n
 CDemoFile: %s: Skipping '%s'\n
+CDemoFile: CDemoFile::WriteMessage DEM_FileHeader at offset 0, updating demo header\n
+CDemoFile: CDemoFile::WriteMessage DEM_FileInfo cur offset %d, updating demo header\n
+CDemoFile: CDemoFile::WriteMessage DEM_SpawnGroups cur offset %d, updating demo header\n
 CDemoFile: Close '%s'\n
 CDemoFile: Flush '%s'\n
 CDemoFile: Open(%s) %s DemoBufferType:%d\n
@@ -2695,14 +2702,38 @@ CDemoFile: [%d] WriteMessage: %s @ %d Size:%d\n
 CDemoFile::Open: couldn't open file %s for %s.\n
 CDemoFile::Open: file already open.\n
 CDemoFile::ReadMessage() snappy::RawUncompress failed.\n
+CDemoFile::ReadMessage: [%i] Get overflow %s requested %d, avail %d bytes\n
 CDemoPlayer::LoadSpawnGroups Preloading spawngroup %s\n
 CDemoPlayer::LoadSpawnGroups Premanifest update spawngroup %s\n
 CDemoPlayer::PlayDemo:  Demo filename is empty or invalid\n
 CDemoPlayer::SetIgnorePacketsForResourceLoading(%s)\n
+CDemoPlayer::StartPlayback: couldn't open demo file '%s'\n
+CDemoPlayer::StartPlayback: failed to create demo net channel for '%s'\n
+CDemoPlayer::StartPlayback: failed to read demo header for '%s'\n
+CDemoPlayer::StartPlayback: incomplete demo %s, unable to repair!\n
+CDemoPlayer::StartPlayback: incomplete demo, %s last good message start [%d], file size [%d]\n
+CDemoPlayer::TryRecoverDemoFile: adding missing CDemoStop_t\n
+CDemoPlayer::TryRecoverDemoFile: backing up original demo to '%s'\n
+CDemoPlayer::TryRecoverDemoFile: failed to parse spawn group message.  %s\n
+CDemoPlayer::TryRecoverDemoFile: fixing playback time %.2f sec, %d ticks, %d frames (tick interval %f = %g fps)\n
+CDemoPlayer::TryRecoverDemoFile: processing %d recovery records\n
+CDemoPlayer::TryRecoverDemoFile: recovered demo into '%s', processing took %.2f msec\n
+CDemoPlayer::TryRecoverDemoFile: truncating and seeking to [%d]\n
+CDemoPlayer::TryRecoverDemoFile: unable to copy '%s' to '%s'\n
+CDemoPlayer::TryRecoverDemoFile: unable to open demo %s for write\n
+CDemoPlayer::TryRecoverDemoFile: unable to read contents of '%s'\n
+CDemoPlayer::TryRecoverDemoFile: unable to recover '%s', backup file '%s' already exists!\n
+CDemoPlayer::UpconvertDemoIfNecessary:  demo file version '%s' engine version '%s' on file '%s'.\n
+CDemoPlayer::UpconvertDemoIfNecessary:  demo upconversion failed, reason: %s\n
+CDemoPlayer::UpconvertDemoIfNecessary:  demo upconversion to '%s' succeeded, playback using converted file %s\n
+CDemoPlayer::UpconvertDemoIfNecessary:  unable to get demo version from '%s'.\n
+CDemoPlayer::UpconvertDemoIfNecessary:  unable to load demo upconverter (%s)\n
+CDemoPlayer::UpconvertDemoIfNecessary:  upconverting demo file '%s'.\n
 CDemoRecorder::OnCrashed:  Finalizing demo file due to crash!\n
 CDemoRecorder::ParseMessage: Failed to serialize message\n
 CDemoRecorder::StartRecording( %s ) calling ForceDemoRecordingFullUpdateAfterNextDeltaPacket to await next delta update before forcing a full update\n
 CDemoRecorder::WriteNetMessage: Failed to serialize %s\n
+CDemoRecorder::WriteSpawnGroups()\n
 CDownloadAddonPrerequisite
 CEmptyEntityInstance
 CEngineGameUI::OnLevelLoadingStarted
@@ -3113,6 +3144,7 @@ CHLTVServer::StartRelay: WriteClassInfosBuffer %s.\n
 CHLTVServer::StartRelay: WriteSendTables %s.\n
 CHLTVServer::UpdateHibernationState:  Terminating after relaying game.\n
 CHLTVServer::UpdateTick
+CHLTVServerAsync::ExecuteDelayedCall StartAutoRecordingCall_t with start tick == 0\n
 CHandle
 CHostStateMgr::QueueNewRequest( %s, %u )\n
 CInputService
@@ -3252,6 +3284,7 @@ CNetworkGameClient::FinishSignonState_New() setting state to %s:%d\n
 CNetworkGameClient::ProcessClassInfo: create on client %s\n
 CNetworkGameClient::ProcessClassInfo: creating client serializers from local server serializers (crc %u, server api %s)\n
 CNetworkGameClient::ProcessClassInfo: parsing serializers from cache due to matching crc %u\n
+CNetworkGameClient::ProcessTick( -1 ), ignoring during demo playback\n
 CNetworkGameClient::SendMoveInternal: Send delayed due to !CanPacket, tick=%d\n
 CNetworkGameClient::SetSignonState: end %i
 CNetworkGameClient::SetSignonState: start %i
@@ -3888,12 +3921,9 @@ Demo fast skipping disabled. Fullpackets_version != DEMOFILE_FULLPACKETS_VERSION
 Demo paused at server tick %i\n
 Demo playback finished ( %.1f seconds, %i render frames, %.2f fps).\n
 Demo playback options:\n
-Demo recorded for game '%s', current game is '%s' [demo_allow_game_mismatch = %d]\n
-Demo recorded with '%s' addons, currently have '%s' addons.\n
 Demo recording custom data for unregistered callback.\n
-Demo upconversion failed, reason: %s\n
-Demo upconversion to '%s' succeeded, playback using converted file : %s\n
 DemoAutoRecorder
+DemoFile
 DemoFileHeader: %s\n
 DemoFileInfo: %s\n
 DemoPlaybackFinished
@@ -4359,7 +4389,6 @@ Failed to parse input ConVar '%s' from string '%s'\n
 Failed to parse network ConVar '%s' from string '%s'\n
 Failed to parse spawn group message.  %s\n
 Failed to parse spawn group messaqge.  %s\n
-Failed to read demo header on '%s'.\n
 Failed to read file %s, configFileType %d, nSlot %d\n
 Failed to save
 Failed to save unsupported class
@@ -6333,7 +6362,6 @@ Playcast packet tick %d, %d Bytes\n
 Player %d%s
 Player %s attempting reconnect, but prior connection still active\n
 Player %s reconnecting, disconnecting prior connection\n
-Playing %sdemo from '%s'.\n
 Playing '%s'\n
 Playing Broadcast (%s)
 Playing Demo (%s)
@@ -8315,9 +8343,6 @@ Vy\fM
 WARNING
 WARNING:  FlushEntityPacket, %s
 WARNING:  Steam Servers Disconnected
-WARNING: %s has invalid DEM_FileHeader.\n
-WARNING: %s has invalid DEM_FileInfo.\nThis probably means the engine crashed while recording the .dem file and it was not finalized.\n
-WARNING: %s pre-dates demo versioning, will need to be upconverted.\n
 WARNING: CEngineWatchdogThread is killing the process: %s
 WARNING: Failed to find startup tool '%s'\n
 WARNING: Failed to load startup asset '%s'\n
@@ -9062,7 +9087,7 @@ calloc
 can't find client frame for world snapshot %d (%d) on server tick %d
 can't instant_replay_skip, no client\n
 can't instant_replay_skip_live, no client\n
-can't play back, no CNetworkGameClient for demo '%s'!!!\n
+can't play back, no CNetworkGameClient for demo '%s'\n
 can't playdemo '%s', currently recording '%s'\n
 can't playdemo '%s', disallowed\n
 can't reach here.
@@ -9276,7 +9301,6 @@ convars_echo_toggle_changes
 conversion failed
 core.stop_all_soundevents
 corrupted stream
-couldn't Open demo file '%s'.\n
 covariant return thunk to 
 cpu model
 cpu_fast
@@ -9333,8 +9357,13 @@ delete
 delete 
 delete[] 
 deleted virtual method called\n
-demo file version '%s' engine version '%s' on file '%s'.\n
+demo file version '%s' .\n
+demo has invalid DEM_FileHeader.\n
+demo has invalid DEM_FileInfo and .dem file not finalized (e.g. engine crash while recording).\n
 demo header buffer is %d bytes\n
+demo pre-dates demo versioning, will need to be upconverted.\n
+demo recorded for game '%s', current game is '%s' [demo_allow_game_mismatch = %d]\n
+demo recorded with '%s' addons, currently have '%s' addons\n
 demo tick,frame start time,frame start delta,frame swap time,frame swap delta,FPS variability\n\n
 demo.proto
 demo_allow_game_mismatch
@@ -9851,7 +9880,7 @@ hltv_proxies
 hltv_slots
 hltv_update_stats
 hltvclientstate.cpp
-hltvserver_async.cpp:1092
+hltvserver_async.cpp:1102
 host_force_frametime_to_equal_tick_interval
 host_force_max_frametime_to_tick_interval
 host_framerate
@@ -10340,6 +10369,7 @@ memory allocation failed
 memory_check_limit
 meshsystem
 message
+message read failure,
 meta 
 min/max
 mismatched
@@ -10621,6 +10651,7 @@ playercount
 playerlist
 players  : %i humans, %i bots (%i max) (%s) (%s)\n
 playing %d: %s\n
+playing %s from '%s'\n
 playsound
 playsound 
 playsound <soundname>
@@ -15134,8 +15165,6 @@ uint64_t google::protobuf::UnknownField::fixed64() const
 uint64_t google::protobuf::UnknownField::varint() const
 uint8
 uj?I
-unable to get demo version from '%s'.\n
-unable to load demo upconverter (%s)\n
 unable to record server classes\n
 unbind
 unbind <key> [splitscreen player] : remove commands from a key\n
@@ -15184,7 +15213,6 @@ unsigned long long
 unsigned short
 unspecified
 unused
-upconverting demo file '%s'.\n
 upper
 url_name
 usage:  %s <filename>\n

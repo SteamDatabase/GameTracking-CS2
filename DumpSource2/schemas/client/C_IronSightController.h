@@ -11,6 +11,6 @@ class C_IronSightController
 	QAngle[8] m_angDeltaAverage;
 	QAngle m_angViewLast;
 	Vector2D m_vecDotCoords;
-	float32 m_flDotBlur;
+	float32 m_flFiringInaccuracyExtraWidthMultiplier;
 	float32 m_flSpeedRatio;
 };
