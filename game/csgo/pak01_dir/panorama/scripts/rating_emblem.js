@@ -143,8 +143,7 @@ var RatingEmblem;
             root_panel.SwitchClass('tier', 'tier-0');
             _SetPremierBackgroundImage(root_panel, rating);
             if (rating && rating > 0) {
-                let remappedRating = Math.floor(rating / 1000.00 / 5);
-                let clampedRating = Math.max(0, Math.min(remappedRating, 6));
+                let clampedRating = GetClampedRating(rating);
                 root_panel.SwitchClass('tier', 'tier-' + clampedRating);
                 colorClassName = 'tier-' + clampedRating;
                 let arrRating = SplitRating(rating);
@@ -235,6 +234,11 @@ var RatingEmblem;
         return bHasRating;
     }
     RatingEmblem.SetXuid = SetXuid;
+    function GetClampedRating(rating) {
+        let remappedRating = Math.floor(rating / 1000.00 / 5);
+        return Math.max(0, Math.min(remappedRating, 6));
+    }
+    RatingEmblem.GetClampedRating = GetClampedRating;
     function _SetPremierBackgroundImage(root_panel, rating) {
         let bgImage = (rating && rating > 0) ? 'premier_rating_bg_large.svg' : 'premier_rating_bg_large_none.svg';
         let elImage = root_panel.FindChildInLayoutFile('jsPremierRatingBg');
