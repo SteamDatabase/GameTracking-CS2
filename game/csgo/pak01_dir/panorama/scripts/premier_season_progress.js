@@ -33,31 +33,20 @@ var SeasonProgress;
                         nWins > 124 ? 5 :
                             0;
         nBars = nBars < 5 ? nBars + 1 : 5;
-        let elPips = $.GetContextPanel().FindChildInLayoutFile('id-premier-season-pips');
-        elPips.SwitchClass('scale', (nBars === 4) ? 'four-medals' : (nBars === 5) ? 'five-medals' : (nBars === 2) ? 'two-medals' : '');
-        let nTotalBars = nBars * 25;
-        let nTotalPips = nTotalBars < 126 ? nTotalBars + 1 : nTotalBars;
-        let nSinglePipWidth = (nTotalPips < 27) ? 17 :
-            (nTotalPips > 27 && nTotalPips < 52) ? 7 :
-                (nTotalPips > 52 && nTotalPips < 77) ? 4 :
-                    (nTotalPips > 77 && nTotalPips < 102) ? 3 :
-                        (nTotalPips > 102 && nTotalPips < 127) ? 2 :
-                            4;
-        for (let i = 1; i < nTotalPips; i++) {
-            let elPip = elPips.FindChild('pip-' + i);
-            if (!elPip) {
-                elPip = $.CreatePanel('Panel', elPips, 'pip-' + i, { clampfractionalpixelpositions: "false", class: 'premier-season-progress-pip' });
-                let isMedalPip = (i % 25 === 0 && i !== 0);
-                elPip.SetHasClass('premier-season-progress-pip-medal', isMedalPip);
-                if (!isMedalPip)
-                    elPip.style.width = nSinglePipWidth + 'px;';
+        let elParent = $.GetContextPanel().FindChildInLayoutFile('id-premier-season-bars');
+        let numMatchesPerBar = 25;
+        for (let i = 1; i <= nBars; i++) {
+            let elBar = elParent.FindChild('bar-' + i);
+            if (!elBar) {
+                elBar = $.CreatePanel('Panel', elParent, 'bar-' + i);
+                elBar.BLoadLayoutSnippet('one-bar');
             }
-            if (i <= nWins) {
-                elPip.SwitchClass('tier', 'tier-' + color);
-            }
-            else {
-                elPip.SwitchClass('tier', 'tier-none');
-            }
+            let rangeOfMatchesInBar = { min: i == 1 ? 1 : ((i - 1) * numMatchesPerBar), max: (i * numMatchesPerBar) };
+            let widthInnerBar = (nWins >= (rangeOfMatchesInBar.max - 1)) ? 1 : ((nWins - rangeOfMatchesInBar.min) / (numMatchesPerBar - 1));
+            elBar.FindChildInLayoutFile('id-inner-bar').style.width = (widthInnerBar * 100) + '%';
+            elBar.FindChildInLayoutFile('id-inner-bar').SwitchClass('tier', 'rank-tier-' + color);
+            elBar.SwitchClass('num-bars', nBars + '-bars');
+            elBar.FindChildInLayoutFile('id-inner-medal').SwitchClass('tier', nWins >= rangeOfMatchesInBar.max ? 'rank-tier-' + color : 'rank-tier-none');
         }
         clampedRating = clampedRating < 1 ? 1 : clampedRating + 1;
         let itemDef = InventoryAPI.GetItemDefinitionIndexFromDefinitionName('premier season coin s=2 c=' + clampedRating + ' b=' + nBars);
