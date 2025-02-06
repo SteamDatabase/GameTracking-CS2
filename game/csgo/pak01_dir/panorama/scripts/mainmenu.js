@@ -392,7 +392,7 @@ var MainMenu;
     function _LoadTab(tab, XmlName, setActiveSection = '') {
         if (!$.GetContextPanel().FindChildInLayoutFile(tab)) {
             const newPanel = $.CreatePanel('Panel', _m_elContentPanel, tab);
-            if ('settings/settings' && setActiveSection !== '') {
+            if (setActiveSection !== '') {
                 newPanel.SetAttributeString('set-active-section', setActiveSection);
             }
             _msg('Created Panel with id: ' + newPanel.id);

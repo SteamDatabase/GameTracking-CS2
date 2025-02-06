@@ -76,7 +76,7 @@ var VanityPlayerInfo;
             elAvatar.BLoadLayoutSnippet("AvatarPlayerCard");
             elAvatar.AddClass('avatar--vanity');
         }
-        Avatar.Init(elAvatar, xuid, 'playercard');
+        Avatar.Init(elAvatar, xuid, 'partymember');
         if (MockAdapter.IsFakePlayer(xuid)) {
             const elAvatarImage = elAvatar.FindChildInLayoutFile("JsAvatarImage");
             elAvatarImage.PopulateFromPlayerSlot(MockAdapter.GetPlayerSlot(xuid));
@@ -107,6 +107,7 @@ var VanityPlayerInfo;
             const percentComplete = (currentPoints / pointsPerLevel) * 100;
             elXpBarInner.style.width = percentComplete + '%';
             elXpBarInner.GetParent().visible = true;
+            _ShowPrestigeUpgrade(newPanel, xuid, isLocalPlayer);
         }
         elRankIcon.SetImage('file://{images}/icons/xp/level' + currentLvl + '.png');
         newPanel.RemoveClass('no-valid-xp');
@@ -145,6 +146,18 @@ var VanityPlayerInfo;
             prime_value: PartyListAPI.GetFriendPrimeEligible(xuid)
         };
         HonorIcon.SetOptions(honorIconOptions);
+    }
+    function _ShowPrestigeUpgrade(elPanel, xuid, isLocalPlayer) {
+        let bPrestigeAvailable = isLocalPlayer && (FriendsListAPI.GetFriendLevel(xuid) >= InventoryAPI.GetMaxLevel());
+        elPanel.FindChildInLayoutFile('vanity-xp-prestige').SetHasClass('hidden', !bPrestigeAvailable);
+        if (bPrestigeAvailable) {
+            elPanel.FindChildInLayoutFile('vanity-xp-prestige').SetPanelEvent('onactivate', _OnActivateGetPrestigeButtonClickable);
+        }
+    }
+    function _OnActivateGetPrestigeButtonClickable() {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
+            '&' + 'asyncworkitemwarning=no' +
+            '&' + 'asyncworktype=prestigecheck');
     }
     function UpdateVoiceIcon(elAvatar, xuid) {
         Avatar.UpdateTalkingState(elAvatar, xuid);

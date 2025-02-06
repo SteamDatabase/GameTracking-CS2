@@ -108,7 +108,7 @@ var PartyMenu;
     }
     function _UpdateAvatar(elPartyMember, xuid) {
         let elAvatar = elPartyMember.FindChildInLayoutFile(xuid);
-        Avatar.Init(elAvatar, xuid, 'playercard');
+        Avatar.Init(elAvatar, xuid, 'partymember');
     }
     function _SetPartyMemberName(elPartyMember, xuid) {
         let elName = elPartyMember.FindChildInLayoutFile('JsFriendName');

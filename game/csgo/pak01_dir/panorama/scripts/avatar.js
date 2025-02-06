@@ -6,14 +6,15 @@ var CAvatar = class {
         const sXuid = xuid.toString();
         switch (type) {
             case 'playercard':
+            case 'partymember':
                 this.SetImage(elAvatar, sXuid);
-                this.SetFlair(elAvatar, sXuid);
+                this.SetFlair(elAvatar, sXuid, type);
                 this.SetTeamColor(elAvatar, sXuid);
                 this.SetLobbyLeader(elAvatar);
                 break;
             case 'flair':
                 this.SetImage(elAvatar, sXuid);
-                this.SetFlair(elAvatar, sXuid);
+                this.SetFlair(elAvatar, sXuid, type);
                 break;
             default:
                 this.SetImage(elAvatar, sXuid);
@@ -47,7 +48,7 @@ var CAvatar = class {
         elImage.RemoveClass('hidden');
     }
     ;
-    SetFlair(elAvatar, xuid) {
+    SetFlair(elAvatar, xuid, type) {
         const elFlair = elAvatar.FindChildTraverse('JsAvatarFlair');
         if (xuid === '' || xuid === '0') {
             elFlair.AddClass('hidden');
@@ -55,7 +56,9 @@ var CAvatar = class {
         }
         let flairItemId = InventoryAPI.GetFlairItemId(xuid);
         if (flairItemId === "0" || !flairItemId) {
-            const flairDefIdx = FriendsListAPI.GetFriendDisplayItemDefFeatured(xuid);
+            const flairDefIdx = (type === 'partymember')
+                ? PartyListAPI.GetFriendDisplayItemDefFeatured(xuid)
+                : FriendsListAPI.GetFriendDisplayItemDefFeatured(xuid);
             flairItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(flairDefIdx, 0);
             if (flairItemId === "0" || !flairItemId) {
                 elFlair.AddClass('hidden');
