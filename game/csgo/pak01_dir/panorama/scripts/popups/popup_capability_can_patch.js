@@ -101,6 +101,7 @@ var CapabilityCanPatch;
             elModelPanel.TurnRightCount(numTurns);
         }
         patchPosition = !patchPosition ? 'wide_intro' : patchPosition + _CameraForModel(charItemId, activeIndex);
+        elModelPanel.Data().camera = 'char_inspect_' + patchPosition;
         elModelPanel.TransitionToCamera('cam_char_inspect_' + patchPosition, 1.25);
     }
     function _CameraForModel(charItemId, activeIndex) {

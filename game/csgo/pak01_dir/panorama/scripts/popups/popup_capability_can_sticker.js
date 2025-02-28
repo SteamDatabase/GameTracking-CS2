@@ -157,6 +157,9 @@ var CapabilityCanApplyAction;
     }
     function _UpdateInspectMap() {
         InspectModelImage.SwitchMap(m_cP);
+        if (m_worktype === 'can_patch') {
+            CapabilityCanPatch.ResetPos();
+        }
         InspectAsyncActionBar.ZoomCamera(true);
         _UpdateItemToApplyPreview(m_toolId);
     }
