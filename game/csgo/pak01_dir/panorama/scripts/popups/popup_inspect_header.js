@@ -26,14 +26,15 @@ var InspectHeader;
         elPanel.FindChildInLayoutFile('InspectName').SetHasClass('text-align-left', ItemInfo.GetSet(ItemId) !== '');
     }
     function _SetRentalTime(elPanel, ItemId) {
-        if (!InventoryAPI.IsRental(ItemId)) {
-            elPanel.FindChildInLayoutFile('ItemRentalTime').SetHasClass('hide', true);
-            return;
+        let elLabel = elPanel.FindChildInLayoutFile('ItemRentalTime');
+        const expirationDate = InventoryAPI.IsRental(ItemId) ? InventoryAPI.GetExpirationDate(ItemId) : 0;
+        const bHasExpirationDate = (expirationDate > 0);
+        if (bHasExpirationDate) {
+            let oLocData = FormatText.FormatRentalTime(expirationDate);
+            elPanel.SetDialogVariable('time-remaining', oLocData.time);
+            elLabel.RemoveClass('hide');
         }
-        let seconds = InventoryAPI.GetExpirationDate(ItemId);
-        let oLocData = FormatText.FormatRentalTime(seconds);
-        elPanel.SetDialogVariable('time-remaining', oLocData.time);
-        elPanel.FindChildInLayoutFile('ItemRentalTime').SetHasClass('hide', false);
+        elLabel.SetHasClass('hide', !bHasExpirationDate);
     }
     function _SetRarity(elPanel, itemId) {
         let rarityColor = InventoryAPI.GetItemRarityColor(itemId);

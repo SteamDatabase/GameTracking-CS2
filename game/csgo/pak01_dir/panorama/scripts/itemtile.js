@@ -188,7 +188,7 @@ var ItemTile;
             elLabel.AddClass('hidden');
             return;
         }
-        let expirationDate = InventoryAPI.GetExpirationDate(id);
+        const expirationDate = InventoryAPI.GetExpirationDate(id);
         if (expirationDate <= 0) {
             elLabel.AddClass('hidden');
             return;

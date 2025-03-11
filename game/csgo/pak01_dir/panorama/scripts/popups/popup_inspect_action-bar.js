@@ -144,41 +144,38 @@ var InspectActionBar;
         }
     }
     function _SetUpSingleActionBtn(elPanel, id, closeInspect) {
-        const validEntries = ItemContextEntries.FilterEntries('inspect');
+        const validEntries = ItemContextEntries.FilterEntries(id, 'inspect');
         const elSingleActionBtn = elPanel.FindChildInLayoutFile('SingleAction');
         for (let i = 0; i < validEntries.length; i++) {
             const entry = validEntries[i];
-            if (entry.AvailableForItem(id)) {
-                let displayName = '';
-                if (entry.name instanceof Function) {
-                    displayName = entry.name(id);
-                }
-                else {
-                    displayName = entry.name;
-                }
-                elSingleActionBtn.text = '#inv_context_' + displayName;
-                elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, closeInspect));
-                elSingleActionBtn.RemoveClass('hidden');
+            let displayName = '';
+            if (entry.name instanceof Function) {
+                displayName = entry.name(id);
             }
+            else {
+                displayName = entry.name;
+            }
+            elSingleActionBtn.text = '#inv_context_' + displayName;
+            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, closeInspect));
+            elSingleActionBtn.RemoveClass('hidden');
         }
     }
     function _TrySetUpSingleActionPreviewBtn(elPanel, id) {
-        const validEntries = ItemContextEntries.FilterEntries('preview');
+        const validEntries = ItemContextEntries.FilterEntries(id, 'preview');
         const elSingleActionBtn = elPanel.FindChildInLayoutFile('SingleAction');
         for (let i = 0; i < validEntries.length; i++) {
             const entry = validEntries[i];
-            if (entry.AvailableForItem(id)) {
-                let displayName = '';
-                if (entry.name instanceof Function) {
-                    displayName = entry.name(id);
-                }
-                else {
-                    displayName = entry.name;
-                }
-                elSingleActionBtn.text = '#inv_context_preview_' + displayName;
-                elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, true));
-                elSingleActionBtn.RemoveClass('hidden');
+            let displayName = '';
+            if (entry.name instanceof Function) {
+                displayName = entry.name(id);
             }
+            else {
+                displayName = entry.name;
+            }
+            let previewActionPrefix = displayName.startsWith('preview_') ? '' : 'preview_';
+            elSingleActionBtn.text = '#inv_context_' + previewActionPrefix + displayName;
+            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, true));
+            elSingleActionBtn.RemoveClass('hidden');
         }
     }
     function _OnSingleAction(entry, id, closeInspect) {

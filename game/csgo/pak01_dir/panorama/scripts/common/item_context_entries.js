@@ -4,16 +4,24 @@
 /// <reference path="../generated/items_event_current_generated_store.ts" />
 var ItemContextEntries;
 (function (ItemContextEntries) {
-    function FilterEntries(populateFilterText) {
+    function FilterEntries(id, populateFilterText) {
         const bHasFilter = populateFilterText !== "(not found)";
         return _Entries.filter((entry) => {
             if (entry.exclusiveFilter) {
-                return entry.exclusiveFilter.includes(populateFilterText);
+                if (!entry.exclusiveFilter.includes(populateFilterText))
+                    return false;
             }
             else if (bHasFilter && entry.populateFilter) {
-                return entry.populateFilter.includes(populateFilterText);
+                if (!entry.populateFilter.includes(populateFilterText))
+                    return false;
             }
-            return !bHasFilter;
+            else {
+                if (bHasFilter)
+                    return false;
+            }
+            if (!entry.bActionIsRentalAware && InventoryAPI.IsRental(id))
+                return false;
+            return entry.AvailableForItem(id);
         });
     }
     ItemContextEntries.FilterEntries = FilterEntries;
@@ -21,6 +29,7 @@ var ItemContextEntries;
         {
             name: 'preview',
             populateFilter: ['lootlist', 'loadout', 'loadout_slot_t', 'loadout_slot_ct', 'tradeup_items', 'tradeup_ingredients'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const defName = InventoryAPI.GetItemDefinitionName(id);
                 if (defName === 'casket')
@@ -105,6 +114,7 @@ var ItemContextEntries;
         {
             name: 'openloadout',
             style: (id) => 'TopSeparator',
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => !!InventoryAPI.GetRawDefinitionKey(id, 'flexible_loadout_group'),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -114,6 +124,7 @@ var ItemContextEntries;
         {
             name: 'swap_finish_both',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => _CanSwapFinish(id, 'ct') && _CanSwapFinish(id, 't'),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -124,6 +135,7 @@ var ItemContextEntries;
             name: 'swap_finish_ct',
             CustomName: (id) => GetItemToReplaceName(id, 'ct'),
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => _CanSwapFinish(id, 'ct'),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -134,6 +146,7 @@ var ItemContextEntries;
             name: 'swap_finish_t',
             CustomName: (id) => GetItemToReplaceName(id, 't'),
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => _CanSwapFinish(id, 't'),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -143,6 +156,7 @@ var ItemContextEntries;
         {
             name: 'flair',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 return InventoryAPI.GetDefaultSlot(id) === 'flair0' && (!InventoryAPI.IsEquipped(id, "noteam") || (InventoryAPI.GetRawDefinitionKey(id, 'item_sub_position2') !== ''));
             },
@@ -175,6 +189,7 @@ var ItemContextEntries;
             name: 'equip_musickit',
             CustomName: (id) => GetItemToReplaceName(id, 'noteam'),
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => InventoryAPI.GetDefaultSlot(id) === 'musickit' && !InventoryAPI.IsEquipped(id, "noteam"),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -188,6 +203,7 @@ var ItemContextEntries;
         {
             name: 'unequip',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let availableForSlots = ['flair0', 'spray0'];
                 return InventoryAPI.IsEquipped(id, "noteam") && availableForSlots.includes(InventoryAPI.GetDefaultSlot(id));
@@ -224,7 +240,8 @@ var ItemContextEntries;
             }
         },
         {
-            name: 'useitem',
+            name: (id) => InventoryAPI.IsRental(id) ? 'preview' : 'useitem',
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_'))
                     return true;
@@ -243,7 +260,11 @@ var ItemContextEntries;
                 return false;
             },
             OnSelected: (id) => {
-                if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_')) {
+                if (InventoryAPI.IsRental(id)) {
+                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                        '&' + 'inspectonly=true');
+                }
+                else if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_')) {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
                         '&' + 'asyncworktype=decodeable');
                 }
@@ -268,12 +289,15 @@ var ItemContextEntries;
             name: (id) => {
                 if (InventoryAPI.GetDecodeableRestriction(id) === 'restricted' && !InventoryAPI.IsTool(id) && !InventoryAPI.CanOpenForRental(id))
                     return 'look_inside';
+                else if (InventoryAPI.IsRental(id))
+                    return 'look_inside';
                 else
                     return 'open_package';
             },
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'decodable');
             },
+            bActionIsRentalAware: true,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 if (InventoryAPI.GetChosenActionItemsCount(id, 'decodable') === 0) {
@@ -292,6 +316,8 @@ var ItemContextEntries;
         },
         {
             name: (id) => {
+                if (InventoryAPI.IsRental(id))
+                    return 'preview';
                 if (InventoryAPI.GetItemDefinitionName(id) === 'casket') {
                     return InventoryAPI.GetItemAttributeValue(id, 'modification date') ? 'yourcasket' : 'newcasket';
                 }
@@ -301,11 +327,19 @@ var ItemContextEntries;
                 const defName = InventoryAPI.GetItemDefinitionName(id);
                 return (defName === 'casket' || defName === 'Name Tag') ? '' : 'TopSeparator';
             },
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
-                return ItemInfo.ItemHasCapability(id, 'nameable') && !InventoryAPI.IsRental(id);
+                if (InventoryAPI.IsRental(id))
+                    return InventoryAPI.IsTool(id) && ItemInfo.ItemHasCapability(id, 'nameable');
+                return ItemInfo.ItemHasCapability(id, 'nameable');
             },
             OnSelected: (id) => {
-                if (InventoryAPI.GetItemDefinitionName(id) === 'casket') {
+                if (InventoryAPI.IsRental(id)) {
+                    $.DispatchEvent('ContextMenuEvent', '');
+                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                        '&' + 'inspectonly=true');
+                }
+                else if (InventoryAPI.GetItemDefinitionName(id) === 'casket') {
                     const fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
                     const noteText = InventoryAPI.GetItemAttributeValue(id, 'modification date') ? 'yourcasket' : 'newcasket';
                     $.DispatchEvent('ContextMenuEvent', '');
@@ -325,8 +359,9 @@ var ItemContextEntries;
             }
         },
         {
-            name: 'can_keychain',
+            name: (id) => InventoryAPI.IsRental(id) ? 'preview_can_keychain' : 'can_keychain',
             populateFilter: ['inspect', 'preview', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => ItemInfo.IsKeychain(id) && ItemInfo.ItemHasCapability(id, 'can_keychain'),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -338,8 +373,7 @@ var ItemContextEntries;
             name: 'can_keychain',
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'can_keychain') &&
-                    InventoryAPI.GetItemKeychainSlotCount(id) > InventoryAPI.GetItemKeychainCount(id) &&
-                    !InventoryAPI.IsRental(id);
+                    InventoryAPI.GetItemKeychainSlotCount(id) > InventoryAPI.GetItemKeychainCount(id);
             },
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -357,7 +391,7 @@ var ItemContextEntries;
         },
         {
             name: 'remove_keychain',
-            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_keychain') && InventoryAPI.GetItemKeychainCount(id) > 0 && !InventoryAPI.IsRental(id),
+            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_keychain') && InventoryAPI.GetItemKeychainCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + id +
@@ -365,8 +399,9 @@ var ItemContextEntries;
             }
         },
         {
-            name: 'can_sticker',
+            name: (id) => InventoryAPI.IsRental(id) ? 'preview_can_sticker' : 'can_sticker',
             populateFilter: ['inspect', 'preview', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => ItemInfo.IsSticker(id) && ItemInfo.ItemHasCapability(id, 'can_sticker'),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -378,8 +413,7 @@ var ItemContextEntries;
             name: 'can_sticker',
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'can_sticker') &&
-                    InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id) &&
-                    !InventoryAPI.IsRental(id);
+                    InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id);
             },
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -389,7 +423,7 @@ var ItemContextEntries;
         },
         {
             name: 'remove_sticker',
-            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0 && !InventoryAPI.IsRental(id),
+            AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'itemid=' + id +
@@ -397,8 +431,9 @@ var ItemContextEntries;
             }
         },
         {
-            name: 'can_patch',
+            name: (id) => InventoryAPI.IsRental(id) ? 'preview_can_patch' : 'can_patch',
             populateFilter: ['inspect', 'preview', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => ItemInfo.IsPatch(id) && ItemInfo.ItemHasCapability(id, 'can_patch'),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
@@ -433,11 +468,18 @@ var ItemContextEntries;
             OnSelected: (id) => $.DispatchEvent('ContextMenuEvent', ''),
         },
         {
-            name: 'can_stattrack_swap',
+            name: (id) => InventoryAPI.IsRental(id) ? 'preview' : 'can_stattrack_swap',
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_stattrack_swap') && InventoryAPI.IsTool(id),
+            bActionIsRentalAware: true,
             OnSelected: (id) => {
+                if (InventoryAPI.IsRental(id)) {
+                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                        '&' + 'inspectonly=true');
+                }
+                else {
+                    $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_stattrack_swap', id, '');
+                }
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_stattrack_swap', id, '');
             }
         },
         {
@@ -445,7 +487,7 @@ var ItemContextEntries;
             populateFilter: ['tradeup_items'],
             AvailableForItem: (id) => {
                 const slot = InventoryAPI.GetDefaultSlot(id);
-                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id) && !InventoryAPI.IsRental(id) &&
+                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id) &&
                     (InventoryAPI.CanTradeUp(id) || InventoryAPI.GetNumItemsNeededToTradeUp(id) > 0);
             },
             OnSelected: (id) => {
@@ -458,7 +500,7 @@ var ItemContextEntries;
             exclusiveFilter: ['tradeup_ingredients'],
             AvailableForItem: (id) => {
                 const slot = InventoryAPI.GetDefaultSlot(id);
-                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id) && !InventoryAPI.IsRental(id);
+                return !!slot && slot !== "melee" && slot !== "c4" && slot !== "clothing_hands" && !ItemInfo.IsEquippalbleButNotAWeapon(id);
             },
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -494,6 +536,7 @@ var ItemContextEntries;
             name: 'add_to_favorites_both',
             style: (id) => 'TopSeparator',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => CanAddToFavorites(id, 't') && CanAddToFavorites(id, 'ct'),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -509,6 +552,7 @@ var ItemContextEntries;
                 return 'TopSeparator';
             },
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: id => CanAddToFavorites(id, 'ct'),
             OnSelected: id => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -533,6 +577,7 @@ var ItemContextEntries;
                 return 'TopSeparator';
             },
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => CanAddToFavorites(id, 't'),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -547,6 +592,7 @@ var ItemContextEntries;
                 return 'TopSeparator';
             },
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => InventoryAPI.ItemIsInFavorites('t', id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -557,6 +603,7 @@ var ItemContextEntries;
             name: 'add_to_favorites_noteam',
             style: (id) => 'TopSeparator',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: id => CanAddToFavorites(id, 'noteam'),
             OnSelected: id => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -567,6 +614,7 @@ var ItemContextEntries;
             name: 'remove_from_favorites_noteam',
             style: (id) => 'TopSeparator',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => InventoryAPI.ItemIsInFavorites('noteam', id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -576,6 +624,7 @@ var ItemContextEntries;
         {
             name: 'enable_shuffle_slot',
             exclusiveFilter: ['loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 return ['customplayer', 'clothing', 'melee', 'c4', 'musickit', 'equipment2'].includes(category);
@@ -589,6 +638,7 @@ var ItemContextEntries;
         {
             name: 'enable_shuffle_slot',
             exclusiveFilter: ['loadout_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 return ['customplayer', 'clothing', 'melee', 'c4', 'musickit', 'equipment2'].includes(category);
@@ -602,6 +652,7 @@ var ItemContextEntries;
         {
             name: 'enable_weapon_shuffle',
             exclusiveFilter: ['loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 if (category != 'secondary' && category != 'smg' && category != 'rifle')
@@ -618,6 +669,7 @@ var ItemContextEntries;
         {
             name: 'enable_weapon_shuffle',
             exclusiveFilter: ['loadout_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 if (category != 'secondary' && category != 'smg' && category != 'rifle')
@@ -634,6 +686,7 @@ var ItemContextEntries;
         {
             name: 'disable_shuffle_slot',
             exclusiveFilter: ['shuffle_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 return ['customplayer', 'clothing', 'melee', 'c4', 'musickit', 'equipment2'].includes(category);
@@ -647,6 +700,7 @@ var ItemContextEntries;
         {
             name: 'disable_shuffle_slot',
             exclusiveFilter: ['shuffle_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 return ['customplayer', 'clothing', 'melee', 'c4', 'musickit', 'equipment2'].includes(category);
@@ -660,6 +714,7 @@ var ItemContextEntries;
         {
             name: 'disable_weapon_shuffle',
             exclusiveFilter: ['shuffle_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 if (category != 'secondary' && category != 'smg' && category != 'rifle')
@@ -676,6 +731,7 @@ var ItemContextEntries;
         {
             name: 'disable_weapon_shuffle',
             exclusiveFilter: ['shuffle_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 const category = InventoryAPI.GetLoadoutCategory(id);
                 if (category != 'secondary' && category != 'smg' && category != 'rifle')
@@ -692,7 +748,7 @@ var ItemContextEntries;
         {
             name: 'intocasket',
             style: (id) => 'TopSeparator',
-            AvailableForItem: (id) => InventoryAPI.IsPotentiallyMarketable(id) && !InventoryAPI.IsRental(id),
+            AvailableForItem: (id) => InventoryAPI.IsPotentiallyMarketable(id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 if (InventoryAPI.GetChosenActionItemsCount(id, 'can_collect') > 0) {
@@ -712,7 +768,7 @@ var ItemContextEntries;
         },
         {
             name: 'sell',
-            AvailableForItem: (id) => InventoryAPI.IsMarketable(id) && !InventoryAPI.IsRental(id),
+            AvailableForItem: (id) => InventoryAPI.IsMarketable(id),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_sellOnMarket', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -733,6 +789,7 @@ var ItemContextEntries;
         {
             name: 'loadout_slot_reset_t',
             exclusiveFilter: ['loadout_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let team = 't';
                 let slot = InventoryAPI.GetDefaultSlot(id);
@@ -755,6 +812,7 @@ var ItemContextEntries;
         {
             name: 'loadout_slot_reset_ct',
             exclusiveFilter: ['loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let team = 'ct';
                 let slot = InventoryAPI.GetDefaultSlot(id);
@@ -777,6 +835,7 @@ var ItemContextEntries;
         {
             name: 'loadout_slot_reset_weapon_t',
             exclusiveFilter: ['loadout_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let team = 't';
                 let category = InventoryAPI.GetLoadoutCategory(id);
@@ -802,6 +861,7 @@ var ItemContextEntries;
         {
             name: 'loadout_slot_reset_weapon_ct',
             exclusiveFilter: ['loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let team = 'ct';
                 let category = InventoryAPI.GetLoadoutCategory(id);
@@ -827,6 +887,7 @@ var ItemContextEntries;
         {
             name: 'loadout_slot_reset_finish_t',
             exclusiveFilter: ['loadout_slot_t'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let category = InventoryAPI.GetLoadoutCategory(id);
                 if (category == 'secondary' || category == 'smg' || category == 'rifle')
@@ -846,6 +907,7 @@ var ItemContextEntries;
         {
             name: 'loadout_slot_reset_finish_ct',
             exclusiveFilter: ['loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => {
                 let category = InventoryAPI.GetLoadoutCategory(id);
                 if (category == 'secondary' || category == 'smg' || category == 'rifle')

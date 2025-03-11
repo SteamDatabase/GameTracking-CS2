@@ -382,6 +382,15 @@ var ItemInfo;
         return (count > 0) ? InventoryAPI.GetInventoryItemIDByIndex(0) : '';
     }
     ItemInfo.FindAnyUserOwnedCharacterItemID = FindAnyUserOwnedCharacterItemID;
+    function IsFauxOrRentalOrPreviewTool(id) {
+        if ((id && id.length == 19 && id.startsWith('922323129721890'))
+            || InventoryAPI.IsFauxItemID(id)
+            || InventoryAPI.IsRental(id))
+            return true;
+        else
+            return false;
+    }
+    ItemInfo.IsFauxOrRentalOrPreviewTool = IsFauxOrRentalOrPreviewTool;
     function IsPreviewable(id) {
         return !!InventoryAPI.GetDefaultSlot(id) || IsSticker(id) || IsPatch(id) || IsSpraySealed(id) || IsKeychain(id);
     }

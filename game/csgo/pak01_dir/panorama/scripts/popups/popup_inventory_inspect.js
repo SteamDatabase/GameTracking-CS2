@@ -12,6 +12,10 @@ var InventoryInspect;
     let _m_PanelRegisteredForEvents;
     function Init() {
         let itemId = $.GetContextPanel().GetAttributeString("itemid", '');
+        if (InventoryAPI.IsRental(itemId)) {
+            $.GetContextPanel().SetAttributeString('showallitemactions', 'false');
+            $.GetContextPanel().SetAttributeString('inspectonly', 'true');
+        }
         if (!_m_PanelRegisteredForEvents) {
             _m_PanelRegisteredForEvents = $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', _ShowNotification);
             $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _ItemAcquired);

@@ -33,7 +33,7 @@ var Crafting;
     function UpdateItemList() {
         let elDropdown = $.GetContextPanel().FindChildInLayoutFile('CraftingSortDropdown');
         let sortType = elDropdown.GetSelected().id;
-        $.DispatchEvent('SetInventoryFilter', $('#Crafting-Items'), 'inv_group_equipment', 'any', 'any', sortType, 'recipe,is_rental:false', '');
+        $.DispatchEvent('SetInventoryFilter', $('#Crafting-Items'), 'inv_group_equipment', 'any', 'any', sortType, 'recipe,is_rental:false,is_sealed:false', '');
     }
     Crafting.UpdateItemList = UpdateItemList;
     function _UpdateCraftingPanelDisplay() {

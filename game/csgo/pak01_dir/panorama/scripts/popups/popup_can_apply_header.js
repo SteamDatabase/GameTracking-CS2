@@ -43,9 +43,7 @@ var CanApplyHeader;
         }
         let warningText = _GetWarningTradeRestricted(oTitleSettings.type, oTitleSettings.toolId, oTitleSettings.itemId);
         warningText = !warningText ? '#SFUI_InvUse_Warning_use_can_stick_' + oTitleSettings.type : warningText;
-        if ((oTitleSettings.toolId && oTitleSettings.toolId.length == 19
-            && oTitleSettings.toolId.startsWith('922323129721890'))
-            || InventoryAPI.IsFauxItemID(oTitleSettings.toolId)) {
+        if (ItemInfo.IsFauxOrRentalOrPreviewTool(oTitleSettings.toolId)) {
             warningText = '#SFUI_InvUse_Warning_use_can_stick_previewonly_' + oTitleSettings.type;
             let bPhantomDisplayItemCannotApply = true;
             m_cP.GetParent().SetHasClass('can_apply_previewonly_phantom_display', bPhantomDisplayItemCannotApply);

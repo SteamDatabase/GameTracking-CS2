@@ -76,6 +76,13 @@ var CapabilityDecodable;
         else {
             SetsItemVarsFromMsg();
         }
+        if ((m_keyId && InventoryAPI.IsRental(m_keyId)) ||
+            InventoryAPI.IsRental(m_caseId)) {
+            $.GetContextPanel().SetAttributeString('asyncworkitemwarning', 'no');
+            $.GetContextPanel().SetAttributeString('asyncforcehide', 'true');
+            $.GetContextPanel().SetAttributeString('inspectonly', 'true');
+            $.GetContextPanel().SetAttributeString('onlyclosepurchasebar', 'true');
+        }
         if (!m_keyId) {
             let associatedItemCount = InventoryAPI.GetAssociatedItemsCount(m_caseId);
             if (!InventoryAPI.IsItemInfoValid(m_caseId)) {

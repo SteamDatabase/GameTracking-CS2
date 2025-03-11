@@ -576,7 +576,8 @@ var InventoryPanel;
         if (!elList)
             elList = $.CreatePanel('InventoryItemList', _m_elSelectItemForCapabilityPopup, 'ItemListForCapability');
         elList.SetHasClass('inv-multi-select-allow', capability === "casketstore" || capability === "casketretrieve");
-        let capabilityFilter = capability + ':' + id + ',' + 'is_rental:false';
+        let filterApplicationToPhantomItems = ItemInfo.IsFauxOrRentalOrPreviewTool(id) ? '' : ',is_rental:false,is_sealed:false';
+        let capabilityFilter = capability + ':' + id + filterApplicationToPhantomItems;
         _UpdateActiveItemList(elList, 'any', 'any', _GetSelectedSort(_m_elSelectItemForCapabilityPopup.FindChildInLayoutFile('CapabilityPopupSortContainer')), capabilityFilter);
         _SetUpCasketPopup(capability, elList);
         _SetCapabilityPopupTitle(id, capability);
