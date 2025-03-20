@@ -30,6 +30,7 @@ class CCSPlayerController : public CBasePlayerController
 	int32 m_iDraftIndex;
 	uint32 m_msQueuedModeDisconnectionTimestamp;
 	uint32 m_uiAbandonRecordedReason;
+	uint32 m_eNetworkDisconnectionReason;
 	bool m_bCannotBeKicked;
 	bool m_bEverFullyConnected;
 	bool m_bAbandonAllowsSurrender;

@@ -68,6 +68,7 @@ class CCSGameRules : public CTeamplayRules
 	Vector m_vMinimapMaxs;
 	float32[8] m_MinimapVerticalSectionHeights;
 	bool m_bSpawnedTerrorHuntHeavy;
+	uint64 m_ullLocalMatchID;
 	int32[10] m_nEndMatchMapGroupVoteTypes;
 	int32[10] m_nEndMatchMapGroupVoteOptions;
 	int32 m_nEndMatchMapVoteWinner;
