@@ -17,7 +17,6 @@ class CCSWeaponBase : public CBasePlayerWeapon
 	bool m_bRequireUseToTouch;
 	CSWeaponState_t m_iState;
 	GameTime_t m_flLastTimeInAir;
-	GameTime_t m_flLastDeployTime;
 	int32 m_nLastEmptySoundCmdNum;
 	uint32 m_nViewModelIndex;
 	bool m_bReloadsWithClips;

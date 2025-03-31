@@ -1,3 +1,0 @@
-class CTriggerTripWire : public CBaseTrigger
-{
-};

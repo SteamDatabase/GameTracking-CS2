@@ -4,6 +4,7 @@
 /// <reference path="mainmenu_store_fullscreen.ts" />
 /// <reference path="common/prime_button_action.ts" />
 /// <reference path="popups/popup_acknowledge_item.ts" />
+/// <reference path="common/icon.ts" />
 /// <reference path="xpshop_track.ts" />
 /// <reference path="particle_controls.ts" />
 var XpShop;
@@ -277,7 +278,8 @@ var XpShop;
                 callout: "",
                 item_name_groups: "",
                 points: '',
-                limited_until: ''
+                limited_until: '',
+                ui_show_new_tag: ''
             };
             for (let key in ShopEntry) {
                 let field_value = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(m_nTrack, i, key);
@@ -295,7 +297,7 @@ var XpShop;
                 ShopEntry.tile_height = ShopEntry.lootlist_item_type === 'weapon' ? m_tileHeight : ShopEntry.lootlist_item_type === 'keychain' ? m_keychainTileHeight : ShopEntry.tile_width;
                 ShopEntry.on_item_activate = _OpenFullScreenInspectItem;
                 let strSetName = InventoryAPI.GetTag(ShopEntry.lootlist[0], 'ItemSet');
-                ShopEntry.ui_set_image = strSetName ? 'file://{images}/econ/set_icons/' + strSetName + '_small.png' : 'file://{images}/econ/set_icons/' + ShopEntry.ui_set_image + '_small.png';
+                ShopEntry.ui_set_image = strSetName ? strSetName : ShopEntry.ui_set_image;
                 if (ShopEntry.limited_until)
                     ShopEntry.suffix_loc_string = '_limitedtime';
             }
@@ -307,7 +309,7 @@ var XpShop;
                 ShopEntry.lootlist = [idCrate];
                 ShopEntry.lootlist_item_type = 'crate';
                 let strSetName = InventoryAPI.GetTag(InventoryAPI.GetLootListItemIdByIndex(idCrate, 0), 'ItemSet');
-                ShopEntry.ui_set_image = strSetName ? 'file://{images}/econ/set_icons/' + strSetName + '_small.png' : '';
+                ShopEntry.ui_set_image = strSetName ? strSetName : '';
                 ShopEntry.on_item_activate = OpenFullscreenInspect;
             }
             _MakeShopTile(ShopEntry);
@@ -351,7 +353,9 @@ var XpShop;
                 }
             });
             if (ShopEntry.ui_set_image) {
-                elTile.FindChildInLayoutFile('id-xpshop-tile-icon').SetImage(ShopEntry.ui_set_image);
+                const elImage = elTile.FindChildInLayoutFile('id-xpshop-tile-icon');
+                IconUtil.SetupFallbackItemSetIcon(elImage, ShopEntry.ui_set_image);
+                IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
             }
             if (ShopEntry.limited_until) {
                 let elPanelLimitedTimer = elTile.FindChildInLayoutFile('id-xpshop-tile-limitedtimer');
@@ -366,7 +370,15 @@ var XpShop;
             elTile.style.backgroundPosition = '50% 50%';
             elTile.style.backgroundSize = 'cover';
             if (ShopEntry.lootlist?.length === 1) {
-                elTile.FindChildInLayoutFile('id-xpshop-tile-single-image').itemid = ShopEntry.lootlist[0];
+                if (ShopEntry.limited_until) {
+                    let elLimitedCarousel = $.CreatePanel('Carousel', elTile, '');
+                    elLimitedCarousel.BLoadLayoutSnippet('limited-item-carousel');
+                    elLimitedCarousel.hittest = false;
+                    elLimitedCarousel.hittestchildren = false;
+                }
+                else {
+                    elTile.FindChildInLayoutFile('id-xpshop-tile-single-image').itemid = ShopEntry.lootlist[0];
+                }
             }
             else if (ShopEntry.lootlist && ShopEntry.lootlist.length > 1) {
                 let elCarousel = elTile.FindChildInLayoutFile('id-xpshop-tile-carousel');
@@ -393,6 +405,7 @@ var XpShop;
                 }
             }
         }
+        elTile.FindChildInLayoutFile('id-new-item-tag').SetHasClass('hidden', !XpShop.ShouldShowNewTagForShopEntry(ShopEntry));
         elTile.SetDialogVariable('name', ShopEntry.callout ? $.Localize(ShopEntry.callout) : ShopEntry.item_name);
         elTile.SetDialogVariable('points', ShopEntry.points);
         return elTile;
@@ -420,39 +433,45 @@ var XpShop;
                 let elShopTile = CreateShopTile(elTilesContainer, itemId, ShopEntry);
                 let elModel = elShopTile.FindChild('id-grid-item-model');
                 if (ShopEntry.entry_type === 'crate') {
-                    elModel.SetActiveItem(0);
-                    elModel.SetItemItemId(itemId, '');
-                    elModel.TransitionToCamera('camera_crate', 0);
-                    elModel.TransitionToCamera('camera_crate_0', 3);
-                    elTilesContainer.SetHasClass('no-bottom-margin', true);
-                    let aCrateLootlist = _GetLootListForReward(itemId);
-                    aCrateLootlist.splice(aCrateLootlist.length - 1, 1);
-                    aCrateLootlist.forEach((id, idx) => {
-                        elModel.SetActiveItem(idx + 1);
-                        elModel.SetItemItemId(id, '');
-                        let sIndex = (idx + 1).toString();
-                        let elCrateHoverTarget = $.CreatePanel('Panel', elShopTile, 'id-crate-item-hover-' + sIndex, { class: 'crate-item-info' + ' crate-item-' + sIndex });
-                        elCrateHoverTarget.SetHasClass('hidden', true);
-                        $.Schedule(2.5, () => {
-                            if (elCrateHoverTarget.IsValid())
-                                elCrateHoverTarget.SetHasClass('hidden', false);
+                    elShopTile.AddClass('crate-item');
+                    let elLootlistItems = elShopTile.FindChildInLayoutFile('id-xpshop-crate-lootlist');
+                    elModel = elShopTile.FindChildInLayoutFile('ItemPreviewPanel');
+                    ;
+                    $.Schedule(.25, () => elModel.TransitionToCamera('cam_case_open', 1));
+                    if (!elLootlistItems) {
+                        elLootlistItems = $.CreatePanel('Panel', elShopTile, 'id-xpshop-crate-lootlist-' + itemId, { class: 'xpshop__crate-lootlist' });
+                        elLootlistItems.style.backgroundImage = 'url("file://{images}/' + ShopEntry.ui_image_thumbnail + '.png")';
+                        elLootlistItems.style.backgroundPosition = '50% 50%';
+                        elLootlistItems.style.backgroundSize = 'clip_then_cover';
+                        elLootlistItems.style.backgroundImgOpacity = '.6';
+                        $.CreatePanel('Panel', elLootlistItems, '', { class: 'xpshop__crate-lootlist__bg' });
+                        let textString = $.Localize('#xpshop_lootlist_info', elGrid);
+                        $.CreatePanel('Label', elLootlistItems, '', { class: 'xpshop__crate-lootlist__label', html: 'true', text: textString });
+                        let elLootlistItemTiles = $.CreatePanel('Panel', elLootlistItems, '', { class: 'xpshop__crate-lootlist__tiles' });
+                        let aCrateLootlist = _GetLootListForReward(itemId);
+                        aCrateLootlist.forEach((id, idx) => {
+                            let elItem = $.CreatePanel('Button', elLootlistItemTiles, id, { class: 'xpshop__crate-lootlist__item-tile' });
+                            elItem.BLoadLayoutSnippet('crate-lootlist-item');
+                            let elImage = elItem.FindChildInLayoutFile('id-crate-lootlits-item-image');
+                            let elRarity = elItem.FindChildInLayoutFile('id-crate-lootlits-item-rarity');
+                            if (id !== '0') {
+                                elImage.itemid = id;
+                                let color = InventoryAPI.GetItemRarityColor(id);
+                                if (color) {
+                                    elRarity.style.backgroundColor = color;
+                                }
+                                elItem.SetPanelEvent('onactivate', () => {
+                                    $.DispatchEvent("LootlistItemPreview", id, itemId);
+                                });
+                            }
+                            else {
+                                let unusualItemImagePath = InventoryAPI.GetLootListUnusualItemImage(itemId) + ".png";
+                                elImage.SetImage("file://{images}/" + unusualItemImagePath);
+                                elRarity.visible = false;
+                                elItem.enabled = false;
+                            }
                         });
-                        let elRarity = $.CreatePanel('Panel', elCrateHoverTarget, '', { class: 'crate-item__rarity' });
-                        let color = InventoryAPI.GetItemRarityColor(id);
-                        if (!color)
-                            elRarity.visible = false;
-                        else
-                            elRarity.style.backgroundColor = color;
-                        let sTitleStyle = 'crate-item__label';
-                        $.CreatePanel('Label', elCrateHoverTarget, '', { text: InventoryAPI.GetItemName(id), class: sTitleStyle });
-                        let Btn = $.CreatePanel('Button', elCrateHoverTarget, '', { class: 'crate-item__inspect-btn' });
-                        $.CreatePanel('Image', Btn, '').SetImage('file://{images}/icons/ui/zoom_in.svg');
-                        let nDefinitionIndex = InventoryAPI.GetItemDefinitionIndexFromDefinitionName(ShopEntry.item_name);
-                        let caseId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(nDefinitionIndex, 0);
-                        elCrateHoverTarget.SetPanelEvent('onactivate', () => {
-                            $.DispatchEvent("LootlistItemPreview", id, caseId);
-                        });
-                    });
+                    }
                     return;
                 }
                 if (ShopEntry.lootlist?.length === 1) {
@@ -557,7 +576,9 @@ var XpShop;
             UiToolkitAPI.HideTextTooltip();
         });
         if (ShopEntry.ui_set_image) {
-            elRedeemBar.FindChildInLayoutFile('id-xpshop-item-redeem-icon').SetImage(ShopEntry.ui_set_image);
+            const elImage = elRedeemBar.FindChildInLayoutFile('id-xpshop-item-redeem-icon');
+            IconUtil.SetupFallbackItemSetIcon(elImage, ShopEntry.ui_set_image);
+            IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
         }
         _ResetToRewardsBar(elRedeemBar, elConfirmBar);
     }
@@ -566,7 +587,9 @@ var XpShop;
             _ResetToRewardsBar(elRedeemBar, elConfirmBar);
         });
         if (ShopEntry.ui_set_image) {
-            elConfirmBar.FindChildInLayoutFile('id-xpshop-item-confirm-icon').SetImage(ShopEntry.ui_set_image);
+            const elImage = elConfirmBar.FindChildInLayoutFile('id-xpshop-item-confirm-icon');
+            IconUtil.SetupFallbackItemSetIcon(elImage, ShopEntry.ui_set_image);
+            IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
         }
         elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').SetPanelEvent('onactivate', () => {
             MissionsAPI.ActionRedeemOperationGoods(m_nTrack, ShopEntry.shop_index);
@@ -613,7 +636,9 @@ var XpShop;
     }
     function _StopRedeemParticles() {
         const elRedeemFx = $.GetContextPanel().FindChildInLayoutFile('id-redeem-wait-particle');
-        elRedeemFx.StopParticlesWithEndcaps();
+        if (elRedeemFx !== null) {
+            elRedeemFx.StopParticlesWithEndcaps();
+        }
     }
     function _EnableRotateOnModel(elModel, lootlist_item_type = '') {
         if (lootlist_item_type === "sticker") {
@@ -695,16 +720,16 @@ var XpShop;
     }
     function CreateShopTile(elTilesContainer, itemId, ShopEntry) {
         let sStyle = 'xpshop__inspect-grid__tile';
-        let mapName = ShopEntry.entry_type === 'crate' ? 'ui/xpshop_case' : ShopEntry.lootlist?.length === 1 ? GameInterfaceAPI.GetSettingString('ui_inspect_bkgnd_map') + '_vanity' : "ui/xpshop_item";
-        let elPanel = $.CreatePanel('Panel', elTilesContainer, itemId, { class: sStyle });
-        if (ShopEntry.lootlist?.length === 1 || ShopEntry.entry_type === 'crate') {
+        let mapName = ShopEntry.lootlist?.length === 1 ? GameInterfaceAPI.GetSettingString('ui_inspect_bkgnd_map') + '_vanity' : "ui/xpshop_item";
+        let elPanel = $.CreatePanel('CSGOBlurTarget', elTilesContainer, itemId, { class: sStyle });
+        if (ShopEntry.lootlist?.length === 1) {
             elPanel.SetHasClass('single-item', true);
         }
         else {
             elPanel.style.width = (ShopEntry.tile_width) + 'px';
             elPanel.style.height = (ShopEntry.tile_height) + 'px';
         }
-        if (ShopEntry.lootlist?.length === 1 && ShopEntry.entry_type !== 'crate') {
+        if (ShopEntry.lootlist?.length === 1) {
             InspectModelImage.Init(elPanel, itemId);
         }
         else {
@@ -723,7 +748,7 @@ var XpShop;
             class: 'xpshop__inspect-grid__tile__model',
             "require-composition-layer": "true",
             'transparent-background': true,
-            'disable-depth-of-field': ShopEntry.entry_type !== 'crate',
+            'disable-depth-of-field': true,
             camera: camera,
             player: "false",
             map: mapName,
@@ -757,6 +782,17 @@ var XpShop;
                 ShopEntry.on_item_activate(ShopEntry, itemId);
             }
         });
+        if (ShopEntry.lootlist?.length === 1 && ShopEntry.limited_until) {
+            let elHint = $.CreatePanel('Panel', elPanel, 'id-xpshop-limited-item-tooltip-loc');
+            elHint.BLoadLayoutSnippet('limited-item-variety');
+            elHint.SetPanelEvent('onmouseover', () => {
+                UiToolkitAPI.ShowCustomLayoutTooltip('id-xpshop-limited-item-tooltip-loc', 'id-xpshop-limited-item-tooltip', 'file://{resources}/layout/tooltips/tooltip_limited_item_variation.xml');
+            });
+            elHint.SetPanelEvent('onmouseout', () => {
+                UiToolkitAPI.HideCustomLayoutTooltip('id-xpshop-limited-item-tooltip');
+            });
+            elHint.AddClass('xpshop-preview-variety');
+        }
     }
     function OpenFullscreenInspect(ShopEntry) {
         let nDefinitionIndex = InventoryAPI.GetItemDefinitionIndexFromDefinitionName(ShopEntry.item_name);
@@ -797,6 +833,14 @@ var XpShop;
             });
         }
     }
+    function ShouldShowNewTagForShopEntry(ShopEntry) {
+        if (ShopEntry.ui_show_new_tag) {
+            let numSecondsRemaining = StoreAPI.GetSecondsUntilTimestamp(parseInt(ShopEntry.ui_show_new_tag));
+            return (numSecondsRemaining > 0);
+        }
+        return false;
+    }
+    XpShop.ShouldShowNewTagForShopEntry = ShouldShowNewTagForShopEntry;
     function _MakeNavButton(ShopEntry) {
         let elParent = $.GetContextPanel().FindChildInLayoutFile('id-xpshop-top-nav');
         let elBtn = elParent.FindChildInLayoutFile(ShopEntry.item_name + '-nav');
@@ -806,7 +850,9 @@ var XpShop;
             elBtn.SetPanelEvent('onactivate', () => _UpdateInspectGrid(ShopEntry));
             elBtn.Data().ui_order = ShopEntry.ui_order;
             if (ShopEntry.ui_set_image) {
-                elBtn.FindChild('id-xpshop-nav-btn-img').SetImage(ShopEntry.ui_set_image);
+                const elImage = elBtn.FindChild('id-xpshop-nav-btn-img');
+                IconUtil.SetupFallbackItemSetIcon(elImage, ShopEntry.ui_set_image);
+                IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
             }
         }
     }

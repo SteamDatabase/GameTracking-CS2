@@ -5,6 +5,7 @@
 /// <reference path="popups/popup_acknowledge_item.ts" />
 /// <reference path="xpshop_track.ts" />
 /// <reference path="itemtile_store.ts" />
+/// <reference path="xpshop.ts" />
 var MainMenuXpShop;
 (function (MainMenuXpShop) {
     const _m_XpShopPanel = $.GetContextPanel();
@@ -127,15 +128,23 @@ var MainMenuXpShop;
     function GetItemsForCollage() {
         let nCount = MissionsAPI.GetSeasonalOperationRedeemableGoodsCount(m_nTrack);
         let aRedeemableGoods = [];
+        let nNewItemCount = 0;
         for (let i = 0; i < nCount; i++) {
             let ShopEntry = {
                 item_name: "",
-                lootlist: []
+                lootlist: [],
+                ui_show_new_tag: ""
             };
             ShopEntry.item_name = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(m_nTrack, i, 'item_name');
             ShopEntry.lootlist = _GetLootListForReward(ShopEntry.item_name);
+            ShopEntry.ui_show_new_tag = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(m_nTrack, i, 'ui_show_new_tag');
             aRedeemableGoods.push(ShopEntry);
+            if (XpShop.ShouldShowNewTagForShopEntry(ShopEntry)) {
+                nNewItemCount++;
+            }
         }
+        $.GetContextPanel().SetDialogVariableInt('new-count', nNewItemCount);
+        $.GetContextPanel().FindChildInLayoutFile('id-new-item-tag').SetHasClass('hide', nNewItemCount < 1);
         let shuffledArray = aRedeemableGoods.sort((a, b) => 0.5 - Math.random());
         let numImages = 16;
         let longistDelay = numImages * 2;

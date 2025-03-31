@@ -4,11 +4,14 @@
 		<include src="s2r://panorama/styles/csgostyles.vcss_c" />
 		<include src="s2r://panorama/styles/mainmenu.vcss_c" />
 		<include src="s2r://panorama/styles/xpshop.vcss_c" />
+		<include src="s2r://panorama/styles/xpshop.vcss_c" />
 		<include src="s2r://panorama/styles/popups/popup_inventory_inspect.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_capability_decodable.vcss_c" />
 	</styles>
 	<scripts>
 		<include src="s2r://panorama/scripts/inspect.vts_c" />
 		<include src="s2r://panorama/scripts/common/prime_button_action.vts_c" />
+		<include src="s2r://panorama/scripts/common/icon.vts_c" />
 		<include src="s2r://panorama/scripts/xpshop_track.vts_c" />
 		<include src="s2r://panorama/scripts/xpshop.vts_c" />
 	</scripts>
@@ -16,7 +19,7 @@
 		<snippet name="shop-tile">
 			<Panel class="xpshop__item-tile">
 				<Panel class="xpshop__item-tile__header">
-					<Image id="id-xpshop-tile-icon" class="xpshop__item-tile__icon" />
+					<Image id="id-xpshop-tile-icon" class="xpshop__item-tile__icon" textureheight="42" texturewidth="-1" scaling="stretch-to-fit-preserve-aspect" />
 					<Label id="id-xpshop-tile-name" text="{s:name}" class="xpshop__item-tile__name stratum-medium-condensed" />
 				</Panel>
 				<Panel class="xpshop__item-tile__points">
@@ -30,9 +33,10 @@
 					</Panel>
 					<Label class="stratum-medium right-margin-4 fontcolor-white" text="#SFUI_Store_Limited_Time_Tagline" />
 				</Panel>
-				<ItemImage id="id-xpshop-tile-single-image" class="xpshop__item-tile__single-image" />
-				<Carousel id="id-xpshop-tile-carousel" autoscroll-delay="6s, 6s" panels-visible="3" class="xpshop__item-tile__carousel full-width full-height" hittest="false" />
 				<ParticleScenePanel id="id-xpshop-tile-particle" class="xpshop__item-tile__particle" hittest="false" startActive="true" particleName="particles/ui/xpshop/xpshop_panel_right_glow.vpcf" cameraOrigin="0 -300 0" lookAt="0 0 0" fov="40" />
+				<ItemImage id="id-xpshop-tile-single-image" class="xpshop__item-tile__single-image" />
+				<Carousel id="id-xpshop-tile-carousel" autoscroll-delay="6s, 6s" panels-visible="1" class="xpshop__item-tile__carousel full-width full-height" hittest="false" />
+				<Label id="id-new-item-tag" class="xpshop__item-tile__new-tag stratum-medium-italic hidden" text="#SFUI_Workshop_New_Map" />
 			</Panel>
 		</snippet>
 		<snippet name="redeem-button">
@@ -41,16 +45,33 @@
 				<Image src="s2r://panorama/images/icons/ui/xpshop_star.vsvg" />
 			</Button>
 		</snippet>
+		<snippet name="limited-item-variety">
+			<Button class="xpshop-preview-variety">
+				<Label class="xpshop__inspect-grid__redeem__btn-text stratum-medium-condensed" html="true" hittest="false" text="#xpshop_limited_item_variations" />
+				<Image src="s2r://panorama/images/icons/ui/join_queue.vsvg" hittest="false" />
+			</Button>
+		</snippet>
+		<snippet name="limited-item-carousel">
+			<Panel id="id-xpshop-limited-item-carousel" autoscroll-delay="1s, 1s" panels-visible="1" class="xpshop__item-tile__limited-item-carousel" hittest="false">
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_0_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_1_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_2_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_3_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_4_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_5_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+				<Image class="limited-item-carousel__image" src="s2r://panorama/images/backgrounds/xpshop/limited_item_variations/limited_item_6_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+			</Panel>
+		</snippet>
 		<snippet name="shop-grid">
 			<Panel class="xpshop__inspect-grid">
 				<Label class="xpshop__inspect-grid__title stratum-medium-condensed" text="{s:name}" />
 				<Panel id="id-xpshop-grid-tiles" class="xpshop__inspect-grid__tiles-container" hittest="false" />
 				<Panel id="id-xpshop-item-redeem-bar" class="xpshop__inspect-grid__redeem">
-					<Image id="id-xpshop-item-redeem-icon" class="xpshop__inspect-grid__icon" />
+					<Image id="id-xpshop-item-redeem-icon" class="xpshop__inspect-grid__icon" textureheight="48" texturewidth="-1" scaling="stretch-to-fit-preserve-aspect" />
 					<Label class="xpshop__inspect-grid__redeem__desc stratum-regular" html="true" text="{s:desc-text}" />
 				</Panel>
 				<Panel id="id-xpshop-item-confirm-bar" class="xpshop__inspect-grid__redeem confirm hidden">
-					<Image id="id-xpshop-item-confirm-icon" class="xpshop__inspect-grid__icon" />
+					<Image id="id-xpshop-item-confirm-icon" class="xpshop__inspect-grid__icon" textureheight="48" texturewidth="-1" scaling="stretch-to-fit-preserve-aspect" />
 					<Label class="xpshop__inspect-grid__redeem__desc stratum-regular" html="true" text="{s:confirm-text}" />
 					<TextButton id="id-xpshop-item-redeem-confirm" class="xpshop__tracks_upsell-btn confirm-btn right-margin-4" text="#xpshop_redeem_confirm_action" />
 					<TextButton id="id-xpshop-item-redeem-cancel" class="xpshop__tracks_upsell-btn confirm-btn" text="#SFUI_PlayerDetails_Cancel" />
@@ -88,6 +109,13 @@
 				</Panel>
 				<TextButton id="id-xpshop-pass-activate-btn" class="xpshop__tracks_upsell-btn confirm-btn activate-pass-btn" text="{s:action-text}" />
 				<Label id="id-xpshop-pass-how-to" class="stratum-medium-condensed xpshop-active-pass__how-to" text="#xpshop_howto" />
+			</Panel>
+		</snippet>
+		<snippet name="crate-lootlist-item">
+			<Panel class="xpshop__crate-lootlist-carousel__item">
+				<ItemImage id="id-crate-lootlits-item-image" scaling="stretch-to-fit-y-preserve-aspect" />
+				<Image id="id-crate-lootlits-item-zoom" src="s2r://panorama/images/icons/ui/zoom_in.vsvg" textureheight="22" texturewidth="22" />
+				<Panel id="id-crate-lootlits-item-rarity" class="xpshop__crate-lootlist__item-rarity" />
 			</Panel>
 		</snippet>
 	</snippets>

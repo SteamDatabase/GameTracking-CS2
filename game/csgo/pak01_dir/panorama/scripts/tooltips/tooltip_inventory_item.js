@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
+/// <reference path="../common/icon.ts" />
 var TooltipInventoryItem;
 (function (TooltipInventoryItem) {
     function SetupTooltip() {
@@ -26,9 +27,13 @@ var TooltipInventoryItem;
         ctx.SetDialogVariable('description', strDesc);
         let strSetName = InventoryAPI.GetTag(id, 'ItemSet');
         let elCollectionLogo = $('#CollectionLogo');
+        if (elCollectionLogo)
+            elCollectionLogo.DeleteAsync(0.0);
+        elCollectionLogo = $.CreatePanel('Image', $.GetContextPanel().FindChildInLayoutFile('jsTopItemTooltipRow'), 'CollectionLogo', { class: "collection-logo", texturewidth: "56", scaling: "stretch-to-fit-preserve-aspect" });
         if (strSetName && strSetName != '0') {
             ctx.AddClass('tooltip-inventory-item__has-set');
-            elCollectionLogo.SetImage('file://{images}/econ/set_icons/' + strSetName + '_small.png');
+            IconUtil.SetupFallbackItemSetIcon(elCollectionLogo, strSetName);
+            IconUtil.SetItemSetSVGImage(elCollectionLogo, strSetName);
             ctx.SetDialogVariable('collection', InventoryAPI.GetTagString(strSetName));
         }
         else {

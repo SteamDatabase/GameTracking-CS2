@@ -1,3 +1,0 @@
-class CTripWireFire : public CBaseCSGrenade
-{
-};

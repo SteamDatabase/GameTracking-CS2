@@ -5,6 +5,7 @@
 /// <reference path="common/store_items.ts" />
 /// <reference path="common/prime_button_action.ts" />
 /// <reference path="itemtile_store.ts" />
+/// <reference path="xpshop.ts" />
 /// <reference path="generated/items_event_current_generated_store.d.ts" />
 /// <reference path="popups/popup_acknowledge_item.ts" />
 var MainMenuStore;
@@ -160,6 +161,24 @@ var MainMenuStore;
         }
         let elButton = elParent.FindChildInLayoutFile('id-store-nav-xpshop');
         if (!elButton) {
+            let nTrack = MissionsAPI.GetSeasonalOperationXpShopIndex();
+            let nNewItemCount = 0;
+            if (nTrack > 0) {
+                let nCount = MissionsAPI.GetSeasonalOperationRedeemableGoodsCount(nTrack);
+                for (let i = 0; i < nCount; i++) {
+                    if (nNewItemCount > 0) {
+                        break;
+                    }
+                    let ShopEntry = {
+                        item_name: "",
+                        ui_show_new_tag: ""
+                    };
+                    ShopEntry.ui_show_new_tag = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(nTrack, i, 'ui_show_new_tag');
+                    if (XpShop.ShouldShowNewTagForShopEntry(ShopEntry)) {
+                        nNewItemCount++;
+                    }
+                }
+            }
             elButton = $.CreatePanel('RadioButton', elParent, 'id-store-nav-xpshop', {
                 group: 'store-top-nav',
                 class: 'content-navbar__tabs__btn'
@@ -167,6 +186,11 @@ var MainMenuStore;
             $.CreatePanel('Label', elButton, '', {
                 text: '#store_tab_xpshop'
             });
+            if (nNewItemCount > 0) {
+                $.CreatePanel('Label', elButton, '', {
+                    class: 'content-navbar__tabs__btn-new', text: '#xpshop_new_items'
+                });
+            }
             elButton.SetPanelEvent('onactivate', () => {
                 NavigateToTab(_m_pagePrefix + 'xpshop', 'xpshop');
             });

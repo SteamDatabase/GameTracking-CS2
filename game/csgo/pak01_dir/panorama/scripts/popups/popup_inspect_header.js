@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
+/// <reference path="../common/icon.ts" />
 /// <reference path="../common/iteminfo.ts" />
 var InspectHeader;
 (function (InspectHeader) {
@@ -62,7 +63,8 @@ var InspectHeader;
         }
         elLabel.text = $.Localize('#CSGO_' + setName);
         elLabel.visible = true;
-        elImage.SetImage('file://{images}/econ/set_icons/' + setName + '_small.png');
+        IconUtil.SetupFallbackItemSetIcon(elImage, setName);
+        IconUtil.SetItemSetSVGImage(elImage, setName);
         elImage.visible = true;
     }
 })(InspectHeader || (InspectHeader = {}));

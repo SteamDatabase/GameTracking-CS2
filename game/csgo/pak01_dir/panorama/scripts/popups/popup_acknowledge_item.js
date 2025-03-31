@@ -1,6 +1,7 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../common/iteminfo.ts" />
+/// <reference path="../common/icon.ts" />
 /// <reference path="popup_capability_can_sticker.ts" />
 var AcknowledgeItems;
 (function (AcknowledgeItems_1) {
@@ -159,7 +160,8 @@ var AcknowledgeItems;
             return;
         }
         elLabel.text = setName;
-        elImage.SetImage('file://{images}/econ/set_icons/' + strSetName + '_small.png');
+        IconUtil.SetupFallbackItemSetIcon(elImage, strSetName);
+        IconUtil.SetItemSetSVGImage(elImage, strSetName);
         elImage.SetHasClass('popup-acknowledge__subtitle_seticon_tiny', false);
         elPanel.SetHasClass('hide', false);
     }
