@@ -6,7 +6,7 @@
 var MainMenuMajorTile;
 (function (MainMenuMajorTile) {
     const _m_cp = $.GetContextPanel();
-    let _m_forceHide = false;
+    let _m_forceHide = true;
     function _Init() {
         if (!MyPersonaAPI.IsConnectedToGC() || _m_forceHide) {
             _m_cp.SetHasClass('hidden', true);
