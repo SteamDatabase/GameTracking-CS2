@@ -643,7 +643,6 @@ var OperationUtil = ( function () {
 			{
 				nSourceLayoutId = 2; 
 			}
-			StoreAPI.RecordUIEvent( "OperationJournal_Purchase", nSourceLayoutId );
 		}
 
 		$.DispatchEvent( 'CSGOPlaySoundEffect', 'tab_mainmenu_inventory', 'MOUSE' );

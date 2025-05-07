@@ -76,7 +76,6 @@ var FriendAdvertiseTile;
     function _OnInviteSetPanelEvent(elTile) {
         let xuid = _m_xuid;
         elTile.FindChildTraverse('JsInviteAdvertisingPlayer').SetPanelEvent('onactivate', () => {
-            StoreAPI.RecordUIEvent("ActionInviteFriendFrom_nearby");
             FriendsListAPI.ActionInviteFriend(xuid, '');
             $.DispatchEvent('FriendInvitedFromContextMenu', xuid);
         });

@@ -25,10 +25,6 @@ var InventoryInspect;
         _UpdatePanelData(itemId);
         _PlayShowPanelSound(itemId);
         _LoadEquipNotification();
-        let defIdx = InventoryAPI.GetItemDefinitionIndex(itemId);
-        if (defIdx > 0) {
-            StoreAPI.RecordUIEvent("Inventory_Inspect", defIdx);
-        }
     }
     InventoryInspect.Init = Init;
     function _UpdatePanelData(itemId) {

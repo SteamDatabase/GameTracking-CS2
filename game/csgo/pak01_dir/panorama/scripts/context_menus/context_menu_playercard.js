@@ -25,10 +25,6 @@ var ContextmenuPlayerCard;
                     ('purchased' === MyPersonaAPI.GetLicenseType());
             },
             OnSelected: (id, type) => {
-                if (type)
-                    StoreAPI.RecordUIEvent("ActionInviteFriendFrom_" + type);
-                else
-                    StoreAPI.RecordUIEvent("ActionInviteFriendGeneric");
                 FriendsListAPI.ActionInviteFriend(id, '');
                 $.DispatchEvent('ContextMenuEvent', '');
                 $.DispatchEvent('FriendInvitedFromContextMenu', id);

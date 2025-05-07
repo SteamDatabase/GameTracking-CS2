@@ -1300,6 +1300,7 @@ $tFa\v
 %s_%s_physics_proxy
 %s__%2d_%3d_%2d_%2d_%2d.txt
 %s_crouch
+%s_dir.vpk
 %s_large
 %s_nodrips
 %s_off
@@ -1329,6 +1330,7 @@ $tFa\v
 &6FR_
 '%s' (%d) -> '%s' (%d)
 '%s' -> '%s' has malformed string (leading or trailing space)\n
+'%s' is an official community map, mouniting addon.\n
 '%s' took %.1fms to execute %d commands, backlog is %d commands\n
 '%s': CQ resync (%s), client will discard cmd timing < %d\n
 '4BO_
@@ -1449,6 +1451,7 @@ $tFa\v
 *ZN11SmokeVolume13RebuildVoxelsERK6AABB_tEUlS2_E_
 *ZN11SmokeVolume18GetSmokeDensityLOSERK5Vec3DIfES3_PS1_EUlS3_jE_
 *ZN11SmokeVolume20BuildSmokeSimulationEP23CSmokeGrenadeProjectileRK5Vec3DIfER24CFixedSizeCircularBufferIS3_Li16EiEfEUlRK6AABB_tE_
+*ZN11SmokeVolume21GetSmokeDensityInLineERK5Vec3DIfES3_PS1_EUlS3_jE_
 *ZN11VoxelOctree8VoxelizeERK7VoxelIDEUlRK6AABB_tE_
 *ZN12CCSGameRules22InitializePlayerCountsERiS0_S0_S0_EUlP5CTeamE_
 *ZN12CCSGameRules5ThinkEvEUlP5CTeamE_
@@ -1626,6 +1629,7 @@ $tFa\v
 ../../game/shared/baseentity_shared.cpp
 ../../game/shared/cstrike15/bot/bot_manager.cpp:213
 ../../game/shared/cstrike15/cs_observer_pawn_shared.cpp
+../../game/shared/cstrike15/cs_quests_shared.cpp
 ../../game/shared/cstrike15/decoy_projectile.cpp
 ../../game/shared/cstrike15/flashbang_projectile.cpp
 ../../game/shared/cstrike15/hegrenade_projectile.cpp
@@ -1684,8 +1688,8 @@ $tFa\v
 ./baseentity.h
 ./cstrike15/hostage/cs_simple_hostage.cpp
 ./gameinterface.cpp
-./gameinterface.cpp:3377
-./gameinterface.cpp:3492
+./gameinterface.cpp:3399
+./gameinterface.cpp:3514
 ./nav_space_build.cpp
 .APathfindGeneric
 .Step
@@ -2070,6 +2074,7 @@ $tFa\v
 13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi385E23CCSUsrMsg_CounterStrafeL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
+13CNetMessagePBILi387E32CCSUsrMsg_RecurringMissionSchemaL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
@@ -3195,6 +3200,7 @@ $tFa\v
 21CCompressedStaticBool
 21CCompressedStaticChar
 21CDebugOverlayGrenades
+21CEconRecurringMission
 21CEconTool_SeasonTiers
 21CEconTool_WeddingRing
 21CEconTool_WrappedGift
@@ -3739,6 +3745,7 @@ $tFa\v
 26CMsgGCNameItemNotification
 26CMsgGCRequestAnnouncements
 26CMsgGCServerVersionUpdated
+26CMsgRecurringMissionSchema
 26CMsgSosSetSoundEventParams
 26CMsgSource1LegacyGameEvent
 26CNavLinkMovementDataSchema
@@ -3755,6 +3762,7 @@ $tFa\v
 26CPulseInstanceSaveAPI_NoOp
 26CPulseSharedEHandleService
 26CSGOInterpolationInfoPB_CL
+26CSOAccountRecurringMission
 26CSchemaAttributeType_Float
 26CSchemaRegistration_navlib
 26CSchemaRegistration_server
@@ -3807,7 +3815,6 @@ $tFa\v
 27CFunFact_PlayerEvalFunction
 27CInfoPlayerCounterterrorist
 27CMarkupVolumeTagged_NavGame
-27CMsgAdjustItemEquippedState
 27CMsgCsgoSteamUserStatChange
 27CMsgGCBannedWordListRequest
 27CMsgGCStorePurchaseFinalize
@@ -4105,6 +4112,7 @@ $tFa\v
 32CCSPlayer_ActionTrackingServices
 32CCSUsrMsg_EntityOutlineHighlight
 32CCSUsrMsg_PlayerStatsUpdate_Stat
+32CCSUsrMsg_RecurringMissionSchema
 32CCSUsrMsg_RoundBackupFilenames_t
 32CClientMsg_CustomGameEventBounce
 32CDirtySpatialPartitionEntityList
@@ -4117,7 +4125,6 @@ $tFa\v
 32CEntityComponentHelperReferencedI30CBodyComponentSkeletonInstanceE
 32CEnvCubemapToolsResourceListener
 32CHostageAlias_info_hostage_spawn
-32CMsgAdjustItemEquippedStateMulti
 32CMsgGCIncrementKillCountResponse
 32CMsgItemAcknowledged__DEPRECATED
 32CMsgSource1LegacyGameEvent_key_t
@@ -4218,6 +4225,7 @@ $tFa\v
 35CMsgGCCStrike15_v2_SetEventFavorite
 35CMsgGCItemCustomizationNotification
 35CMsgGCStorePurchaseFinalizeResponse
+35CMsgRequestRecurringMissionSchedule
 35CMsgSerializedSOCache_Cache_Version
 35CPulseCell_Outflow_ScriptedSequence
 35CPulseInterfaceHelpers_Save_EntText
@@ -4411,7 +4419,7 @@ $tFa\v
 46CMsgGCCStrike15_v2_MatchmakingGC2ServerConfirm
 46CMsgGCCStrike15_v2_MatchmakingGC2ServerReserve
 46CMsgGCCStrike15_v2_MatchmakingServerRoundStats
-46CSOEconDefaultEquippedDefinitionInstanceClient
+46CMsgRecurringMissionSchema_MissionTemplateList
 46CTraceFilterNoPlayersAndFlashbangPassableAnims
 47CCSUsrMsg_RoundEndReportData_RerEvent_Objective
 47CMsgGCCStrike15_v2_Client2GCRequestPrestigeCoin
@@ -5026,6 +5034,7 @@ BLOAT =%-2d %s
 BLTY^b5>IT\b&.:HVb
 BMUZ_c6BLV\c'1=JVc
 BMV]`b3>LW_b!+;LZb
+BMakeQuestDefSchema
 BN lib
 BNW^ac4ANY_c".=MZc
 BOMB DEFUSE ABORTED\n
@@ -5209,6 +5218,7 @@ BuildCacheSubscribed(CEconGameAccountSteamChina)
 BuildCacheSubscribed(CEconItem)
 BuildCacheSubscribed(CEconPersonaDataPublic)
 BuildCacheSubscribed(CEconQuestProgress)
+BuildCacheSubscribed(CEconRecurringMission)
 BuildComponentRecursive
 Bullet History
 Bullet%d
@@ -5477,6 +5487,7 @@ CCSUsrMsg_ProcessSpottedEntityUpdate_t
 CCSUsrMsg_QuestProgress_t
 CCSUsrMsg_RadioText_t
 CCSUsrMsg_RawAudio_t
+CCSUsrMsg_RecurringMissionSchema_t
 CCSUsrMsg_ReportHit_t
 CCSUsrMsg_RoundBackupFilenames_t
 CCSUsrMsg_RoundEndReportData_t
@@ -5558,6 +5569,7 @@ CEconItemSchema
 CEconItemSchema::GetAttributeDefinitionByName
 CEconPersonaDataPublic
 CEconQuestProgress
+CEconRecurringMission
 CEmbeddedSubclass
 CEmbeddedSubclassGeneric
 CEngineServiceRegistry::RegisterEngineServices()
@@ -6364,6 +6376,7 @@ Create(CEconEquipSlot)
 Create(CEconGameAccountSteamChina)
 Create(CEconPersonaDataPublic)
 Create(CEconQuestProgress)
+Create(CEconRecurringMission)
 CreateByClassname
 CreateControllerToGraphBindings
 CreateDamageInfo
@@ -7063,12 +7076,14 @@ Failed to allocate a token stream for '%s'. (Out of memory?)
 Failed to allocate an instance of a class
 Failed to compute mesh tangents for mesh using material %s -- %s\n
 Failed to destroy destructible part(s) in hit group %d for entity %s. Remaining hit groups: %s\n
+Failed to find ID in recurring mission template
 Failed to find a visible soundscape along the soundcast ray! Are soundscapes properly set up?\n
 Failed to find custom physics damage table name: %s\n
 Failed to find entity %s during an autosave at distance from!\n
 Failed to find entity '%s' by name with type constraint '%s'. Found type '%s' instead\n
 Failed to find entity '%s' by name\n
 Failed to find function %s\n
+Failed to find recurring missions periods in schema
 Failed to generate new item: %s\n
 Failed to hit anything.
 Failed to include script "%s"
@@ -8444,6 +8459,7 @@ Invalid Steam Logon Delayed: Kicking client [U:1:%d] %s\n
 Invalid attach type specified for particle_test in cvar 'particle_test_attach_mode.\n
 Invalid counterterrorist spawnpoint at (%.1f,%.1f,%.1f)\n
 Invalid directory size for %s [got %d, max %d]\n
+Invalid entry in recurring mission cycle
 Invalid file id.\n
 Invalid map '%s' included in map cycle file. Ignored.\n
 Invalid navigation file '%s'.\n
@@ -8974,6 +8990,7 @@ Missing required transfer interface: %s
 Missing sprite material %s\n
 Missing token
 Missing token %s
+Missions
 MixedShadowsChanged
 Mod R%d <- R%d %% R%d
 Model %s missing bone and flex counts (%d < %d), init %d\n
@@ -9183,6 +9200,7 @@ N13CNetMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL13SignonGroup_t13EL19NetChan
 N13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi385E23CCSUsrMsg_CounterStrafeL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
+N13CNetMessagePBILi387E32CCSUsrMsg_RecurringMissionSchemaL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
@@ -9283,6 +9301,7 @@ N5GCSDK21CProtoBufSharedObjectI16CSOEconEquipSlotLi3EEE
 N5GCSDK21CProtoBufSharedObjectI16CSOQuestProgressLi46EEE
 N5GCSDK21CProtoBufSharedObjectI20CSOPersonaDataPublicLi2EEE
 N5GCSDK21CProtoBufSharedObjectI24CSOGameAccountSteamChinaLi18EEE
+N5GCSDK21CProtoBufSharedObjectI26CSOAccountRecurringMissionLi16EEE
 N5GCSDK21CProtoBufSharedObjectI27CSOAccountSeasonalOperationLi41EEE
 N5GCSDK21ISharedObjectListenerE
 N5GCSDK22CGCSOUpdateMultipleJobE
@@ -9508,6 +9527,8 @@ No matching backup files found.\n
 No model!
 No one can buy!!\n
 No parameter provided to Input DisableCollisionsWith in logic_collision_pair %s. Ignoring.\n
+No recurring mission cycle found in schema
+No recurring mission cycle period schedule in schema
 No script specified\n
 No target provided
 No train %s\n
@@ -9646,6 +9667,7 @@ OnObserverTargetChanged
 OnOut1
 OnOut2
 OnPawnChanged
+OnPendingTeamChanged
 OnPlayerControllerNameChanged
 OnRenderAttributesChanged
 OnRescueZoneTouch
@@ -10224,6 +10246,7 @@ RSA-SHA512
 RSAES-OAEP
 RSASSA-PSS
 RSA_blinding
+RTime32
 Radial using: %s\n
 RadiationThink
 Radio.Affirmitive
@@ -10287,6 +10310,11 @@ Recommended Distance
 Recommended distance this movement traverses
 Record that the function was called
 Recovery
+Recurring mission cycle has no missions for a period.
+Recurring mission cycle period schedule has an invalid entry: %s
+Recurring mission cycle period schedule has an invalid range: %s
+Recurring mission cycle period schedule is invalid
+Recurring mission entry %u not found in definition map
 RedirectOutput
 Register Test Checkpoint
 Register as a listener for a game event from script.
@@ -10537,6 +10565,7 @@ SV:  can't save, no IEntity2SaveRestore\n
 SV:  changed command queue to %s\n
 SV: %d(%s) changed min command queue size to %d\n
 SV: changing command queue to %s\n
+SV: common quest vars for %s\n
 SXNetID
 Safe To Auto-Switch Away From
 Safe To Auto-Switch To
@@ -11682,6 +11711,7 @@ Update(CEconGameAccountSteamChina)
 Update(CEconItem)
 Update(CEconPersonaDataPublic)
 Update(CEconQuestProgress)
+Update(CEconRecurringMission)
 UpdateBlocked: Area %d is already blocked with a different team id! This may cause flow bugs.\n
 UpdateQueryCache
 UpdateViewPostThink
@@ -12639,10 +12669,6 @@ anyPolicy
 append_items
 appid
 approachdata
-ar_baloney
-ar_dizzy
-ar_lunacy
-ar_pool_day
 archiveCutoff
 area %d is blocked\n
 area %d is unblocked\n
@@ -12870,6 +12896,8 @@ bombk
 bone(%d:%s)
 boneTransforms
 bonemergeflex
+bonus expr
+bonus xp
 bonus_itemdefs
 bot_interactions
 bot_join_after_player: %d\n
@@ -12992,7 +13020,6 @@ c4.plantquiet
 c4.spinningSpark
 cACertificate
 cNAMERecord
-c_eventid
 c_game_mode
 c_game_type
 c_skirmishid
@@ -13299,6 +13326,7 @@ condition_is_weapon_equipped
 condition_is_weapon_suitable
 condition_out_of_ammo
 condition_owns_item
+config doesn't have a period length
 configuration file routines
 conflict_response
 const char* Reflection::Internal::GetFuncName() [with T = CDemoSettingsComponentInstance]
@@ -13322,6 +13350,7 @@ contactshadow
 contains_patches_representing_organizations
 contains_stickers_autographed_by_proplayers
 contains_stickers_representing_organizations
+content
 content types
 contentType
 context
@@ -13341,10 +13370,6 @@ converts delta QAngle to an angular velocity Vector
 conveyor_models
 convictedforbehavior
 convictedforcheating
-coop_autumn
-coop_cementplant
-coop_fall
-coop_kasbah
 coord_integral
 copy_diffuse_from_default_cubemap
 core.explosion.ring1
@@ -13385,36 +13410,23 @@ crouch_reload
 cryptlib.c
 cryptocom
 cryptopro
-cs_agency
-cs_apollo
-cs_backalley
 cs_bot
-cs_climb
-cs_cruise
-cs_downtown
 cs_game_disconnected
 cs_gameevents.proto
 cs_gamerules
-cs_insertion
-cs_insertion2
 cs_intermission
 cs_match_end_restart
 cs_minimap_boundary
-cs_motel
 cs_player_controller
 cs_player_manager
 cs_pre_restart
 cs_respawn
 cs_round_final_beep
 cs_round_start_beep
-cs_rush
-cs_siege
 cs_team_manager
-cs_thunder
 cs_usercmd.proto
 cs_win_panel_match
 cs_win_panel_round
-cs_workout
 csblood
 csgo_droneclip
 csgo_grenadeclip
@@ -13518,79 +13530,6 @@ data_cp_value
 dc grace
 dcObject
 dcobject
-de_abbey
-de_ali
-de_ancient
-de_anubis
-de_assembly
-de_austria
-de_basalt
-de_bazaar
-de_biome
-de_blackgold
-de_blagai
-de_boyard
-de_breach
-de_cache
-de_cache_scrimmagemap
-de_calavera
-de_canals
-de_castle
-de_chalice
-de_chinatown
-de_chlorine
-de_coast
-de_crete
-de_edin
-de_elysion
-de_empire
-de_engage
-de_extraction
-de_facade
-de_favela
-de_glass
-de_grind
-de_guard
-de_gwalior
-de_hive
-de_iris
-de_lite
-de_log
-de_marquis
-de_memento
-de_mikla
-de_mills
-de_mirage
-de_mirage_scrimmagemap
-de_mist
-de_mocha
-de_mutiny
-de_overgrown
-de_overpass
-de_palais
-de_pitstop
-de_prime
-de_rails
-de_ravine
-de_resort
-de_royal
-de_ruby
-de_ruins
-de_santorini
-de_seaside
-de_season
-de_shipped
-de_shortdust
-de_shortnuke
-de_studio
-de_subzero
-de_swamp
-de_thera
-de_thrill
-de_tulip
-de_tuscan
-de_whistle
-de_zoo
 debug of origin changes for %d set to %s\n
 debug_malloc
 debug_malloc2
@@ -13641,6 +13580,7 @@ decoy_projectile
 decoy_projectile.ventr
 decoy_projectile_server
 decoy_started
+default period length must be a week
 defaultDist1
 defaultDist2
 defaultDist3
@@ -13833,13 +13773,6 @@ dynamicMaximumOcclusion
 dynamicProxyPoint
 dynamic_prop
 dynlock
-dz_blacksite
-dz_county
-dz_ember
-dz_frostbite
-dz_junglety
-dz_sirocco
-dz_vineyard
 eFlinchHeading
 eFlinches
 eFootIKMoveMode
@@ -14124,7 +14057,6 @@ exposurecompensation
 exposuresmoothingrange
 exposurespeeddown
 exposurespeedup
-expr
 expression
 expressions
 expressions/%s.vfe
@@ -14553,14 +14485,6 @@ gc_status
 gconly
 gcsdk_gcmessages.proto
 gcsystemmsgs.proto
-gd_bank
-gd_cbble
-gd_crashsite
-gd_dizzy
-gd_lake
-gd_lunacy
-gd_rialto
-gd_sugarcane
 gearratio
 generate cryptogram
 generating substitute command %d from %d\n
@@ -14607,6 +14531,7 @@ glowrange
 glowrangemin
 glowstate
 glowteam
+gmflags
 godmode OFF\n
 godmode ON\n
 golf ball
@@ -14627,7 +14552,6 @@ graph_instance
 graph_keys
 graph_param
 graph_states
-graphics_settings
 grate
 grenade0
 grenade1
@@ -15515,7 +15439,6 @@ load from save file for %s
 loaded
 loadondemand
 loadtime
-lobby_mapveto
 loc_description
 loc_details
 loc_key
@@ -15873,9 +15796,125 @@ mamamamamama
 manifest
 manual
 map %s\n
+map_ar_baloney
+map_ar_dizzy
+map_ar_lunacy
+map_ar_pool_day
 map_background
+map_coop_autumn
+map_coop_cementplant
+map_coop_fall
+map_coop_kasbah
+map_cs_agency
+map_cs_apollo
+map_cs_backalley
+map_cs_climb
+map_cs_cruise
+map_cs_downtown
+map_cs_insertion
+map_cs_insertion2
+map_cs_motel
+map_cs_rush
+map_cs_siege
+map_cs_thunder
+map_cs_workout
+map_de_abbey
+map_de_ali
+map_de_ancient
+map_de_anubis
+map_de_assembly
+map_de_austria
+map_de_basalt
+map_de_bazaar
+map_de_biome
+map_de_blackgold
+map_de_blagai
+map_de_boyard
+map_de_breach
+map_de_brewery
+map_de_cache
+map_de_cache_scrimmagemap
+map_de_calavera
+map_de_canals
+map_de_castle
+map_de_chalice
+map_de_chinatown
+map_de_chlorine
+map_de_coast
+map_de_crete
+map_de_dogtown
+map_de_edin
+map_de_elysion
+map_de_empire
+map_de_engage
+map_de_extraction
+map_de_facade
+map_de_favela
+map_de_glass
+map_de_grail
+map_de_grind
+map_de_guard
+map_de_gwalior
+map_de_hive
+map_de_iris
+map_de_jura
+map_de_lite
+map_de_log
+map_de_marquis
+map_de_memento
+map_de_mikla
+map_de_mills
+map_de_mirage
+map_de_mirage_scrimmagemap
+map_de_mist
+map_de_mocha
+map_de_mutiny
+map_de_overgrown
+map_de_overpass
+map_de_palais
+map_de_pitstop
+map_de_prime
+map_de_rails
+map_de_ravine
+map_de_resort
+map_de_royal
+map_de_ruby
+map_de_ruins
+map_de_santorini
+map_de_seaside
+map_de_season
+map_de_shipped
+map_de_shortdust
+map_de_shortnuke
+map_de_studio
+map_de_subzero
+map_de_swamp
+map_de_thera
+map_de_thrill
+map_de_tulip
+map_de_tuscan
+map_de_whistle
+map_de_zoo
+map_dz_blacksite
+map_dz_county
+map_dz_ember
+map_dz_frostbite
+map_dz_junglety
+map_dz_sirocco
+map_dz_vineyard
 map_extension
+map_gd_bank
+map_gd_cbble
+map_gd_crashsite
+map_gd_dizzy
+map_gd_lake
+map_gd_lunacy
+map_gd_rialto
+map_gd_sugarcane
+map_graphics_settings
+map_lobby_mapveto
 map_token
+map_warehouse
 mapcycle.txt
 mapgroup %s;
 mapgroup %s\n
@@ -16061,12 +16100,15 @@ misc6
 missing all pose parameters\n
 missing asn1 eos
 missing caption for '%s' [%u]\n
+mission_cycle
+mission_period_length
 mmamammmmammamamaaamammma
 mmmaaaabcdefgmmmmaaaammmaamm
 mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa
 mmmmmaaaaammmmmaaaaaabcdefgabcdefg
 mmnmmommommnonmmonqnmmo
 mmnnmmnnnmmnn
+mmtype
 mobileTelephoneNumber
 model
 model.cpp
@@ -16400,6 +16442,7 @@ only_render_to_texture
 onnpcdeath
 onplayerdeath
 onworldimpact
+op points
 open_buymenu
 opened
 operation_coin
@@ -16849,6 +16892,7 @@ point_value_remapper
 point_velocitysensor
 point_worldtext
 pointer != NULL
+points: 
 policyConstraints
 policyMappings
 popularity_seed
@@ -17087,6 +17131,9 @@ reason(%lu)
 recent_only
 recipe
 recipes
+recurring_mission_config
+recurring_mission_periods
+recurring_missions
 recycle_list
 recycling
 referencename
@@ -17172,6 +17219,7 @@ reversalsoundthresholdLarge
 reversalsoundthresholdMedium
 reversalsoundthresholdSmall
 revolving_loot_lists
+reward ll
 reward_drop_list
 rfc822Mailbox
 rifle0
@@ -17639,6 +17687,7 @@ single interp backtrack
 singleLevelQuality
 single_shot
 single_shot_accurate
+singlematch: %s\n
 size_params
 skeletonMaterialGroupChanged
 skeletonMeshGroupMaskChanged
@@ -18548,6 +18597,8 @@ vecVelocity
 velocitytype
 vertical_align
 very_hard
+victim_classname_%s
+victim_location_%s
 victimid
 view_model
 view_model_exponent_override_size
@@ -18598,7 +18649,6 @@ wap-wsg-idm-ecid-wtls6
 wap-wsg-idm-ecid-wtls7
 wap-wsg-idm-ecid-wtls8
 wap-wsg-idm-ecid-wtls9
-warehouse
 warp_shield_impact
 water_wake
 waterbullet
@@ -18666,6 +18716,7 @@ weapon_galilar_server
 weapon_glock
 weapon_glock.ventr
 weapon_glock_server
+weapon_grenade
 weapon_hand_R
 weapon_hand_r
 weapon_healthshot
@@ -18840,6 +18891,7 @@ x509_info
 x509_pkey
 x509_req
 x509_store
+xpExpr
 xp_shop_ticket
 xpgrant
 xpshopredeem

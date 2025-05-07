@@ -21,6 +21,8 @@ var MuteSpinner;
             let xuid = $.GetContextPanel().GetParent().xuid;
             m_curVal = GameStateAPI.GetPlayerVoiceVolume(xuid).toFixed(2);
             m_isMuted = GameStateAPI.IsSelectedPlayerMuted(xuid);
+            let locMsg = GameStateAPI.HasCommunicationBan(xuid) ? '#tooltip_cannot_unmute' : '#tooltip_mute';
+            $.GetContextPanel().SetDialogVariableLocString('mute_tooltip_message', locMsg);
             if (m_isMuted === undefined)
                 m_isMuted = false;
         }

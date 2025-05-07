@@ -4,51 +4,41 @@
 {
 	0%
 	{
-		position: 0px 0px 0px;
-	}
-	
-	25%
-	{
-		position: -4px 0px 0px;
-	}
-	
-	75%
-	{
-		position: 4px 0px 0px;
+		position: -6px 0px 0px;
 	}
 	
 	100%
 	{
-		position: 0px 0px 0px;
+		position: 6px 0px 0px;
 	}
 	
 }
 
 .mission-root
 {
-	transition-property: opacity, height, transform;
+	transition-property: opacity, height, transform, brightness, saturation;
 	transition-duration: .15s;
 	transition-timing-function: ease-in-out;
 }
 
-.mission-root:not(.SEARCHING):hover .background-contents
-{
-	transform: scale3d( 1.05, 1.05, 1);
-}
-
-.mission-root:not(.SEARCHING):hover .background-contents .mission-bg
-{
-	brightness: 1.2;
-}
-
 .mission-root.hidden
 {
-	opacity: 0;
+	visibility: collapse;
 	height: 0px;
 	margin-top: 0px;
 	transition-property: opacity, height;
 	transition-duration: .25s;
 	transition-timing-function: ease-in-out;
+}
+
+.mission-root #missionButton:not(.DISABLED):hover .background-contents
+{
+	transform: scale3d( 1.05, 1.05, 1);
+}
+
+.mission-root #missionButton:not(.DISABLED):hover .background-contents .mission-bg
+{
+	brightness: 1.2;
 }
 
 .background-contents
@@ -88,8 +78,9 @@
 	transition-property: transform, brightness;
 	transition-duration: .2s, 0.1s;
 	transition-timing-function: ease-in-out;
+	position: -4px 0px 0px;
 	animation-name: subtle-motion;
-	animation-duration: 10s;
+	animation-duration: 8s;
 	animation-timing-function: ease-in-out;
 	animation-iteration-count: infinite;
 	animation-direction: alternate-reverse;
@@ -149,6 +140,11 @@
 	text-overflow: shrink;
 }
 
+.hide-time .mission-time-remaining
+{
+	visibility: collapse;
+}
+
 .mission-location
 {
 	flow-children: right;
@@ -162,8 +158,8 @@
 	font-stretch: condensed;
 	color: white;
 	vertical-align:center;
-	max-height: 50px;
 	text-overflow: shrink;
+	text-align: center;
 	horizontal-align: center;
 	max-height: 24px;
 }
@@ -219,6 +215,7 @@
 	height: 6px;
 	horizontal-align: center;
 	vertical-align: center;
+	background-color: rgba(0, 0, 0, 1);
 }
 
 .mission-progress-container .progress-bar-container .progress-bar
@@ -227,21 +224,41 @@
 	height: 100%;
 }
 
-.mission-progress-container .progress-bar-container .ProgressBarLeft
+.mission-progress-container .progress-bar-container #mission-progress
 {
-	background-color: gradient( linear, 0% 0%, 100% 0%, from( #134f87FF ), to(rgb(28, 186, 230)) );
+	background-color: rgba(0, 0, 0, 0.0);
 }
 
-.mission-progress-container .progress-bar-container .ProgressBarRight
+.mission-progress-container .progress-bar-container #mission-progress .ProgressBarLeft
 {
-	background-color: black;
+	background-color: gradient( linear, 0% 0%, 100% 0%, from( rgb(12, 84, 104) ), to(rgb(25, 176, 218)) );
+}
+
+.mission-progress-container .progress-bar-container #mission-progress .ProgressBarRight
+{
+	background-color: #00000000;
+}
+
+.mission-progress-container .progress-bar-container #mission-progress--live
+{
+	background-color: rgba(0, 0, 0, 0.671);
+}
+
+.mission-progress-container .progress-bar-container #mission-progress--live .ProgressBarLeft
+{
+	background-color: rgb(187, 255, 249);
+}
+
+.mission-progress-container .progress-bar-container #mission-progress--live .ProgressBarRight
+{
+	background-color: #00000000;
 }
 
 .mission-progress-container .mission-xp-reward-container
 {
 	vertical-align: center;
 	height: 25px;
-	width: 60px;
+	width: 70px;
 }
 
 .mission-progress-container .mission-xp-reward-container .mission-xp-reward-img
@@ -258,6 +275,7 @@
 	horizontal-align: center;
 	vertical-align: center;
 	margin-top: 1px;
+	text-align: center;
 }
 
 .mission-additional-container,.mission-description-container
@@ -285,17 +303,48 @@
 	box-shadow: shadowOffset;
 }
 
-#id-mainmenu-mission-panel.SEARCHING:not(.SEARCHING_FOR_MISSION)
+#id-mainmenu-mission-panel.COMPLETE #missionButton
 {
-	saturation: 0.5;
-	brightness: 0.5;
-	blur: gaussian( 1 );
-	transition-property: saturation, brightness, blur;
-	transition-duration: 0.25s;
-	transition-timing-function: ease-in-out;
+	visibility: collapse;
 }
 
-#id-mainmenu-mission-panel.SEARCHING.SEARCHING_FOR_MISSION .mission-bg-searching
+#id-mainmenu-mission-panel .mission-complete
+{
+	visibility: collapse;
+}
+
+#id-mainmenu-mission-panel.COMPLETE .mission-complete
+{
+	visibility: visible;
+}
+
+#id-mainmenu-mission-panel.COMPLETE
+{
+	box-shadow: none;
+}
+
+#id-mainmenu-mission-panel .mission-complete
+{
+	width: 100%;
+	height: 46px;
+	vertical-align: bottom;
+}
+
+#id-mainmenu-mission-panel .mission-complete .mission-header--complete
+{
+	flow-children: down;
+	vertical-align:center;
+	horizontal-align: center;
+	margin: 4px;
+}
+
+#id-mainmenu-mission-panel .mission-complete .mission-header--complete Label
+{
+	text-align: center;
+	horizontal-align: center;
+}
+
+#id-mainmenu-mission-panel.SEARCHING_FOR_MISSION .mission-bg-searching
 {
 	opacity: 1;
 	transform: scaleY(1.0);
@@ -308,7 +357,7 @@
 	transition-timing-function: ease-in-out;
 }
 
-#id-mainmenu-mission-panel.SEARCHING.SEARCHING_FOR_MISSION .mission-main-content
+#id-mainmenu-mission-panel.SEARCHING_FOR_MISSION .mission-main-content
 {
 	opacity: 1;
 	transform: translateY(-36px);
@@ -330,13 +379,27 @@
 	color: white;
 }
 
-#id-mainmenu-mission-panel.SEARCHING.SEARCHING_FOR_MISSION .searching
+#id-mainmenu-mission-panel.SEARCHING_FOR_MISSION .searching
 {
 	visibility: visible;
 	animation-name: slow-pulse;
 	animation-duration: 2s;
 	animation-timing-function: ease-in-out;
 	animation-iteration-count: infinite;
+}
+
+.DISABLED
+{
+	saturation: 0.5;
+	brightness: 0.3;
+	opacity: 0.9;
+}
+
+.DISABLED.SEARCHING_FOR_MISSION
+{
+	saturation: 1;
+	brightness: 1;
+	opacity: 1;
 }
 
 @keyframes 'slow-pulse'
@@ -356,197 +419,5 @@
 		opacity: 0.2;
 	}
 	
-}
-
-#id-playmenu-mission-panel
-{
-	width: 400px;
-	height: 56px;
-	vertical-align: center;
-	margin-right: 40px;
-	transition-property: transform, opacity, wash-color;
-	transition-duration: .25s;
-	transition-timing-function: ease-in-out;
-}
-
-#id-playmenu-mission-panel.SEARCHING
-{
-	opacity: 0;
-	wash-color: rgb(160, 20, 20);
-	transform: translateX(200px);
-}
-
-#id-playmenu-mission-panel .mission-main-content
-{
-	flow-children: right;
-	padding: 0px;
-	border: 1px solid rgb(19, 135, 168);
-}
-
-#id-playmenu-mission-panel .mission-main-content .mission-left,#id-playmenu-mission-panel .mission-main-content .mission-right
-{
-	flow-children: down;
-	width: 50%;
-	margin: 4px;
-}
-
-#id-playmenu-mission-panel .mission-main-content .mission-left
-{
-	border-right: 1px solid #ffffff30;
-	vertical-align: center;
-}
-
-#id-playmenu-mission-panel .mission-left-inner
-{
-	flow-children: down;
-	horizontal-align: center;
-	vertical-align: center;
-}
-
-#id-playmenu-mission-panel .mission-left-inner .mission-time-remaining
-{
-	font-size: 15px;
-	font-family: Stratum2;
-	font-weight: lighter;
-	color: white;
-	height: fill-parent-flow(1);
-	max-height:18px;
-	text-align: center;
-	horizontal-align:center;
-}
-
-#id-playmenu-mission-panel .mission-left-inner .mission-mode-mapgroup
-{
-	text-align: center;
-}
-
-#id-playmenu-mission-panel .mission-progress-container
-{
-	flow-children: right;
-	margin: 0px;
-	height: 50%;
-	horizontal-align: center;
-}
-
-#id-playmenu-mission-panel .mission-progress-container .mission-num
-{
-	height: 100%;
-	font-size: 18px;
-	color: white;
-	font-family: Stratum2;
-	font-stretch: condensed;
-	wash-color: white;
-	horizontal-align: center;
-	vertical-align: center;
-	text-align: center;
-}
-
-#id-playmenu-mission-panel .mission-progress-container .progress-bar-container
-{
-	height: 24px;
-	horizontal-align: center;
-	vertical-align: center;
-}
-
-#id-playmenu-mission-panel .mission-progress-container .mission-xp-reward-container
-{
-	vertical-align: center;
-	height: 20px;
-	width: 45px;
-}
-
-#id-playmenu-mission-panel .mission-progress-container .mission-xp-reward-container .mission-xp-reward-img
-{
-	wash-color: rgb(19, 135, 168);
-	img-shadow: 0px 0px 1px 1.0 #0000003b;
-	width: 100%;
-	height: 100%;
-}
-
-#id-playmenu-mission-panel .mission-progress-container .mission-xp-reward-container .mission-xp-reward
-{
-	font-size: 16px;
-	color: white;
-	font-family: Stratum2 Medium Condensed;
-	wash-color: white;
-	horizontal-align: center;
-	vertical-align: center;
-	margin-top: 2px;
-}
-
-#id-playmenu-mission-panel .mission-bg
-{
-	background-image: url("s2r://panorama/images/backgrounds/mission_background_short_psd.vtex");
-	background-size: 100% 200%;
-	background-position: 0% 50%;
-	background-img-opacity: 1;
-	ignore-parent-flow: true;
-	height: 100%;
-	width: 100%;
-	opacity: 1;
-}
-
-#id-playmenu-mission-panel .mission-art-bg
-{
-	background-position: 0% 30%;
-	background-size: 100% 300%;
-}
-
-#id-playmenu-mission-panel .mission-directive
-{
-	visibility: collapse;
-}
-
-#Hud .mission-root
-{
-	width: 400px;
-	height: 90px;
-	vertical-align:top;
-	horizontal-align:left;
-	visibility: visible;
-	margin-top: 20px;
-}
-
-#Hud .mission-root .background-contents
-{
-	background-color: gradient( linear, 0% 0%, 100% 0%, from( #000000aa ), to( #00000000 ) );
-}
-
-#Hud .mission-root .background-contents .mission-bg
-{
-	background-image: none;
-	ignore-parent-flow: true;
-	height: 100%;
-	width: 100%;
-	opacity: 1;
-}
-
-#Hud .mission-root .mission-main-content
-{
-	padding: 10px;
-}
-
-#Hud .mission-root .mission-main-content .mission-progress-container
-{
-	width: 250px;
-	horizontal-align: left;
-	padding: 0px;
-	margin: 0px;
-}
-
-#Hud .mission-root .mission-main-content .mission-description-container
-{
-	height: fill-parent-flow(1.0);
-	width: 300px;
-}
-
-#Hud .mission-root .mission-main-content .mission-description-container .mission-description
-{
-	font-size: 25px;
-	text-overflow: shrink;
-	horizontal-align: left;
-	vertical-align: center;
-	height: fit-children;
-	text-align:left;
 }
 

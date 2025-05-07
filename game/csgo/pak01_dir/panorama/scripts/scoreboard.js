@@ -1768,14 +1768,12 @@ var Scoreboard;
                 }
             }
         }
-        StoreAPI.RecordUIEvent('ScoreboardMoreStatsToggle');
     }
     function _MuteVoice() {
         GameInterfaceAPI.ConsoleCommand('voice_modenable_toggle');
         $.Schedule(0.1, _UpdateMuteVoiceState);
     }
     function _UpdateMuteVoiceState() {
-        StoreAPI.RecordUIEvent('ScoreboardMuteVoiceToggle');
         let muteState = GameInterfaceAPI.GetSettingString('voice_modenable') === '1';
         let elMuteImage = _m_cP.FindChildInLayoutFile('id-sb-meta__mutevoice__image');
         if (!elMuteImage)
@@ -1788,7 +1786,6 @@ var Scoreboard;
         }
     }
     function _BlockUgc() {
-        StoreAPI.RecordUIEvent('ScoreboardBlockUgcToggle');
         let ugcBlockState = GameInterfaceAPI.GetSettingString('cl_hide_avatar_images') !== '0' ||
             GameInterfaceAPI.GetSettingString('cl_sanitize_player_names') !== '0';
         if (ugcBlockState) {

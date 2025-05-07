@@ -107,7 +107,6 @@ var ContextMenuWatchNoticeMatchStream = (function () {
 			{
 				var onActivate = function ( url )
 				{
-					StoreAPI.RecordUIEvent( "WatchNoticeSchedMatchLink" );
 					GameInterfaceAPI.ConsoleCommand( 'playcast "' + url + '"' );
 					$.DispatchEvent( 'ContextMenuEvent', '' );
 				}
@@ -152,7 +151,6 @@ var ContextMenuWatchNoticeMatchStream = (function () {
 			
 				var onActivate = function ( url )
 				{
-					StoreAPI.RecordUIEvent( "WatchNoticeSchedMatchView" );
 					SteamOverlayAPI.OpenUrlInOverlayOrExternalBrowser( url );
 					$.DispatchEvent( 'ContextMenuEvent', '' );
 				}
@@ -169,7 +167,6 @@ var ContextMenuWatchNoticeMatchStream = (function () {
 
 			var onActivate = function ( url )
 			{
-				StoreAPI.RecordUIEvent( "WatchNoticeSchedMatchLink" );
 				SteamOverlayAPI.OpenUrlInOverlayOrExternalBrowser( url );
 				$.DispatchEvent( 'ContextMenuEvent', '' );
 			}

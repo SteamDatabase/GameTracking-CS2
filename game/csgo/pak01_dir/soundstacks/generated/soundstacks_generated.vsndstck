@@ -837,6 +837,26 @@
 							property_group = "Curves"
 						}
 					}
+					use_volume_convar = 
+					{
+						data_type = "bool"
+						value = "false"
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Sound Events"
+						}
+					}
+					volume_convar = 
+					{
+						data_type = "string"
+						value = ""
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Sound Events"
+						}
+					}
 				}
 			},
 			
@@ -1958,12 +1978,21 @@
 			},
 			
 			{
+				name = "get_volume_convar"
+				operator = "convar_get"
+				convar = "@public.volume_convar"
+				output = "1.0"
+				input_execute = "@public.use_volume_convar"
+				execute_once = "false"
+			},
+			
+			{
 				name = "mult_mixer_volume"
 				operator = "math_accumulate12_float"
 				apply = "mult"
 				input1 = "@mixer.output_volume"
 				input2 = "@impact_speed_input_volume_mapping_curve_mult.output"
-				input3 = "1.000000"
+				input3 = "@get_volume_convar.output"
 				__remap_input2 = "volume"
 			},
 			

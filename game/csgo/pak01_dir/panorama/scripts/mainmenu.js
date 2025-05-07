@@ -365,7 +365,6 @@ var MainMenu;
         $('#MainMenuNavBarSwitchTeams').SetHasClass('pausemenu-navbar__btn-small--hidden', (bQueuedMatchmaking || bGotvSpectating));
         $('#MainMenuNavBarVote').SetHasClass('pausemenu-navbar__btn-small--hidden', (bGotvSpectating));
         $('#MainMenuNavBarReportServer').SetHasClass('pausemenu-navbar__btn-small--hidden', !bIsCommunityServer);
-        _AddPauseMenuMissionPanel();
         OnHomeButtonPressed();
     }
     function _OnHidePauseMenu() {
@@ -859,8 +858,7 @@ var MainMenu;
     function _OpenPlayMenu() {
         if (MatchStatsAPI.GetUiExperienceType())
             return;
-        if (_m_bPreLoadedTabs)
-            _InsureSessionCreated();
+        _InsureSessionCreated();
         NavigateToTab('JsPlay', 'mainmenu_play');
     }
     function _OpenWatchMenu() {
@@ -1438,7 +1436,7 @@ var MainMenu;
                     mode_ui: 'casual',
                     type: 'classic',
                     gamemodeflags: 0,
-                    mapgroupname: 'mg_dust247',
+                    mapgroupname: 'mg_casualalpha',
                     map: 'de_dust2'
                 }
             },

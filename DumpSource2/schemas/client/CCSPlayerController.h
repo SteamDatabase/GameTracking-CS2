@@ -6,6 +6,7 @@ class CCSPlayerController : public CBasePlayerController
 	CCSPlayerController_DamageServices* m_pDamageServices;
 	uint32 m_iPing;
 	bool m_bHasCommunicationAbuseMute;
+	uint32 m_uiCommunicationMuteFlags;
 	CUtlSymbolLarge m_szCrosshairCodes;
 	uint8 m_iPendingTeamNum;
 	GameTime_t m_flForceTeamTime;
@@ -25,6 +26,7 @@ class CCSPlayerController : public CBasePlayerController
 	int32 m_iCompetitiveRankingPredicted_Tie;
 	int32 m_nEndMatchNextMapVote;
 	uint16 m_unActiveQuestId;
+	uint32 m_rtActiveMissionPeriod;
 	QuestProgress::Reason m_nQuestProgressReason;
 	uint32 m_unPlayerTvControlFlags;
 	int32 m_iDraftIndex;

@@ -199,13 +199,6 @@ var PopupMajorHub;
         SetupSouvenirMap();
     }
     function SetupSouvenirMap() {
-        let oSouvenirs = g_ActiveTournamentInfo.souvenirs;
-        let elModelPanel = _m_cp.FindChildInLayoutFile('id-major-hub-souvenir-model');
-        Object.keys(oSouvenirs).forEach((key, index) => {
-            elModelPanel.SetActiveItem(7);
-            let idForCharges = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(oSouvenirs[key], 0);
-            elModelPanel.SetItemItemId(idForCharges, '');
-        });
     }
     function _UpdateStoreTiles() {
         let elStore = _m_cp.FindChildInLayoutFile('id-major-store-block');

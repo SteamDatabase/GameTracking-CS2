@@ -2180,6 +2180,14 @@ var PlayMenu;
         elCanelBtn.SetPanelEvent('onactivate', () => { elTextLabel.text = '', _UpdateWorkshopMapFilter; });
     }
     PlayMenu.OnClearFilterText = OnClearFilterText;
+    function _SwitchGameModeTab(gameMode) {
+        $('#GameModeSelectionRadios');
+        for (let element of $('#GameModeSelectionRadios').Children()) {
+            if (element.id === gameMode) {
+                $.DispatchEvent("Activated", element, "mouse");
+            }
+        }
+    }
     {
         _Init();
         $.RegisterEventHandler("ReadyForDisplay", $.GetContextPanel(), _ReadyForDisplay);
@@ -2194,6 +2202,7 @@ var PlayMenu;
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_ClansInfoUpdated', _ClansInfoUpdated);
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', _OnPlayerNameChangedUpdate);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_PipRankUpdate', _PipRankUpdate);
+        $.RegisterForUnhandledEvent('PlayMenu_SwitchGameModeTab', _SwitchGameModeTab);
         $.RegisterForUnhandledEvent('DirectChallenge_GenRandomKey', _OnDirectChallengeRandom);
         $.RegisterForUnhandledEvent('DirectChallenge_EditKey', _OnDirectChallengeEdit);
         $.RegisterForUnhandledEvent('DirectChallenge_CopyKey', _OnDirectChallengeCopy);

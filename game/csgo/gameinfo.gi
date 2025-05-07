@@ -31,6 +31,7 @@
 			Mod		csgo_core
 
 			AddonRoot			csgo_addons
+			OfficialAddonRoot	csgo_community_addons
 
 			LayeredGameRoot		"../game_otherplatforms/etc" [$MOBILE || $ETC_TEXTURES] //Some platforms do not support DXT compression. ETC is a well-supported alternative.
 			LayeredGameRoot		"../game_otherplatforms/low_bitrate" [$MOBILE]
@@ -304,5 +305,7 @@
 		"AllowAddonDownload" "1"
 		"AllowAddonDownloadForDemos" "1"
 		"DisableAddonValidationForDemos" "1"
+		"UseOfficialAddons" "1"
+		"RestrictFlatFileAddonsToTools" "1"
 	}
 }

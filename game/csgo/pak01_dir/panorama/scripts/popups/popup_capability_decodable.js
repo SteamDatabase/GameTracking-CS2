@@ -241,7 +241,6 @@ var CapabilityDecodable;
     }
     function _ViewOnMarket(id) {
         SteamOverlayAPI.OpenURL(ItemInfo.GetMarketLinkForLootlistItem(id));
-        StoreAPI.RecordUIEvent("ViewOnMarket");
     }
     function _GetDisplayWeightForScroll(itemid) {
         let rarityVal = InventoryAPI.GetItemRarity(itemid);

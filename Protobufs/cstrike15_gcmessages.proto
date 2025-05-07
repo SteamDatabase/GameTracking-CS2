@@ -109,12 +109,19 @@ enum ECsgoGCMsg {
 	k_EMsgGCCStrike15_v2_Client2GcAckXPShopTracks = 9222;
 	k_EMsgGCCStrike15_v2_MatchmakingGC2ClientSearchStats = 9223;
 	k_EMsgGCCStrike15_v2_PremierSeasonSummary = 9224;
+	k_EMsgGCCStrike15_v2_RequestRecurringMissionSchedule = 9225;
+	k_EMsgGCCStrike15_v2_RecurringMissionSchema = 9226;
 }
 
 enum ECsgoSteamUserStat {
 	k_ECsgoSteamUserStat_XpEarnedGames = 1;
 	k_ECsgoSteamUserStat_MatchWinsCompetitive = 2;
 	k_ECsgoSteamUserStat_SurvivedDangerZone = 3;
+}
+
+enum QuestType {
+	k_EQuestType_Operation = 1;
+	k_EQuestType_RecurringMission = 2;
 }
 
 enum EClientReportingVersion {
@@ -345,6 +352,10 @@ message PlayerQuestData {
 		optional uint64 quest_id = 1;
 		optional int32 quest_normal_points_earned = 2;
 		optional int32 quest_bonus_points_earned = 3;
+		optional int32 quest_normal_points_required = 4;
+		optional int32 quest_reward_xp = 5;
+		optional int32 quest_period = 6;
+		optional .QuestType quest_type = 7 [default = k_EQuestType_Operation];
 	}
 
 	optional uint32 quester_account_id = 1;
@@ -541,6 +552,7 @@ message CMsgGCCStrike15_v2_MatchmakingGC2ServerReserve {
 	repeated .OperationalVarValue op_var_values = 19;
 	optional uint32 socache_control = 20;
 	repeated int32 teammate_colors = 21;
+	optional uint32 match_id_additional = 22;
 }
 
 message CMsgGCCStrike15_v2_MatchmakingServerReservationResponse {
@@ -1207,6 +1219,13 @@ message CSOPersonaDataPublic {
 	optional uint32 xp_trail_level = 5;
 }
 
+message CSOAccountRecurringMission {
+	optional uint32 account_id = 1;
+	optional uint32 mission_id = 2;
+	optional uint32 period = 3;
+	optional uint32 progress = 4;
+}
+
 message CMsgGCCStrike15_v2_GC2ClientNotifyXPShop {
 	optional .CSOAccountXpShop prematch = 1;
 	optional .CSOAccountXpShop postmatch = 2;
@@ -1508,4 +1527,16 @@ message CMsgGCCStrike15_v2_GC2ClientInitSystem_Response {
 
 message CMsgGCCStrike15_v2_SetPlayerLeaderboardSafeName {
 	optional string leaderboard_safe_name = 1;
+}
+
+message CMsgRequestRecurringMissionSchedule {
+}
+
+message CMsgRecurringMissionSchema {
+	message MissionTemplateList {
+		optional uint32 period = 1;
+		repeated bytes mission_templates = 2;
+	}
+
+	repeated .CMsgRecurringMissionSchema.MissionTemplateList missions = 1;
 }

@@ -87,7 +87,6 @@ var InspectActionBar;
         elMarketLinkBtn.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
         elMarketLinkBtn.SetPanelEvent('onactivate', () => {
             SteamOverlayAPI.OpenURL(ItemInfo.GetMarketLinkForLootlistItem(id));
-            StoreAPI.RecordUIEvent("ViewOnMarket");
         });
     }
     function _SetUpOpenSeasonStatsAction(elPanel, id) {

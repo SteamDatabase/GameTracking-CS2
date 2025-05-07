@@ -63,7 +63,6 @@ class CCSGameRules : public CTeamplayRules
 	int32[30] m_iMatchStats_PlayersAlive_T;
 	float32[32] m_TeamRespawnWaveTimes;
 	GameTime_t[32] m_flNextRespawnWave;
-	int32 m_nServerQuestID;
 	Vector m_vMinimapMins;
 	Vector m_vMinimapMaxs;
 	float32[8] m_MinimapVerticalSectionHeights;

@@ -626,6 +626,7 @@ var InspectModelImage;
             return;
         const elItemPanel = GetExistingItemPanel('ItemPreviewPanel');
         elItemPanel.SetHasClass('hidden', !bshow);
+        elItemPanel.SetReadyForDisplay(bshow);
         if (bshow)
             $.DispatchEvent("CSGOPlaySoundEffect", "weapon_showSolo", "MOUSE");
     }
@@ -634,8 +635,10 @@ var InspectModelImage;
         if (!m_elContainer.IsValid())
             return;
         const elCharPanel = GetExistingItemPanel('CharPreviewPanel');
-        if (elCharPanel)
+        if (elCharPanel) {
             elCharPanel.SetHasClass('hidden', !bshow);
+            elCharPanel.SetReadyForDisplay(bshow);
+        }
         if (bshow)
             $.DispatchEvent("CSGOPlaySoundEffect", "weapon_showOnChar", "MOUSE");
     }

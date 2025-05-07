@@ -54,7 +54,6 @@ var CharacterButtons;
         const modelRenderSettingsOneOffTempCopy = ItemInfo.DeepCopyVanityCharacterSettings(data.m_modelPanelSettings);
         modelRenderSettingsOneOffTempCopy.cheer = InventoryAPI.GetCharacterDefaultCheerByItemId(modelRenderSettingsOneOffTempCopy.charItemId);
         CharacterAnims.PlayAnimsOnPanel(modelRenderSettingsOneOffTempCopy);
-        StoreAPI.RecordUIEvent("PlayCheer", 1);
     }
     CharacterButtons.PlayCheer = PlayCheer;
     function PlayDefeat() {
@@ -66,7 +65,6 @@ var CharacterButtons;
         const modelRenderSettingsOneOffTempCopy = ItemInfo.DeepCopyVanityCharacterSettings(data.m_modelPanelSettings);
         modelRenderSettingsOneOffTempCopy.cheer = InventoryAPI.GetCharacterDefaultDefeatByItemId(modelRenderSettingsOneOffTempCopy.charItemId);
         CharacterAnims.PlayAnimsOnPanel(modelRenderSettingsOneOffTempCopy);
-        StoreAPI.RecordUIEvent("PlayCheer", 1);
     }
     CharacterButtons.PlayDefeat = PlayDefeat;
     function UpdateScenery() {
@@ -77,7 +75,6 @@ var CharacterButtons;
     function PreviewModelVoice() {
         const data = $.GetContextPanel().Data();
         InventoryAPI.PreviewModelVoice(data.m_modelPanelSettings.charItemId);
-        StoreAPI.RecordUIEvent("PlayCheer", 2);
     }
     CharacterButtons.PreviewModelVoice = PreviewModelVoice;
     function InitCharacterButtons(elButtons, elPreviewpanel, characterButtonSettings) {

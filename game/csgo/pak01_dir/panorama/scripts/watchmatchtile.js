@@ -78,7 +78,6 @@ var watchMatchTile = ( function (){
 					if ( EmbeddedStreamAPI.GetStreamExternalLinkTypes().indexOf( 'B' ) >= 0 )
 					{
 						items.push( { label: $.Localize( '#CSGO_Watch_Info_live' ), jsCallback: function() {
-							StoreAPI.RecordUIEvent( "WatchNoticeSchedEventLink" );
 							EmbeddedStreamAPI.OpenStreamInExternalBrowser( 'XB' );
 							$.DispatchEvent( 'CSGOPlaySoundEffect', 'UIPanorama.sidemenu_select', 'MOUSE' );
 						} } );
@@ -88,7 +87,6 @@ var watchMatchTile = ( function (){
 					if ( EmbeddedStreamAPI.GetStreamExternalLinkTypes().indexOf( 'G' ) >= 0 )
 					{
 						items.push( { label: $.Localize( '#CSGO_Watch_Watch_GOTV' ), jsCallback: function() {
-							StoreAPI.RecordUIEvent( "WatchNoticeSchedEventLink" );
 							EmbeddedStreamAPI.OpenStreamInExternalBrowser( 'XG' );
 							$.DispatchEvent( 'CSGOPlaySoundEffect', 'UIPanorama.sidemenu_select', 'MOUSE' );
 						} } );

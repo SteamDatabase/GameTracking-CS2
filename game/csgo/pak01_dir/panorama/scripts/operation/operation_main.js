@@ -21,7 +21,6 @@ var OperationMain = ( function()
 		{
 			$.Schedule( .3, OperationUtil.OpenUpSell );
 		}
-		StoreAPI.RecordUIEvent( "OperationJournal_View" );
 	};
 
 	var _CheckUsersOperationStatus = function()
@@ -617,19 +616,6 @@ var OperationMain = ( function()
 		
 		                                                               
 		$.Schedule( .3, _UpdateInspectPanel );
-
-		                                               
-		if ( bTrackStats )
-		{
-			if ( elSelected.Data().nCategoryButtonIdx !== undefined )
-			{
-				StoreAPI.RecordUIEvent( "OperationJournal_RewardTrackSelection_Category", elSelected.Data().nCategoryButtonIdx );
-			}
-			else
-			{
-				StoreAPI.RecordUIEvent( "OperationJournal_RewardTrackSelection_Individual", elSelected.Data().oReward.idx );
-			}
-		}
 	};
 
 	var _SetActiveReward = function( elSelected )

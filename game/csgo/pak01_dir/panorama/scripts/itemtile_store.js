@@ -181,7 +181,6 @@ var ItemTileStore;
         let m_CommunityUrl = SteamOverlayAPI.GetSteamCommunityURL();
         let strSetName = InventoryAPI.GetItemSet(itemId);
         SteamOverlayAPI.OpenURL(m_CommunityUrl + "/market/search?q=&appid=" + m_AppID + "&lock_appid=" + m_AppID + "&category_" + m_AppID + "_ItemSet%5B%5D=tag_" + strSetName);
-        StoreAPI.RecordUIEvent("ViewOnMarket");
     }
     function ShowDecodePopup(id, displayItemId, isNew) {
         var strExtraSettings = '';
