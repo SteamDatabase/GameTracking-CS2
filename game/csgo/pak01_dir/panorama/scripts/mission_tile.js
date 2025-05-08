@@ -190,8 +190,8 @@ var MissionTile;
         const inParty = PartyListAPI.GetCount() > 1;
         const isLobbyLeader = LobbyAPI.GetHostSteamID() === xuid;
         let isSearchingForMission = false;
-        if (IsSearching()) {
-            const lobbySettings = LobbyAPI.GetSessionSettings();
+        const lobbySettings = LobbyAPI.GetSessionSettings();
+        if (IsSearching() && lobbySettings && lobbySettings.game) {
             isSearchingForMission = lobbySettings.game.mode == m_oMissionData.gamemode &&
                 (lobbySettings.game.mapgroupname == m_oMissionData.mapgroup ||
                     lobbySettings.game.map == m_oMissionData.map);
