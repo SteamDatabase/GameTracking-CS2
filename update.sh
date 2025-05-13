@@ -1,17 +1,22 @@
 #!/bin/bash
+set -euo pipefail
 
 cd "${0%/*}"
 . ../common.sh
 
 echo "Processing CS2..."
 
+set +e
 ../tools/dump_source2.sh csgo csgo
+DUMPER_EXIT_CODE=$?
+set -e
 
 ProcessDepot ".so"
 ProcessDepot ".dll"
 DeduplicateStringsFrom ".so" "game/bin/linuxsteamrt64/libengine2_strings.txt" "game/bin/linuxsteamrt64/libtier0_strings.txt" "DumpSource2/.stringsignore"
 ProcessVPK
 
+set +e
 while IFS= read -r -d '' file
 do
 	echo " > $file"
@@ -22,9 +27,12 @@ do
 		--output "$(echo "$file" | sed -e 's/\.vpk$/\//g')" \
 		--vpk_cache \
 		--vpk_decompile \
-		--vpk_extensions "txt,lua,kv3,db,gameevents,vcss_c,vjs_c,vts_c,vxml_c,vsndevts_c,vsndstck_c,vpulse_c,vdata_c" \
-	|| echo "Decompiler failed"
+		--vpk_extensions "txt,lua,kv3,db,gameevents,vcss_c,vjs_c,vts_c,vxml_c,vsndevts_c,vsndstck_c,vpulse_c,vdata_c"
+	if [[ "$DUMPER_EXIT_CODE" -eq 0 ]] && [[ $? -ne 0 ]]; then
+		DUMPER_EXIT_CODE=$?
+	fi
 done <   <(find . -type f -name "pak01_dir.vpk" -print0)
+set -e
 
 while IFS= read -r -d '' file
 do
@@ -35,6 +43,8 @@ ProcessToolAssetInfo
 
 FixUCS2
 
-CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')" "$1"
+CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')" "${1:-}"
 
 echo "Done"
+
+exit "$DUMPER_EXIT_CODE"
