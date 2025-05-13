@@ -26,7 +26,7 @@ var Leaderboard;
     let m_NameLockEventHandler;
     let m_leaderboardName = '';
     let m_onlyAvailableSeasonLeaderboard = '';
-    const IS_NEW_SEASON = true;
+    const IS_NEW_SEASON = false;
     function RegisterEventHandlers() {
         _msg('RegisterEventHandlers');
         if (!m_bEventsRegistered) {
@@ -272,7 +272,7 @@ var Leaderboard;
             _msg('leaderboard status: requested');
         }
         if (m_leaderboardName.includes('friends')) {
-            if (IS_NEW_SEASON && (count == 0)) {
+            if (count == 0) {
                 _ShowNewSeasonFriends();
             }
             else {

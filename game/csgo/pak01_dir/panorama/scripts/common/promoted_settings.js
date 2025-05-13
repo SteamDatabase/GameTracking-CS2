@@ -212,6 +212,30 @@ var g_PromotedSettings = [
         start_date: new Date('January 27, 2025'),
         end_date: new Date('March 1, 2025')
     },
+    {
+        id: "RadarShapeSquare",
+        loc_name: "#SFUI_Settings_Radar_Shape_Square",
+        loc_desc: "#SFUI_Settings_Radar_Shape_Square_Info",
+        section: "GameSettings",
+        start_date: new Date('January 27, 2025'),
+        end_date: new Date('March 1, 2025')
+    },
+    {
+        id: "RadarBlurBackground",
+        loc_name: "#SFUI_Settings_Radar_Blur_Background",
+        loc_desc: "#SFUI_Settings_Radar_Blur_Background_Info",
+        section: "GameSettings",
+        start_date: new Date('January 27, 2025'),
+        end_date: new Date('March 1, 2025')
+    },
+    {
+        id: "WeaponRarityColor",
+        loc_name: "#SFUI_HUDWeaponRarityColor",
+        loc_desc: "#SFUI_HUDWeaponRarityColor_desc",
+        section: "GameSettings",
+        start_date: new Date('January 27, 2025'),
+        end_date: new Date('June 1, 2025')
+    },
 ]
     .reverse();
 var PromotedSettingsUtil;
