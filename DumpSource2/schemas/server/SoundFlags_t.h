@@ -1,5 +1,7 @@
 enum SoundFlags_t : uint16_t
 {
+	// MPropertySuppressEnumerator
+	// MEnumeratorIsNotAFlag
 	SOUND_FLAGS_NONE = 0,
 	SOUND_FLAG_GUNFIRE = 1,
 	SOUND_FLAG_COMBINE_ONLY = 2,

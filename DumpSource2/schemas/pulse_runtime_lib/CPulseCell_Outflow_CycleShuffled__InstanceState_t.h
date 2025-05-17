@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulseCell_Outflow_CycleShuffled::InstanceState_t
 {
 	CUtlVectorFixedGrowable< uint8, 8 > m_Shuffle;

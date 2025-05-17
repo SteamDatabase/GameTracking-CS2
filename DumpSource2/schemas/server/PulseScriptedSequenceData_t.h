@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PulseScriptedSequenceData_t
 {
 	int32 m_nActorID;

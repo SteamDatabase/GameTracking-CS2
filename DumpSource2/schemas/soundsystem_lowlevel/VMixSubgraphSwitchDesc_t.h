@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixSubgraphSwitchDesc_t
 {
 	VMixSubgraphSwitchInterpolationType_t m_interpolationMode;

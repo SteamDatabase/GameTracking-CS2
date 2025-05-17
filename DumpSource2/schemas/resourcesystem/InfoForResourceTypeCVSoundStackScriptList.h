@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vsndstck"
 class InfoForResourceTypeCVSoundStackScriptList
 {
 };

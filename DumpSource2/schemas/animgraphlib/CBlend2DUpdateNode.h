@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CBlend2DUpdateNode : public CAnimUpdateNodeBase
 {
 	CUtlVector< BlendItem_t > m_items;

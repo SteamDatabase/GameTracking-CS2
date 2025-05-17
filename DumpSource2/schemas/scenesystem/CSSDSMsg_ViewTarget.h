@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSSDSMsg_ViewTarget
 {
 	CUtlString m_Name;

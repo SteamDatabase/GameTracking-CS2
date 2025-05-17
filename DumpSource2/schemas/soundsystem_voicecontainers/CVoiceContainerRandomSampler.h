@@ -1,3 +1,6 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MPropertyFriendlyName = "Random Smapler Container"
+// MPropertyDescription = "Trash Synth"
 class CVoiceContainerRandomSampler : public CVoiceContainerBase
 {
 	float32 m_flAmplitude;

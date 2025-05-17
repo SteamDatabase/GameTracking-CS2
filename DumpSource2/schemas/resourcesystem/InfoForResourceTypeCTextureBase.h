@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vtex"
 class InfoForResourceTypeCTextureBase
 {
 };

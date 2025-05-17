@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixEnvelopeDesc_t
 {
 	float32 m_flAttackTimeMS;

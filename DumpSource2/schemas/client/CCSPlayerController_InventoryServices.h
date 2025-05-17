@@ -1,11 +1,28 @@
+// MNetworkVarNames = "item_definition_index_t m_unMusicID"
+// MNetworkVarNames = "MedalRank_t m_rank"
+// MNetworkVarNames = "int m_nPersonaDataPublicLevel"
+// MNetworkVarNames = "int m_nPersonaDataPublicCommendsLeader"
+// MNetworkVarNames = "int m_nPersonaDataPublicCommendsTeacher"
+// MNetworkVarNames = "int m_nPersonaDataPublicCommendsFriendly"
+// MNetworkVarNames = "int m_nPersonaDataXpTrailLevel"
+// MNetworkVarNames = "ServerAuthoritativeWeaponSlot_t m_vecServerAuthoritativeWeaponSlots"
 class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 {
+	// MNetworkEnable
 	uint16 m_unMusicID;
+	// MNetworkEnable
 	MedalRank_t[6] m_rank;
+	// MNetworkEnable
 	int32 m_nPersonaDataPublicLevel;
+	// MNetworkEnable
 	int32 m_nPersonaDataPublicCommendsLeader;
+	// MNetworkEnable
 	int32 m_nPersonaDataPublicCommendsTeacher;
+	// MNetworkEnable
 	int32 m_nPersonaDataPublicCommendsFriendly;
+	// MNetworkEnable
 	int32 m_nPersonaDataXpTrailLevel;
+	// MNetworkEnable
+	// MNetworkUserGroup = "LocalPlayerExclusive"
 	C_UtlVectorEmbeddedNetworkVar< ServerAuthoritativeWeaponSlot_t > m_vecServerAuthoritativeWeaponSlots;
 };

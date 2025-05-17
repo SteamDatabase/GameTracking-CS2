@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class LookAtOpFixedSettings_t
 {
 	CAnimAttachment m_attachment;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class TagSpan_t
 {
 	int32 m_tagIndex;

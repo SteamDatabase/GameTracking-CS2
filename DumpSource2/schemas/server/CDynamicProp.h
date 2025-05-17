@@ -1,8 +1,13 @@
+// MEntityAllowsPortraitWorldSpawn
+// MNetworkVarNames = "bool m_bUseHitboxesForRenderBox"
+// MNetworkVarNames = "bool m_bUseAnimGraph"
 class CDynamicProp : public CBreakableProp
 {
 	bool m_bCreateNavObstacle;
 	bool m_bNavObstacleUpdatesOverridden;
+	// MNetworkEnable
 	bool m_bUseHitboxesForRenderBox;
+	// MNetworkEnable
 	bool m_bUseAnimGraph;
 	CEntityIOOutput m_pOutputAnimBegun;
 	CEntityIOOutput m_pOutputAnimOver;

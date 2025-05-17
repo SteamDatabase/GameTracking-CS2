@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class OldFeEdge_t
 {
 	float32[3] m_flK;

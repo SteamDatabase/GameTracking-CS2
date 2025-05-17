@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vsmart"
 class InfoForResourceTypeCSmartProp
 {
 };

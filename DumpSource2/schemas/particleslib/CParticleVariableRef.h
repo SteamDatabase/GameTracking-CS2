@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MPropertyCustomEditor = "ParticleVariableRef()"
 class CParticleVariableRef
 {
 	CKV3MemberNameWithStorage m_variableName;

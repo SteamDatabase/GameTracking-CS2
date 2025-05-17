@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PostProcessingResource_t
 {
 	bool m_bHasTonemapParams;

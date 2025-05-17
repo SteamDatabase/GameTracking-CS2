@@ -1,5 +1,11 @@
+// MNetworkVarNames = "CPropDataComponent::Storage_t m_CPropDataComponent"
+// MNetworkVarNames = "bool m_noGhostCollision"
 class CBreakableProp : public CBaseProp
 {
+	// MNetworkEnable
+	// MNetworkUserGroup = "CPropDataComponent"
+	// MNetworkAlias = "CPropDataComponent"
+	// MNetworkTypeAlias = "CPropDataComponent"
 	CPropDataComponent m_CPropDataComponent;
 	CEntityIOOutput m_OnBreak;
 	CEntityOutputTemplate< float32 > m_OnHealthChanged;
@@ -32,5 +38,6 @@ class CBreakableProp : public CBaseProp
 	CHandle< CBaseEntity > m_hFlareEnt;
 	bool m_bUsePuntSound;
 	CUtlSymbolLarge m_iszPuntSound;
+	// MNetworkEnable
 	bool m_noGhostCollision;
 };

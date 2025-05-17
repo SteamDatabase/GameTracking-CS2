@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmStateNode::TimedEvent_t
 {
 	CGlobalSymbol m_ID;

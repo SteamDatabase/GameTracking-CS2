@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PGDInstruction_t
 {
 	PulseInstructionCode_t m_nCode;

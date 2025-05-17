@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ModelBoneFlexDriverControl_t
 {
 	ModelBoneFlexComponent_t m_nBoneComponent;

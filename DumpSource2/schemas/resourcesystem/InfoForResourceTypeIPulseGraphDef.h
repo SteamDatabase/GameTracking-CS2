@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vpulse"
 class InfoForResourceTypeIPulseGraphDef
 {
 };

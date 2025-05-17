@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeVertexMapDesc_t
 {
 	CUtlString sName;

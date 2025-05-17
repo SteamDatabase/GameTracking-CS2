@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CHitBoxSet
 {
 	CUtlString m_name;

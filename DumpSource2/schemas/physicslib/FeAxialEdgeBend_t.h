@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeAxialEdgeBend_t
 {
 	float32 te;

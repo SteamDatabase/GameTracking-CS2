@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CModelConfigElement_RandomPick : public CModelConfigElement
 {
 	CUtlVector< CUtlString > m_Choices;

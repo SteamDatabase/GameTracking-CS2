@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PulseGraphExecutionHistoryEntry_t
 {
 	PulseCursorID_t nCursorID;

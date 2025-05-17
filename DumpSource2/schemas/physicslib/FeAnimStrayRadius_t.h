@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeAnimStrayRadius_t
 {
 	uint16[2] nNode;

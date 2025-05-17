@@ -1,8 +1,10 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimDesc
 {
 	CBufferString m_name;
 	CAnimDesc_Flag m_flags;
 	float32 fps;
+	// MKV3TransferName = "m_pData"
 	CAnimEncodedFrames m_Data;
 	CUtlVector< CAnimMovement > m_movementArray;
 	CTransform m_xInitialOffset;

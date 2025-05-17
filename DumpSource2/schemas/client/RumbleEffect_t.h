@@ -1,6 +1,7 @@
 enum RumbleEffect_t : uint32_t
 {
 	RUMBLE_INVALID = -1,
+	// MPropertySuppressEnumerator
 	RUMBLE_STOP_ALL = 0,
 	RUMBLE_PISTOL = 1,
 	RUMBLE_357 = 2,
@@ -26,5 +27,6 @@ enum RumbleEffect_t : uint32_t
 	RUMBLE_PHYSCANNON_LOW = 22,
 	RUMBLE_PHYSCANNON_MEDIUM = 23,
 	RUMBLE_PHYSCANNON_HIGH = 24,
+	// MPropertySuppressEnumerator
 	NUM_RUMBLE_EFFECTS = 25,
 };

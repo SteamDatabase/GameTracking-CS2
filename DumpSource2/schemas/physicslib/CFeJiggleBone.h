@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFeJiggleBone
 {
 	uint32 m_nFlags;

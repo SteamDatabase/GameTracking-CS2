@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixPitchShiftDesc_t
 {
 	int32 m_nGrainSampleCount;

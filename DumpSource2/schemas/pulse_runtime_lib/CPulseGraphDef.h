@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulseGraphDef
 {
 	CUtlSymbolLarge m_DomainIdentifier;

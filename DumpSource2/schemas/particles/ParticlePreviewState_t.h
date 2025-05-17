@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ParticlePreviewState_t
 {
 	CUtlString m_previewModel;

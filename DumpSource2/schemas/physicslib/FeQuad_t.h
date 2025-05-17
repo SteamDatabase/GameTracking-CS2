@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeQuad_t
 {
 	uint16[4] nNode;

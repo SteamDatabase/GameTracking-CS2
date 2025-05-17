@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmRootMotionData
 {
 	CUtlVector< CTransform > m_transforms;

@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vrman"
 class InfoForResourceTypeCResourceManifestInternal
 {
 };

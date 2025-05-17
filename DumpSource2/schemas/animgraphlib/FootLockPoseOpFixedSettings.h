@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FootLockPoseOpFixedSettings
 {
 	CUtlVector< FootFixedData_t > m_footInfo;

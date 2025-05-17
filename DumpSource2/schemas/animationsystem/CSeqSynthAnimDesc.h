@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSeqSynthAnimDesc
 {
 	CBufferString m_sName;

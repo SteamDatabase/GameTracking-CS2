@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixFilterDesc_t
 {
 	VMixFilterType_t m_nFilterType;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class TwoBoneIKSettings_t
 {
 	IkEndEffectorType m_endEffectorType;

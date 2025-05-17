@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeKelagerBend2_t
 {
 	float32[3] flWeight;

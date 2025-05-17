@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class AggregateSceneObject_t
 {
 	ObjectTypeFlags_t m_allFlags;

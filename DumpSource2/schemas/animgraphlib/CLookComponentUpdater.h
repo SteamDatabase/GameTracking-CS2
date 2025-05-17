@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CLookComponentUpdater : public CAnimComponentUpdater
 {
 	CAnimParamHandle m_hLookHeading;

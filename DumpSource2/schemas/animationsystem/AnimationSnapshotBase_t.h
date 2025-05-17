@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class AnimationSnapshotBase_t
 {
 	float32 m_flRealTime;

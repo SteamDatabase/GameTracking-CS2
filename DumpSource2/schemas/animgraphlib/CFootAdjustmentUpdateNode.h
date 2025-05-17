@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFootAdjustmentUpdateNode : public CUnaryUpdateNode
 {
 	CUtlVector< HSequence > m_clips;

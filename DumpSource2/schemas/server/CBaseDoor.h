@@ -1,3 +1,4 @@
+// MNetworkVarNames = "bool m_bIsUsable"
 class CBaseDoor : public CBaseToggle
 {
 	QAngle m_angMoveEntitySpace;
@@ -26,5 +27,6 @@ class CBaseDoor : public CBaseToggle
 	bool m_bLoopMoveSound;
 	bool m_bCreateNavObstacle;
 	bool m_isChaining;
+	// MNetworkEnable
 	bool m_bIsUsable;
 };

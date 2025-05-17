@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixDelayDesc_t
 {
 	VMixFilterDesc_t m_feedbackFilter;

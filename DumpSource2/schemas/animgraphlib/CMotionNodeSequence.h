@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMotionNodeSequence : public CMotionNode
 {
 	CUtlVector< TagSpan_t > m_tags;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeBuildBoxRigid_t : public FeBoxRigid_t
 {
 	int32 m_nPriority;

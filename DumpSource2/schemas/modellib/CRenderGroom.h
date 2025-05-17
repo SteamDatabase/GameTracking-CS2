@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CRenderGroom
 {
 	CUtlVector< RenderHairStrandInfo_t > m_hairs;

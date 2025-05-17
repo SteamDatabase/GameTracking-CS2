@@ -1,6 +1,9 @@
+// MNetworkExcludeByUserGroup = "LocalPlayerExclusive"
+// MNetworkVarNames = "CHandle< CEconWearable > m_hMyWearables"
 class CBaseCombatCharacter : public CBaseFlex
 {
 	bool m_bForceServerRagdoll;
+	// MNetworkEnable
 	CNetworkUtlVectorBase< CHandle< CEconWearable > > m_hMyWearables;
 	float32 m_impactEnergyScale;
 	bool m_bApplyStressDamage;

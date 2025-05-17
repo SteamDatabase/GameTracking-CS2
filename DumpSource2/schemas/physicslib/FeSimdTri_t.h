@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeSimdTri_t
 {
 	uint32[4][3] nNode;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSeqSeqDescFlag
 {
 	bool m_bLooping;

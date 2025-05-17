@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimUpdateSharedData
 {
 	CUtlVector< CSmartPtr< CAnimUpdateNodeBase > > m_nodes;

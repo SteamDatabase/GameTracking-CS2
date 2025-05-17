@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PostProcessingLocalContrastParameters_t
 {
 	float32 m_flLocalContrastStrength;

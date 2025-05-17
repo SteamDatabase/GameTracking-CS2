@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class SkeletonAnimCapture_t::Frame_t
 {
 	float32 m_flTime;

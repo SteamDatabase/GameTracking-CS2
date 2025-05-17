@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixDynamicsDesc_t
 {
 	float32 m_fldbGain;

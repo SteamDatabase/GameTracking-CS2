@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vxml"
 class InfoForResourceTypeCPanoramaLayout
 {
 };

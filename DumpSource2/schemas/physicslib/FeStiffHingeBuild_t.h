@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeStiffHingeBuild_t
 {
 	float32 flMaxAngle;

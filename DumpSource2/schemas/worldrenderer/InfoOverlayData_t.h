@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class InfoOverlayData_t
 {
 	matrix3x4_t m_transform;

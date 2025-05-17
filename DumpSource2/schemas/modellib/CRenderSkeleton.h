@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CRenderSkeleton
 {
 	CUtlVector< RenderSkeletonBone_t > m_bones;

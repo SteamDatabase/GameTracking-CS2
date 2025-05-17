@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CCompositeMaterialEditorDoc
 {
 	int32 m_nVersion;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class RnBodyDesc_t
 {
 	CUtlString m_sDebugName;

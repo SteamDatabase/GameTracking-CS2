@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VPhysXConstraint2_t
 {
 	uint32 m_nFlags;

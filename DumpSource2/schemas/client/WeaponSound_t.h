@@ -24,5 +24,6 @@ enum WeaponSound_t : uint32_t
 	WEAPON_SOUND_MOUSE_PRESSED = 21,
 	WEAPON_SOUND_DROP = 22,
 	WEAPON_SOUND_RADIO_USE = 23,
+	// MPropertySuppressEnumerator
 	WEAPON_SOUND_NUM_TYPES = 24,
 };

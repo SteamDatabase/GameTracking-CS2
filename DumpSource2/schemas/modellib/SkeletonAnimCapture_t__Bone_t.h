@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class SkeletonAnimCapture_t::Bone_t
 {
 	CUtlString m_Name;

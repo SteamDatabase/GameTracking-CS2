@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSequenceTagSpans
 {
 	CGlobalSymbol m_sSequenceName;

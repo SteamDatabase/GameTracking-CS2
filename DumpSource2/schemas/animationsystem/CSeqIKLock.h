@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSeqIKLock
 {
 	float32 m_flPosWeight;

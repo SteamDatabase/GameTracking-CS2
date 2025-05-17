@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FollowAttachmentSettings_t
 {
 	CAnimAttachment m_attachment;

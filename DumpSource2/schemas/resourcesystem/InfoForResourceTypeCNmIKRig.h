@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vnmik"
 class InfoForResourceTypeCNmIKRig
 {
 };

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CVoxelVisibility
 {
 	uint32 m_nBaseClusterCount;

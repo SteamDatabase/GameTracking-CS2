@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FourCovMatrices3
 {
 	FourVectors m_vDiag;

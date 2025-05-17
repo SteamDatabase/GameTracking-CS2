@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vpost"
 class InfoForResourceTypeCPostProcessingResource
 {
 };

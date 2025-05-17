@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CastSphereSATParams_t
 {
 	Vector m_vRayStart;

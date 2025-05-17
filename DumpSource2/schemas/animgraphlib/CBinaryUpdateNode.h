@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CBinaryUpdateNode : public CAnimUpdateNodeBase
 {
 	CAnimUpdateNodeRef m_pChild1;

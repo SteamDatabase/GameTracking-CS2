@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VPhysics2ShapeDef_t
 {
 	CUtlVector< RnSphereDesc_t > m_spheres;

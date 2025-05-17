@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CTurnHelperUpdateNode : public CUnaryUpdateNode
 {
 	AnimValueSource m_facingTarget;

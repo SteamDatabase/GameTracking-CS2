@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeSimdRodConstraintAnim_t
 {
 	uint16[4][2] nNode;

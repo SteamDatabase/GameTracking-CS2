@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vseq"
 class InfoForResourceTypeCSequenceGroupData
 {
 };

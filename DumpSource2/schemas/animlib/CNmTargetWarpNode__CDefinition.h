@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmTargetWarpNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nClipReferenceNodeIdx;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAimCameraUpdateNode : public CUnaryUpdateNode
 {
 	CAnimParamHandle m_hParameterPosition;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FollowTargetOpFixedSettings_t
 {
 	int32 m_boneIndex;

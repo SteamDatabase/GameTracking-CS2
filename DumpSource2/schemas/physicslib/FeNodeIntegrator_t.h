@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeNodeIntegrator_t
 {
 	float32 flPointDamping;

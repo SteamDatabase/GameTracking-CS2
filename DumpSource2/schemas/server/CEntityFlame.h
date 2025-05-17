@@ -1,6 +1,10 @@
+// MNetworkVarNames = "CHandle< CBaseEntity> m_hEntAttached"
+// MNetworkVarNames = "bool m_bCheapEffect"
 class CEntityFlame : public CBaseEntity
 {
+	// MNetworkEnable
 	CHandle< CBaseEntity > m_hEntAttached;
+	// MNetworkEnable
 	bool m_bCheapEffect;
 	float32 m_flSize;
 	bool m_bUseHitboxes;

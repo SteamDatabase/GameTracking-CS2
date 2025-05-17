@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeBoxRigid_t
 {
 	CTransform tmFrame2;

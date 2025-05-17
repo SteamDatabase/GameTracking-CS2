@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CovMatrix3
 {
 	Vector m_vDiag;

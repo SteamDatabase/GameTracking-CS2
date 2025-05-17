@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CExampleSchemaVData_Monomorphic
 {
 	int32 m_nExample1;

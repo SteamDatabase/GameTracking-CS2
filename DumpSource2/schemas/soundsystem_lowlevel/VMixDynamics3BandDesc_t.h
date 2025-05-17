@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixDynamics3BandDesc_t
 {
 	float32 m_fldbGainOutput;

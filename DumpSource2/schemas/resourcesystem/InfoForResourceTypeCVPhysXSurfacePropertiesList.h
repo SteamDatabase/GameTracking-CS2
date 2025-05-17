@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vsurf"
 class InfoForResourceTypeCVPhysXSurfacePropertiesList
 {
 };

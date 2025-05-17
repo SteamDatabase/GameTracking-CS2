@@ -1,6 +1,13 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+// MVDataOverlayType = 1
 class CMoodVData
 {
+	// MPropertyDescription = "Model to get the animation list from"
+	// MPropertyAutoRebuildOnChange
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sModelName;
+	// MPropertyDescription = "Type of mood"
 	MoodType_t m_nMoodType;
+	// MPropertyDescription = "Layers for this mood"
 	CUtlVector< MoodAnimationLayer_t > m_animationLayers;
 };

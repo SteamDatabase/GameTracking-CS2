@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CConstraintSlave
 {
 	Quaternion m_qBaseOrientation;

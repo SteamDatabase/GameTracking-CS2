@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CBoneConstraintDotToMorph : public CBoneConstraintBase
 {
 	CUtlString m_sBoneName;

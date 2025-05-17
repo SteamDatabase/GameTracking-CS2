@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class WorldNode_t
 {
 	CUtlVector< SceneObject_t > m_sceneObjects;

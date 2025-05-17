@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSeqAutoLayer
 {
 	int16 m_nLocalReference;

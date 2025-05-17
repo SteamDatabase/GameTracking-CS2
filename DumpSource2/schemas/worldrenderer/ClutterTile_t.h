@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ClutterTile_t
 {
 	uint32 m_nFirstInstance;

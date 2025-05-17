@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeRigidColliderIndices_t
 {
 	uint16 m_nTaperedCapsuleRigidIndex;

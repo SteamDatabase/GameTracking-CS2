@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CStepsRemainingMetricEvaluator : public CMotionMetricEvaluator
 {
 	CUtlVector< int32 > m_footIndices;

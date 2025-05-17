@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CRenderMesh
 {
 	CUtlLeanVectorFixedGrowable< CSceneObjectData, 1 > m_sceneObjects;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PermModelExtPart_t
 {
 	CTransform m_Transform;

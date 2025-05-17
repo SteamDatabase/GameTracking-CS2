@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CStopAtGoalUpdateNode : public CUnaryUpdateNode
 {
 	float32 m_flOuterRadius;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CommandToolCommand_t
 {
 	bool m_bEnabled;

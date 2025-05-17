@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ParticleControlPointConfiguration_t
 {
 	CUtlString m_name;

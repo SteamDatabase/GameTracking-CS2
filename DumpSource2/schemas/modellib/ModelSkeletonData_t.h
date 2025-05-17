@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ModelSkeletonData_t
 {
 	CUtlVector< CUtlString > m_boneName;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmRootMotionOverrideNode::CDefinition : public CNmPassthroughNode::CDefinition
 {
 	int16 m_desiredMovingVelocityNodeIdx;

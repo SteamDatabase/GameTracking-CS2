@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class RnHalfEdge_t
 {
 	uint8 m_nNext;

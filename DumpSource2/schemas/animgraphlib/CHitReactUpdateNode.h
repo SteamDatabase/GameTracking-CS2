@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CHitReactUpdateNode : public CUnaryUpdateNode
 {
 	HitReactFixedSettings_t m_opFixedSettings;

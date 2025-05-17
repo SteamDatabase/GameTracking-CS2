@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMovementComponentUpdater : public CAnimComponentUpdater
 {
 	CUtlVector< CSmartPtr< CAnimMotorUpdaterBase > > m_motors;

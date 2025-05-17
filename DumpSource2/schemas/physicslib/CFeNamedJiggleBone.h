@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFeNamedJiggleBone
 {
 	CUtlString m_strParentBone;

@@ -1,3 +1,4 @@
+// MNetworkVarNames = "bool m_bTestOcclusion"
 class CTriggerLook : public CTriggerOnce
 {
 	CHandle< CBaseEntity > m_hLookTarget;
@@ -10,6 +11,7 @@ class CTriggerLook : public CTriggerOnce
 	bool m_bIsLooking;
 	bool m_b2DFOV;
 	bool m_bUseVelocity;
+	// MNetworkEnable
 	bool m_bTestOcclusion;
 	CEntityIOOutput m_OnTimeout;
 	CEntityIOOutput m_OnStartLook;

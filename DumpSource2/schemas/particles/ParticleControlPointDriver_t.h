@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ParticleControlPointDriver_t
 {
 	int32 m_iControlPoint;

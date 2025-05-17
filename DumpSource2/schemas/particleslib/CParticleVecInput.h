@@ -1,3 +1,6 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MClassIsParticleVec
+// MParticleCustomFieldDefaultValue (UNKNOWN FOR PARSER)
 class CParticleVecInput : public CParticleInput
 {
 	ParticleVecType_t m_nType;

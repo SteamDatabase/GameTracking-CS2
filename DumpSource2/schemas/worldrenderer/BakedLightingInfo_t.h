@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class BakedLightingInfo_t
 {
 	uint32 m_nLightmapVersionNumber;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PulseGraphExecutionHistoryCursorDesc_t
 {
 	CUtlVector< PulseCursorID_t > vecAncestorCursorIDs;

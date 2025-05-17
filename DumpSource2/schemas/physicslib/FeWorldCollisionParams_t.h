@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeWorldCollisionParams_t
 {
 	float32 flWorldFriction;

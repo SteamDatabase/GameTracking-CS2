@@ -1,3 +1,5 @@
+// MNetworkOverride = "m_angRotation CGameSceneNode"
+// MNetworkOverride = "m_flSimulationTime CBaseEntity"
 class CFuncRotating : public CBaseModelEntity
 {
 	CEntityIOOutput m_OnStopped;

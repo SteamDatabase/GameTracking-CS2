@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFollowPathUpdateNode : public CUnaryUpdateNode
 {
 	float32 m_flBlendOutTime;

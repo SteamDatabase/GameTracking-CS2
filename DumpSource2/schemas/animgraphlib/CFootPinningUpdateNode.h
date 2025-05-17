@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFootPinningUpdateNode : public CUnaryUpdateNode
 {
 	FootPinningPoseOpFixedData_t m_poseOpFixedData;

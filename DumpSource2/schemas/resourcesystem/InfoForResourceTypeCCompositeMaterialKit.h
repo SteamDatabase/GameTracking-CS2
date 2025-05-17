@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vcompmat"
 class InfoForResourceTypeCCompositeMaterialKit
 {
 };

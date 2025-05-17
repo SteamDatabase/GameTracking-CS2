@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class AggregateLODSetup_t
 {
 	Vector m_vLODOrigin;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class BlendItem_t
 {
 	CUtlVector< TagSpan_t > m_tags;

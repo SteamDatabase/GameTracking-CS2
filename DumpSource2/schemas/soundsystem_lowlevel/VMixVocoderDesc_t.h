@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixVocoderDesc_t
 {
 	int32 m_nBandCount;

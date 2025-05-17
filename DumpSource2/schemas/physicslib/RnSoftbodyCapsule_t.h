@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class RnSoftbodyCapsule_t
 {
 	Vector[2] m_vCenter;

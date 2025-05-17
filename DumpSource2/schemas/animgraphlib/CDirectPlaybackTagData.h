@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CDirectPlaybackTagData
 {
 	CUtlString m_sequenceName;

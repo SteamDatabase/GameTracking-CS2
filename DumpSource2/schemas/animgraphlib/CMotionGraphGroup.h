@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMotionGraphGroup
 {
 	CMotionSearchDB m_searchDB;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmGraphDefinition
 {
 	CUtlVector< int16 > m_persistentNodeIndices;

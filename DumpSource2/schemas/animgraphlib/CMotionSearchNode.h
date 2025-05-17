@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMotionSearchNode
 {
 	CUtlVector< CMotionSearchNode* > m_children;

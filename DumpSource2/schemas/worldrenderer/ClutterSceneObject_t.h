@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ClutterSceneObject_t
 {
 	AABB_t m_Bounds;

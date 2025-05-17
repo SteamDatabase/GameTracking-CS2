@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeSpringIntegrator_t
 {
 	uint16[2] nNode;

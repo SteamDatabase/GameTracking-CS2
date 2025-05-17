@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vphys"
 class InfoForResourceTypeCPhysAggregateData
 {
 };

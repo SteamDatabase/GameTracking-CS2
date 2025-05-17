@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmIDComparisonNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;

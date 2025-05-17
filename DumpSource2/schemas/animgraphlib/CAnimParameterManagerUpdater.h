@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimParameterManagerUpdater
 {
 	CUtlVector< CSmartPtr< CAnimParameterBase > > m_parameters;

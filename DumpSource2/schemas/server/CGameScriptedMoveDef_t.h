@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CGameScriptedMoveDef_t
 {
 	ScriptedMoveType_t m_nType;

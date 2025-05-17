@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FootFixedSettings
 {
 	TraceSettings_t m_traceSettings;

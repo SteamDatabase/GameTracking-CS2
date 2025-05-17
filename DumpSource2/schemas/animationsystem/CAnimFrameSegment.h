@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimFrameSegment
 {
 	int32 m_nUniqueFrameIndex;

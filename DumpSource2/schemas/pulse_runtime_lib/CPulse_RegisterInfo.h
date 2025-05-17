@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulse_RegisterInfo
 {
 	PulseRuntimeRegisterIndex_t m_nReg;

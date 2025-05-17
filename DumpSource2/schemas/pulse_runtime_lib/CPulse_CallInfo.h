@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulse_CallInfo
 {
 	CUtlSymbolLarge m_PortName;

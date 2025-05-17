@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "item"
 class InfoForResourceTypeCDotaItemDefinitionResource
 {
 };

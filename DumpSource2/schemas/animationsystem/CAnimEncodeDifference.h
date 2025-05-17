@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimEncodeDifference
 {
 	CUtlVector< CAnimBoneDifference > m_boneArray;

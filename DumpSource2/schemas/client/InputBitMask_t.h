@@ -1,6 +1,8 @@
 enum InputBitMask_t : uint64_t
 {
+	// MEnumeratorIsNotAFlag
 	IN_NONE = 0,
+	// MEnumeratorIsNotAFlag
 	IN_ALL = -1,
 	IN_ATTACK = 1,
 	IN_JUMP = 2,
@@ -16,6 +18,7 @@ enum InputBitMask_t : uint64_t
 	IN_RELOAD = 8192,
 	IN_SPEED = 65536,
 	IN_JOYAUTOSPRINT = 131072,
+	// MEnumeratorIsNotAFlag
 	IN_FIRST_MOD_SPECIFIC_BIT = 4294967296,
 	IN_USEORRELOAD = 4294967296,
 	IN_SCORE = 8589934592,

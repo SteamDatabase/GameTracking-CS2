@@ -1,6 +1,11 @@
+// MEntityAllowsPortraitWorldSpawn
+// MNetworkVarNames = "bool m_bUseHitboxesForRenderBox"
+// MNetworkVarNames = "bool m_bUseAnimGraph"
 class C_DynamicProp : public C_BreakableProp
 {
+	// MNetworkEnable
 	bool m_bUseHitboxesForRenderBox;
+	// MNetworkEnable
 	bool m_bUseAnimGraph;
 	CEntityIOOutput m_pOutputAnimBegun;
 	CEntityIOOutput m_pOutputAnimOver;

@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MPropertyFriendlyName = "Granulator Container"
 class CVoiceContainerGranulator : public CVoiceContainerBase
 {
 	float32 m_flGrainLength;

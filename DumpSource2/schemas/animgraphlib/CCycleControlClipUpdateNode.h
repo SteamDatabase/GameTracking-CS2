@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CCycleControlClipUpdateNode : public CLeafUpdateNode
 {
 	CUtlVector< TagSpan_t > m_tags;

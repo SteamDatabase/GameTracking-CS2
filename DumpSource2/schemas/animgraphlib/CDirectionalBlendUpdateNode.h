@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CDirectionalBlendUpdateNode : public CLeafUpdateNode
 {
 	HSequence[8] m_hSequences;

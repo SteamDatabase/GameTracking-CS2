@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMotionMatchingUpdateNode : public CLeafUpdateNode
 {
 	CMotionDataSet m_dataSet;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class EntityIOConnectionData_t
 {
 	CUtlString m_outputName;

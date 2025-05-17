@@ -1,3 +1,6 @@
+// MNetworkVarNames = "CHandle< CBaseModelEntity> m_glowEntity"
+// MNetworkVarNames = "bool m_usable"
+// MNetworkVarNames = "string_t m_szDisplayText"
 class CBaseButton : public CBaseToggle
 {
 	QAngle m_angMoveEntitySpace;
@@ -22,7 +25,10 @@ class CBaseButton : public CBaseToggle
 	CEntityHandle m_hConstraintParent;
 	bool m_bForceNpcExclude;
 	CUtlSymbolLarge m_sGlowEntity;
+	// MNetworkEnable
 	CHandle< CBaseModelEntity > m_glowEntity;
+	// MNetworkEnable
 	bool m_usable;
+	// MNetworkEnable
 	CUtlSymbolLarge m_szDisplayText;
 };

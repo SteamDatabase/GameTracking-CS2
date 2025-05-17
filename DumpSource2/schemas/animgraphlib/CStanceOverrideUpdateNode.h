@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CStanceOverrideUpdateNode : public CUnaryUpdateNode
 {
 	CUtlVector< StanceInfo_t > m_footStanceInfo;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeHingeLimit_t
 {
 	uint16[6] nNode;

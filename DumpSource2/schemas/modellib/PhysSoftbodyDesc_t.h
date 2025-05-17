@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PhysSoftbodyDesc_t
 {
 	CUtlVector< uint32 > m_ParticleBoneHash;

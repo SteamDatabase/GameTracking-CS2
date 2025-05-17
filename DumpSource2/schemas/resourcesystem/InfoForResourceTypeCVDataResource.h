@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vdata"
 class InfoForResourceTypeCVDataResource
 {
 };

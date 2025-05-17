@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMorphRectData
 {
 	int16 m_nXLeftDst;

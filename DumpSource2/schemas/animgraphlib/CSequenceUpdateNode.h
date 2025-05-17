@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSequenceUpdateNode : public CSequenceUpdateNodeBase
 {
 	HSequence m_hSequence;

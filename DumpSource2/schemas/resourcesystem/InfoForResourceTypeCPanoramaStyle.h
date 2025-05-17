@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vcss"
 class InfoForResourceTypeCPanoramaStyle
 {
 };

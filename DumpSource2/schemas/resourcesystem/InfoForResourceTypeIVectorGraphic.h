@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vsvg"
 class InfoForResourceTypeIVectorGraphic
 {
 };

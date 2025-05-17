@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vpcf"
 class InfoForResourceTypeIParticleSystemDefinition
 {
 };

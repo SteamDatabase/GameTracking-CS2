@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class RenderHairStrandInfo_t
 {
 	uint32[2] m_nGuideHairIndices_nSurfaceTriIndex;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VPhysXConstraintParams_t
 {
 	int8 m_nType;

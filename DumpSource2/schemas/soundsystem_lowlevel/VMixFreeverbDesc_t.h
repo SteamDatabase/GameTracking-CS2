@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VMixFreeverbDesc_t
 {
 	float32 m_flRoomSize;

@@ -1,3 +1,6 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MClassIsParticleFloat
+// MParticleCustomFieldDefaultValue (UNKNOWN FOR PARSER)
 class CParticleFloatInput : public CParticleInput
 {
 	ParticleFloatType_t m_nType;

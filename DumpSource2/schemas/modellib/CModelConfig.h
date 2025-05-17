@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CModelConfig
 {
 	CUtlString m_ConfigName;

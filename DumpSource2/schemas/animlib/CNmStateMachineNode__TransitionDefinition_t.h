@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmStateMachineNode::TransitionDefinition_t
 {
 	int16 m_nTargetStateIdx;

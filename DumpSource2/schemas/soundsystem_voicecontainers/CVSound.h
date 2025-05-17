@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CVSound
 {
 	int32 m_nRate;
@@ -10,5 +11,6 @@ class CVSound
 	uint32 m_nStreamingSize;
 	CUtlVector< int32 > m_nSeekTable;
 	int32 m_nLoopEnd;
+	// MFgdFromSchemaCompletelySkipField
 	CUtlBinaryBlock m_encodedHeader;
 };

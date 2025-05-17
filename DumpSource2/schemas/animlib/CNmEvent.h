@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmEvent
 {
 	float32 m_flStartTimeSeconds;

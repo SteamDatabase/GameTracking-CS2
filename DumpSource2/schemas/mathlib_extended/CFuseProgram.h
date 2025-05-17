@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFuseProgram
 {
 	CUtlVector< uint8 > m_programBuffer;

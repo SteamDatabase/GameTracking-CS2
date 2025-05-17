@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CCachedPose
 {
 	CUtlVector< CTransform > m_transforms;

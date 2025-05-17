@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vmdl"
 class InfoForResourceTypeCModel
 {
 };

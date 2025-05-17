@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class ModelBoneFlexDriver_t
 {
 	CUtlString m_boneName;

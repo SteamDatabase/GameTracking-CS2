@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimParamHandle
 {
 	AnimParamType_t m_type;

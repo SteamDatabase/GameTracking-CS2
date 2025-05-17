@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmClip
 {
 	CStrongHandle< InfoForResourceTypeCNmSkeleton > m_skeleton;

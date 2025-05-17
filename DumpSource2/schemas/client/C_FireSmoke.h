@@ -1,6 +1,12 @@
+// MNetworkOverride = "m_flScale"
+// MNetworkOverride = "m_flScaleTime"
+// MNetworkVarNames = "int32 m_nFlameModelIndex"
+// MNetworkVarNames = "int32 m_nFlameFromAboveModelIndex"
 class C_FireSmoke : public C_BaseFire
 {
+	// MNetworkEnable
 	int32 m_nFlameModelIndex;
+	// MNetworkEnable
 	int32 m_nFlameFromAboveModelIndex;
 	float32 m_flScaleRegister;
 	float32 m_flScaleStart;

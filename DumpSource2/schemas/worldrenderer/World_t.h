@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class World_t
 {
 	WorldBuilderParams_t m_builderParams;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PhysFeModelDesc_t
 {
 	CUtlVector< uint32 > m_CtrlHash;

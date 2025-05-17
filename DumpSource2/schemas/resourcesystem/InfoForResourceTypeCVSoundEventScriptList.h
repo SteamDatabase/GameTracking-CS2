@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vsndevts"
 class InfoForResourceTypeCVSoundEventScriptList
 {
 };

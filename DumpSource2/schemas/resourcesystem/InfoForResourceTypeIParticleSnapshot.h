@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vsnap"
 class InfoForResourceTypeIParticleSnapshot
 {
 };

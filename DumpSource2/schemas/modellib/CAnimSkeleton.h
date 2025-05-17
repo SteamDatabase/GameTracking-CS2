@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimSkeleton
 {
 	CUtlVector< CTransform > m_localSpaceTransforms;

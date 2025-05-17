@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeTaperedCapsuleRigid_t
 {
 	fltx4[2] vSphere;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmParameterizedBlendNode::BlendRange_t
 {
 	int16 m_nInputIdx0;

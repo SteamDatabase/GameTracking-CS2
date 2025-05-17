@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulseRuntimeMethodArg
 {
 	CKV3MemberNameWithStorage m_Name;

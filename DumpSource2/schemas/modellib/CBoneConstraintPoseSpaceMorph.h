@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CBoneConstraintPoseSpaceMorph : public CBoneConstraintBase
 {
 	CUtlString m_sBoneName;

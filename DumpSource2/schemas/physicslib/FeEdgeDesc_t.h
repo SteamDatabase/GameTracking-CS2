@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeEdgeDesc_t
 {
 	uint16[2] nEdge;

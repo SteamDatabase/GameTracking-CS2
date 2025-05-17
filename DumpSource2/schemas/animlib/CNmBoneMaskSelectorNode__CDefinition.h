@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmBoneMaskSelectorNode::CDefinition : public CNmBoneMaskValueNode::CDefinition
 {
 	int16 m_defaultMaskNodeIdx;

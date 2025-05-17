@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class AggregateMeshInfo_t
 {
 	uint32 m_nVisClusterMemberOffset;

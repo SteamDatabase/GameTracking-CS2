@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFuseSymbolTable
 {
 	CUtlVector< ConstantInfo_t > m_constants;

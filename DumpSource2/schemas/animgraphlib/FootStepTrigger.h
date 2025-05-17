@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FootStepTrigger
 {
 	CUtlVector< int32 > m_tags;

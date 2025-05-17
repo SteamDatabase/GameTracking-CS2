@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class AnimationDecodeDebugDump_t
 {
 	AnimationProcessingType_t m_processingType;

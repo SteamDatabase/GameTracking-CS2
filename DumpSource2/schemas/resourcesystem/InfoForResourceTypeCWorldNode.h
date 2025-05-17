@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vwnod"
 class InfoForResourceTypeCWorldNode
 {
 };

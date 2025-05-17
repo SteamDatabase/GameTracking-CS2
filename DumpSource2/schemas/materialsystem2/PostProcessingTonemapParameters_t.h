@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PostProcessingTonemapParameters_t
 {
 	float32 m_flExposureBias;

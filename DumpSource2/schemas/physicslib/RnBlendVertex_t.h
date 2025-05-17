@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class RnBlendVertex_t
 {
 	uint16 m_nWeight0;

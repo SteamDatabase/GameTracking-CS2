@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class PostProcessingBloomParameters_t
 {
 	BloomBlendMode_t m_blendMode;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAddUpdateNode : public CBinaryUpdateNode
 {
 	BinaryNodeChildOption m_footMotionTiming;

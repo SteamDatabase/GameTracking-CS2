@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class SkeletonDemoDb_t
 {
 	CUtlVector< SkeletonAnimCapture_t* > m_AnimCaptures;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class FeCtrlOffset_t
 {
 	Vector vOffset;

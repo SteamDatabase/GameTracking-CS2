@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CAnimationGraphVisualizerPie : public CAnimationGraphVisualizerPrimitiveBase
 {
 	VectorAligned m_vWsCenter;

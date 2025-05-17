@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class HitReactFixedSettings_t
 {
 	int32 m_nWeightListIndex;

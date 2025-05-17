@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class VPhysXAggregateData_t
 {
 	uint16 m_nFlags;

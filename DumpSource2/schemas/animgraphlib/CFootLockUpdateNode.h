@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CFootLockUpdateNode : public CUnaryUpdateNode
 {
 	FootLockPoseOpFixedSettings m_opFixedSettings;

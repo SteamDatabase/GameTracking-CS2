@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class GameAmmoTypeInfo_t : public AmmoTypeInfo_t
 {
 	int32 m_nBuySize;

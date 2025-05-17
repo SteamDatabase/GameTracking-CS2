@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMaterialDrawDescriptor
 {
 	float32 m_flUvDensity;

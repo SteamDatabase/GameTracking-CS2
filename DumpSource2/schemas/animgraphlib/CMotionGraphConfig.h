@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMotionGraphConfig
 {
 	float32[4] m_paramValues;

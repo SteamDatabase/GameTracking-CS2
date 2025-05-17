@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CModelConfigElement_AttachedModel : public CModelConfigElement
 {
 	CUtlString m_InstanceName;

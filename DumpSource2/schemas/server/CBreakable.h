@@ -1,5 +1,10 @@
+// MNetworkVarNames = "CPropDataComponent::Storage_t m_CPropDataComponent"
 class CBreakable : public CBaseModelEntity
 {
+	// MNetworkEnable
+	// MNetworkUserGroup = "CPropDataComponent"
+	// MNetworkAlias = "CPropDataComponent"
+	// MNetworkTypeAlias = "CPropDataComponent"
 	CPropDataComponent m_CPropDataComponent;
 	Materials m_Material;
 	CHandle< CBaseEntity > m_hBreaker;

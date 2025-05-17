@@ -1,3 +1,4 @@
+// MResourceTypeForInfoType = "vmorf"
 class InfoForResourceTypeCMorphSetData
 {
 };

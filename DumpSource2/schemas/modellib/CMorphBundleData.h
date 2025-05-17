@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMorphBundleData
 {
 	float32 m_flULeftSrc;
