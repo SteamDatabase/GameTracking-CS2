@@ -7,7 +7,7 @@ cd "${0%/*}"
 echo "Processing CS2..."
 
 set +e
-../tools/dump_source2.sh csgo csgo
+../tools/dump_source2.sh csgo CS2
 DUMPER_EXIT_CODE=$?
 set -e
 
