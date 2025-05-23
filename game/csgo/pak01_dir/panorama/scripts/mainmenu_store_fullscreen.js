@@ -121,6 +121,9 @@ var MainMenuStore;
         elParent.style.backgroundImage = 'url("file://{images}/backgrounds/store_home_' + catagory + '.psd")';
         elParent.style.backgroundPosition = '50% 50%';
         elParent.style.backgroundSize = 'cover';
+        if (catagory === 'tournament') {
+            elParent.SetDialogVariable('tournament-name', $.Localize("#store_nav_tournament_" + g_ActiveTournamentInfo.eventid));
+        }
         let oItemsByCategory = StoreItems.GetStoreItems();
         let aItemsList = oItemsByCategory[catagory];
         if (aItemsList.length < 1) {
