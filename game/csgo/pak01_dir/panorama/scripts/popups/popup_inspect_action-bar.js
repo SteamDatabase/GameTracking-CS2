@@ -40,6 +40,7 @@ var InspectActionBar;
         _SetCloseBtnAction(elPanel);
         _SetUpMarketLink(elPanel, itemId);
         _SetUpOpenSeasonStatsAction(elPanel, itemId);
+        _SetUpViewHighlightReelAction(elPanel, itemId);
         const category = InventoryAPI.GetLoadoutCategory(itemId);
         if (category == "musickit") {
             InventoryAPI.PlayItemPreviewMusic(itemId, '');
@@ -103,6 +104,17 @@ var InspectActionBar;
             $.DispatchEvent('ContextMenuEvent', '');
             elOpenSeasonPanel.SetHasClass('hidden', false);
         }
+    }
+    function _SetUpViewHighlightReelAction(elPanel, id) {
+        const reelId = InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 highlight');
+        if (!reelId)
+            return;
+        const elViewHighlightReelAction = elPanel.FindChildInLayoutFile('ViewHighlightReelAction');
+        elViewHighlightReelAction.SetPanelEvent('onactivate', () => {
+            UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-videoclip-' + reelId, 'file://{resources}/layout/popups/popup_videoclip.xml', 'reelid=' + reelId + '&' +
+                'itemid=' + id);
+        });
+        elViewHighlightReelAction.SetHasClass('hidden', false);
     }
     function _SetupEquipItemBtns(elPanel, id) {
         const elMoreActionsBtn = elPanel.FindChildInLayoutFile('InspectActionsButton');

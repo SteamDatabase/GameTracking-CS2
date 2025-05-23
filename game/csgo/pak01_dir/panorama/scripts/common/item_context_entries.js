@@ -58,6 +58,19 @@ var ItemContextEntries;
             }
         },
         {
+            name: 'view_highlight_reel',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            AvailableForItem: (id) => {
+                return !!InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 highlight');
+            },
+            OnSelected: (id) => {
+                const reelId = InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 highlight');
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-videoclip-' + reelId, 'file://{resources}/layout/popups/popup_videoclip.xml', 'reelid=' + reelId + '&' +
+                    'itemid=' + id);
+                $.DispatchEvent('ContextMenuEvent', '');
+            }
+        },
+        {
             name: 'open_season_stats_panel',
             populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => {

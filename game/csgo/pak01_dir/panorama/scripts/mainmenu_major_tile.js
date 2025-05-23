@@ -6,19 +6,19 @@
 var MainMenuMajorTile;
 (function (MainMenuMajorTile) {
     const _m_cp = $.GetContextPanel();
-    let _m_forceHide = true;
     function _Init() {
-        if (!MyPersonaAPI.IsConnectedToGC() || _m_forceHide) {
-            _m_cp.SetHasClass('hidden', true);
+        let bVisible = true;
+        if (!MyPersonaAPI.IsConnectedToGC())
+            bVisible = false;
+        else if (LicenseUtil.GetCurrentLicenseRestrictions())
+            bVisible = false;
+        else if (!StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[1][0], 0), 1, ''))
+            bVisible = false;
+        _m_cp.SetHasClass('hidden', !bVisible);
+        if (!bVisible)
             return;
-        }
-        let restrictions = LicenseUtil.GetCurrentLicenseRestrictions();
-        if (restrictions) {
-            _m_cp.SetHasClass('hidden', true);
-            return;
-        }
-        _m_cp.SetHasClass('hidden', false);
         _m_cp.FindChildInLayoutFile('id-btn-open-major-hub').SetPanelEvent('onactivate', OpenMajorHub);
+        _m_cp.SetHasClass('major-' + g_ActiveTournamentInfo.eventid.toString(), true);
         _m_cp.FindChildInLayoutFile('id-img-open-major-hub').SetImage('file://{images}/tournaments/backgrounds/pickem_mainmenu_promo_' + g_ActiveTournamentInfo.eventid + '.png');
         let sRestriction = InventoryAPI.GetDecodeableRestriction("capsule");
         let bCanSellCapsules = (sRestriction !== "restricted" && sRestriction !== "xray");

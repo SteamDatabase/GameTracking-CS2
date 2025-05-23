@@ -43,10 +43,11 @@ var PopupMajorHub;
     }
     PopupMajorHub.ClosePopup = ClosePopup;
     function LeaderboardPopup() {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_leaderboards.xml', 'type=official_leaderboard_pickem_sha2024_team.friends' +
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_leaderboards.xml', 'type=official_leaderboard_pickem_' + g_ActiveTournamentInfo.location + '_team.friends' +
             '&' + 'titleoverride=#CSGO_PickEm_Leaderboard_Title' +
             '&' + 'points-title=#tournament_coin_completed_challenges' +
-            '&' + 'popup-style=major-hub-popup-leaderboard');
+            '&' + 'popup-style=major-hub-popup-leaderboard' +
+            '&' + 'eventid=' + _m_eventId);
     }
     PopupMajorHub.LeaderboardPopup = LeaderboardPopup;
     function Init() {
@@ -139,9 +140,8 @@ var PopupMajorHub;
         let coinItemId = InventoryAPI.GetActiveTournamentCoinItemId(_m_eventId);
         if ((!coinItemId || coinItemId === '0') && (passItemId && passItemId !== '0') && !m_setDefaultTab)
             OpenPassActivate(passItemId);
-        let nCount = 3;
         let elLastActiveSection;
-        for (let i = nCount - 1; i >= 0; --i) {
+        for (let i = g_ActiveTournamentInfo.num_stages_with_swiss; i >= 0; --i) {
             let sectionId = PredictionsAPI.GetEventSectionIDByIndex(_m_tournamentId, i);
             if (PredictionsAPI.GetSectionIsActive(_m_tournamentId, sectionId) === true) {
                 let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage' + i);
@@ -158,7 +158,7 @@ var PopupMajorHub;
             $.DispatchEvent("Activated", elLastActiveSection, "mouse");
         }
         else {
-            let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage2');
+            let elNavBtn = _m_cp.FindChildInLayoutFile('id-pickem-nav-stage' + g_ActiveTournamentInfo.num_stages_with_swiss);
             $.DispatchEvent("Activated", elNavBtn, "mouse");
         }
         m_setDefaultTab = true;
@@ -170,10 +170,16 @@ var PopupMajorHub;
     }
     function _SetBackgroundImages() {
         let bgImage = "url( 'file://{images}/tournaments/backgrounds/pickem_bg_" + _m_eventId + ".png')";
-        _m_cp.FindChildInLayoutFile('id-major-store-block').style.backgroundImage = bgImage;
-        _m_cp.FindChildInLayoutFile('id-major-store-block').SetHasClass('major-background-size', true);
-        _m_cp.FindChildInLayoutFile('id-graffiti-block').style.backgroundImage = bgImage;
-        _m_cp.FindChildInLayoutFile('id-graffiti-block').SetHasClass('major-background-size', true);
+        if (_m_eventId !== 24) {
+            _m_cp.FindChildInLayoutFile('id-graffiti-block').style.backgroundImage = bgImage;
+            _m_cp.FindChildInLayoutFile('id-graffiti-block').SetHasClass('major-background-size', true);
+            _m_cp.FindChildInLayoutFile('id-major-store-block').style.backgroundImage = bgImage;
+            _m_cp.FindChildInLayoutFile('id-major-store-block').SetHasClass('major-background-size', true);
+        }
+        else {
+            _m_cp.FindChildInLayoutFile('id-major-store').style.backgroundImage = bgImage;
+            _m_cp.FindChildInLayoutFile('id-major-store').SetHasClass('major-background-size', true);
+        }
         _m_cp.FindChildInLayoutFile('id-challenges-block').style.backgroundImage = bgImage;
         _m_cp.FindChildInLayoutFile('id-challenges-block').SetHasClass('major-background-size', true);
     }
@@ -386,7 +392,8 @@ var PopupMajorHub;
         elImage.itemid = ItemInfo.GetFauxReplacementItemID(tournamentCoinItemId, 'graffiti');
         var elIBtn = $.GetContextPanel().FindChildInLayoutFile('id-tournament-journal-selectspray-btn');
         elIBtn.SetPanelEvent('onactivate', function () {
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_tournament_select_spray.xml', 'journalid=' + tournamentCoinItemId);
+            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_tournament_select_spray.xml', 'journalid=' + tournamentCoinItemId +
+                '&' + 'eventid=' + _m_eventId);
         });
         elParent.SetHasClass('graffiti-panel-visible', true);
     }
@@ -405,10 +412,10 @@ var PopupMajorHub;
         m_oPageData.groupId = groupId;
         m_oPageData.sectionIndex = sectionIndex;
         PredictionsTimer.UpdateTimer();
-        if ((sectionIndex === 0 || sectionIndex === 1) && elPage) {
+        if ((sectionIndex < g_ActiveTournamentInfo.num_stages_with_swiss) && elPage) {
             PredictionsGroup.Init();
         }
-        else if (sectionIndex === 2) {
+        else {
             PredictionsBracket.Init();
         }
         if (!m_oPageData.hasAlreadyInit.includes(elPage.id)) {
@@ -496,10 +503,10 @@ var PopupMajorHub;
     }
     function RefreshActivePage() {
         PredictionsTimer.UpdateTimer();
-        if (m_oPageData.sectionIndex === 0 || m_oPageData.sectionIndex === 1) {
+        if (m_oPageData.sectionIndex < g_ActiveTournamentInfo.num_stages_with_swiss) {
             PredictionsGroup.UpdateFromPredictionUploadedEvent();
         }
-        else if (m_oPageData.sectionIndex === 2) {
+        else if (m_oPageData.sectionIndex == g_ActiveTournamentInfo.num_stages_with_swiss) {
             PredictionsBracket.UpdateFromPredictionUploadedEvent();
         }
     }
@@ -575,7 +582,7 @@ var SavePicksButton;
         }
         elBtn.visible = true;
         ShowHideNoActivePassWarning(oPageData, false);
-        let nCount = oPageData.sectionIndex >= 2 ? 7 : PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
+        let nCount = (oPageData.sectionIndex >= g_ActiveTournamentInfo.num_stages_with_swiss) ? 7 : PredictionsAPI.GetGroupPicksCount(oPageData.tournamentId, oPageData.groupId);
         if (aLocalPicks.length === nCount) {
             let bPicksDifferent = false;
             for (let i = 0; i < nCount; ++i) {

@@ -373,6 +373,30 @@ var ItemTile;
     }
     ;
     let jsTooltipDelayHandle = null;
+    function ShowVideoClip() {
+        const id = $.GetContextPanel().GetAttributeString('itemid', '0');
+        const reelId = InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 highlight');
+        if (reelId) {
+            const reelJson = InventoryAPI.BuildHighlightReelSchemaJSON(reelId);
+            const reelSchemaDef = JSON.parse(reelJson);
+            const videoPlayer = $.GetContextPanel().FindChildTraverse('VideoClipMovie');
+            if (videoPlayer) {
+                videoPlayer.AddClass('play');
+                videoPlayer.SetMovie(reelSchemaDef["url_480p"]);
+                videoPlayer.Play();
+            }
+        }
+    }
+    function HideVideoClip() {
+        let id = $.GetContextPanel().GetAttributeString('itemid', '0');
+        if (InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 highlight')) {
+            const videoPlayer = $.GetContextPanel().FindChildTraverse('VideoClipMovie');
+            if (videoPlayer) {
+                videoPlayer.RemoveClass('play');
+                videoPlayer.Stop();
+            }
+        }
+    }
     function ShowTooltip() {
         jsTooltipDelayHandle = $.Schedule(.4, ShowToolTipOnDelay);
     }
@@ -384,6 +408,7 @@ var ItemTile;
             return;
         }
         UiToolkitAPI.ShowCustomLayoutParametersTooltip('ItemImage', 'JsItemTooltip', 'file://{resources}/layout/tooltips/tooltip_inventory_item.xml', 'itemid=' + id);
+        ShowVideoClip();
     }
     ;
     function HideTooltip() {
@@ -392,6 +417,7 @@ var ItemTile;
             $.CancelScheduled(jsTooltipDelayHandle);
             jsTooltipDelayHandle = null;
         }
+        HideVideoClip();
     }
     ItemTile.HideTooltip = HideTooltip;
     ;

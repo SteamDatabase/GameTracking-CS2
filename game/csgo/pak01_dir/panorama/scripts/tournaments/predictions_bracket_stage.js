@@ -4,7 +4,7 @@
 var PredictionsBracket;
 (function (PredictionsBracket) {
     let _m_foundTarget = false;
-    let _m_aBracketSectionIndexes = [2, 3, 4];
+    let _m_aBracketSectionIndexes = [g_ActiveTournamentInfo.num_stages_with_swiss, g_ActiveTournamentInfo.num_stages_with_swiss + 1, g_ActiveTournamentInfo.num_stages_with_swiss + 2];
     let _m_aPickPanels;
     function Init() {
         let oPageData = PopupMajorHub.GetActivePageData();
@@ -188,7 +188,7 @@ var PredictionsBracket;
     function _UpdateAllPickSections() {
         let oPageData = PopupMajorHub.GetActivePageData();
         for (var i = 0; i < _m_aBracketSectionIndexes.length; i++) {
-            if (_m_aBracketSectionIndexes[i] === 2) {
+            if (i == 0) {
                 _SetUpStartTeams(oPageData);
             }
             _UpdateAllPicksForSection(oPageData, _m_aBracketSectionIndexes[i]);
@@ -318,7 +318,7 @@ var PredictionsBracket;
                     if (elTeam) {
                         elTeam.SetDialogVariable('team-name', $.Localize('#CSGO_PickEm_Team_TBD'));
                         elTeam.SetDialogVariable('team-score', '');
-                        elTeam.FindChildInLayoutFile('id-team-logo').SetImage("file://{images}/tournaments/unknown_team.svg");
+                        elTeam.FindChildInLayoutFile('id-team-logo').SetImage(oPageData.tournamentId == "tournament:24" ? "file://{images}/tournaments/unknown_team_dark.svg" : "file://{images}/tournaments/unknown_team.svg");
                         elTeam.RemoveClass('is-correct');
                     }
                 });

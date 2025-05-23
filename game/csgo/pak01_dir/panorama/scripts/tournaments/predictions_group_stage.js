@@ -367,8 +367,8 @@ var PredictionsGroup;
                     arrTeamPairs.push({ panel: elTeamPair, keyteamwl: 0, keyteam_wins: 0, keyteam_loss: 0 });
                     elTeamPair.SetHasClass('has_valid_matchup', false);
                     elTeamPair.SetHasClass('has_match_in_progress', false);
-                    elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-0').SetImage("file://{images}/tournaments/unknown_team.svg");
-                    elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-1').SetImage("file://{images}/tournaments/unknown_team.svg");
+                    elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-0').SetImage(oPageData.tournamentId == "tournament:24" ? "file://{images}/tournaments/unknown_team_dark.svg" : "file://{images}/tournaments/unknown_team.svg");
+                    elTeamPair.FindChildInLayoutFile('id-team-matchup-logo-1').SetImage(oPageData.tournamentId == "tournament:24" ? "file://{images}/tournaments/unknown_team_dark.svg" : "file://{images}/tournaments/unknown_team.svg");
                     elTeamPair.Data().umids = [];
                     elTeamPair.SetPanelEvent('onactivate', () => {
                         let sUmids = (elTeamPair.Data().umids.length > 0) ? elTeamPair.Data().umids.join(',') : '';
@@ -401,7 +401,7 @@ var PredictionsGroup;
                     }
                 });
                 arrSlots.forEach(el => {
-                    el.SetImage("file://{images}/tournaments/unknown_team.svg");
+                    el.SetImage(oPageData.tournamentId == "tournament:24" ? "file://{images}/tournaments/unknown_team_dark.svg" : "file://{images}/tournaments/unknown_team.svg");
                 });
                 _m_elPlacements[strID] = { slots: arrSlots, results: 0 };
             }
