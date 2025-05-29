@@ -86,6 +86,13 @@ var ContextMenuGetSouvenir;
         let elGetSouvenirBtn = elMatch.FindChildInLayoutFile('id-get-souvenir-btn');
         let elDropdown = elMatch.FindChildInLayoutFile('PurchaseCountDropdown');
         let tailUmid = umid.split('_').at(-1);
+        const nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
+        const bPlayoffMatch = (nStageID >= 5) && (nStageID <= 13);
+        const bThisMatchHasRedeemsEnabled = !bPlayoffMatch || StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[g_ActiveTournamentStoreLayout.length - 1][0], 0), 1, '');
+        if (!bThisMatchHasRedeemsEnabled) {
+            elGetSouvenir.visible = false;
+            return;
+        }
         if (_m_redeemsAvailable > 0) {
             elGetSouvenir.SetDialogVariable('price', $.Localize('#popup_redeem_souvenir_action_redeem'));
             elDropdown.visible = false;

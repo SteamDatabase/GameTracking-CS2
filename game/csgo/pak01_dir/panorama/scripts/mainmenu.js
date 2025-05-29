@@ -18,7 +18,7 @@ var MainMenu;
     const _m_elContentPanel = $('#JsMainMenuContent');
     let _m_playedInitalFadeUp = false;
     const _m_maxMainMenuDisplayAgents = 5;
-    const _m_elNotificationsContainer = $('#NotificationsContainer');
+    const _m_elNotificationsContainer = $('#id-notifications-container');
     let _m_notificationSchedule = false;
     let _m_bVanityAnimationAlreadyStarted = false;
     let _m_bHasPopupNotification = false;
@@ -1134,8 +1134,9 @@ var MainMenu;
         }
     }
     function _GetNotificationBarData() {
-        const notification = { color_class: "", title: "", tooltip: "", link: "" };
+        let aAlerts = [];
         if (LicenseUtil.GetCurrentLicenseRestrictions() === false) {
+            const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
             const bIsConnectedToGC = MyPersonaAPI.IsConnectedToGC();
             $('#MainMenuInput').SetHasClass('GameClientConnectingToGC', !bIsConnectedToGC);
             if (bIsConnectedToGC) {
@@ -1144,16 +1145,28 @@ var MainMenu;
             else if (!_m_tLastSeenDisconnectedFromGC) {
                 _m_tLastSeenDisconnectedFromGC = +new Date();
             }
-            else if (Math.abs((+new Date()) - _m_tLastSeenDisconnectedFromGC) > 7000) {
-                notification.color_class = "NotificationLoggingOn";
+            else if (Math.abs((+new Date()) - _m_tLastSeenDisconnectedFromGC) > 500) {
                 notification.title = $.Localize("#Store_Connecting_ToGc");
                 notification.tooltip = $.Localize("#Store_Connecting_ToGc_Tooltip");
-                return notification;
+                notification.color_class = "";
+                notification.icon = "gc-connecting";
+                notification.is_gc_connecting = true;
+                aAlerts.push(notification);
             }
+        }
+        if (NewsAPI.IsNewClientAvailable()) {
+            const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
+            notification.color_class = "yellow-alert";
+            notification.icon = "client_update";
+            notification.title = $.Localize("#SFUI_MainMenu_Outofdate_Title");
+            notification.tooltip = $.Localize("#SFUI_MainMenu_Outofdate_Body");
+            aAlerts.push(notification);
         }
         const nIsVacBanned = MyPersonaAPI.IsVacBanned();
         if (nIsVacBanned != 0) {
-            notification.color_class = "NotificationRed";
+            const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
+            notification.color_class = "red-alert";
+            notification.icon = "ban_global";
             if ((nIsVacBanned & 1) == 1) {
                 notification.title = $.Localize("#SFUI_MainMenu_Vac_Title");
                 notification.tooltip = $.Localize("#SFUI_MainMenu_Vac_Info");
@@ -1169,67 +1182,116 @@ var MainMenu;
                 notification.tooltip = $.Localize("#SFUI_MainMenu_GameBan_Info");
                 notification.link = "https://help.steampowered.com/faqs/view/4E54-0B96-D0A4-1557";
             }
-            return notification;
+            aAlerts.push(notification);
         }
-        if (NewsAPI.IsNewClientAvailable()) {
-            notification.color_class = "NotificationYellow";
-            notification.title = $.Localize("#SFUI_MainMenu_Outofdate_Title");
-            notification.tooltip = $.Localize("#SFUI_MainMenu_Outofdate_Body");
-            return notification;
-        }
-        const nBanRemaining = CompetitiveMatchAPI.GetCooldownSecondsRemaining();
-        if (nBanRemaining > 0) {
-            notification.tooltip = CompetitiveMatchAPI.GetCooldownReason();
-            const strType = CompetitiveMatchAPI.GetCooldownType();
-            if (strType == "global") {
-                notification.title = $.Localize("#SFUI_MainMenu_Global_Ban_Title");
-                notification.color_class = "NotificationRed";
+        else {
+            const nPlayBanGlobalRemaining = MyPersonaAPI.GetPlayBanSecondsRemaining();
+            if (nPlayBanGlobalRemaining > 0) {
+                const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
+                notification.tooltip = $.Localize("#CSGO_Purchasable_Game_License_BannedInChina");
+                notification.title = $.Localize("#SFUI_MainMenu_GameBan_Title") + ' ' + FormatText.SecondsToSignificantTimeString(nPlayBanGlobalRemaining);
+                notification.color_class = "red-alert";
+                notification.icon = "ban_global";
+                aAlerts.push(notification);
             }
-            else if (strType == "green") {
-                notification.title = $.Localize("#SFUI_MainMenu_Temporary_Ban_Title");
-                notification.color_class = "NotificationGreen";
-            }
-            else if (strType == "competitive") {
-                notification.title = $.Localize("#SFUI_MainMenu_Competitive_Ban_Title");
-                notification.color_class = "NotificationYellow";
-            }
-            if (!CompetitiveMatchAPI.CooldownIsPermanent()) {
-                const title = notification.title;
-                if (CompetitiveMatchAPI.ShowFairPlayGuidelinesForCooldown()) {
-                    notification.link = "https://blog.counter-strike.net/index.php/fair-play-guidelines/";
+            else {
+                const nBanRemaining = CompetitiveMatchAPI.GetCooldownSecondsRemaining();
+                if (nBanRemaining > 0) {
+                    const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
+                    notification.tooltip = CompetitiveMatchAPI.GetCooldownReason();
+                    const strType = CompetitiveMatchAPI.GetCooldownType();
+                    if (strType == "global") {
+                        notification.title = $.Localize("#SFUI_MainMenu_Global_Ban_Title");
+                        notification.color_class = "yellow-alert";
+                        notification.icon = "ban_competitive";
+                    }
+                    else if (strType == "green") {
+                        notification.title = $.Localize("#SFUI_MainMenu_Temporary_Ban_Title");
+                        notification.color_class = "yellow-alert";
+                        notification.icon = "ban_competitive";
+                    }
+                    else if (strType == "competitive") {
+                        notification.title = $.Localize("#SFUI_MainMenu_Competitive_Ban_Title");
+                        notification.color_class = "yellow-alert";
+                        notification.icon = "ban_competitive";
+                    }
+                    if (!CompetitiveMatchAPI.CooldownIsPermanent()) {
+                        const title = notification.title;
+                        if (CompetitiveMatchAPI.ShowFairPlayGuidelinesForCooldown()) {
+                            notification.link = "https://blog.counter-strike.net/index.php/fair-play-guidelines/";
+                        }
+                        notification.title = title + ' ' + FormatText.SecondsToSignificantTimeString(nBanRemaining);
+                    }
+                    aAlerts.push(notification);
                 }
-                notification.title = title + ' ' + FormatText.SecondsToSignificantTimeString(nBanRemaining);
             }
-            return notification;
+        }
+        const nCommsMuteRemaining = MyPersonaAPI.GetCommunicationsBanSecondsRemaining();
+        if (nCommsMuteRemaining > 0) {
+            const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
+            notification.tooltip = $.Localize("#GameUI_AccountInfo_CommsBanNagYouIngame");
+            notification.title = $.Localize("#tooltip_cannot_unmute") + ' ' + FormatText.SecondsToSignificantTimeString(nCommsMuteRemaining);
+            notification.color_class = "yellow-alert";
+            notification.icon = "message";
+            aAlerts.push(notification);
         }
         const strNotification = MyPersonaAPI.GetTradeBanNotification();
         if (strNotification) {
-            notification.color_class = "NotificationYellow";
+            const notification = { color_class: "", title: "", tooltip: "", link: "", icon: "" };
+            notification.color_class = "yellow-alert";
+            notification.icon = "ban_trade";
             const idxspace = strNotification.indexOf(' ', 60);
             notification.title = (idxspace > 0)
                 ? strNotification.substring(0, idxspace) + '...'
                 : $.Localize('#SFUI_LoginPerfectWorld_Title_Info');
             notification.tooltip = strNotification;
-            return notification;
+            aAlerts.push(notification);
         }
-        return null;
+        return aAlerts;
     }
     function _UpdateNotificationBar() {
-        const notification = _GetNotificationBarData();
-        for (let strColorClass of _m_NotificationBarColorClasses) {
-            const bVisibleColor = notification && notification.color_class && (notification.color_class == strColorClass);
-            _m_elNotificationsContainer.SetHasClass(strColorClass, !!bVisibleColor);
-        }
-        if (notification !== null) {
-            if (notification.link) {
-                const btnClickableLink = $.FindChildInContext('#ClickableLinkButton');
-                btnClickableLink.enabled = true;
-                btnClickableLink.SetPanelEvent('onactivate', () => SteamOverlayAPI.OpenUrlInOverlayOrExternalBrowser(notification.link));
-                notification.title = "<span class='fairplay-link'>" + notification.title + "</span>";
+        const aNotifications = _GetNotificationBarData();
+        _m_elNotificationsContainer.Children().forEach(icon => {
+            if (icon && icon.IsValid()) {
+                icon.SetHasClass('show', false);
             }
-            $.FindChildInContext('#MainMenuNotificationTitle').text = notification.title;
+        });
+        if (aNotifications?.length < 1) {
+            _m_elNotificationsContainer.SetHasClass('show', false);
+            return;
         }
-        _m_elNotificationsContainer.SetHasClass('hidden', notification === null);
+        _m_elNotificationsContainer.SetHasClass('show', true);
+        aNotifications.forEach(notification => {
+            let oNotification = notification;
+            let elIcon = _m_elNotificationsContainer.FindChildInLayoutFile('id-alert-navbar-' + oNotification.icon);
+            if (oNotification.is_gc_connecting && elIcon) {
+                elIcon.SetHasClass('show', true);
+            }
+            else {
+                if (!elIcon) {
+                    elIcon = $.CreatePanel(('Image'), _m_elNotificationsContainer, 'id-alert-navbar-' + oNotification.icon, { class: 'mainmenu-top-navbar__radio-btn__icon mainmenu-top-navbar__alerts-icon',
+                        src: 'file://{images}/icons/ui/' + oNotification.icon + '.svg'
+                    });
+                }
+                elIcon.SwitchClass('alert-color', oNotification.color_class);
+                elIcon.SetHasClass('show', true);
+            }
+            elIcon.SetPanelEvent('onactivate', () => {
+                let gc = oNotification.is_gc_connecting === true ? 'true' : 'false';
+                let elContextMenu = UiToolkitAPI.ShowCustomLayoutContextMenuParameters('', '', 'file://{resources}/layout/context_menus/context_menu_navbar_notification.xml', 'icon=' + oNotification.icon + '&' +
+                    'color=' + oNotification.color_class + '&' +
+                    'title=' + oNotification.title + '&' +
+                    'tooltip=' + oNotification.tooltip + '&' +
+                    'link=' + oNotification.link + '&' +
+                    'gcconnecting=' + gc);
+                elContextMenu.AddClass("ContextMenu_NoArrow");
+                elContextMenu.SetFocus();
+            });
+            elIcon.SetPanelEvent('onmouseover', () => {
+                UiToolkitAPI.ShowTitleTextTooltip('id-alert-navbar-' + oNotification.icon, oNotification.title, oNotification.tooltip);
+            });
+            elIcon.SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTitleTextTooltip(); });
+        });
     }
     function _UpdateNotifications() {
         _msg('_UpdateNotifications');
@@ -1259,20 +1321,13 @@ var MainMenu;
         if (!_m_acknowledgePopupHandler) {
             let jsPopupCallbackHandle;
             jsPopupCallbackHandle = UiToolkitAPI.RegisterJSCallback(_ResetAcknowlegeHandler);
-            _m_acknowledgePopupHandler = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_acknowledge_item.xml', updatedItemTypeAndItemid + '&callback=' + jsPopupCallbackHandle);
+            UiToolkitAPI.ShowCustomLayoutTooltip('', 'file://{resources}/layout/popups/popup_acknowledge_item.xml', updatedItemTypeAndItemid + '&callback=' + jsPopupCallbackHandle);
             $.DispatchEvent('CSGOPlaySoundEffect', 'UIPanorama.inventory_new_item', 'MOUSE');
         }
     }
     function _ResetAcknowlegeHandler() {
         _m_acknowledgePopupHandler = null;
     }
-    function ShowNotificationBarTooltip() {
-        const notification = _GetNotificationBarData();
-        if (notification !== null) {
-            UiToolkitAPI.ShowTextTooltip('NotificationsContainer', notification.tooltip);
-        }
-    }
-    MainMenu.ShowNotificationBarTooltip = ShowNotificationBarTooltip;
     function ShowVote() {
         const contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('MainMenuNavBarVote', '', 'file://{resources}/layout/context_menus/context_menu_vote.xml', '', () => { });
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
