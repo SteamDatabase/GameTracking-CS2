@@ -89,10 +89,7 @@ var ContextMenuGetSouvenir;
         const nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
         const bPlayoffMatch = (nStageID >= 5) && (nStageID <= 13);
         const bThisMatchHasRedeemsEnabled = !bPlayoffMatch || StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[g_ActiveTournamentStoreLayout.length - 1][0], 0), 1, '');
-        if (!bThisMatchHasRedeemsEnabled) {
-            elGetSouvenir.visible = false;
-            return;
-        }
+        elGetSouvenir.SetHasClass('awaiting-highlights', !bThisMatchHasRedeemsEnabled);
         if (_m_redeemsAvailable > 0) {
             elGetSouvenir.SetDialogVariable('price', $.Localize('#popup_redeem_souvenir_action_redeem'));
             elDropdown.visible = false;
@@ -162,11 +159,12 @@ var ContextMenuGetSouvenir;
     function _SetPreviewBtn(elMatch, rawMapName, umid) {
         let previewBtn = elMatch.FindChildInLayoutFile('id-preview-souvenir-btn');
         previewBtn.SetPanelEvent('onactivate', () => {
-            let idFaux = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.souvenirs[rawMapName], 0);
             let nEventID = MatchInfoAPI.GetMatchTournamentEventID(umid);
             let nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
             let team0 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 0);
             let team1 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 1);
+            const bPlayoffMatch = (nStageID >= 5) && (nStageID <= 13);
+            let idFaux = InventoryAPI.GetFauxItemIDFromDefAndPaintIndexUB1(g_ActiveTournamentInfo.souvenirs[rawMapName], 0, bPlayoffMatch ? 13 : 0);
             let attributes = `{ "tournament event id": ${nEventID}, "tournament event stage id": ${nStageID}, "tournament event team0 id": ${team0}, "tournament event team1 id": ${team1} }`;
             UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + idFaux
                 + '&' +
