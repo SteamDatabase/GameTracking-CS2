@@ -1,6 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
-// MPropertySuppressBaseClassField (UNKNOWN FOR PARSER)
-// MPropertySuppressBaseClassField (UNKNOWN FOR PARSER)
+// MPropertySuppressBaseClassField = "m_iSlot"
+// MPropertySuppressBaseClassField = "m_iPosition"
 class CCSWeaponBaseVData : public CBasePlayerWeaponVData
 {
 	CSWeaponType m_WeaponType;

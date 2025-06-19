@@ -2,7 +2,7 @@
 // MVDataRoot
 // MVDataNodeType = 1
 // MFgdFromSchemaEditablePolymorphicThisClass
-// MVDataFileExtension (UNKNOWN FOR PARSER)
+// MVDataFileExtension = "vsnd"
 // MPropertyFriendlyName = "VSND Container"
 // MPropertyDescription = "Voice Container Base"
 class CVoiceContainerBase

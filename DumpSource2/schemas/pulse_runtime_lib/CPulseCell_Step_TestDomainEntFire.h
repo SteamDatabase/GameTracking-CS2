@@ -3,7 +3,7 @@
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Fake Ent-Fire"
-// MPulseEditorHeaderText (UNKNOWN FOR PARSER)
+// MPulseEditorHeaderText = "Fire input {m_Input}"
 class CPulseCell_Step_TestDomainEntFire : public CPulseCell_BaseFlow
 {
 	CUtlString m_Input;
