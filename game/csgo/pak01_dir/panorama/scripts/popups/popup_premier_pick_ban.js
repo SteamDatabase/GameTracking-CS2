@@ -626,7 +626,7 @@ var PremierPickBan;
     }
     function PlayerActivityVoice(xuid) {
         const elTeammates = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-team-teammates');
-        const elAvatar = elTeammates.FindChildTraverse(xuid);
+        const elAvatar = elTeammates.FindChildInLayoutFile(xuid);
         if (elAvatar && elAvatar.IsValid()) {
             Avatar.UpdateTalkingState(elAvatar, xuid);
         }
