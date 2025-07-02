@@ -227,7 +227,6 @@ class CCSGameRules : public CTeamplayRules
 	Vector m_vMinimapMaxs;
 	// MNetworkEnable
 	float32[8] m_MinimapVerticalSectionHeights;
-	bool m_bSpawnedTerrorHuntHeavy;
 	uint64 m_ullLocalMatchID;
 	// MNetworkEnable
 	int32[10] m_nEndMatchMapGroupVoteTypes;

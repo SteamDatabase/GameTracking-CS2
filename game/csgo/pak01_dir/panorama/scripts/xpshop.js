@@ -592,7 +592,7 @@ var XpShop;
             IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
         }
         elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').SetPanelEvent('onactivate', () => {
-            MissionsAPI.ActionRedeemOperationGoods(m_nTrack, ShopEntry.shop_index);
+            MissionsAPI.ActionRedeemOperationGoods(m_nTrack, ShopEntry.shop_index, parseInt(ShopEntry.points));
             elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').enabled = false;
             elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-cancel').enabled = false;
             $.GetContextPanel().SetHasClass('waiting-for-redeem', true);

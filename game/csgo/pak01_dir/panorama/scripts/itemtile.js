@@ -379,8 +379,10 @@ var ItemTile;
         if (reelId) {
             const reelJson = InventoryAPI.BuildHighlightReelSchemaJSON(reelId);
             const reelSchemaDef = JSON.parse(reelJson);
+            const videoPlayerContainer = $.GetContextPanel().FindChildTraverse('VideoClipMovieContainer');
             const videoPlayer = $.GetContextPanel().FindChildTraverse('VideoClipMovie');
-            if (videoPlayer) {
+            if (videoPlayerContainer && videoPlayer) {
+                videoPlayerContainer.AddClass('play');
                 videoPlayer.AddClass('play');
                 videoPlayer.SetMovie(reelSchemaDef["url_480p"]);
                 videoPlayer.Play();
@@ -390,8 +392,10 @@ var ItemTile;
     function HideVideoClip() {
         let id = $.GetContextPanel().GetAttributeString('itemid', '0');
         if (InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 highlight')) {
+            const videoPlayerContainer = $.GetContextPanel().FindChildTraverse('VideoClipMovieContainer');
             const videoPlayer = $.GetContextPanel().FindChildTraverse('VideoClipMovie');
-            if (videoPlayer) {
+            if (videoPlayerContainer && videoPlayer) {
+                videoPlayerContainer.RemoveClass('play');
                 videoPlayer.RemoveClass('play');
                 videoPlayer.Stop();
             }

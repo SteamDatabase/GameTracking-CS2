@@ -18,6 +18,7 @@ var PremierPickBan;
     function Init() {
         $.RegisterForUnhandledEvent('PanoramaComponent_PregameDraft_DraftUpdate', OnDraftUpdate);
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', UpdateName);
+        $.RegisterForUnhandledEvent("PanoramaComponent_PartyList_PlayerActivityVoice", PlayerActivityVoice);
         SetDefaultTimerValue();
         Show();
         OnDraftUpdate();
@@ -621,6 +622,13 @@ var PremierPickBan;
         let elAvatar = elList.FindChildInLayoutFile(xuid);
         if (elAvatar) {
             elAvatar.SetDialogVariable('teammate_name', FriendsListAPI.GetFriendName(xuid));
+        }
+    }
+    function PlayerActivityVoice(xuid) {
+        const elTeammates = _m_elPickBanPanel.FindChildInLayoutFile('id-team-vote-team-teammates');
+        const elAvatar = elTeammates.FindChildTraverse(xuid);
+        if (elAvatar && elAvatar.IsValid()) {
+            Avatar.UpdateTalkingState(elAvatar, xuid);
         }
     }
 })(PremierPickBan || (PremierPickBan = {}));

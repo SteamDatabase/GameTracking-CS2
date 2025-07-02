@@ -41,8 +41,8 @@ class C_EconItemView : public IEconItemInterface
 	int32 m_iRarityOverride;
 	int32 m_iQualityOverride;
 	int32 m_iOriginOverride;
+	uint8 m_ubStyleOverride;
 	uint8 m_unClientFlags;
-	uint8 m_unOverrideStyle;
 	// MNetworkEnable
 	CAttributeList m_AttributeList;
 	// MNetworkEnable

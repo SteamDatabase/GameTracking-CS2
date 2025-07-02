@@ -12,6 +12,7 @@ var PopupVideoClip;
         const videoPlayer = $('#VideoClipMovie');
         if (videoPlayer) {
             videoPlayer.SetMovie(reelSchemaDef["url_1080p"]);
+            videoPlayer.SetPlaybackVolume(0.5);
             videoPlayer.Play();
         }
     }
@@ -20,4 +21,5 @@ var PopupVideoClip;
         $.DispatchEvent('UIPopupButtonClicked', '');
     }
     PopupVideoClip.Close = Close;
+    $.RegisterForUnhandledEvent("ServerReserved", Close);
 })(PopupVideoClip || (PopupVideoClip = {}));

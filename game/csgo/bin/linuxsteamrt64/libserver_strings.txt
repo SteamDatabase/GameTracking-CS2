@@ -1676,7 +1676,7 @@ $tFa\v
 ../../game/server/cstrike15/effects/inferno.cpp
 ../../game/shared/ai_responsesystem.cpp
 ../../game/shared/animdemomanager.cpp
-../../game/shared/animgraph_gamesystem.cpp:545
+../../game/shared/animgraph_gamesystem.cpp:551
 ../../game/shared/animgraphcontroller.cpp
 ../../game/shared/animgraphcontroller.h
 ../../game/shared/baseentity_shared.cpp
@@ -1741,8 +1741,8 @@ $tFa\v
 ./baseentity.h
 ./cstrike15/hostage/cs_simple_hostage.cpp
 ./gameinterface.cpp
-./gameinterface.cpp:3393
-./gameinterface.cpp:3508
+./gameinterface.cpp:3403
+./gameinterface.cpp:3518
 ./nav_space_build.cpp
 .APathfindGeneric
 .Step
@@ -3183,6 +3183,7 @@ $tFa\v
 20CPulseCell_BaseValue
 20CRagdollPropAttached
 20CResponseCriteriaSet
+20CSOAccountXpShopBids
 20CSOEconItemAttribute
 20CSOEconRentalHistory
 20CSOPersonaDataPublic
@@ -3272,7 +3273,6 @@ $tFa\v
 21CHostageExpresserShim
 21CInfoTargetServerOnly
 21CInstancedSceneEntity
-21CItemHeavyAssaultSuit
 21CLightQueryGameSystem
 21CLogicMeasureMovement
 21CMsgApplyStatTrakSwap
@@ -4410,7 +4410,6 @@ $tFa\v
 42CMsgGCCStrike15_v2_GC2ClientTournamentInfo
 42CMsgGCCStrike15_v2_GiftsLeaderboardRequest
 42CMsgGCCStrike15_v2_Server2GCClientValidate
-42CMsgGCCstrike15_v2_ClientRequestNewMission
 42CPulseCell_Step_TestDomainCreateFakeEntity
 42CUserMsg_ParticleManager_DestroyPhysicsSim
 42CUserMsg_ParticleManager_ParticleCanFreeze
@@ -4738,6 +4737,7 @@ $tFa\v
 ?TestCheckpoint: %s
 ?autosave\n
 ?nav_pathfind_debug_log
+?weapons/models/defuser/defuser.vmdl
 @333333
 @<unknown>
 @@regex_error
@@ -5065,6 +5065,9 @@ BIO lib
 BIO routines
 BInit
 BLOAT =%-2d %s
+BLOCK_LOS_DEFAULT
+BLOCK_LOS_FORCE_FALSE
+BLOCK_LOS_FORCE_TRUE
 BLTY^b5>IT\b&.:HVb
 BMUZ_c6BLV\c'1=JVc
 BMV]`b3>LW_b!+;LZb
@@ -5096,6 +5099,7 @@ BULLET_PLAYER_57MM
 BULLET_PLAYER_762MM
 BULLET_PLAYER_9MM
 BULLET_PLAYER_BUCKSHOT
+BValidate
 BWeaponPurchaseCount_t
 BYield
 Backtrack failed completely, bad starting position\n
@@ -5139,6 +5143,7 @@ BaseEntity Details
 BaseEntity.EnterWater
 BaseEntity.ExitWater
 BaseExplosionEffect.Sound
+BaseExplosionTypes_t
 BaseGameStats_Driver
 BaseGrenade.Explode
 BaseGrenade.JumpThrowF
@@ -5948,8 +5953,10 @@ CSGOVScriptGameSystem
 CSObserverStartup
 CSPName
 CSPlayerController_SwitchTeam
+CSPlayerState
 CSPointScriptExtensions
 CSVCMsg_UserCommands_t
+CSWeaponMode
 CSWeaponSystem
 CSaveMemory
 CSaveRestoreBuffer::TokenHash() is COMPLETELY FULL!\n
@@ -6280,6 +6287,7 @@ Chicken.Death
 Chicken.FlapWings
 Chicken.Fly
 Chicken.Panic
+ChickenActivity
 ChickenThink
 ChickenTouch
 ChickenUse
@@ -6547,6 +6555,9 @@ DND_COMMAND
 DNSY_c=BJT^c68@LZc,-3@Qc 
 DOOR IS %s
 DOOR STATE: %s
+DOOR_CHECK_BACKWARD
+DOOR_CHECK_FORWARD
+DOOR_CHECK_FULL
 DOUBLE_AND
 DOUBLE_OR
 DOUBLE_QUOTED_STRING
@@ -6825,6 +6836,7 @@ ENGAGE_AND_INVESTIGATE
 ENGINE lib
 ENT TEXT STICKY NAMES\n
 ENTITY IS NOT A PLAYER: %d\n
+EOverrideBlockLOS_t
 ERROR: (%s) can't teleport object (%s) as it has a parent (%s)!\n
 ERROR: (%s) target '%s' not found. Deleting.\n
 ERROR: Bomb planted outside of a zone!\n
@@ -6897,6 +6909,23 @@ EVERYONE CAN BUY!\n
 EVP lib
 EXCELLENT
 EXPERT
+EXPLOSION_TYPE_COUNT
+EXPLOSION_TYPE_CUSTOM
+EXPLOSION_TYPE_DEFAULT
+EXPLOSION_TYPE_ELECTRICAL
+EXPLOSION_TYPE_EMP
+EXPLOSION_TYPE_EXPLOSIVEBARREL
+EXPLOSION_TYPE_FIREWORKS
+EXPLOSION_TYPE_FLASHBANG
+EXPLOSION_TYPE_GASCAN
+EXPLOSION_TYPE_GASCYLINDER
+EXPLOSION_TYPE_GRENADE
+EXPLOSION_TYPE_ICE
+EXPLOSION_TYPE_MOLOTOV
+EXPLOSION_TYPE_NONE
+EXPLOSION_TYPE_SHRAPNEL
+EXPLOSION_TYPE_SMOKEGRENADE
+EXPLOSION_TYPE_TRIPMINE
 EXPONENT
 EXTERNALLY_CREATED
 Early exit
@@ -6909,6 +6938,7 @@ EffectDispatch
 Effects: %d (EF_NODRAW=%d)
 Eiffel tower
 Elapsed
+Electrical
 Electrical.Explode
 ElectroThinkContext
 ElectrocuteThink
@@ -7074,6 +7104,7 @@ ExplodeDamage
 ExplodeRadius
 ExplodeTouch
 Explosion.GasCan
+Explosive Barrel
 ExplosiveBarrel.Explode
 Exponential Decay
 Extend current Map
@@ -7266,6 +7297,7 @@ Fired when a round starts.
 Fired when a round winner is determined.
 Fired when the freeze period of a round ends.
 Fires off this entity's OnTrigger responses.
+Fireworks
 Fireworks.Explode
 FireworksCrate.Start
 FireworksCrate.Stop
@@ -7405,7 +7437,9 @@ GameStatsUpload_
 GameSystem2HostHook
 GameTimescale
 GameTypes001
+Gas Cylinder
 GasCylinder.Explode
+Gascan
 Gear.JumpLand.CT
 Gear.JumpLand.T
 General.BurningFlesh
@@ -7761,7 +7795,6 @@ Healthshot.Success
 Heard enemy, holding position for %f2.1 seconds...\n
 Heard noise (%s from %s, pri %s, time %3.1f)\n
 Heat: %.1f
-HeavyWakeTaunt
 Help
 Hide
 Hide from area is NULL.\n
@@ -7773,7 +7806,6 @@ HidingSpotServiceHidingSpotArray
 Hierarchically spawn an entity group from a set of spawn tables.
 Highlight reel definition %s: id must be a positive integer
 Highlight reel definition %s: invalid "map"
-Highlight reel definition %s: invalid "matchid"
 Highlight reel definition %s: invalid "tournament event id"
 Highlight reel definition %s: invalid "tournament event stage id"
 Highlight reel definition %s: invalid "tournament event team id"
@@ -8995,6 +9027,7 @@ Mod R%d <- R%d %% R%d
 Model %s missing bone and flex counts (%d < %d), init %d\n
 Model conversion: %d conversions in %.3fsec (%.3fms each)\n
 Model: %s
+Molotov
 Molotov projectile spawned at %f %f %f, velocity %f %f %f\n
 Molotov.Bounce
 Molotov.Explode
@@ -9376,6 +9409,7 @@ NULL
 NULL CELL
 NULL Ent in GiveNamedItem: %s!\n
 NULL entity in global entity list!\n
+NUM_PLAYER_STATES
 NativeFunctions
 Nav Area: %d (%s)
 Nav ignore = %s
@@ -9950,6 +9984,7 @@ PrettyFont:%s:%d:%d
 Preview
 Primary   %02x%02x%02x
 PrimaryWeapon
+Primary_Mode
 Print a console message with a linked console command
 Print a hud message on all clients
 Print some text to the game window above an entity.
@@ -10013,9 +10048,11 @@ QAngle: %.2f %.2f %.2f
 QW\_acDLT[`c29EQ\c
 QX]`bcEOW]ac3>IT\c
 Quality definition %d: Duplicate quality name %s
+Quality definition %s: Invalid value (%d). It is reserved for Any
 Quality definition %s: Missing required field "value"
 Quality definition %s: missing "color_name"
 Quality definition %s: missing "hex_color"
+Quality definition any: The quality name "any" is a reserved keyword and cannot be used.
 QualityColorCommunity
 QualityColorCompleted
 QualityColorDeveloper
@@ -10386,6 +10423,12 @@ SELF_DEFENSE
 SEMICOLON
 SERVERSIDE
 SERVER_DLL
+SHAKE_AMPLITUDE
+SHAKE_FREQUENCY
+SHAKE_START
+SHAKE_START_NORUMBLE
+SHAKE_START_RUMBLEONLY
+SHAKE_STOP
 SHOULD_BE_DESTROYED
 SINGLE_LINE_COMMENT
 SINGLE_QUOTED_STRING
@@ -10412,6 +10455,15 @@ SSEQ (%d): %.2f "%s" (%d) DelayStart( %d ). Current m_nNotReadySequenceCount is:
 SSL lib
 SSL routines
 STARVE=%-2d %s
+STATE_ACTIVE
+STATE_DEATH_ANIM
+STATE_DEATH_WAIT_FOR_KEY
+STATE_DORMANT
+STATE_GUNGAME_RESPAWN
+STATE_OBSERVER_MODE
+STATE_PICKINGCLASS
+STATE_PICKINGTEAM
+STATE_WELCOME
 STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001
 STOPPED!
 STRING_CHAR
@@ -10781,6 +10833,7 @@ SecondHalfScore/team1
 SecondHalfScore/team2
 Secondary %02x%02x%02x
 SecondaryWeapon
+Secondary_Mode
 Section Pause
 Secure Electronic Transactions
 Security
@@ -11003,6 +11056,7 @@ Setting an animgraph parameter via Pulse is only supported on prop_dynamic!
 Setting mapgroup to '%s'\n
 SetupModel
 SetupSequences
+ShakeCommand_t
 ShakeRopes
 SharedObjectCache for %s (%d types):\n
 SharedRandomFloat
@@ -11025,6 +11079,7 @@ ShowStateTransitions: player '%s'(%s) entering '%s'\n
 ShowWorldLayerAndSpawnEntities
 Showing only (%s)
 Shows this layer
+Shrapnel
 Shrapnel.Explode
 Signature hook to fill out arguments for OutflowSignature_OnAsyncChild1
 Signature hook to fill out arguments for OutflowSignature_OnAsyncChild2
@@ -11035,6 +11090,7 @@ Signature hook to fill out arguments for OutflowSignature_OnYieldResume1
 Signature hook to fill out arguments for OutflowSignature_OnYieldResume2
 Signon
 Simple Cubic
+SimpleConstraintSoundProfile::SimpleConstraintsSoundProfileKeypoints_t
 Simulated GC communications failure is active. Mode: Down
 Simulated GC communications failure is active. Mode: RecvOnly
 Simulated GC communications failure is not active.\n
@@ -11049,6 +11105,7 @@ Skirmish mode %d references a non-existant gamemode: %s\n
 SkyboxSlot
 SlideTouch
 Slot(%d) : [%s] [Clip: %03d | %03d ] [Rvd: %03d | %03d]
+Smoke Grenade
 SmokeGrenade.Bounce
 SmokeGrenade.Explode
 SmokeVolume: Failed to find detonation
@@ -11201,7 +11258,6 @@ Step One Tick
 StepSimulationFuncRotatingAnglesSerializer
 Sticker kit '%s' rotate range is not valid %f:%f
 Sticker kit '%s' scale range is not valid %f:%f
-Sticker kit '%s' wear range is not valid %f:%f
 StitchPath has incorrect ending\n
 Stone.Huge
 Stone.Large
@@ -11439,6 +11495,7 @@ TriggerOnce: %s
 TriggerProximity - Missing measure target or measure target with no origin!\n
 TriggerTrackChange
 Triggers the creation of entities in a manually-completed spawn group
+Tripmine
 Tripmine.Explode
 Trust Root
 Try to clear all the debug overlay info
@@ -11698,6 +11755,31 @@ WARNING: item_generic '%s' - allowpickup callback '%s' should return a bool!\n
 WARNING: item_generic '%s' - cannot have a trigger radius without a pickup radius - disabling trigger behavior!\n
 WARNING: item_generic '%s' - pickup radius of %f is larger than trigger radius of %f - disabling trigger behavior!\n
 WEAPON PRIM ATTACK\n
+WEAPON_SOUND_DROP
+WEAPON_SOUND_EMPTY
+WEAPON_SOUND_IMPACT
+WEAPON_SOUND_MELEE_HIT
+WEAPON_SOUND_MELEE_HIT_NPC
+WEAPON_SOUND_MELEE_HIT_PLAYER
+WEAPON_SOUND_MELEE_HIT_WORLD
+WEAPON_SOUND_MELEE_MISS
+WEAPON_SOUND_MOUSE_PRESSED
+WEAPON_SOUND_NEARLYEMPTY
+WEAPON_SOUND_NUM_TYPES
+WEAPON_SOUND_RADIO_USE
+WEAPON_SOUND_REFLECT
+WEAPON_SOUND_RELOAD
+WEAPON_SOUND_SECONDARY_ATTACK
+WEAPON_SOUND_SECONDARY_EMPTY
+WEAPON_SOUND_SECONDARY_IMPACT
+WEAPON_SOUND_SECONDARY_REFLECT
+WEAPON_SOUND_SINGLE
+WEAPON_SOUND_SINGLE_ACCURATE
+WEAPON_SOUND_SPECIAL1
+WEAPON_SOUND_SPECIAL2
+WEAPON_SOUND_SPECIAL3
+WEAPON_SOUND_ZOOM_IN
+WEAPON_SOUND_ZOOM_OUT
 WIDE_HUMAN_HULL
 WOL: 0x%p (%s)
 WORLDTEXT_VERTICAL_ALIGN_BOTTOM
@@ -11731,9 +11813,11 @@ Water: Level %0.3f\n
 Weapon '%s' script file not found, but its data was accessed. This error is fatal.\n
 Weapon fire 
 Weapon.AutoSemiAutoSwitch
+WeaponAttackType_t
 WeaponC4Resources
 WeaponLength
 WeaponList
+WeaponMode_MAX
 WeaponPreference
 WeaponPurchases/DefIndex_%d
 Weapon_Knife.Hit
@@ -12813,7 +12897,6 @@ buy shield
 buy vest
 buy vesthelm
 buying
-buymenu display model
 buymenu\n
 buytime_ended
 c2onb191v4
@@ -12943,21 +13026,18 @@ character_mode
 characteristic-two-field
 characters/models
 characters/models/%s/%s.vmdl
-characters/models/ctm_heavy/ctm_heavy.vmdl
 characters/models/ctm_sas/ctm_sas.vmdl
 characters/models/shared/arms/bare_arms/v_bare_arms.vmdl
 characters/models/shared/arms/glove_%s/%s.vmdl
 characters/models/shared/arms/glove_bloodhound/w_glove_bloodhound.vmdl
 characters/models/shared/arms/glove_brokenfang/w_glove_brokenfang.vmdl
 characters/models/shared/arms/glove_handwrap/w_glove_handwrap.vmdl
-characters/models/shared/arms/glove_hardknuckle/v_glove_hardknuckle_black.vmdl
 characters/models/shared/arms/glove_hydra/w_glove_hydra.vmdl
 characters/models/shared/arms/glove_motorcycle/w_glove_motorcycle.vmdl
 characters/models/shared/arms/glove_slick/w_glove_slick.vmdl
 characters/models/shared/arms/glove_specialist/w_glove_specialist.vmdl
 characters/models/shared/arms/glove_sporty/w_glove_sporty.vmdl
 characters/models/shared/observer/cs_observer.vmdl
-characters/models/tm_heavy/tm_phoenix_heavy.vmdl
 characters/models/tm_phoenix/tm_phoenix.vmdl
 chatter_outnumbered_threshold
 check_Type
@@ -13559,6 +13639,7 @@ domainComponent
 domainRelatedObject
 dominated
 dont_rotate_other
+doorCheck_e
 door_break
 door_close
 door_closed
@@ -13826,6 +13907,7 @@ err.c
 error %s:  %s\n
 error:%08lX:%s:%s:%s
 eventName
+event_allow_individual_maps
 evp_pkey
 ex%dd_%s
 ex_data
@@ -13875,6 +13957,7 @@ exposurecompensation
 exposuresmoothingrange
 exposurespeeddown
 exposurespeedup
+expr_bonus
 expressions
 expressions/%s.vfe
 extReq
@@ -14044,6 +14127,7 @@ flMoveSpeedBlendStrafe
 flNoise
 flOriginalDamage
 flPlaneOffset
+flPoints >= flPointsPrev
 flRange
 flRunCycle
 flRunCycleValue
@@ -14285,8 +14369,6 @@ gc_generation_settings/rotate_end
 gc_generation_settings/rotate_start
 gc_generation_settings/scale_max
 gc_generation_settings/scale_min
-gc_generation_settings/wear_max
-gc_generation_settings/wear_min
 gc_status
 gconly
 gcsdk_gcmessages.proto
@@ -14537,6 +14619,7 @@ holdInstructionNone
 holdInstructionReject
 holdpos
 holiday_restriction
+holstered
 holsterweapon
 homePostalAddress
 homeTelephoneNumber
@@ -14578,7 +14661,6 @@ iTeamNum
 iValue
 i_destructible_part_destroyed_part_index
 iana
-icon display model
 icon_default_image
 icon_path
 icon_path_range:%u:%u
@@ -14979,6 +15061,7 @@ is commodity
 is now %d.\n
 is2d
 isPointPrefab
+is_an_event
 is_attacking
 is_collection
 is_essential_piece
@@ -14989,7 +15072,6 @@ is_selected_in_hammer
 is_tool_controlled_session
 isbot
 isdebris
-isheavy
 ispainted
 isplanted
 issilenced
@@ -15028,7 +15110,6 @@ item_gear_slot_position
 item_generic
 item_generic_trigger_helper
 item_healthkit
-item_heavyassaultsuit
 item_iconname
 item_kevlar
 item_level_max
@@ -15090,6 +15171,12 @@ k_EGCMsgResponseUnknownError
 kevlar(%d) 
 keyBag
 keyUsage
+keychain slot %d highlight
+keychain slot %d id
+keychain slot %d offset x
+keychain slot %d offset y
+keychain slot %d offset z
+keychain slot %d seed
 keychain slot 0 highlight
 keychain slot 0 id
 keychain slot 0 offset x
@@ -15723,7 +15810,6 @@ mass %.1f
 massscale
 master
 match_highlight_reel_keychain
-matchid
 matchmaking
 materialDamageOverlay
 material_base
@@ -15835,6 +15921,7 @@ messagelist.cpp
 messagesound
 messagevolume
 metal
+mg_%s
 mg_skirmish_%s
 mgf1
 mgmt
@@ -15900,7 +15987,6 @@ modelID
 modelName
 model_attribute
 model_display_flags
-model_holstered
 model_inventory
 model_player
 model_player_per_class
@@ -15939,8 +16025,6 @@ models/props_junk/watermelon01.vmdl
 models/props_plants/claypot03.vmdl
 models/tools/bullet_hit_marker.vmdl
 models/weapons/uid.vmdl
-models/weapons/v_models/arms/ctm_heavy/v_sleeve_ctm_heavy.vmdl
-models/weapons/v_models/arms/phoenix_heavy/v_sleeve_phoenix_heavy.vmdl
 models/weapons/w_bullet.vmdl
 models/weapons/w_muzzlefireshape.vmdl
 modifiedconvars_t
@@ -16052,7 +16136,6 @@ nWhichOutflowB
 nWinner
 nYieldArg1
 nameConstraints
-name_and_equip
 name_mode
 nameable
 navProperty_NavAttributes
@@ -16225,6 +16308,7 @@ open_buymenu
 opened
 operation_coin
 operation_type
+operational_points
 operatorname
 optionallycompressedtangentframe
 opvarArrayIndex
@@ -16855,6 +16939,7 @@ qualityLabelledData
 quest id
 quest reward lootlist
 quest_definitions
+quest_reward
 quest_reward_loot_lists
 queued_outputs
 rFC822localPart
@@ -16948,6 +17033,7 @@ repeatable
 reportedPosition
 reportingin
 requested_cancel
+required_event
 requiresUseKey
 requires_attr
 requires_attr_reward
@@ -17402,6 +17488,7 @@ should_leave_corpse
 show_clips
 show_in_armory
 show_lpv_sample_grid
+show_victim_distance
 show_vpulse_file
 showlight
 shrapnel
@@ -17426,6 +17513,7 @@ single interp backtrack
 singleLevelQuality
 single_shot
 single_shot_accurate
+singlematch
 singlematch: %s\n
 size_params
 skill.cfg
@@ -17684,6 +17772,7 @@ stoppoint
 store_bundle
 store_remap
 stored_as_integer
+strPoints.Count() == strXpExpressions.Count()
 strSoundEventName
 strange_parts
 strategies
@@ -17702,6 +17791,7 @@ strtok_r
 struct
 struct 
 style: %i\n
+styles
 subclass_change: Changed entity %d from subclass %s -> subclass %s\n
 subclass_change: Selected entity %s doesn't match requested subclass %s's entity type %s\n
 subclass_change: Unable to find entity to apply to\n
@@ -17831,6 +17921,7 @@ target time backtrack
 targetInformation
 targetName
 target_rule
+target_team
 targetclassname
 targetentityname
 targethealth
@@ -18230,7 +18321,6 @@ unlimited quantity
 unlisted_items_default_to
 unlocalized_name
 unlock
-unlocked styles
 unlocked_sound
 unparsed text after QAngle string, '%s'\n
 unparsed text after Quaternion string, '%s'\n
@@ -18568,7 +18658,6 @@ weapon_zoom_rifle
 weaponclassname
 weapons/models/c4/defuse_multimeter.vmdl
 weapons/models/c4/weapon_c4.vmdl
-weapons/models/defuser/defuser.vmdl
 weapons/models/elite/weapon_pist_elite.vmdl
 weapons/models/grenade/decoy/weapon_decoy.vmdl
 weapons/models/grenade/flashbang/weapon_flashbang.vmdl
@@ -18625,6 +18714,8 @@ x509_pkey
 x509_req
 x509_store
 xpExpr
+xp_bonus_percent
+xp_reward
 xp_shop_ticket
 xpgrant
 xpshopredeem

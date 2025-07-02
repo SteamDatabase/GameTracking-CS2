@@ -42,8 +42,8 @@ var MissionTile;
                 $.GetContextPanel().AddClass('hidden');
                 return;
             }
-            $.GetContextPanel().SetHasClass('stop-anims', m_oMissionData.progress_saved + m_livePointsCache >= m_oMissionData.goal_points);
-            $.GetContextPanel().SetHasClass('COMPLETE', m_oMissionData.progress_saved + (m_oMissionData.progress_this_match ? m_oMissionData.progress_this_match : 0) >= m_oMissionData.goal_points);
+            $.GetContextPanel().SetHasClass('stop-anims', m_oMissionData.progress_saved + m_livePointsCache >= m_oMissionData.goal_points.slice(-1)[0]);
+            $.GetContextPanel().SetHasClass('COMPLETE', m_oMissionData.progress_saved + (m_oMissionData.progress_this_match ? m_oMissionData.progress_this_match : 0) >= m_oMissionData.goal_points.slice(-1)[0]);
         }
         else if (!IsTheInGamePanel()) {
             if (!MyPersonaAPI.IsConnectedToGC()) {
@@ -67,13 +67,14 @@ var MissionTile;
             }
             SetButtonPlayMission();
             SessionUpdate();
-            $.GetContextPanel().SetHasClass('COMPLETE', m_oMissionData.progress_saved >= m_oMissionData.goal_points);
+            $.GetContextPanel().SetHasClass('COMPLETE', m_oMissionData.progress_saved >= m_oMissionData.goal_points.slice(-1)[0]);
         }
         if (IsTheInGamePanel() || IsThePauseMenuPanel()) {
             if (m_oMissionData.progress_this_match && m_oMissionData.progress_this_match > m_livePointsCache) {
                 $.GetContextPanel().TriggerClass('progress-pulse');
                 m_livePointsCache = m_oMissionData.progress_this_match;
                 $.DispatchEvent('CSGOPlaySoundEffect', 'UI.Mission.QuotaUp', 'MOUSE');
+                _msg('progress new ' + m_oMissionData.progress_this_match + " saved ts  " + m_livePointsCache);
                 _msg('PULSE');
             }
         }
@@ -108,14 +109,14 @@ var MissionTile;
     function ConstructMissionStrings(elPanel) {
         if (IsTheInGamePanel() || IsThePauseMenuPanel()) {
             let total = m_oMissionData.progress_saved + (m_oMissionData.progress_this_match ? m_oMissionData.progress_this_match : 0);
-            total = Math.min(total, m_oMissionData.goal_points);
+            total = Math.min(total, m_oMissionData.goal_points.slice(-1)[0]);
             elPanel.SetDialogVariableInt("mission-progress", total);
         }
         else {
             elPanel.SetDialogVariableInt("mission-progress", m_oMissionData.progress_saved);
         }
-        elPanel.SetDialogVariableInt("mission-points", m_oMissionData.goal_points);
-        elPanel.SetDialogVariableInt("mission-xp", Number(m_oMissionData.xp_reward));
+        elPanel.SetDialogVariableInt("mission-points", m_oMissionData.goal_points.slice(-1)[0]);
+        elPanel.SetDialogVariableInt("mission-xp", Number(m_oMissionData.xp_reward.slice(-1)[0]));
         const timeRemaining = FormatText.SecondsToSignificantTimeString(m_oMissionData.seconds_remaining);
         elPanel.SetDialogVariable('mission-time-remaining', timeRemaining);
         elPanel.SetHasClass('hide-time', m_oMissionData.seconds_remaining <= 0);
@@ -154,7 +155,7 @@ var MissionTile;
         const elProg = $.GetContextPanel().FindChildTraverse('mission-progress');
         if (!elProg)
             return;
-        const saved = m_oMissionData.progress_saved / m_oMissionData.goal_points;
+        const saved = m_oMissionData.progress_saved / m_oMissionData.goal_points.slice(-1)[0];
         elProg.min = 0;
         elProg.max = 1.0;
         elProg.value = saved;
@@ -164,7 +165,7 @@ var MissionTile;
                 return;
             elProgLive.min = 0;
             elProgLive.max = 1.0;
-            elProgLive.value = m_oMissionData.progress_this_match ? (saved + m_oMissionData.progress_this_match / m_oMissionData.goal_points) : 0;
+            elProgLive.value = m_oMissionData.progress_this_match ? (saved + m_oMissionData.progress_this_match / m_oMissionData.goal_points.slice(-1)[0]) : 0;
         }
         _msg(m_oMissionData.progress_saved + ' ' + m_oMissionData.progress_this_match);
     }

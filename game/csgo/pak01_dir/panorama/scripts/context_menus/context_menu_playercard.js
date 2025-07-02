@@ -221,9 +221,9 @@ var ContextmenuPlayerCard;
             xml: 'file://{resources}/layout/mute_spinner.xml',
             icon: null,
             AvailableForItem: (id) => {
-                return GameStateAPI.IsLocalPlayerPlayingMatch() &&
-                    !_IsSelf(id) &&
-                    GameStateAPI.IsPlayerConnected(id);
+                const bInGameAndMutable = GameStateAPI.IsLocalPlayerPlayingMatch() && !_IsSelf(id) && GameStateAPI.IsPlayerConnected(id);
+                const bInPartyAndMutable = !_IsSelf(id) && PartyListAPI.BIsVoiceChatEnabled() && PartyListAPI.BIsPlayerInParty(id);
+                return bInGameAndMutable || bInPartyAndMutable;
             },
             OnSelected: null,
         },

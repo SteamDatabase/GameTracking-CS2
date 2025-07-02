@@ -11,27 +11,6 @@ var MainMenuMissions;
         const missionContainer = $("#mission-container-root");
         if (!missionContainer)
             return;
-        if (0) {
-            const maxpoints = Math.random() * 100;
-            missionInfo = {
-                name: 'test',
-                loc_name: '#test',
-                loc_description: '#quest_11000_var_desc',
-                gamemode: 'demolition',
-                mapgroup: 'mg_1',
-                map: 'de_dust',
-                expression: '',
-                seconds_remaining: 300,
-                xp_reward: Math.random() * 500,
-                progress_saved: Math.random() * maxpoints,
-                goal_points: maxpoints,
-                string_tokens: {
-                    'weapon': 'Famas',
-                    'gamemode': 'Casual',
-                    'location': 'CT Spawn'
-                }
-            };
-        }
         missionContainer.RemoveAndDeleteChildren();
         if (missionInfo != undefined) {
             if (missionContainer) {
@@ -41,8 +20,8 @@ var MainMenuMissions;
                 const elNameLabel = elMissionPanel.FindChildTraverse("name");
                 elNameLabel.text = missionInfo.loc_description;
                 elMissionPanel.SetDialogVariableInt("progress", missionInfo.progress_saved);
-                elMissionPanel.SetDialogVariableInt("points", missionInfo.goal_points);
-                elMissionPanel.SetDialogVariableInt("xp", Number(missionInfo.xp_reward));
+                elMissionPanel.SetDialogVariableInt("points", missionInfo.goal_points[0]);
+                elMissionPanel.SetDialogVariableInt("xp", Number(missionInfo.xp_reward[0]));
                 elMissionPanel.SetPanelEvent("onactivate", PlayMission.bind(undefined, missionInfo));
                 function ExtractStringTokens(string_tokens) {
                     for (const k in string_tokens) {
@@ -99,7 +78,6 @@ var MainMenuMissions;
                     type: gameType,
                     mapgroupname: mg,
                     map: m.map,
-                    questid: 0,
                     gamemodeflags: gmFlags,
                 },
             },

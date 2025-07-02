@@ -826,8 +826,8 @@ var MainMenu;
         _UpdatePlayerVanityModel(oSettings);
     }
     function _PlayerActivityVoice(xuid) {
-        const vanityPanel = $('#JsMainmenu_Vanity');
-        const elAvatar = vanityPanel.FindChildInLayoutFile('JsPlayerVanityAvatar-' + xuid);
+        const vanityPanel = $('#MainMenuVanityInfo');
+        const elAvatar = vanityPanel.FindChildTraverse('JsPlayerVanityAvatar-' + xuid);
         if (elAvatar && elAvatar.IsValid()) {
             VanityPlayerInfo.UpdateVoiceIcon(elAvatar, xuid);
         }
