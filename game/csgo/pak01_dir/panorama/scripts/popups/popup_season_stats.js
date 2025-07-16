@@ -201,6 +201,10 @@ var PopupSeasonStats;
         elTies.visible = nTies > 0;
         if (nTies > 0) {
             let nXPos = Math.floor(elTiesBar.actualxoffset / elTiesBar.actualuiscale_x);
+            if (nXPos > 1920 || nXPos <= 0) {
+                elTies.visible = false;
+                return;
+            }
             elTies.style.x = nXPos + 'px;';
         }
     }
@@ -357,7 +361,7 @@ var PopupSeasonStats;
         });
         let elTies = elPanel.FindChildInLayoutFile('id-map-stat-ties');
         elTies.visible = false;
-        $.Schedule(.5, () => {
+        $.Schedule(.8, () => {
             _PositionTiesLabel(elTies, elBar.FindChild('id-bar-ties'), mapData.ties);
         });
     }

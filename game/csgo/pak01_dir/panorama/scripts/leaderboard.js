@@ -26,7 +26,7 @@ var Leaderboard;
     let m_NameLockEventHandler;
     let m_leaderboardName = '';
     let m_onlyAvailableSeasonLeaderboard = '';
-    const IS_NEW_SEASON = false;
+    const IS_NEW_SEASON = true;
     function RegisterEventHandlers() {
         _msg('RegisterEventHandlers');
         if (!m_bEventsRegistered) {
