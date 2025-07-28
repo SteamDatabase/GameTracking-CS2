@@ -216,7 +216,9 @@ var AcknowledgeItems;
     }
     function ItemstoAcknowlegeRightAway(id) {
         const itemType = InventoryAPI.GetItemTypeFromEnum(id);
-        return itemType === 'quest' || itemType === 'coupon_crate' || itemType === 'campaign';
+        return itemType === 'quest' ||
+            itemType === 'coupon_crate' ||
+            itemType === 'campaign';
     }
     function CarouselUpdated(elPanel) {
         $.Schedule(.15, () => {

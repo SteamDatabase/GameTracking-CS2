@@ -273,11 +273,13 @@ var InspectActionBar;
         InspectModelImage.SetCharScene(characterItemId, weaponItemId);
     }
     InspectActionBar.OnUpdateCharModel = OnUpdateCharModel;
-    function NavigateModelPanel(type) {
+    function NavigateModelPanel(type, bEndWeaponLookat = true) {
         InspectModelImage.ShowHideItemPanel((type !== 'InspectModelChar'));
         InspectModelImage.ShowHideCharPanel((type === 'InspectModelChar'));
         $.GetContextPanel().FindChildTraverse('InspectCharModelsControls').SetHasClass('hidden', type !== 'InspectModelChar');
-        InspectModelImage.EndWeaponLookat();
+        if (bEndWeaponLookat) {
+            InspectModelImage.EndWeaponLookat();
+        }
         let elDesc = $.GetContextPanel().GetParent().FindChildInLayoutFile('InspectItemDesc');
         if (elDesc && elDesc.IsValid()) {
             elDesc.SetHasClass('hidden', false);
@@ -318,7 +320,8 @@ var InspectActionBar;
     }
     InspectActionBar.UpdateScenery = UpdateScenery;
     function LookatWeapon() {
-        NavigateModelPanel('InspectModel');
+        const bEndWeaponLookat = false;
+        NavigateModelPanel('InspectModel', bEndWeaponLookat);
         let elDesc = $.GetContextPanel().GetParent().FindChildInLayoutFile('InspectItemDesc');
         if (elDesc && elDesc.IsValid()) {
             elDesc.SetHasClass('hidden', true);

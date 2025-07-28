@@ -189,16 +189,6 @@ var ContextMenuGetSouvenir;
                 $.DispatchEvent('ShowAcknowledgePopup', '', '');
             }
             return;
-            InventoryAPI.AcknowledgeNewItembyItemID(itemid);
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemid +
-                '&' + 'inspectonly=true' +
-                '&' + 'showcharselect=false' +
-                '&' + 'showallitemactions=false' +
-                '&' + 'showmarketlink=false' +
-                '&' + 'showitemcert=false' +
-                '&' + 'allowsave=false' +
-                'none');
-            $.DispatchEvent('ContextMenuEvent', '');
         }
     };
     {

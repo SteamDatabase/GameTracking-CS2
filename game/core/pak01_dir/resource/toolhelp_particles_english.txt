@@ -793,5 +793,19 @@ Allows a composite meshgroup mask to be specified, bodygroup field is ignored.<p
 <b>Model Default MeshGroup Mask</b><br>
 submodel and bodygroup fields ignored, model gets default meshgroup mask
 compiled into model.<p>"
+		"Attribute.C_OP_PinParticleToCP.m_bRetainInitialVelocity:name_ref"		"Retain Initial Velocity "
+		"Attribute.C_OP_PinParticleToCP.m_bRetainInitialVelocity:help"		"If we're the last/newest particle and pinned, when a new particle is created, restore the initial velocity we had previous to being pinned.  This can be used to better lock a stream of particles to an emitter while not stomping on the initial velocities being created in initializers.
+NOTE : Must be placed after Movement Basic in the hierarchy or the velocity will have incorrect forces applied to it on the frame it is released."
+		"Attribute.CParticleSystemDefinition.m_flAggregateRadius:name_ref"		"aggregation radius"
+		"Attribute.CParticleSystemDefinition.m_flAggregateRadius:help"		"If set, and this particle system is created with PATTACH_WORLDORIGIN with no owner, it will attempt to aggregate the system with the closest system of the same type that falls within this radius.  This will cause the system to be moved to the new position and restarted.  The \"minimum free particles to aggregate\" field will be taken into account to help ensure that the selected system has enough free particles to allow for the new effect to be created.
+If no system fits the above rules, the system will be spawned as a new system, otherwise it will be lumped in with an existing system.  <p>
+This decreases a bunch of overhead around spawning and initializing a new system and allows them to be opportunistically recycled.  <p>
+Because it moves and restarts an existing system, it is crucial that this system not use any elements that require it to do  operator (non-initializer) functions on CP data, as those values may change arbitrarily when the system receives a new aggregation request."
+		"Attribute.CParticleSystemDefinition.m_bShouldBatch:name_ref"		"batch particle systems (DO NOT USE)"
+		"Attribute.CParticleSystemDefinition.m_bShouldBatch:help"		"See Aggregation instead. <p>
+This will batch particles created with a PATTACH_CUSTOMORIGIN or PATTACH_INVALID attach type together.  It does ZERO safety testing for anything else about the system, meaning you should not use it unless you know what you're doing is safe.  It will happily batch systems across a map creating gigantic bounding boxes that are bad for perf.  It also does a simple restart on the system so positions can be incorrect, will happily restart systems with no remaining particles available, etc.  <p>
+Overall I'm not sure why this exists, and you should really consider using aggregation instead which does more checks for appropriateness, such as spatial checks, selecting the closest system, minimum particle counts to ensure a specified number of particles still exists, and restarts ensuring emitters and cp are properly reset.  AFAICT, it does the same things this does, but with safety.  <p>
+<p>
+I will probably remove this at some point in the future if I can determine if it really has a reason to exist or not.<p>"
 	}
 }

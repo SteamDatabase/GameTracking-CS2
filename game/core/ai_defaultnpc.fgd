@@ -15,7 +15,6 @@
 		1 : "Ragdoll and get up when settled"
 		2 : "Ragdoll and remain ragdoll"
 	]
-	combat_zone(target_destination) [ group="NPC Properties" ] : "Combat Zone" : "" : "Markup volume entity to restrict npc. Forces the npc to navigate to the zone and stay inside of it."
 
 	spawn_hunting_nearest_player(choices) : "Spawn Hunting Nearest Player?" : 0 =
 	[
@@ -48,12 +47,17 @@
 	input StartScripting(void) : "Enter scripting state. In this state, NPCs ignore a variety of stimulus that would make them break out of their scripts: They ignore danger sounds, ignore +USE, don't idle speak or respond to other NPC's idle speech, and so on."
 	input StopScripting(void) : "Exit scripting state."
 	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
+	input SetRagdollProfile(string) : "Sets the active ragdoll profile."
 	input EnableTeleportBuffer(void) : "Enable the teleport buffer around this NPC, if it's been disabled previously."
 	input DisableTeleportBuffer(void) : "Disable the teleport buffer around this NPC."
 	input EnableChoreoPhysProxy(void) : "Enable the phys proxy."
 	input DisableChoreoPhysProxy(void) : "Disable the phys proxy."
 	input DisableRandomLookAts( boolean ) : "Disables the AI's random lookAts."
 	input EnableRandomLookAts( boolean ) : "Enables the AI's random lookAts."
+	input DisableSenseHearing( void ) : "Disable the NPC's Hearing senses. They won't hear any AI sounds (NPC/Combat/Player/Weapon/etc)"
+	input EnableSenseHearing( void ) : "Enable the NPC's Hearing senses."
+	input DisableSenseSeeing( void ) : "Disable the NPC's ability to see. They won't hear determine visibility of any enemies / friends."
+	input EnableSenseSeeing( void ) : "Enable the NPC's ability to see."
 	input ForceLookAtTarget( string ): "Set named actor to be the look at target"
 	input ClearForcedLookAtTarget( void ): "Clear the look at target set by ForceLookAtTarget"
 	input LookAtIgnoreHands( void ) : "NPC does not look at the player hands"
@@ -75,7 +79,12 @@
 	input RemoveDisallowedAttribute(string) : "Removes a nav attribute by name that the NPC was not allowed to navigate on."
 ]
 
-@BaseClass base(DefaultNPC) = TalkNPC
+@BaseClass base(DefaultNPC) 
+	metadata
+	{
+		input_output_cpp = [ "ai_base_actor" ]
+	}
+= TalkNPC
 [
 	UseSentence(string) : "Use Sentence"
 	UnUseSentence(string) : "Un-Use Sentence"
@@ -86,7 +95,7 @@
 		1 : "Yes (Don't use speech semaphore)"
 	]
 
-	input SpeakResponseConcept(string) : "Speak the specified response concept."
+	input SpeakResponseConcept(cpp) 
 	input CancelSpeech(void) : "Cancel any speech that the NPC is currently speaking."
 ]
 
@@ -114,7 +123,7 @@
 
 	DontPickupWeapons(boolean) : "Prevent picking up weapons?" : "No" : "If yes, this NPC will NOT be allowed to pick up weapons they find on the ground."
 
-	GameEndAlly(boolean) : "Is this a vital ally?" : "No" : "If yes, this NPC will cause the game to end if killed."
+	GameEndAlly(boolean) : "Is this a game-ending ally?" : "No" : "If yes, this NPC will cause the game to end if killed."
 
 	input MakeGameEndAlly(void) : "Make this NPC a game end ally."
 	input MakeRegularAlly(void) : "Make this NPC a regular ally."
@@ -123,8 +132,6 @@
 	input DisableWeaponPickup(void) : "Disable Weapon Pickup"
 	input EnableLimitedReloads(void) : "Enable Limited Reloads (if specified in VData)"
 	input DisableLimitedReloads(void) : "Disable Limited Reloads"
-
-	input GiveAbility(string) : "Gives the NPC an ability of the specified name (see npc_abilities.vdata)."
 	
 	input SetReadinessPanic(void) : "Set readiness to panic state (Special)"
 	input SetReadinessLow(void) : "Set readiness to calmest state (Bored)"
@@ -135,6 +142,9 @@
 	input ClearAllOutputs(void) : "Obliterate every output that this NPC has."
 
 	input ReviveCompleted(void) : "Force the NPC to revive itself from an incapacitated state. "
+
+	input EnableStandoff(float) : "Enable the Standoff behavior. Can be given a radius that the NPC is allowed to move within."
+	input DisableStandoff(float) : "Disable the Standoff behavior. If given a duration, it will automatically re-enable after the time has passed."
 
 	output OnWeaponPickup(void) : "Fires when this NPC picks a weapon off the ground or a gun rack."
 ]
@@ -269,7 +279,6 @@
 		262144  : "Enemy Damage Only" : 0
 		524288  : "Bleed" : 0
 		1048576 : "Perfect Accuracy" : 0
-		2097152 : "Collide against physics objects (Creates VPhysics Shadow)" : 0
 	]
 	output OnTargeted(void) : "Fires when targeted"
 	output OnReleased(void) : "Fires when no longer targeted"
@@ -408,7 +417,13 @@
 	output LeaveTarget(void) : "Fires when NPC leaves this target"
 ]
 
-@PointClass base(BaseScripted, DXLevelChoice) editormodel("models/editor/scripted_sequence.vmdl") tags( Choreo ) sphere(m_flRadius) sequenceList( entity, "m_iszEntity" ) = scripted_sequence :
+@PointClass 
+	base(BaseScripted, DXLevelChoice)
+	editormodel("models/editor/scripted_sequence.vmdl") 
+	tags( Choreo ) 
+	sphere(m_flRadius)
+	sequenceList( entity, "m_iszEntity" ) 
+	= scripted_sequence:
 	"Grabs an NPC and makes them play a specified set of animations. The NPC can be told to move to the scripted sequence position or can "+
 	"be told to play the script wherever they currently are. "+
 	"Multiple scripted sequences of the same name (or sync group, if specified) will frame-synchronize in the action animation once all the actors have moved to position. "+
@@ -510,9 +525,11 @@
 		"eVeryFast"	: "Forced Very Fast (Sprint)"
 	]
 	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
+	stop_radius(float) : "Stop Radius" : "0" : "Optional distance to goal at which to terminate the path.  This distance is measured along the full valid path from the goal, not directly.  This path will end at the first point, measured back from the goal, where the path exists within this given range. The resulting path will be the initial section of a fully valid path that reaches the goal."
+    goal_arrival_tolerance(float) : "Goal Arrival Tolerance" : "0" : "Optional distance from the goal position within which the NPC is allowed to end the navigation."
 ]
 
-@PointClass base(Targetname, AIScriptedBase) tags( Choreo ) color(255 0 255) iconsprite("editor/aiscripted_schedule") = ai_scripted_abilityusage :
+@PointClass base(Targetname, AIScriptedBase) tags( Choreo ) color(255 0 255) selected_line( 255 255 255, targetname, m_iszTarget ) selected_line( 255 255 255, targetname, m_iszNPC ) iconsprite("editor/aiscripted_schedule") = ai_scripted_abilityusage :
 	"Forces an NPC to perform an ability at a specified target."
 [
 	m_iszAbilityName(npc_ability_name) : "Ability Subclass to Perform" : "" : "Subclass of the ability that target NPC(s) should perform against the Ability Target."

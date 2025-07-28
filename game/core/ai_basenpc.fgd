@@ -194,7 +194,7 @@
 	nodeheight(integer) : "NodeHeight"  : 0
 ]
 
-@PointClass base(Targetname, HintNode) editormodel("models/editor/node_hint.vmdl", fixedbounds) sphere(radius) color(255 255 255) = info_hint :
+@PointClass base(Targetname, Parentname, HintNode) editormodel("models/editor/node_hint.vmdl", fixedbounds) sphere(radius) color(255 255 255) = info_hint :
 	"A hint that is not used for navigation. They don't go into the nodegraph, nor do they fall to the ground. Use these to provide " +
 	"some spatial context for NPCs, such as 'look here if you can't find the player' or 'throw rocks at this spot'."
 [
@@ -257,6 +257,10 @@
 //-------------------------------------------------------------------------
 @BaseClass base(Targetname, RenderFields, DamageFilter, ResponseContext, Shadow, PosableSkeleton) 
 	color(0 200 200) 
+	metadata
+	{
+		input_output_cpp = [ "base_npc" ]
+	}
 = BaseNPC
 [
 	subclass_name( vdata_choice:scripts/npc_units.vdata ) : "Unit Name" : "" : "Name of the NPC Unit."
@@ -268,8 +272,8 @@
 		1 : "Wait Till Seen" : 0
 		2 : "Gag (No IDLE sounds until angry)" : 0
 		4 : "Fall to ground (unchecked means *teleport* to ground)" : 1
-		8 : "Drop Healthkit" : 0
 		16 : "Efficient - Don't acquire enemies or avoid obstacles" : 0
+		32 : "Spawn Upright - Remove any pitch / roll from the initial transform" : 0
 		128: "Wait For Script" : 0
 		256: "Long Visibility/Shoot" : 0
 		512: "Fade Corpse" : 1
@@ -284,13 +288,23 @@
 
 	ignoreunseenenemies(boolean) [ group="NPC Properties" ] : "Ignore unseen enemies" : 0 : "Prefer visible enemies, regardless of distance or relationship priority"
 
+	forcedynamichull(boolean) [ group="Physics Properties" ] : "Force Dynamic Hull" : 0 : "Force this NPC to use a dynamic hull even if its vdata doesn't request it"
 	physdamagescale(float) [ group="Physics Properties" ] : "Physics Impact Damage Scale" : "1.0" : "Scales damage energy when this character is hit by a physics object. With a value of 0 the NPC will take no damage from physics."
 
 	NavRestrictionVolume(target_destination) [ group="NPC Properties" ] : "Nav Restriction Volume" : "" : "Markup volume entity to restrict unit navigation"
 
 	DefaultAnim(sequence) : "Preview Animation" : "" : "Name of an animation to preview in Hammer, does not do anything in game."
 
-	destructible_part_initial_state_destructed_1(choices) [ group="Initially Destroyed Destructable Parts" ] : "Hit Group 1" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
+	ai_lod(choices) : "AI LOD" : "0" : "Determines what AI features are enabled/disabled for performance reasons" =
+	[
+	"-1": "Auto"
+	"0" : "High"
+	"1" : "Medium"
+	"2" : "Low"
+	"3" : "Very Low"
+	]
+
+	destructible_part_initial_state_destructed_1(choices) [ group="Initially Destroyed Destructible Parts" ] : "Hit Group 1" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
 	[
 	"-1" : "HITGROUP_INVALID"
 	"0" : "HITGROUP_GENERIC"
@@ -322,9 +336,18 @@
 	"25" : "HITGROUP_EQUIPMENT_14"
 	"26" : "HITGROUP_EQUIPMENT_15"
 	"27" : "HITGROUP_EQUIPMENT_16"
+
+	"32" : "HITGROUP_LEFT_LOWER_ARM"
+	"33" : "HITGROUP_LEFT_HAND"
+	"34" : "HITGROUP_RIGHT_LOWER_ARM"
+	"35" : "HITGROUP_RIGHT_HAND"
+	"36" : "HITGROUP_LEFT_LOWER_LEG"
+	"37" : "HITGROUP_RIGHT_LOWER_LEG"
 	]
 
-	destructible_part_initial_state_destructed_2(choices) [ group="Initially Destroyed Destructable Parts" ] : "Hit Group 2" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
+	destructible_part_initial_state_destructed_1_part_index(integer) [ group="Initially Destroyed Destructible Parts" ] : "Part Index 1" : "0" : "Index of the part to be initialized as destructed."
+
+	destructible_part_initial_state_destructed_2(choices) [ group="Initially Destroyed Destructible Parts" ] : "Hit Group 2" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
 	[
 	"-1" : "HITGROUP_INVALID"
 	"0" : "HITGROUP_GENERIC"
@@ -356,9 +379,17 @@
 	"25" : "HITGROUP_EQUIPMENT_14"
 	"26" : "HITGROUP_EQUIPMENT_15"
 	"27" : "HITGROUP_EQUIPMENT_16"
-	]
 
-	destructible_part_initial_state_destructed_3(choices) [ group="Initially Destroyed Destructable Parts" ] : "Hit Group 3" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
+	"32" : "HITGROUP_LEFT_LOWER_ARM"
+	"33" : "HITGROUP_LEFT_HAND"
+	"34" : "HITGROUP_RIGHT_LOWER_ARM"
+	"35" : "HITGROUP_RIGHT_HAND"
+	"36" : "HITGROUP_LEFT_LOWER_LEG"
+	"37" : "HITGROUP_RIGHT_LOWER_LEG"
+	]
+	destructible_part_initial_state_destructed_2_part_index(integer) [ group="Initially Destroyed Destructible Parts" ] : "Part Index 2" : "0" : "Index of the part to be initialized as destructed."
+
+	destructible_part_initial_state_destructed_3(choices) [ group="Initially Destroyed Destructible Parts" ] : "Hit Group 3" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
 	[
 	"-1" : "HITGROUP_INVALID"
 	"0" : "HITGROUP_GENERIC"
@@ -390,9 +421,17 @@
 	"25" : "HITGROUP_EQUIPMENT_14"
 	"26" : "HITGROUP_EQUIPMENT_15"
 	"27" : "HITGROUP_EQUIPMENT_16"
-	]
 
-	destructible_part_initial_state_destructed_4(choices) [ group="Initially Destroyed Destructable Parts" ] : "Hit Group 4" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
+	"32" : "HITGROUP_LEFT_LOWER_ARM"
+	"33" : "HITGROUP_LEFT_HAND"
+	"34" : "HITGROUP_RIGHT_LOWER_ARM"
+	"35" : "HITGROUP_RIGHT_HAND"
+	"36" : "HITGROUP_LEFT_LOWER_LEG"
+	"37" : "HITGROUP_RIGHT_LOWER_LEG"
+	]
+	destructible_part_initial_state_destructed_3_part_index(integer) [ group="Initially Destroyed Destructible Parts" ] : "Part Index 3" : "0" : "Index of the part to be initialized as destructed."
+
+	destructible_part_initial_state_destructed_4(choices) [ group="Initially Destroyed Destructible Parts" ] : "Hit Group 4" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
 	[
 	"-1" : "HITGROUP_INVALID"
 	"0" : "HITGROUP_GENERIC"
@@ -424,9 +463,17 @@
 	"25" : "HITGROUP_EQUIPMENT_14"
 	"26" : "HITGROUP_EQUIPMENT_15"
 	"27" : "HITGROUP_EQUIPMENT_16"
-	]
 
-	destructible_part_initial_state_destructed_5(choices) [ group="Initially Destroyed Destructable Parts" ] : "Hit Group 5" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
+	"32" : "HITGROUP_LEFT_LOWER_ARM"
+	"33" : "HITGROUP_LEFT_HAND"
+	"34" : "HITGROUP_RIGHT_LOWER_ARM"
+	"35" : "HITGROUP_RIGHT_HAND"
+	"36" : "HITGROUP_LEFT_LOWER_LEG"
+	"37" : "HITGROUP_RIGHT_LOWER_LEG"
+	]
+	destructible_part_initial_state_destructed_4_part_index(integer) [ group="Initially Destroyed Destructible Parts" ] : "Part Index 4" : "0" : "Index of the part to be initialized as destructed."
+
+	destructible_part_initial_state_destructed_5(choices) [ group="Initially Destroyed Destructible Parts" ] : "Hit Group 5" : "-1" : "Parts assigned to this hit group will be initialized as destructed." =
 	[
 	"-1" : "HITGROUP_INVALID"
 	"0" : "HITGROUP_GENERIC"
@@ -458,10 +505,27 @@
 	"25" : "HITGROUP_EQUIPMENT_14"
 	"26" : "HITGROUP_EQUIPMENT_15"
 	"27" : "HITGROUP_EQUIPMENT_16"
+
+	"28" : "HITGROUP_DRIVER"
+	"29" : "HITGROUP_DRIVER_SIDE_ENTRY"
+	"30" : "HITGROUP_PASSENGER"
+	"31" : "HITGROUP_PASSENGER_SIDE_ENTRY"
+	"32" : "HITGROUP_REAR_ENTRY"
+	"33" : "HITGROUP_FRONT_ENTRY"
+	"34" : "HITGROUP_TOP_ENTRY"
+
+	"35" : "HITGROUP_LEFT_LOWER_ARM"
+	"36" : "HITGROUP_LEFT_HAND"
+	"37" : "HITGROUP_RIGHT_LOWER_ARM"
+	"38" : "HITGROUP_RIGHT_HAND"
+	"39" : "HITGROUP_LEFT_LOWER_LEG"
+	"40" : "HITGROUP_RIGHT_LOWER_LEG"
 	]
+	destructible_part_initial_state_destructed_5_part_index(integer) [ group="Initially Destroyed Destructible Parts" ] : "Part Index 5" : "0" : "Index of the part to be initialized as destructed."
 
 	// Outputs
 	output OnDamaged(void) : "Fired when this NPC takes damage."
+	output OnStartDeath(void) : "Fired when this NPC has begun dying before other death-related callbacks." 
 	output OnDeath(void) : "Fired when this NPC is killed." 
 	output OnThreeQuarterHealth(void) : "Fired when this NPC reaches 75% of its maximum health (even if they die)."
 	output OnHalfHealth(void) : "Fired when this NPC reaches half of its maximum health (even if they die)."
@@ -500,6 +564,9 @@
 	input BecomeRagdoll(void) : "This NPC will instantly become a ragdoll with ZERO force (just go limp). OnDeath, OnHalfHealth, etc. Outputs will **NOT** BE FIRED."
 	input SetEasingParameter(string) : "Set an easing parameter Format: <name=value>"
 	input SetNavRestrictionVolume(string) : "Set the nav restriction volume. Parameter is the name of the target markup volume. Empty parameter will clear the nav restriction."
+
+	// API Inputs
+	input SetAILOD(cpp)
 ]
 
 @BaseClass base(Targetname, Parentname) iconsprite("editor/npc_maker.vmat") color(0 0 255) = BaseNPCMaker
@@ -566,6 +633,7 @@
 
 	// Outputs
 	output OnSpawnNPC(string) : "Fired when an NPC is spawned. The activator is the NPC, and the string is the name of the NPC." 
+	output OnSpawnedNPCDied(void) : "Fired when any spawned child died"
 	output OnAllSpawned(void) : "Fired when the spawned is exhausted (all children have been spawned)."
 	output OnAllSpawnedDead(void) : "Fired when the spawner is exhausted (all children have been spawned) and all spawned children have died."
 	output OnAllLiveChildrenDead(void) : "Fired when all spawned children have died. This does not mean the spawned is exhausted, so a new child may be spawned any time after this (unless the maker is disabled)."
@@ -585,6 +653,8 @@
 	input ChangeDestinationGroup(target_destination) : "Switch to a different set of Destination entities."
 	input SetMinimumSpawnDistance(integer) : "Set the minimum spawn distance from player to destination node."
 	input SetSpawnEntity(target_destination) : "Select (override) the entity to center the spawn destination around."
+	input EnableInfiniteSpawns(void) : "Set this maker to keep spawning NPCs forever."
+	input DisableInfiniteSpawns(bool) : "Set this maker to no longer infinitely spawn, using MaxChildren instead. By default, MaxChildren will be reduced by the number of live children (pass in 1 to disable)."
 ]
 
 @BaseClass base(BaseNPC) = VehicleDriverNPC
@@ -807,7 +877,7 @@
 	output OnDone( void ) : "Fires when NPC completes behavior (any post-success or fail acting is complete)"
 ]
 
-@BaseClass base(Targetname, EnableDisable) = AIGoalBase
+@BaseClass base(Targetname) = AIGoalBase
 [
 	actor(target_destination) : "Actor(s) to affect"
 
@@ -822,6 +892,7 @@
 	// Inputs
 	input Activate(void)
 	input Deactivate(void)
+	input Toggle(void)
 ]
 
 @PointClass base(LeadGoalBase, AIGoalBase) tags( AI ) iconsprite("editor/ai_goal_lead.vmat") = ai_goal_lead : "A goal used to make the target NPC lead the player to a location in the world. It will move ahead of the player, pausing if the player lags behind, and moving back to retrieve the player if necessary.<p>
@@ -1259,60 +1330,55 @@
 ]
 
 
-@PointClass base(Targetname, Parentname) tags( AI ) sphere(volume) iconsprite("editor/ai_sound.vmat") = ai_sound :
+@PointClass base(Targetname, Parentname) tags( AI ) sphere(volume) iconsprite("editor/ai_sound.vmat") = ai_volumetric_event :
 	"This entity makes sounds or smells that can be sensed by NPCs, but not by the player. This can be used " +
 	"to cause reactions in nearby NPCs.<br><br>" +
-	"<b>Sound Types</b><br>" +
+	"<b>Event Types</b><br>" +
 	"- Combat: Will cause most NPCs to become alert<br>" +
-	"- World: Will cause most NPCs to become alert<br>" +
 	"- Danger: Will cause most NPCs to move away from the position of the sound<br>" +
 	"- Bullet Impact<br>" +
-	"- Carcass<br>" +
-	"- Meat<br>" +
-	"- Garbage<br>" +
-	"- Thumper: causes antlions to run away briefly<br>" +
-	"- Readiness: (Low, Medium, High) Causes player companions that can hear this sound to change readiness"
+	"- Thumper (HLX): causes antlions to run away briefly<br>"
 [
-	//input InsertSound(Integer) : "THIS IS NOW OBSOLETE. Use InsertAISound"
-	input EmitAISound(void) : "Start playing the AI sound."
-	input StopAISound(void) : "Stop this AI sound if it is currently playing."
+	input EmitAIVolumetricEvent(void) : "Start the AI event."
+	input StopAIVolumetricEvent(void) : "Stop this AI event if it is currently active."
 
-	volume(integer) : "Volume" : 120 : "How far away this sound can be heard. This is a radius."
-	duration(float) : "Duration" : "0.5" : "How long the sound persists each time you insert it."
+	radius(float) : "Radius" : 120 : "How far away this event can be detected. This is a radius."
+	duration(float) : "Duration" : "0.5" : "How long the event persists each time you start it."
 
-	soundtype(choices) : "Sound Type" : 0 : "The type of sound or smell will determine the reaction of NPCs that sense it." =
+	eventtype(choices) : "Event Type" : "eCombat" : "The type of sound or smell will determine the reaction of NPCs that sense it." =
 	[
-		0 : "Select one"
-		1 : "Combat"
-		//2 : "Player (Don't use)"
-		3 : "Danger"
-		4 : "Bullet Impact"
-		5 : "Thumper"
-		//6 : "Physics Danger"
-		7 : "Move Away - Most NPCs will clear the radius of this sound when heard."
-		//8 : "Player Vehicle"
-		9 : "Glass Break"
-		//10 : "Physics Object"
+		"eCombat" :			"Combat"
+		"eDanger" :			"Danger"
+//		"ePlayer" :			"Player" (don't use)
+		"eBulletImpact" :	"Bullet Impact"
+		"ePhysicsDanger" :	"Physics Danger"
+		"eMoveAway" :		"Move Away"
+//		"ePlayerVehicle" :	"Player Vehicle" (don't use)
+		"eGlassBreak" :		"Glass Break"
+//		"ePhysicsObject" :	"Physics Object"
+		"eWarnFriends" :	"Warn Friends"
+		"eGunfire" :		"Gunfire"
+		"eExplosion" :		"Explosion"
+		"eThumper" :		"Thumper"
+		"eFood" :			"Food"
 	]
 
-	soundcontext(choices) : "Additional sound context (optional)" : 0 : "Optional settings specifying such things as who can or cannot hear the sound." =
+	eventflags(flagchoices) : "Additional event context (optional)" : "" : "Optional settings specifying such things as who can or cannot detect the event." =
 	[
-		0 : "Select one"
-		1 : "Gunfire"
-		2 : "Only Combine hear"
-		//4 : "React to Source"
-		8 : "Explosion"
-		16 : "Combine cannot hear"
-		//32 : "Danger Approaching"
-		64 : "Player Allies only hear"
-		128 : "Cause Hearers to blindly panic"
+//		"eReactToSource"	: "React to Source"
+//		"eDangerApproach"	: "Danger Approaching"
+//		"eAlliesOnly"		: "Allies only react"
+		"ePanicNPCs"		: "Cause npcs to blindly panic"
+//		"eSquadOnly"		: "Squad only reacts"
+		"eCombineOnly"		: "Only Combine react"
+		"eExcludeCombine"	: "Combine ignore"
 	]
 
 	locationproxy(target_destination) : "Location Proxy" : "" : "The name of an entity to use as a proxy to determine the location at which to make the sound. If you specify an entity here, the sound will be made at that entity's location (!player included)" 
 ]
 
 
-@PointClass base( BaseNPCMaker) tags( Logic ) iconsprite("editor/npc_maker.vmat")
+@PointClass base( BaseNPCMaker ) tags( Logic ) iconsprite("editor/npc_maker.vmat")
 	metadata
 	{
 		create_entity_template_lumps = 
@@ -1346,4 +1412,37 @@
 
 @PointClass base(Targetname, EnableDisable) = ai_point_of_interest
 [
+]
+
+@PointClass base(Targetname, Parentname, EnableDisable) iconsprite("editor/env_microphone.vmat") editormodel("models/editor/axis_helper_thick.vmdl") sphere(MaxRange) color(0 0 255) = ai_volumetric_event_sensor :
+	"Detects AI events at a point, and outputs the sound level as a value between 0 and 1. It only detects events that match the specified event type."
+[
+	ListenFilter(filterclass) : "Listen Filter" : "" : "The name of an filter entity which specifies the only entities the microphone can hear. Sounds emitted by other entities will not be heard."
+
+	eventtypes(flagchoices) : "Event Types" : "" : "The type of event to listen for" =
+	[
+		"eCombat" :			"Combat"
+		"eDanger" :			"Danger"
+		"ePlayer" :			"Player"
+		"eBulletImpact" :	"Bullet Impact"
+		"ePhysicsDanger" :	"Physics Danger"
+		"eMoveAway" :		"Move Away"
+		"ePlayerVehicle" :	"Player Vehicle"
+		"eGlassBreak" :		"Glass Break"
+		"ePhysicsObject" :	"Physics Object"
+		"eWarnFriends" :	"Warn Friends"
+		"eGunfire" :		"Gunfire"
+		"eExplosion" :		"Explosion"
+		"eThumper" :		"Thumper"
+		"eFood" :			"Food"
+		"eGravityForce" :	"Gravity Force"
+	]
+
+	Sensitivity(float) : "Sensitivity" : 1 : "How much to scale event radii when doing sensing"
+	MaxRange(float) : "Maximum hearing range (0=infinite)" : 240 : "Events beyond this range won't be detected, irrelevant of event radius."
+
+	// Outputs
+	output OnEventStarted(cpp)
+	output OnEventEnded(cpp)
+	output OnAllEventsEnded(cpp)
 ]

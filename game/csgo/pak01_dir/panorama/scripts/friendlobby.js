@@ -78,11 +78,6 @@ var friendLobby;
         let mapGroups = PartyBrowserAPI.GetPartySessionSetting(_m_xuid, 'game/mapgroupname');
         if (mapGroups == 'workshop')
             return $.Localize('#SFUI_Groups_workshop');
-        if (gameMode === 'cooperative') {
-            let questId = PartyBrowserAPI.GetPartySessionSetting(_m_xuid, 'game/questid');
-            if (questId && questId != '0')
-                return $.Localize(MissionsAPI.GetQuestDefinitionField(parseInt(questId), "loc_name"));
-        }
         if (!mapGroups)
             mapGroups = '';
         let mapsList = mapGroups.split(',');

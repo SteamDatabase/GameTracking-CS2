@@ -151,7 +151,7 @@ var PopupSeasonStats;
             if (elStat.FindChild('stat-icon')) {
                 elStat.FindChild('stat-icon').SetImage('file://{images}/icons/ui/stat_' + statName + '.svg');
             }
-            var displayValue = FormatNumberWithCommas(value);
+            var displayValue = FormatText.FormatNumberToNiceString(value, 0);
             elStat.SetDialogVariable('stat-value', displayValue);
         }
     }
@@ -172,7 +172,7 @@ var PopupSeasonStats;
         let nStatMatchesTotal = (wins + losses + ties);
         elStat.Data().value = nStatMatchesTotal;
         elStat.SetDialogVariable('stat-title', $.Localize('#season_stat_title_matches_played'));
-        elStat.SetDialogVariable('stat-value', FormatNumberWithCommas(nStatMatchesTotal));
+        elStat.SetDialogVariable('stat-value', FormatText.FormatNumberToNiceString(nStatMatchesTotal, 0));
     }
     function _SetWinPercentStat(elStat, wins, losses, ties) {
         let nWinPercent = ((wins / Math.max(1, losses + wins + ties)) * 100).toFixed(1);
@@ -711,9 +711,6 @@ var PopupSeasonStats;
                 });
             }
         });
-    }
-    function FormatNumberWithCommas(value) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
     {
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_GcLogonNotificationReceived', _ReadyForDisplay);

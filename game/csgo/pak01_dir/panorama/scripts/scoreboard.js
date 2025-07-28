@@ -1213,7 +1213,6 @@ var Scoreboard;
             let questID = GameStateAPI.GetActiveQuestID();
             if (questID > 0) {
                 elCoopStats.AddClass('show-mission-desc');
-                MissionsAPI.ApplyQuestDialogVarsToPanelJS(questID, elCoopStats);
                 let elLabel = elCoopStats.FindChildInLayoutFile('MissionDescriptionLabel');
                 if (elLabel) {
                     let strMissionDescriptionToken = MissionsAPI.GetQuestDefinitionField(questID, 'loc_description');

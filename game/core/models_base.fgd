@@ -70,6 +70,7 @@
 	name(resource:particle)		[report, group="Particles"]	: "Particle System"
 	detach_from_owner(bool)		[group="Particles"]			: "Detach From Owner" : "0"
 	always_run(bool)			[group="Particles"]			: "Always Run" : "0"
+	aggregate(bool)				[group="Particles"]			: "Attempt to Aggregate" : "0"
 	stop_on_seq_change(bool)	[group="Sequence"]			: "Stop On Sequence Change" : "0"
 	stop_immediately(bool)		[group="Sequence"]			: "Sequence Change Stop Is Instant" : "0"
 	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
@@ -218,6 +219,7 @@
 	name(resource:particle)		[report, group="Particles"] : "Particle System"
 	detach_from_owner(bool)		[group="Particles"]			: "Detach From Owner" : "0"
 	always_run(bool)			[group="Particles"]			: "Always Run" : "0"
+	aggregate(bool)				[group="Particles"]			: "Attempt to Aggregate" : "0"
 	stop_on_seq_change(bool)	[group="Sequence"]			: "Stop On Sequence Change" : "0"
 	stop_immediately(bool)		[group="Sequence"]			: "Sequence Change Stop Is Instant" : "0"
 	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
@@ -257,21 +259,18 @@
 	input(string) : "Input"
 ]
 
+@ModelAnimEvent = AE_DESTRUCTIBLE_PART_DESTROY 
+[
+	hit_group(string)		: "Hit Group Name"
+	part_index(int)			: "Part to destroy up to" : "0"
+	force(float) 			: "Force to apply if part breaks" : 0
+	force_radius(float) 	: "Force radius to use for broken parts" : 24
+]
 
 @ModelAnimEvent = AE_SV_PLAYSOUND 
 [
 	name(sound) : "Sound Name"
 	tags(string) : "Tags"
-]
-
-@ModelAnimEvent = AE_SCRIPT_EVENT_SOUND 
-[
-	name(sound) : "Sound Name"
-]
-
-@ModelAnimEvent = AE_SCRIPT_EVENT_SOUND_VOICE 
-[
-	name(sound) : "Sound Name"
 ]
 
 @ModelAnimEvent = AE_SCRIPT_EVENT_SENTENCE_RND1 
@@ -340,6 +339,7 @@
 	stop_immediately(bool)		[group="Sequence"]			: "Sequence Change Stop Is Instant" : "0"
 	use_layer_sequence(bool)	[group="Sequence"]			: "Use Layer Sequence" : "0"
 	tags(string)			[group="Sequence"]			: "Tags"
+	materialgroup(string) : "Material Group" : "" : "Optionally set a material group on the created prop model.  Note that material group name comes from the prop model." // Not a materialgroup type because ModelDoc's picker populates it from the current model
 ]
 
 
@@ -390,4 +390,18 @@ game_data_list( ao_proxy_box_list )
 	dimensions(vector) [ scale_bone_relative ] : "Dimensions" : "10 10 10"
 	offset_origin(vector) [ scale_bone_relative ] : "Offset" : "0 0 0"
 	offset_angles(angle) : "Angles" : "0 0 0"
+]
+
+@ModelGameData
+game_data_list( CNPCPhysicsHull )
+	metadata
+    {
+        node_name_key = "m_sName"		
+    }
+= CNPCPhysicsHull [ ]
+
+
+@ModelGameData = cloth_ground_plane
+[
+	trace_raise(float)				: "Cast a ray to find the ground, given the raise"					: 0		: "If set, cloth will trace a ray to find ground plane, ray start raised from the "
 ]

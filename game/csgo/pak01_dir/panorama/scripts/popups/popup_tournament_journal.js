@@ -459,7 +459,6 @@ var TournamentJournal = ( function()
 							mode: gameMode,
 							type: gameType,
 							mapgroupname: mapGroup,
-							questid: 0
 						},
 					}
 				};
@@ -744,12 +743,7 @@ var TournamentJournal = ( function()
     {
         
                                                                                          
-        var schemaString = InventoryAPI.BuildItemSchemaDefJSON( itemid );
-
-        if ( !schemaString )
-            return false;
-		
-        var itemSchemaDef = JSON.parse( schemaString );
+        var itemSchemaDef = ItemInfo.BuildItemSchemaDef( itemid );
         return itemSchemaDef[ "cannot_inspect" ] === 1 ? false : true;
     };
 

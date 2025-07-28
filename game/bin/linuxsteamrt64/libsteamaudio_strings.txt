@@ -1,22 +1,43 @@
- fnumber=%d ofs=0x%x sz=%d
  offset=
  thread=%lu, file=%s, line=%d, info="
 %019lu
 %5lu file=%s, line=%d, 
 %ld bytes leaked in %d chunks\n
 %lli
-%llu
-%s%s%s crc=0x%x metadatasz=%d
 %s(%d): OpenSSL internal error, assertion failed: %s\n
+%s: Unable to create energy field [%d]\n
+%s: Unable to create hybrid reverb estimator [%d]\n
+%s: Unable to create impulse response [%d]\n
+%s: Unable to create partitioned impulse response [%d]\n
+%s: Unable to create partitioner [%d]\n
+%s: Unable to create probe array (%d)\n
+%s: Unable to create probe batch(%d)\n
+%s: Unable to create probe lookup [%d]\n
+%s: Unable to create probe neighborhood [%d]\n
+%s: Unable to create reconstructor [%d]\n
+%s: Unable to create reverb estimator [%d]\n
+%s: Unable to create serialized object (%d)\n
+%s: Unable to created compressed data [%d]\n
+%s: Unable to find serialized probe batch data\n
+%s: Unable to load data: %s\n
+%s: Unable to load probe batch (%d)\n
+%s: Unable to load probe batch.\n
+%s: Unable to save data: %s\n
 %s_%03d.vpk
-*.vpk
+-avx
+-no_hierarchical_vpk_memory_mapping
+-sse2
+-sse3
+-sse4
+-steamaudio_validation
 ../../public/tier0/utlrbtree.h
 .custom.dimensions
 .custom.materials
 .custom.occlusion
 .sapaths
 .sareverb
-0123456789
+0 = use biquad instead of svf, 1 = use vectorized svf, 2 = use scalar svf
+0: distance ratio only. 1: deviation only (1/r). 2: deviation only (linear). 3: Mode 0 and Mode 1, 4: Mode 0 and Mode 2
 11CSteamAudio
 11ISteamAudio
 14CBaseAppSystemI11ISteamAudioE
@@ -37,21 +58,18 @@
 18CSource3DProcessor
 21CSurfacePropDataTableI19CSteamAudioMaterialE
 22CHybridReverbProcessor
+22CSteamAudioPartitioner
 22IHybridReverbProcessor
 23CSteamAudioMaterialList
 25CSteamAudioSimulationData
 25CSurfacePropDataTableBase
 25ISteamAudioSimulationData
-2RD\n2
-5a\v6;
-60-G/0
-81Pl\v1
-8P0T
+26CSteamAudioReverbSimulator
+27CSteamAudioPartitioningTask
+30CSchemaRegistration_steamaudio
 <<ERROR>>
 <INVALID>
-?RegisterConCommand: Unknown error registering con command "%s"!\n
-?UUUUUU
-@@basic_string::_M_create
+AABB_t
 AD Time Stamping
 AD_DVCS
 AES-128-CBC
@@ -101,30 +119,39 @@ BIO lib
 BIO routines
 BN lib
 BUF lib
+BakeDimensions
 BakeDimensions: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeDimensions: No probes generated. Bake cancelled.\n
+BakeDimensions: Unable to create probe batch. [%d]\n
+BakeDimensions: Unable to create simulator. (%d)\n
+BakeDimensions: Unable to create source. (%d)\n
+BakeMaterials
 BakeMaterials: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeMaterials: No probes generated. Bake cancelled.\n
 BakeOcclusion
 BakeOcclusion: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeOcclusion: No probes generated. Bake cancelled.\n
 BakeOcclusion: Unable to create impulse response. (%d)\n
 BakeOcclusion: Unable to create probe batch. [%d]\n
 BakeOcclusion: Unable to create simulator. (%d)\n
 BakeOcclusion: Unable to create source. (%d)\n
 BakePathData
-BakePathData: Baked %llu bytes.\n
 BakePathData: Cancelled\n
 BakePathData: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakePathData: No probes generated. Bake cancelled.\n
 BakePathData: Unable to create probe batch. [%d]\n
-BakePathData: Unable to create serialized object. [%d]\n
 BakeReverb
 BakeReverb: Cancelled\n
-BakeReverb: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
-BakeReverb: Saved %zu bytes.\n
+BakeReverb: Max probes (%u) limit exceeded (%d), even after enabling clustering. Bake cancelled.\n
+BakeReverb: Max probes (%u) limit exceeded (%d). Forcing clustering on.\n
+BakeReverb: No probes generated. Bake cancelled.\n
+BakeReverb: Unable to create cluster map. (%d)\n
+BakeReverb: Unable to create clustered probe array. (%d)\n
+BakeReverb: Unable to create clustered probe batch. (%d)\n
 BakeReverb: Unable to create probe array. (%d)\n
 BakeReverb: Unable to create probe batch. (%d)\n
-BakeReverb: Unable to create serialized object. (%d)\n
 Basic OCSP Response
 Big Number part of OpenSSL 1.0.2j  26 Sep 2016
-Binvalid_hitbox
 Biometric Info
 CA Issuers
 CA Repository
@@ -159,12 +186,29 @@ CONF lib
 CRLReason
 CRYPTO lib
 CSPName
+CSteamAudioAmbisonicsField
+CSteamAudioBakedDimensionsData
+CSteamAudioBakedMaterialsData
+CSteamAudioBakedOcclusionData
+CSteamAudioBakedPathingData
+CSteamAudioBakedReverbData
+CSteamAudioCompressedReverb
+CSteamAudioPartitioner
+CSteamAudioPartitioningTask
+CSteamAudioProbeData
+CSteamAudioReverbSimulator
+CSteamAudioSource
 CT Certificate SCTs
 CT Precertificate Poison
 CT Precertificate SCTs
 CT Precertificate Signer
+CUtlString
+CUtlStringToken
+Cannot allocate abstract class
 Chunk hash not found.
+Class does not allow allocation from its schema binding
 Code Signing
+CompressBakedReverbInProbeBatch
 Content file %s is corrupt (Chunk: %s). Verify integrity of game files.\n
 Content file %s is corrupt. Hashing could not be verified. Verify integrity of game files.\n
 Content file %s is corrupt. Verify integrity of game files.\n
@@ -173,7 +217,7 @@ Content file %s is corrupt; signature couldn't be verified. Verify integrity of 
 Continue using previous prrobes if probe lookup for reverb fails.
 Could not load custom hrtf properties file. %s
 CrlID
-D40]T30
+DES-CBC
 DES-CDMF
 DES-CFB
 DES-CFB1
@@ -199,31 +243,37 @@ DSA-SHA1-old
 DSA-old
 DSO lib
 DSO support routines
+DVCS
 Diffie-Hellman based MAC
 Diffie-Hellman routines
-Dimensions: Baked data file is the wrong format version, skipping load. Consider re-baking. (%s)\n
-Dimensions: Baked data file is the wrong format, skipping load. Consider re-baking. (%s)\n
 Dimensions: Cannot find baked data file: %s.\n
+Dimensions: Data not stored in KV3 format. Rebake.\n
 Dimensions: Filesystem not initialized.\n
 Dimensions: Imported %d probes from baked file (%s).\n
+Dimensions: Loaded baked data file (%s).\n
 Dimensions: Unable to load baked data file (%s).\n
 Directory
 Display baked data stats for the current mod.
+Domain
 E-mail Protection
 EC lib
 ENGINE lib
 EVP lib
+Enable SIMD code path for shoebox reverb processor.
 Enable caching listener probe neighborhood for pathing.
 Enable custom HRTF loading.
 Enable perspective correction for 3D audio.
+Enables tracy profiling when baking steam audio data in Hammer.
 Enterprises
 Error reading from loaded packed store "%s"
 Experimental
 Exported scene as OBJ to %s.\n
 Exported scene as PHONONSCENE to %s.\n
 Extended OCSP Status
+Extension Request
 FILE pointer
 FIPS routines
+Failed to allocate an instance of a class
 Failed to open file
 Failed to read
 Failed to read %d bytes\n
@@ -247,10 +297,11 @@ GOST R 3410-2001 Parameter Set Cryptocom
 Generate Halton Sequence for a given order and number of samples.
 Generated %d probes with %.2f spacing and %.2f height.\n
 Generating Halton Sequence of %d order for %d samples.\n
-Ges-8R
 HMAC
 HMAC GOST 34.11-94
 HMAC routines
+HMAC-MD5
+HMAC-SHA1
 Hold Instruction Call Issuer
 Hold Instruction Code
 Hold Instruction None
@@ -261,15 +312,24 @@ IDEA-CBC
 IDEA-CFB
 IDEA-ECB
 IDEA-OFB
+IPLCompressedEnergyFields
+IPLProbeBatch
 IPSec End System
 IPSec Tunnel
 IPSec User
 ISO Member Body
 ISO US Member Body
 ISO-US
+ITU-T
 If set, all the probes near a source withing probe range are used to find paths instead of nearest probe.
+If set, baked dimensions data is loaded.
+If set, baked materials data is loaded.
+If set, baked occlusion data is loaded.
 If set, baked pathing data is loaded. Steam Audio Hammer entities can successfully use pathing in this case.
 If set, baked reverb data is loaded. Reset it to zero during an format changes of baked data until all data is updated.
+ImportDimensionsData
+ImportMaterialsData
+ImportOcclusionData
 ImportPathingData
 ImportReverbData
 Independent
@@ -279,24 +339,30 @@ International Organizations
 Invalidity Date
 JOINT-ISO-ITU-T
 KISA
+KV3 save transfer failed: %s
+KV3TransferPostLoadFn
+KV3TransferPostSaveFn
 Key field (file) missing in custom hrtf properties file. Using default HRTF.
 Key field (normalization) missing in custom hrtf properties file. Setting it to no normalization.
 Key field (volume) missing in custom hrtf properties file. Setting it to 0 dB.
+LoadKV3Object error: %s\n
 Loaded custom HRTF [%s] with volume [%.2f dB] and normaliztion [%d]\n
 LocalKeySet
 MD5-SHA1
+MDC2
 MGF1
+MGetKV3ClassDefaults
 MIME MHS
 Mail
 Management
-Materials: Baked data file is the wrong format version, skipping load. Consider re-baking. (%s)\n
-Materials: Baked data file is the wrong format, skipping load. Consider re-baking. (%s)\n
 Materials: Cannot find baked data file: %s.\n
 Materials: Filesystem not initialized.\n
 Materials: Imported %d probes from baked file (%s).\n
+Materials: Loaded baked data file (%s).\n
 Materials: Unable to load baked data file (%s).\n
 Maximum gain any HRTF could have during volume normalization.
-Maximum number of probes to create when baking custom data.
+Maximum number of probes to create when baking custom data (dimensions).
+Maximum number of probes to create when baking custom data (occlusion).
 Maximum number of probes to create when baking paths.
 Maximum number of probes to create when baking reverb.
 Microsoft CSP Name
@@ -325,7 +391,11 @@ Netscape Revocation Url
 Netscape SSL Server Name
 Netscape Server Gated Crypto
 No PHONONSCENE found for export to %s.\n
+Nonce
 Normalize volume of default HRTF dataset across all directions.
+Not safe to 'new' this class due to alignment requirements
+Number of rays to trace for estimating inside outside status of a probe.
+OBB_t
 OBJ lib
 OCSP
 OCSP Archive Cutoff
@@ -340,11 +410,11 @@ OCSPSigning
 OPENSSL_ia32cap
 Oakley-EC2N-3
 Oakley-EC2N-4
-Occlusion: Baked data file is the wrong format version, skipping load. Consider re-baking. (%s)\n
-Occlusion: Baked data file is the wrong format, skipping load. Consider re-baking. (%s)\n
 Occlusion: Cannot find baked data file: %s.\n
+Occlusion: Data not stored in KV3 format. Rebake.\n
 Occlusion: Filesystem not initialized.\n
 Occlusion: Imported %d probes from baked file (%s).\n
+Occlusion: Loaded baked data file (%s).\n
 Occlusion: Unable to load baked data file (%s).\n
 PBE-MD2-DES
 PBE-MD2-RC2-64
@@ -373,17 +443,18 @@ Packed store %s with refcount > 0.\n
 Parse error on %s: %s\n
 Path length of invalid path in inches. Set this to .0 to use direct distance as path length.
 Pathing: Baked data file is the wrong format version, skipping load. Consider re-baking. (%s)\n
+Pathing: Baked data file is the wrong format version, skipping load. Consider re-baking.\n
 Pathing: Baked data file is the wrong format, skipping load. Consider re-baking. (%s)\n
+Pathing: Baked data file is the wrong format, skipping load. Consider re-baking.\n
 Pathing: Cannot find baked paths file: %s. Pathing disabled.\n
 Pathing: Cannot find baked paths file: %s.\n
 Pathing: Filesystem not initialized.\n
 Pathing: Imported %d probes from baked pathing file (%s).\n
 Pathing: Loaded baked data file (%s).\n
+Pathing: No baked pathing found in baked data file.\n
 Pathing: No baked pathing found in baked data file: %s.\n
-Pathing: No probes found in baked data file: %s. Pathing disabled.\n
-Pathing: Unable to create serialized object. (%d)\n
+Pathing: No probes found in baked data file. Pathing disabled.\n
 Pathing: Unable to load baked data file (%s).\n
-Pathing: Unable to load probe batch. (%d)\n
 Pathing: Unable to read from baked data file (%s). Pathing disabled.\n
 Permanent Identifier
 Perspective correction factor, ratio of screen size and view depth from screen, for 3D audio.
@@ -397,14 +468,17 @@ Proxy Certificate Information
 RAND lib
 RC2-40-CBC
 RC2-64-CBC
+RC2-CBC
 RC2-CFB
 RC2-ECB
 RC2-OFB
+RC4-40
 RC4-HMAC-MD5
 RC5-CBC
 RC5-CFB
 RC5-ECB
 RC5-OFB
+RIPEMD160
 RSA Data Security, Inc.
 RSA Data Security, Inc. PKCS
 RSA lib
@@ -427,11 +501,20 @@ RSA_blinding
 ResourceCompiler/SteamAudio/CustomDataDefaults/BakeDimensions
 ResourceCompiler/SteamAudio/CustomDataDefaults/BakeMaterials
 ResourceCompiler/SteamAudio/CustomDataDefaults/BakeOcclusion
+ResourceCompiler/SteamAudio/CustomDataDefaults/DimensionsInsideSizeFieldOrder
+ResourceCompiler/SteamAudio/CustomDataDefaults/DimensionsInsideThreshold
+ResourceCompiler/SteamAudio/CustomDataDefaults/DimensionsOutsideFieldOrder
+ResourceCompiler/SteamAudio/CustomDataDefaults/DimensionsOutsideThreshold
+ResourceCompiler/SteamAudio/CustomDataDefaults/DimensionsSizeThreshold
 ResourceCompiler/SteamAudio/CustomDataDefaults/FilterUsingNavMesh
 ResourceCompiler/SteamAudio/CustomDataDefaults/FilterUsingVolumes
 ResourceCompiler/SteamAudio/CustomDataDefaults/GridGenerationType
 ResourceCompiler/SteamAudio/CustomDataDefaults/GridSpacing
 ResourceCompiler/SteamAudio/CustomDataDefaults/HeightAboveFloor
+ResourceCompiler/SteamAudio/CustomDataDefaults/OcclusionPathing
+ResourceCompiler/SteamAudio/CustomDataDefaults/OcclusionReflection
+ResourceCompiler/SteamAudio/CustomDataDefaults/OcclusionReflectionBounces
+ResourceCompiler/SteamAudio/CustomDataDefaults/OcclusionReflectionRays
 ResourceCompiler/SteamAudio/CustomDataDefaults/RebakeOption
 ResourceCompiler/SteamAudio/PathingDefaults/FilterUsingNavMesh
 ResourceCompiler/SteamAudio/PathingDefaults/FilterUsingVolumes
@@ -447,6 +530,7 @@ ResourceCompiler/SteamAudio/Reverb/AmbisonicsOrder
 ResourceCompiler/SteamAudio/ReverbDefaults/ClusteringCubemapResolution
 ResourceCompiler/SteamAudio/ReverbDefaults/ClusteringDepthThreshold
 ResourceCompiler/SteamAudio/ReverbDefaults/ClusteringEnabled
+ResourceCompiler/SteamAudio/ReverbDefaults/CompressionEnabled
 ResourceCompiler/SteamAudio/ReverbDefaults/FilterUsingNavMesh
 ResourceCompiler/SteamAudio/ReverbDefaults/FilterUsingVolumes
 ResourceCompiler/SteamAudio/ReverbDefaults/GridGenerationType
@@ -456,26 +540,35 @@ ResourceCompiler/SteamAudio/ReverbDefaults/IRDuration
 ResourceCompiler/SteamAudio/ReverbDefaults/NumBounces
 ResourceCompiler/SteamAudio/ReverbDefaults/NumRays
 ResourceCompiler/SteamAudio/ReverbDefaults/RebakeOption
+Reverb: %d static probes. %d clustered probes. %d movable reverbs.\n
+Reverb: (Movable %d) %d static probes. %d clustered probes.\n
 Reverb: Baked data file is the wrong format version, skipping load. Consider re-baking. (%s)\n
+Reverb: Baked data file is the wrong format version, skipping load. Consider re-baking.\n
 Reverb: Baked data file is the wrong format, skipping load. Consider re-baking. (%s)\n
+Reverb: Baked data file is the wrong format, skipping load. Consider re-baking.\n
 Reverb: Cannot find baked reverb file: %s. Reverb disabled.\n
 Reverb: Cannot find baked reverb file: %s.\n
 Reverb: Filesystem not initialized.\n
-Reverb: Imported %d probes from baked reverb file (%s).\n
+Reverb: Imported baked reverb data (%s).\n
 Reverb: Loaded baked data file (%s).\n
+Reverb: No baked reverb found in baked data file.\n
 Reverb: No baked reverb found in baked data file: %s.\n
-Reverb: No probes found in baked data file: %s. Reverb disabled.\n
+Reverb: No probes found in baked data file. Reverb disabled.\n
 Reverb: Unable to create serialized object. (%d)\n
 Reverb: Unable to load baked data file (%s). Reverb disabled.\n
 Reverb: Unable to load baked data file (%s).\n
 Reverb: Unable to load probe batch. (%d)\n
 S/MIME
 S/MIME Capabilities
-SABD\n
 SEED-CBC
 SEED-CFB
 SEED-ECB
 SEED-OFB
+SHA1
+SHA224
+SHA256
+SHA384
+SHA512
 SMIME
 SMIME-CAPS
 SNMPv2
@@ -488,12 +581,24 @@ Selected Attribute Types
 Set the maximum update rate (in Hz) for reverb.
 Set the overlap fraction (0 to 1) for hybrid reverb.
 Set the transition time (in seconds) between convolution and parametric reverb.
+SetKV3FromProbeBatch
+SetProbeBatchFromKV3
+SetProbes
+SetSerializedData
 Sets the number of threads used for realtime reflection by Steam Audio.
 Signature verification failed.
 SoundSystemLowLevel
+St12bad_weak_ptr
 SteamAudio
+SteamAudioCustomDataDimensionsSettings_t
+SteamAudioCustomDataOcclusionSettings_t
+SteamAudioPathSettings_t
+SteamAudioReverbClusteringSettings_t
+SteamAudioReverbCompressionSettings_t
+SteamAudioReverbSettings_t
 Strong Extranet ID
 Subject Information Access
+SurfacePropertiesList
 TLS Web Client Authentication
 TLS Web Server Authentication
 TS lib
@@ -506,6 +611,7 @@ The number of directions considered for ray bounce by Steam Audio.
 The number of rays to trace for reflection modeling by Steam Audio.
 The time delay between a sound being emitted and the last audible reflection in Steam Audio.
 This variable is checked by soundstack to globally enabling pathing for audio processing.
+Time Stamping
 Toggles the speculative fix for low-frequency issues when using spatial blend.
 Trust Root
 UNDEF
@@ -520,8 +626,8 @@ Unable to create static mesh: %d.\n
 Unable to load custom HRTF [%s]\n
 Unknown version %d for vpk %s
 Usage: snd_steamaudio_halton_sequence <order> <numsamples>.\n
+Use compressed reverb data if available.
 VPK directory for '%s' corrupt
-W1rGP1
 X500
 X500algorithms
 X509
@@ -557,7 +663,6 @@ X9.42 DH
 X9.57
 X9.57 CM ?
 X9cm
-Y?N10__cxxabiv117__class_type_infoE
 ZLIB
 [%02d:%02d:%02d] 
 [%3d] [ Pathing %6.2f MB %6d %4.1f %4.1f %7.1f ] %s\n
@@ -566,9 +671,11 @@ ZLIB
 [%3d] [ Reverb: Invalid baked data version found. Please rebake. ] %s\n
 \n------- Steam Audio Baked Pathing Statistics ------\n
 \n------- Steam Audio Baked Reverb Statistics ------\n
-\n09N
+__ctype_tolower_loc
 __memset_chk
+__strcat_chk
 __vfprintf_chk
+__xstat
 _flt.vpk
 aRecord
 a_object.c
@@ -618,7 +725,6 @@ aes-256-gcm
 aes-256-ofb
 aes-256-xts
 algorithm
-animation
 ansi-X9-62
 anyExtendedKeyUsage
 anyPolicy
@@ -628,12 +734,14 @@ asn1 length mismatch
 asn1_lib.c
 associatedDomain
 associatedName
+audio
 authorityInfoAccess
 authorityKeyIdentifier
 authorityRevocationList
 b_print.c
 bad asn1 object header
 bad get asn1 object call
+bad_weak_ptr
 basicConstraints
 basicOCSPResponse
 bf-cbc
@@ -724,13 +832,12 @@ characteristic-two-field
 clearance
 cleartext track 2
 clientAuth
-clientside
 cmac
 codeSigning
 common libcrypto routines
 commonName
+comp
 configuration file routines
-content
 content types
 contentType
 countersignature
@@ -750,6 +857,7 @@ custom_hrtfs
 dITRedirect
 dNSDomain
 dSAQuality
+data
 dcObject
 dcobject
 debug_malloc
@@ -773,6 +881,7 @@ des-ede3-cfb1
 des-ede3-cfb8
 des-ede3-ofb
 des-ofb
+description
 destinationIndicator
 desx-cbc
 dh-cofactor-kdf
@@ -790,7 +899,6 @@ dhSinglePass-stdDH-sha384kdf-scheme
 dhSinglePass-stdDH-sha512kdf-scheme
 dhpublicnumber
 digital envelope routines
-directory
 directory services (X.500)
 directory services - algorithms
 distinguishedName
@@ -816,6 +924,7 @@ dsaWithSHA1
 dsaWithSHA1-old
 dsa_with_SHA224
 dsa_with_SHA256
+dvcs
 dynamic
 dynlock
 ec_pre_comp
@@ -831,7 +940,10 @@ ecdsa-with-Specified
 elliptic curve routines
 emailAddress
 emailProtection
+enable_compressed_reverb_lookup
 enable_dc_correction_for_phase_interpolation
+enable_iir_order_8
+enable_iir_order_switching
 enable_paths_from_all_source_probes
 enable_reverb_probe_caching_for_missing_probes
 encrypted track 2
@@ -851,38 +963,31 @@ extendedStatus
 facsimileTelephoneNumber
 fatal
 favouriteDrink
-fclose
-feof
-ferror
-fflush
 fips
 fips2
-fopen
 fopen('
-free
 freshestCRL
 friendlyCountry
 friendlyCountryName
 friendlyName
-fseek
-ftell
 func(%lu)
-fwrite
 generate cryptogram
 generationQualifier
 generic cryptogram
 getservbyname
-gettext
 givenName
 gost-mac
 gost2001
 gost2001cc
 gost89
 gost89-cnt
+gost94
 gost94cc
 highFreqAbsorption
 highFreqTransmission
 hmac
+hmac-md5
+hmac-sha1
 hmacWithMD5
 hmacWithSHA1
 hmacWithSHA224
@@ -895,9 +1000,7 @@ holdInstructionNone
 holdInstructionReject
 homePostalAddress
 homeTelephoneNumber
-host
 houseIdentifier
-i2t<f2R
 iA5StringSyntax
 iana
 id-DHBasedMac
@@ -1141,6 +1244,7 @@ idea-cfb
 idea-ecb
 idea-ofb
 identified-organization
+info
 inhibitAnyPolicy
 initials
 int_err_get (err.c)
@@ -1155,6 +1259,19 @@ iplAmbisonicsDecodeEffectCreate
 iplBinauralEffectApply
 iplBinauralEffectCreate
 iplBinauralEffectRelease
+iplCompressedEnergyFieldsBlendAndDecompress
+iplCompressedEnergyFieldsCreateEmpty
+iplCompressedEnergyFieldsCreateFromProbeBatch
+iplCompressedEnergyFieldsGetCompressedData
+iplCompressedEnergyFieldsGetDictionary
+iplCompressedEnergyFieldsGetNumBands
+iplCompressedEnergyFieldsGetNumBins
+iplCompressedEnergyFieldsGetNumChannels
+iplCompressedEnergyFieldsGetNumProbes
+iplCompressedEnergyFieldsGetNumSingularValues
+iplCompressedEnergyFieldsRelease
+iplCompressedEnergyFieldsSetCompressedData
+iplCompressedEnergyFieldsSetDictionary
 iplContextCreate
 iplContextRelease
 iplContextSetVariableBool
@@ -1166,20 +1283,36 @@ iplDirectivityCalculate
 iplDistanceAttenuationCalculate
 iplEmbreeDeviceCreate
 iplEmbreeDeviceRelease
+iplEnergyFieldCreate
+iplEnergyFieldGetChannel
+iplEnergyFieldGetNumBins
+iplEnergyFieldGetNumChannels
+iplEnergyFieldRelease
 iplHRTFCreate
 iplHRTFRelease
-iplImpulseResponse2AddChannel
-iplImpulseResponse2AddSample
+iplHybridReverbEffectApply
+iplHybridReverbEffectCreate
+iplHybridReverbEstimatorCreate
+iplHybridReverbEstimatorEstimate
+iplHybridReverbEstimatorRelease
 iplImpulseResponse2Create
 iplImpulseResponse2GetChannel
 iplImpulseResponse2GetNumSamples
 iplImpulseResponse2Release
 iplImpulseResponse2Reset
-iplImpulseResponse2SetChannel
-iplImpulseResponse2SetChannelDelayed
-iplImpulseResponse2SetSample
-iplImpulseResponse2Swap
 iplImpulseResponse2SwapSource
+iplImpulseResponseCreate
+iplImpulseResponseGetChannel
+iplImpulseResponseGetNumChannels
+iplImpulseResponseGetNumSamples
+iplImpulseResponseRelease
+iplImpulseResponseReset
+iplImpulseResponseSwap
+iplOverlapSaveFIRCreate
+iplOverlapSaveFIRRelease
+iplPartitionerCreate
+iplPartitionerPartition
+iplPartitionerRelease
 iplPathBakerBake
 iplPathBakerCancelBake
 iplPathEffectApply
@@ -1194,37 +1327,43 @@ iplProbeArrayResize
 iplProbeArraySetProbe
 iplProbeBatchAddProbe
 iplProbeBatchAddProbeArray
-iplProbeBatchAddProbeArrayAndCluster
 iplProbeBatchCommit
 iplProbeBatchCreate
-iplProbeBatchCreateNonUniform
+iplProbeBatchGetEnergyField
 iplProbeBatchGetInfluencingProbes
+iplProbeBatchGetNumProbes
+iplProbeBatchGetProbe
 iplProbeBatchGetProbeArray
+iplProbeBatchGetReverb
 iplProbeBatchLoad
-iplProbeBatchLoadNonUniform
+iplProbeBatchLookupBakedReflections
+iplProbeBatchLookupCreate
+iplProbeBatchLookupRelease
 iplProbeBatchRelease
 iplProbeBatchSave
+iplProbeClusterMapCreate
+iplProbeClusterMapGetData
+iplProbeClusterMapRelease
 iplProbeNeighborhoodCalculateWeights
 iplProbeNeighborhoodCheckOcclusion
 iplProbeNeighborhoodCreate
+iplProbeNeighborhoodFindNearest
+iplProbeNeighborhoodGetNumProbes
+iplProbeNeighborhoodGetNumValidProbes
+iplProbeNeighborhoodGetProbe
+iplProbeNeighborhoodGetProbeIndex
 iplProbeNeighborhoodRelease
 iplProbeNeighborhoodReset
 iplProbeNeighborhoodResize
+iplProbeNeighborhoodSetProbeBatch
+iplProbeNeighborhoodSetProbeIndex
+iplReconstructorCreate
+iplReconstructorReconstruct
+iplReconstructorRelease
 iplReflectionsBakerBake
-iplReflectionsBakerCancelBake
-iplReflectionsEffect2Apply
-iplReflectionsEffect2Create
-iplReflectionsEffect2Release
-iplReflectionsEffect2SetBuffer
-iplReflectionsEffect2SetFloat
-iplReflectionsEffect2SetInt32
-iplReflectionsPartitioner2AddTask
-iplReflectionsPartitioner2Commit
-iplReflectionsPartitioner2Create
-iplReflectionsPartitioner2Release
-iplReflectionsPartitioner2RemoveTask
-iplReflectionsPartitioner2Retain
-iplReflectionsPartitioner2RunTasks
+iplReverbEstimatorApplyScale
+iplReverbEstimatorCreate
+iplReverbEstimatorRelease
 iplSceneCommit
 iplSceneCreate
 iplSceneRelease
@@ -1266,6 +1405,7 @@ ipsecUser
 issuer capabilities
 issuerAltName
 issuingDistributionPoint
+itu-t
 janetMailbox
 joint-iso-itu-t
 jurisdictionC
@@ -1277,7 +1417,6 @@ jurisdictionStateOrProvinceName
 keyBag
 keyUsage
 kisa
-l0\f$f0 
 lastModifiedBy
 lastModifiedTime
 lhash.c
@@ -1290,10 +1429,69 @@ localtime
 lowFreqAbsorption
 lowFreqTransmission
 mXRecord
+m_bEnableClustering
+m_bEnableCompression
+m_bEnablePathing
+m_bEnableReflections
+m_clusteredProbes
+m_compressedClusteredData
+m_compressedData
+m_field
+m_flDepthThreshold
+m_flIRDuration
+m_flInsideThreshold
+m_flOutsideThreshold
+m_flProbePathRange
+m_flProbeVisRadius
+m_flProbeVisThreshold
+m_flSizeThreshold
+m_nAmbisonicsOrder
+m_nAmbisonicsOrderInsideSizeField
+m_nAmbisonicsOrderOutsideField
+m_nBands
+m_nBins
+m_nChannels
+m_nCubeMapResolution
+m_nNumBounces
+m_nNumRays
+m_nNumVisSamples
+m_nProbes
+m_nReflectionBounces
+m_nReflectionRays
+m_pClusteredProbeBatch
+m_pCompressedData
+m_pProbeBatch
+m_probes
+m_reverbClusteringSettings
+m_reverbCompressionSettings
+m_reverbSettings
+m_vMaxBounds
+m_vMinBounds
+m_vecClusterForProbe
+m_vecCompressedData
+m_vecDictionary
+m_vecInOut
+m_vecInsideSmallSizeField
+m_vecMaterialTokens
+m_vecMaterialWeights
+m_vecMovableReverbAABBs
+m_vecMovableReverbInitialTransforms
+m_vecMovableReverbKeyTokens
+m_vecMovableReverbKeys
+m_vecMovableReverbOBBs
+m_vecMovableReverbTransforms
+m_vecMovableReverbs
+m_vecNumSingularValues
+m_vecOutsideField
+m_vecPathingDeviation
+m_vecPathingRatio
+m_vecReflectionRatio
+m_vecSize
 mail
 mailPreferenceOption
 malloc failure
 manager
+matrix3x4_t
 max_hrtf_normalization_volume_gain_db
 md2WithRSAEncryption
 md4WithRSAEncryption
@@ -1307,12 +1505,7 @@ mem.c
 mem_dbg.c
 member
 member-body
-memchr
-memcmp
-memcpy
-memmove
 memory buffer routines
-memset
 merchant initiated auth
 message extensions
 messageDigest
@@ -1339,7 +1532,6 @@ nested asn1 error
 noCheck
 noRevAvail
 normalization
-not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugsstd::bad_alloc
 nsBaseUrl
 nsCaPolicyUrl
 nsCaRevocationUrl
@@ -1431,10 +1623,10 @@ privateKeyUsagePeriod
 protocolInformation
 proxyCertInfo
 pseudonym
-qa1-x]1
 qcStatements
 qualityLabelledData
 rFC822localPart
+rand
 rand2
 random number generator
 rc2-40-cbc
@@ -1452,9 +1644,11 @@ rc5-ofb
 readdir
 reason(%lu)
 registeredAddress
+reverb_min_absorptive_gain
 rfc822Mailbox
 ripemd160
 ripemd160WithRSA
+role
 roleOccupant
 room
 roomNumber
@@ -1471,6 +1665,7 @@ safeContentsBag
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
+scattering
 scripts/custom_hrtfs.txt
 scripts/surfaceproperties_steamaudio.txt
 sdsiCertificate
@@ -1649,10 +1844,12 @@ setext-miAuth
 setext-pinAny
 setext-pinSecure
 setext-track2
+sha1
 sha1WithRSA
 sha1WithRSAEncryption
 sha224
 sha224WithRSAEncryption
+sha256
 sha256WithRSAEncryption
 sha384
 sha384WithRSAEncryption
@@ -1661,12 +1858,17 @@ sha512WithRSAEncryption
 shaWithRSAEncryption
 signingTime
 simpleSecurityObject
-simulation
 singleLevelQuality
+snd_boxverb_simd
+snd_boxverb_simd_svf
+snd_hrtf_distance_behind
 snd_steamaudio_active_hrtf
 snd_steamaudio_baked_data_stats
+snd_steamaudio_baked_occlusion_mode
 snd_steamaudio_default_hrtf_volume_gain
+snd_steamaudio_enable_compressed_reverb_lookup
 snd_steamaudio_enable_custom_hrtf
+snd_steamaudio_enable_editor_profiling
 snd_steamaudio_enable_pathing
 snd_steamaudio_enable_perspective_correction
 snd_steamaudio_enable_probeneighborhood_caching
@@ -1677,12 +1879,17 @@ snd_steamaudio_hybrid_reverb_overlap
 snd_steamaudio_hybrid_reverb_transition_time
 snd_steamaudio_invalid_path_length
 snd_steamaudio_ir_duration
+snd_steamaudio_load_dimensions_data
+snd_steamaudio_load_materials_data
+snd_steamaudio_load_occlusion_data
 snd_steamaudio_load_pathing_data
 snd_steamaudio_load_reverb_data
 snd_steamaudio_max_convolution_sources
 snd_steamaudio_max_hrtf_normalization_gain_db
 snd_steamaudio_max_occlusion_samples
 snd_steamaudio_max_probes_customdata
+snd_steamaudio_max_probes_customdata_dimensions
+snd_steamaudio_max_probes_customdata_materials
 snd_steamaudio_max_probes_pathing
 snd_steamaudio_max_probes_reverb
 snd_steamaudio_normalize_default_hrtf_volume
@@ -1705,16 +1912,35 @@ ssl_sess_cert
 ssl_session
 stack.c
 stateOrProvinceName
-std::vector<unsigned short, std::allocator<unsigned short>>::_M_default_append(unsigned long)
+std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
+std::_Sp_locker::_Sp_locker(void const*)
+std::_Sp_locker::_Sp_locker(void const*, void const*)
+std::_Sp_locker::~_Sp_locker()
+std::_Sp_make_shared_tag::_S_eq(std::type_info const&)
+std::_Sp_make_shared_tag::_S_ti()::__tag
+std::bad_weak_ptr::what() const
+std::bad_weak_ptr::~bad_weak_ptr()
+std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&, char const*)
+std::vector<std::string, std::allocator<std::string>>::~vector()
 steamaudio.cpp
 steamaudio_customdata_bake_dimensions
 steamaudio_customdata_bake_materials
 steamaudio_customdata_bake_occlusion
+steamaudio_customdata_dimensions_inside_threshold
+steamaudio_customdata_dimensions_insidesize_order
+steamaudio_customdata_dimensions_numrays
+steamaudio_customdata_dimensions_outside_order
+steamaudio_customdata_dimensions_outside_threshold
+steamaudio_customdata_dimensions_size_threshold
 steamaudio_customdata_filter_navmesh
 steamaudio_customdata_filter_volumes
 steamaudio_customdata_generation_type
 steamaudio_customdata_grid_spacing
 steamaudio_customdata_height_above_floor
+steamaudio_customdata_occlusion_pathing
+steamaudio_customdata_occlusion_reflection
+steamaudio_customdata_occlusion_reflection_bounces
+steamaudio_customdata_occlusion_reflection_rays
 steamaudio_customdata_rebake_option
 steamaudio_pathing_filter_navmesh
 steamaudio_pathing_filter_volumes
@@ -1731,6 +1957,7 @@ steamaudio_reverb_bounces
 steamaudio_reverb_clustering_cubemap_resolution
 steamaudio_reverb_clustering_depth_threshold
 steamaudio_reverb_clustering_enable
+steamaudio_reverb_compression_enable
 steamaudio_reverb_filter_navmesh
 steamaudio_reverb_filter_volumes
 steamaudio_reverb_generation_type
@@ -1740,10 +1967,9 @@ steamaudio_reverb_ir_duration
 steamaudio_reverb_rays
 steamaudio_reverb_rebake_option
 steamaudioscene.cpp
-strcmp
+store
 street
 streetAddress
-strrchr
 subjectAltName
 subjectDirectoryAttributes
 subjectInfoAccess
@@ -1752,10 +1978,10 @@ subtreeMaximumQuality
 subtreeMinimumQuality
 supportedAlgorithms
 supportedApplicationContext
+surfacePropertyName
 surname
 system lib
 system library
-table
 targetInformation
 telephoneNumber
 teletexTerminalIdentifier
@@ -1768,7 +1994,13 @@ timeStamping
 title
 tpBasis
 trustRoot
-u0+!n0
+typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::bad_weak_ptr
+typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_make_shared_tag
+typeinfo name for std::bad_weak_ptr
 undefined
 uniqueMember
 unknown library
@@ -1778,6 +2010,9 @@ userCertificate
 userClass
 userId
 userPassword
+valid
+volume
+vtable for std::bad_weak_ptr
 wap-wsg
 wap-wsg-idm-ecid-wtls1
 wap-wsg-idm-ecid-wtls10

@@ -228,10 +228,7 @@ var ItemInfo;
     }
     ItemInfo.IsEquippableThroughContextMenu = IsEquippableThroughContextMenu;
     function IsWeapon(id) {
-        const schemaString = InventoryAPI.BuildItemSchemaDefJSON(id);
-        if (!schemaString)
-            return false;
-        const itemSchemaDef = JSON.parse(schemaString);
+        const itemSchemaDef = BuildItemSchemaDef(id);
         return (itemSchemaDef["craft_class"] === "weapon");
     }
     ItemInfo.IsWeapon = IsWeapon;
@@ -310,13 +307,23 @@ var ItemInfo;
         else if (itemSchemaDef.hasOwnProperty("model_player") || isMusicKit || issMusicKitDefault || isPet || IsKeychain(id))
             return 'img://inventory_' + id;
     }
-    function GetModelPlayer(id) {
+    function BuildItemSchemaDef(id) {
         const schemaString = InventoryAPI.BuildItemSchemaDefJSON(id);
-        if (!schemaString)
-            return "";
         const itemSchemaDef = JSON.parse(schemaString);
-        const modelPlayer = itemSchemaDef["model_player"];
-        return modelPlayer;
+        if (itemSchemaDef.model_ag2 &&
+            itemSchemaDef.name &&
+            (itemSchemaDef.name.startsWith("customplayer_")
+                ? GameInterfaceAPI.IsUsingAG2Pawns()
+                : GameInterfaceAPI.IsUsingAG2Weapons())) {
+            itemSchemaDef.model_player = itemSchemaDef.model_ag2;
+            itemSchemaDef.model_world = itemSchemaDef.model_ag2;
+        }
+        return itemSchemaDef;
+    }
+    ItemInfo.BuildItemSchemaDef = BuildItemSchemaDef;
+    function GetModelPlayer(id) {
+        const itemSchemaDef = BuildItemSchemaDef(id);
+        return itemSchemaDef["model_player"];
     }
     ItemInfo.GetModelPlayer = GetModelPlayer;
     function IsKeychain(itemId) {
@@ -336,8 +343,7 @@ var ItemInfo;
     }
     ItemInfo.IsPatch = IsPatch;
     function GetDefaultCheer(id) {
-        const schemaString = InventoryAPI.BuildItemSchemaDefJSON(id);
-        const itemSchemaDef = JSON.parse(schemaString);
+        const itemSchemaDef = BuildItemSchemaDef(id);
         if (itemSchemaDef["default_cheer"])
             return itemSchemaDef["default_cheer"];
         else
@@ -345,8 +351,7 @@ var ItemInfo;
     }
     ItemInfo.GetDefaultCheer = GetDefaultCheer;
     function GetDefaultDefeat(id) {
-        const schemaString = InventoryAPI.BuildItemSchemaDefJSON(id);
-        const itemSchemaDef = JSON.parse(schemaString);
+        const itemSchemaDef = BuildItemSchemaDef(id);
         if (itemSchemaDef["default_defeat"])
             return itemSchemaDef["default_defeat"];
         else
@@ -358,8 +363,7 @@ var ItemInfo;
             return '';
         }
         let pedistalModel = '';
-        const schemaString = InventoryAPI.BuildItemSchemaDefJSON(id);
-        const itemSchemaDef = JSON.parse(schemaString);
+        const itemSchemaDef = BuildItemSchemaDef(id);
         if (InventoryAPI.GetDefaultSlot(id) === "flair0") {
             pedistalModel = itemSchemaDef.hasOwnProperty('attributes') ? itemSchemaDef.attributes["pedestal display model"] : '';
         }

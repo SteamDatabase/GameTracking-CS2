@@ -15,7 +15,9 @@
  %s%lu (%s0x%lx)\n
  ' ) - 3 G M Q _ c e i w } 
  (%ld unused bits)\n
- (%s encoded)
+ (%s ZSTD compressed %.1f%%)
+ (%s encoded @ %.1f bytes per triangle v%i)
+ (%s encoded @ %.1f bytes per vertex v%i)
  (INVALID PSS PARAMETERS)\n
  (Negative)
  * Requested DmAttribute of value of type "%s" From DmAttribute "%s" which is type "%s"\n
@@ -25,7 +27,6 @@
  8f\ff
  Base Class Array'
  Base Class Descriptor at (
- C>TQ
  Class Hierarchy Descriptor'
  Complete Object Locator'
  FLK
@@ -40,6 +41,8 @@
  UAV
  Xia
  [ %f %f %f %f  %f %f %f %f  %f %f %f %f  %f %f %f %f ]
+ [unused by shader]
+ \tV_fflush
  ^LXjt
  _GDK\tZ
  center %f %f scale %f %f rotate %f translate %f %f
@@ -48,7 +51,6 @@
  filename="%s"%s
  filename="smime.p7s"%s%s
  fnumber=%d ofs=0x%x sz=%d
- for 
  iciNWq
  micalg="
  name=
@@ -91,7 +93,6 @@
 "YEu
 "`bB303
 "cs73KI
-"e?<<<<<<l?
 "id" "elementid" 
 "l7ql`R2lWf
 "lbN.
@@ -101,6 +102,7 @@
 #P0_?G0
 #Q7z
 #\t#\v#'#)#/#3#5#E#Q#S#Y#c#k#
+#\tV_fileno
 #\v+(bF&drJ:x#
 #k+ka\T
 #lyj
@@ -112,7 +114,6 @@ $@D4Z
 $Cw!R
 $GIRu
 $HypYkf
-$Ib?s
 $J6"t
 $JXsZ
 $XI(6
@@ -186,7 +187,6 @@ $prefix_element$
 %E5u(
 %Gdnv
 %I64i
-%\tV_isdigit_str
 %aIwV
 %bw+s
 %d particles with %d attributes\n
@@ -199,7 +199,6 @@ $prefix_element$
 %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f
 %i.txt
 %ld bytes leaked in %d chunks\n
-%llu
 %llx
 %lu:%s:%s:%d:%s\n
 %s        [%d.%d.%d] uvCropped    = { ( %g, %g ), ( %g, %g ) }\n
@@ -227,6 +226,7 @@ $prefix_element$
 %s PARAMETERS
 %s PRIVATE KEY
 %s algorithm "%s" unsupported\n
+%s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s channel
 %s encoding %s %d format %s %d %s\n
 %s%02X
@@ -240,7 +240,6 @@ $prefix_element$
 %s(%s) = %s
 %s------%s%s
 %s------%s--%s%s
-%s.vpk
 %s0x%06x: 
 %s: (%d bit)\n
 %s: Element uses unknown element type %s\n
@@ -249,7 +248,6 @@ $prefix_element$
 %s_%03d.vpk
 &'&)&5&;&?&K&S&Y&e&i&o&{&
 &8@Cb
-&?PPPPPPP?
 &AK(h
 &Sgw
 &V6J
@@ -260,6 +258,7 @@ $prefix_element$
 'DAE
 'O6n
 'Z9t%
+'\tV_fopenUTF8
 'g0dW
 'id' or 'name' missing
 'pSN.F
@@ -272,13 +271,14 @@ $prefix_element$
 (0'yX
 (5Me
 (5jP
+(5m2
 (BZq
 (D4D
 (NONE)
 (No embedded resource manifests.)\n
 (No manifest registration information.)\n
 (U1h
-(Uh1
+(Ym2
 (ZdOt\n&
 ([%d]%s:%g)
 (d4t8
@@ -286,6 +286,7 @@ $prefix_element$
 (h`H1pqA
 (i/Al
 (jvg;
+(null)
 (vQF
 (wMww
 )!)#)?)G)])e)i)o)u)
@@ -296,7 +297,6 @@ $prefix_element$
 )Urz
 )fuG
 )haI
-)yIx
 *%*/*O*U*_*e*k*m*s*
 ** Error loading module '%s'\n
 *** Converter error - element "%s" already has a non-int attribute "%s"!\n
@@ -347,7 +347,6 @@ $prefix_element$
 ,3g4
 ,7~5d
 ,ARu@y6
-,HR>O
 ,Reason=
 ,ShfPQ
 ,ZFDGn
@@ -382,7 +381,6 @@ $prefix_element$
 -5X5
 -;-C-I-M-a-e-q-
 -AvRJ
--BH>t
 -D65K
 -DBF
 -U`5K
@@ -399,7 +397,6 @@ $prefix_element$
 .00cfg
 .4bb
 .97yY
-.>\rfJBGo
 .?AU?$_InitialTaskHandle@XV<lambda_5a9ef80d79df7873994019ff15dceae5>@@U_TypeSelectorNoAsync@details@Concurrency@@@?$task@E@Concurrency@@
 .?AU?$_InitialTaskHandle@XV<lambda_60c5de84e69e46aa92419d47e2f3ad51>@@U_TypeSelectorNoAsync@details@Concurrency@@@?$task@E@Concurrency@@
 .?AU?$_InitialTaskHandle@XV<lambda_85226a1ade6d27c19b16702c44b1a394>@@U_TypeSelectorNoAsync@details@Concurrency@@@?$task@E@Concurrency@@
@@ -450,22 +447,22 @@ $prefix_element$
 .?AV?$CDmAttributeOp@H@@
 .?AV?$CDmAttributeOp@M@@
 .?AV?$CDmAttributeOp@UDmUnknownAttribute_t@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@EHV?$CUtlMemory@EH@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@HHV?$CUtlMemory@HH@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@MHV?$CUtlMemory@MH@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@V?$Vec2D@M@@HV?$CUtlMemory@V?$Vec2D@M@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@V?$Vec3D@M@@HV?$CUtlMemory@V?$Vec3D@M@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@V?$Vec4D@M@@HV?$CUtlMemory@V?$Vec4D@M@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VCUtlBinaryBlock@@HV?$CUtlMemory@VCUtlBinaryBlock@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VCUtlSymbolLarge@@HV?$CUtlMemory@VCUtlSymbolLarge@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VColor@@HV?$CUtlMemory@VColor@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VDmeTime_t@@HV?$CUtlMemory@VDmeTime_t@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VQAngle@@HV?$CUtlMemory@VQAngle@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VQuaternionStorage@@HV?$CUtlMemory@VQuaternionStorage@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@VVMatrix@@HV?$CUtlMemory@VVMatrix@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@W4DmElementHandle_t@@HV?$CUtlMemory@W4DmElementHandle_t@@H@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@_KHV?$CUtlMemory@_KH@@@@@@
-.?AV?$CDmAttributeOp@V?$CUtlVector@_NHV?$CUtlMemory@_NH@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@EHV?$CUtlVectorMemory_Growable@EH$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@HHV?$CUtlVectorMemory_Growable@HH$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@MHV?$CUtlVectorMemory_Growable@MH$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@V?$Vec2D@M@@HV?$CUtlVectorMemory_Growable@V?$Vec2D@M@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@V?$Vec3D@M@@HV?$CUtlVectorMemory_Growable@V?$Vec3D@M@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@V?$Vec4D@M@@HV?$CUtlVectorMemory_Growable@V?$Vec4D@M@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VCUtlBinaryBlock@@HV?$CUtlVectorMemory_Growable@VCUtlBinaryBlock@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VCUtlSymbolLarge@@HV?$CUtlVectorMemory_Growable@VCUtlSymbolLarge@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VColor@@HV?$CUtlVectorMemory_Growable@VColor@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VDmeTime_t@@HV?$CUtlVectorMemory_Growable@VDmeTime_t@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VQAngle@@HV?$CUtlVectorMemory_Growable@VQAngle@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VQuaternionStorage@@HV?$CUtlVectorMemory_Growable@VQuaternionStorage@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@VVMatrix@@HV?$CUtlVectorMemory_Growable@VVMatrix@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@W4DmElementHandle_t@@HV?$CUtlVectorMemory_Growable@W4DmElementHandle_t@@H$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@_KHV?$CUtlVectorMemory_Growable@_KH$0A@@@@@@@
+.?AV?$CDmAttributeOp@V?$CUtlVector@_NHV?$CUtlVectorMemory_Growable@_NH$0A@@@@@@@
 .?AV?$CDmAttributeOp@V?$Vec2D@M@@@@
 .?AV?$CDmAttributeOp@V?$Vec3D@M@@@@
 .?AV?$CDmAttributeOp@V?$Vec4D@M@@@@
@@ -491,7 +488,7 @@ $prefix_element$
 .?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_1>@?1???$ConvertFromBC6h@URGBA8888_t@@$00@ImageLoader@@YA_NPEBEPEAURGBA8888_t@@HH@Z@@@YAXHHPEBD$$QEAV1?1???$ConvertFromBC6h@URGBA8888_t@@$00@ImageLoader@@YA_NPEBEPEAURGBA8888_t@@HH@Z@HHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
 .?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_1>@?1???$ConvertFromBC7@UBGRA8888_t@@@ImageLoader@@YA_NPEBEPEAUBGRA8888_t@@HH@Z@@@YAXHHPEBD$$QEAV1?1???$ConvertFromBC7@UBGRA8888_t@@@ImageLoader@@YA_NPEBEPEAUBGRA8888_t@@HH@Z@HHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
 .?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_1>@?1???$ConvertFromBC7@URGBA8888_t@@@ImageLoader@@YA_NPEBEPEAURGBA8888_t@@HH@Z@@@YAXHHPEBD$$QEAV1?1???$ConvertFromBC7@URGBA8888_t@@@ImageLoader@@YA_NPEBEPEAURGBA8888_t@@HH@Z@HHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
-.?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_1>@?8??WriteToBufferBC6H_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KAEBUFloatBitmapEncodeSettings_t@@@Z@@@YAXHHPEBD$$QEAV1?8??WriteToBufferBC6H_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KAEBUFloatBitmapEncodeSettings_t@@@Z@HHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
+.?AV?$CParallelLambdaJob@V<lambda_1>@?M@???$ParallelFor@$00V<lambda_1>@?M@??WriteToBufferBC6H_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KAEBUFloatBitmapEncodeSettings_t@@@Z@@@YAXHHPEBD$$QEAV1?M@??WriteToBufferBC6H_ispctexcomp@FloatBitMap_t@@IEBA_NPEAX_KAEBUFloatBitmapEncodeSettings_t@@@Z@HHW4JobPriority_t@@@Z@@CParallelProcessLauncher@@
 .?AV?$CTier0AppSystem@VIApplication@@$0A@@@
 .?AV?$CTier1AppSystem@VIApplication@@$0A@@@
 .?AV?$CUndoArrayAttributeSetMultipleValueElement@E@@
@@ -668,6 +665,7 @@ $prefix_element$
 .?AVBlock4x4Encoding_RGBA8_Opaque@Etc@@
 .?AVBlock4x4Encoding_RGBA8_Transparent@Etc@@
 .?AVCAppSystemDict@@
+.?AVCBaseVModuleMetadataProvider@@
 .?AVCBitmapAssetTypeInfo@@
 .?AVCColorizedLoggingListener@@
 .?AVCDataModel@@
@@ -715,6 +713,7 @@ $prefix_element$
 .?AVCElementVisitor_DmeMeshFinder@@
 .?AVCElementVisitor_DotaLightFinder@@
 .?AVCElementVisitor_LightEnvironment@@
+.?AVCEmptySequence@@
 .?AVCFileLoggingListener@@
 .?AVCImportActBusy@@
 .?AVCImportCommentary@@
@@ -735,11 +734,13 @@ $prefix_element$
 .?AVCKV3TransferLoadContext@@
 .?AVCKV3TransferSaveContext@@
 .?AVCMapAssetTypeInfo@@
+.?AVCModuleMetadataProvider_ResourceManifests@@
 .?AVCPostConnectCallback@@
 .?AVCResourceAssetTypeInfo@@
 .?AVCSFMBaseImporter@@
 .?AVCSchemaInstallCallback@@
 .?AVCSchemaRegistration@@
+.?AVCSchemaRegistration_resourceinfo@@
 .?AVCSchemaRegistration_toolutils2@@
 .?AVCSimpleAssetTypeInfo@@
 .?AVCSimpleLoggingListener@@
@@ -755,9 +756,11 @@ $prefix_element$
 .?AVCUndoCreateElement@@
 .?AVCUndoDestroyElement@@
 .?AVCUndoElement@@
+.?AVCVMMDAssetTypeInfo@@
 .?AVFindByTypeVisitor@@
 .?AVIAppSystem@@
 .?AVIApplication@@
+.?AVIBaseSequence@@
 .?AVIDataModel@@
 .?AVIDmAttributeOp@@
 .?AVIDmElementFactory@@
@@ -772,6 +775,7 @@ $prefix_element$
 .?AVIFileLoggingListener@@
 .?AVILoggingListener@@
 .?AVIMultipleWorkerJob@@
+.?AVISequence@@
 .?AVIUndoElement@@
 .?AV_CancellationTokenRegistration@details@Concurrency@@
 .?AV_DefaultPPLTaskScheduler@details@Concurrency@@
@@ -796,10 +800,6 @@ $prefix_element$
 .?AVlogic_error@std@@
 .?AVout_of_range@std@@
 .?AVruntime_error@std@@
-.?AVstl_condition_variable_interface@details@Concurrency@@
-.?AVstl_condition_variable_win7@details@Concurrency@@
-.?AVstl_critical_section_interface@details@Concurrency@@
-.?AVstl_critical_section_win7@details@Concurrency@@
 .?AVsystem_error@std@@
 .?AVtask_canceled@Concurrency@@
 .?AVtype_info@@
@@ -1102,6 +1102,7 @@ $prefix_element$
 .pdata
 .pp@0
 .rdata
+.rdata$00
 .rdata$T
 .rdata$r
 .rdata$voltmd
@@ -1116,6 +1117,7 @@ $prefix_element$
 .text$di
 .text$mn
 .text$mn$00
+.text$mn$21
 .text$x
 .text$yd
 .tls
@@ -1123,7 +1125,6 @@ $prefix_element$
 .tls$ZZZ
 .tmpdiff.txt
 .vmat
-.vpk
 .vpk/
 .x7B
 .xJ>Hf
@@ -1146,7 +1147,6 @@ $prefix_element$
 // \t\t\t\t\t\t"BA_INT_DANGER"\t\tbreak out of this anim only if threatened\n
 // \t\t\t\t\t\t"BA_INT_NONE"\t\tbreak out only when time runs out. No external influence will break me out.\n
 // \t\t\t\t\t\t"BA_INT_PLAYER"\t\tbreak out of this anim if I can see the player, or I'm threatened\n
-/2GG>!B
 /2x1
 /5dJ
 /RIv
@@ -1156,82 +1156,95 @@ $prefix_element$
 /usr/local/ssl/lib/engines
 /usr/local/ssl/private
 /zt1
-0 0 0
-002@
-005@
-0123456789
+0.0 1.0
+0.0 180.0
+0.001 1.0
+0.01 1.0
+007@
+017@
 02V8[
-036@
+044$
+046@
+056@
 05=k
 066@
+077@
 086@
+087@
 08bX
 09,h
+096@
+097@
 0;Q5[
 0<cz
-0>8P&
-0A2@
-0B2@
-0D4@
-0E>X
-0F2@
-0I2@
-0J4@
-0L2@
+0A7@
+0B7@
+0D3@
+0G7@
+0H5@
+0I3@
+0I5@
+0J3@
+0L3@
 0M2~@p
-0N4@
-0O2@
-0S2@
-0S4@
-0T2@
-0T4@
-0U2@
-0V4@
+0M3@
+0M7@
+0MD5
+0N7@
+0O3@
+0Q7@
+0R3@
+0S5@
+0T3@
+0U3@
+0V3@
 0W/5
-0W2@
-0X2@
-0X8b?~
-0Y2@
-0Z2@
-0Z5@
+0W3@
+0W5@
+0W7@
+0Y3@
+0Z3@
+0Z7@
 0Z@q
 0\r0#0)070;0U0Y0[0g0q0y0}0
+0a3@
+0b3@
 0d4@
-0e5@
+0e4@
 0e\r8
-0f2@
-0f3@
-0f5@
+0f6@
 0g3@
-0g5@
-0h2@
 0h4@
 0h6@
-0i2@
 0i5@
 0i6@
 0iN>/
-0j2@
-0k2@
-0k4@
+0j4@
+0j6@
 0k6@
 0l3@
-0l4@
-0m4@
 0n3@
-0o2@
-0p4@
+0n5@
+0o5@
+0o6@
+0p3@
+0p7@
 0pp@5tqE?|sO541
-0q4@
-0r2@
-0t2@
+0q3@
+0q6@
+0r6@
+0s7@
+0t5@
+0t6@
 0tU+xc:
-0u2@
-0v2@
+0u3@
+0v3@
+0w3@
+0w7@
 0x%llx
-0x2@
-0y2@
-0z3@
+0y3@
+0y4@
+0z4@
 0}dV
 1!1'1-191C1E1K1]1a1g1m1s1
 1#IND
@@ -1278,6 +1291,7 @@ $prefix_element$
 2\fWQx
 2\rU2t
 2\rlhp
+2\vp44$
 2^pV
 2a"l
 2bT~
@@ -1287,7 +1301,6 @@ $prefix_element$
 2nIg
 2p"6
 2prB
-3 FB
 3%3+3/353A3G3[3_3g3k3s3y3
 31tPR
 35-w
@@ -1295,12 +1308,12 @@ $prefix_element$
 37LQ
 3>N;kU
 3>fvw
-3?tr
 3DES
 3DES(168)
 3Ej%Tb
 3M5cWAK
 3Wk1^
+3\tV_ftell
 3\v;8BJ\nH
 3icq
 3ja~
@@ -1317,24 +1330,23 @@ $prefix_element$
 4@AA
 4Ch;
 4F0I
-4M4@
 4Mv8
-4Q2@
+4S3@
 4Zis
 4\fPl
-4d3@
 4f h
+4o3@
 4tpD
 4zj@1;IJ
 5'0v2ZP
 5-535;5A5Q5e5o5q5w5{5}5
 5-\rGw
 50Q5
-51>W
 52pk
 5A10K
 5EwO
 5N{j
+5\tV_fwrite
 5\vFuo
 5b!g
 5dO7
@@ -1356,10 +1368,8 @@ $prefix_element$
 6666666666666666jjjjjjjjjjjjjjjj[
 67-s
 6H,N
-6NK>
 6O|T%
 6Qd=
-6\fXO>\ntA
 6_wEX
 6afD
 6bX+
@@ -1378,9 +1388,7 @@ $prefix_element$
 7*QR
 7,gm;
 71iB
-7>I0
 7?7E7I7O7]7a7u7
-7?GX
 7?XEAVn
 7GK2
 7OsR
@@ -1397,88 +1405,79 @@ $prefix_element$
 7sAP'
 7wKR
 7zRQ
-7~xh
 8+Qw
 8-byte data pool
-805@
 80F2<
-826@
+827@
 82\n:XPH
+836@
+846@
 851Pe
-856@
-876@
-892@
+877@
+893@
+896@
 8<pl
 8= zp
 8A6j
-8B2@
-8C2@
+8C7@
 8ClipBoard
-8D2@
-8E2@
-8G2@
-8G6@
+8Csinf
+8D3@
+8E3@
+8F7@
+8G3@
 8GZS
-8H2@
-8H6@
-8I6@
-8M2@
-8N2@
-8O4@
-8O6@
-8P2@
-8P6@
-8R2@
-8R4@
+8H3@
+8H5@
+8H7@
+8I5@
+8I7@
+8K3@
+8N3@
+8P3@
+8Q3@
 8SIffK5W
+8T5@
 8TZvrv<
-8U4@
-8U5@
-8U6@
-8V2@
-8X4@
+8V5@
+8X5@
+8X7@
 8Y5@
-8Z3@
-8Z4@
 8\v8!83858A8G8K8S8W8_8e8o8q8}8
 8]Vc2
-8a4@
-8b2@
-8c2@
+8a7@
+8b7@
+8c5@
 8ca1
 8d3@
-8d5@
+8d6@
+8d7@
 8dS2
-8e4@
-8f3@
-8g2@
-8g4@
-8g6@
-8h3@
+8e3@
+8e6@
+8e7@
+8f5@
+8g5@
+8g7@
 8h5@
-8i3@
-8j3@
-8j4@
-8j6@
-8ke?;
-8l2@
-8m2@
-8m3@
-8n2@
-8n4@
-8o4@
-8p2@
+8i4@
+8k4@
+8l4@
+8l6@
+8m4@
+8p3@
+8p5@
+8p7@
 8pe7?
 8q-S*]X
-8q2@
+8q5@
+8q7@
 8r5@
-8s5@
+8s3@
 8sOy
-8t5@
 8u5@
-8x5@
-8y3@
-8y5@
+8y4@
+8z3@
 9#9%9)9/9=9A9M9[9k9y9}9
 9)PF
 9)jx
@@ -1486,8 +1485,6 @@ $prefix_element$
 95\r9{
 9966
 9:dzGN
-9>70
-9>powf
 9@Xp&
 9IGv
 9J9;6
@@ -1514,7 +1511,6 @@ $prefix_element$
 :NAy
 :QYJ
 :Vlq
-:\tV_log2f
 :cwd|
 :eaI
 :gN(dq
@@ -1567,10 +1563,10 @@ $prefix_element$
 ======== %s ========\n\n
 =O?AqP
 =Q9M
+=\tV_isdigit_str
 =aes(partial)
 =cQ6
 =cdE
-=e2m
 =imb;D
 =trF6,#
 >#>)>/>3>A>W>c>e>w>
@@ -1586,19 +1582,17 @@ $prefix_element$
 >p00<
 >yhP
 >ztq
-?!5WOo
-?49HoKC
+?1cb
 ?7zQ6$
-?7{KV\nU
 ?8bunz8
+??0?$CUniformRandomStreamImpl@VCThreadNullMutex@@@@QEAA@H@Z
 ??0CTSListBase@@QEAA@XZ
 ??0CThreadEvent@@QEAA@_N@Z
 ??0CThreadLocalScope@@QEAA@PEAUThreadHandle_t__@@_N@Z
 ??0CThreadMutex@@QEAA@PEBD@Z
 ??0CThreadRWLock_FastRead@@QEAA@XZ
-??0CUtlBuffer@@QEAA@HHH@Z
-??0CUtlBuffer@@QEAA@PEBXHH@Z
-??0CUtlMemoryBlockAllocator@@QEAA@HIW4RawAllocatorType_t@@@Z
+??0CUtlBuffer@@QEAA@HHW4BufferFlags_t@0@@Z
+??0CUtlBuffer@@QEAA@PEBXHW4BufferFlags_t@0@@Z
 ??0CUtlMemoryPoolBase@@QEAA@HHHW4MemoryPoolGrowType_t@@PEBDW4MemAllocAttribute_t@@@Z
 ??0CUtlString@@QEAA@AEBVCBufferString@@@Z
 ??0CUtlSymbolTable@@QEAA@HH_N@Z
@@ -1608,7 +1602,6 @@ $prefix_element$
 ??1CThreadMutex@@QEAA@XZ
 ??1CThreadSemaphore@@QEAA@XZ
 ??1CThreadSyncObject@@QEAA@XZ
-??1CUtlMemoryBlockAllocator@@QEAA@XZ
 ??1CUtlMemoryPoolBase@@QEAA@XZ
 ??1CUtlSymbolTable@@QEAA@XZ
 ??1KeyValues@@QEAA@XZ
@@ -1625,8 +1618,6 @@ $prefix_element$
 ?Acquire@CUtlString@@QEAAXPEAVCBufferString@@_N@Z
 ?AddNullTermination@CUtlBuffer@@IEAAXXZ
 ?AddString@CUtlSymbolTable@@QEAA?AVCUtlSymbol@@PEBDPEA_N@Z
-?Alloc@CRawAllocator@@SAPEAXW4RawAllocatorType_t@@_KPEA_K@Z
-?Alloc@CUtlMemoryBlockAllocator@@QEAAII@Z
 ?Alloc@CUtlMemoryPoolBase@@QEAAPEAXXZ
 ?AllocAligned@CUtlScratchMemoryPool@@QEAAPEAXHH@Z
 ?Append@CUtlString@@QEAAXPEBD@Z
@@ -1652,7 +1643,7 @@ $prefix_element$
 ?EncounteredComplexReadLockOperation@CThreadRWLock_FastRead@@IEAA_NI_NPEBDH@Z
 ?EndsWith@CBufferString@@QEBA_NPEBD@Z
 ?EnsureCapacity@CUtlBuffer@@QEAAXH@Z
-?EnterScopeInternalBudgetFlags@?$VProfScopeHelper@$0A@$0A@@@SAP6AXXZPEBDAEAUVProfBudgetGroupCallSite@@@Z
+?EnterScopeInternalBudgetFlags@?$VProfScopeHelper@$0A@$0A@@@SAP6AXXZPEBDAEAUVProfBudgetGroupCallSite@@AEBVCUtlSourceLocation@@@Z
 ?ExtendPath@CBufferString@@QEAAPEBDPEBDD_N@Z
 ?ExtractFileBase@CBufferString@@QEAAPEBDPEBD_N@Z
 ?ExtractFileExtension@CBufferString@@QEAAPEBDPEBD@Z
@@ -1674,7 +1665,6 @@ $prefix_element$
 ?FixupPathName@CBufferString@@QEAAPEBDD@Z
 ?Format@CBufferString@@QEAAHPEBDZZ
 ?Format@CUtlString@@QEAAHPEBDZZ
-?Free@CRawAllocator@@SAXW4RawAllocatorType_t@@PEAX_K@Z
 ?Free@CUtlMemoryPoolBase@@QEAAXPEAX@Z
 ?FreeInts@CVariableBitStringBase@@AEAAXXZ
 ?FreeMemoryBlock@CUtlString@@AEAAXXZ
@@ -1710,11 +1700,11 @@ $prefix_element$
 ?IsKV3Data@@YA_NPEBXHPEAUKV3ID_t@@PEADH@Z
 ?LoadFromBuffer@KeyValues@@QEAA_NPEBDAEAVCUtlBuffer@@PEAVIFileSystem@@0P6A_N0PEAX@ZPEAVIKeyValuesErrorSpew@@30@Z
 ?LoadFromFile@KeyValues@@QEAA_NPEAVIFileSystem@@PEBD1P6A_N1PEAX@Z21@Z
-?LoadKV3@@YA_NPEAVCKeyValues3Context@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBD@Z
-?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBD@Z
-?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDAEBUKV3ID_t@@2@Z
-?LoadKV3FromFile@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBD2AEBUKV3ID_t@@@Z
-?LoadKV3FromKV1Text_Translated@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDW4KV1TextEscapeBehavior_t@@PEBUKV1ToKV3Translation_t@@H2_N@Z
+?LoadKV3@@YA_NPEAVCKeyValues3Context@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z
+?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z
+?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDAEBUKV3ID_t@@2I@Z
+?LoadKV3FromFile@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBD2AEBUKV3ID_t@@I@Z
+?LoadKV3FromKV1Text_Translated@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDW4KV1TextEscapeBehavior_t@@PEBUKV1ToKV3Translation_t@@H2_NI@Z
 ?Lock@CThreadMutex@@QEAAXPEBDH@Z
 ?LoggingSystem_Log@@YA?AW4LoggingResponse_t@@HW4LoggingSeverity_t@@AEBULeafCodeInfo_t@@PEBDZZ
 ?LoggingSystem_Log@@YA?AW4LoggingResponse_t@@HW4LoggingSeverity_t@@VColor@@PEBDZZ
@@ -1729,14 +1719,14 @@ $prefix_element$
 ?PeekDelimitedStringLength@CUtlBuffer@@QEAAHPEAVCUtlCharConversion@@_N@Z
 ?PeekGet@CUtlBuffer@@QEAAPEBXHH@Z
 ?PeekStringLength@CUtlBuffer@@QEAAHXZ
+?Plat_RedirectThisProcessStdioToFile@@YA_NHI@Z
 ?Printf@CUtlBuffer@@QEAAXPEBDZZ
 ?Purge@CBufferString@@QEAAXH@Z
-?Purge@CUtlMemoryBlockAllocator@@QEAAXXZ
 ?Purge@CUtlString@@QEAAXXZ
 ?Put@CUtlBuffer@@QEAAXPEBXH@Z
 ?PutDelimitedString@CUtlBuffer@@QEAAXPEAVCUtlCharConversion@@PEBD@Z
 ?PutString@CUtlBuffer@@QEAAXPEBD@Z
-?R0I?
+?RandomInt@?$CUniformRandomStreamImpl@VCThreadNullMutex@@@@QEAAHHH@Z
 ?Relinquish@CBufferString@@QEAAPEADW4EAllocationOption_t@1@@Z
 ?RemoveAll@CUtlSymbolTable@@QEAAXXZ
 ?RemoveAt@CBufferString@@QEAAPEBDHH@Z
@@ -1758,7 +1748,7 @@ $prefix_element$
 ?SetBufferType@CUtlBuffer@@QEAAX_N0@Z
 ?SetDirect@CUtlString@@QEAAXPEBDH@Z
 ?SetExtension@CBufferString@@QEAAPEBDPEBD_N@Z
-?SetExternalBuffer@CUtlBuffer@@QEAAXPEAXHHH@Z
+?SetExternalBuffer@CUtlBuffer@@QEAAXPEAXHHW4BufferFlags_t@1@@Z
 ?SetFloat@KeyValues@@QEAAXPEBDM@Z
 ?SetInt@KeyValues@@QEAAXPEBDH@Z
 ?SetLength@CBufferString@@QEAAPEADH_NPEAH@Z
@@ -1794,13 +1784,11 @@ $prefix_element$
 ?Wait@CThreadSyncObject@@QEAA_NI@Z
 ?d86L
 ?dt]X
+?expf
 ?f`Y4
 ?gwL
 ?jOb
-?kxG2)
-?lZE
 ?qBJ
-?rAj
 ?srJO
 ?tya
 ?uWS
@@ -1820,6 +1808,7 @@ $prefix_element$
 @dKb]
 @i1V
 @n2w
+A weight determining the frequency at which this model is placed relative to other models within the detail type. The weights of all models are summed and the probability of selecting this model is its weight divided by the sum weight.
 A!A3A5A;A?AYAeAkAwA{A
 A%N_A
 A,uw"
@@ -1838,7 +1827,6 @@ AC2,h
 ACCESS_DESCRIPTION
 ACPT_STATE
 AD Time Stamping
-ADDONS
 ADD_CERT_DIR
 ADH-AES128-GCM-SHA256
 ADH-AES128-SHA
@@ -1912,7 +1900,6 @@ AES_XTS_CIPHER
 AGgV
 AI\tHpH8x
 AJsN
-AK>(v
 ALG_MODULE_INIT
 ALL:!EXPORT:!LOW:!aNULL:!eNULL:!SSLv2
 ANSI X9.62
@@ -2054,6 +2041,7 @@ Alpha Fade Out Random
 Alpha Fade and Decay
 Alpha Random
 Alternate strings this tag will match when searching for assets by name.
+Am_bUseShadowFastPath
 Animation Bone Flags
 Animation Configuration File
 Any Extended Key Usage
@@ -2069,6 +2057,7 @@ Arms
 AssetEditInfoFilterFunc_t
 AssetEngineCommand_t
 AssetWarningFixType_t
+Attachments
 Attempted to add two format updaters with the same file format (%s)!\n
 Attempted to add two legacy updaters with the same file format (%s)!\n
 Attempted to add two serializers with the same file encoding (%s)!\n
@@ -2246,8 +2235,10 @@ Binary
 Binary (deterministic sequential ids)
 Binary: Element uses unknown element type %s\n
 Biometric Info
+BlockEncodingForResource - Failed to load asset types configuration file: %s\n
 BoX5
 Body
+BoneConstraintList
 BrowInV
 Bs'n
 Bu 5
@@ -2259,7 +2250,6 @@ C!OFtq74
 C%C'C3C7C9COCWCiC
 C-gr
 C3ps
-C5R?\t
 C6DN
 C7HSY
 C:/Program Files/Beyond Compare 4/BCompare.exe
@@ -2267,9 +2257,12 @@ C:\Program Files (x86)\Beyond Compare 3\BCompare.exe
 C:\buildworker\csgo_rel_win64\build\_build_\utils\resourceinfo\_vpc_resourceinfo\default\win64\_msvc_\Retail\resourceinfo.pdb
 C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp
 C:\buildworker\csgo_rel_win64\build\src\bitmap\tinyexr_impl.cpp
+C:\buildworker\csgo_rel_win64\build\src\datamodel\dependencygraph.cpp
+C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp
 C:\buildworker\csgo_rel_win64\build\src\public\appframework\tier2app.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\threadtoolstypes.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\tslist.h
+C:\buildworker\csgo_rel_win64\build\src\public\tier0\utlblockvector.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\utldict.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\utlrbtree.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\utlsortvector.h
@@ -2322,7 +2315,6 @@ CBI]6
 CBaseToolInfo
 CBitmapAssetTypeInfo
 CBufferString
-CC:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp
 CD1mB"
 CDataModel:  %i elements left in memory!!!\n
 CDataModel: Failed to open file "%s"\n
@@ -2338,6 +2330,8 @@ CDataModel::Unserialize
 CDependencyGraph::Cleanup
 CDependencyGraph::FindAttrNode
 CDependencyGraph::Reset
+CDetailPropModel
+CDetailPropType
 CDmAttribute pool
 CDmExtraVertexStream
 CDmSerializerBinary: Attribute '%s' of element '%s' read as '%s' but expected '%s'\n
@@ -2370,14 +2364,13 @@ CHECK_POLICY
 CHECK_SUITEB_CIPHER_LIST
 CHammerMesh
 CImagePlaneNode
-CKMeansClustering::AssignVectorsToClusters(), C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp:155
+CKMeansClustering::AssignVectorsToClusters(), C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp:159
 CKV3MemberNameWithStorage
 CKeyValues3Array::EnsureElementCapacity
 CKeyValues3Array::InsertMultipleBefore
 CKeyValues3Context::Root
 CKeyValues3Table::EnsureMemberCapacity
 CKh/Q
-CL:>8
 CLIENT_CERTIFICATE
 CLIENT_FINISHED
 CLIENT_HELLO
@@ -2513,6 +2506,7 @@ CMapTileMesh
 CMapTileProxy
 CMapVariableSet
 CMapWorld
+CModelMaterialGroupName
 CModuleManifests
 COLLECT_DATA
 COMPLEMENTOFALL
@@ -2568,6 +2562,7 @@ CT Precertificate Signer
 CTSQueue<class std::function<void __cdecl(void)> *,0>::Push
 CTSQueue<struct CThreadedLogger::Buffer_t *,0>::Push
 CTerrainSelection
+CThreadedFileLogger
 CThreadedLogger
 CTier2AppSystemDict::Init
 CToolsConfig
@@ -2586,25 +2581,40 @@ CUndoCreateElement
 CUndoDestroyElement
 CUndoManager::Redo
 CUndoManager::Undo
+CUtlBlockVector<struct FileHandleTracker_t,int,class CMemAllocAllocator>::GrowCount
+CUtlBlockVector<struct UtlRBTreeNode_t<struct CDmElementSerializationDictionary::ElementInfo_t,int>,int,class CMemAllocAllocator>::GrowCount
+CUtlBlockVector<unsigned char,int,class CMemAllocAllocator>::GrowCount
 CUtlDict<class CDmElement *,class CDefFastCaselessStringLess>::Insert
 CUtlDict<class CDmElementFactoryHelper *,class CDefFastCaselessStringLess>::Insert
-CUtlMemory_RawAllocator<class CUtlHashtableEntry<unsigned int,struct empty_t> >::EnsureCapacity
-CUtlMemory_RawAllocator<unsigned int>::EnsureCapacity
-CUtlMemory_RawAllocator<unsigned int>::Grow
-CUtlRBTree<class CDmAttribute *,class CDefLess<class CDmAttribute *>,int,class CUtlMemory<struct UtlRBTreeNode_t<class CDmAttribute *,int>,int> >::Insert
-CUtlRBTree<class CDmElement *,class CDefLess<class CDmElement *>,int,class CUtlMemory<struct UtlRBTreeNode_t<class CDmElement *,int>,int> >::Insert
-CUtlRBTree<class IDmeOperator *,class CDefLess<class IDmeOperator *>,unsigned short,class CUtlMemory<struct UtlRBTreeNode_t<class IDmeOperator *,unsigned short>,unsigned short> >::Insert
-CUtlRBTree<struct CDmElementSerializationDictionary::ElementInfo_t,class CLessFunc<&private: static bool __cdecl CDmElementSerializationDictionary::LessFunc(struct CDmElementSerializationDictionary::ElementInfo_t const &,struct CDmElementSerializationDictionary::ElementInfo_t const &)>,int,class CUtlBlockMemory<struct UtlRBTreeNode_t<struct CDmElementSerializationDictionary::ElementInfo_t,int>,int> >::Insert
-CUtlRBTree<struct CUtlOrderedMapBase<class CUtlSymbolLarge,int,class CDefLess<class CUtlSymbolLarge>,int>::Node_t,class CUtlOrderedMapBase<class CUtlSymbolLarge,int,class CDefLess<class CUtlSymbolLarge>,int>::CKeyLess,int,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<class CUtlSymbolLarge,int,class CDefLess<class CUtlSymbolLarge>,int>::Node_t,int>,int> >::Insert
-CUtlRBTree<struct CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::Node_t,class CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::CKeyLess,unsigned short,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::Node_t,unsigned short>,unsigned short> >::Insert
-CUtlRBTree<struct CUtlOrderedMapBase<enum DmElementHandle_t,enum DmElementHandle_t,class CDefLess<enum DmElementHandle_t>,int>::Node_t,class CUtlOrderedMapBase<enum DmElementHandle_t,enum DmElementHandle_t,class CDefLess<enum DmElementHandle_t>,int>::CKeyLess,int,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<enum DmElementHandle_t,enum DmElementHandle_t,class CDefLess<enum DmElementHandle_t>,int>::Node_t,int>,int> >::Insert
-CUtlRBTree<struct CUtlOrderedMapBase<enum KV3MetatextType_t,class CBufferString,class CDefLess<enum KV3MetatextType_t>,int>::Node_t,class CUtlOrderedMapBase<enum KV3MetatextType_t,class CBufferString,class CDefLess<enum KV3MetatextType_t>,int>::CKeyLess,int,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<enum KV3MetatextType_t,class CBufferString,class CDefLess<enum KV3MetatextType_t>,int>::Node_t,int>,int> >::Insert
-CUtlRBTree<struct CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<int>,int>::Node_t,class CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<int>,int>::CKeyLess,int,class CUtlMemory<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<int>,int>::Node_t,int>,int> >::Insert
-CUtlSortVector<struct ChunkHashFraction_t,class ChunkHashFractionLess_t,class CUtlVector<struct ChunkHashFraction_t,int,class CUtlMemory<struct ChunkHashFraction_t,int> > >::Find
+CUtlLeanVectorBase<struct UtlRBTreeNode_t<class IDmeOperator *,unsigned short>,unsigned short,class CMemAllocAllocator>::EnsureCapacity
+CUtlLeanVectorBase<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::Node_t,unsigned short>,unsigned short,class CMemAllocAllocator>::EnsureCapacity
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CDmElement *,struct empty_t,class CDefEquals<class CDmElement *>,struct HashMapFunctor_t<class CDmElement *>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<class CDmElement *,struct empty_t,class CDefEquals<class CDmElement *>,struct HashMapFunctor_t<class CDmElement *>,int>::HashBucket_t,int>::AddMultipleToTail
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CUtlSymbolLarge,struct empty_t,class CDefEquals<class CUtlSymbolLarge>,struct HashMapFunctor_t<class CUtlSymbolLarge>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<class CUtlSymbolLarge,struct empty_t,class CDefEquals<class CUtlSymbolLarge>,struct HashMapFunctor_t<class CUtlSymbolLarge>,int>::HashBucket_t,int>::AddMultipleToTail
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlMemoryBlockAllocator<char,class CMemAllocAllocator>::MemPage_t,int,class CMemAllocAllocator>,struct CUtlMemoryBlockAllocator<char,class CMemAllocAllocator>::MemPage_t,int>::EnsureUnusedCapacity
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlMemoryBlockAllocator<struct FileHandleTracker_t,class CMemAllocAllocator>::MemPage_t,int,class CMemAllocAllocator>,struct CUtlMemoryBlockAllocator<struct FileHandleTracker_t,class CMemAllocAllocator>::MemPage_t,int>::EnsureUnusedCapacity
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlMemoryBlockAllocator<struct UtlRBTreeNode_t<struct CDmElementSerializationDictionary::ElementInfo_t,int>,class CMemAllocAllocator>::MemPage_t,int,class CMemAllocAllocator>,struct CUtlMemoryBlockAllocator<struct UtlRBTreeNode_t<struct CDmElementSerializationDictionary::ElementInfo_t,int>,class CMemAllocAllocator>::MemPage_t,int>::EnsureUnusedCapacity
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlMemoryBlockAllocator<unsigned char,class CMemAllocAllocator>::MemPage_t,int,class CMemAllocAllocator>,struct CUtlMemoryBlockAllocator<unsigned char,class CMemAllocAllocator>::MemPage_t,int>::EnsureUnusedCapacity
+CUtlMemoryBlockAllocator<char,class CMemAllocAllocator>::AddPage
+CUtlMemoryBlockAllocator<char,class CMemAllocAllocator>::Alloc
+CUtlMemoryBlockAllocator<struct FileHandleTracker_t,class CMemAllocAllocator>::AddPage
+CUtlMemoryBlockAllocator<struct UtlRBTreeNode_t<struct CDmElementSerializationDictionary::ElementInfo_t,int>,class CMemAllocAllocator>::AddPage
+CUtlMemoryBlockAllocator<unsigned char,class CMemAllocAllocator>::AddPage
+CUtlRBTree<class CDmAttribute *,class CDefLess<class CDmAttribute *>,int,class CUtlLeanVector<struct UtlRBTreeNode_t<class CDmAttribute *,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTree<class CDmElement *,class CDefLess<class CDmElement *>,int,class CUtlLeanVector<struct UtlRBTreeNode_t<class CDmElement *,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTree<class IDmeOperator *,class CDefLess<class IDmeOperator *>,unsigned short,class CUtlLeanVector<struct UtlRBTreeNode_t<class IDmeOperator *,unsigned short>,unsigned short,class CMemAllocAllocator> >::Insert
+CUtlRBTree<struct CDmElementSerializationDictionary::ElementInfo_t,class CLessFunc<&private: static bool __cdecl CDmElementSerializationDictionary::LessFunc(struct CDmElementSerializationDictionary::ElementInfo_t const &,struct CDmElementSerializationDictionary::ElementInfo_t const &)>,int,class CUtlBlockVector<struct UtlRBTreeNode_t<struct CDmElementSerializationDictionary::ElementInfo_t,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTree<struct CUtlOrderedMapBase<class CUtlSymbolLarge,int,class CDefLess<class CUtlSymbolLarge>,int>::Node_t,class CUtlOrderedMapBase<class CUtlSymbolLarge,int,class CDefLess<class CUtlSymbolLarge>,int>::CKeyLess,int,class CUtlLeanVector<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<class CUtlSymbolLarge,int,class CDefLess<class CUtlSymbolLarge>,int>::Node_t,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTree<struct CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::Node_t,class CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::CKeyLess,unsigned short,class CUtlLeanVector<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<class CUtlSymbolLarge,struct DmMemoryInfo_t,class CDefLess<class CUtlSymbolLarge>,unsigned short>::Node_t,unsigned short>,unsigned short,class CMemAllocAllocator> >::Insert
+CUtlRBTree<struct CUtlOrderedMapBase<enum DmElementHandle_t,enum DmElementHandle_t,class CDefLess<enum DmElementHandle_t>,int>::Node_t,class CUtlOrderedMapBase<enum DmElementHandle_t,enum DmElementHandle_t,class CDefLess<enum DmElementHandle_t>,int>::CKeyLess,int,class CUtlLeanVector<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<enum DmElementHandle_t,enum DmElementHandle_t,class CDefLess<enum DmElementHandle_t>,int>::Node_t,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTree<struct CUtlOrderedMapBase<enum KV3MetatextType_t,class CBufferString,class CDefLess<enum KV3MetatextType_t>,int>::Node_t,class CUtlOrderedMapBase<enum KV3MetatextType_t,class CBufferString,class CDefLess<enum KV3MetatextType_t>,int>::CKeyLess,int,class CUtlLeanVector<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<enum KV3MetatextType_t,class CBufferString,class CDefLess<enum KV3MetatextType_t>,int>::Node_t,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTree<struct CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<int>,int>::Node_t,class CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<int>,int>::CKeyLess,int,class CUtlLeanVector<struct UtlRBTreeNode_t<struct CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<int>,int>::Node_t,int>,int,class CMemAllocAllocator> >::Insert
+CUtlRBTreeBase
+CUtlSortVector<struct ChunkHashFraction_t,class ChunkHashFractionLess_t,class CUtlVector<struct ChunkHashFraction_t,int,class CUtlVectorMemory_Growable<struct ChunkHashFraction_t,int,0> > >::Find
 CUtlStreamBuffer does not support TEXT_BUFFER's use CUtlBuffer\n
+CUtlString
+CVMMDAssetTypeInfo
 CVcn
 CVisibilityMgr
-CWD>~3
 CWeakHandle
 C[L6
 C\lVQ
@@ -2615,6 +2625,7 @@ Camellia(128)
 Camellia(256)
 Cannot allocate abstract class
 Cannot deduce for class
+Cannot find buffer data for block %i\n
 Cannot unserialize a prefix element here (type "$prefix_element$")
 Certificate Hold
 Certificate Sign
@@ -2626,6 +2637,7 @@ CheekH
 Chunk hash not found.
 ClQ(|
 Class does not allow allocation from its schema binding
+Cleanup
 CloseClipboard
 CloseHandle
 CloseLid
@@ -2642,6 +2654,7 @@ Commentary File
 CompareStringEx
 CompareStringW
 Compiled GUI file
+Complete fade out size
 CompressBlocksBC1
 CompressBlocksBC3
 CompressBlocksBC6H
@@ -2663,7 +2676,6 @@ Content-Type: multipart/signed;
 Content-Type: text/plain\r\n\r\n
 CorExitProcess
 Create In Hierarchy
-CreateEventW
 CreateFileW
 CreateThread
 CreateThreadpoolWork
@@ -2681,7 +2693,6 @@ D*64
 D.Hog^
 D.]ppM
 D16_UNORM
-D24S8
 D24_UNORM_S8_UINT
 D2I_ASN1_BIT_STRING
 D2I_ASN1_GENERALIZEDTIME
@@ -2804,6 +2815,7 @@ DH_generate_key
 DH_generate_parameters_ex
 DH_new_method
 DHparams_print_fp
+DI5@
 DIRECTORYSTRING
 DIR_ADD
 DIR_CTRL
@@ -2823,7 +2835,6 @@ DL_LOAD
 DL_MERGER
 DL_NAME_CONVERTER
 DL_UNLOAD
-DM4@
 DMX Model
 DMX Model Pipeline Animation Script File
 DMX Model Pipeline Bone Mask Script File
@@ -2857,6 +2868,7 @@ DO_PVK_HEADER
 DO_RSA_PRINT
 DO_SIGVER_INIT
 DO_SSL3_WRITE
+DQ3@
 DSA PARAMETERS
 DSA PRIVATE KEY
 DSA lib
@@ -2925,21 +2937,26 @@ DYNAMIC_CTRL
 DYNAMIC_GET_DATA_CTX
 DYNAMIC_LOAD
 DYNAMIC_SET_DATA_CTX
-DZ3@
 Dampen Movement Relative to Control Point
 Data Encipherment
 DataModel needs the file system to function
+Data_Branch1xy
+Data_Branch1zBranch2x
+Data_Branch2yz
 Datamodel symbol table: %d entries %llu bytes\n
 DatamodelSymbols
 DcO/lcK+hSK
 Dd g4X3
+Dd4@
 Decipher Only
 DecodePointer
 DecompressTextureBits
 DeleteCriticalSection
-Dependencies
 DeregisterEventSource
+Detail Prop Model
+Detail Prop Type
 Dhq0\ri
+Di6@
 Different CRL scope
 Diffie-Hellman based MAC
 Diffie-Hellman part of OpenSSL 1.0.2j  26 Sep 2016
@@ -3043,9 +3060,7 @@ DmeVector4CurveInfo
 DmeVector4Log
 DmeVector4LogLayer
 DmeVertexData
-Dn2@
 DnRv
-Do2@
 Domain
 Dq;n
 DsBV
@@ -3057,7 +3072,6 @@ E-mail Protection
 E1t"
 E5tq
 E;5k
-E>nEA
 EA/c
 EC PARAMETERS
 EC PRIVATE KEY
@@ -3324,14 +3338,12 @@ EXPORT56
 EXTENDED_KEY_USAGE
 EXTERNAL
 E[3M
-E[\rn?gc
 E\nQc
 EdiPartyName
 EdiPartyName:<unsupported>
 EditGameClassProps
 Ee{5
 EhQ,[3
-EiUL
 EjNG
 Element uses unknown element type %s\n
 Email address mismatch
@@ -3339,6 +3351,7 @@ Empty inputlist '%s'\n
 EmptyClipboard
 Encipher Only
 EncodeBC6Blocks
+EncodeBC7Blocks
 EncodePointer
 Encountered an element array attribute '%s' while reading the prefix element
 Encountered an element attribute '%s' while reading the prefix element
@@ -3350,7 +3363,6 @@ Enterprises
 EovVY
 Ep0u
 Eric Young's PKCS#1 RSA
-Error
 Error converting from %s to %s\n
 Error importing actbusy element %s\n
 Error importing txt file! %s\n
@@ -3399,7 +3411,6 @@ F6tr
 F7!z
 F9q'
 F<mb
-F>qUxv
 FDA~i
 FEMh\f
 FF!w
@@ -3427,36 +3438,37 @@ Factory for element type '%s' already exists (Check your IMPLEMENT_ELEMENT_FACTO
 Fail to schedule the chore!
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
-Failed to determine polymorphic class name
 Failed to read
 Failed to read %d bytes\n
 Failed to read inputlist '%s' (%d)\n
+Failed to save unsupported class
+FeetSettings
 Ff,n
-FfW?
 Fgi?)
 Fi:je
 Field Type: %s\n
 Field=
 File Size: %s bytes\n
 FileTimeToSystemTime
+FindAttrNode
 FindClose
 FindFirstFileExW
 FindNextFileW
 Fingers
 Fingers_L
 Fingers_R
-FloatBitMap_t::ConvertGammaToLinear(318): Conversion not supported yet!\n
+FloatBitMap_t::ConvertGammaToLinear(319): Conversion not supported yet!\n
 FloatBitMap_t::InitializeDummyRow
 FloatBitMap_t::WriteInMemoryEXRFast
 FloatBitMap_t::WriteInMemoryEXRFast(), C:\buildworker\csgo_rel_win64\build\src\bitmap\tinyexr_impl.cpp:164
-FloatBitMap_t::WriteToBuffer(961): Unsupported color format "%s", skipping!\n
-FloatBitMap_t::WriteToBufferBC7_bc7e(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1638
-FloatBitMap_t::WriteToBufferBC7_ispctexcomp(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1750
-FloatBitMap_t::WriteToBufferDXT_atitc(1018): Error! Temp texture is %d bytes when ATI's lib requires %d bytes!\n
-FloatBitMap_t::WriteToBufferDXT_atitc(1103): Unsupported output color format "%s"!\n
-FloatBitMap_t::WriteToBufferDXT_atitc(1112): Error! Allocated %llu bytes when ATI's lib requires %d bytes!\n
-FloatBitMap_t::WriteToBufferDXT_atitc(1120): Error %d returned from ATI_TC_ConvertTexture()!\n
-FloatBitMap_t::WriteToBufferETC(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1874
+FloatBitMap_t::WriteToBuffer(985): Unsupported color format "%s", skipping!\n
+FloatBitMap_t::WriteToBufferBC7_bc7e(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1672
+FloatBitMap_t::WriteToBufferBC7_ispctexcomp(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1784
+FloatBitMap_t::WriteToBufferDXT_atitc(1043): Error! Temp texture is %d bytes when ATI's lib requires %d bytes!\n
+FloatBitMap_t::WriteToBufferDXT_atitc(1128): Unsupported output color format "%s"!\n
+FloatBitMap_t::WriteToBufferDXT_atitc(1137): Error! Allocated %llu bytes when ATI's lib requires %d bytes!\n
+FloatBitMap_t::WriteToBufferDXT_atitc(1145): Error %d returned from ATI_TC_ConvertTexture()!\n
+FloatBitMap_t::WriteToBufferETC(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1908
 FlsAlloc
 FlsFree
 FlsGetValue
@@ -3466,6 +3478,7 @@ FlushFileBuffers
 Fm{#t
 FoldLipLo
 FoldLipUp
+FoliageAnimation
 Fop]
 Found match: %s\n
 FreeEnvironmentStringsW
@@ -3478,8 +3491,6 @@ G1b1
 G2bQ
 G2xVo\?
 G8R8_G8B8_UNORM
-G>US
-GAMEROOT
 GBd<}v
 GCTL
 GENERALIZEDTIME
@@ -3538,6 +3549,7 @@ GRAPHICSTRING
 GTsW
 GXqN
 GXy{
+G\f%G47
 GeneralNames
 GeneralString
 GenerateResourceNameFromFileName: Invalid extension specified in file name "%s"!\n
@@ -3618,91 +3630,92 @@ GoXis
 Go^ldg
 Gz,J
 G{Ol
-H%f1
+H!j2
 H.aR
 H0+G+R
-H02@
-H15@
+H26@
+H46@
 H5gRR-
+H77@
 H8,2
-H86@
 H8xp
-H9g1
+H93@
+H96@
+H97@
 H=`HY
 H@H9xqI
-HA2@
+HB3@
+HB7@
 HBJ\nTRF
-HD2@
-HE2@
+HC3@
+HD3@
+HE3@
 HEAD 
+HF7@
+HG3@
+HG7@
 HH&a
+HH3@
+HH5@
+HH7@
 HH:mm:ss
 HIGH
+HM3@
+HM7@
 HMAC
 HMAC GOST 34.11-94
 HMAC routines
 HMAC-MD5
 HMAC-SHA1
 HMAC_Init_ex
-HO6@
+HMj2
+HN3@
+HN7@
 HO8?
-HP2@
-HP4@
-HQ4@
-HR2@
-HS2@
-HS4@
-HU2@
-HU4@
-HU6@
+HP3@
+HR3@
+HS7@
 HU>mA$_E*
-HV2@
-HV6@
+HV3@
+HW5@
 HWyn
-HY2@
-HY4@
-HY6@
-HZ3@
-HZ6@
-H\tV_powf
+HX7@
+HZ4@
+Ha7@
+Hak2
 Hammer temp export
 Hash Algorithm: 
+Hb3@
+Hb5@
+Hb7@
 HbAta
 Hc S
 Hc3@
-Hc4@
-Hc5@
 Hc8a"
+Hd4@
 Hd5@
 HdEu
-He5@
 Heap32First
 Heap32ListFirst
 Heap32ListNext
 Heap32Next
-Hee1
-Heg1
-Hf2@
-Hf3@
 Hf4@
-Hf5@
+Hf6@
 Hg3@
-Hg5@
 Hg>?S
-Hh2@
-Hh3@
-Hh5@
+Hh4@
+Hh7@
 Hhr+g
-Hi2@
 Hi4@
 Hi5@
-Hk2@
-Hk3@
+Hj4@
+Hj6@
 Hk6@
-Hl6@
+Hl3@
 Hm3@
 Hm4@
-Ho4@
+Hn3@
+Ho6@
 Hofw
 Hold Instruction Call Issuer
 Hold Instruction Code
@@ -3710,15 +3723,17 @@ Hold Instruction None
 Hold Instruction Reject
 Hostname mismatch
 Hp)X?
-Hp4@
+Hp3@
 Hq,r/f
-Hq2@
+Hq3@
+Hq7@
 HqI9x
+Hr6@
+Hs7@
 Ht4qw
-Hu5@
-Hw2@
-Hx2@
-Hy5@
+Ht5@
+Hw7@
+Hy4@
 H{1S
 I"9|OxTex
 I+8G
@@ -3727,6 +3742,7 @@ I2D_ASN1_TIME
 I2S_ASN1_IA5STRING
 I2V_AUTHORITY_INFO_ACCESS
 I2nC
+I6k2
 I9xq
 I;b_b
 IA5STRING
@@ -3744,6 +3760,10 @@ IDEA-OFB
 IMPLICIT
 IND)ind)
 INITY
+INPUT_LAYOUT_VARIATION_DEFAULT
+INPUT_LAYOUT_VARIATION_MAX
+INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID
+INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID_MORPH_VERT_ID
 INT_CTRL_HELPER
 INT_CTX_NEW
 INT_DUP_EX_DATA
@@ -3753,6 +3773,7 @@ INT_FREE_EX_DATA
 INT_NEW_EX_DATA
 INT_RSA_VERIFY
 INT_TS_RESP_VERIFY_TOKEN
+INVALID
 INdK
 IP Address
 IP Address:%d.%d.%d.%d
@@ -3768,14 +3789,12 @@ ISSUING_DIST_POINT
 ITU-T
 IV block
 I\tHA\t981G'dc
-I\tV_qsort
 Icon associated with the tag
 If set, draw this as an overlay image on the asset preview
 If set, the presence of this tag will cause the tools to hide the asset from users by default. NOTE: This means if an asset gets tagged with this it might 'dissapear' from the UI!
 If set, the presence of this tag will cause the tools to suppress or dissuade use in several ways (and draw a red X over the asset preview)
 Ij)s
 Ik\f`dub`D
-Il?333333c?
 Illegal to wait on a task in a Windows Runtime STA
 Image packing validation failed!
 Images (%u):\n
@@ -3784,17 +3803,18 @@ Independent
 Index      Address       References   String\n
 Infinite recursion in patch file?\n
 InfoDataFilter_t
+InfoForResourceTypeCModel
+InfoForResourceTypeCVDataResource
 Inherit Velocity
 Inherit all
 Inhibit Policy Mapping
 Initial Repulsion Velocity
 Initial Scalar Noise
 Initial Velocity Noise
-InitializeConditionVariable
 InitializeCriticalSectionAndSpinCount
 InitializeCriticalSectionEx
 InitializeSListHead
-InitializeSRWLock
+InputLayoutVariation_t
 Integer overflow writing large exr: %ix%i %ibpp\n
 International Organizations
 Invalid argument for SaveEXRImageToMemory
@@ -3823,7 +3843,6 @@ JPQv
 JS_!0
 JZIX
 J\nHBF
-J\tV_qsort_s
 J`KL
 JawD
 JawH
@@ -3867,6 +3886,8 @@ KeyValues
 KeyValues2
 KeyValues2 (flat)
 KeyValues2 (no ids)
+KeyValues3: pre-allocated array memory is too small for %u elements (%u bytes available, %u bytes needed)\n
+KeyValues3: pre-allocated table memory is too small for %u members (%u bytes available, %u bytes needed)\n
 KeyValues: Can't serialize attribute of type %s into KeyValues files!\n
 KeyValues: Element uses unknown element type %s\n
 KlD#
@@ -3880,31 +3901,27 @@ L4Eud
 L4uGv~;6
 L5^x|S
 L>ev
-L?UUUUUUU?
 L@4T
 LAM\rhaI)|pL<
 LBN6
 LCMapStringEx
 LCMapStringW
-LD4@
 LG.HK
-LG4@
-LH3@
 LINEBUFFER_CTRL
 LIST_ADD
-LM4@
 LOAD
 LOAD_IV
 LOG_MESSAGE
 LONG
 LONG_C2I
+LS3@
 LT[N
-LWG>
-LWW>
 LXKQ
 LY\r5
+LZ4@
 Last two rows as percentage of total size %f %%:\n
 LbWf
+Ld6@
 Leaking %i elements\n
 LeaveCriticalSection
 LeftFingers
@@ -3926,10 +3943,10 @@ LoadLibraryExW
 LoadLibraryW
 LocalKeySet
 LocaleNameToLCID
+LookAtList
 LqH!)8
 LsiX
 Ltc$
-Ly2@
 M'Ezb
 M-laO
 M0 E
@@ -3949,20 +3966,21 @@ MIC-CLEAR
 MIC-ONLY
 MIME MHS
 MIME-Version: 1.0%s
-MINIDUMP_WRAP_CODE: Entering [%s(%u):%s:]\n
 MINIDUMP_WRAP_CODE: In __except block\n
-MINIDUMP_WRAP_CODE: Wrapped execution\n
 MM/dd/yy
 MODULE_INIT
 MODULE_LOAD_DSO
 MODULE_RUN
 MPropertyAttributeEditor
+MPropertyAttributeRange
 MPropertyAutoExpandSelf
 MPropertyDescription
 MPropertyFriendlyName
+MPropertyProvidesEditContextString
 MPropertyStartGroup
 MPropertySuppressExpr
 MS[;6
+MVDataAssociatedFile
 MVDataOutlinerDetailExpr
 MVDataOutlinerIconExpr
 MVDataRoot
@@ -3991,7 +4009,12 @@ MapClass
 MapNode
 Mask Algorithm: 
 Match Particle Velocities
+Material group (skin) to assign to use with the model.
 Max Velocity
+Maximum random scale value to apply to the model.
+Maximum range of random offset to apply along the model's local up direction
+Maximum range of the random rotation to apply the model.
+Maximum slope on which the target will be placed.
 Mc]T=
 MessageBoxA
 MessageBoxW
@@ -4009,11 +4032,17 @@ MinghuaQu
 MinghuaQu)
 MinghuaQuS
 MinghuaQuw
+MinidumpAgeLogs
 MinidumpLog
+Minimum random scale value to apply to the model.
+Minimum range of random offset to apply along the model's local up direction
+Minimum range of the random rotation to apply the model. Random rotation is applied in the local space of the model. Rotation values are ordered pitch, yaw, roll.
+Minimum slope on which the target will be placed. Slope is a [ 0, 180 ] value based on the surface normal where horizontal surface (floor) is 0, vertical surface (wall) is 90, and a horizontal upside down surface (ceiling) is 180.
 Missing data block
 Missing snapshot buffer block
 MlT8
 Mlt(J
+Model to be displayed.
 Module "%s": Failed to load.\n
 Module "%s": Timed out while loading.\n
 Module32First
@@ -4026,6 +4055,8 @@ Movement Lock to Control Point
 Movement Maintain Position Along Path
 Movement Match Particle Velocities
 Movement Max Velocity
+MovementGaitId_t
+MovementSettings
 MovieSettings
 Mq~h
 MrFW
@@ -4038,12 +4069,9 @@ N#ih
 N'L&R/l
 N.8U}
 N.lb
-N3`d?
 N5dIn9
 N7CJ'
 N=Knn
-N>O=I9
-N>VF
 NAME_CONSTRAINTS
 NAN(IND)
 NAN(SNAN)
@@ -4079,9 +4107,9 @@ NISTP256_PRE_COMP_NEW
 NISTP521_PRE_COMP_NEW
 NO X509_NAME
 NOEXECHECK
+NONE
 NOTICEREF
 NOTICE_SECTION
-NQ?s
 NREF_NOS
 NULL shared library method
 NULL-MD5
@@ -4126,6 +4154,7 @@ Not Before:
 Not safe to 'new' this class due to alignment requirements
 NrPn
 Nu6Q
+NumCols() <= V_ARRAYSIZE( s_DummyRow )
 Nw!qB
 NwJ\rH
 Nz3I#B
@@ -4240,7 +4269,6 @@ Oscillate Vector
 Output memory size is zero
 OutputDebugStringW
 OutputResourceBlock
-OutputResourceDataBlock - Failed to load asset types configuration file: %s\n
 OverlayProjectionDirection
 Ow!y
 P!bxo
@@ -4250,14 +4278,15 @@ P-224
 P-256
 P-384
 P-521
-P05@
-P15@
 P1\t98"
-P36@
-P56@
+P26@
+P46@
 P5[1
-P66@
-P76@
+P67@
+P87@
+P93@
+P96@
+PA7@
 PAGN_4
 PARAMETERS
 PARSE_BAG
@@ -4265,7 +4294,6 @@ PARSE_BAGS
 PARSE_HTTP_LINE1
 PARSE_TAGGING
 PATHBYADDR
-PB2@
 PBE-MD2-DES
 PBE-MD2-RC2-64
 PBE-MD5-DES
@@ -4284,7 +4312,8 @@ PBES2
 PBKDF2
 PBKDF2PARAM
 PBMAC1
-PC2@
+PC7@
+PE6@
 PEIF
 PEM lib
 PEM part of OpenSSL 1.0.2j  26 Sep 2016
@@ -4314,16 +4343,16 @@ PEM_read_bio
 PEM_read_bio_Parameters
 PEM_write
 PEM_write_bio
-PG2@
-PG6@
+PF3@
+PG3@
 PGr]
-PH2@
-PH6@
+PH5@
 PHAG2
 PHhn}Y
-PI2@
-PJ2@
-PK2@
+PI3@
+PI5@
+PJ3@
+PK3@
 PKCS #7 SIGNED DATA
 PKCS12
 PKCS12 lib
@@ -4437,8 +4466,10 @@ PKEY_RSA_VERIFYRECOVER
 PKEY_SET_TYPE
 PKEY_USAGE_PERIOD
 PKIX
-PL2@
-PN4@
+PL3@
+PL6@
+PM3@
+PO3@
 POLICYINFO
 POLICYQUALINFO
 POLICY_CONSTRAINTS
@@ -4447,9 +4478,10 @@ POLICY_MAPPINGS
 POLICY_SECTION
 POST
 POST 
-PP6@
 PPz\v=
-PQ2@
+PQ3@
+PQ7@
+PR7@
 PRB+
 PRINTABLE
 PRINTABLESTRING
@@ -4459,48 +4491,48 @@ PRNG not seeded
 PROCESS_PCI_VALUE
 PROXY_CERT_INFO_EXTENSION
 PROXY_POLICY
+PS5@
 PSC\n
 PSK-3DES-EDE-CBC-SHA
 PSK-AES128-CBC-SHA
 PSK-AES256-CBC-SHA
 PSK-RC4-SHA
 PSPECIFIED
-PT2@
-PU5@
+PT3@
 PUBLIC KEY
 PUT 
-PV4@
-PW2@
-PW4@
-PW6@
+PX3@
 PY5@
-PZ2@
-PZ5@
+PZ4@
+PZ7@
+Pa3@
 Packed store %s with refcount > 0.\n
 Parameters
 Particle Configuration File
-Pb4@
-Pb5@
-Pc2@
-Pd2@
-Pd3@
+Pc5@
 Pd4@
 Pe3@
 Pe4@
+Pe6@
+Pe7@
 PeekNamedPipe
 Peer haven't sent GOST certificate, required for selected ciphersuite
 PerVertexLighting
 Permanent Identifier
 Permitted
-Ph4@
+Pg5@
+Ph5@
+Ph6@
+Physics
 Pi6@
-Pj2@
-Pk3@
+PivotPaint
+Pl4@
+Pl6@
 Pm8A?
 PmR"H?
-Pn2@
-Pn3@
-Po2@
+Pn4@
+Pn5@
+Po5@
 Policy Qualifier CPS
 Policy Qualifier User Notice
 Polynomial:
@@ -4514,10 +4546,12 @@ Position Within Box Random
 Position Within Sphere Random
 Position on Model Random
 PosterSettings
-Pq4@
+Pp3@
+Pp5@
+Pq5@
+Pq6@
 Pr"V
-Pr5@
-Pr6@
+Pr3@
 Pre-Age Noise
 Prefix element cannot contain element or element_array attributes. ('%s')
 Preset File
@@ -4535,24 +4569,24 @@ Process32Next
 PropWorldOrigin
 Proxies
 Proxy Certificate Information
-Ps2@
-Ps5@
-Pt5@
-Pu2@
+Ps3@
+Pt3@
+Pt7@
+Pu3@
 Public Key
 Public-Key
 Public-Key: (%d bit)\n
-Pv2@
-Px5@
+Pv3@
+Pv7@
 Py3@
-Pz5@
+Pz3@
+Pz4@
 P|iC\r
 Q*hd
 Q/xtJ2
 Q4EX
-Q5rHg,>
 Q6p]
-QAf?
+QAngle
 QTk$
 Q`uV
 Qdsma
@@ -4655,6 +4689,43 @@ RE!r
 RE4\t
 READ_N
 REAL
+RENDER_BUFFER_ACCELERATION_STRUCTURE
+RENDER_BUFFER_BYTEADDRESS_BUFFER
+RENDER_BUFFER_PER_FRAME_WRITE_ONCE
+RENDER_BUFFER_POOL_ALLOCATED
+RENDER_BUFFER_SHADER_BINDING_TABLE
+RENDER_BUFFER_STRUCTURED_BUFFER
+RENDER_BUFFER_UAV_DRAW_INDIRECT_ARGS
+RENDER_BUFFER_USAGE_CONDITIONAL_RENDERING
+RENDER_BUFFER_USAGE_INDEX_BUFFER
+RENDER_BUFFER_USAGE_SHADER_RESOURCE
+RENDER_BUFFER_USAGE_UNORDERED_ACCESS
+RENDER_BUFFER_USAGE_VERTEX_BUFFER
+RENDER_MULTISAMPLE_16X
+RENDER_MULTISAMPLE_2X
+RENDER_MULTISAMPLE_4X
+RENDER_MULTISAMPLE_6X
+RENDER_MULTISAMPLE_8X
+RENDER_MULTISAMPLE_INVALID
+RENDER_MULTISAMPLE_NONE
+RENDER_MULTISAMPLE_TYPE_COUNT
+RENDER_PRIM_COMPUTE_SHADER
+RENDER_PRIM_HETEROGENOUS
+RENDER_PRIM_INSTANCED_QUADS
+RENDER_PRIM_LINES
+RENDER_PRIM_LINES_WITH_ADJACENCY
+RENDER_PRIM_LINE_STRIP
+RENDER_PRIM_LINE_STRIP_WITH_ADJACENCY
+RENDER_PRIM_MESH_SHADER
+RENDER_PRIM_POINTS
+RENDER_PRIM_TRIANGLES
+RENDER_PRIM_TRIANGLES_WITH_ADJACENCY
+RENDER_PRIM_TRIANGLE_STRIP
+RENDER_PRIM_TRIANGLE_STRIP_WITH_ADJACENCY
+RENDER_PRIM_TYPE_COUNT
+RENDER_SLOT_INVALID
+RENDER_SLOT_PER_INSTANCE
+RENDER_SLOT_PER_VERTEX
 REQUEST_CERTIFICATE
 REQUEST_VERIFY
 RESOURCE_ENCODING_COMPILEIMAGEUTILS_TEXT
@@ -4662,7 +4733,11 @@ RESOURCE_ENCODING_COUNT
 RESOURCE_ENCODING_INTROSPECTED
 RESOURCE_ENCODING_INVALID
 RESOURCE_ENCODING_KV3
+RESOURCE_ENCODING_LEGACY_VSND
 RESOURCE_ENCODING_MBUF
+RESOURCE_ENCODING_MIDX
+RESOURCE_ENCODING_MSLT
+RESOURCE_ENCODING_MVTX
 RESOURCE_ENCODING_RAW_BYTES
 RESOURCE_ENCODING_TEXT
 RESOURCE_ENCODING_VRMAN
@@ -4677,7 +4752,6 @@ RFC 5639 curve over a 320 bit prime field
 RFC 5639 curve over a 384 bit prime field
 RFC 5639 curve over a 512 bit prime field
 RFCY
-RGBA8888
 RH/Y
 RIPEMD160
 RM~]qY
@@ -4763,9 +4837,13 @@ RSA_verify_ASN1_OCTET_STRING
 RSA_verify_PKCS1_PSS
 RSA_verify_PKCS1_PSS_mgf1
 RSDS3p
+R\fp44$
 R\r1>Vp
+R\tV_log2f
+R\vp44$
 R]Di
 Radius Random
+Radius Scale
 RaiseException
 Random Cull
 Randomly Flip Yaw
@@ -4783,10 +4861,15 @@ Remap Distance to Control Point to Scalar
 Remap Noise to Scalar
 Remap Scalar
 Remove From CRL
+RenderBufferFlags_t
+RenderInputLayoutField_t
+RenderMultisampleType_t
+RenderPrimitiveType_t
+RenderSlotType_t
 ReportEventW
 Require Explicit Policy
 Required for any auto-tag. Restricts the auto-application of this tag to a specific asset type (string from assettypes_common.txt like 'material_asset' or 'model_asset')
-ResetEvent
+Reset
 Resource Name:
 Resource Type: %s = %lld (0x%08llX) [Version %d]\n
 Resource references not allowed in EditInfo data: "%s"
@@ -4819,7 +4902,6 @@ RtIF
 RtlCaptureContext
 RtlLookupFunctionEntry
 RtlPcToFileHeader
-RtlUnwind
 RtlUnwindEx
 RtlVirtualUnwind
 RxT\f0<1
@@ -4841,7 +4923,6 @@ S8#w
 S9>H
 S<Fb
 S<hN-AO
-S>$hkDh$h>[2
 SECG curve over a 112 bit prime field
 SECG curve over a 113 bit binary field
 SECG curve over a 128 bit prime field
@@ -5014,10 +5095,12 @@ SXNET_get_id_ulong
 SXNetID
 S\vQN
 Salt Length: 0x
+Scale factor to apply to the model at the minimum material blend weight value. Set this if you want the model to scale up as the material blend fades in. The samller the value, the smaller the model will start as the material begins to fade in.
 ScalpD
 Schema description file
+Screen space size [ 0, 1 ] (where 1 is the whole screen) at which the model will be completely faded out. Anything smaller than this size will not be visible, anything larger will start fading in.
+Screen space size [ 0, 1 ] (where 1 is the whole screen) at which the model will begin to to fade out. Anything larger will be fully visible, anything smaller will start to fade out.
 Sd:z
-SearchPaths
 Secure Electronic Transactions
 Security
 Seed:
@@ -5035,18 +5118,20 @@ SetConsoleCtrlHandler
 SetConsoleMode
 SetEndOfFile
 SetEnvironmentVariableW
-SetEvent
 SetFilePointerEx
+SetGrowSize
 SetLastError
 SetStdHandle
 SetUnhandledExceptionFilter
 ShellExecuteExA
+Should instances of this model generate shadows in the lightmap. Note that shadows in the light map will persist even after the model fades out.
 Signature verification failed.
-SleepConditionVariableCS
 SleepConditionVariableSRW
 Sn^G
+Specifies the number of props placed per square foot.
 Sr89[
 Stack part of OpenSSL 1.0.2j  26 Sep 2016
+Start fade out size
 StereoFlip
 Strong Extranet ID
 Subject Information Access
@@ -5065,10 +5150,9 @@ T*8U
 T0.S
 T61STRING
 T72[t
-T92@
 TC\tf\
-TD4@
 TELETEXSTRING
+TH5@
 TLS Web Client Authentication
 TLS Web Server Authentication
 TLS1_CHECK_SERVERHELLO_TLSEXT
@@ -5080,7 +5164,6 @@ TLSv1 part of OpenSSL 1.0.2j  26 Sep 2016
 TLSv1.1
 TLSv1.2
 TLSv1/SSLv3
-TM4@
 TM=U*
 TPD2
 TPS'
@@ -5089,7 +5172,6 @@ TQ\v;83
 TRG7ts
 TRUSTED CERTIFICATE
 TS lib
-TS2@
 TSA server
 TSG.
 TS_ACCURACY_set_micros
@@ -5136,12 +5218,12 @@ TS_VERIFY
 TS_VERIFY_CERT
 TS_VERIFY_CTX_new
 TUUUU
-TX6@
 TXJw^{
 TYPE=
-T\tV_sincosf
+TZ4@
 TanFrameQuat
 TerminateProcess
+TextBlock()
 TextImage
 Texture Configuration File
 The VData file to read
@@ -5154,16 +5236,18 @@ Thread32Next
 Tiid
 Time Stamp signing
 Time Stamping
-Tl3@
 TlsAlloc
 TlsFree
 TlsGetValue
 TlsSetValue
+Tn3@
+To3@
 TongueCurl
 TongueD
 TongueH
 TongueV
 TongueWidth
+ToolEditContext_ID_VMDL
 ToolImage( 16 )
 ToolImage( 64 )
 Toolutils
@@ -5178,7 +5262,6 @@ Trying to add a frame when there is no current sequence.\n
 Tu\t(OR
 Type=
 Tz$o
-Tz3@
 T~a@E
 U RDn
 U$qk.
@@ -5190,7 +5273,6 @@ U4tT
 U79Pc
 U7{8+S
 U?Y5qX}\tf
-UA>N0Wl
 UEax
 UFJ\ns
 UI_ctrl
@@ -5205,7 +5287,6 @@ UI_set_result
 UNDEF
 UNIV
 UNIVERSALSTRING
-UNKNOWN
 URI:%s
 USER32.dll
 USERNOTICE
@@ -5250,6 +5331,7 @@ Unserialize: Unable to start dmxconvert process\n
 Unserialize: Unexpected encoding name '%s' reading file '%s' - expected encoding '%s'\n
 Unserialize: Unexpected format '%s' reading file '%s' - expected format '%s'\n
 Unspecified
+Unsupported ETC image format %d.\n
 Unsupported extension feature
 Unsupported texture version: %d
 Unused
@@ -5297,6 +5379,10 @@ VMS_LOAD
 VMS_MERGER
 VMS_UNLOAD
 VPK directory for '%s' corrupt
+VSOUND_ADPCM
+VSOUND_MP3
+VSOUND_PCM16
+VSOUND_PCM8
 VTEX_FLAG_CREATE_LINEAR_API_TEXTURE
 VTEX_FLAG_CUBE_TEXTURE
 VTEX_FLAG_DEPRECATED_0
@@ -5340,6 +5426,7 @@ VTEX_FORMAT_WEBP_RGBA8888
 VY5[;o
 V\rKk
 V_a|I
+Value indicating if the model's up direction should be matched to the surface. Value should be in the [ 0, 1 ] range, where 0 means that the model up will be model (or object space) up and will ignore the surface direction, and 1 indicates that the model up will exactly match the surface normal.
 Valve Make Sheet File
 Valve Map File
 Valve Material File
@@ -5364,6 +5451,8 @@ VggjeK uO5n
 Vgui editor file
 Virual volume texture file
 Vp>u
+VsInputSignatureElement_t
+VsInputSignature_t
 Vt_9
 V~~Vq
 W!Uf
@@ -5402,11 +5491,9 @@ WTLS curve over a 160 bit prime field
 WTLS curvs over a 224 bit prime field
 WZTR
 W\noB
-WaNd?
 WaitForSingleObject
 WaitForSingleObjectEx
 WakeAllConditionVariable
-WakeConditionVariable
 Warning changing packing mode when %d sequences already defined. This may not be serialized correctly.\n
 Warning in .VMT file (%s): no ']' or '}' found in vector key "%s".\nDid you forget to surround the vector with "s?\n
 Wcr"
@@ -5426,12 +5513,13 @@ Writing .tga from float format image, values will be clamped [0..1].  Perhaps yo
 Wrote symbol stats to file: %s
 X.509 part of OpenSSL 1.0.2j  26 Sep 2016
 X/4B
-X15@
-X16@
+X03@
+X07@
 X24_TYPELESS_G8_UINT
 X32_TYPELESS_G8X24_UINT
 X400Name
 X400Name:<unsupported>
+X46@
 X500
 X500algorithms
 X509
@@ -5546,7 +5634,6 @@ X509v3 Subject Directory Attributes
 X509v3 Subject Key Identifier
 X509v3 extensions
 X509v3_add_ext
-X86@
 X9-57
 X9.42 DH
 X9.42 DH PARAMETERS
@@ -5565,91 +5652,94 @@ X9.62 curve over a 359 bit binary field
 X9.62 curve over a 368 bit binary field
 X9.62 curve over a 431 bit binary field
 X9.62/SECG curve over a 256 bit prime field
+X96@
+X97@
 X9_62_CHARACTERISTIC_TWO
 X9_62_CURVE
 X9_62_FIELDID
 X9_62_PENTANOMIAL
 X9cm
 X:vS
-XA2@
-XB2@
+XA3@
+XB7@
 XB`i|
-XC6@
-XD2@
-XD6@
+XD3@
 XD{p7
-XE4@
+XE3@
 XFle
+XG7@
 XG[r
-XK2@
+XH5@
 XLuC'4
-XM2@
-XM6@
+XM7@
 XMM{*
-XN2@
-XN6@
 XNU`{3
-XO2@
-XO4@
-XP2@
-XQ6@
+XP3@
+XR3@
 XRJ2
-XS4@
-XT4@
-XT6@
-XU2@
+XS3@
+XS7@
+XT5@
+XU3@
+XV3@
+XV5@
+XW5@
+XW7@
 XWY]
-XX2@
-XY2@
+XX5@
+XY3@
+XY7@
 XYD%
 XZ4@
+XZ5@
 X\tQo
-X]f1
-Xa2@
-Xa4@
-Xc3@
+Xa5@
+Xc4@
 Xd3h
-Xd5@
+Xd6@
+Xd7@
+Xe5@
 Xf3@
+Xf4@
+Xf6@
 XfJ7
-Xg2@
-Xg3@
-Xg6@
-Xh6@
+Xg4@
+Xg7@
+Xh3@
+Xh4@
 Xi3@
-Xi4@
-Xj3@
-Xj4@
+Xj6@
 XjfR
-Xl2@
-Xl4@
-Xn4@
-Xp4@
+Xk3@
+Xk4@
+Xm4@
+Xm6@
+Xn6@
+Xo6@
+Xp6@
+Xp7@
+Xq3@
 XqgA+
-Xr2@
-Xt2@
+Xr5@
+Xs5@
+Xt5@
 Xu5@
+Xu7@
 Xuub
-Xw5@
+Xw3@
 XwA0
-Xx2@
-Xy2@
-Xy5@
+Xx3@
 Xz"7
-Xz2@
 Y-Ny
 Y4i%
-Y8a:
 Y93a=7c@
 Y;C;8V
-Y>kX>M
 YGi\n
 YH%c
 YMI( 
 YS1n
 YWQa:B
 Y\f\vtw
-Y\tV_snprintf
 Y\vQlJ
 Y`\fpV
 Yb6N4
@@ -5677,7 +5767,6 @@ ZLONG
 ZSTD
 ZSz@
 ZXF,`i
-Z\>z8
 Zd[w
 Ze2Zh@
 ZjLS
@@ -5690,7 +5779,6 @@ Z~wl
 [%d] Pushing undo '%s'\n
 [%s] %s=%s\n
 [%s] Forced dmxconvert - Finished [%s] in %0.2f secs. Please re-save or upconvert this asset!\n
-[*ncd>0
 [AES part of OpenSSL 1.0.2j  26 Sep 2016
 [D55
 [HEX DUMP]:
@@ -5746,8 +5834,6 @@ Z~wl
 \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
 \n\tIPSec/IKE/Oakley curve #3 over a 155 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
 \n\tIPSec/IKE/Oakley curve #4 over a 185 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
-\nh?oT
-\nk>oB
 \nqYu
 \ntM(ie-V
 \r!\r+\r-\r=\r?\rO\rU\ri\ry\r
@@ -5762,12 +5848,14 @@ Z~wl
 \rY=QX
 \rYYHl
 \r\f\v\v\n\n\t\t\t\t\t
+\r\tV_atoi
 \r\vpL1
 \r^mX
 \ri1I
 \rjwB\t
 \roKK
 \rrCj
+\rtext
 \sG7tPD
 \t               
 \t                      by the engine DLL's, and game DLL's if mod is specified.  
@@ -5846,6 +5934,7 @@ Z~wl
 \tDepth        = %d\n
 \tExtra Data   = %d entries:\n
 \tExtra Data   = (none)\n
+\tFAILED to parse legacy VSound Header!
 \tFile Size: %s bytes\n
 \tFlags        = 0x%08X\n
 \tFormat       = %d (%s)\n
@@ -5861,6 +5950,7 @@ Z~wl
 \tNAN encountered in element '%s' guid %s attribute '%s'!\n
 \tNone\n
 \tNumMipLevels = %d\n
+\tReferenced by embedded mesh = %s%s\n
 \tReflectivity = ( %g, %g, %g, %g )\n
 \tResource Name: "%s"\n
 \tResource Type  \tExtraction Type\tDescription\n
@@ -5868,11 +5958,10 @@ Z~wl
 \tSpecified extraction type "%s" not supported for resource type %s!\n
 \tVPK File % 4d: /%s\n
 \tVTEX Version = %d\n
+\tV_atan2f
 \tV_fclose
-\tV_fflush
-\tV_fopenUTF8
-\tV_ftell
-\tV_fwrite
+\tV_strtod
+\tV_tanf
 \tV_vsnprintf
 \tVertex Buffer%s\n
 \tWarning
@@ -5884,11 +5973,15 @@ Z~wl
 \t[ Input ]\n
 \t[ Operations ]\n
 \t\n--- (Unsupported texture version: %d)\n\n
+\t\n\v\n\v\n\v\n\v\n\v\n\v\n\v\n\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\r\f\r\f\r\f\r\f\r\f\r\f\r\f\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r
 \t\tCreation Flags =%s%s%s%s\n
-\t\tElements = %i\n
-\t\tElementsSize = %i bytes\n
+\t\tIndexSize = %i bytes\n
+\t\tIndices = %i\n
 \t\tInput Layout Fields\n
 \t\tTotal Size = %s
+\t\tTriangles = %i\n
+\t\tVertexSize = %i bytes\n
+\t\tVertices = %i\n
 \t\t[-b <block id>]\n
 \t\t[-baremode]\n
 \t\t[-dep] [compile] [runtime]\n
@@ -5898,6 +5991,7 @@ Z~wl
 \t\t[-game_res_kv3] <mod name>\n
 \t\t[-maxelements max_elements] \n
 \t\t[-module_dep] <module name>\n
+\t\t\t%s%i %s @%i-%i
 \t\t\t%s%i %s @%i-%i\n
 \t\t\tLZ4HC level %i, %i->%i (%02i%% -%s) in %.1fms (%.2fmb/sec)\n
 \t\t\tZSTD level %i, %i->%i (%02i%% -%s) in %.1fms (%.2fmb/sec)\n
@@ -5915,18 +6009,23 @@ Z~wl
 \tg_pMemAlloc
 \tg_pThreadPool
 \tkE>fvw
+\tm_flDuration  = %.6f\n
+\tm_loopStart   = %d\n
+\tm_nChannels   = %d\n
+\tm_nFormat     = %d (%s)\n
+\tm_nRate       = %d\n
+\tm_sampleCount = %d\n
 \toRE
 \ttqE5
 \t}BzJ88
 \v#\v)\v-\v?\vG\vQ\vW\v]\ve\vo\v{\v
-\vA03>A|
 \vBCeA
 \vGt5
 \vHCK/
 \vNCE\v
 \vUY6[E
+\v\tV_atofloat32
 \v\vTSG
-\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r
 \vj0k
 \vjC7
 ]1h=bfz
@@ -5942,13 +6041,10 @@ Z~wl
 ^J_spY
 ^Nij
 ^RB!r
-^RfN>
 _Ek6b]
 _Lx6
 _OPENSSL_isservice
-_RDATA
 _YWL
-_\tV_sscanf
 __based(
 __cdecl
 __clrcall
@@ -5977,7 +6073,6 @@ _mip%d
 _multibase
 _name
 _not_pickable
-_oD>Kg
 _xU`u
 _z%03d
 _}eOk
@@ -5989,7 +6084,7 @@ _}eOk
 `ITS
 `RTTI
 `VX:H
-`\tV_sscanf_s
+`\tV_powf
 `anonymous namespace'
 `copy constructor closure'
 `default constructor closure'
@@ -6029,7 +6124,6 @@ _}eOk
 `vftable'
 `virtual displacement map'
 `yNT
-`yh1
 a null shared library handle was used
 a(hq
 a2d_ASN1_OBJECT
@@ -6039,7 +6133,6 @@ a2i_ASN1_STRING
 a2i_GENERAL_NAME
 a4H>
 a5<p
-a6>r
 a;Tg
 a@XZ
 aA0k
@@ -6063,6 +6156,7 @@ aRWZ5
 aRecord
 aSRP
 aXvC
+a\tV_qsort
 a]?xG
 aaControls
 abcdefghijklmnopqrstuvwxyz
@@ -6081,7 +6175,6 @@ ad_timestamping
 add signer error
 adding object
 additional verification
-addonroot
 address family not supported
 address in use
 address not available
@@ -6147,7 +6240,6 @@ alphatest_hifreq_threshhold
 alphatest_threshhold
 already connected
 already loaded
-always
 ambientOcclusionMode
 ambientcolor2
 ambientcolor3
@@ -6205,6 +6297,7 @@ attempt to reuse session in different context
 attenuation0
 attenuation1
 attenuation2
+attrib
 attributes
 audio
 audioTarget
@@ -6221,6 +6314,7 @@ auto_time
 aux error
 awO8
 axfb5
+axis
 axisSystem
 aybSr
 a|gj(
@@ -6238,6 +6332,7 @@ bPb:L7X)
 bSh&+
 bV}TS
 b\fzUkm
+b\tV_qsort_s
 b]jY
 background
 backgroundMap
@@ -6328,7 +6423,6 @@ balance$0
 balance$0Indices
 balanceIndices
 balancechannel
-base
 base64 decode error
 base64 encoding
 baseLayer
@@ -6460,7 +6554,6 @@ c2tnb359v1
 c2tnb431r1
 c51.l
 c5@O
-c?FA@s}
 cACertificate
 cL;p
 cNAMERecord
@@ -6551,9 +6644,8 @@ challenge
 challenge is different
 challengePassword
 changeColorChannels
-channels
+channel
 characteristic-two-field
-children
 chlist
 choices
 chunk >= 0
@@ -6576,7 +6668,6 @@ clampextendtlastframe
 clamps
 clampt
 clampu
-classname
 cleanup method function failed
 clearDecals
 clearance
@@ -6614,6 +6705,7 @@ collisionmesh
 color log
 color$0
 color$0Indices
+color1
 color255
 color_array
 color_blue
@@ -6630,6 +6722,7 @@ combo
 command not supported
 command takes input
 command takes no input
+commentary
 common libcrypto routines
 common ok and cancel characters
 commonName
@@ -6691,7 +6784,6 @@ cookie mismatch
 coordSys
 coordinates out of range
 copy
-core
 could not bind to the requested symbol name
 could not load the shared library
 could not obtain hardware handle
@@ -6742,7 +6834,6 @@ ctx->length <= (int)sizeof(ctx->enc_data)
 ctx->tmp_len <= 3
 cubemap
 curvature
-curve
 curve info
 curvetypes
 custom
@@ -6815,23 +6906,22 @@ d2i_X509_PKEY
 d35P
 d4\tp
 d8L2
+d93@
 d=%-2d hl=%ld l=%4ld 
 d=%-2d hl=%ld l=inf  
-d?000000`?
 dAN"
 dDV8
+dH5@
 dHHp
+dI5@
 dITRedirect
-dM4@
 dNSDomain
 dOj\f,
-dP2@
-dRL>
+dS3@
 dSAQuality
 dWry
 dZ!2.
 d[kHy 
-d\tV_stricmp_fast
 d_r_0
 data
 data between ccs and finished
@@ -6846,6 +6936,7 @@ data too small
 data too small for key size
 dataEncipherment
 dataWindow
+data_block
 data_offset
 data_plus_mac_plus_padding_size < 1024 * 1024
 data_size
@@ -6904,6 +6995,7 @@ des-ede3-cfb8
 des-ede3-ofb
 des-ofb
 des3
+description
 destination address required
 destinationIndicator
 desx
@@ -6954,7 +7046,6 @@ dinfo
 dirName
 direction
 directlight
-directory
 directory not empty
 directory services (X.500)
 directory services - algorithms
@@ -6975,6 +7066,7 @@ distinguishedName
 distpoint
 distpoint already set
 div by zero
+dl4@
 dmdName
 dmemesh
 dmfbxserializer
@@ -7000,7 +7092,6 @@ doesn't contain
 domain
 domainComponent
 domainRelatedObject
-double
 drawGameRenderablesMask
 drawToolRenderablesMask
 dsa not implemented
@@ -7045,9 +7136,9 @@ duplicate zone id
 durationTime
 dvcs
 dxt5
-dy2@
 dynamic
 dynlock
+dz4@
 e+000
 e+3E
 eBeL
@@ -7055,12 +7146,18 @@ eC z
 eContent
 eContentType
 eF>t
+eFast
 eLK(w
+eMoveWithGait
 eN.d\tA
 eNULL
 eO@R
 eODj
+eSlow
 eTU\n
+eTeleport
+eWait
+eWaitFacing
 eXQd
 e\tcCPtH
 ec group new by name failure
@@ -7139,6 +7236,7 @@ emailAddress
 emailCA
 emailProtection
 embeddedTarget
+embedded_meshes
 emissionStopTime
 emitting
 empty file structure
@@ -7165,6 +7263,7 @@ encryption ctrl failure
 encryption not supported for this key type
 endFrame
 endTime
+endframe
 engine configuration error
 engine is not in the list
 engine routines
@@ -7173,6 +7272,7 @@ engines section error
 enhancedSearchGuide
 ent_dota_lightinfo
 enterprises
+entity
 entityUInfo
 entity_properties
 entry_anim
@@ -7270,12 +7370,9 @@ f1cK%
 f45\r
 fBB\fy
 fC\tc
-fD>b
 fL\ri
 fP;y
 fUnh\
-fWi?
-f\tV_strlower_fast
 f\trixZ
 facial_animation
 facsimileTelephoneNumber
@@ -7283,10 +7380,11 @@ fadeIn
 fadeOut
 failed loading private key
 failed loading public key
-failure
 fallbacks
+falloff
 falloff_left
 falloff_right
+fast
 fast_strobe
 fatal
 favouriteDrink
@@ -7300,7 +7398,6 @@ fieldType
 file exists
 file too large
 file:
-filename
 filename too big
 filename too long
 filterType
@@ -7325,7 +7422,6 @@ fog_lighting
 fogcontributionstrength
 fogshadows
 fogstrength
-fopen
 fopen('
 format error in CRL's lastUpdate field
 format error in CRL's nextUpdate field
@@ -7334,10 +7430,8 @@ format error in certificate's notBefore field
 forward
 forwardParity
 fpnS
-frame
 frame %s{r=0},%s{g=a},%s{b=0},%s{a=a} %s
 frameRate
-framerate
 frames
 freshestCRL
 friendlyCountry
@@ -7351,7 +7445,6 @@ func_physbox
 function not supported
 functionName
 functionality not supported
-future
 future already retrieved
 fxv^
 g u}DE
@@ -7368,7 +7461,6 @@ g]i/H
 ga_frame
 game:tools/images/assettypes/generic_lg.png
 game:tools/images/assettypes/generic_sm.png
-gameinfo
 gameitemclass
 gameunitclass
 gb`X
@@ -7413,83 +7505,70 @@ h&eC
 h*Ax
 h0'D
 h0XB
-h15@
-h16@
 h2Wl
 h2n_\
-h36@
+h46@
 h5N.
-h65@
-h66@
-h86@
-h>1my
-hA2@
-hC2@
-hC4@
-hC6@
-hD2@
+h87@
+h96@
+h97@
+hA3@
+hB3@
+hB7@
+hD3@
 hEM&!
-hF2@
 hF\rDz
 hFcg
-hH6@
-hI2@
-hI3@
+hH5@
+hH7@
 hJxRX@_
-hL2@
-hN2@
+hK3@
+hM3@
 hN2D
-hO2@
-hO6@
-hQ4@
-hQ6@
-hR2@
+hN3@
+hO3@
+hP3@
+hQ7@
+hR7@
 hRB.
 hU3@
-hU5@
-hV4@
 hW*m
 hW1M
-hW4@
 hW_z
-hX2@
+hX3@
 hX@e
-hY4@
-hY6@
-hZ3@
-hZ5@
-hZ6@
+hY3@
+hY5@
+hZ7@
 h`Zr
+ha3@
 hammer
 hash
 hashAlgorithm
 hashFunc
-hb4@
-hb5@
 hb`V
 hbvc
 hc4@
-hc5@
+hc6@
 hc[N
 hc\raF
 hcrop
-hd3@
-hd4@
 hd5@
-he2@
-he3@
+hd6@
+he7@
 header too long
 heartbeat request already pending
-height
 hex:
 hex_to_string
 hexkey
-hf5@
+hf4@
+hf6@
+hg3@
 hg4@
-hh3@
-hh5@
+hh6@
+hh7@
 hhwi
-hi3@
+hi4@
 hi6@
 hiddenFlags
 hiddenGroups
@@ -7497,14 +7576,12 @@ hide_debug_complaints
 high_priority
 hintDxt5Compression
 hitbox
-hj2@
-hj3@
 hj4@
-hk2@
+hj6@
+hl3@
+hl5@
 hl5v
-hl6@
 hloav\\t
-hm3@
 hmac
 hmac-md5
 hmac-sha1
@@ -7514,11 +7591,8 @@ hmacWithSHA224
 hmacWithSHA256
 hmacWithSHA384
 hmacWithSHA512
-hn2@
-hn4@
+hn5@
 hnM<
-ho2@
-ho4@
 holdInstructionCallIssuer
 holdInstructionCode
 holdInstructionNone
@@ -7527,21 +7601,20 @@ hold_left
 hold_right
 homePostalAddress
 homeTelephoneNumber
-host
 host unreachable
 houdini
 houseIdentifier
-hq4@
+hq7@
+hr3@
+hr7@
 hr_H
-hs2@
-ht2@
+hs5@
+ht3@
 http request
 https proxy request
-hu5@
 hvL&
-hw5@
-hx5@
-hy5@
+hx3@
+hy3@
 hz3@
 h|gg
 i <= EVP_MAX_MD_SIZE
@@ -7864,6 +7937,7 @@ index too small
 indirectCRL
 indirectlight
 infinite
+info
 info_particle_system
 inhibitAnyPolicy
 inhibitPolicyMapping
@@ -7880,16 +7954,15 @@ insert
 instance_file
 instance_parm
 instance_variable
-int16
-int32
-int64
 int_array
 int_dhvparams
 int_dhx942_dh
 int_err_get (err.c)
 int_thread_get (err.c)
+integer
 integer not ascii format
 integer too large for long
+intensity
 internal list error
 international-organizations
 internationaliSDNNumber
@@ -8041,7 +8114,6 @@ jOJw"
 jTuf
 jV*d9O
 j[6Z
-j\tV_strtod
 j\vIP{s
 janetMailbox
 jb:5
@@ -8157,21 +8229,22 @@ k~Rz
 l <= sizeof(c->iv)
 l&rB6
 l4Ot
-l65@
 l7@J
+l93@
 lC57
-lD4@
 lDcW
 lG4@
+lH5@
+lK5@
 lM2p
-lM4@
+lZ4@
+l\tV_sincosf
 language
 last octet invalid
 lastModifiedBy
 lastModifiedTime
 lastUpdate
 layers
-lc3@
 lcO/<1\r=,!\r-@@@
 left
 leftEdgeActive
@@ -8185,7 +8258,6 @@ leftvaluechannel
 lei5:
 len <= SSL3_RT_MAX_PLAIN_LENGTH
 len == (unsigned int)ret
-length
 length error
 length is greater than %ld\n
 length mismatch
@@ -8223,17 +8295,15 @@ localityName
 location
 locator
 lock to bone
-long
 lower_hemisphere_is_black
 lowprecisionuv
 lowprecisionuv1
-ly3@
+lz4@
 m&9W
 m*Zu
 m4}O
 m>FC*a7H
 m>gh
-m?H7
 mAFr
 mDJe
 mG4>
@@ -8261,8 +8331,10 @@ m_BlockID
 m_Blocks
 m_Checks
 m_ChildResourceList
+m_Command
 m_CompileDependsOnResourceTypes
 m_CompilerIdentifier
+m_Description
 m_Encoding
 m_EngineCommands
 m_EngineModulesThatReferenceAssets
@@ -8276,6 +8348,7 @@ m_FilterFunc
 m_Filters
 m_FixDescription
 m_FixType
+m_Format
 m_FriendlyName
 m_Group
 m_HideForRetailMods
@@ -8289,13 +8362,17 @@ m_Library
 m_LimitToMods
 m_Manifests
 m_MatchSystemExecutable
+m_MaterialGroup
 m_Mod
+m_ModelName
+m_Models
 m_OverrideToolShortcutName
 m_ParameterType
 m_PriorityExts
 m_RelativeFilename
 m_RequireSearchableIntKey
 m_RequireSearchableIntValue
+m_RequiredSpecialDependency
 m_ResourceVersion
 m_Resources
 m_RestrictAutoTagToAssetType
@@ -8313,26 +8390,44 @@ m_TagAliases
 m_TagColor
 m_TagDescription
 m_TagIcon
+m_TagName
 m_ThumbnailOverlayImage
 m_Title
 m_ToolIcon
 m_WeakReferenceList
 m_WorkingDir
+m_bAllowedToCompileInTestMode
+m_bBakedTwoSided
 m_bBringEngineToFront
+m_bCanBatchWithDynamicShaderConstants
 m_bCanHighlightSubassets
 m_bCannotBeAMultiParentChildCompile
 m_bCannotBeShown
+m_bCastStaticShadows
+m_bCompressedZSTD
 m_bContentFileIsText
+m_bCreateBufferSRV
+m_bCreateBufferUAV
+m_bCreatePooledBuffer
+m_bCreateRawBuffer
 m_bDebugCommandline
 m_bDoNotWarnAboutLargeAssetBatches
+m_bDrawLast
 m_bFileExists
+m_bHasBakedLightingFromLightMap
+m_bHasBakedLightingFromVertexStream
 m_bHideTypeByDefault
 m_bIgnoreCompiledState
 m_bIsGameFile
 m_bIsNontrivialChildAssetType
+m_bIsNotMatchedToMaterial
 m_bIsSecondaryTool
 m_bIsWorkshopItemTool
 m_bIsWorkshopManagerTool
+m_bMeshoptCompressed
+m_bMeshoptIndexSequence
+m_bNoShadow
+m_bOnlyShadow
 m_bOnlyWarnAddons
 m_bOnlyWarnIfContentFilePresent
 m_bOnlyWarnIfGameFilePresent
@@ -8347,13 +8442,47 @@ m_bSuppressFullFingerprintCalculation
 m_bTagHidesAssetByDefault
 m_bTagIndicatesRejectedAsset
 m_bUnrecognizedReferencesAreErrors
+m_bUseCompressedNormalTangent
+m_depth_elems
+m_elems
 m_fMoveTo
+m_flBlendWeightMinScale
+m_flDensity
+m_flEndFadeSize
+m_flMaxSurfaceSlope
+m_flMinSurfaceSlope
+m_flOrientToSurface
+m_flRandomVerticalOffsetMax
+m_flRandomVerticalOffsetMin
+m_flStartFadeSize
+m_indexBuffers
+m_inputLayoutFields
+m_nBlockIndex
+m_nD3DSemanticIndex
+m_nDataBlock
+m_nElementCount
+m_nElementSizeInBytes
 m_nFileCRC
 m_nFingerprint
 m_nFingerprintDefault
+m_nMeshIndex
+m_nMorphBlock
+m_nOffset
+m_nSemanticIndex
+m_nSlot
+m_nSlotType
 m_nSourceLine
+m_nToolsVBBlock
 m_nUserData
+m_nVBIBBlock
+m_pD3DSemanticName
+m_pSemantic
+m_pSemanticName
 m_pVertexData
+m_sId
+m_szShaderSemantic
+m_toolsBuffers
+m_vertexBuffers
 ma\v\r01!
 mac absent
 mac generation error
@@ -8366,7 +8495,6 @@ mac_secret_length <= sizeof(hmac_pad)
 mac_size <= EVP_MAX_MD_SIZE
 mail
 mailPreferenceOption
-main
 maintain position along path
 makefile
 malloc failure
@@ -8385,6 +8513,7 @@ maxChannels
 maxThrust
 max_thrust
 max_time
+maximum
 maxsize=
 maya
 md bio init error
@@ -8400,11 +8529,16 @@ md_length_size <= MAX_HASH_BIT_COUNT_BYTES
 md_size <= EVP_MAX_MD_SIZE
 mdc2
 mdc2WithRSA
+medium
 member
 member-body
 memory buffer
 memory buffer routines
 merchant initiated auth
+mesh_calculate_curvature_smooth_invert
+mesh_calculate_curvature_smooth_pass_count
+mesh_calculate_curvature_smooth_weight
+mesh_index
 message digest
 message digest is null
 message extensions
@@ -8429,6 +8563,7 @@ mime-mhs-headings
 minThrust
 min_thrust
 min_time
+minimum
 minsize=
 mips
 missing asn1 eos
@@ -8460,16 +8595,18 @@ missing tmp rsa pkey
 missing value
 missing verify message
 mobileTelephoneNumber
-mode
 modelPath
 model_attachment
 model_bone
+model_default_preview_sequence_name
 model_path
 modo
 module initialization error
 module=
 modulus too large
 modulus:
+morph_block
+morph_texture
 move
 move_to_gait
 movieSettings
@@ -8522,7 +8659,6 @@ nSRecord
 nStf,a
 nSw}Z\tu
 n\r2S
-n]?iJ
 n`3i
 name constraints minimum and maximum not supported
 name too long
@@ -8722,7 +8858,6 @@ not key transport
 not loaded
 not proc type
 not pwri
-not supported
 not supported for this key type
 notAfter
 notBefore
@@ -8743,13 +8878,11 @@ nsRevocationUrl
 nsSGC
 nsSslServerName
 nssslserver
-null
 null before block missing
 null is wrong length
 null parameter
 null ssl ctx
 null ssl method passed
-nullptr
 numTimeSteps
 num_particles
 number=%d, address=%08lX\n
@@ -8760,11 +8893,9 @@ o&1m&
 o)nV
 o1+v3
 o2i_ECPublicKey
-o?GS
 oB4Do4
 oBFX}k6U
 oG)e5L
-oI>O7
 oMinghuaQu
 oN86
 oWnS
@@ -8785,6 +8916,7 @@ odMsh
 odd number of chars
 odd number of digits
 oeap
+offset
 offsetTime
 oi3o
 old session cipher not returned
@@ -8865,48 +8997,56 @@ p.other
 p.ppBasis
 p.prime
 p.tpBasis
-p02@
-p15@
+p03@
+p07@
 p2{l
+p44$
+p46@
 p4Z3
 p4diff
 p5Z3
 p5\nL,
 p618
-p>dO&
+p67@
+p77@
+p93@
+p96@
 p@0pqE5tsO?|1
-pB2@
-pC4@
+pA7@
+pC3@
+pC7@
 pD4t
-pF6@
-pG2@
-pG6@
+pE3@
+pF7@
 pG_*h
-pH2@
-pI3@
+pH3@
+pI5@
 pIp 
-pK2@
-pM2@
-pM6@
-pN2@
-pN6@
+pJ3@
+pM3@
+pM7@
 pO0h
-pP2@
-pP4@
-pQ2@
+pQ3@
+pQ5@
 pRTH
-pS2@
+pS3@
+pS5@
+pS7@
 pSPo
 pSourceFunc
 pSpecified
-pT2@
-pT4@
-pT6@
-pU2@
+pT3@
+pT5@
+pU5@
 pU>\AL
-pV2@
-pY2@
+pV3@
+pW3@
+pW5@
+pW7@
+pX5@
+pZ3@
 pZ4@
+pZ5@
 p^i9
 pa5@
 packet length too long
@@ -8924,7 +9064,6 @@ parents asset
 parents asset (exact)
 parse error
 parse tlsext
-particle
 partyName
 passed a null parameter
 passed null parameter
@@ -8944,6 +9083,8 @@ pathlen
 pattern
 payload + padding <= 16381
 payment gateway capabilities
+pb3@
+pb7@
 pbeWithMD2AndDES-CBC
 pbeWithMD2AndRC2-CBC
 pbeWithMD5AndCast5CBC
@@ -8957,10 +9098,8 @@ pbeWithSHA1And40BitRC2-CBC
 pbeWithSHA1And40BitRC4
 pbeWithSHA1AndDES-CBC
 pbeWithSHA1AndRC2-CBC
-pc2@
-pc3@
 pcPathLengthConstraint
-pe4@
+pd3@
 pe5@
 peer did not return a certificate
 peer does not accept heartbeats
@@ -8980,16 +9119,15 @@ personalSignature
 personalTitle
 pf3@
 pfmscale
-pg2@
-pg3@
-ph4@
+pg4@
+ph3@
 photo
 phrase is too short, needs to be at least %d chars\n
 physicalDeliveryOfficeName
+physics
 physicsSimplificationError
 physicsSimplificationOverride
-pi4@
-pi5@
+pi3@
 pilot
 pilotAttributeSyntax
 pilotAttributeType
@@ -9004,7 +9142,6 @@ pinEnabled
 pin_enabled
 pivotOffset
 pixelAspectRatio
-pj3@
 pk4@
 pkL'
 pkcs
@@ -9039,6 +9176,14 @@ pkeyalg
 pkix
 pkparameters2group failure
 pl4@
+pl6@
+pm3@
+pm4@
+pn3@
+pn6@
+po3@
+po6@
+po7@
 point arithmetic failure
 point at infinity
 point is not on curve
@@ -9078,16 +9223,18 @@ posxyz
 pp == NULL || *pp != NULL
 pp&c
 pp3@
-pp4@
+pp5@
+pp6@
+pp7@
 ppBasis
-pq2@
+pq3@
 pqualid
-pr2@
 pre mac length too long
 prefab_has_runtime_entity_by_default
 prefab_root
 preferredDeliveryMethod
 presentationAddress
+preset
 presetGroups
 presetRemap
 presets
@@ -9105,6 +9252,7 @@ prime239v3
 prime256v1
 prime2:
 prime:
+priority
 priv [ %d ] 
 priv:
 priv_key
@@ -9140,14 +9288,16 @@ proxyCertInfo
 proxyPolicy
 proxyType
 ps(crh
-ps5@
+ps6@
+ps7@
 psC3
 pseudonym
 psk identity not found
 psk no client cb
 psk no server cb
 pt5@
-pu2@
+pt7@
+pu3@
 pub: 
 pub_key
 pubkey
@@ -9161,15 +9311,13 @@ public-key:
 publicExponent:
 publicKey
 public_key
-publiccontent
 purecall
-pv2@
+pv3@
+pv7@
 pvk data too short
 pvk too short
-px2@
-py2@
-pz2@
-pz5@
+pw3@
+py4@
 pzKD)
 q not prime
 q&A\nn
@@ -9184,10 +9332,9 @@ qF{qc\t
 qIRH
 qOy*o
 qPq2k
-qS>g?h3
 qTm_fC=
 qUN1
-q\tV_tanf
+q\tV_snprintf
 qangle_array
 qcStatements
 qf`ny
@@ -9214,6 +9361,7 @@ rZ1VwGf5
 rZPM
 r\tVr.>T
 r\vDi
+r\vp44$
 radiusScale
 radius_random
 radius_scale
@@ -9289,7 +9437,6 @@ requireExplicitPolicy
 required cipher missing
 required compresssion algorithm missing
 resampleinterval
-reserved
 resource deadlock would occur
 resource unavailable try again
 resourceinfo
@@ -9423,14 +9570,15 @@ saturation
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
+scale
 scaleColor
 scene
 schemasystem
 screenWindowCenter
 screenWindowWidth
-script
 scripted_sequence
 scriptlist
+scripts/detail_prop_types.vdata
 scsv received when renegotiating
 sdsiCertificate
 searchGuide
@@ -9488,6 +9636,7 @@ selectionGroups
 self signed certificate
 self signed certificate in certificate chain
 semanticName
+sequence
 sequence length mismatch
 sequence not constructed
 sequence or set needs config
@@ -9497,7 +9646,6 @@ sequences
 sequential position along path
 serial
 serialNumber
-server
 server finished
 server read error
 server response error
@@ -9729,6 +9877,7 @@ skycolor
 skyintensity
 skyname
 slot full
+slow
 slow_pulse_nofade
 slow_strobe
 slow_strong_pulse
@@ -9907,6 +10056,7 @@ stLDp
 stack buffer overrun (/GS failure)
 staggerinterval
 standard
+start
 startFrame
 startTime
 start_on_spawn
@@ -9963,18 +10113,14 @@ t0;?ZlP*m
 t2U 
 t4O_
 t80z
-t92@
 tA`KO/3G!\n7h=
-tD4@
 tGTS
+tH5@
 tLY^m`6
 tLl 
 tLsq
-tM4@
 tNt5
-tR2@
-tZ3@
-table
+tP3@
 tag mismatch
 tag value too high
 tag=
@@ -10009,13 +10155,13 @@ tex_source1
 texcoord
 texcoord$0
 texcoord$0Indices
-text
 text file busy
 text/plain
 text:
 textEncodedORAddress
 textNotice
 text_block
+texture
 textureCompileSettings
 textureCoordinates
 textureCoordinatesIndices
@@ -10028,7 +10174,6 @@ there must be one signer
 thisUpdate
 thread=%lu, 
 tier0.dll
-time
 time not ascii format
 time stamp routines
 time syscall error
@@ -10086,8 +10231,8 @@ too many iterations
 too many links
 too many symbolic link levels
 too many temporary variables
+tools_vb_block
 toolutils2
-tp3@
 tpBasis
 tq}a
 trail_length_random
@@ -10103,7 +10248,6 @@ tsa name mismatch
 tsa untrusted
 tst info setup error
 ty3@
-type
 type not compressed data
 type not constructed
 type not data
@@ -10278,6 +10422,7 @@ unsupported ssl version
 unsupported status type
 unsupported type
 unsupported version
+unused
 unwrap error
 unwrap failure
 upAxis
@@ -10285,7 +10430,6 @@ use srtp not negotiated
 useEdgeInfo
 usecurvetypes
 useedgeinfo
-user
 user too long
 userCertificate
 userClass
@@ -10350,6 +10494,7 @@ variableOverrideValues
 variableSubTypes
 variableTypeNames
 variableTypes
+vbib_block
 vconsole2_
 vcrop
 vecline
@@ -10360,11 +10505,13 @@ vector3_array
 vector4_array
 vector<T> too long
 velTolerance
+velocity
 velocity_random
 velocity_tolerance
 verification failure
 version incompatibility
 vertexFormat
+very_fast
 videoTarget
 virtualvolumetexture
 visbility
@@ -10409,6 +10556,7 @@ wQ0"
 wR\fe3c
 wRlb.
 wY[K,
+w\tV_sscanf
 w_5&#R4
 wap-wsg
 wap-wsg-idm-ecid-wtls1
@@ -10429,7 +10577,6 @@ weightweight$0
 weightweight$0Indices
 wfA'@7
 whirlpool
-width
 win64
 wlLYP
 wm"h
@@ -10444,7 +10591,6 @@ wrinkle
 wrinkle$0
 wrinkle$0Indices
 wrinkleIndices
-write
 write bio not set
 write to read only BIO
 wrong certificate type
@@ -10472,8 +10618,8 @@ w{Z0
 x#Nb
 x,5J
 x/OA
+x06@
 x121Address
-x15@
 x500UniqueIdentifier
 x509
 x509 certificate routines
@@ -10486,74 +10632,72 @@ x509_info
 x509_pkey
 x509_req
 x509_store
-x76@
 x931
-xA2@
-xB2@
-xC2@
-xC4@
-xD2@
+x96@
+x97@
+xA3@
+xB7@
+xC3@
+xC6@
+xD3@
+xF3@
 xFKF
-xI2@
+xG7@
+xH5@
 xI3@
-xK2@
-xL2@
-xN4@
-xO2@
+xI4@
+xL3@
+xN3@
+xO3@
 xOu\vsF
-xQ6@
 xQfF
-xS4@
-xT?V
-xU5@
+xR3@
+xU4@
 xUN'
-xV4@
-xV6@
-xW6@
-xX4@
-xX6@
-xY5@
-xZ3@
+xX3@
+xX7@
+xY7@
+xZ4@
+x\tV_sscanf_s
 x\v6V
-xa2@
-xb2@
 xb5@
-xc4@
-xc5@
+xc7@
 xcoord
+xd4@
+xd6@
+xd7@
 xe3@
-xf2@
-xf4@
+xe4@
 xg-9Ja
-xg6@
-xh2@
-xh3@
-xh5@
+xg5@
+xg7@
+xh4@
 xh6@
-xi2@
-xi3@
+xi4@
 xi6@
+xi7@
 xj3@
+xj4@
 xj6@
 xk3@
-xl2@
-xl3@
+xk6@
 xm4@
-xn2@
+xm6@
+xn3@
+xo3@
+xo5@
 xp$=S
-xp2@
-xp3@
 xpH8
-xq4@
+xq6@
 xqI9
 xr5@
 xrJ:DCG
+xs3@
 xsK;
-xu5@
-xv5@
-xw5@
+xt3@
+xu7@
 xxH}
-xy5@
+xz4@
 xzxv
 y#y&Jb
 y0JY
@@ -10602,6 +10746,7 @@ zz2K
 |BDmeElement
 |InzT
 |XYl
+|\tV_stricmp_fast
 |hdX)
 |sG2
 |}Eq1
@@ -10617,6 +10762,7 @@ zz2K
 ~If D
 ~P2T
 ~R65Fu
+~\tV_strlower_fast
 ~jLRG
 ~w]UG
 ~yhZ

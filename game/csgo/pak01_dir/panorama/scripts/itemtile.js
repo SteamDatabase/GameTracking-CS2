@@ -216,6 +216,10 @@ var ItemTile;
             $.DispatchEvent("OnItemTileActivated", $.GetContextPanel(), id);
             return;
         }
+        if ($.GetContextPanel().FindAncestor("id-pet-sticker-item-list") != null) {
+            $.DispatchEvent("OnItemTileActivated", $.GetContextPanel(), id);
+            return;
+        }
         let capabilityInfo = _GetPopUpCapability();
         if (capabilityInfo) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_item_select', 'MOUSE');

@@ -167,4 +167,11 @@ var FormatText;
         }
     }
     FormatText.FormatRentalTime = FormatRentalTime;
+    function FormatNumberToNiceString(value, nsigdigits) {
+        let strNum = value.toFixed(nsigdigits);
+        strNum = strNum.replace('.', $.Localize('#LOC_Number_DecimalPoint'));
+        strNum = strNum.replace(/\B(?=(\d{3})+(?!\d))/g, $.Localize("#LOC_Number_Grouping"));
+        return strNum;
+    }
+    FormatText.FormatNumberToNiceString = FormatNumberToNiceString;
 })(FormatText || (FormatText = {}));

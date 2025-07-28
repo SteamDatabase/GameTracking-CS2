@@ -428,11 +428,8 @@ var PlayMenu;
     function _IsGameModeAvailable(serverType, gameMode) {
         let isAvailable = true;
         if (gameMode === "cooperative" || gameMode === "coopmission") {
-            const questID = GetMatchmakingQuestId();
-            const bGameModeMatchesLobby = questID !== 0 && (LobbyAPI.GetSessionSettings().game.mode === gameMode);
-            const bAvailable = bGameModeMatchesLobby && MissionsAPI.GetQuestDefinitionField(questID, "gamemode") === gameMode;
-            _SetGameModeRadioButtonVisible(gameMode, bAvailable);
-            return bAvailable;
+            _SetGameModeRadioButtonVisible(gameMode, false);
+            return false;
         }
         else if (m_gameModeConfigs[gameMode] &&
             _GetAvailableMapGroups(gameMode, _IsValveOfficialServer(serverType)).length == 0) {
@@ -784,9 +781,6 @@ var PlayMenu;
             delete mapgroup['mg_lobby_mapveto'];
             return Object.keys(mapgroup);
         }
-        if ((gameMode === "cooperative" || gameMode === "coopmission") && GetMatchmakingQuestId() > 0) {
-            return [LobbyAPI.GetSessionSettings().game.mapgroupname];
-        }
         return [];
     }
     function _GetMapGroupPanelID() {
@@ -986,20 +980,10 @@ var PlayMenu;
     function _LazyCreateMapListPanel() {
         const serverType = m_serverSetting;
         const gameMode = _RealGameMode();
-        let strRequireTagNameToReuse = null;
-        let strRequireTagValueToReuse = null;
-        if ((gameMode === "cooperative") || (gameMode === "coopmission")) {
-            strRequireTagNameToReuse = 'map-selection-quest-id';
-            strRequireTagValueToReuse = '' + GetMatchmakingQuestId();
-        }
         const panelID = _GetMapGroupPanelID();
         if (panelID in m_mapSelectionButtonContainers) {
             let bAllowReuseExistingContainer = true;
             const elExistingContainer = m_mapSelectionButtonContainers[panelID];
-            if (elExistingContainer && strRequireTagNameToReuse) {
-                const strExistingTagValue = elExistingContainer.GetAttributeString(strRequireTagNameToReuse, '');
-                bAllowReuseExistingContainer = (strExistingTagValue === strRequireTagValueToReuse);
-            }
             const elFriendLeaderboards = elExistingContainer ? elExistingContainer.FindChildTraverse("FriendLeaderboards") : null;
             if (elFriendLeaderboards) {
                 const strEmbeddedLeaderboardName = elFriendLeaderboards.GetAttributeString("type", '');
@@ -1032,13 +1016,9 @@ var PlayMenu;
             const elMapTile = container.FindChildTraverse("MapTile");
             if (elMapTile)
                 elMapTile.BLoadLayoutSnippet("MapGroupSelection");
-            _LoadLeaderboardsLayoutForContainer(container);
         }
         else {
             strSnippetNameOverride = '';
-        }
-        if (strRequireTagNameToReuse && strRequireTagValueToReuse) {
-            container.SetAttributeString(strRequireTagNameToReuse, strRequireTagValueToReuse);
         }
         const isPlayingOnValveOfficial = _IsValveOfficialServer(serverType);
         const arrMapGroups = _GetAvailableMapGroups(gameMode, isPlayingOnValveOfficial);
@@ -1326,22 +1306,6 @@ var PlayMenu;
         elFriendLeaderboards.AddClass('leaderboard_embedded');
         elFriendLeaderboards.RemoveClass('Hidden');
     }
-    function _LoadLeaderboardsLayoutForContainer(container) {
-        if ((m_gameModeSetting === "cooperative") || (m_gameModeSetting === "coopmission")) {
-            const questID = GetMatchmakingQuestId();
-            if (questID > 0) {
-                const lbName = "official_leaderboard_quest_" + questID;
-                const elFriendLeaderboards = container.FindChildTraverse("FriendLeaderboards");
-                if (elFriendLeaderboards.GetAttributeString("type", '') !== lbName) {
-                    const strTitle = '#CSGO_official_leaderboard_mission_embedded';
-                    _ReloadLeaderboardLayoutGivenSettings(container, lbName, strTitle, '');
-                }
-                const elDescriptionLabel = container.FindChildTraverse("MissionDesc");
-                elDescriptionLabel.text = MissionsAPI.GetQuestDefinitionField(questID, "loc_description");
-                MissionsAPI.ApplyQuestDialogVarsToPanelJS(questID, container);
-            }
-        }
-    }
     function _UpdateMapGroupButtons(isEnabled, isSearching, isHost) {
         const panelID = _LazyCreateMapListPanel();
         if ((_RealGameMode() === 'competitive' || _RealGameMode() === 'scrimcomp2v2') && _IsPlayingOnValveOfficial()) {
@@ -1466,13 +1430,6 @@ var PlayMenu;
         elBtn.SetDialogVariable('slide_toggle_text', $.Localize("#permissions_open_party"));
         elBtn.SetSelected(settings.system.access === 'public');
         elBtn.enabled = isEnabled;
-    }
-    function GetMatchmakingQuestId() {
-        const settings = LobbyAPI.GetSessionSettings();
-        if (settings && settings.game && settings.game.questid)
-            return parseInt(settings.game.questid);
-        else
-            return 0;
     }
     function _UpdateLeaderboardBtn(gameMode, isOfficalMatchmaking = false) {
         const elLeaderboardButton = $('#PlayMenulLeaderboards');

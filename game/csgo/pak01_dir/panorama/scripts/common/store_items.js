@@ -133,10 +133,7 @@ var StoreItems;
             : InventoryAPI.GetItemTypeFromEnum(itemid) === 'type_tool' ? '#tournament_items_notice' : '';
     }
     function isPurchaseable(itemid) {
-        let schemaString = InventoryAPI.BuildItemSchemaDefJSON(itemid);
-        if (!schemaString)
-            return false;
-        let itemSchemaDef = JSON.parse(schemaString);
+        let itemSchemaDef = ItemInfo.BuildItemSchemaDef(itemid);
         return itemSchemaDef["cannot_inspect"] === 1 ? false : true;
     }
 })(StoreItems || (StoreItems = {}));

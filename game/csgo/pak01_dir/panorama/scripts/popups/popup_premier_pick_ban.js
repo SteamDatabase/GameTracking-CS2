@@ -368,12 +368,17 @@ var PremierPickBan;
             elAvatar.BLoadLayoutSnippet('small-avatar');
             let avatarImage = elAvatar.FindChildTraverse('JsAvatarImage');
             avatarImage.PopulateFromSteamID(xuid);
+            elAvatar.FindChildTraverse('FriendContextMenuButton').SetPanelEvent('onactivate', _OpenContextMenu.bind(undefined, xuid));
             const teamColorIdx = PartyListAPI.GetPartyMemberTeammateColor(xuid);
             const teamColorRgb = TeamColor.GetTeamColor(Number(teamColorIdx));
             avatarImage.style.border = '2px solid rgb(' + teamColorRgb + ')';
             elAvatar.SetDialogVariable('teammate_name', FriendsListAPI.GetFriendName(xuid));
             return elAvatar;
         }
+    }
+    function _OpenContextMenu(xuid) {
+        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParameters('', '', 'file://{resources}/layout/context_menus/context_menu_playercard.xml', 'xuid=' + xuid + '&pregame=true');
+        contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
     function SetPlayerRank(playerIdx, elAvatar) {
         let playerWindowStats = MatchDraftAPI.GetPregamePlayerWindowStatsObject(playerIdx);

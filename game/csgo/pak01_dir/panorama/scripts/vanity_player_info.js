@@ -42,8 +42,7 @@ var VanityPlayerInfo;
         const scale = axis === "x" ? context.actualuiscale_x : context.actualuiscale_y;
         return Math.round(value * scale) / scale;
     }
-    function SetVanityInfoPanelPos(elParent, index, oPos, OnlyXOrY) {
-        const idPrefix = "id-player-vanity-info-" + index;
+    function SetVanityInfoPanelPos(elParent, index, oPos, idPrefix, OnlyXOrY) {
         const elPanel = elParent.FindChildInLayoutFile(idPrefix);
         if (elPanel && elPanel.IsValid()) {
             switch (OnlyXOrY) {

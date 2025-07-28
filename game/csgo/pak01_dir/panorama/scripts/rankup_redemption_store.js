@@ -131,7 +131,7 @@ var RankUpRedemptionStore;
     function PopulateItems(bFirstTime = false, claimedItemId = '') {
         _msg('PopulateItems');
         _msg('claimedItemId:' + claimedItemId);
-        const objStore = InventoryAPI.GetPersonalStore();
+        const objStore = GetPersonalStore();
         $.GetContextPanel().RemoveClass('waiting');
         if (bFirstTime) {
             $.GetContextPanel().TriggerClass('reveal-store');
@@ -144,11 +144,9 @@ var RankUpRedemptionStore;
             }
         });
         elItemContainer.RemoveAndDeleteChildren();
-        if (objStore) {
-            const arrItemIds = objStore.items;
-            for (let i = 0; i < arrItemIds.length; i++) {
-                _CreateItemPanel(arrItemIds[i], i, bFirstTime, claimedItemId);
-            }
+        const arrItemIds = objStore ? Object.values(objStore.items) : ['-', '-', '-', '-'];
+        for (let i = 0; i < arrItemIds.length; i++) {
+            _CreateItemPanel(arrItemIds[i], i, bFirstTime, claimedItemId);
         }
         _UpdateAllItemStyles();
         elItemContainer.Children().forEach((element, idx) => {

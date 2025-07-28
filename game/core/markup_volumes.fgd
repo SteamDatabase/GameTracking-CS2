@@ -30,6 +30,16 @@
 ]
 
 
+@SolidClass base( markup_volume_tagged )
+	vecline_local( ref_position, 255, 255, 255 )
+	text_local( ref_position, "  Ref Pos", 255, 255, 255 )
+ = markup_volume_with_ref : "Tagged markup volume entity with a target reference point.  Points are only in volume if behind the reference point relative to a given query position."
+[
+	ref_position(local_point) : "Ref Pos" : "0 0 0" : "Reference position."
+	use_ref_position(boolean) : "Use Reference Position" : 1 : "Use the reference position when calculating validity of query positions."
+]
+
+
 @SolidClass base(markup_volume_tagged)
 = markup_group : "Markup group entity; add the group's targetname to the 'Markup Groups' field of a markup entity to add that entity to this group"
 [
@@ -43,17 +53,25 @@
 ]
 
 
-@SolidClass base(markup_volume_tagged) tags( NavMarkup )
+@SolidClass base(markup_volume_with_ref) tags( NavMarkup )
 	metadata
 	{
 		auto_apply_material = "materials/tools/toolsnavattribute.vmat"
 	}
 = func_nav_markup : "Tagged NAV markup volume entity, used during export and can be queried in-game by tag/name/type/location"
 [
+	flags(flags) =
+	[
+		1 : "Ground" : 1
+		2 : "Air" : 1
+	]
+
 	navProperty_NavGen(tag_list) : "Nav Generation Markup" = 
 	[
 		"WALKABLESEED" : "Walkable Seed" : 0
 		"NONAV" : "No Nav" : 0
+		"NONAVNONSOLID" : "No Nav Non Solid" : 0
+		"NONAVSPACE" : "No Nav Space" : 0
 	]
 
 	navProperty_NavAttributes(tag_list) : "Nav Attributes"  =
@@ -63,15 +81,6 @@
 	]
 ]
 
-
-@SolidClass base( markup_volume_tagged )
-	vecline_local( ref_position, 255, 255, 255 )
-	text_local( ref_position, "  Ref Pos", 255, 255, 255 )
- = markup_volume_with_ref : "Tagged markup volume entity with a target reference point.  Points are only in volume if behind the reference point relative to a given query position."
-[
-	ref_position(local_point) : "Ref Pos" : "0 0 0" : "Reference position."
-	use_ref_position(boolean) : "Use Reference Position" : 1 : "Use the reference position when calculating validity of query positions."
-]
 
 
 @SolidClass base( func_nav_markup ) 

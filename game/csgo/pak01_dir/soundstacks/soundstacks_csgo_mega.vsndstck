@@ -877,6 +877,50 @@
 							display_edit_flag = "public.set_mixlayer_amount_enable"
 						}
 					}
+					use_velocity_volume_curve = 
+					{
+						data_type = "bool"
+						value = "false"
+						_system_properties = 
+						{
+							property_group = "Position"
+						}
+					}
+					velocity_magnitude = 
+					{
+						data_type = "float"
+						value = "0"
+						_system_properties = 
+						{
+							property_group = "Position"
+						}
+					}
+					velocity_volume_seek_speed = 
+					{
+						data_type = "float"
+						value = "100"
+						_system_properties = 
+						{
+							property_group = "Position"
+						}
+					}
+					velocity_volume_curve = 
+					{
+						data_type = "float6"
+						soundevent_data = "true"
+						value = 
+						{
+							value1 = "[0.000000,0.000000,0.000000,0.000000,2.000000,3.000000]"
+							value2 = "[150.000000,0.000000,0.000000,0.000000,2.000000,3.000000]"
+							value3 = "[300.000000,1.000000,0.000000,0.000000,2.000000,3.000000]"
+						}
+						_system_properties = 
+						{
+							display_group = "advanced"
+							display_edit_type = "field_curve_2d_editor"
+							display_edit_flag = "public.use_velocity_volume_curve"
+						}
+					}
 				}
 			},
 			
@@ -945,6 +989,56 @@
 				apply = "greater_than_or_equal"
 				input1 = "@entity_is_player_add.output"
 				input2 = "1"
+			},
+			
+			{
+				name = "is_ambient"
+				operator = "math_string"
+				input1 = "@public.mixgroup"
+				input2 = "Ambient"
+				execute_once = "1"
+			},
+			
+			{
+				name = "is_surf_enabled"
+				operator = "convar_get"
+				convar = "sv_surf_sounds"
+				execute_once = "0"
+				input_execute = "@is_ambient.output"
+			},
+			
+			{
+				name = "is_ambient_and_surf_enabled"
+				operator = "math_float"
+				input1 = "@is_surf_enabled.output"
+				input2 = "@is_ambient.output"
+			},
+			
+			{
+				name = "use_surf_ambient_volume"
+				operator = "math_float"
+				apply = "and"
+				input1 = "@is_surf_enabled.output"
+				execute_once = "0"
+				input2 = "@is_ambient.output"
+				input_execute = "@is_ambient.output"
+			},
+			
+			{
+				name = "snd_surf_volume_map"
+				operator = "convar_get"
+				execute_once = "0"
+				convar = "snd_surf_volume_map"
+				input_execute = "@is_ambient_and_surf_enabled.output"
+			},
+			
+			{
+				name = "surf_ambient_volume"
+				operator = "ctrl_switch_float"
+				execute_once = "0"
+				input1 = "1"
+				input2 = "@snd_surf_volume_map.output"
+				input_switch = "@use_surf_ambient_volume.output"
 			},
 			
 			{
@@ -1113,6 +1207,15 @@
 				apply = "greater_than_or_equal"
 				input1 = "@public.self_destruct_time"
 				input2 = "0"
+			},
+			
+			{
+				name = "velocity_volume_curve"
+				operator = "math_curve_2d"
+				input_execute = "@public.use_velocity_volume_curve"
+				public_field_name = "public.velocity_volume_curve"
+				output = "1"
+				input = "@velocity_seek.output"
 			},
 			
 			{
@@ -1939,6 +2042,8 @@
 				input1 = "@mixer.output_volume"
 				input2 = "@impact_speed_input_volume_mapping_curve_mult.output"
 				input3 = "@get_volume_convar.output"
+				input4 = "@velocity_volume_curve.output"
+				input5 = "@surf_ambient_volume.output"
 			},
 			
 			{
@@ -2278,6 +2383,15 @@
 				input3 = "@time_mixlayer_amount_curve.output_x_max"
 				expression = "_1 <= 0 || _2 >= _3"
 			},
+			
+			{
+				name = "velocity_seek"
+				operator = "math_filter_float"
+				input_execute = "@public.use_velocity_volume_curve"
+				input_max_velocity = "@public.velocity_volume_seek_speed"
+				input_reset = "1"
+				input = "@public.velocity_magnitude"
+			},
 		]
 		_system_properties = 
 		{
@@ -2297,8 +2411,8 @@
 			}
 			public = 
 			{
-				x = 0.000000
-				y = 1896.000000
+				x = -1460.000000
+				y = 1550.000000
 			}
 			mixer = 
 			{
@@ -2322,8 +2436,8 @@
 			}
 			get_entity_info = 
 			{
-				x = 1134.000000
-				y = 1114.000000
+				x = 1010.000000
+				y = 3460.000000
 			}
 			soundevent_limit = 
 			{
@@ -2552,8 +2666,8 @@
 			}
 			speakers_spatialize_rear_scale = 
 			{
-				x = 0.000000
-				y = 724.000000
+				x = 200.000000
+				y = 640.000000
 			}
 			speakers_spatialize = 
 			{
@@ -2802,8 +2916,8 @@
 			}
 			get_vsnd_track_01 = 
 			{
-				x = 0.000000
-				y = 3548.000000
+				x = -170.000000
+				y = 3340.000000
 			}
 			distance_volume_mapping_curve = 
 			{
@@ -2837,8 +2951,8 @@
 			}
 			time_volume_mapping_curve = 
 			{
-				x = 520.000000
-				y = 6610.000000
+				x = 480.000000
+				y = 6790.000000
 			}
 			time_volume_mapping_curve_mult = 
 			{
@@ -2847,8 +2961,8 @@
 			}
 			impact_speed_input_volume_mapping_curve = 
 			{
-				x = 1134.000000
-				y = 5980.000000
+				x = 1170.000000
+				y = 5940.000000
 			}
 			impact_speed_input_volume_mapping_curve_mult = 
 			{
@@ -2887,8 +3001,8 @@
 			}
 			mult_mixer_volume = 
 			{
-				x = 12908.000000
-				y = 1896.000000
+				x = 4070.000000
+				y = 2420.000000
 			}
 			volume_fan = 
 			{
@@ -3067,8 +3181,8 @@
 			}
 			time_mixlayer_amount_curve = 
 			{
-				x = 1040.000000
-				y = 2970.000000
+				x = 980.000000
+				y = 3010.000000
 			}
 			mixlayer_keepalive = 
 			{
@@ -3084,6 +3198,51 @@
 			{
 				x = 1480.000000
 				y = 2440.000000
+			}
+			velocity_volume_curve = 
+			{
+				x = 2390.000000
+				y = 2050.000000
+			}
+			velocity_seek = 
+			{
+				x = 1370.000000
+				y = 2140.000000
+			}
+			velocity_seek_first_frame_filter = 
+			{
+				x = 1570.000000
+				y = 2390.000000
+			}
+			use_surf_ambient_volume = 
+			{
+				x = -490.000000
+				y = 1080.000000
+			}
+			is_ambient = 
+			{
+				x = -1230.000000
+				y = 1260.000000
+			}
+			is_surf_enabled = 
+			{
+				x = -1040.000000
+				y = 1020.000000
+			}
+			snd_surf_volume_map = 
+			{
+				x = -680.000000
+				y = 800.000000
+			}
+			surf_ambient_volume = 
+			{
+				x = -147.171188
+				y = 886.848328
+			}
+			is_ambient_and_surf_enabled = 
+			{
+				x = -1001.487061
+				y = 744.399841
 			}
 		}
 	}

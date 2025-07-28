@@ -10,19 +10,6 @@ var OperationMain = ( function()
 	var _m_activeRewardBtn = null;
 	const SECTIONS_IN_BAR = 100;
 
-	var _Init = function()
-	{
-		_SetUpFlipAnimForProgressBar();
-		_SetUpFlipAnimForInspect();
-		_CheckUsersOperationStatus();
-
-		                                     
-		if ( OperationUtil.UpdateOldStars().ids.length > 0 )
-		{
-			$.Schedule( .3, OperationUtil.OpenUpSell );
-		}
-	};
-
 	var _CheckUsersOperationStatus = function()
 	{
 		_m_nSeasonAccess = $.GetContextPanel().GetAttributeInt( "season_access", 0 );
@@ -303,103 +290,6 @@ var OperationMain = ( function()
 		return aTiles;
 	};
 
-	                        
-	                        
-	                       
-	var _SetUpFlipAnimForProgressBar = function()
-	{
-		_m_oProgressFlipModule = new FlipPanelAnimation( {
-			controlBtnPrev: _m_cp.FindChildInLayoutFile( 'id-op-progress-prev' ),
-			controlBtnNext: _m_cp.FindChildInLayoutFile( 'id-op-progress-next' ),
-			animPanelA: _m_cp.FindChildInLayoutFile( 'id-op-progressbar-1' ),
-			animPanelB: _m_cp.FindChildInLayoutFile( 'id-op-progressbar-2' ),
-			parentPanel: _m_cp.FindChildInLayoutFile( 'id-op-progressbars' ),
-			funcCallback: _UpdateProgressBarDisplay,
-			activeIndex: 0,
-			oCallbackData: null
-		} );
-		
-		_m_oProgressFlipModule[ 'ControlBtnActions' ]();
-
-		_TransitionEvent( _m_cp.FindChildInLayoutFile( 'id-op-progressbar-1' ) );
-		_TransitionEvent( _m_cp.FindChildInLayoutFile( 'id-op-progressbar-2' ) );
-	};
-
-	var _TransitionEvent = function( elBar )
-	{
-			elBar.OnPropertyTransitionEndEvent = function( panelName, propertyName )
-			{
-
-				if ( elBar.id === panelName && propertyName === 'transform' )
-				{
-					                                
-					                                        
-					if ( !elBar.BIsTransparent() &&
-						( elBar.BHasClass( 'flip-panel-anim-up-show' ) || elBar.BHasClass( 'flip-panel-anim-down-show' ) ) )
-					{
-						_UpdateRewardTiles();
-						_ShowPurchaseSpecificStarsBtn();
-
-						var aChildren = _m_cp.FindChildInLayoutFile( 'id-op-rewards-list' ).FindChildrenWithClassTraverse( 'op-main-reward' );
-						var aSelected = aChildren.filter( element => element.checked );
-
-						                                                                         
-						_m_activeRewardBtn = aSelected.length < 1 ? aChildren[ 0 ] : aSelected[ 0 ];
-						_SetActiveReward( _m_activeRewardBtn );
-						_SetCheckedMatchingTile();
-						_UpdateRewardsOnProgressBar( elBar );
-			
-						                                                                                                                    
-						_UpdateInspectPanel();
-					}
-				}
-
-				if ( elBar.id === panelName && propertyName === 'opacity' )
-				{
-					                                       
-					if ( elBar.visible === true && elBar.BIsTransparent() )
-					{
-						_HideRewardsOnProgressBar( elBar );
-					}
-				}
-				return false;
-			};
-
-			$.RegisterEventHandler( 'PropertyTransitionEnd', elBar, elBar.OnPropertyTransitionEndEvent );
-	};
-
-	                   
-	                   
-	                   
-	var _UpdateProgressBarDisplay = function( oData, isPrev = false )
-	{
-		function UpdateData( oData )
-		{
-			oData.oCallbackData.sectionStart = ( SECTIONS_IN_BAR *  oData.activeIndex );
-			oData.oCallbackData.sectionEnd = ( SECTIONS_IN_BAR * oData.activeIndex ) + SECTIONS_IN_BAR;
-
-			var NextPanel = _m_oProgressFlipModule.DetermineHiddenPanel( oData.animPanelA, oData.animPanelB );
-
-			                   
-			_m_activeRewardBtn = null;
-			_UpdateProgressBarSections( oData, NextPanel );
-		}
-		
-		if ( isPrev )
-		{
-			--oData.activeIndex;
-			UpdateData( oData );
-			_m_oProgressFlipModule.BtnPressPrevAnim( oData.animPanelA, oData.animPanelB );
-		}
-		else
-		{
-			++oData.activeIndex;
-			UpdateData( oData );
-			_m_oProgressFlipModule.BtnPressNextAnim( oData.animPanelA, oData.animPanelB );
-		}
-		_UpdateProgressBarEnableDisable( oData )
-	};
-
 	var _UpdateProgressBarEnableDisable = function( oData )
 	{
 		oData.controlBtnPrev.enabled = oData.activeIndex > 0;
@@ -436,16 +326,6 @@ var OperationMain = ( function()
 		}
 
 		_UpdateRewardPanelsOnProgressBar( _GetRewardsInRange(), elBar, oRewardTohighlight );
-	};
-
-	var _HideRewardsOnProgressBar = function( elBar )
-	{
-		var elRewards = elBar.FindChildInLayoutFile( 'op-main-progressbar-rewards' );
-
-		if ( elRewards )
-		{
-			elRewards.RemoveAndDeleteChildren();
-		}
 	};
 
 	var _GetRewardToHighlight = function( rewardTohighlightIndex )
@@ -881,14 +761,6 @@ var OperationMain = ( function()
 		} );
 	};
 
-	var _IsCase = function( rewardId )
-	{
-		return ItemInfo.ItemHasCapability( rewardId, 'decodable' ) &&
-			InventoryAPI.GetAssociatedItemsCount( rewardId ) > 0 ?
-			true :
-			false;
-	};
-
 	var _OnPipActivate = function( itemId, rewardId, index )
 	{
 		if ( _m_oNamesFlipModuleInspect.ActiveIndex === index )
@@ -912,153 +784,6 @@ var OperationMain = ( function()
 		_m_oNamesFlipModuleInspect.AddParamToCallbackData( 'maxIndex', aItems.length - 1 );
 		_m_oNamesFlipModuleInspect.UseCallback();
 	};
-
-	var _SetUpFlipAnimForInspect = function()
-	{	 	
-		_m_oNamesFlipModuleInspect = new FlipPanelAnimation( {
-			controlBtnPrev: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-prev' ),
-			controlBtnNext: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-next' ),
-			animPanelA: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-name-1' ),
-			animPanelB: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-name-2' ),
-			parentPanel: _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-names' ),
-			funcCallback: _UpdateInspectName,
-			activeIndex: 0,
-			oCallbackData: null
-		} );
-		
-		_m_oNamesFlipModuleInspect[ 'ControlBtnActions' ]();
-	};
-
-	var _UpdateInspectName = function( oData, isPrev = false )
-	{
-		var activeTileId = _m_activeRewardBtn.Data().oReward.itempremium.ids[0];
-		var bIsCase = _IsCase( activeTileId );
-
-		function UpdateData( oData )
-		{
-			var NextPanel = _m_oNamesFlipModuleInspect.DetermineHiddenPanel( oData.animPanelA, oData.animPanelB );
-			var displayItemId = '';
-
-			if ( _m_activeRewardBtn.Data().bShowPips === false )
-			{
-				NextPanel.GetParent().visible = false;
-			}
-			else
-			{
-				displayItemId = bIsCase ? activeTileId : oData.oCallbackData.items[ oData.activeIndex ];
-				NextPanel.GetParent().visible = true;
-				NextPanel.SetDialogVariable( 'reward_item_name', InventoryAPI.GetItemName( displayItemId ));
-	
-				var aPips = _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-rarity' ).Children();
-				if( aPips.length > 0 )
-				{
-					aPips[ oData.activeIndex ].checked = true;
-				}
-			}
-
-			_UpdateInspectModelPanelOrImage( displayItemId, oData.oCallbackData.rewardid );
-		}
-		
-		if ( isPrev )
-		{
-			--oData.activeIndex;
-			UpdateData( oData );
-			_m_oNamesFlipModuleInspect.BtnPressPrevAnim( oData.animPanelA, oData.animPanelB );
-			if ( oData.oCallbackData.items[ oData.activeIndex - 1 ] )
-				_CacheWeapon( oData.oCallbackData.items[ oData.activeIndex - 1 ] );
-		}
-		else
-		{
-			++oData.activeIndex;
-			UpdateData( oData );
-			_m_oNamesFlipModuleInspect.BtnPressNextAnim( oData.animPanelA, oData.animPanelB );
-			if ( oData.oCallbackData.items[ oData.activeIndex + 1 ] )
-				_CacheWeapon( oData.oCallbackData.items[ oData.activeIndex + 1 ] );
-		}
-
-		$.DispatchEvent( 'CSGOPlaySoundEffect', 'UIPanorama.generic_button_press', 'MOUSE' );
-
-		oData.controlBtnPrev.visible = _m_activeRewardBtn.Data().bShowPips;
-		oData.controlBtnNext.visible = _m_activeRewardBtn.Data().bShowPips;
-		oData.controlBtnPrev.enabled = oData.activeIndex > 0;
-		oData.controlBtnNext.enabled = oData.activeIndex < oData.oCallbackData.maxIndex;
-
-		if( oData.oCallbackData.items[ oData.activeIndex + 1 ])
-		{
-			_CacheWeaponMouseOver( oData.controlBtnNext, oData.oCallbackData.items[ oData.activeIndex + 1 ], true );
-		}
-
-		if( oData.oCallbackData.items[ oData.activeIndex - 1 ])
-		{
-			_CacheWeaponMouseOver( oData.controlBtnPrev, oData.oCallbackData.items[ oData.activeIndex - 1 ], true );
-		}
-	};
-	
-	function _UpdateInspectModelPanelOrImage ( itemId, rewardId )
-	{
-		var elModel = _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-model' );
-		var elImage = _m_cp.FindChildInLayoutFile( 'id-op-main-inspect-image' );
-
-		elModel.visible = false; 
-		elImage.visible = false;
-	
-		var isCharacter = false;
-		var displayItemId = '';
-		if( _m_activeRewardBtn.Data().bIsCoin && OperationUtil.GetOperationInfo().bPremiumUser )
-		{
-			displayItemId = InventoryAPI.GetActiveSeasonCoinItemId();
-		}
-		else
-		{
-			displayItemId = ( !_m_activeRewardBtn.Data().bShowPips ) ? rewardId : itemId;
-		}
-		
-		var model = ItemInfo.GetModelPathFromJSONOrAPI( displayItemId );
-		if ( model && !_m_activeRewardBtn.Data().bIsGraffiti)
-		{
-			elModel.visible = true;
-			elModel.SetScene( "resource/ui/econ/ItemModelPanelCharWeaponInspect.res",
-				model,
-				false
-			);
-
-			isCharacter = ItemInfo.IsCharacter( displayItemId );
-			elModel.SetHasClass( 'character', isCharacter );
-
-			if ( isCharacter )
-			{
-				var settings = ItemInfo.GetOrUpdateVanityCharacterSettings( displayItemId, 'unowned' );
-				settings.panel = elModel;
-
-				CharacterAnims.PlayAnimsOnPanel( settings );
-				elModel.SetSceneIntroFOV( 1.6, 50000 );
-				elModel.SetFlashlightColor( 4.16, 4.06, 5.20 );
-				elModel.SetFlashlightFOV( 60 );
-				                                            
-		  		                                 
-				elModel.SetDirectionalLightModify( 1 );
-				elModel.SetDirectionalLightDirection( 66.83, -23.02, 121.82);
-				elModel.SetDirectionalLightColor(0.29, 0.09, 0.63);
-				elModel.SetAmbientLightColor( 0.17, 0.18, 0.36);
-				elModel.SetCameraPosition(118.85, 0.41, 50.22);
-				elModel.SetCameraAngles( 5.66, 179.31, 0.00 );
-				
-				          
-				                                      
-				                                                     
-				                                                                        
-			}
-			else
-			{
-				elModel.SetSceneIntroFOV( 0.7, 50000  );
-			}
-		}
-		else
-		{
-			elImage.visible = true;
-			elImage.SetImage( 'file://{images}' + _m_activeRewardBtn.Data().oReward.imagePathInspect + '.png' );
-		}
-	}
 	
 	var _CacheWeapon = function( id )
 	{
@@ -1084,7 +809,6 @@ var OperationMain = ( function()
 	};
 
 	return {
-		Init: _Init,
 		CheckUsersOperationStatus: _CheckUsersOperationStatus,
 	};
 } )();
@@ -1092,7 +816,5 @@ var OperationMain = ( function()
 (function () {
 
 	$.RegisterForUnhandledEvent( 'PanoramaComponent_MyPersona_InventoryUpdated', OperationMain.CheckUsersOperationStatus );
-	                                                                                                          
-	                                                                                                      
 })();
 

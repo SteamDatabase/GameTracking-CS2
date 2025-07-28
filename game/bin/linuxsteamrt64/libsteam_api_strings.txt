@@ -1,7 +1,5 @@
- for 
 %02d:%02d:%02d
 %04d%02d%02d%02d%02d%02d
-%llu
 %s/.steam/%s
 %s/.steam/steam
 %u.%u.%u.%u:%i
@@ -33,8 +31,9 @@ Lowered '%s' -> '%s'\n
 Matched '%s' -> '%s'\n
 No %s
 No appID found.  Either launch the game from Steam, or put the file steam_appid.txt containing the correct appID in your game folder.
-STEAMTIMELINE_INTERFACE_V001
-STEAMUGC_INTERFACE_VERSION020
+STEAMTIMELINE_INTERFACE_V004
+STEAMUGC_INTERFACE_VERSION021
+STEAMUSERSTATS_INTERFACE_VERSION013
 STEAMVIDEO_INTERFACE_V007
 Setting breakpad minidump AppID = %u\n
 SteamAPI_GetHSteamPipe
@@ -54,6 +53,7 @@ SteamAPI_ISteamApps_GetAppBuildId
 SteamAPI_ISteamApps_GetAppInstallDir
 SteamAPI_ISteamApps_GetAppOwner
 SteamAPI_ISteamApps_GetAvailableGameLanguages
+SteamAPI_ISteamApps_GetBetaInfo
 SteamAPI_ISteamApps_GetCurrentBetaName
 SteamAPI_ISteamApps_GetCurrentGameLanguage
 SteamAPI_ISteamApps_GetDLCCount
@@ -63,10 +63,12 @@ SteamAPI_ISteamApps_GetFileDetails
 SteamAPI_ISteamApps_GetInstalledDepots
 SteamAPI_ISteamApps_GetLaunchCommandLine
 SteamAPI_ISteamApps_GetLaunchQueryParam
+SteamAPI_ISteamApps_GetNumBetas
 SteamAPI_ISteamApps_InstallDLC
 SteamAPI_ISteamApps_MarkContentCorrupt
 SteamAPI_ISteamApps_RequestAllProofOfPurchaseKeys
 SteamAPI_ISteamApps_RequestAppProofOfPurchaseKey
+SteamAPI_ISteamApps_SetActiveBeta
 SteamAPI_ISteamApps_SetDlcContext
 SteamAPI_ISteamApps_UninstallDLC
 SteamAPI_ISteamClient_BReleaseSteamPipe
@@ -194,7 +196,6 @@ SteamAPI_ISteamFriends_GetPlayerNickname
 SteamAPI_ISteamFriends_GetProfileItemPropertyString
 SteamAPI_ISteamFriends_GetProfileItemPropertyUint
 SteamAPI_ISteamFriends_GetSmallFriendAvatar
-SteamAPI_ISteamFriends_GetUserRestrictions
 SteamAPI_ISteamFriends_HasFriend
 SteamAPI_ISteamFriends_InviteUserToGame
 SteamAPI_ISteamFriends_IsClanChatAdmin
@@ -215,7 +216,6 @@ SteamAPI_ISteamFriends_RequestUserInformation
 SteamAPI_ISteamFriends_SendClanChatMessage
 SteamAPI_ISteamFriends_SetInGameVoiceSpeaking
 SteamAPI_ISteamFriends_SetListenForFriendsMessages
-SteamAPI_ISteamFriends_SetPersonaName
 SteamAPI_ISteamFriends_SetPlayedWith
 SteamAPI_ISteamFriends_SetRichPresence
 SteamAPI_ISteamGameSearch_AcceptGame
@@ -676,14 +676,21 @@ SteamAPI_ISteamParties_GetNumActiveBeacons
 SteamAPI_ISteamParties_GetNumAvailableBeaconLocations
 SteamAPI_ISteamParties_JoinParty
 SteamAPI_ISteamParties_OnReservationCompleted
+SteamAPI_ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput
 SteamAPI_ISteamRemotePlay_BGetSessionClientResolution
 SteamAPI_ISteamRemotePlay_BSendRemotePlayTogetherInvite
-SteamAPI_ISteamRemotePlay_BStartRemotePlayTogether
+SteamAPI_ISteamRemotePlay_CreateMouseCursor
+SteamAPI_ISteamRemotePlay_DisableRemotePlayTogetherDirectInput
+SteamAPI_ISteamRemotePlay_GetInput
 SteamAPI_ISteamRemotePlay_GetSessionClientFormFactor
 SteamAPI_ISteamRemotePlay_GetSessionClientName
 SteamAPI_ISteamRemotePlay_GetSessionCount
 SteamAPI_ISteamRemotePlay_GetSessionID
 SteamAPI_ISteamRemotePlay_GetSessionSteamID
+SteamAPI_ISteamRemotePlay_SetMouseCursor
+SteamAPI_ISteamRemotePlay_SetMousePosition
+SteamAPI_ISteamRemotePlay_SetMouseVisibility
+SteamAPI_ISteamRemotePlay_ShowRemotePlayTogetherUI
 SteamAPI_ISteamRemoteStorage_BeginFileWriteBatch
 SteamAPI_ISteamRemoteStorage_CommitPublishedFileUpdate
 SteamAPI_ISteamRemoteStorage_CreatePublishedFileUpdateRequest
@@ -752,10 +759,24 @@ SteamAPI_ISteamScreenshots_TagPublishedFile
 SteamAPI_ISteamScreenshots_TagUser
 SteamAPI_ISteamScreenshots_TriggerScreenshot
 SteamAPI_ISteamScreenshots_WriteScreenshot
-SteamAPI_ISteamTimeline_AddTimelineEvent
-SteamAPI_ISteamTimeline_ClearTimelineStateDescription
+SteamAPI_ISteamTimeline_AddGamePhaseTag
+SteamAPI_ISteamTimeline_AddInstantaneousTimelineEvent
+SteamAPI_ISteamTimeline_AddRangeTimelineEvent
+SteamAPI_ISteamTimeline_ClearTimelineTooltip
+SteamAPI_ISteamTimeline_DoesEventRecordingExist
+SteamAPI_ISteamTimeline_DoesGamePhaseRecordingExist
+SteamAPI_ISteamTimeline_EndGamePhase
+SteamAPI_ISteamTimeline_EndRangeTimelineEvent
+SteamAPI_ISteamTimeline_OpenOverlayToGamePhase
+SteamAPI_ISteamTimeline_OpenOverlayToTimelineEvent
+SteamAPI_ISteamTimeline_RemoveTimelineEvent
+SteamAPI_ISteamTimeline_SetGamePhaseAttribute
+SteamAPI_ISteamTimeline_SetGamePhaseID
 SteamAPI_ISteamTimeline_SetTimelineGameMode
-SteamAPI_ISteamTimeline_SetTimelineStateDescription
+SteamAPI_ISteamTimeline_SetTimelineTooltip
+SteamAPI_ISteamTimeline_StartGamePhase
+SteamAPI_ISteamTimeline_StartRangeTimelineEvent
+SteamAPI_ISteamTimeline_UpdateRangeTimelineEvent
 SteamAPI_ISteamUGC_AddAppDependency
 SteamAPI_ISteamUGC_AddContentDescriptor
 SteamAPI_ISteamUGC_AddDependency
@@ -823,6 +844,7 @@ SteamAPI_ISteamUGC_SetItemTags
 SteamAPI_ISteamUGC_SetItemTitle
 SteamAPI_ISteamUGC_SetItemUpdateLanguage
 SteamAPI_ISteamUGC_SetItemVisibility
+SteamAPI_ISteamUGC_SetItemsDisabledLocally
 SteamAPI_ISteamUGC_SetLanguage
 SteamAPI_ISteamUGC_SetMatchAnyTag
 SteamAPI_ISteamUGC_SetRankedByTrendDays
@@ -836,6 +858,7 @@ SteamAPI_ISteamUGC_SetReturnOnlyIDs
 SteamAPI_ISteamUGC_SetReturnPlaytimeStats
 SteamAPI_ISteamUGC_SetReturnTotalOnly
 SteamAPI_ISteamUGC_SetSearchText
+SteamAPI_ISteamUGC_SetSubscriptionsLoadOrder
 SteamAPI_ISteamUGC_SetTimeCreatedDateRange
 SteamAPI_ISteamUGC_SetTimeUpdatedDateRange
 SteamAPI_ISteamUGC_SetUserItemVote
@@ -884,7 +907,6 @@ SteamAPI_ISteamUserStats_GetUserAchievementAndUnlockTime
 SteamAPI_ISteamUserStats_GetUserStatFloat
 SteamAPI_ISteamUserStats_GetUserStatInt32
 SteamAPI_ISteamUserStats_IndicateAchievementProgress
-SteamAPI_ISteamUserStats_RequestCurrentStats
 SteamAPI_ISteamUserStats_RequestGlobalAchievementPercentages
 SteamAPI_ISteamUserStats_RequestGlobalStats
 SteamAPI_ISteamUserStats_RequestUserStats
@@ -985,7 +1007,7 @@ SteamAPI_SteamController_v008
 SteamAPI_SteamDatagramHostedAddress_Clear
 SteamAPI_SteamDatagramHostedAddress_GetPopID
 SteamAPI_SteamDatagramHostedAddress_SetDevAddress
-SteamAPI_SteamFriends_v017
+SteamAPI_SteamFriends_v018
 SteamAPI_SteamGameSearch_v001
 SteamAPI_SteamGameServerHTTP_v003
 SteamAPI_SteamGameServerInventory_v003
@@ -993,7 +1015,7 @@ SteamAPI_SteamGameServerNetworkingMessages_SteamAPI_v002
 SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v012
 SteamAPI_SteamGameServerNetworking_v006
 SteamAPI_SteamGameServerStats_v001
-SteamAPI_SteamGameServerUGC_v020
+SteamAPI_SteamGameServerUGC_v021
 SteamAPI_SteamGameServerUtils_v010
 SteamAPI_SteamGameServer_v015
 SteamAPI_SteamHTMLSurface_v005
@@ -1030,7 +1052,6 @@ SteamAPI_SteamNetworkingIdentity_GetGenericString
 SteamAPI_SteamNetworkingIdentity_GetIPAddr
 SteamAPI_SteamNetworkingIdentity_GetIPv4
 SteamAPI_SteamNetworkingIdentity_GetPSNID
-SteamAPI_SteamNetworkingIdentity_GetStadiaID
 SteamAPI_SteamNetworkingIdentity_GetSteamID
 SteamAPI_SteamNetworkingIdentity_GetSteamID64
 SteamAPI_SteamNetworkingIdentity_GetXboxPairwiseID
@@ -1045,7 +1066,6 @@ SteamAPI_SteamNetworkingIdentity_SetIPAddr
 SteamAPI_SteamNetworkingIdentity_SetIPv4Addr
 SteamAPI_SteamNetworkingIdentity_SetLocalHost
 SteamAPI_SteamNetworkingIdentity_SetPSNID
-SteamAPI_SteamNetworkingIdentity_SetStadiaID
 SteamAPI_SteamNetworkingIdentity_SetSteamID
 SteamAPI_SteamNetworkingIdentity_SetSteamID64
 SteamAPI_SteamNetworkingIdentity_SetXboxPairwiseID
@@ -1057,12 +1077,12 @@ SteamAPI_SteamNetworkingUtils_SteamAPI_v004
 SteamAPI_SteamNetworking_v006
 SteamAPI_SteamParentalSettings_v001
 SteamAPI_SteamParties_v002
-SteamAPI_SteamRemotePlay_v002
+SteamAPI_SteamRemotePlay_v003
 SteamAPI_SteamRemoteStorage_v016
 SteamAPI_SteamScreenshots_v003
-SteamAPI_SteamTimeline_v001
-SteamAPI_SteamUGC_v020
-SteamAPI_SteamUserStats_v012
+SteamAPI_SteamTimeline_v004
+SteamAPI_SteamUGC_v021
+SteamAPI_SteamUserStats_v013
 SteamAPI_SteamUser_v023
 SteamAPI_SteamUtils_v010
 SteamAPI_SteamVideo_v007
@@ -1083,6 +1103,7 @@ SteamAPI_servernetadr_t_SetIP
 SteamAPI_servernetadr_t_SetQueryPort
 SteamClient
 SteamClient017
+SteamFriends018
 SteamGameServer015
 SteamGameServer_BSecure
 SteamGameServer_GetHSteamPipe
@@ -1121,7 +1142,9 @@ Using breakpad crash handler\n
 [S_API] SteamAPI_Init(): SteamAPI_IsSteamRunning() did not locate a running instance of Steam.\n
 \nwith error:\n
 \t(%zu) comparing %s with %s\n
-__int128
+_Accum
+_Fract
+_Sat 
 __lxstat
 __realpath_chk
 __strcpy_chk
@@ -1168,45 +1191,25 @@ __xmknod
 __xstat
 _fini
 _init
-abort
 access
-allocator
-basic_string
-char
-chmod
 chown
-close
 complex 
 dlmopen
 dlopen failed trying to load:\n
-double
 faccessat
 false 
-fclose
-fopen
-free
 freopen
-fwrite
 g_pSteamClientGameServer
 imaginary 
 lchown
 libsteam.so
 link
-long
-long long
-memcmp
-memcpy
-memset
 mkfifo
 mold 1.10.1 (compatible with GNU ld)
 mount
-open64
-read
 realpath
 root
 scandir
-short
-signed char
 sscanf
 statfs
 statfs64
@@ -1216,13 +1219,6 @@ steam://run/%u
 steam://run/%u//
 steamclient.so
 strcasestr
-strcmp
-strncpy
-throw
-tolower
-transaction clone for 
 utime
 utimes
-virtual thunk to 
-vtable for 
-write
+{lambda(

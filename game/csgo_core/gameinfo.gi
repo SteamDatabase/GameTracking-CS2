@@ -112,7 +112,6 @@
 		"URLName" "csgo"
 		"DefaultRenderSystem"					"-dx11"
 		"DefaultToolsRenderSystem"				"-dx11"
-		"SupportsVulkanParticleOptimizations"	"1"
 		"RenderingPipeline"
 		{
 			"SkipPostProcessing" "0"
@@ -124,11 +123,9 @@
 			"AmbientOcclusionProxies" "1"
 			"HighPrecisionLighting" "1" 
 
-			"Tonemapping_UseLogLuminance" "1"	// for the filmic tonemapper
 			// Defaults for maps without a env_tonemap_controller
 			"Tonemapping_DefaultAutoExposureMin" "1.0"
 			"Tonemapping_DefaultAutoExposureMax" "1.0"
-			"Tonemapping_DefaultRate" "0.2"
 			"Tonemapping_DefaultFilmicLinear" "1"
 		}
 		"SetUILanguageOnSteamDropDown" "1" // csgo language is controlled by steam, both audio and ui localization strings
@@ -177,8 +174,6 @@
 	{
 		"ParticlesFoggedByDefault"	"1"
 		"EnableParticleShaderFeatureBranching"	"1"
-		"ParticlePixelCBSlot" "4"
-		"ParticleVertexCBSlot" "4"
 		"ParticleTextureBaseSlot" "8"
 		"EnableMixedResolution" "1"
 		"ParticleTraceOffsetOnlyHit" "1"
@@ -190,7 +185,7 @@
 		"GpuLightBinner" "1"
 		"GpuLightBinnerSunLightFastPath" "1"
 		"GpuLightBinnerBinEnvMaps" "1"
-		"GpuLightBinnerBinLPVs" "0"
+		"GpuLightBinnerBinLPVs" "1"
 		"GpuLightBinnerSupportViewModelCascade" "1"
 		"DynamicShadowResolution" "1"
 		"DefaultShadowTextureWidth" "4096"
@@ -266,6 +261,7 @@
 		"SteamAudioEnabled"				"1"
 		"AddonMapCommand"				"map_workshop"
 		"LatticeDeformerEnabled"		"1"
+		"SmartPropInstanceRendering"	"1"
 	}
 
 	RenderPipelineAliases
@@ -307,6 +303,12 @@
 			"envmap"	"0"	// this is broken
 			"sareverb"	"1" // Bake Steam Audio reverb
 			"sapaths"	"1" // Bake Steam Audio pathing info
+			"sacustomdata"	"1"	// Bake Steam Audio custom data
+		}
+		
+		CompileManifest
+		{
+			EnforceValidManifestResourcePaths "1"
 		}
 
 		MeshCompiler
@@ -316,6 +318,7 @@
 			EncodeIndexBuffer       "1"
 			UseMikkTSpace           "1"
 			MeshletConeWeight       ".15"
+			SplitDepthStream		"1"
 		}
 
 		WorldRendererBuilder
@@ -341,6 +344,7 @@
 		BakedLighting
 		{
 			Version 2
+			DeterministicBuild 1
 			DisableCullingForShadows 1
 			MinSpecLightmapSize 4096
             ImportanceVolumeTransitionRegion 120            // distance we transition from high to low resolution charts 
@@ -373,29 +377,51 @@
 			PreMergeOpenSpaceMaxDimension "2048.0"
 			PreMergeOpenSpaceMaxRatio "8.0"
 			PreMergeSmallRegionsSizeThreshold "20.0"
+			DeterministicBuild "1"
 		}
 
 		SteamAudio
 		{
 			ReverbDefaults
 			{
+				GridGenerationType	"0"						// 0: Automatic, Everywhere, 1: Automatic, Use Probe Generation Volume, 2: Manual
+				FilterUsingVolumes	"1"						// Filter Using Probe Exclusion Volumes ( boolean )
+				FilterUsingNavMesh	"0"						// Filter Using NavMesh
 				GridSpacing			"3.0"
 				HeightAboveFloor	"1.5"
-				RebakeOption		"1"						// 0: cleanup, 1: manual, 2: auto
+				RebakeOption		"0"						// 0: cleanup, 1: manual, 2: auto
 				NumRays				"32768"
 				NumBounces			"64"
 				IRDuration			"1.0"
 				AmbisonicsOrder		"1"
+				ClusteringEnabled	"0"
+				ClusteringCubemapResolution	"16.0"
+				ClusteringDepthThreshold	"10.0"
 			}
 			PathingDefaults
 			{
+				GridGenerationType	"0"						// 0: Automatic, Everywhere, 1: Automatic, Use Probe Generation Volume, 2: Manual
+				FilterUsingVolumes	"1"						// Filter Using Probe Exclusion Volumes ( boolean )
+				FilterUsingNavMesh	"0"						// Filter Using NavMesh
 				GridSpacing			"3.0"
 				HeightAboveFloor	"1.5"
-				RebakeOption		"1"						// 0: cleanup, 1: manual, 2: auto
+				RebakeOption		"0"						// 0: cleanup, 1: manual, 2: auto
 				NumVisSamples		"1"
 				ProbeVisRadius		"0"
 				ProbeVisThreshold	"0.1"
 				ProbeVisPathRange	"1000.0"
+			}
+			CustomDataDefaults
+			{
+				GridGenerationType	"0"						// 0: Automatic, Everywhere, 1: Automatic, Use Probe Generation Volume, 2: Manual
+				FilterUsingVolumes	"1"						// Filter Using Probe Exclusion Volumes ( boolean )
+				FilterUsingNavMesh	"0"						// Filter Using NavMesh
+				GridSpacing			"3.0"
+				HeightAboveFloor	"1.5"
+				RebakeOption		"0"						// 0: cleanup, 1: manual, 2: auto
+				BakeOcclusion		"0"						// 0: Disabled, 1: Enabled
+				BakeDimensions		"0"						// 0: Disabled, 1: Enabled
+				BakeMaterials		"0"						// 0: Disabled, 1: Enabled
 			}
 		}
 
@@ -496,10 +522,16 @@
 		"GenerateVPKManifest" "1"
 	}
 
+	Physics
+	{
+		"BuildMeshWings" "1"
+	}
 	PostProcessingEditor
 	{
 		"supports_local_contrast"	"1"
 		"filmic_linear_scale" 		"1"
+		"compute_bloom"				"1"
+
 	}
 
 	SoundSystem

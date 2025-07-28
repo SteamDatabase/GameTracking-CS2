@@ -8,6 +8,7 @@
 /// <reference path="inspect.ts" />
 /// <reference path="avatar.ts" />
 /// <reference path="vanity_player_info.ts" />
+/// <reference path="vanity_pet_info.ts" />
 /// <reference path="particle_controls.ts" />
 /// <reference path="video_setting_recommendations.ts" />
 var MainMenu;
@@ -118,9 +119,12 @@ var MainMenu;
                 initial_entity: 'vanity_character',
                 mouse_rotate: 'false',
                 parallax_degrees: ".5",
-                parallax_offset: "200.0"
+                parallax_offset: "200.0",
+                hittest: 'false'
             });
             elMapPanel.Data().loadedMap = backgroundMap;
+            elMapPanel.Data().parallax_zoomed = 50;
+            elMapPanel.Data().parallax_unzoomed = 200;
             m_bRestartBackgroundMapSound = true;
         }
         else if (elMapPanel.Data().loadedMap !== backgroundMap) {
@@ -138,7 +142,7 @@ var MainMenu;
             elMapPanel.FireEntityInput('main_light', 'SetBrightness', '2');
             elMapPanel.FireEntityInput('main_light', 'Enable');
         }
-        InspectModelImage.HidePanelItemEntities(elMapPanel);
+        InspectModelImage.DisableItemLighting(elMapPanel);
         _SetCSMSplitPlane0DistanceOverride(elMapPanel, backgroundMap);
         return elMapPanel;
     }
@@ -466,6 +470,7 @@ var MainMenu;
         if (_m_elContentPanel.BHasClass('mainmenu-content--offscreen')) {
             _m_elContentPanel.AddClass('mainmenu-content--animate');
             _m_elContentPanel.RemoveClass('mainmenu-content--offscreen');
+            _m_elContentPanel.SetFocus();
         }
         $.GetContextPanel().AddClass("mainmenu-content--open");
         $.DispatchEvent('ShowContentPanel');
@@ -550,7 +555,7 @@ var MainMenu;
         $.DispatchEvent('HideContentPanel');
         ParticleControls.UpdateMainMenuTopBar(m_MainMenuTopBarParticleFX, '');
         const vanityPanel = $('#JsMainmenu_Vanity');
-        if (vanityPanel) {
+        if (vanityPanel && vanityPanel.IsValid()) {
             vanityPanel.Pause();
         }
         $('#MainMenuNavBarHome').checked = true;
@@ -840,7 +845,7 @@ var MainMenu;
                 if (elVanityPanel.SetActiveCharacter(i) === true) {
                     const oPanelPos = elVanityPanel.GetBonePositionInPanelSpace('pelvis');
                     oPanelPos.y -= 0.0;
-                    VanityPlayerInfo.SetVanityInfoPanelPos(elVanityPlayerInfoParent, i, oPanelPos);
+                    VanityPlayerInfo.SetVanityInfoPanelPos(elVanityPlayerInfoParent, i, oPanelPos, "id-player-vanity-info-" + i);
                 }
             }
         }
@@ -1133,6 +1138,8 @@ var MainMenu;
             }
         }
     }
+    function PopUpPetNotification(popupNotification) {
+    }
     function _GetNotificationBarData() {
         let aAlerts = [];
         if (LicenseUtil.GetCurrentLicenseRestrictions() === false) {
@@ -1353,23 +1360,6 @@ var MainMenu;
             '&' + 'allowclose=' + paramclose +
             '&' + 'cancel=' + paramcancel +
             '&' + 'okcmd=' + strOkCmd);
-    }
-    function _AddPauseMenuMissionPanel() {
-        let elPanel = null;
-        const missionId = GameStateAPI.GetActiveQuestID();
-        _msg('GameStateAPI.GetActiveQuestID(): ' + missionId);
-        const oGameState = GameStateAPI.GetTimeDataJSO();
-        if (!$.GetContextPanel().FindChildInLayoutFile('JsActiveMission') && missionId && oGameState && oGameState.gamephase !== 5) {
-            elPanel = $.CreatePanel('Panel', $('#JsActiveMissionPanel'), 'JsActiveMission');
-            elPanel.AddClass('PauseMenuModeOnly');
-            elPanel.BLoadLayout('file://{resources}/layout/operation/operation_active_mission.xml', false, false);
-        }
-        else {
-            elPanel = $.GetContextPanel().FindChildInLayoutFile('JsActiveMission');
-        }
-        if (missionId && elPanel && elPanel.IsValid()) {
-            elPanel.SetAttributeString('missionid', missionId.toString());
-        }
     }
     function _DeletePauseMenuMissionPanel() {
         if ($.GetContextPanel().FindChildInLayoutFile('JsActiveMission')) {

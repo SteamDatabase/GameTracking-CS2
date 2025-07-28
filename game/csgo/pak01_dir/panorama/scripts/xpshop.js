@@ -271,6 +271,7 @@ var XpShop;
             let ShopEntry = {
                 ui_order: 0,
                 nav_order: 0,
+                flags: 0,
                 ui_image: "",
                 ui_set_image: "",
                 ui_image_thumbnail: "",
@@ -279,7 +280,11 @@ var XpShop;
                 item_name_groups: "",
                 points: '',
                 limited_until: '',
-                ui_show_new_tag: ''
+                ui_show_new_tag: '',
+                bidding_cycle: '',
+                bidding_close: '',
+                bidding_pause: '',
+                bidding_batch: ''
             };
             for (let key in ShopEntry) {
                 let field_value = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(m_nTrack, i, key);
@@ -301,16 +306,31 @@ var XpShop;
                 if (ShopEntry.limited_until)
                     ShopEntry.suffix_loc_string = '_limitedtime';
             }
-            else if (ShopEntry.item_name.startsWith('crate_')) {
-                ShopEntry.entry_type = 'crate';
-                ShopEntry.suffix_loc_string = '_crate';
+            else {
+                let eType = (ShopEntry.item_name.startsWith('crate_')) ? 'crate' : ShopEntry.item_name;
+                ShopEntry.entry_type = eType;
+                ShopEntry.suffix_loc_string = '_' + (ShopEntry.bidding_cycle ? 'bid' : eType);
                 let nDefinitionIndex = InventoryAPI.GetItemDefinitionIndexFromDefinitionName(ShopEntry.item_name);
                 let idCrate = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(nDefinitionIndex, 0);
                 ShopEntry.lootlist = [idCrate];
-                ShopEntry.lootlist_item_type = 'crate';
-                let strSetName = InventoryAPI.GetTag(InventoryAPI.GetLootListItemIdByIndex(idCrate, 0), 'ItemSet');
-                ShopEntry.ui_set_image = strSetName ? strSetName : '';
-                ShopEntry.on_item_activate = OpenFullscreenInspect;
+                ShopEntry.lootlist_item_type = eType;
+                ShopEntry.on_item_activate = _OpenFullScreenInspectItem;
+                if (eType === 'crate') {
+                    let strSetName = InventoryAPI.GetTag(InventoryAPI.GetLootListItemIdByIndex(idCrate, 0), 'ItemSet');
+                    ShopEntry.ui_set_image = strSetName ? strSetName : '';
+                    ShopEntry.on_item_activate = OpenFullscreenInspect;
+                }
+            }
+            if (ShopEntry.flags && ((ShopEntry.flags & 4) === 4)) {
+                const petItemId = InventoryAPI.GetPetItemID();
+                if (petItemId)
+                    continue;
+            }
+            if (ShopEntry.bidding_cycle) {
+                ShopEntry.points = '';
+                const numSecondsRemaining = StoreAPI.GetSecondsUntilTimestamp(parseInt(ShopEntry.bidding_close));
+                if (numSecondsRemaining <= 0)
+                    continue;
             }
             _MakeShopTile(ShopEntry);
             _MakeNavButton(ShopEntry);
@@ -365,12 +385,16 @@ var XpShop;
                 elPanelLimitedTimer.SetDialogVariableInt('daysremaining', numDaysRemaining);
                 let strTimer = $.Localize((numDaysRemaining > 0) ? '#SFUI_Store_Offer_Days_Remaining' : '#SFUI_Store_Last_Chance', elPanelLimitedTimer);
                 elPanelLimitedTimer.SetDialogVariable('limitedtimeleft', strTimer);
+                let elPanelLabelBuy = elPanelLimitedTimer.FindChildInLayoutFile('id-xpshop-tile-limitedtimer-tag-buy');
+                let elPanelLabelBid = elPanelLimitedTimer.FindChildInLayoutFile('id-xpshop-tile-limitedtimer-tag-bid');
+                elPanelLabelBuy.SetHasClass('hidden', ShopEntry.bidding_cycle ? true : false);
+                elPanelLabelBid.SetHasClass('hidden', ShopEntry.bidding_cycle ? false : true);
             }
             elTile.style.backgroundImage = 'url("file://{images}/' + ShopEntry.ui_image_thumbnail + '.png")';
             elTile.style.backgroundPosition = '50% 50%';
             elTile.style.backgroundSize = 'cover';
             if (ShopEntry.lootlist?.length === 1) {
-                if (ShopEntry.limited_until) {
+                if (ShopEntry.limited_until && ShopEntry.item_name && ShopEntry.item_name.startsWith('lootlist:')) {
                     let elLimitedCarousel = $.CreatePanel('Carousel', elTile, '');
                     elLimitedCarousel.BLoadLayoutSnippet('limited-item-carousel');
                     elLimitedCarousel.hittest = false;
@@ -421,7 +445,7 @@ var XpShop;
             elGrid.SetDialogVariable('name', ShopEntry.callout ? $.Localize(ShopEntry.callout) : ShopEntry.item_name);
             elGrid.SetDialogVariable('cost_stars', ShopEntry.points);
             elGrid.SetDialogVariable('desc-text', $.Localize('#xpshop_redeem_item_desc' + (ShopEntry.suffix_loc_string ? ShopEntry.suffix_loc_string : ''), elGrid));
-            elGrid.SetDialogVariable('use-text', $.Localize('#xpshop_redeem_use_stars', elGrid));
+            elGrid.SetDialogVariable('use-text', $.Localize(ShopEntry.bidding_cycle ? '#xpshop_redeem_bid_stars' : '#xpshop_redeem_use_stars', elGrid));
             elGrid.SetDialogVariable('confirm-text', $.Localize('#xpshop_redeem_use_confirm_item' + (ShopEntry.suffix_loc_string ? ShopEntry.suffix_loc_string : ''), elGrid));
             let elRedeemBar = elGrid.FindChildInLayoutFile('id-xpshop-item-redeem-bar');
             let elConfirmBar = elGrid.FindChildInLayoutFile('id-xpshop-item-confirm-bar');
@@ -561,9 +585,10 @@ var XpShop;
             elConfirmBar.SetHasClass('hidden', false);
             elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').enabled = true;
             elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-cancel').enabled = true;
+            elConfirmBar.GetParent().FindChildInLayoutFile("id-xpshop-item-bidamt-bar").SetHasClass('hidden', true);
         });
         RedeemBtn.SetPanelEvent('onmouseover', () => {
-            let nStarsNeeded = m_activeTracks > 0 ? (parseInt(ShopEntry.points) - elBalance.Data().balance) : 0;
+            let nStarsNeeded = m_activeTracks > 0 ? ((ShopEntry.bidding_cycle ? 1 : parseInt(ShopEntry.points)) - elBalance.Data().balance) : 0;
             RedeemBtn.SetDialogVariableInt('stars_needed', nStarsNeeded);
             let strToolTip = (m_activeTracks < 1) ? '#xpshop_redeem_need_pass_tooltip' :
                 nStarsNeeded > 0 ? $.Localize('#xpshop_redeem_not_enough_stars', RedeemBtn) : '';
@@ -581,6 +606,94 @@ var XpShop;
             IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
         }
         _ResetToRewardsBar(elRedeemBar, elConfirmBar);
+        if (ShopEntry.bidding_cycle && elBalance.Data().balance && elBalance.Data().balance > 0) {
+            RedeemBtn.enabled = true;
+            RedeemBtn.SetPanelEvent('onactivate', () => {
+                const rtBiddingClose = parseInt(ShopEntry.bidding_close);
+                const rtBiddingCycle = parseInt(ShopEntry.bidding_cycle);
+                const rtBiddingPause = parseInt(ShopEntry.bidding_pause);
+                const numSecondsRemaining = StoreAPI.GetSecondsUntilTimestamp(rtBiddingClose);
+                if (numSecondsRemaining <= 0) {
+                    UiToolkitAPI.ShowGenericPopupOneOptionBgStyle(ShopEntry.callout, "#xpshop_redeem_bid_allover", "", "#UI_OK", () => { }, "dim");
+                    return;
+                }
+                const numPeriodsRemaining = Math.floor(numSecondsRemaining / rtBiddingCycle);
+                const rtPreviousClose = rtBiddingClose - (numPeriodsRemaining + 1) * rtBiddingCycle;
+                const numSecondsSincePrevious = (rtBiddingClose - numSecondsRemaining) - rtPreviousClose;
+                if ((numSecondsSincePrevious >= rtBiddingCycle)
+                    || (numSecondsSincePrevious <= rtBiddingPause)) {
+                    const numSecondsUntilNextBidOpens = rtBiddingPause - ((numSecondsSincePrevious >= rtBiddingCycle)
+                        ? 0 : numSecondsSincePrevious);
+                    const numHours = Math.floor(numSecondsUntilNextBidOpens / 3600) + 1;
+                    RedeemBtn.SetDialogVariableInt('hours_until_bid_batch', numHours);
+                    UiToolkitAPI.ShowGenericPopupOneOptionBgStyle(ShopEntry.callout, $.Localize("#xpshop_redeem_bid_batchover", numHours, RedeemBtn), "", "#UI_OK", () => { }, "dim");
+                    return;
+                }
+                if (ShopEntry.flags && ((ShopEntry.flags & 4) === 4)) {
+                    const petItemId = InventoryAPI.GetPetItemID();
+                    if (petItemId) {
+                        UiToolkitAPI.ShowGenericPopupOneOptionBgStyle(ShopEntry.callout, "#chicken_egg_cannot_bid_own", "", "#UI_OK", () => { }, "dim");
+                        return;
+                    }
+                }
+                elRedeemBar.SetHasClass('hidden', true);
+                elConfirmBar.SetHasClass('hidden', false);
+                elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').enabled = true;
+                elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-cancel').enabled = true;
+                ShopEntry.bidding_points_amount = 1;
+                let bMakingNewBid = true;
+                const numBids = InventoryAPI.GetCacheTypeElementsCount('XpShopBids');
+                for (let iBid = 0; iBid < numBids; ++iBid) {
+                    const jsoBid = InventoryAPI.GetCacheTypeElementJSOByIndex('XpShopBids', iBid);
+                    if (jsoBid.campaign_id == m_nTrack) {
+                        ShopEntry.bidding_points_amount = jsoBid.expected_cost;
+                        bMakingNewBid = false;
+                        break;
+                    }
+                }
+                let fnLocalizeConfirmBar = () => {
+                    elConfirmBar.SetDialogVariable('cost_stars', '' + ShopEntry.bidding_points_amount);
+                    elConfirmBar.SetDialogVariable('confirm-text', $.Localize((bMakingNewBid ? '#xpshop_redeem_use_confirm_item' : '#xpshop_redeem_use_cancel_item')
+                        + (ShopEntry.suffix_loc_string ? ShopEntry.suffix_loc_string : ''), elConfirmBar));
+                    elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').Children()[0].text
+                        = $.Localize((bMakingNewBid ? '#xpshop_redeem_use_confirm_item_bid_btn' : '#xpshop_redeem_use_cancel_item_bid_btn'), elConfirmBar);
+                };
+                let elBidAmount = elConfirmBar.GetParent().FindChildInLayoutFile("id-xpshop-item-bidamt-bar");
+                if (bMakingNewBid && elBalance.Data().balance > 1) {
+                    elBidAmount.SetDialogVariable('cost_stars', "");
+                    elBidAmount.SetDialogVariableInt('bid-amount', 1);
+                    elBidAmount.SetHasClass('hidden', false);
+                    let elBidSlider = elBidAmount.FindChildInLayoutFile("id-xpshop-bid-amount");
+                    elBidSlider.min = 1;
+                    elBidSlider.max = elBalance.Data().balance;
+                    elBidSlider.increment = 1;
+                    elBidSlider.default = 1;
+                    elBidSlider.value = 1;
+                    elBidSlider.SetPanelEvent('onvaluechanged', () => {
+                        const n = Math.round(elBidSlider.value);
+                        ShopEntry.bidding_points_amount = n;
+                        elBidAmount.SetDialogVariableInt('bid-amount', n);
+                        fnLocalizeConfirmBar();
+                    });
+                    elBidAmount.FindChildInLayoutFile("id-xpshop-bid-amount-less").SetPanelEvent('onactivate', () => {
+                        const n = Math.round(elBidSlider.value);
+                        if (n > 1)
+                            elBidSlider.value = (n - 1);
+                    });
+                    elBidAmount.FindChildInLayoutFile("id-xpshop-bid-amount-more").SetPanelEvent('onactivate', () => {
+                        const n = Math.round(elBidSlider.value);
+                        if (n < elBalance.Data().balance)
+                            elBidSlider.value = (n + 1);
+                    });
+                }
+                else {
+                    elBidAmount.SetHasClass('hidden', true);
+                }
+                fnLocalizeConfirmBar();
+                if (!bMakingNewBid)
+                    ShopEntry.bidding_points_amount = -ShopEntry.bidding_points_amount;
+            });
+        }
     }
     function _SetUpConfirmBar(elRedeemBar, elConfirmBar, ShopEntry) {
         elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-cancel').SetPanelEvent('onactivate', () => {
@@ -592,7 +705,7 @@ var XpShop;
             IconUtil.SetItemSetSVGImage(elImage, ShopEntry.ui_set_image);
         }
         elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').SetPanelEvent('onactivate', () => {
-            MissionsAPI.ActionRedeemOperationGoods(m_nTrack, ShopEntry.shop_index, parseInt(ShopEntry.points));
+            MissionsAPI.ActionRedeemOperationGoods(m_nTrack, ShopEntry.shop_index, ShopEntry.bidding_cycle ? ShopEntry.bidding_points_amount : parseInt(ShopEntry.points));
             elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-confirm').enabled = false;
             elConfirmBar.FindChildInLayoutFile('id-xpshop-item-redeem-cancel').enabled = false;
             $.GetContextPanel().SetHasClass('waiting-for-redeem', true);
@@ -611,6 +724,7 @@ var XpShop;
     function _ResetToRewardsBar(elRedeemBar, elConfirmBar) {
         elRedeemBar.SetHasClass('hidden', false);
         elConfirmBar.SetHasClass('hidden', true);
+        elConfirmBar.GetParent().FindChildInLayoutFile("id-xpshop-item-bidamt-bar").SetHasClass('hidden', true);
     }
     function _SetWarningText(elGrid, ShopEntry) {
         let warningText = '';
@@ -782,7 +896,7 @@ var XpShop;
                 ShopEntry.on_item_activate(ShopEntry, itemId);
             }
         });
-        if (ShopEntry.lootlist?.length === 1 && ShopEntry.limited_until) {
+        if (ShopEntry.lootlist?.length === 1 && ShopEntry.limited_until && !ShopEntry.bidding_cycle) {
             let elHint = $.CreatePanel('Panel', elPanel, 'id-xpshop-limited-item-tooltip-loc');
             elHint.BLoadLayoutSnippet('limited-item-variety');
             elHint.SetPanelEvent('onmouseover', () => {

@@ -11,13 +11,14 @@ var PopupVideoClip;
             $.Localize("#HighlightReel_" + reelSchemaDef["id"]));
         const videoPlayer = $('#VideoClipMovie');
         if (videoPlayer) {
+            UiToolkitAPI.PlaySoundEvent('UIPanorama.OnStartPopupVideo');
             videoPlayer.SetMovie(reelSchemaDef["url_1080p"]);
-            videoPlayer.SetPlaybackVolume(0.5);
             videoPlayer.Play();
         }
     }
     PopupVideoClip.Init = Init;
     function Close() {
+        UiToolkitAPI.PlaySoundEvent('UIPanorama.OnStopPopupVideo');
         $.DispatchEvent('UIPopupButtonClicked', '');
     }
     PopupVideoClip.Close = Close;

@@ -151,16 +151,16 @@ var InspectModelImage;
         return elPanel;
     }
     function StartWeaponLookat() {
-        let elInspectPanel = GetExistingItemPanel('ItemPreviewPanel');
-        if (elInspectPanel) {
-            elInspectPanel.StartWeaponLookat();
+        let elItemPanel = GetExistingItemPanel('ItemPreviewPanel');
+        if (elItemPanel) {
+            elItemPanel.StartWeaponLookat();
         }
     }
     InspectModelImage.StartWeaponLookat = StartWeaponLookat;
     function EndWeaponLookat() {
-        let elInspectPanel = GetExistingItemPanel('ItemPreviewPanel');
-        if (elInspectPanel) {
-            elInspectPanel.EndWeaponLookat();
+        let elItemPanel = GetExistingItemPanel('ItemPreviewPanel');
+        if (elItemPanel) {
+            elItemPanel.EndWeaponLookat();
         }
     }
     InspectModelImage.EndWeaponLookat = EndWeaponLookat;
@@ -395,19 +395,19 @@ var InspectModelImage;
         _TransitionCamera(panel, 'nametag_close');
         return panel;
     }
-    function _GetBackGroundMap() {
+    function _GetBackGroundMap(bUseMainMenuMap = false) {
         if (m_useAcknowledge) {
             return 'ui/acknowledge_item';
         }
         let backgroundMap = GameInterfaceAPI.GetSettingString('ui_inspect_bkgnd_map');
-        if (backgroundMap == 'mainmenu') {
+        if (backgroundMap == 'mainmenu' || bUseMainMenuMap === true) {
             backgroundMap = GameInterfaceAPI.GetSettingString('ui_mainmenu_bkgnd_movie');
         }
         backgroundMap = !backgroundMap ? backgroundMap : backgroundMap + '_vanity';
         return backgroundMap;
     }
-    function _LoadInspectMap(itemId, oSettings) {
-        let mapName = _GetBackGroundMap();
+    function _LoadInspectMap(itemId, oSettings, bUseMainMenuMap = false) {
+        let mapName = _GetBackGroundMap(bUseMainMenuMap);
         let elPanel = GetExistingItemPanel('ItemPreviewPanel');
         if (!elPanel) {
             let strAsyncWorkType = $.GetContextPanel().GetAttributeString("asyncworktype", "");
@@ -467,22 +467,19 @@ var InspectModelImage;
     }
     function _AdditionalMapLoadSettings(elPanel, active_item_idx, mapName) {
         if (elPanel.id === 'CharPreviewPanel') {
-            HidePanelItemEntities(elPanel);
-            _HidePanelCharEntities(elPanel, true);
+            DisableItemLighting(elPanel);
             _SetCSMSplitPlane0DistanceOverride(elPanel, mapName);
         }
         else if (elPanel.id === 'id-inspect-image-bg-map') {
-            HidePanelItemEntities(elPanel);
-            _HidePanelCharEntities(elPanel, false);
+            DisableItemLighting(elPanel);
         }
         else {
-            _HidePanelCharEntities(elPanel, false);
-            _HideItemEntities(active_item_idx, elPanel);
+            _SetLightingForItem(active_item_idx, elPanel);
             if (mapName === 'de_nuke_vanity') {
-                _SetSpotlightBrightness(elPanel);
+                SetSpotlightBrightness(elPanel);
             }
             else {
-                _SetSunBrightness(elPanel);
+                SetSunBrightness(elPanel);
             }
         }
         _SetWorkshopPreviewPanelProperties(elPanel);
@@ -676,26 +673,15 @@ var InspectModelImage;
         }
     }
     InspectModelImage.SwitchMap = SwitchMap;
-    function _HidePanelCharEntities(elPanel, bIsPlayerInspect = false) {
-        elPanel.FireEntityInput('vanity_character', 'Alpha');
-        elPanel.FireEntityInput('vanity_character1', 'Alpha');
-        elPanel.FireEntityInput('vanity_character2', 'Alpha');
-        elPanel.FireEntityInput('vanity_character3', 'Alpha');
-        elPanel.FireEntityInput('vanity_character4', 'Alpha');
-        if (!bIsPlayerInspect) {
-            elPanel.FireEntityInput('vanity_character5', 'Alpha');
-        }
+    function DisableItemLighting(elPanel) {
+        _SetLightingForItem(-1, elPanel);
     }
-    function HidePanelItemEntities(elPanel) {
-        _HideItemEntities(-1, elPanel);
-    }
-    InspectModelImage.HidePanelItemEntities = HidePanelItemEntities;
-    function _HideItemEntities(indexShow, elPanel) {
-        let numItemEntitiesInMap = 8;
+    InspectModelImage.DisableItemLighting = DisableItemLighting;
+    function _SetLightingForItem(indexShow, elPanel) {
+        let numItemEntitiesInMap = 9;
         for (let i = 0; i <= numItemEntitiesInMap; i++) {
             let itemIndexMod = i === 0 ? '' : i.toString();
             if (indexShow !== i) {
-                elPanel.FireEntityInput('item' + itemIndexMod, 'Alpha');
                 elPanel.FireEntityInput('light_item' + itemIndexMod, 'Disable');
                 elPanel.FireEntityInput('light_item_new' + itemIndexMod, 'Disable');
             }
@@ -724,12 +710,14 @@ var InspectModelImage;
             elPanel.FireEntityInput('light_item_new' + indexShow, 'Disable');
         }
     }
-    function _SetSunBrightness(elPanel) {
+    function SetSunBrightness(elPanel) {
         elPanel.FireEntityInput('sun', 'SetLightBrightness', '1.1');
     }
-    function _SetSpotlightBrightness(elPanel) {
+    InspectModelImage.SetSunBrightness = SetSunBrightness;
+    function SetSpotlightBrightness(elPanel) {
         elPanel.FireEntityInput('main_light', 'SetBrightness', '1.1');
     }
+    InspectModelImage.SetSpotlightBrightness = SetSpotlightBrightness;
     function _HexColorToRgb(hex) {
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);

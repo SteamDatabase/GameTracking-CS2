@@ -552,7 +552,7 @@
 					soundevent_01 = 
 					{
 						soundevent_data = "true"
-						data_type = "string"
+						data_type = "sndevt"
 						value = ""
 						_system_properties = 
 						{
@@ -575,7 +575,7 @@
 			
 			{
 				name = "get_soundevent_01"
-				operator = "opvar_get_string"
+				operator = "opvar_get_sndevt"
 				input_execute = "1"
 				check_event_data = "true"
 				input_operator_name = "public"
@@ -589,6 +589,7 @@
 				name = "start_soundevent_01"
 				operator = "soundevent_start"
 				input_spawn_oneshots = "1.000000"
+				spawn_orphans = 1
 				input_execute = 1
 				input_start = 1
 				soundevent_name = "@get_soundevent_01.output"
@@ -619,9 +620,11 @@
 						soundevent_data = "true"
 						value = 
 						[
-							"sounds/weapons/bullet_impacts/wpn_bullet_impact_dry_zombie_01.vsnd",
-							"sounds/weapons/bullet_impacts/wpn_bullet_impact_dry_zombie_02.vsnd",
-							"sounds/weapons/bullet_impacts/wpn_bullet_impact_dry_zombie_03.vsnd",
+							"sounds/diagnostics/ambient/random_amb_sfx/forest_bird01.vsnd",
+							"sounds/diagnostics/ambient/random_amb_sfx/forest_bird01b.vsnd",
+							"sounds/diagnostics/ambient/random_amb_sfx/forest_bird02.vsnd",
+							"sounds/diagnostics/ambient/random_amb_sfx/forest_bird02b.vsnd",
+							"sounds/diagnostics/ambient/random_amb_sfx/forest_bird03.vsnd",
 						]
 					}
 					restart_time = 
@@ -1117,6 +1120,548 @@
 		{
 			display_game = "diagnostics"
 		}
+	}
+	update_test_lfo_timing = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "LFO"
+				operator = "mod_LFO"
+				wave_type = "sqr"
+				input_frequency = "0.75"
+				input_scale = "0.5"
+				input_center = "0.5"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				execute_once = "true"
+				input_vsnd1 = "sounds/diagnostics/sin_1024hz_-3db_lp.vsnd"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+				input_max_gain_change_per_second = 87
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "1"
+				submix_name = "AllVoices"
+				send_type = "named"
+			},
+			
+			{
+				name = "set_input"
+				operator = "vmix_mixgraph_input"
+				input_name = "AllVoices_amp_volume_input"
+				input = "@LFO.output"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	update_test_env_timing = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					start_time = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+					last_lfo_value = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "LFO"
+				operator = "mod_LFO"
+				wave_type = "sqr"
+				input_frequency = "0.75"
+				input_scale = "0.5"
+				input_center = "0.5"
+			},
+			
+			{
+				name = "last_lfo_value"
+				operator = "opvar_get_float"
+				check_event_data = "false"
+				input_operator_name = "public"
+				input_field_name = "last_lfo_value"
+			},
+			
+			{
+				name = "lfo_rising_edge"
+				operator = "math_float_eval"
+				expression = "min( max(_1, 0) , (_2 == 0))"
+				input1 = "@LFO.output"
+				input2 = "@public.last_lfo_value"
+			},
+			
+			{
+				name = "set_last_lfo_value"
+				operator = "opvar_set_float"
+				check_event_data = "false"
+				input_operator_name = "public"
+				input_field_name = "last_lfo_value"
+				input = "@LFO.output"
+			},
+			
+			{
+				name = "set_start_time"
+				operator = "opvar_set_float"
+				check_event_data = "false"
+				input_execute = "@lfo_rising_edge.output"
+				input_operator_name = "public"
+				input_field_name = "start_time"
+				input = "@get_event_info.output_elapsed_time"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				execute_once = "true"
+				input_vsnd1 = "sounds/diagnostics/sin_1024hz_-3db_lp.vsnd"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+				input_max_gain_change_per_second = 87
+			},
+			
+			{
+				name = "lfo_time"
+				operator = "math_float_eval"
+				expression = "_1 - _2"
+				input1 = "@get_event_info.output_elapsed_time"
+				input2 = "@public.start_time"
+			},
+			
+			{
+				name = "sample_env_curve"
+				operator = "container_sample_curve"
+				input_time = "@lfo_time.output"
+				input_container = "sounds/diagnostics/containers/beep_test_container.vsnd"
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "1"
+				submix_name = "AllVoices"
+				send_type = "named"
+			},
+			
+			{
+				name = "set_input"
+				operator = "vmix_mixgraph_input"
+				input_name = "AllVoices_amp_volume_input"
+				input = "@sample_env_curve.output"
+			},
+			
+			{
+				name = "facing_submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "0"
+				send_type = "facing"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	update_test_lfo_beep = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "LFO"
+				operator = "mod_LFO"
+				wave_type = "sqr"
+				input_frequency = "0.75"
+				input_scale = "0.5"
+				input_center = "0.5"
+			},
+			
+			{
+				name = "play_or_stop"
+				operator = "math_float"
+				apply = "min"
+				input1 = "@LFO.output"
+				input2 = "@get_event_info.output_unstopped"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				execute_once = "true"
+				input_vsnd1 = "sounds/diagnostics/beep.vsnd"
+				input_start = "@play_or_stop.output"
+				input_speaker_volumes = "[0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+				input_max_gain_change_per_second = 96000
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "1"
+				submix_name = "AllVoices"
+				send_type = "named"
+			},
+			
+			{
+				name = "update_prevent_stop"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	update_test_mixgroup_timing = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				execute_once = "true"
+				input_vsnd1 = "sounds/diagnostics/sin_1024hz_-3db_lp.vsnd"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+				input_max_gain_change_per_second = 87
+			},
+			
+			{
+				name = "layer_amount_test_target_mixgroup"
+				operator = "soundmixer_get_mixgroup"
+				mixgroup = "layer_amount_target"
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "1"
+				submix_name = "amped"
+				send_type = "named"
+			},
+			
+			{
+				name = "set_input"
+				operator = "vmix_mixgraph_input"
+				input_name = "amped_volume_input"
+				input = "@layer_amount_test_target_mixgroup.output_volume"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	update_test_lfo_beep_env_trigger = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					start_time = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+					last_lfo_value = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "LFO"
+				operator = "mod_LFO"
+				wave_type = "sqr"
+				input_frequency = "0.75"
+				input_scale = "0.5"
+				input_center = "0.5"
+			},
+			
+			{
+				name = "play_or_stop"
+				operator = "math_float"
+				apply = "min"
+				input1 = "@LFO.output"
+				input2 = "@get_event_info.output_unstopped"
+			},
+			
+			{
+				name = "last_lfo_value"
+				operator = "opvar_get_float"
+				check_event_data = "false"
+				input_operator_name = "public"
+				input_field_name = "last_lfo_value"
+			},
+			
+			{
+				name = "lfo_rising_edge"
+				operator = "math_float_eval"
+				expression = "min( max(_1, 0) , (_2 == 0))"
+				input1 = "@LFO.output"
+				input2 = "@public.last_lfo_value"
+			},
+			
+			{
+				name = "set_last_lfo_value"
+				operator = "opvar_set_float"
+				check_event_data = "false"
+				input_operator_name = "public"
+				input_field_name = "last_lfo_value"
+				input = "@LFO.output"
+			},
+			
+			{
+				name = "set_start_time"
+				operator = "opvar_set_float"
+				check_event_data = "false"
+				input_execute = "@lfo_rising_edge.output"
+				input_operator_name = "public"
+				input_field_name = "start_time"
+				input = "@get_event_info.output_elapsed_time"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				execute_once = "true"
+				input_vsnd1 = "sounds/diagnostics/beep.vsnd"
+				input_start = "@play_or_stop.output"
+				input_speaker_volumes = "[0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]"
+				input_max_gain_change_per_second = 96000
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "1"
+				submix_name = "unaltered"
+				send_type = "named"
+			},
+			
+			{
+				name = "lfo_time"
+				operator = "math_float_eval"
+				expression = "_1 - _2"
+				input1 = "@get_event_info.output_elapsed_time"
+				input2 = "@public.start_time"
+			},
+			
+			{
+				name = "sample_env_curve"
+				operator = "container_sample_curve"
+				input_time = "@lfo_time.output"
+				input_container = "sounds/diagnostics/containers/beep_test_container.vsnd"
+			},
+			
+			{
+				name = "lfo_invert"
+				operator = "math_float_eval"
+				expression = "1.0 - _1"
+				input1 = "@LFO.output"
+			},
+			
+			{
+				name = "layer_amount_test_trigger_mixgroup"
+				operator = "soundmixer_get_mixgroup"
+				mixgroup = "layer_amount_trigger"
+			},
+			
+			{
+				name = "mixer_trigger"
+				operator = "soundmixer_set_trigger"
+				input_trigger = "@lfo_invert.output"
+				input_mixgroups = "@layer_amount_test_trigger_mixgroup.output_mixgroups"
+			},
+			
+			{
+				name = "update_prevent_stop"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	update_test_lfo_beep_timing = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "start_soundevent"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "Diagnostic.update_test_lfo_beep"
+			},
+			
+			{
+				name = "start_soundevent2"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "Diagnostic.update_test_lfo_timing"
+			},
+			
+			{
+				name = "update_prevent_stop"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	update_test_env_beep_timing = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "start_soundevent"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "Diagnostic.update_test_lfo_beep"
+			},
+			
+			{
+				name = "start_soundevent2"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "Diagnostic.update_test_env_timing"
+			},
+			
+			{
+				name = "update_prevent_stop"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	update_test_env_beep_mixlayer_timing = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "start_soundevent2"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "Diagnostic.update_test_lfo_beep_env_trigger"
+			},
+			
+			{
+				name = "start_soundevent"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "Diagnostic.update_test_mixgroup_timing"
+			},
+			
+			{
+				name = "update_prevent_stop"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
 	}
 	update_test_opvar_event_sequence = 
 	{
@@ -2560,7 +3105,7 @@
 				name = "dont_exit"
 				operator = "sos_goto"
 				input_execute = "0.000000"
-				input_exit = "0.000000"
+				input_goto_end = "0.000000"
 			},
 			
 			{
@@ -3388,7 +3933,6 @@
 			
 			{
 				name = "update_test_opvar_get_float"
-				input = "6"
 				operator = "opvar_get_float"
 				input_operator_name = "public"
 				input_field_name = "test_enum_field"
@@ -3556,19 +4100,16 @@
 			{
 				name = "update_test_rand1"
 				operator = "math_random_float"
-				input_seed = "-1.000000"
 			},
 			
 			{
 				name = "update_test_rand2"
 				operator = "math_random_float"
-				input_seed = "-1.000000"
 			},
 			
 			{
 				name = "update_test_rand3"
 				operator = "math_random_float"
-				input_seed = "-1.000000"
 			},
 		]
 		_system_properties = 
@@ -3715,7 +4256,7 @@
 				operator = "math_float"
 				apply = "less_than"
 				input1 = "@get_event_info.output_elapsed_time"
-				input2 = "1"
+				input2 = "100"
 			},
 			
 			{
@@ -3735,7 +4276,7 @@
 				{
 					interval = 
 					{
-						value = "0.250000"
+						value = "0.50000"
 					}
 					pitch = 
 					{
@@ -3903,6 +4444,128 @@
 		{
 			display_game = "diagnostics"
 		}
+	}
+	test_vmix_voice_sends = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					volume = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					balance = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					vgraph = 
+					{
+						data_type = "string"
+						value = "test.mix8"
+					}
+					track1 = 
+					{
+						data_type = "string"
+						value = "sounds/misc/null.vsnd"
+					}
+					track2 = 
+					{
+						data_type = "string"
+						value = "sounds/misc/null.vsnd"
+					}
+					vsnd_files1 = 
+					{
+						data_type = "vsnd"
+						value = "sounds/misc/null.vsnd"
+					}
+					vsnd_files2 = 
+					{
+						data_type = "vsnd"
+						value = "sounds/misc/null.vsnd"
+					}
+					volume_test_input = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					memory_type = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "set_builtins"
+				operator = "sos_set_builtins"
+				input_voicegraph = "@public.vgraph"
+			},
+			
+			{
+				name = "volume_fan"
+				operator = "util_float_to_speakers"
+				input = "@public.volume"
+			},
+			
+			{
+				name = "speakers_limit"
+				operator = "math_speakers"
+				apply = "mult"
+				left_front = "1.000000"
+				right_front = "0.666000"
+				center = "1.000000"
+				lfe = "0.666000"
+				left_rear = "1.000000"
+				right_rear = "0.666000"
+				input2 = "@volume_fan.output"
+			},
+			
+			{
+				name = "start_vmix"
+				operator = "vmix_voice_start"
+				input_track1 = "@public.track1"
+				input_track2 = "@public.track2"
+				input_vsnd1 = "@public.vsnd_files1"
+				input_vsnd2 = "@public.vsnd_files2"
+				execute_once = "false"
+				input_execute = "1.000000"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "@speakers_limit.output"
+				input_pitch = "1.000000"
+				input_memory_type = "@public.memory_type"
+			},
+			
+			{
+				name = "allvoices_submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1.0"
+				input = "1.0"
+				submix_name = "AllVoices"
+				send_type = "named"
+			},
+			
+			{
+				name = "amped_bus_voices_submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1.0"
+				input = "0.0"
+				submix_name = "amped_buss"
+				send_type = "named"
+			},
+		]
 	}
 	test_vmix_8track = 
 	{
@@ -4214,6 +4877,29 @@
 			display_game = "diagnostics"
 		}
 	}
+	test_import_opvar_field = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_field_test = 
+					{
+						data_type = "public_opvar"
+						value = "test_simple_public_field"
+					}
+				}
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
 	test_system_properties = 
 	{
 		operators = 
@@ -4314,8 +5000,8 @@
 				operator = "math_randomize_float"
 				execute_once = "true"
 				input = "@public.pitch"
-				input_min = "@public.pitch_rand_min"
-				input_max = "@public.pitch_rand_max"
+				input_rand_min = "@public.pitch_rand_min"
+				input_rand_max = "@public.pitch_rand_max"
 			},
 			
 			{
@@ -4358,7 +5044,6 @@
 			{
 				name = "source_info_test"
 				operator = "game_get_source_info"
-				source = "entity"
 			},
 			
 			{
@@ -5263,7 +5948,6 @@
 				operator = "math_curve_2d_6knot"
 				input_execute = "1"
 				input = "@public.input"
-				curve_defintion_type = "vector"
 				curve_type = "spline"
 				execute_once = "1.000000"
 				input_vector = "@get_curve_6knot.output"
@@ -5784,5 +6468,97 @@
 				input_stop_at_time = "3"
 			},
 		]
+	}
+	update_test_vsnd_envelope = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						soundevent_data = "true"
+						value = 
+						[
+							"sounds/diagnostics/enveloped_noise_01.vsnd",
+						]
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "get_vsnd"
+				operator = "opvar_get_vsnd"
+				execute_once = "true"
+				check_event_data = "true"
+				input_operator_name = "public"
+				input_field_name = "vsnd_files"
+				input_use_namespace = "false"
+				array_selection_type = "random_exclusive"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				input_vsnd1 = "@get_vsnd.output"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "[ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ]"
+			},
+			
+			{
+				name = "sample_env_curve"
+				operator = "container_sample_curve"
+				input_time = "@get_event_info.output_elapsed_time"
+				input_default = "0.0"
+				input_container = "@get_vsnd.output"
+			},
+			
+			{
+				name = "***ENV:"
+				operator = "util_print_float"
+				input = "@sample_env_curve.output"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	test_empty = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					input1 = 
+					{
+						data_type = "float"
+						value = "0"
+						_system_properties = 
+						{
+							display_group = "Normal"
+						}
+					}
+				}
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
 	}
 }

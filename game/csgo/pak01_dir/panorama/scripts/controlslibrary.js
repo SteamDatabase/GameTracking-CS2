@@ -62,15 +62,6 @@ function OnPopupCustomLayoutXpGrant() {
 function OnPopupCustomLayoutCaseConfirm() {
     UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_container_open_confirm.xml', 'none');
 }
-function OnPopupCustomLayoutOperationHub(startPage) {
-    var nActiveSeason = GameTypesAPI.GetActiveSeasionIndexValue();
-    if (nActiveSeason < 0)
-        return;
-    var elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/operation/operation_main.xml', 'none');
-    elPanel.SetAttributeInt("season_access", nActiveSeason);
-    if (startPage)
-        elPanel.SetAttributeInt("start_page", startPage);
-}
 function OnPopupCustomLayoutLoadingScreen() {
     ClearPopupsText();
     UiToolkitAPI.ShowCustomLayoutPopup('teams', 'file://{resources}/layout/teamselectmenu.xml');
@@ -109,28 +100,7 @@ function VideoPlayNextTrailer() {
     videoPlayer.SetTitle("Trailer " + g_VideoCurrentTrailer);
     videoPlayer.Play();
 }
-var g_sceneanimsList = [
-    'cu_ct_pose01',
-    'cu_ct_pose02',
-    'cu_ct_pose03',
-    'cu_ct_pose04',
-    'cu_t_pose01',
-    'cu_t_pose02',
-    'cu_t_pose03',
-    'cu_t_pose04',
-];
-var g_sceneanimindex = 0;
-var g_maxsceneitemcontext = 5;
-var g_sceneitemcontext = 0;
 function InitScenePanel() {
-    g_sceneanimindex = 0;
-    var charT = LoadoutAPI.GetItemID('ct', 'customplayer');
-    var model = ItemInfo.GetModelPlayer(charT);
-    var playerPanel = $("#Player1");
-    playerPanel.SetSceneAngles(0, 0, 0, false);
-    playerPanel.SetPlayerModel(model);
-    playerPanel.PlaySequence(g_sceneanimsList[g_sceneanimindex], true);
-    playerPanel.SetCameraPreset(6, false);
     var playbackSpeedSlider = $('#PlaybackSpeedSlider');
     playbackSpeedSlider.min = -2;
     playbackSpeedSlider.max = 2;
@@ -152,25 +122,6 @@ function SceneCameraPlaybackSpeedTextChanged() {
     }
     else {
     }
-}
-function SceneNextAnimSequence() {
-    g_sceneanimindex++;
-    if (g_sceneanimindex >= g_sceneanimsList.length) {
-        g_sceneanimindex = 0;
-    }
-    var playerPanel = $("#Player1");
-    playerPanel.PlaySequence(g_sceneanimsList[g_sceneanimindex], true);
-}
-function ScenePrevAnimSequence() {
-    g_sceneanimindex--;
-    if (g_sceneanimindex < 0) {
-        g_sceneanimindex = g_sceneanimsList.length - 1;
-    }
-    var playerPanel = $("#Player1");
-    playerPanel.PlaySequence(g_sceneanimsList[g_sceneanimindex], true);
-}
-function GenerateInventoryImages() {
-    $("#Player1").GenerateInventoryImages();
 }
 var g_DialogVarCount = 0;
 function UpdateParentDialogVariablesFromTextEntry() {

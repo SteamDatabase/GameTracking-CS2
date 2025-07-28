@@ -180,6 +180,7 @@
 		"snd_steamaudio_max_hrtf_normalization_gain_db"		"6.0"
 		"snd_steamaudio_enable_pathing"						"1"
 		"snd_steamaudio_source_pathing_debug"				"0"
+		"snd_steamaudio_max_probes_customdata"				"12000"
 
 		"snd_event_browser_default_stack"			"csgo_mega"
 		"snd_event_browser_default_vsnd_field"		"public.vsnd_files_track_01"
@@ -187,8 +188,12 @@
 
 		// Need much tighter sound clock sync
 		"snd_delay_sound_ms_max"	"40"
+		
+		// possible tighter sound clock sync settings. needs testing. 
+		//"snd_delay_sound_ms_max"	"20"
+		//"snd_delay_sound_ms_shift" "5"
 
-		//don't let people miss with speaker config settings.
+		//don't let people mess with speaker config settings.
 		"speaker_config"
 		{
 			"min"		"-1"
@@ -211,6 +216,13 @@
 
 		"sv_long_frame_ms" "15"
 		"cq_buffer_bloat_msecs_max" "64"
+
+		"cl_interp_ag2_for_non_ag2_entities"	"0"
+	}
+	
+	Sounds
+	{
+		HierarchicalEncodingFiles	 "1"
 	}
 
 	// Temporarily allowing this because the particle files that are tripping this up ALSO crash PET so I 

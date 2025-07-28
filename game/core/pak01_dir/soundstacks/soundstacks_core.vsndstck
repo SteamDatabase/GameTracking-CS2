@@ -316,6 +316,11 @@
 						data_type = "float"
 						value = "1.000000"
 					}
+					pitch = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
 					vsnd_files = 
 					{
 						data_type = "vsnd"
@@ -363,7 +368,7 @@
 				input_execute = "1.000000"
 				input_start = "@public.start"
 				input_speaker_volumes = "@volume_fan.output"
-				input_pitch = "1.000000"
+				input_pitch = "@public.pitch"
 				input_memory_type = "@public.memory_type"
 			},
 		]
@@ -532,8 +537,8 @@
 				operator = "math_randomize_float"
 				execute_once = "true"
 				input = "@public.pitch"
-				input_min = "@public.pitch_rand_min"
-				input_max = "@public.pitch_rand_max"
+				input_rand_min = "@public.pitch_rand_min"
+				input_rand_max = "@public.pitch_rand_max"
 			},
 			
 			{
@@ -640,7 +645,6 @@
 			{
 				name = "source_info"
 				operator = "game_get_source_info"
-				source = "entity"
 			},
 			
 			{
@@ -848,7 +852,11 @@
 					vsnd_files = 
 					{
 						data_type = "vsnd"
-						value = "sounds/misc/null.vsnd"
+						soundevent_data = "true"
+						value = 
+						[
+							"sounds/common/null.vsnd",
+						]
 					}
 					memory_type = 
 					{
@@ -870,9 +878,20 @@
 			},
 			
 			{
+				name = "get_vsnd"
+				operator = "opvar_get_vsnd"
+				execute_once = "true"
+				check_event_data = "true"
+				input_operator_name = "public"
+				input_field_name = "vsnd_files"
+				input_use_namespace = "false"
+				array_selection_type = "random_exclusive"
+			},
+			
+			{
 				name = "start_vsnd"
 				operator = "vmix_voice_start"
-				input_vsnd1 = "@public.vsnd_files"
+				input_vsnd1 = "@get_vsnd.output"
 				execute_once = "false"
 				input_execute = "1.000000"
 				input_start = "@get_event_info.output_unstopped"
@@ -2076,5 +2095,68 @@
 			display_game = "core"
 			display_group = "utility"
 		}
+	}
+	core_preload_soundevents = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					priority = 
+					{
+						data_type = "float"
+						value = "10"
+					}
+					soundevents = 
+					{
+						soundevent_data = "true"
+						data_type = "string"
+						value = ""
+					}
+				}
+			},
+			
+			{
+				name = "get_soundevent_data_length"
+				operator = "opvar_get_info"
+				execute_once = "true"
+				check_event_data = "true"
+				input_operator_name = "public"
+				input_field_name = "soundevents"
+				input_use_namespace = "false"
+			},
+			
+			{
+				name = "get_soundevent"
+				operator = "opvar_get_string"
+				input_execute = 1
+				check_event_data = "true"
+				input_operator_name = "public"
+				input_field_name = "soundevents"
+				input_use_namespace = "false"
+				array_selection_type = "index"
+				input_index = "@goto_head.output_goto_count"
+			},
+			
+			{
+				name = "preload_soundevent"
+				operator = "vmix_preload_soundevent"
+				input_execute = 1
+				input_soundevent_name = "@get_soundevent.output"
+				input_memory_priority = "@public.priority"
+			},
+			
+			{
+				name = "goto_head"
+				operator = "sos_goto"
+				input_execute = 1
+				input_goto_operator = "get_soundevent"
+				input_max_loop_count = "@get_soundevent_data_length.output_element_count"
+			},
+		]
 	}
 }

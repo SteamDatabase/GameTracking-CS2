@@ -20,7 +20,7 @@
  :score num_rounds  :scoresum 1  :payloadformat {  payload0 {  :score time_played  :format uint64  :upload sum  }  payload1 {  :score time_played_ct  :format uint64  :upload sum  }  payload2 {  :score time_played_t  :format uint64  :upload sum  }  payload3 {  :score total_medals  :format int  :upload last  }  } 
  :score numstars  :scoresum 1  :payloadformat {  payload0 {  :score bombs_planted  :format int  :upload sum  }  payload1 {  :score bombs_detonated  :format int  :upload sum  }  payload2 {  :score bombs_defused  :format int  :upload sum  }  payload3 {  :score hostages_rescued  :format int  :upload sum  }  } 
  :score wins_ratio  :payloadformat {  payload0 {  :score total_wins :format int  :upload sum  }  payload1 {  :score total_losses  :format int  :upload sum  }  payload2 {  :score win_as_ct  :format int  :upload sum  }  payload3 {  :score win_as_t  :format int  :upload sum  }  payload4 {  :score loss_as_ct  :format int  :upload sum  }  payload5 {  :score loss_as_t  :format int  :upload sum  }  } 
- game {  mapgroupname #empty#  map #empty#  mode #empty#  type #empty#  state #empty#  hosted 0  spectate 0  apr 0  ark 0  questid 0  skirmishmode 0  gamemodeflags 0  loc #empty#  clanid #empty#  clantag #empty#  } 
+ game {  mapgroupname #empty#  map #empty#  mode #empty#  type #empty#  state #empty#  hosted 0  spectate 0  apr 0  ark 0  skirmishmode 0  gamemodeflags 0  loc #empty#  clanid #empty#  clantag #empty#  } 
  server failed to respond '%s'\n
  session was expecting server reload...\n
  system {  network #empty#  access #empty#  netflag #empty#  }  options {  server #empty#  }  members {  numSlots #int#0  numPlayers #int#0  } 
@@ -44,7 +44,7 @@
 #SFUI_LocalPlayer
 $%llx
 %llX
-%llu
+%llx
 %llx/%s
 %s is now muted.\n
 %s is now unmuted.\n
@@ -53,15 +53,18 @@ $%llx
 ( payload0 / max( payload1, 1 ) ) * ( min( payload2, 20 ) / 20 ) * 10000000
 ( payload2 /  max( payload1, 1 ) )
 (muted)
-*.%sbsp
 ,ar_monastery
 ,sv_load_test
 -------     ----------------\n
+-gamemodes_serverfile
+-usebanlist
 ../public/gcsdk_csgo_legacy/gcsteamdefines.h
+../public/gcsdk_csgo_legacy/msgprotobuf.h
 .360
-.ACJobMgr::m_WorkThreadPool
 0.0.0.0
 00000000
+1 = allow searches for dedicated servers
+1 = pretend like search is going, but abort after some time
 10IGameTypes
 11CCallResultI14CMatchSearcher16LobbyMatchList_tE
 11CCallResultI15CSysSessionHost14LobbyCreated_tE
@@ -79,6 +82,7 @@ $%llx
 11PlayerLocal
 12CMatchSystem
 12IMatchServer
+12IMatchSystem
 12IPlayerLocal
 12PlayerFriend
 13CCallbackImplILi24EE
@@ -253,13 +257,11 @@ $%llx
 :sort
 :upload
 <%s:u%u:lb%d>
-?PrepareForSessionCreate: matchmaking version %d\n
-@12IMatchSystem
-@@regex_error
 @workshop
 APPSYSTEM: In ConnectGameInterfaces(), s_nRegistrationCount is %d!\n
 APPSYSTEM: In ConnectGameInterfaces(), tried to use different connection modes!\n
 APPSYSTEM: In ReconnectGameInterface(), tried to use different connection modes!\n
+AddWorkItem
 Adding player %llu to team %d\n
 All connected players have been unmuted.\n
 AllowSecureServers
@@ -267,11 +269,12 @@ AvgFormula
 AwaitingLocalAccept
 AwaitingRemoteAccept
 Away
-BGCHost
-BInit
+BAsyncSend
+BAsyncSendProto
 Binary
 Binary/ptr
 Binary/size
+Bot difficulty for offline play.
 Busy
 CGCClient
 CGCClient - BSendGCMsgToClient (ProtoBuf)
@@ -282,6 +285,7 @@ CGCSOCreateJob
 CGCSODestroyJob
 CGCSOUpdateJob
 CGCSOUpdateMultipleJob
+CJobMgr::m_WorkThreadPool
 CLeaderboardRequestQueue::OnQueryFinished\n
 CLeaderboardRequestQueue::OnStartNewQuery - request prepared.\n
 CLeaderboardRequestQueue::OnStartNewQuery preparing request...\n
@@ -307,6 +311,7 @@ CMatchSessionOnlineSearch::UpdateSessionSettings is unavailable in state %d!\n
 CMatchSessionOnlineTeamSearch [ state=%d ]\n
 CMatchSessionOnlineTeamSearch::CMatchSessionOnlineSearch\n
 CMatchTitleGameSettingsMgr::ExtendTeamLobbyToGame\n
+CProtoBufMsg
 CProtoBufMsg::BAsyncSendProto
 CProtoBufMsg::CProtoBufMsg( MsgType_t )
 CProtoBufMsg::InitFromPacket( IMsgNetPacket )
@@ -330,10 +335,12 @@ CWorkThreadPool::StartWorkThread: Thread creation failed.\n
 CWorkThreadPool::~CWorkThreadPool: work complete queue not empty, %d items discarded.\n
 CWorkThreadPool::~CWorkThreadPool: work processing queue not empty: %d items discarded.\n
 Cancel
+Comma delimited list of ip:port of servers used to search for dedicated servers instead of searching for public servers.\nUse syntax `publicip1:port|privateip1:port,publicip2:port|privateip2:port` if your server is behind NAT.\nIf the server is behind NAT, you can specify `0.0.0.0|privateip:port` and if server port is in the list of `mm_server_search_lan_ports` its public address should be automatically detected.
 Command::%s
 ConnectServerDetailsRequest
 ConnectServerDetailsRequest/server
 Connection to server timed out
+Continue
 Converted sys session into CMatchSessionOnlineClient:\n
 Converting offline session to online session...\n
 Could not find or connect to a DS
@@ -344,9 +351,9 @@ Created CMatchSessionOnlineClient:\n
 Created CMatchSessionOnlineHost:\n
 Created CMatchSessionOnlineSearch:\n
 Created CMatchSessionOnlineTeamSearch:\n
+Created CSearchManager(%p):\n
 Created DS searcher\n
 Created lobby id: 0x%llx\n
-Cumulative bytes re-alloced: %s\n
 Datacenter::EnableUpdate( %d ), current state = %d\n
 Datacenter::RequestStop, time %.2f, state %d\n
 DebugDrawQueueManager001
@@ -354,6 +361,7 @@ Dedicated search in progress\n
 Dedicated search not active\n
 Dedicated server list fetched %d servers.\n
 DefineSessionSearchKeys settings:\n
+Delay after datacenter update is enabled before data is actually queried.
 Delete
 Delete/Server
 DependentLobby
@@ -365,7 +373,9 @@ Destroying CMatchSessionOnlineSearch:\n
 Destroying CMatchSessionOnlineTeamSearch.\n
 Destroying CSearchManager(%p):\n
 DotaMapUtils001
+Duration of LAN discovery ping phase.
 EconSettlement
+EmitBaseMessageV
 EntitySubclassUtilsV001
 Establishing connection with %d search results.\n
 EventWatchEms
@@ -379,7 +389,6 @@ ExtendedSettings
 F-%u@-%u\n%s\n
 Failed to contact leaderboard server for '%s'\n
 Failed to load %s\n
-Failed to send Hello message to the GC.\n
 Failed to start server map!\n
 Failed to update leaderboard score for '%s'\n
 Failed to upload leaderboard score for '%s'\n
@@ -410,6 +419,8 @@ Filter>=/game:ark
 Filter>=/members:numPlayers
 Friend reqd to join lobby
 GAMEEVENTSMANAGER002
+GCClient
+GCHost
 Game alias "%s" is unknown, setting default game type=%d mode=%d\n
 Game alias "%s" resolved game type=%d mode=%d\n
 Game::SetPlayerRanking
@@ -462,10 +473,24 @@ GamesTypes: unable to set game type and mode. Could not find type/mode matching 
 GamesTypes: unable to set game type and mode. Game type value is outside valid range.  (value == %d)\n
 GetPchTempTextBuffer() called after UninitTempTextBuffers()
 HostUtils001
-INFO
+How long to wait between pinging internet server details.
+How long to wait for internet server details.
+How long until a server is no longer returned by the master till we remove it.
+How many friend requests are displayed.
+How many servers can be pinged for server details in a batch.
+How often to refresh a listed server.
+IP address of dedicated servers to consider available
 InetSearchServerDetails
 InetSearchServerDetails/pingxuid
 InetSearchServerDetails/timestamp
+InitFromPacket
+Interval between LAN discovery pings.
+Interval between datacenter stats retries.
+Interval between datacenter stats updates.
+Interval between matchsearcher updates.
+Interval between players searches.
+Interval between servers updates.
+Invite
 Job %s trying to release lock %s at %s(%d) though the lock is held by %s\n
 Job of type %s held lock for %.2f seconds while job of type %s was waiting\n
 Job of type %s held lock for %.2f seconds\n
@@ -482,15 +507,18 @@ LanSearch
 LanSearchServerPing
 LanSearchServerPing/timestamp
 LbsUpdate
+Leaderboard
 Leaderboard '%s' was not found on server\n
 Leaderboard score uploaded for '%s', new rank %d, old rank %d\n
 Leaderboard score uploaded, but not changed for '%s'\n
 LeaderboardRequestQueue: ProcessResults finished.\n
 LeaderboardRequestQueue: ProcessResults has no view description for view!\n
+Lobby
 Lobby data: %s = %s\n
 LobbySetData: '%s' = '%s'\n
 LockMmQueue
 LockMmSearch
+Longest preferred ping to dedicated servers for games
 Looking for next map in mapgroup '%s'...\n
 LookingToPlay
 LookingToTrade
@@ -499,11 +527,14 @@ Match
 MatchSession: \n
 Matchmaking
 Matchmaking: lobby response %d!\n
+Members
 Migrate
 Migrated into CMatchSessionOnlineClient:\n
 Migrated into CMatchSessionOnlineHost:\n
 Migrating into CMatchSessionOnlineClient...\n
+Mute a specific Steam user
 Mute list cleared.\n
+Mutelist
 Mutelist/%d
 N11CDsSearcher19CServerListListenerE
 N25CMatchSessionOnlineSearch19CServerListListenerE
@@ -577,17 +608,20 @@ OnMatchSessionUpdate
 OnPlayerLeaderChanged
 OnPlayerMachinesConnected
 OnPlayerMachinesDisconnected
+OnPlayerRemoved
+OnPlayerUpdated
 OnProfileLeaderboardData
-OnProfileStorageAvailable
 OnProfilesWriteOpportunity
 OnSteamOverlayCall::LobbyJoin
 OnSysMuteListChanged
+Online
 OnlineSearch - client fully connected to session, search finished.\n
 OnlineSearch::StartSearch failed to build filter list!\n
 OnlineSearch::StartSearchPass:\n
 Options/searchteamkey
 Options/server
 Party
+Player
 Player#     Player Name\n
 Player# is invalid or refers to a bot, please use "voice_show_mute" command.\n
 Player/xuid
@@ -596,6 +630,7 @@ PlayerLocal::UpdateLeaderboardData for %s ...\n
 PlayerLocal::UpdateLeaderboardData for %s finished.\n
 PlayerManager::OnGameUsersChanged\n
 PlayerProfile
+Ports to scan during LAN games discovery. Also used to discover and correctly connect to dedicated LAN servers behind NATs.
 PredictionDiffManager001
 QueueConnect
 RP for %s\n
@@ -606,6 +641,8 @@ Report
 Requested join data %.3f sec ago from xuid = %llx\n
 Requesting dedicated server list...\n
 Requesting dedicated whitelist validation...\n
+Reset all mute information for all players who were ever muted.
+Reset ignored sessions
 ResponseRulesCache001
 SOCache
 STARS_
@@ -615,7 +652,6 @@ SearchPass%d
 Searching...\n
 Sending join session request...\n
 Server manager refresh completed.\n
-Server manager refreshing...\n
 Server shutting down
 Server/adronline
 Server/connectstring
@@ -624,16 +660,19 @@ Server/reservationid
 Server/server
 Server/xuid
 SessionSearch
+Set the configuration of game type and mode based on game alias like "deathmatch".
 SetEvent()
 Settings data:\n
 SetupSteamRankingConfiguration
 SharedObjectCache for %s (%d types):\n
+Show debug information about current matchmaking session
+Show whether current players are muted.
+Shows information retrieved from data center
 SinglePlayerSharedMemory001
 Skill%dCheck
 Skill%dFormula
 Skill%dRange
 Snooze
-Start
 StartListenServer
 Steam leaderboard was not found.\n
 Steam search for dedicated servers timed out.\n
@@ -642,7 +681,6 @@ SteamID
 SteamLeaderboard
 Steam_OnServersConnected\n
 Steam_OnServersDisconnected\n
-Stop
 Succeeded in starting server map!\n
 Successfully validated whitelist for %s...\n
 SysSession is NULL\n
@@ -659,10 +697,10 @@ SysSession::Voice
 SysSession::VoiceMutelist
 SysSession::VoiceStatus
 SysSessionData
-System
 System data:\n
 System/dependentlobby
 System:dependentlobby
+Team search will fake cancel before searching for server
 TeamRes
 TeamResFail
 TeamReservation
@@ -681,14 +719,18 @@ TeamSearchResult::%s
 TeamSearchResult::Dedicated
 TeamSearchResult::ListenClient
 TeamSearchResult::ListenHost
+The current game mode (based on game type). See GameModes.txt.
+The current game type. See GameModes.txt.
+This matchmaking version will override .res file version for isolating matchmaking
 Thread "%s" (ID %llu) failed to shut down
 ThreadingMain
+Time team search is in error state until it self-cancels
 TitleSettings
 Trying to send message type %d before GC connection established.  This is guaranteed to fail.\n
-UNKNOWN
 Unhandled mmF->SysSessionUpdate!\n
 Unknown MsgType (%d) - Not Found
 Unknown type in CSysSessionHost::PrintValue ( %s )\n
+Unmute a specific Steam user, or `all` to unmute all connected players.
 UnpackGameDetailsFromQOS found bad QOS block terminator!\n
 UnpackGameDetailsFromSteamLobby defined unknown type in schema!\n
 Update/Server
@@ -699,39 +741,50 @@ WOL: 0x%p (%s)
 WWWWWWWWWWWWWWW
 WakeDependentJobFinished
 Warning: ignoring P2P session request from %s\n
+When initiating team search, set this key to match with known opponents team
+When performing CSGO community matchmaking look for servers with at least so many human players
 [MM] Joining session %llx, %d search results remaining...\n
 [MM] Server responded '%s', dist %d\n
 \tTypeCache for %d (%d objects):\n
 _remote_host
 _remote_xuidsrc
-`@Created CSearchManager(%p):\n
 accepted
-active
+access
 addr
+adrlocal
+adronline
+ar_monastery
+armsrace
 auto_close_session
 binary/ptr
 binary/size
 blockedyou
 botDifficulty
+bot_difficulty
+bot_dont_shoot
+bot_quota
 c_game_mode
 c_game_type
 c_skirmishid
 callhandleptr
+casual
 checkpoint
+cl_clanid
+cl_names_debug
+cl_session
 clan
 clan_preferred
 client>host
 clientconnect
-clients
-close
+closed
 comp
+comp2v2
+competitive
 competitive2v2
 confirmed
 connect %s %s\n
-console
 conteam
 conteamlobby
-convars
 coop
 cooperative
 coopmission
@@ -741,7 +794,9 @@ crypt
 ct_arms
 ct_models
 custom
+custom_bot_difficulty
 custommatch
+deathmatch
 default_game_mode
 default_game_type
 delete/game/clanid
@@ -755,35 +810,38 @@ discarded
 disconnecthdlr
 disconnecthdrl
 dlcmask
+dlcrequired
 doesntexist
 dontmodifylocalsession
 dsresult
 econ
-eight
+endgame
 ending
+endvalue
 event
 exec_offline
 externalIP
 externalpeer
-fclose
-fflush
 finale_start
-free
+friend
 friends
 from
-full
 fullpostinit
-fwrite
+game/apr
 game/ark
 game/clanID
+game/clanid
 game/clanname
+game/clantag
 game/dlcrequired
 game/hosted
 game/jclanid
 game/jclantag
 game/jfriend
 game/loc
+game/map
 game/mapgroupname
+game/mmqueue
 game/mode
 game/nby
 game/opp_team_type
@@ -795,6 +853,7 @@ game/state
 game/type
 gameModes
 gameTypes
+game_alias
 game_alias armsrace
 game_alias casual
 game_alias competitive
@@ -802,7 +861,9 @@ game_alias deathmatch
 game_alias new_user_training
 game_alias wingman
 game_alias workshop
+game_mode
 game_newmap
+game_type
 gamedir
 gamemode
 gamemodes
@@ -814,6 +875,8 @@ gametypes
 gametypes/%s/gamemodes/%s/exec
 gametypes/%s/gamemodes/%s/weaponprogression_ct
 gametypes/%s/gamemodes/%s/weaponprogression_t
+gcclient.cpp
+gclogger.cpp
 gcsdk_gcmessages.proto
 gcsystemmsgs.proto
 gotv
@@ -839,6 +902,10 @@ k%s%d
 kicked
 kills
 libmatchmaking.so
+lobby
+local
+lock
+machine%d
 machine%d/id
 machine0
 machine0/tuver
@@ -846,15 +913,14 @@ makeonline
 makeonlinestate
 map/mapcommand
 mapGroups
+mapgroup
 mapgroupsMP
 mapgroupsSP
 mapname
 maps/%s.kv
-maps/workshop/
 matching%s
 matching%s%d
 matchmaking
-maxplayers
 maxvalue
 members
 members/machine%d
@@ -875,11 +941,68 @@ minvalue
 mmF->CloseSession
 mmF->SysSessionCommand
 mmF->SysSessionUpdate
+mm_csgo_community_search_players_min
+mm_datacenter_debugprint
+mm_datacenter_query_delay
+mm_datacenter_retry_interval
+mm_datacenter_update_interval
+mm_debug_friend_rp
+mm_debugprint
+mm_dedicated_allow
+mm_dedicated_fake
+mm_dedicated_force_servers
+mm_dedicated_ip
+mm_dedicated_search_maxping
+mm_dedicated_search_maxresults
+mm_dedicated_timeout_request
+mm_dlcs_mask_extras
+mm_dlcs_mask_fake
+mm_events_listeners_validation
+mm_ignored_sessions_forget_pass
+mm_ignored_sessions_forget_time
+mm_ignored_sessions_reset
+mm_match_search_update_interval
+mm_player_search_count
+mm_player_search_lan_ping_duration
+mm_player_search_lan_ping_interval
+mm_player_search_requests_limit
+mm_player_search_update_interval
+mm_server_search_inet_ping_interval
+mm_server_search_inet_ping_refresh
+mm_server_search_inet_ping_timeout
+mm_server_search_inet_ping_window
+mm_server_search_lan_ping_duration
+mm_server_search_lan_ping_interval
+mm_server_search_lan_ports
+mm_server_search_server_lifetime
+mm_server_search_update_interval
+mm_session_search_num_results
+mm_session_search_qos_timeout
+mm_session_sys_connect_timeout
+mm_session_sys_delay_create
+mm_session_sys_delay_create_host
+mm_session_sys_kick_ban_duration
+mm_session_sys_pkey
+mm_session_sys_ranking_timeout
+mm_session_sys_slots_guaranteed
+mm_session_team_res_timeout
+mm_session_voice_loading
+mm_sv_load_test
+mm_teamsearch_errortime
+mm_teamsearch_nostart
+mm_title_debug_version
+mm_tu_string
+mm_use_p2p_for_listen_server
+mmqueue
+mp_retake_ct_count
+mp_retake_t_count
+msgprotobuf.cpp
 nameID
 nameID_SP
+net_allow_multicast
 netmsg
 newValue
-newline
+new_user_training
 nextpass
 nextpass?
 no_reset_vote_threshold_ct
@@ -888,11 +1011,12 @@ noleave
 nomap
 noplayers
 notwanted
-null
+numMachines
+numPlayers
 numResults
+numSlots
 official
 offlineinit
-options
 options/action
 options/anytypemode
 options/bypasslobby
@@ -900,6 +1024,7 @@ options/clanid
 options/conteammatch
 options/createreason
 options/dcFriendsRed
+options/endvalue
 options/friendxuid
 options/nby
 options/play
@@ -909,7 +1034,6 @@ options/sessionHostData
 options/sessionid
 options/sv_load_test
 peerserver
-pingxuid
 pkgitem
 player%d
 player%d/voice
@@ -924,12 +1048,14 @@ private
 progress
 promo
 quickmatch
+random
 ratelimit
 ready
 reload
 requires_attr
 requires_attr_reward
 requires_attr_value
+reserve
 resource\MatchSystem.res
 reward_drop_list
 richpresence
@@ -944,6 +1070,7 @@ search_online
 search_onlineteam
 search_team_time
 searchawaitingpeer
+searchempty
 searcherror
 searchfinished
 searchidle
@@ -951,7 +1078,6 @@ searching
 searchlinked
 searchresult
 searchstarted
-serialize
 server/adrlocal
 server/adronline
 server/name
@@ -980,32 +1106,47 @@ settings/system/lock
 settingsptr
 sharedobj
 skirmish
+skirmishid
 sleep for time
 starting
 stat
 stat_agg
-stdout
+std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
+std::_Sp_make_shared_tag::_S_ti()::__tag
 steamextra/tier1/tsmempool.cpp
 steamextra/tier1/tsmultimempool.cpp
 steammessages.proto
 storage
-strcmp
-strtod
 suppressed
 survival
+sv_search_team_key
+sv_skirmish_id
 syssession
 system/access
+system/lock
 system/netflag
+system:access
 system:network
+t_arms
+t_models
+team
 teamMembers
 teamResKey
 teamlink
+teamlobby
 template#include
 templates#include
 threads
 titleid
+training
 transition
 turequired
+tuver
+typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_make_shared_tag
 udpate/game/map
 uids
 undefined
@@ -1019,12 +1160,23 @@ update/server
 update/system/lock
 updated
 updatedelete
+voice
+voice_mute
+voice_reset_mutelist
+voice_show_mute
+voice_test_log_send
+voice_unmute
 waiting for lock
 weaponprogression_ct
 weaponprogression_t
 white
+wingman
 work item
+workshop
 workthreadpool.cpp
+xuid
 xuidHost
+xuidOnline
+xuidsrc
 yielding
 youblocked
