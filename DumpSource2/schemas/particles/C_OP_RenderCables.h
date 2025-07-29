@@ -15,6 +15,8 @@ class C_OP_RenderCables : public CParticleFunctionRenderer
 	// MPropertySortPriority = 700
 	ParticleColorBlendType_t m_nColorBlendType;
 	// MPropertyStartGroup = ""
+	// MPropertyFriendlyName = "cable material"
+	// MPropertyAttributeEditor = "AssetBrowse( vmat, *extraFilterString=(shader=cables.vfx) )"
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hMaterial;
 	// MPropertyFriendlyName = "texture repetition mode"
 	TextureRepetitionMode_t m_nTextureRepetitionMode;
@@ -50,7 +52,7 @@ class C_OP_RenderCables : public CParticleFunctionRenderer
 	// MParticleInputOptional
 	CParticleTransformInput m_LightingTransform;
 	// MPropertyFriendlyName = "material float variables"
-	CUtlVector< FloatInputMaterialVariable_t > m_MaterialFloatVars;
+	CUtlLeanVector< FloatInputMaterialVariable_t > m_MaterialFloatVars;
 	// MPropertyFriendlyName = "material vector variables"
-	CUtlVector< VecInputMaterialVariable_t > m_MaterialVecVars;
+	CUtlLeanVector< VecInputMaterialVariable_t > m_MaterialVecVars;
 };

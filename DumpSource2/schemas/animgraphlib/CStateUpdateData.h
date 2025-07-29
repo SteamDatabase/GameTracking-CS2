@@ -9,4 +9,6 @@ class CStateUpdateData
 	bitfield:1 m_bIsStartState;
 	bitfield:1 m_bIsEndState;
 	bitfield:1 m_bIsPassthrough;
+	bitfield:1 m_bIsPassthroughRootMotion;
+	bitfield:1 m_bPreEvaluatePassthroughTransitionPath;
 };

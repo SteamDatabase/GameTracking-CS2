@@ -9,8 +9,9 @@ class CScriptedSequence : public CBaseEntity
 	CUtlSymbolLarge m_iszEntity;
 	CUtlSymbolLarge m_iszSyncGroup;
 	ScriptedMoveTo_t m_nMoveTo;
-	MovementGait_t m_nMoveToGait;
+	SharedMovementGait_t m_nMoveToGait;
 	ScriptedHeldWeaponBehavior_t m_nHeldWeaponBehavior;
+	ForcedCrouchState_t m_nForcedCrouchState;
 	bool m_bIsPlayingPreIdle;
 	bool m_bIsPlayingEntry;
 	bool m_bIsPlayingAction;
@@ -34,11 +35,14 @@ class CScriptedSequence : public CBaseEntity
 	bool m_bDisableNPCCollisions;
 	bool m_bKeepAnimgraphLockedPost;
 	bool m_bDontAddModifiers;
+	bool m_bDisableAimingWhileMoving;
+	bool m_bIgnoreRotation;
 	float32 m_flRadius;
 	float32 m_flRepeat;
 	float32 m_flPlayAnimFadeInTime;
 	float32 m_flMoveInterpTime;
 	float32 m_flAngRate;
+	float32 m_flMoveSpeed;
 	bool m_bWaitUntilMoveCompletesToStartAnimation;
 	int32 m_nNotReadySequenceCount;
 	GameTime_t m_startTime;
@@ -72,4 +76,5 @@ class CScriptedSequence : public CBaseEntity
 	CTransform m_matOtherToMain;
 	CHandle< CBaseEntity > m_hInteractionMainEntity;
 	int32 m_iPlayerDeathBehavior;
+	bool m_bSkipFadeIn;
 };

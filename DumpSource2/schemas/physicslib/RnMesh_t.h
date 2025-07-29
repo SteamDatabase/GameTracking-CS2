@@ -7,6 +7,7 @@ class RnMesh_t
 	CUtlVectorSIMDPaddedVector m_Vertices;
 	CUtlVector< RnTriangle_t > m_Triangles;
 	CUtlVector< RnWing_t > m_Wings;
+	CUtlVector< uint8 > m_TriangleEdgeFlags;
 	CUtlVector< uint8 > m_Materials;
 	Vector m_vOrthographicAreas;
 	uint32 m_nFlags;

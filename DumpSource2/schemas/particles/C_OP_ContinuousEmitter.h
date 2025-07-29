@@ -19,6 +19,9 @@ class C_OP_ContinuousEmitter : public CParticleFunctionEmitter
 	EventTypeSelection_t m_nEventType;
 	// MPropertyFriendlyName = "control point with snapshot data"
 	int32 m_nSnapshotControlPoint;
+	// MPropertyFriendlyName = "snapshot subset"
+	// MPropertySuppressExpr = "m_nSnapshotControlPoint < 0"
+	CUtlString m_strSnapshotSubset;
 	// MPropertyFriendlyName = "limit per update"
 	int32 m_nLimitPerUpdate;
 	// MPropertyFriendlyName = "force emit on first update"

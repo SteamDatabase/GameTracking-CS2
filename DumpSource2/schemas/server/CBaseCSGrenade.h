@@ -5,7 +5,6 @@
 // MNetworkVarNames = "bool m_bThrowAnimating"
 // MNetworkVarNames = "GameTime_t m_fThrowTime"
 // MNetworkVarNames = "float m_flThrowStrength"
-// MNetworkVarNames = "float m_flThrowStrengthApproach"
 // MNetworkVarNames = "GameTime_t m_fDropTime"
 // MNetworkVarNames = "GameTime_t m_fPinPullTime"
 // MNetworkVarNames = "bool m_bJustPulledPin"
@@ -30,8 +29,6 @@ class CBaseCSGrenade : public CCSWeaponBase
 	GameTime_t m_fThrowTime;
 	// MNetworkEnable
 	float32 m_flThrowStrength;
-	// MNetworkEnable
-	float32 m_flThrowStrengthApproach;
 	// MNetworkEnable
 	GameTime_t m_fDropTime;
 	// MNetworkEnable

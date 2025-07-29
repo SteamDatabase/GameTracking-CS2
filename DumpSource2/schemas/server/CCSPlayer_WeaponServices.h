@@ -1,6 +1,8 @@
 // MNetworkVarNames = "GameTime_t m_flNextAttack"
 // MNetworkVarNames = "bool m_bIsLookingAtWeapon"
 // MNetworkVarNames = "bool m_bIsHoldingLookAtWeapon"
+// MNetworkVarNames = "uint8 m_networkAnimTiming"
+// MNetworkVarNames = "bool m_bBlockInspectUntilNextGraphUpdate"
 class CCSPlayer_WeaponServices : public CPlayer_WeaponServices
 {
 	// MNetworkEnable
@@ -20,6 +22,8 @@ class CCSPlayer_WeaponServices : public CPlayer_WeaponServices
 	bool m_bPickedUpWeapon;
 	bool m_bDisableAutoDeploy;
 	bool m_bIsPickingUpGroundWeapon;
-	uint32 m_nOldShootPositionHistoryCount;
-	uint32 m_nOldInputHistoryCount;
+	// MNetworkEnable
+	CNetworkUtlVectorBase< uint8 > m_networkAnimTiming;
+	// MNetworkEnable
+	bool m_bBlockInspectUntilNextGraphUpdate;
 };

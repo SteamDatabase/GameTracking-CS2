@@ -1,4 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CSosGroupActionSoundeventPrioritySchema : public CSosGroupActionSchema
 {
 	// MPropertyFriendlyName = "Priority Value, typically 0.0 to 1.0"

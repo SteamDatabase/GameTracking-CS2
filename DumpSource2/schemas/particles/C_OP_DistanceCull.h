@@ -10,4 +10,7 @@ class C_OP_DistanceCull : public CParticleFunctionOperator
 	float32 m_flDistance;
 	// MPropertyFriendlyName = "cull inside instead of outside"
 	bool m_bCullInside;
+	// MPropertyFriendlyName = "Attribute to Test"
+	// MPropertyAttributeChoiceName = "particlefield_vector"
+	ParticleAttributeIndex_t m_nAttribute;
 };

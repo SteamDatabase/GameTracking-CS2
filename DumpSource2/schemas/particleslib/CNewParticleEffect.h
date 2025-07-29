@@ -13,8 +13,8 @@ class CNewParticleEffect : public IParticleEffect
 	bitfield:1 m_bSimulate;
 	bitfield:1 m_bShouldPerformCullCheck;
 	bitfield:1 m_bForceNoDraw;
+	bitfield:1 m_bSuppressScreenSpaceEffect;
 	bitfield:1 m_bShouldSave;
-	bitfield:1 m_bDisableAggregation;
 	bitfield:1 m_bShouldSimulateDuringGamePaused;
 	bitfield:1 m_bShouldCheckFoW;
 	Vector m_vSortOrigin;

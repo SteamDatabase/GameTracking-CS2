@@ -1,3 +1,3 @@
-class CNmZeroPoseTask : public CNmTask
+class CNmZeroPoseTask : public CNmPoseTask
 {
 };

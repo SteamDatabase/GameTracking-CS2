@@ -9,6 +9,9 @@ class C_OP_SetControlPointToVectorExpression : public CParticleFunctionPreEmissi
 	CParticleCollectionVecInput m_vInput1;
 	// MPropertyFriendlyName = "input 2"
 	CParticleCollectionVecInput m_vInput2;
+	// MPropertyFriendlyName = "lerp value"
+	// MPropertySuppressExpr = "m_nExpression != VECTOR_EXPRESSION_LERP"
+	CPerParticleFloatInput m_flLerp;
 	// MPropertyFriendlyName = "normalize result"
 	bool m_bNormalizedOutput;
 };

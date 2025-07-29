@@ -11,6 +11,8 @@ class CPhysSurfaceProperties
 	CUtlString m_description;
 	// MKV3TransferName = "physics"
 	CPhysSurfacePropertiesPhysics m_physics;
+	// MKV3TransferName = "vehicleparams"
+	CPhysSurfacePropertiesVehicle m_vehicleParams;
 	// MKV3TransferName = "audiosounds"
 	CPhysSurfacePropertiesSoundNames m_audioSounds;
 	// MKV3TransferName = "audioparams"

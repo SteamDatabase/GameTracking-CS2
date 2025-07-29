@@ -1,5 +1,6 @@
 // MNetworkVarNames = "CRenderComponent::Storage_t m_CRenderComponent"
 // MNetworkVarNames = "CHitboxComponent::Storage_t m_CHitboxComponent"
+// MNetworkVarNames = "CDestructiblePartsSystemComponent * m_pDestructiblePartsSystemComponent"
 // MNetworkVarNames = "RenderMode_t m_nRenderMode"
 // MNetworkVarNames = "RenderFx_t m_nRenderFX"
 // MNetworkVarNames = "Color m_clrRender"
@@ -38,8 +39,16 @@ class CBaseModelEntity : public CBaseEntity
 	HitGroup_t m_nDestructiblePartInitialStateDestructed2;
 	HitGroup_t m_nDestructiblePartInitialStateDestructed3;
 	HitGroup_t m_nDestructiblePartInitialStateDestructed4;
-	int32 m_nLastHitDestructiblePartIndex;
+	int32 m_nDestructiblePartInitialStateDestructed0_PartIndex;
+	int32 m_nDestructiblePartInitialStateDestructed1_PartIndex;
+	int32 m_nDestructiblePartInitialStateDestructed2_PartIndex;
+	int32 m_nDestructiblePartInitialStateDestructed3_PartIndex;
+	int32 m_nDestructiblePartInitialStateDestructed4_PartIndex;
+	// MNetworkEnable
+	CDestructiblePartsSystemComponent* m_pDestructiblePartsSystemComponent;
 	HitGroup_t m_LastHitGroup;
+	CGlobalSymbol m_sLastDamageSourceName;
+	Vector m_vLastDamagePosition;
 	GameTime_t m_flDissolveStartTime;
 	CEntityIOOutput m_OnIgnite;
 	// MNetworkEnable

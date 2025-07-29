@@ -5,5 +5,5 @@ class PulseGraphExecutionHistoryEntry_t
 	PulseDocNodeID_t nEditorID;
 	float32 flExecTime;
 	uint32 unFlags;
-	CUtlSymbolLarge tagName;
+	PulseSymbol_t tagName;
 };

@@ -11,10 +11,6 @@
 // MNetworkVarNames = "float m_flTonemapEVSmoothingRange"
 // MNetworkVarNames = "bool m_bMaster"
 // MNetworkVarNames = "bool m_bExposureControl"
-// MNetworkVarNames = "float m_flRate"
-// MNetworkVarNames = "float m_flTonemapPercentTarget"
-// MNetworkVarNames = "float m_flTonemapPercentBrightPixels"
-// MNetworkVarNames = "float m_flTonemapMinAvgLum"
 class C_PostProcessingVolume : public C_BaseTrigger
 {
 	// MNetworkEnable
@@ -41,12 +37,4 @@ class C_PostProcessingVolume : public C_BaseTrigger
 	bool m_bMaster;
 	// MNetworkEnable
 	bool m_bExposureControl;
-	// MNetworkEnable
-	float32 m_flRate;
-	// MNetworkEnable
-	float32 m_flTonemapPercentTarget;
-	// MNetworkEnable
-	float32 m_flTonemapPercentBrightPixels;
-	// MNetworkEnable
-	float32 m_flTonemapMinAvgLum;
 };

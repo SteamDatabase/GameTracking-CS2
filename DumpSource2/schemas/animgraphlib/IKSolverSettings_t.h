@@ -1,7 +1,8 @@
+// M_LEGACY_OptInToSchemaPropertyDomain
 class IKSolverSettings_t
 {
 	// MPropertyFriendlyName = "Solver Type"
-	// MPropertyAttrChangeCallback (UNKNOWN FOR PARSER)
+	// MPropertyAutoRebuildOnChange
 	IKSolverType m_SolverType;
 	// MPropertyFriendlyName = "Num Iterations "
 	// MPropertyAttrStateCallback (UNKNOWN FOR PARSER)

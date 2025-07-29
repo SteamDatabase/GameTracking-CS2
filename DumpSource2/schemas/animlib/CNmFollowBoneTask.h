@@ -1,0 +1,3 @@
+class CNmFollowBoneTask : public CNmPoseTask
+{
+};

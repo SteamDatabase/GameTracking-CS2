@@ -1,5 +1,4 @@
 // MNetworkVarNames = "CPropDataComponent::Storage_t m_CPropDataComponent"
-// MNetworkVarNames = "bool m_noGhostCollision"
 class C_BreakableProp : public CBaseProp
 {
 	// MNetworkEnable
@@ -7,6 +6,7 @@ class C_BreakableProp : public CBaseProp
 	// MNetworkAlias = "CPropDataComponent"
 	// MNetworkTypeAlias = "CPropDataComponent"
 	CPropDataComponent m_CPropDataComponent;
+	CEntityIOOutput m_OnStartDeath;
 	CEntityIOOutput m_OnBreak;
 	CEntityOutputTemplate< float32 > m_OnHealthChanged;
 	CEntityIOOutput m_OnTakeDamage;
@@ -33,7 +33,4 @@ class C_BreakableProp : public CBaseProp
 	GameTime_t m_flLastPhysicsInfluenceTime;
 	float32 m_flDefaultFadeScale;
 	CHandle< C_BaseEntity > m_hLastAttacker;
-	CHandle< C_BaseEntity > m_hFlareEnt;
-	// MNetworkEnable
-	bool m_noGhostCollision;
 };

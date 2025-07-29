@@ -1,5 +1,4 @@
 // MNetworkUserGroupProxy = "C_BasePlayerPawn"
-// MNetworkUserGroupProxy = "C_BasePlayerPawn"
 // MNetworkExcludeByUserGroup = "FogController"
 // MNetworkIncludeByUserGroup = "Player"
 // MNetworkIncludeByUserGroup = "Water"
@@ -30,6 +29,7 @@
 // MNetworkVarNames = "sky3dparams_t m_skybox3d"
 // MNetworkVarNames = "GameTime_t m_flDeathTime"
 // MNetworkVarNames = "CHandle< CBasePlayerController> m_hController"
+// MNetworkVarNames = "CHandle< CBasePlayerController> m_hDefaultController"
 class C_BasePlayerPawn : public C_BaseCombatCharacter
 {
 	// MNetworkEnable
@@ -54,7 +54,6 @@ class C_BasePlayerPawn : public C_BaseCombatCharacter
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	C_UtlVectorEmbeddedNetworkVar< ViewAngleServerChange_t > m_ServerViewAngleChanges;
-	uint32 m_nHighestConsumedServerViewAngleChangeIndex;
 	QAngle v_angle;
 	QAngle v_anglePrevious;
 	// MNetworkEnable
@@ -78,5 +77,7 @@ class C_BasePlayerPawn : public C_BaseCombatCharacter
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnControllerChanged"
 	CHandle< CBasePlayerController > m_hController;
+	// MNetworkEnable
+	CHandle< CBasePlayerController > m_hDefaultController;
 	bool m_bIsSwappingToPredictableController;
 };

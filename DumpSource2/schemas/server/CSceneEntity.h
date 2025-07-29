@@ -44,6 +44,7 @@ class CSceneEntity : public CPointEntity
 	int32 m_nAutomatedAction;
 	float32 m_flAutomationDelay;
 	float32 m_flAutomationTime;
+	int32 m_nSpeechPriority;
 	CHandle< CBaseEntity > m_hWaitingForThisResumeScene;
 	bool m_bWaitingForResumeScene;
 	bool m_bPausedViaInput;

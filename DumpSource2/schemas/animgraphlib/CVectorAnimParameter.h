@@ -1,3 +1,4 @@
+// M_LEGACY_OptInToSchemaPropertyDomain
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Vector Parameter"
 class CVectorAnimParameter : public CConcreteAnimParameter

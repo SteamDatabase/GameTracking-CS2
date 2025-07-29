@@ -7,7 +7,7 @@ class PulseScriptedSequenceData_t
 	CUtlString m_szSequence;
 	CUtlString m_szExitSequence;
 	ScriptedMoveTo_t m_nMoveTo;
-	MovementGait_t m_nMoveToGait;
+	SharedMovementGait_t m_nMoveToGait;
 	ScriptedHeldWeaponBehavior_t m_nHeldWeaponBehavior;
 	bool m_bLoopPreIdleSequence;
 	bool m_bLoopActionSequence;

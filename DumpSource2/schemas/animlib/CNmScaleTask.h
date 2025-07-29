@@ -1,0 +1,3 @@
+class CNmScaleTask : public CNmPoseTask
+{
+};

@@ -18,4 +18,10 @@ enum ScalarExpressionType_t : uint32_t
 	SCALAR_EXPRESSION_MAX = 6,
 	// MPropertyFriendlyName = "Mod"
 	SCALAR_EXPRESSION_MOD = 7,
+	// MPropertyFriendlyName = "Equal"
+	SCALAR_EXPRESSION_EQUAL = 8,
+	// MPropertyFriendlyName = "Greater Than"
+	SCALAR_EXPRESSION_GT = 9,
+	// MPropertyFriendlyName = "Less Than"
+	SCALAR_EXPRESSION_LT = 10,
 };

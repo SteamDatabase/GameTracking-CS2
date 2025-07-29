@@ -1,4 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CSosGroupActionSoundeventClusterSchema : public CSosGroupActionSchema
 {
 	// MPropertyFriendlyName = "Minimum Nearby Soundevents"

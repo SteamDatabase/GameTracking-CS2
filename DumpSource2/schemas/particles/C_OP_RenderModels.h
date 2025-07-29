@@ -126,6 +126,8 @@ class C_OP_RenderModels : public CParticleFunctionRenderer
 	// MPropertySortPriority = 600
 	CUtlVector< MaterialVariable_t > m_MaterialVars;
 	// MPropertyStartGroup = "Model Overrides"
+	// MPropertyFriendlyName = "render filter"
+	CPerParticleFloatInput m_flRenderFilter;
 	// MPropertyFriendlyName = "model list selection override"
 	CPerParticleFloatInput m_flManualModelSelection;
 	// MPropertyFriendlyName = "input model"

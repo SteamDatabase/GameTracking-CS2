@@ -1,15 +1,51 @@
+// MNetworkVarNames = "Vector m_vFanOrigin"
+// MNetworkVarNames = "Vector m_vFanOriginOffset"
+// MNetworkVarNames = "Vector m_vFanEnd"
+// MNetworkVarNames = "Vector m_vNoiseDirectionTarget"
+// MNetworkVarNames = "Vector m_vDirection"
+// MNetworkVarNames = "bool m_bPushTowardsInfoTarget"
+// MNetworkVarNames = "bool m_bPushAwayFromInfoTarget"
+// MNetworkVarNames = "Quaternion m_qNoiseDelta"
+// MNetworkVarNames = "CHandle< CInfoFan> m_hInfoFan"
+// MNetworkVarNames = "float m_flForce"
+// MNetworkVarNames = "bool m_bFalloff"
+// MNetworkVarNames = "CountdownTimer m_RampTimer"
 class CTriggerFan : public CBaseTrigger
 {
+	// MNetworkEnable
 	Vector m_vFanOrigin;
+	// MNetworkEnable
+	Vector m_vFanOriginOffset;
+	// MNetworkEnable
 	Vector m_vFanEnd;
-	Vector m_vNoise;
+	// MNetworkEnable
+	Vector m_vNoiseDirectionTarget;
+	// MNetworkEnable
+	Vector m_vDirection;
+	// MNetworkEnable
+	bool m_bPushTowardsInfoTarget;
+	// MNetworkEnable
+	bool m_bPushAwayFromInfoTarget;
+	// MNetworkEnable
+	Quaternion m_qNoiseDelta;
+	// MNetworkEnable
+	CHandle< CInfoFan > m_hInfoFan;
+	// MNetworkEnable
 	float32 m_flForce;
-	float32 m_flRopeForceScale;
-	float32 m_flPlayerForce;
-	float32 m_flRampTime;
+	// MNetworkEnable
 	bool m_bFalloff;
+	// MNetworkEnable
+	CountdownTimer m_RampTimer;
+	CUtlSymbolLarge m_iszInfoFan;
+	float32 m_flRopeForceScale;
+	float32 m_flParticleForceScale;
+	float32 m_flPlayerForce;
+	bool m_bPlayerWindblock;
+	float32 m_flNPCForce;
+	float32 m_flRampTime;
+	float32 m_fNoiseDegrees;
+	float32 m_fNoiseSpeed;
 	bool m_bPushPlayer;
 	bool m_bRampDown;
-	bool m_bAddNoise;
-	CountdownTimer m_RampTimer;
+	int32 m_nManagerFanIdx;
 };

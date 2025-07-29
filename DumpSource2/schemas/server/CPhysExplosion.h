@@ -8,5 +8,6 @@ class CPhysExplosion : public CPointEntity
 	float32 m_flInnerRadius;
 	float32 m_flPushScale;
 	bool m_bConvertToDebrisWhenPossible;
+	bool m_bAffectInvulnerableEnts;
 	CEntityIOOutput m_OnPushedPlayer;
 };

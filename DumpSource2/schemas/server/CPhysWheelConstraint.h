@@ -11,4 +11,5 @@ class CPhysWheelConstraint : public CPhysConstraint
 	float32 m_flMaxSteeringAngle;
 	float32 m_flSteeringAxisFriction;
 	float32 m_flSpinAxisFriction;
+	CHandle< CBaseEntity > m_hSteeringMimicsEntity;
 };

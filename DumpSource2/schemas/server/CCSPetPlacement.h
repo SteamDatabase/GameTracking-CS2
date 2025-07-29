@@ -1,0 +1,3 @@
+class CCSPetPlacement : public CBaseEntity
+{
+};

@@ -1,6 +1,7 @@
 // MNetworkVarNames = "int m_zoomLevel"
 // MNetworkVarNames = "int m_iBurstShotsRemaining"
 // MNetworkVarNames = "bool m_bNeedsBoltAction"
+// MNetworkVarNames = "int32 m_nRevolverCylinderIdx"
 class C_CSWeaponBaseGun : public C_CSWeaponBase
 {
 	// MNetworkEnable
@@ -12,4 +13,6 @@ class C_CSWeaponBaseGun : public C_CSWeaponBase
 	bool m_inPrecache;
 	// MNetworkEnable
 	bool m_bNeedsBoltAction;
+	// MNetworkEnable
+	int32 m_nRevolverCylinderIdx;
 };

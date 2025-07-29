@@ -37,7 +37,6 @@ class C_RopeKeyframe : public C_BaseModelEntity
 	uint16 m_RopeFlags;
 	// MNetworkEnable
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_iRopeMaterialModelIndex;
-	Vector[10] m_LightValues;
 	// MNetworkEnable
 	uint8 m_nSegments;
 	// MNetworkEnable

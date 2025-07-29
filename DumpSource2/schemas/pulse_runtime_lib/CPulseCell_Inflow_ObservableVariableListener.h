@@ -5,6 +5,6 @@
 // MPulseCellWithCustomDocNode
 class CPulseCell_Inflow_ObservableVariableListener : public CPulseCell_Inflow_BaseEntrypoint
 {
-	CPulse_BlackboardReference m_BlackboardReference;
+	PulseRuntimeBlackboardReferenceIndex_t m_nBlackboardReference;
 	bool m_bSelfReference;
 };

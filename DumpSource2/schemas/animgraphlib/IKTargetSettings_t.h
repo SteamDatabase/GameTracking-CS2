@@ -1,7 +1,8 @@
+// M_LEGACY_OptInToSchemaPropertyDomain
 class IKTargetSettings_t
 {
 	// MPropertyFriendlyName = "Target Source"
-	// MPropertyAttrChangeCallback (UNKNOWN FOR PARSER)
+	// MPropertyAutoRebuildOnChange
 	IKTargetSource m_TargetSource;
 	// MPropertyFriendlyName = "Bone"
 	// MPropertyAttrStateCallback (UNKNOWN FOR PARSER)

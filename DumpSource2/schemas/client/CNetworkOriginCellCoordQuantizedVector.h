@@ -18,6 +18,7 @@ class CNetworkOriginCellCoordQuantizedVector
 	uint16 m_cellZ;
 	// MNetworkEnable
 	uint16 m_nOutsideWorld;
+	// MNetworkEnable
 	// MNetworkBitCount = 15
 	// MNetworkMinValue = 0.000000
 	// MNetworkMaxValue = 1024.000000
@@ -26,6 +27,7 @@ class CNetworkOriginCellCoordQuantizedVector
 	// MNetworkPriority = 31
 	// MNetworkSerializer = "posx"
 	CNetworkedQuantizedFloat m_vecX;
+	// MNetworkEnable
 	// MNetworkBitCount = 15
 	// MNetworkMinValue = 0.000000
 	// MNetworkMaxValue = 1024.000000
@@ -34,6 +36,7 @@ class CNetworkOriginCellCoordQuantizedVector
 	// MNetworkPriority = 31
 	// MNetworkSerializer = "posy"
 	CNetworkedQuantizedFloat m_vecY;
+	// MNetworkEnable
 	// MNetworkBitCount = 15
 	// MNetworkMinValue = 0.000000
 	// MNetworkMaxValue = 1024.000000

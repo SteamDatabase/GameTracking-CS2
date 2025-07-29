@@ -8,6 +8,7 @@ class CBaseDoor : public CBaseToggle
 	bool m_bDoorGroup;
 	bool m_bLocked;
 	bool m_bIgnoreDebris;
+	bool m_bNoNPCs;
 	FuncDoorSpawnPos_t m_eSpawnPosition;
 	float32 m_flBlockDamage;
 	CUtlSymbolLarge m_NoiseMoving;

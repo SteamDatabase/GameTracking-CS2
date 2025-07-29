@@ -40,6 +40,7 @@
 // MNetworkVarNames = "float32 m_flGravityScale"
 // MNetworkVarNames = "float32 m_flTimeScale"
 // MNetworkVarNames = "bool m_bAnimatedEveryTick"
+// MNetworkVarNames = "bool m_bGravityDisabled"
 // MNetworkVarNames = "GameTime_t m_flNavIgnoreUntilTime"
 // MNetworkVarNames = "BloodType m_nBloodType"
 class C_BaseEntity : public CEntityInstance
@@ -130,9 +131,11 @@ class C_BaseEntity : public CEntityInstance
 	uint32 m_fFlags;
 	Vector m_vecAbsVelocity;
 	// MNetworkEnable
+	// MNetworkAlias = "m_vecVelocity"
 	// MNetworkUserGroup = "LocalPlayerExclusive"
-	// MNetworkChangeCallback = "OnLocalVelocityChanged"
+	// MNetworkChangeCallback = "OnServerVelocityChanged"
 	// MNetworkPriority = 32
+	CNetworkVelocityVector m_vecServerVelocity;
 	CNetworkVelocityVector m_vecVelocity;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
@@ -178,7 +181,7 @@ class C_BaseEntity : public CEntityInstance
 	// MNetworkEncoder = "coord"
 	float32 m_flElasticity;
 	// MNetworkEnable
-	// MNetworkUserGroup = "LocalPlayerExclusive"
+	// MNetworkChangeCallback = "OnGravityUpdated"
 	float32 m_flGravityScale;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
@@ -187,20 +190,21 @@ class C_BaseEntity : public CEntityInstance
 	// MNetworkChangeCallback = "OnInterpolationAmountChanged"
 	bool m_bAnimatedEveryTick;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnGravityUpdated"
+	bool m_bGravityDisabled;
+	// MNetworkEnable
 	// MNetworkChangeCallback = "OnNavIgnoreChanged"
 	GameTime_t m_flNavIgnoreUntilTime;
 	uint16 m_hThink;
 	uint8 m_fBBoxVisFlags;
+	float32 m_flActualGravityScale;
+	bool m_bGravityActuallyDisabled;
 	bool m_bPredictable;
 	bool m_bRenderWithViewModels;
-	CSplitScreenSlot m_nSplitUserPlayerPredictionSlot;
 	int32 m_nFirstPredictableCommand;
 	int32 m_nLastPredictableCommand;
 	CHandle< C_BaseEntity > m_hOldMoveParent;
 	CParticleProperty m_Particles;
-	CUtlVector< float32 > m_vecPredictedScriptFloats;
-	CUtlVector< int32 > m_vecPredictedScriptFloatIDs;
-	int32 m_nNextScriptVarRecordID;
 	QAngle m_vecAngVelocity;
 	int32 m_DataChangeEventRef;
 	CUtlVector< CEntityHandle > m_dependencies;

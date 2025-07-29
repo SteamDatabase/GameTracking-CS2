@@ -1,4 +1,4 @@
-class C_CSGO_PreviewPlayer_GraphController : public CAnimGraphControllerBase
+class C_CSGO_PreviewPlayer_GraphController : public CBaseAnimGraphAnimGraphController
 {
 	CAnimGraphParamOptionalRef< char* > m_pszCharacterMode;
 	CAnimGraphParamOptionalRef< char* > m_pszTeamPreviewVariant;

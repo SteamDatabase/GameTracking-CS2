@@ -11,11 +11,8 @@ class CSkeletonInstance : public CGameSceneNode
 	bool m_bIsAnimationEnabled;
 	// MNetworkEnable
 	bool m_bUseParentRenderBounds;
-	// MNetworkDisable
 	bool m_bDisableSolidCollisionsForHierarchy;
-	// MNetworkDisable
 	bitfield:1 m_bDirtyMotionType;
-	// MNetworkDisable
 	bitfield:1 m_bIsGeneratingLatchedParentSpaceState;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "skeletonMaterialGroupChanged"

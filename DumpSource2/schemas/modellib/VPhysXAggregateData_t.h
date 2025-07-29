@@ -9,6 +9,7 @@ class VPhysXAggregateData_t
 	CUtlVector< uint16 > m_indexHash;
 	CUtlVector< matrix3x4a_t > m_bindPose;
 	CUtlVector< VPhysXBodyPart_t > m_parts;
+	CUtlVector< PhysShapeMarkup_t > m_shapeMarkups;
 	CUtlVector< VPhysXConstraint2_t > m_constraints2;
 	CUtlVector< VPhysXJoint_t > m_joints;
 	PhysFeModelDesc_t* m_pFeModel;

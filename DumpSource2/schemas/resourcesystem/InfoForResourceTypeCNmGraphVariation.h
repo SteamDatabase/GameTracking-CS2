@@ -1,4 +1,0 @@
-// MResourceTypeForInfoType = "vnmvar"
-class InfoForResourceTypeCNmGraphVariation
-{
-};

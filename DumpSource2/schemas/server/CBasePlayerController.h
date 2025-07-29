@@ -13,6 +13,7 @@
 // MNetworkVarNames = "PlayerConnectedState m_iConnected"
 // MNetworkVarNames = "char m_iszPlayerName"
 // MNetworkVarNames = "uint64 m_steamID"
+// MNetworkVarNames = "bool m_bNoClipEnabled"
 // MNetworkVarNames = "uint32 m_iDesiredFOV"
 class CBasePlayerController : public CBaseEntity
 {
@@ -51,6 +52,9 @@ class CBasePlayerController : public CBaseEntity
 	// MNetworkEncoder = "fixed64"
 	// MNetworkChangeCallback = "OnSteamIDChanged"
 	uint64 m_steamID;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnNoClipEnableChanged"
+	bool m_bNoClipEnabled;
 	// MNetworkEnable
 	uint32 m_iDesiredFOV;
 };

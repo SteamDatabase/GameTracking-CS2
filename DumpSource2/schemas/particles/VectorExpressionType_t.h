@@ -18,4 +18,6 @@ enum VectorExpressionType_t : uint32_t
 	VECTOR_EXPRESSION_MAX = 6,
 	// MPropertyFriendlyName = "Cross Product"
 	VECTOR_EXPRESSION_CROSSPRODUCT = 7,
+	// MPropertyFriendlyName = "Lerp"
+	VECTOR_EXPRESSION_LERP = 8,
 };

@@ -1,0 +1,4 @@
+// MResourceTypeForInfoType = "vsgraph"
+class InfoForResourceTypeCSurfaceGraph
+{
+};

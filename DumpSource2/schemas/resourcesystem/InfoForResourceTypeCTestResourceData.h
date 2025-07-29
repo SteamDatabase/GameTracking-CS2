@@ -1,0 +1,4 @@
+// MResourceTypeForInfoType = "vtest"
+class InfoForResourceTypeCTestResourceData
+{
+};

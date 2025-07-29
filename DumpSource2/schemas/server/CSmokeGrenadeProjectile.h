@@ -27,4 +27,5 @@ class CSmokeGrenadeProjectile : public CBaseCSGrenadeProjectile
 	GameTime_t m_flLastBounce;
 	GameTime_t m_fllastSimulationTime;
 	bool m_bExplodeFromInferno;
+	bool m_bDidGroundScorch;
 };

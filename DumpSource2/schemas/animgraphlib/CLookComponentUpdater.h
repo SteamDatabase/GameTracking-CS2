@@ -2,6 +2,7 @@
 class CLookComponentUpdater : public CAnimComponentUpdater
 {
 	CAnimParamHandle m_hLookHeading;
+	CAnimParamHandle m_hLookHeadingNormalized;
 	CAnimParamHandle m_hLookHeadingVelocity;
 	CAnimParamHandle m_hLookPitch;
 	CAnimParamHandle m_hLookDistance;

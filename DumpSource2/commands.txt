@@ -130,6 +130,12 @@ addip (developmentonly defensive)
 addons (developmentonly defensive)
 	list current addon info.
 
+adjacent_levels (developmentonly gamedll)
+	List adjacent levels
+
+adjacent_preload (developmentonly gamedll)
+	Preload adjacennt level data - will override regular changelevel code -- PROTOTYPE/WIP
+
 alias (release)
 	Alias a command.
 
@@ -467,6 +473,7 @@ cl_ent_animgraph_debug (clientdll cheat)
 
 cl_ent_animgraph_record (clientdll cheat)
 	Toggles recording of animgraph replay of the given entity(s)
+	Arguments: entityName automaticallyOpenInAnimgraphEditor
 	Arguments:   	{entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
 
 cl_ent_attachments (clientdll cheat)
@@ -623,7 +630,7 @@ cl_game_mode_convars (developmentonly clientdll defensive)
 	Display the values of the convars for the current game_mode.
 
 cl_imgui_debug_entity (clientdll cheat)
-	Shows the entity browswer, focused on the entity you specify.
+	Shows the entity browser, focused on the entity you specify.
 	Arguments:   	{entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
 
 cl_imgui_set_selection (clientdll cheat)
@@ -756,11 +763,15 @@ cl_report_soundpatch (developmentonly clientdll defensive)
 cl_resetfps (developmentonly clientdll defensive)
 	Reset information from cl_showfps.
 
+cl_rr_dump_rules (clientdll cheat)
+	Print all response rules
+
 cl_rr_reloadresponsesystems (clientdll cheat)
 	Reload all response system scripts.
 
 cl_save_animgraph_recording (clientdll cheat)
 	Saves all active animgraph recordings to disk
+	Arguments: automaticallyOpenInAnimgraphEditor
 
 cl_script_add_debug_filter (clientdll cheat)
 	Add a filter to the game debug overlay
@@ -867,9 +878,6 @@ cl_test_list_entities (clientdll cheat)
 cl_ticktiming (dontrecord release)
 	{print|<interval>} [summary|detail]  Print timing stats now, or set report interval
 
-cl_tree_sway_dir (developmentonly clientdll defensive)
-	sets tree sway wind direction and strength
-
 cl_updatevisibility (developmentonly clientdll defensive)
 	Updates visibility bits.
 
@@ -964,7 +972,8 @@ crash (cheat)
 	 2: force an Assert
 	 3: infinite loop
 	 4: stack buffer overrun
-	 5: multiple asserts across multiple threads
+	 5: multiple asserts across multiple threads. Optional number of threads (default 5)
+	 6: looping memory leak until we're out of memory. Optional allocation size in bytes (default 1048576/1MB)
 
 crash_error (cheat)
 	Cause the engine to crash by Plat_FatalError on main thread (Debug!!)
@@ -1059,8 +1068,14 @@ demo_marktick (release)
 demo_pause (release)
 	Pauses demo playback.
 
+demo_pauseatservertick (release)
+	Pauses when the 'render time' reaches the specified tick.
+
 demo_resume (release)
 	Resumes demo playback.
+
+demo_step_tick (release)
+	Play for N ticks (default=1) and then pause.
 
 demo_timescale (release)
 	Sets demo replay speed.
@@ -1076,9 +1091,6 @@ demolist (release)
 
 demoui (clientdll release)
 	Show/hide demo playback ui
-
-destructible_parts_force_destroy (developmentonly gamedll defensive)
-	Force a destructible part to break
 
 dev_send_gc_message (developmentonly clientdll defensive)
 	<msgid> Send a blank body message with a given ID to gc for routing tests
@@ -1202,6 +1214,7 @@ ent_animgraph_debug (gamedll cheat)
 
 ent_animgraph_record (gamedll cheat)
 	Toggles recording of animgraph replay of the given entity(s)
+	Arguments: entityName automaticallyOpenInAnimgraphEditor
 	Arguments:   	{entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
 
 ent_animgraph_setvar (gamedll cheat)
@@ -1219,6 +1232,9 @@ ent_autoaim (gamedll cheat)
 ent_bbox (gamedll cheat)
 	Displays the movement bounding box for the given entity(ies) in orange.  Some entites will also display entity specific overlays.
 	Arguments:   	{entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
+
+ent_bonemergeplayer (gamedll cheat)
+	Bonemerge the player onto the entity under the crosshairs
 
 ent_call (gamedll cheat)
 	ent_call <funcname> <option:entname> calls function on current look target or filtername, checks on ent, then root, then mode, then map scope
@@ -1256,6 +1272,10 @@ ent_fire (gamedll cheat vconsole_fuzzy_matching)
 ent_fire_output (gamedll cheat vconsole_fuzzy_matching)
 	Usage:
 	   ent_fire_output <target> [output name] [value] [delay]
+
+ent_gib (gamedll cheat)
+	Gibs the given entity(s)
+	Arguments:   	{entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
 
 ent_grab (gamedll cheat)
 	grabs the object in front of the player. Options: -loose -multiple -toggle
@@ -1627,7 +1647,7 @@ imgui_cycle_undocked_window_focus (developmentonly defensive)
 	Cycles focus between the game window and undocked imgui windows
 
 imgui_debug_entity (gamedll cheat)
-	Shows the entity browswer, focused on the entity you specify.
+	Shows the entity browser, focused on the entity you specify.
 	Arguments:   	{entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
 
 imgui_set_selection (gamedll cheat)
@@ -1730,6 +1750,9 @@ killvector (gamedll cheat client_can_execute)
 	Kills a player applying force. Usage: killvector <player> <x value> <y value> <z value>
 
 lastinv (clientdll server_can_execute)
+	<no description>
+
+launch_training_map (developmentonly clientdll defensive)
 	<no description>
 
 launch_warmup_map (clientdll dontrecord clientcmd_can_execute)
@@ -1901,9 +1924,6 @@ mat_print_textures_size_in_memory (developmentonly defensive)
 mat_reinitmaterials (developmentonly defensive)
 	Reinitializes all loaded materials, reloading their shaders.
 
-mat_reloadmaterials (developmentonly defensive)
-	Reloads all materials. Takes an optional substring as an argument.
-
 mat_reloadshaders (developmentonly defensive)
 	Reloads all shaders. Takes optional substrings of shader names to recompile as arguments.
 
@@ -2036,6 +2056,15 @@ nav_clear_selected_set (gamedll cheat)
 nav_create_indirect_connection (gamedll cheat)
 	Create a connection between the selected area and the area pointed at by the crosshair.
 
+nav_create_indirect_connection_from_to (gamedll cheat)
+	Create a connection between the current 'from' and 'to' locations.
+
+nav_create_indirect_connection_set_from_using_editpos (gamedll cheat)
+	Set the 'from' location of an indirect connection to be the current edit pos of nav_edit.
+
+nav_create_indirect_connection_set_to_using_editpos (gamedll cheat)
+	Set the 'to' location of an indirect connection to be the current edit pos of nav_edit.
+
 nav_delete (gamedll cheat)
 	Deletes the currently highlighted Area.
 
@@ -2046,7 +2075,7 @@ nav_delete_marked (gamedll cheat)
 	Deletes the currently marked Area (if any).
 
 nav_disconnect (gamedll cheat)
-	To disconnect two Areas, mark an Area, highlight a second Area, then invoke the disconnect command. This will remove all connections between the two Areas.
+	Disconnects selected area from all neighbor areas.
 
 nav_end_deselecting (gamedll cheat)
 	Stop continuously removing from the selected set.
@@ -2059,6 +2088,9 @@ nav_end_drag_selecting (gamedll cheat)
 
 nav_end_selecting (gamedll cheat)
 	Stop continuously adding to the selected set.
+
+nav_list_movable_meshes (gamedll cheat)
+	List the movable meshes registered with the movable meshes manager.
 
 nav_lower_drag_volume_max (gamedll cheat)
 	Lower the top of the drag select volume.
@@ -2092,6 +2124,9 @@ nav_select_radius (gamedll cheat)
 
 nav_select_with_attribute (gamedll cheat)
 	Selects areas with the given attribute.
+
+nav_set_movable_mesh_dormant_flag (gamedll cheat)
+	Set the movable mesh dormant flag (0=active, 1=dormant)
 
 nav_split (gamedll cheat)
 	To split an Area into two, align the split line using your cursor and invoke the split command.
@@ -2216,9 +2251,6 @@ phys_list (developmentonly gamedll)
 	    -world -snapshots: Start/Stop dumping snapshots of the world into the current directory
 	    -world -profiletraces: ProfileRecordedTraces
 	    -world -agg: current aggregate data registry (loaded resources)
-
-phys_mark_debug (gamedll cheat)
-	Mark object for debug
 
 phys_record_rays (developmentonly gamedll)
 	Dump physics main world to file
@@ -2365,6 +2397,9 @@ radio2 (clientdll release)
 radio3 (clientdll release)
 	Opens a radio menu
 
+ragdoll_cleanup_all (linked_concommand gamedll clientdll cheat)
+	Cleans up all ragdolls.
+
 rangefinder (gamedll cheat)
 	Measures distance along a ray
 
@@ -2388,9 +2423,6 @@ redirectend (hidden release)
 
 redirectstart (hidden release)
 	Redirect server console output
-
-refresh_ui_audio_state (clientdll cheat)
-	Restores audio DSP state for the UI.
 
 regenerate_weapon_skins (clientdll cheat)
 	<no description>
@@ -2418,7 +2450,7 @@ replay_death (gamedll cheat)
 	start hltv replay of last death
 
 replay_start (gamedll cheat client_can_execute)
-	Start GOTV replay: replay_start <delay> [<player name or index>]
+	Start Source2 TV replay: replay_start <delay> [<player name or index>]
 
 replay_stop (gamedll client_can_execute)
 	stop hltv replay
@@ -2468,6 +2500,9 @@ restart_in_untrusted (clientdll hidden clientcmd_can_execute)
 restart_normal (clientdll hidden clientcmd_can_execute)
 	Restart
 
+rr_dump_rules (gamedll cheat)
+	Print all response rules
+
 rr_forceconcept (gamedll cheat)
 	fire a response concept directly at a given character.
 	USAGE: rr_forceconcept <target name or index> <concept> "criteria1:value1,criteria2:value2,..."
@@ -2487,6 +2522,7 @@ save (developmentonly gamedll dontrecord defensive)
 
 save_animgraph_recording (gamedll cheat)
 	Saves all active animgraph recordings to disk
+	Arguments: automaticallyOpenInAnimgraphEditor
 
 save_clear_subdirectory (developmentonly gamedll replicated defensive)
 	<no description>
@@ -2695,6 +2731,9 @@ show_untrusted_warning_again (clientdll hidden clientcmd_can_execute)
 showconsole (dontrecord release)
 	Show the console.
 
+showents (gamedll cheat)
+	Dump entity list to console.
+
 showtriggers (gamedll cheat)
 	Enable or Disable showing trigger entities
 
@@ -2819,6 +2858,9 @@ snd_print_soundevent (developmentonly vconsole_fuzzy_matching vconsole_set_focus
 snd_print_soundevent_default_public_properties (developmentonly vconsole_fuzzy_matching vconsole_set_focus)
 	Print the default public properties of a specified soundevent. Values do not reflect values set on the soundevent. For that see "snd_print_soundevent"
 
+snd_purge_vsnd_table (developmentonly)
+	Purges the VSnd table
+
 snd_rear_headphone_position (developmentonly defensive)
 	Specifies the position  (in degrees) of the virtual rear left/right headphones.
 
@@ -2827,6 +2869,9 @@ snd_rear_stereo_speaker_position (developmentonly defensive)
 
 snd_rear_surround_speaker_position (developmentonly defensive)
 	Specifies the position (in degrees) of the virtual rear left/right speakers.
+
+snd_refresh_ui_audio_state (clientdll cheat)
+	Restores audio DSP state for the UI.
 
 snd_remove_all_soundevents (developmentonly cheat)
 	Remove all soundevents
@@ -3101,6 +3146,9 @@ stopsound (cheat)
 stopsoundscape (clientdll cheat)
 	Stops all soundscape processing and fades current looping sounds
 
+stopwatch (developmentonly clientdll defensive)
+	General purpose timer. use 'stopwatch' to toggle or explicitly call 'stopwatch start' and/or 'stopwatch stop'.
+
 subclass_change (gamedll cheat vconsole_fuzzy_matching)
 	Changes the subclass of the given entity.
 	Arguments:   	<new_subclass> {entity_name} / {class_name} / {entity_index} / {no argument = pick what player is looking at}
@@ -3137,6 +3185,9 @@ sv_fullupdate (developmentonly defensive)
 
 sv_game_mode_convars (developmentonly gamedll defensive)
 	Display the values of the convars for the current game_mode.
+
+sv_histogram (developmentonly defensive)
+	var change info histogram
 
 sv_kill_smokegrenade (developmentonly gamedll cheat)
 	kill all smoke grenades
@@ -3227,6 +3278,9 @@ test_entity_blocker (gamedll cheat)
 
 test_list_entities (gamedll cheat)
 	test-list entities
+
+test_shipping_assert (release)
+	Generate an assert to test shipping assertion code
 
 test_voice_container_nesting (linked_concommand developmentonly defensive)
 	Test nesting voice containers.

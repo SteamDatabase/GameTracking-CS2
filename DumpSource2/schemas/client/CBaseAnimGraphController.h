@@ -3,15 +3,18 @@
 // MNetworkVarNames = "GameTime_t m_flSeqStartTime"
 // MNetworkVarNames = "float m_flSeqFixedCycle"
 // MNetworkVarNames = "AnimLoopMode_t m_nAnimLoopMode"
+// MNetworkVarNames = "HNmGraphDefinitionStrong m_hGraphDefinitionAG2"
+// MNetworkVarNames = "bool m_bIsUsingAG2"
+// MNetworkVarNames = "uint8 m_serializedPoseRecipeAG2"
+// MNetworkVarNames = "int m_nSerializePoseRecipeSizeAG2"
+// MNetworkVarNames = "uint8 m_nGraphCreationFlagsAG2"
+// MNetworkVarNames = "int m_nServerGraphDefReloadCountAG2"
 class CBaseAnimGraphController : public CSkeletonAnimationController
 {
 	// MNetworkEnable
 	CAnimGraphNetworkedVariables m_animGraphNetworkedVars;
-	// MNetworkDisable
 	bool m_bSequenceFinished;
-	// MNetworkDisable
 	float32 m_flSoundSyncTime;
-	// MNetworkDisable
 	uint32 m_nActiveIKChainMask;
 	// MNetworkEnable
 	// MNetworkSerializer = "minusone"
@@ -38,14 +41,23 @@ class CBaseAnimGraphController : public CSkeletonAnimationController
 	// MNetworkPriority = 32
 	// MNetworkChangeCallback = "OnNetworkedAnimationChanged"
 	CNetworkedQuantizedFloat m_flPlaybackRate;
-	// MNetworkDisable
 	SequenceFinishNotifyState_t m_nNotifyState;
-	// MNetworkDisable
 	bool m_bNetworkedAnimationInputsChanged;
-	// MNetworkDisable
 	bool m_bNetworkedSequenceChanged;
-	// MNetworkDisable
 	bool m_bLastUpdateSkipped;
-	// MNetworkDisable
 	GameTime_t m_flPrevAnimUpdateTime;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "AG2_OnAnimGraphDefinitionOrModeChanged"
+	CStrongHandle< InfoForResourceTypeCNmGraphDefinition > m_hGraphDefinitionAG2;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "AG2_OnAnimGraphDefinitionOrModeChanged"
+	bool m_bIsUsingAG2;
+	// MNetworkEnable
+	C_NetworkUtlVectorBase< uint8 > m_serializedPoseRecipeAG2;
+	// MNetworkEnable
+	int32 m_nSerializePoseRecipeSizeAG2;
+	// MNetworkEnable
+	uint8 m_nGraphCreationFlagsAG2;
+	// MNetworkEnable
+	int32 m_nServerGraphDefReloadCountAG2;
 };

@@ -5,7 +5,6 @@
 // MNetworkVarNames = "EntitySpottedState_t m_entitySpottedState"
 class C_C4 : public C_CSWeaponBase
 {
-	char[32] m_szScreenText;
 	ParticleIndex_t m_activeLightParticleIndex;
 	C4LightEffect_t m_eActiveLightEffect;
 	// MNetworkEnable

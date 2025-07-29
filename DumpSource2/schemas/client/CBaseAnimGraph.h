@@ -4,6 +4,7 @@
 // MNetworkVarNames = "Vector m_vecForce"
 // MNetworkVarNames = "int32 m_nForceBone"
 // MNetworkVarNames = "PhysicsRagdollPose_t m_RagdollPose"
+// MNetworkVarNames = "bool m_bRagdollEnabled"
 // MNetworkVarNames = "bool m_bRagdollClientSide"
 class CBaseAnimGraph : public C_BaseModelEntity
 {
@@ -23,6 +24,9 @@ class CBaseAnimGraph : public C_BaseModelEntity
 	bool m_bBuiltRagdoll;
 	// MNetworkEnable
 	PhysicsRagdollPose_t m_RagdollPose;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnClientRagdollEnabledChanged"
+	bool m_bRagdollEnabled;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnClientRagdollChanged"
 	bool m_bRagdollClientSide;

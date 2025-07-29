@@ -9,4 +9,6 @@ enum ChickenActivity : uint32_t
 	PANIC = 6,
 	TRICK = 7,
 	TURN_IN_PLACE = 8,
+	FEED = 9,
+	SLEEP = 10,
 };

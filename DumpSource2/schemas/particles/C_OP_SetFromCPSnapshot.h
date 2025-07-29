@@ -3,6 +3,9 @@ class C_OP_SetFromCPSnapshot : public CParticleFunctionOperator
 {
 	// MPropertyFriendlyName = "snapshot control point number"
 	int32 m_nControlPointNumber;
+	// MPropertyFriendlyName = "snapshot subset"
+	// MPropertySuppressExpr = "m_nControlPointNumber < 0"
+	CUtlString m_strSnapshotSubset;
 	// MPropertyFriendlyName = "field to read"
 	// MPropertyAttributeChoiceName = "particlefield"
 	ParticleAttributeIndex_t m_nAttributeToRead;

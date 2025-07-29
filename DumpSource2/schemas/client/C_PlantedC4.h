@@ -11,7 +11,6 @@
 // MNetworkVarNames = "GameTime_t m_flDefuseCountDown"
 // MNetworkVarNames = "bool m_bBombDefused"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_hBombDefuser"
-// MNetworkVarNames = "CHandle< CBaseEntity> m_hControlPanel"
 // MNetworkVarNames = "CAttributeContainer m_AttributeManager"
 class C_PlantedC4 : public CBaseAnimGraph
 {
@@ -48,8 +47,6 @@ class C_PlantedC4 : public CBaseAnimGraph
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnDefuserChanged"
 	CHandle< C_CSPlayerPawn > m_hBombDefuser;
-	// MNetworkEnable
-	CHandle< C_BaseEntity > m_hControlPanel;
 	// MNetworkEnable
 	C_AttributeContainer m_AttributeManager;
 	CHandle< C_Multimeter > m_hDefuserMultimeter;

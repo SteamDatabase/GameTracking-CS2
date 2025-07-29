@@ -11,12 +11,18 @@ class CNavHullVData
 	// MPropertyFriendlyName = "Height"
 	// MPropertyDescription = "Height of navigating agent capsule."
 	float32 m_agentHeight;
-	// MPropertyFriendlyName = "Enable Short Height"
-	// MPropertyDescription = "Enable shorter navigating agent capsules ( e.g. crouch ) in addition to regular height capsules."
+	// MPropertyFriendlyName = "Enable Crouch Height"
+	// MPropertyDescription = "Enable shorter navigating agent capsules ( crouch ) in addition to regular height capsules."
 	bool m_agentShortHeightEnabled;
-	// MPropertyFriendlyName = "Short height"
-	// MPropertyDescription = "Short Height of navigating agent capsules if enabled."
+	// MPropertyFriendlyName = "Crouch height"
+	// MPropertyDescription = "Crouch height of navigating agent capsules if enabled."
 	float32 m_agentShortHeight;
+	// MPropertyFriendlyName = "Enable Crawl Height"
+	// MPropertyDescription = "Enable even shorter navigating agent capsules ( crawl ) in addition to regular height capsules."
+	bool m_agentCrawlEnabled;
+	// MPropertyFriendlyName = "Crawl height"
+	// MPropertyDescription = "Crawl height of navigating agent capsules if enabled."
+	float32 m_agentCrawlHeight;
 	// MPropertyFriendlyName = "Max Climb"
 	// MPropertyDescription = "Max vertical offset that the agent simply ignores and walks over."
 	float32 m_agentMaxClimb;

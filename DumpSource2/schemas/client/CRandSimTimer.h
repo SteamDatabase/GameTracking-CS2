@@ -1,5 +1,5 @@
 class CRandSimTimer : public CSimpleSimTimer
 {
-	float32 m_minInterval;
-	float32 m_maxInterval;
+	float32 m_flMinInterval;
+	float32 m_flMaxInterval;
 };

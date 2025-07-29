@@ -2,7 +2,6 @@
 // MNetworkVarNames = "bool m_bWarmupPeriod"
 // MNetworkVarNames = "GameTime_t m_fWarmupPeriodEnd"
 // MNetworkVarNames = "GameTime_t m_fWarmupPeriodStart"
-// MNetworkVarNames = "bool m_bServerPaused"
 // MNetworkVarNames = "bool m_bTerroristTimeOutActive"
 // MNetworkVarNames = "bool m_bCTTimeOutActive"
 // MNetworkVarNames = "float m_flTerroristTimeOutRemaining"
@@ -102,8 +101,6 @@ class C_CSGameRules : public C_TeamplayRules
 	GameTime_t m_fWarmupPeriodEnd;
 	// MNetworkEnable
 	GameTime_t m_fWarmupPeriodStart;
-	// MNetworkEnable
-	bool m_bServerPaused;
 	// MNetworkEnable
 	bool m_bTerroristTimeOutActive;
 	// MNetworkEnable

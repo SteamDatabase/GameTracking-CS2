@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
-// MCellForDomain = "ServerPointEntity"
+// MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Listen for Entity Output"
@@ -9,7 +9,6 @@
 class CPulseCell_Outflow_ListenForEntityOutput : public CPulseCell_BaseYieldingInflow
 {
 	// MPulseCellOutflow_IsDefault
-	// MPulseSignatureName (UNKNOWN FOR PARSER)
 	SignatureOutflow_Resume m_OnFired;
 	CPulse_ResumePoint m_OnCanceled;
 	// MPulseDocCustomAttr (UNKNOWN FOR PARSER)

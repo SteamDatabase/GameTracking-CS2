@@ -1,3 +1,4 @@
+// MNetworkVarNames = "bool m_ragEnabled"
 // MNetworkVarNames = "Vector m_ragPos"
 // MNetworkVarNames = "QAngle m_ragAngles"
 // MNetworkVarNames = "float32 m_flBlendWeight"
@@ -5,13 +6,14 @@
 class C_RagdollProp : public CBaseAnimGraph
 {
 	// MNetworkEnable
+	// MNetworkChangeCallback = "ragEnabledChanged"
+	C_NetworkUtlVectorBase< bool > m_ragEnabled;
+	// MNetworkEnable
 	// MNetworkEncoder = "coord"
-	// MNetworkChangeCallback = "ragAnglesChanged"
 	C_NetworkUtlVectorBase< Vector > m_ragPos;
 	// MNetworkEnable
 	// MNetworkEncoder = "qangle"
 	// MNetworkBitCount = 13
-	// MNetworkChangeCallback = "ragAnglesChanged"
 	C_NetworkUtlVectorBase< QAngle > m_ragAngles;
 	// MNetworkEnable
 	// MNetworkBitCount = 8

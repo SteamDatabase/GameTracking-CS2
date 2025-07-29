@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulse_CallInfo
 {
-	CUtlSymbolLarge m_PortName;
+	PulseSymbol_t m_PortName;
 	PulseDocNodeID_t m_nEditorNodeID;
 	PulseRegisterMap_t m_RegisterMap;
 	PulseDocNodeID_t m_CallMethodID;

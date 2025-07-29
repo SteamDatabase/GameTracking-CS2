@@ -1,5 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Cloth Settings Tag"
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CClothSettingsAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Stiffness"

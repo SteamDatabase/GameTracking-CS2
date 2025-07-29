@@ -7,5 +7,7 @@ class CNmSkeleton
 	CUtlVector< CTransform > m_parentSpaceReferencePose;
 	CUtlVector< CTransform > m_modelSpaceReferencePose;
 	int32 m_numBonesToSampleAtLowLOD;
-	CUtlLeanVector< CNmBoneMask > m_boneMasks;
+	CUtlLeanVector< NmBoneMaskSetDefinition_t > m_maskDefinitions;
+	CUtlLeanVector< CNmSkeleton::SecondarySkeleton_t > m_secondarySkeletons;
+	bool m_bIsPropSkeleton;
 };

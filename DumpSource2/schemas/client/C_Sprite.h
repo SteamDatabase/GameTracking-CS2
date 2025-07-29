@@ -58,7 +58,6 @@ class C_Sprite : public C_BaseModelEntity
 	int32 m_nStartBrightness;
 	int32 m_nDestBrightness;
 	GameTime_t m_flBrightnessTimeStart;
-	CWeakHandle< InfoForResourceTypeIMaterial2 > m_hOldSpriteMaterial;
 	int32 m_nSpriteWidth;
 	int32 m_nSpriteHeight;
 };

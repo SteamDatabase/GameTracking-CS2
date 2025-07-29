@@ -1,5 +1,4 @@
 // MNetworkUserGroupProxy = "CBasePlayerPawn"
-// MNetworkUserGroupProxy = "CBasePlayerPawn"
 // MNetworkExcludeByUserGroup = "FogController"
 // MNetworkIncludeByUserGroup = "Player"
 // MNetworkIncludeByUserGroup = "Water"
@@ -31,6 +30,7 @@
 // MNetworkVarNames = "sky3dparams_t m_skybox3d"
 // MNetworkVarNames = "GameTime_t m_flDeathTime"
 // MNetworkVarNames = "CHandle< CBasePlayerController> m_hController"
+// MNetworkVarNames = "CHandle< CBasePlayerController> m_hDefaultController"
 class CBasePlayerPawn : public CBaseCombatCharacter
 {
 	// MNetworkEnable
@@ -55,7 +55,6 @@ class CBasePlayerPawn : public CBaseCombatCharacter
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	CUtlVectorEmbeddedNetworkVar< ViewAngleServerChange_t > m_ServerViewAngleChanges;
-	uint32 m_nHighestGeneratedServerViewAngleChangeIndex;
 	QAngle v_angle;
 	QAngle v_anglePrevious;
 	// MNetworkEnable
@@ -72,6 +71,8 @@ class CBasePlayerPawn : public CBaseCombatCharacter
 	CAI_Expresser* m_pExpresser;
 	// MNetworkEnable
 	CHandle< CBasePlayerController > m_hController;
+	// MNetworkEnable
+	CHandle< CBasePlayerController > m_hDefaultController;
 	float32 m_fHltvReplayDelay;
 	float32 m_fHltvReplayEnd;
 	CEntityIndex m_iHltvReplayEntity;

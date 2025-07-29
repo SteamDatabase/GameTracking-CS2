@@ -8,6 +8,7 @@ enum CDebugOverlayFilterType_t : uint32_t
 	AI_SCHEDULE = 5,
 	AI_TASK = 6,
 	AI_EVENT = 7,
-	END_SIM_HISTORY_TYPES = 8,
+	AI_PATHFINDING = 8,
+	END_SIM_HISTORY_TYPES = 9,
 	COMBINED = -1,
 };

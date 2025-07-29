@@ -1,3 +1,4 @@
+// M_LEGACY_OptInToSchemaPropertyDomain
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Float Parameter"
 class CFloatAnimParameter : public CConcreteAnimParameter

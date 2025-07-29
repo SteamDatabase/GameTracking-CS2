@@ -6,7 +6,7 @@ enum NmEventConditionRules_t : uint8_t
 	PreferHighestProgress = 3,
 	OperatorOr = 4,
 	OperatorAnd = 5,
-	SearchOnlyStateEvents = 6,
+	SearchOnlyGraphEvents = 6,
 	SearchOnlyAnimEvents = 7,
-	SearchBothStateAndAnimEvents = 8,
+	SearchBothGraphAndAnimEvents = 8,
 };

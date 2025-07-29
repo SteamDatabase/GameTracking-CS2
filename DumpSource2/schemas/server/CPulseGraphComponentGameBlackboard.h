@@ -1,3 +1,0 @@
-class CPulseGraphComponentGameBlackboard : public CPulseGraphComponentBase
-{
-};

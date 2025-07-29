@@ -7,4 +7,5 @@ class PhysicsRagdollPose_t
 	CNetworkUtlVectorBase< CTransform > m_Transforms;
 	// MNetworkEnable
 	CHandle< CBaseEntity > m_hOwner;
+	bool m_bSetFromDebugHistory;
 };

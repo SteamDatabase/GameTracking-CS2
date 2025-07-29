@@ -32,12 +32,8 @@ class CNetworkedSequenceOperation
 	// MNetworkMaxValue = 1.000000
 	// MNetworkEncodeFlags = 0
 	CNetworkedQuantizedFloat m_flWeight;
-	// MNetworkDisable
 	bool m_bSequenceChangeNetworked;
-	// MNetworkDisable
 	bool m_bDiscontinuity;
-	// MNetworkDisable
 	float32 m_flPrevCycleFromDiscontinuity;
-	// MNetworkDisable
 	float32 m_flPrevCycleForAnimEventDetection;
 };

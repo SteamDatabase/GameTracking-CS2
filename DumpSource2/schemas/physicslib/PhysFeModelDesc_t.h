@@ -32,6 +32,8 @@ class PhysFeModelDesc_t
 	CUtlVector< FeRodConstraint_t > m_Rods;
 	CUtlVector< FeTwistConstraint_t > m_Twists;
 	CUtlVector< FeHingeLimit_t > m_HingeLimits;
+	CUtlVector< uint32 > m_AntiTunnelBytecode;
+	CUtlVector< FeDynKinLink_t > m_DynKinLinks;
 	CUtlVector< FeAntiTunnelProbe_t > m_AntiTunnelProbes;
 	CUtlVector< uint16 > m_AntiTunnelTargetNodes;
 	CUtlVector< FeAxialEdgeBend_t > m_AxialEdges;

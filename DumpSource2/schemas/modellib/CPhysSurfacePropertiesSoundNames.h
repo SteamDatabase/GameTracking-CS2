@@ -23,4 +23,6 @@ class CPhysSurfacePropertiesSoundNames
 	CUtlString m_pushOff;
 	// MKV3TransferName = "skidstop"
 	CUtlString m_skidStop;
+	// MKV3TransferName = "resonant"
+	CUtlString m_resonant;
 };

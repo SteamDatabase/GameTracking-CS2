@@ -6,4 +6,6 @@ class CPhysFixed : public CPhysConstraint
 	float32 m_flAngularDampingRatio;
 	bool m_bEnableLinearConstraint;
 	bool m_bEnableAngularConstraint;
+	CUtlSymbolLarge m_sBoneName1;
+	CUtlSymbolLarge m_sBoneName2;
 };

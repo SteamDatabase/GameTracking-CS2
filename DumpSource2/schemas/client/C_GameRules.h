@@ -3,8 +3,6 @@
 // MNetworkVarNames = "bool m_bGamePaused"
 class C_GameRules
 {
-	// MNetworkDisable
-	// MNetworkChangeAccessorFieldPathIndex
 	CNetworkVarChainer __m_pChainEntity;
 	// MNetworkEnable
 	int32 m_nTotalPausedTicks;

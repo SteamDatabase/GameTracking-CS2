@@ -5,7 +5,6 @@ class CPointTemplate : public CLogicalEntity
 	CUtlSymbolLarge m_iszEntityFilterName;
 	float32 m_flTimeoutInterval;
 	bool m_bAsynchronouslySpawnEntities;
-	CEntityIOOutput m_pOutputOnSpawned;
 	PointTemplateClientOnlyEntityBehavior_t m_clientOnlyEntityBehavior;
 	PointTemplateOwnerSpawnGroupType_t m_ownerSpawnGroupType;
 	CUtlVector< uint32 > m_createdSpawnGroupHandles;

@@ -7,6 +7,9 @@ class C_OP_SetVectorAttributeToVectorExpression : public CParticleFunctionOperat
 	CPerParticleVecInput m_vInput1;
 	// MPropertyFriendlyName = "input 2"
 	CPerParticleVecInput m_vInput2;
+	// MPropertyFriendlyName = "lerp value"
+	// MPropertySuppressExpr = "m_nExpression != VECTOR_EXPRESSION_LERP"
+	CPerParticleFloatInput m_flLerp;
 	// MPropertyFriendlyName = "output field"
 	// MPropertyAttributeChoiceName = "particlefield_vector"
 	ParticleAttributeIndex_t m_nOutputField;

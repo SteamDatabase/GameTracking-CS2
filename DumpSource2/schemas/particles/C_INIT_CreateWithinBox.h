@@ -13,4 +13,6 @@ class C_INIT_CreateWithinBox : public CParticleFunctionInitializer
 	bool m_bLocalSpace;
 	// MPropertyFriendlyName = "Random number generator controls"
 	CRandomNumberGeneratorParameters m_randomnessParameters;
+	// MPropertyFriendlyName = "use new code"
+	bool m_bUseNewCode;
 };

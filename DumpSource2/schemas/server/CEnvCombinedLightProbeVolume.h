@@ -3,7 +3,12 @@
 // MNetworkVarNames = "float m_Entity_flBrightness"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hCubemapTexture"
 // MNetworkVarNames = "bool m_Entity_bCustomCubemapTexture"
-// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_AmbientCube"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SDF"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_DC"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_R"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_G"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_B"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeDirectLightIndicesTexture"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeDirectLightScalarsTexture"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeDirectLightShadowsTexture"
@@ -36,7 +41,17 @@ class CEnvCombinedLightProbeVolume : public CBaseEntity
 	// MNetworkEnable
 	bool m_Entity_bCustomCubemapTexture;
 	// MNetworkEnable
-	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture;
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_AmbientCube;
+	// MNetworkEnable
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SDF;
+	// MNetworkEnable
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SH2_DC;
+	// MNetworkEnable
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SH2_R;
+	// MNetworkEnable
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SH2_G;
+	// MNetworkEnable
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SH2_B;
 	// MNetworkEnable
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeDirectLightIndicesTexture;
 	// MNetworkEnable

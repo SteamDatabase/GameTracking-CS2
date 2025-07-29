@@ -7,6 +7,9 @@ class C_OP_SetControlPointFieldFromVectorExpression : public CParticleFunctionPr
 	CParticleCollectionVecInput m_vecInput1;
 	// MPropertyFriendlyName = "input 2"
 	CParticleCollectionVecInput m_vecInput2;
+	// MPropertyFriendlyName = "lerp value"
+	// MPropertySuppressExpr = "m_nExpression != VECTOR_EXPRESSION_LERP"
+	CPerParticleFloatInput m_flLerp;
 	// MPropertyFriendlyName = "output"
 	CParticleRemapFloatInput m_flOutputRemap;
 	// MPropertyFriendlyName = "output control point"

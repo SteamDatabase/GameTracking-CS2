@@ -6,8 +6,6 @@
 // MNetworkIncludeByName = "m_pCameraServices"
 // MNetworkVarTypeOverride = "CCSObserver_UseServices m_pUseServices"
 // MNetworkIncludeByName = "m_pUseServices"
-// MNetworkVarTypeOverride = "CCSObserver_ViewModelServices m_pViewModelServices"
-// MNetworkIncludeByName = "m_pViewModelServices"
 class CCSObserverPawn : public CCSPlayerPawnBase
 {
 };

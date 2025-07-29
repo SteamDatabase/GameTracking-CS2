@@ -5,6 +5,7 @@ class CBlendUpdateNode : public CAnimUpdateNodeBase
 	CUtlVector< uint8 > m_sortedOrder;
 	CUtlVector< float32 > m_targetValues;
 	AnimValueSource m_blendValueSource;
+	LinearRootMotionBlendMode_t m_eLinearRootMotionBlendMode;
 	CAnimParamHandle m_paramIndex;
 	CAnimInputDamping m_damping;
 	BlendKeyType m_blendKeyType;
@@ -12,4 +13,5 @@ class CBlendUpdateNode : public CAnimUpdateNodeBase
 	bool m_bSyncCycles;
 	bool m_bLoop;
 	bool m_bLockWhenWaning;
+	bool m_bIsAngle;
 };

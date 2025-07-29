@@ -1,5 +1,6 @@
 // MNetworkVarNames = "CRenderComponent::Storage_t m_CRenderComponent"
 // MNetworkVarNames = "CHitboxComponent::Storage_t m_CHitboxComponent"
+// MNetworkVarNames = "CDestructiblePartsSystemComponent * m_pDestructiblePartsSystemComponent"
 // MNetworkVarNames = "RenderMode_t m_nRenderMode"
 // MNetworkVarNames = "RenderFx_t m_nRenderFX"
 // MNetworkVarNames = "Color m_clrRender"
@@ -32,7 +33,11 @@ class C_BaseModelEntity : public C_BaseEntity
 	// MNetworkAlias = "CHitboxComponent"
 	// MNetworkTypeAlias = "CHitboxComponent"
 	CHitboxComponent m_CHitboxComponent;
+	// MNetworkEnable
+	CDestructiblePartsSystemComponent* m_pDestructiblePartsSystemComponent;
 	HitGroup_t m_LastHitGroup;
+	CGlobalSymbol m_sLastDamageSourceName;
+	Vector m_vLastDamagePosition;
 	bool m_bInitModelEffects;
 	bool m_bIsStaticProp;
 	int32 m_nLastAddDecal;

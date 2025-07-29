@@ -1,10 +1,10 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulseGraphDef
 {
-	CUtlSymbolLarge m_DomainIdentifier;
-	CUtlSymbolLarge m_ParentMapName;
-	CUtlSymbolLarge m_ParentXmlName;
-	CUtlVector< CUtlSymbolLarge > m_vecGameBlackboards;
+	PulseSymbol_t m_DomainIdentifier;
+	CPulseValueFullType m_DomainSubType;
+	PulseSymbol_t m_ParentMapName;
+	PulseSymbol_t m_ParentXmlName;
 	CUtlVector< CPulse_Chunk* > m_Chunks;
 	CUtlVector< CPulseCell_Base* > m_Cells;
 	CUtlVector< CPulse_Variable > m_Vars;

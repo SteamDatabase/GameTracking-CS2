@@ -2,5 +2,5 @@
 class PulseGraphExecutionHistoryNodeDesc_t
 {
 	CBufferString strCellDesc;
-	CUtlSymbolLarge strBindingName;
+	PulseSymbol_t strBindingName;
 };

@@ -1,5 +1,4 @@
 class CAnimGraphControllerBase
 {
-	CAnimGraphParamOptionalRef< char* > m_sDestructiblePartDestroyedHitGroup;
-	CAnimGraphParamOptionalRef< int32 > m_nDestructiblePartDestroyedPartIndex;
+	CUtlVectorFixedGrowable< CGlobalSymbol, 8 > m_vecParamsToResetInPostGraphUpdate;
 };

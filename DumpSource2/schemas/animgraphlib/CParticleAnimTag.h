@@ -1,5 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Particle Tag"
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CParticleAnimTag : public CAnimTagBase
 {
 	// MPropertySuppressField
@@ -11,6 +12,8 @@ class CParticleAnimTag : public CAnimTagBase
 	CUtlString m_configName;
 	// MPropertyFriendlyName = "Detach From Owner"
 	bool m_bDetachFromOwner;
+	// MPropertyFriendlyName = "Attempt to Aggregate"
+	bool m_bAggregate;
 	// MPropertyFriendlyName = "Stop on Tag End"
 	// MPropertyGroupName = "Ending"
 	bool m_bStopWhenTagEnds;

@@ -1,8 +1,8 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulse_OutputConnection
 {
-	CUtlSymbolLarge m_SourceOutput;
-	CUtlSymbolLarge m_TargetEntity;
-	CUtlSymbolLarge m_TargetInput;
-	CUtlSymbolLarge m_Param;
+	PulseSymbol_t m_SourceOutput;
+	PulseSymbol_t m_TargetEntity;
+	PulseSymbol_t m_TargetInput;
+	PulseSymbol_t m_Param;
 };

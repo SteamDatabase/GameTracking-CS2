@@ -11,8 +11,6 @@
 // MNetworkIncludeByName = "m_pMovementServices"
 // MNetworkVarTypeOverride = "CCSPlayer_WaterServices m_pWaterServices"
 // MNetworkIncludeByName = "m_pWaterServices"
-// MNetworkVarTypeOverride = "CCSPlayer_ViewModelServices m_pViewModelServices"
-// MNetworkIncludeByName = "m_pViewModelServices"
 // MNetworkVarTypeOverride = "CCSPlayer_CameraServices m_pCameraServices"
 // MNetworkIncludeByName = "m_pCameraServices"
 // MNetworkVarTypeOverride = "CCSPlayer_WeaponServices m_pWeaponServices"
@@ -78,6 +76,9 @@
 // MNetworkVarNames = "uint16 m_unFreezetimeEndEquipmentValue"
 // MNetworkVarNames = "CEntityIndex m_nLastKillerIndex"
 // MNetworkVarNames = "PredictedDamageTag_t m_PredictedDamageTags"
+// MNetworkVarNames = "GameTime_t m_fImmuneToGunGameDamageTime"
+// MNetworkVarNames = "bool m_bGunGameImmunity"
+// MNetworkVarNames = "float m_fMolotovDamageTime"
 class C_CSPlayerPawn : public C_CSPlayerPawnBase
 {
 	// MNetworkEnable
@@ -169,6 +170,7 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	bool m_bLastHeadBoneTransformIsValid;
 	GameTime_t m_lastLandTime;
 	bool m_bOnGroundLastTick;
+	CHandle< C_CS2HudModelArms > m_hHudModelArms;
 	// MNetworkEnable
 	QAngle m_qDeathEyeAngles;
 	bool m_bSkipOneHeadConstraintUpdate;
@@ -279,4 +281,12 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	C_UtlVectorEmbeddedNetworkVar< PredictedDamageTag_t > m_PredictedDamageTags;
 	GameTick_t m_nPrevHighestReceivedDamageTagTick;
 	int32 m_nHighestAppliedDamageTagTick;
+	bool m_bShouldAutobuyDMWeapons;
+	// MNetworkEnable
+	GameTime_t m_fImmuneToGunGameDamageTime;
+	// MNetworkEnable
+	bool m_bGunGameImmunity;
+	GameTime_t m_fImmuneToGunGameDamageTimeLast;
+	// MNetworkEnable
+	float32 m_fMolotovDamageTime;
 };

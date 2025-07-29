@@ -25,6 +25,11 @@ class C_OP_ClientPhysics : public CParticleFunctionRenderer
 	// MPropertyFriendlyName = "control point (for finding nearest sim)"
 	// MPropertySuppressExpr = "m_bKillParticles == true"
 	int32 m_nControlPoint;
+	// MPropertyFriendlyName = "specific sim id"
+	// MPropertySuppressExpr = "m_bKillParticles == true"
+	int32 m_nForcedSimId;
 	// MPropertyFriendlyName = "tint blend (color vs prop group gradient)"
 	ParticleColorBlendType_t m_nColorBlendType;
+	// MPropertyFriendlyName = "forced status effect flags"
+	ParticleAttrBoxFlags_t m_nForcedStatusEffects;
 };

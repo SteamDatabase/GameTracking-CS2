@@ -20,4 +20,8 @@ enum SpriteCardTextureType_t : uint32_t
 	SPRITECARD_TEXTURE_SPHERICAL_HARMONICS_B = 8,
 	// MPropertyFriendlyName = "Spherical Harmonics C"
 	SPRITECARD_TEXTURE_SPHERICAL_HARMONICS_C = 9,
+	// MPropertyFriendlyName = "Depth Filter Map"
+	SPRITECARD_TEXTURE_DEPTH = 10,
+	// MPropertyFriendlyName = "Illumination Gradient"
+	SPRITECARD_TEXTURE_ILLUMINATION_GRADIENT = 11,
 };

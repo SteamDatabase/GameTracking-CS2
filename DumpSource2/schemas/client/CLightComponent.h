@@ -36,7 +36,10 @@
 // MNetworkVarNames = "bool m_bUsesBakedShadowing"
 // MNetworkVarNames = "int m_nShadowPriority"
 // MNetworkVarNames = "int m_nBakedShadowIndex"
+// MNetworkVarNames = "int32 m_nLightPathUniqueId"
+// MNetworkVarNames = "int32 m_nLightMapUniqueId"
 // MNetworkVarNames = "bool m_bRenderToCubemaps"
+// MNetworkVarNames = "bool m_bAllowSSTGeneration"
 // MNetworkVarNames = "int m_nDirectLight"
 // MNetworkVarNames = "int m_nIndirectLight"
 // MNetworkVarNames = "float m_flFadeMinDist"
@@ -65,8 +68,6 @@
 // MNetworkVarNames = "float m_flMinRoughness"
 class CLightComponent : public CEntityComponent
 {
-	// MNetworkDisable
-	// MNetworkChangeAccessorFieldPathIndex
 	CNetworkVarChainer __m_pChainEntity;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"
@@ -185,7 +186,15 @@ class CLightComponent : public CEntityComponent
 	int32 m_nBakedShadowIndex;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"
+	int32 m_nLightPathUniqueId;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "LightRenderingChanged"
+	int32 m_nLightMapUniqueId;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "LightRenderingChanged"
 	bool m_bRenderToCubemaps;
+	// MNetworkEnable
+	bool m_bAllowSSTGeneration;
 	// MNetworkEnable
 	int32 m_nDirectLight;
 	// MNetworkEnable

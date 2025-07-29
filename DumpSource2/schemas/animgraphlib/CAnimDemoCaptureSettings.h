@@ -1,4 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimDemoCaptureSettings
 {
 	// MPropertyFriendlyName = "Rotation Error Range"
@@ -40,7 +41,7 @@ class CAnimDemoCaptureSettings
 	int32 m_nBaseSequenceFrame;
 	// MPropertyFriendlyName = "Bone Selection Mode"
 	// MPropertyGroupName = "+Bones"
-	// MPropertyAttrChangeCallback (UNKNOWN FOR PARSER)
+	// MPropertyAutoRebuildOnChange
 	EDemoBoneSelectionMode m_boneSelectionMode;
 	// MPropertyFriendlyName = "Bones"
 	// MPropertyGroupName = "+Bones"

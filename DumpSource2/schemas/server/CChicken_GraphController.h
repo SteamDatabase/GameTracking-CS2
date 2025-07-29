@@ -1,4 +1,4 @@
-class CChicken_GraphController : public CAnimGraphControllerBase
+class CChicken_GraphController : public CBaseAnimGraphAnimGraphController
 {
 	CAnimGraphParamRef< char* > m_paramActivity;
 	CAnimGraphParamRef< bool > m_paramEndActivityImmediately;

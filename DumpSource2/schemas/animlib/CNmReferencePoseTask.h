@@ -1,3 +1,3 @@
-class CNmReferencePoseTask : public CNmTask
+class CNmReferencePoseTask : public CNmPoseTask
 {
 };

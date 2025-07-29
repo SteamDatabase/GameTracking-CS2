@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
-// MCellForDomain = "ServerPointEntity"
+// MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPulseCellWithCustomDocNode
@@ -9,6 +9,7 @@ class CPulseCell_Outflow_ScriptedSequence : public CPulseCell_BaseYieldingInflow
 	int32 m_nExpectedNumSequencesInSyncGroup;
 	bool m_bEnsureOnNavmeshOnFinish;
 	bool m_bDontTeleportAtEnd;
+	bool m_bDisallowInterrupts;
 	PulseScriptedSequenceData_t m_scriptedSequenceDataMain;
 	CUtlVector< PulseScriptedSequenceData_t > m_vecAdditionalActors;
 	CPulse_ResumePoint m_OnFinished;

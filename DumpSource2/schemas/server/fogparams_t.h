@@ -21,7 +21,6 @@
 // MNetworkVarNames = "float32 locallightscale"
 // MNetworkVarNames = "bool enable"
 // MNetworkVarNames = "bool blend"
-// MNetworkVarNames = "bool m_bNoReflectionFog"
 class fogparams_t
 {
 	// MNetworkEnable
@@ -84,7 +83,6 @@ class fogparams_t
 	bool enable;
 	// MNetworkEnable
 	bool blend;
-	// MNetworkEnable
-	bool m_bNoReflectionFog;
+	bool m_bPadding2;
 	bool m_bPadding;
 };

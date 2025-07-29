@@ -126,7 +126,8 @@ class CParticleSystemDefinition : public IParticleSystemDefinition
 	int32 m_nAggregationMinAvailableParticles;
 	// MPropertyFriendlyName = "aggregation radius"
 	float32 m_flAggregateRadius;
-	// MPropertyFriendlyName = "batch particle systems"
+	// MPropertyFriendlyName = "batch particle systems (DO NOT USE)"
+	// MParticleAdvancedField
 	bool m_bShouldBatch;
 	// MPropertyFriendlyName = "Hitboxes fall back to render bounds"
 	bool m_bShouldHitboxesFallbackToRenderBounds;

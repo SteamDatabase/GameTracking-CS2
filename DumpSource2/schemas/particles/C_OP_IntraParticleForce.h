@@ -15,6 +15,4 @@ class C_OP_IntraParticleForce : public CParticleFunctionForce
 	float32 m_flRepulsionMaxStrength;
 	// MPropertyFriendlyName = "use aabbtree"
 	bool m_bUseAABB;
-	// MPropertyFriendlyName = "thread pairwise collision"
-	bool m_bThreadIt;
 };

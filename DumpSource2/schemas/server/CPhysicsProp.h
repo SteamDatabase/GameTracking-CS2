@@ -19,7 +19,6 @@ class CPhysicsProp : public CBreakableProp
 	bool m_bNoNavmeshBlocker;
 	bool m_bForceNpcExclude;
 	float32 m_massScale;
-	float32 m_inertiaScale;
 	float32 m_buoyancyScale;
 	int32 m_damageType;
 	int32 m_damageToEnableMotion;
@@ -28,9 +27,9 @@ class CPhysicsProp : public CBreakableProp
 	bool m_bDroppedByPlayer;
 	bool m_bTouchedByPlayer;
 	bool m_bFirstCollisionAfterLaunch;
-	int32 m_iExploitableByPlayer;
 	bool m_bHasBeenAwakened;
 	bool m_bIsOverrideProp;
+	DynamicContinuousContactBehavior_t m_nDynamicContinuousContactBehavior;
 	GameTime_t m_fNextCheckDisableMotionContactsTime;
 	int32 m_iInitialGlowState;
 	int32 m_nGlowRange;
@@ -46,4 +45,5 @@ class CPhysicsProp : public CBreakableProp
 	bool m_bRemovableForAmmoBalancing;
 	// MNetworkEnable
 	bool m_bAwake;
+	bool m_bAttachedToReferenceFrame;
 };

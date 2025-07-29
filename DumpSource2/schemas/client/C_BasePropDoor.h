@@ -7,6 +7,7 @@
 // MNetworkIncludeByName = "m_spawnflags"
 // MNetworkVarNames = "DoorState_t m_eDoorState"
 // MNetworkVarNames = "bool m_bLocked"
+// MNetworkVarNames = "bool m_bNoNPCs"
 // MNetworkVarNames = "Vector m_closedPosition"
 // MNetworkVarNames = "QAngle m_closedAngles"
 // MNetworkVarNames = "CHandle< C_BasePropDoor> m_hMaster"
@@ -17,6 +18,8 @@ class C_BasePropDoor : public C_DynamicProp
 	bool m_modelChanged;
 	// MNetworkEnable
 	bool m_bLocked;
+	// MNetworkEnable
+	bool m_bNoNPCs;
 	// MNetworkEnable
 	Vector m_closedPosition;
 	// MNetworkEnable

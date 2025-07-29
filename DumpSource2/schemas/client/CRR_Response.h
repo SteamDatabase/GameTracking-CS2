@@ -5,10 +5,9 @@ class CRR_Response
 	char[128] m_szMatchingRule;
 	ResponseParams m_Params;
 	float32 m_fMatchScore;
+	bool m_bAnyMatchingRulesInCooldown;
 	char* m_szSpeakerContext;
 	char* m_szWorldContext;
 	ResponseFollowup m_Followup;
 	CUtlSymbol m_recipientFilter;
-	CUtlVector< CUtlSymbol > m_pchCriteriaNames;
-	CUtlVector< char* > m_pchCriteriaValues;
 };

@@ -1,5 +1,6 @@
 // MEntityAllowsPortraitWorldSpawn
 // MNetworkVarNames = "float m_flScattering"
+// MNetworkVarNames = "Color m_TintColor"
 // MNetworkVarNames = "float m_flAnisotropy"
 // MNetworkVarNames = "float m_flFadeSpeed"
 // MNetworkVarNames = "float m_flDrawDistance"
@@ -25,17 +26,20 @@
 // MNetworkVarNames = "float m_flDefaultDrawDistance"
 // MNetworkVarNames = "bool m_bStartDisabled"
 // MNetworkVarNames = "bool m_bEnableIndirect"
-// MNetworkVarNames = "bool m_bIndirectUseLPVs"
 // MNetworkVarNames = "bool m_bIsMaster"
 // MNetworkVarNames = "HRenderTextureStrong m_hFogIndirectTexture"
 // MNetworkVarNames = "int m_nForceRefreshCount"
 // MNetworkVarNames = "float m_fNoiseSpeed"
 // MNetworkVarNames = "float m_fNoiseStrength"
 // MNetworkVarNames = "Vector m_vNoiseScale"
+// MNetworkVarNames = "float m_fWindSpeed"
+// MNetworkVarNames = "Vector m_vWindDirection"
 class CEnvVolumetricFogController : public CBaseEntity
 {
 	// MNetworkEnable
 	float32 m_flScattering;
+	// MNetworkEnable
+	Color m_TintColor;
 	// MNetworkEnable
 	float32 m_flAnisotropy;
 	// MNetworkEnable
@@ -87,8 +91,6 @@ class CEnvVolumetricFogController : public CBaseEntity
 	// MNetworkEnable
 	bool m_bEnableIndirect;
 	// MNetworkEnable
-	bool m_bIndirectUseLPVs;
-	// MNetworkEnable
 	bool m_bIsMaster;
 	// MNetworkEnable
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_hFogIndirectTexture;
@@ -100,5 +102,9 @@ class CEnvVolumetricFogController : public CBaseEntity
 	float32 m_fNoiseStrength;
 	// MNetworkEnable
 	Vector m_vNoiseScale;
+	// MNetworkEnable
+	float32 m_fWindSpeed;
+	// MNetworkEnable
+	Vector m_vWindDirection;
 	bool m_bFirstTime;
 };

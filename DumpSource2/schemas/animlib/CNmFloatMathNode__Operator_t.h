@@ -4,4 +4,5 @@ enum CNmFloatMathNode::Operator_t : uint8_t
 	Sub = 1,
 	Mul = 2,
 	Div = 3,
+	Mod = 4,
 };

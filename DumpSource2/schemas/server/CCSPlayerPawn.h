@@ -1,3 +1,4 @@
+// MNetworkOutOfPVSUpdates (UNKNOWN FOR PARSER)
 // MNetworkVarTypeOverride = "CCSPlayer_WeaponServices m_pWeaponServices"
 // MNetworkIncludeByName = "m_pWeaponServices"
 // MNetworkVarTypeOverride = "CCSPlayer_ItemServices m_pItemServices"
@@ -8,8 +9,6 @@
 // MNetworkIncludeByName = "m_pWaterServices"
 // MNetworkVarTypeOverride = "CCSPlayer_MovementServices m_pMovementServices"
 // MNetworkIncludeByName = "m_pMovementServices"
-// MNetworkVarTypeOverride = "CCSPlayer_ViewModelServices m_pViewModelServices"
-// MNetworkIncludeByName = "m_pViewModelServices"
 // MNetworkVarTypeOverride = "CCSPlayer_CameraServices m_pCameraServices"
 // MNetworkIncludeByName = "m_pCameraServices"
 // MNetworkVarNames = "CCSPlayer_BulletServices * m_pBulletServices"
@@ -79,6 +78,9 @@
 // MNetworkVarNames = "uint32 m_vecPlayerPatchEconIndices"
 // MNetworkVarNames = "Color m_GunGameImmunityColor"
 // MNetworkVarNames = "PredictedDamageTag_t m_PredictedDamageTags"
+// MNetworkVarNames = "GameTime_t m_fImmuneToGunGameDamageTime"
+// MNetworkVarNames = "bool m_bGunGameImmunity"
+// MNetworkVarNames = "float m_fMolotovDamageTime"
 class CCSPlayerPawn : public CCSPlayerPawnBase
 {
 	// MNetworkEnable
@@ -284,4 +286,12 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	CUtlVectorEmbeddedNetworkVar< PredictedDamageTag_t > m_PredictedDamageTags;
 	int32 m_nHighestAppliedDamageTagTick;
+	bool m_bCommittingSuicideOnTeamChange;
+	bool m_wasNotKilledNaturally;
+	// MNetworkEnable
+	GameTime_t m_fImmuneToGunGameDamageTime;
+	// MNetworkEnable
+	bool m_bGunGameImmunity;
+	// MNetworkEnable
+	float32 m_fMolotovDamageTime;
 };

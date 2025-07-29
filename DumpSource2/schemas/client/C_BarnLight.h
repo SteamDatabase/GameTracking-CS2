@@ -7,6 +7,8 @@
 // MNetworkVarNames = "float m_flBrightnessScale"
 // MNetworkVarNames = "int m_nDirectLight"
 // MNetworkVarNames = "int m_nBakedShadowIndex"
+// MNetworkVarNames = "int32 m_nLightPathUniqueId"
+// MNetworkVarNames = "int32 m_nLightMapUniqueId"
 // MNetworkVarNames = "int m_nLuminaireShape"
 // MNetworkVarNames = "float m_flLuminaireSize"
 // MNetworkVarNames = "float m_flLuminaireAnisotropy"
@@ -30,6 +32,7 @@
 // MNetworkVarNames = "int m_nShadowMapSize"
 // MNetworkVarNames = "int m_nShadowPriority"
 // MNetworkVarNames = "bool m_bContactShadow"
+// MNetworkVarNames = "bool m_bForceShadowsEnabled"
 // MNetworkVarNames = "int m_nBounceLight"
 // MNetworkVarNames = "float m_flBounceScale"
 // MNetworkVarNames = "float m_flMinRoughness"
@@ -96,6 +99,12 @@ class C_BarnLight : public C_BaseModelEntity
 	// MNetworkEnable
 	// MNetworkChangeCallback = "RenderingChanged"
 	int32 m_nBakedShadowIndex;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "RenderingChanged"
+	int32 m_nLightPathUniqueId;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "RenderingChanged"
+	int32 m_nLightMapUniqueId;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "RenderingChanged"
 	int32 m_nLuminaireShape;
@@ -166,6 +175,9 @@ class C_BarnLight : public C_BaseModelEntity
 	// MNetworkEnable
 	// MNetworkChangeCallback = "RenderingChanged"
 	bool m_bContactShadow;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "RenderingChanged"
+	bool m_bForceShadowsEnabled;
 	// MNetworkEnable
 	int32 m_nBounceLight;
 	// MNetworkEnable

@@ -9,7 +9,6 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 {
 	float32 m_flStepSoundTime;
 	// MNetworkEnable
-	// MNetworkUserGroup = "LocalPlayerExclusive"
 	// MNetworkBitCount = 17
 	// MNetworkMinValue = -4096.000000
 	// MNetworkMaxValue = 4096.000000

@@ -5,4 +5,6 @@ class C_INIT_DistanceToNeighborCull : public CParticleFunctionInitializer
 	CPerParticleFloatInput m_flDistance;
 	// MPropertyFriendlyName = "include particle radius"
 	bool m_bIncludeRadii;
+	// MPropertyFriendlyName = "lifespan overlap percentage"
+	CPerParticleFloatInput m_flLifespanOverlap;
 };

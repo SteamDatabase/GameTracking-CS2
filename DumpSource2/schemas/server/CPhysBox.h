@@ -3,10 +3,11 @@ class CPhysBox : public CBreakable
 	int32 m_damageType;
 	int32 m_damageToEnableMotion;
 	float32 m_flForceToEnableMotion;
-	QAngle m_angPreferredCarryAngles;
+	Vector m_vHoverPosePosition;
+	QAngle m_angHoverPoseAngles;
 	bool m_bNotSolidToWorld;
 	bool m_bEnableUseOutput;
-	int32 m_iExploitableByPlayer;
+	HoverPoseFlags_t m_nHoverPoseFlags;
 	float32 m_flTouchOutputPerEntityDelay;
 	CEntityIOOutput m_OnDamaged;
 	CEntityIOOutput m_OnAwakened;

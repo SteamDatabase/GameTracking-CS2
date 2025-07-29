@@ -1,6 +1,7 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CBasePlayerVData : public CEntitySubclassVDataBase
 {
+	// MPropertyProvidesEditContextString = "ToolEditContext_ID_VMDL"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sModelName;
 	CSkillFloat m_flHeadDamageMultiplier;
 	CSkillFloat m_flChestDamageMultiplier;

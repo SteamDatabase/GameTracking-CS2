@@ -1,4 +1,3 @@
-// MNetworkVarNames = "bool m_bEnabled"
 // MNetworkVarNames = "float32 m_MaxWeight"
 // MNetworkVarNames = "float32 m_FadeDuration"
 // MNetworkVarNames = "float32 m_Weight"
@@ -6,12 +5,9 @@
 class CColorCorrectionVolume : public CBaseTrigger
 {
 	// MNetworkEnable
-	bool m_bEnabled;
-	// MNetworkEnable
 	float32 m_MaxWeight;
 	// MNetworkEnable
 	float32 m_FadeDuration;
-	bool m_bStartDisabled;
 	// MNetworkEnable
 	float32 m_Weight;
 	// MNetworkEnable

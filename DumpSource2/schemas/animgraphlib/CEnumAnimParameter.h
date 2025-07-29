@@ -1,3 +1,4 @@
+// M_LEGACY_OptInToSchemaPropertyDomain
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Enum Parameter"
 class CEnumAnimParameter : public CConcreteAnimParameter
@@ -7,6 +8,6 @@ class CEnumAnimParameter : public CConcreteAnimParameter
 	// MPropertyFriendlyName = "Values"
 	// MPropertyAttrChangeCallback (UNKNOWN FOR PARSER)
 	CUtlVector< CUtlString > m_enumOptions;
-	// MPropertyHideField
+	// MPropertySuppressField
 	CUtlVector< uint64 > m_vecEnumReferenced;
 };

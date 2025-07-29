@@ -17,4 +17,7 @@ class C_OP_InstantaneousEmitter : public CParticleFunctionEmitter
 	int32 m_nMaxEmittedPerFrame;
 	// MPropertyFriendlyName = "control point with snapshot data"
 	int32 m_nSnapshotControlPoint;
+	// MPropertyFriendlyName = "snapshot subset"
+	// MPropertySuppressExpr = "m_nSnapshotControlPoint < 0"
+	CUtlString m_strSnapshotSubset;
 };

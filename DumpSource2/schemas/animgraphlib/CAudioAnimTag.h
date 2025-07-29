@@ -1,5 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Audio Tag"
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CAudioAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Sound Event"

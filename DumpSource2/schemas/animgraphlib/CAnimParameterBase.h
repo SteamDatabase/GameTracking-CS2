@@ -1,4 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimParameterBase
 {
 	// MPropertyFriendlyName = "Name"
@@ -12,11 +13,11 @@ class CAnimParameterBase
 	CUtlString m_group;
 	// MPropertyReadOnly
 	AnimParamID m_id;
-	// MPropertyHideField
-	// MPropertyAttrChangeCallback (UNKNOWN FOR PARSER)
+	// MPropertySuppressField
+	// MPropertyAutoRebuildOnChange
 	CUtlString m_componentName;
-	// MPropertyHideField
+	// MPropertySuppressField
 	bool m_bNetworkingRequested;
-	// MPropertyHideField
+	// MPropertySuppressField
 	bool m_bIsReferenced;
 };

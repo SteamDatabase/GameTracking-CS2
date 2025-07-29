@@ -76,7 +76,7 @@ enum DebugOverlayBits_t : uint64_t
 	// MPropertyFriendlyName = "NPC Body Locations"
 	// MPropertyDescription = "show npc body locations"
 	OVERLAY_NPC_BODYLOCATIONS = 67108864,
-	// MPropertyFriendlyName = "NPC View Conde"
+	// MPropertyFriendlyName = "NPC View Cone"
 	// MPropertyDescription = "show npc's viewcone"
 	OVERLAY_NPC_VIEWCONE_BIT = 134217728,
 	// MPropertyFriendlyName = "NPC Kill"
@@ -118,4 +118,7 @@ enum DebugOverlayBits_t : uint64_t
 	// MPropertyFriendlyName = "NPC Ability Ranges"
 	// MPropertyDescription = "draw range indicators for all abilities on the NPC"
 	OVERLAY_NPC_ABILITY_RANGE_DEBUG_BIT = 1099511627776,
+	// MPropertyFriendlyName = "Minimal Text"
+	// MPropertyDescription = "Only draw the base name and subclass, but no other text data"
+	OVERLAY_MINIMAL_TEXT = 2199023255552,
 };

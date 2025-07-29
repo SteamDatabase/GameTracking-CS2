@@ -5,8 +5,7 @@
 // MPulseCellWithCustomDocNode
 class CPulseCell_Inflow_EntOutputHandler : public CPulseCell_Inflow_BaseEntrypoint
 {
-	CUtlSymbolLarge m_SourceEntity;
-	CUtlSymbolLarge m_SourceOutput;
-	CUtlSymbolLarge m_TargetInput;
+	PulseSymbol_t m_SourceEntity;
+	PulseSymbol_t m_SourceOutput;
 	CPulseValueFullType m_ExpectedParamType;
 };

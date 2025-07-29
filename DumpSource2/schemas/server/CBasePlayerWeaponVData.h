@@ -3,6 +3,7 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 {
 	// MPropertyStartGroup = "Visuals"
 	// MPropertyDescription = "Model used on the ground or held by an entity"
+	// MPropertyProvidesEditContextString = "ToolEditContext_ID_VMDL"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_szWorldModel;
 	// MPropertyDescription = "Model used by the tools only to populate comboboxes for things like animgraph parameter pickers"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sToolsOnlyOwnerModelName;
@@ -11,10 +12,17 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	// MPropertyDescription = "Allows flipping the model, regardless of whether it is built left or right handed"
 	bool m_bAllowFlipping;
 	// MPropertyDescription = "Attachment to fire bullets from"
-	// MPropertyAttributeEditor = "VDataModelAttachment( m_szWorldModel )"
 	CAttachmentNameSymbolWithStorage m_sMuzzleAttachment;
 	// MPropertyDescription = "Effect when firing this weapon"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szMuzzleFlashParticle;
+	// MPropertyDescription = "Barrel smoke after firing this weapon"
+	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szBarrelSmokeParticle;
+	// MPropertyDescription = "Barrel smoke shot threshold to create smoke"
+	uint8 m_nMuzzleSmokeShotThreshold;
+	// MPropertyDescription = "Barrel smoke shot timeout"
+	float32 m_flMuzzleSmokeTimeout;
+	// MPropertyDescription = "Barrel smoke decrement rate when not firing"
+	float32 m_flMuzzleSmokeDecrementRate;
 	// MPropertyStartGroup = "Behavior"
 	// MPropertyDescription = "Should both primary and secondary attacks be cooled down together (so cooling down primary attack would cooldown both primary + secondary attacks)?"
 	bool m_bLinkedCooldowns;
@@ -42,6 +50,8 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	int32 m_iDefaultClip2;
 	// MPropertyDescription = "Indicates whether to treat reserve ammo as clips (reloads) instead of raw bullets"
 	bool m_bReserveAmmoAsClips;
+	// MPropertyDescription = "Regardless of ammo position, we'll always use clip1 as where our bullets come from"
+	bool m_bTreatAsSingleClip;
 	// MPropertyStartGroup = "UI"
 	// MPropertyDescription = "This value used to determine this weapon's importance in autoselection"
 	int32 m_iWeight;
@@ -51,6 +61,7 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	// MPropertyFriendlyName = "Safe To Auto-Switch Away From"
 	bool m_bAutoSwitchFrom;
 	RumbleEffect_t m_iRumbleEffect;
+	float32 m_flDropSpeed;
 	// MPropertyFriendlyName = "HUD Bucket"
 	// MPropertyDescription = "Which 'column' to display this weapon in the HUD"
 	int32 m_iSlot;

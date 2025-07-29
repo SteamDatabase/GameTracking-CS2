@@ -12,7 +12,6 @@
 // MNetworkVarNames = "GameTime_t m_flDefuseCountDown"
 // MNetworkVarNames = "bool m_bBombDefused"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_hBombDefuser"
-// MNetworkVarNames = "CHandle< CBaseEntity> m_hControlPanel"
 class CPlantedC4 : public CBaseAnimGraph
 {
 	// MNetworkEnable
@@ -49,8 +48,6 @@ class CPlantedC4 : public CBaseAnimGraph
 	bool m_bBombDefused;
 	// MNetworkEnable
 	CHandle< CCSPlayerPawn > m_hBombDefuser;
-	// MNetworkEnable
-	CHandle< CBaseEntity > m_hControlPanel;
 	int32 m_iProgressBarTime;
 	bool m_bVoiceAlertFired;
 	bool[4] m_bVoiceAlertPlayed;

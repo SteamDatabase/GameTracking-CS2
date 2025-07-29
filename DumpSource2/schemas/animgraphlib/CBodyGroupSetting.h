@@ -1,6 +1,7 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Body Group Setting"
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CBodyGroupSetting
 {
 	// MPropertyFriendlyName = "BodyGroup"

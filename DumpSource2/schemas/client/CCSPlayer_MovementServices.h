@@ -4,6 +4,7 @@
 // MNetworkVarNames = "float m_flDuckSpeed"
 // MNetworkVarNames = "bool m_bDuckOverride"
 // MNetworkVarNames = "bool m_bDesiresDuck"
+// MNetworkVarNames = "float m_flDuckOffset"
 // MNetworkVarNames = "uint32 m_nDuckTimeMsecs"
 // MNetworkVarNames = "uint32 m_nDuckJumpTimeMsecs"
 // MNetworkVarNames = "uint32 m_nJumpTimeMsecs"
@@ -15,6 +16,7 @@
 // MNetworkVarNames = "float m_flOffsetTickCompleteTime"
 // MNetworkVarNames = "float m_flOffsetTickStashedSpeed"
 // MNetworkVarNames = "float m_flStamina"
+// MNetworkVarNames = "bool m_bWasSurfing"
 class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 {
 	// MNetworkEnable
@@ -30,6 +32,7 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	bool m_bDuckOverride;
 	// MNetworkEnable
 	bool m_bDesiresDuck;
+	// MNetworkEnable
 	float32 m_flDuckOffset;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
@@ -48,7 +51,6 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	bool m_duckUntilOnGround;
 	bool m_bHasWalkMovedSinceLastJump;
 	bool m_bInStuckTest;
-	float32[64][2] m_flStuckCheckTime;
 	int32 m_nTraceCount;
 	int32 m_StuckLast;
 	bool m_bSpeedCropped;
@@ -79,4 +81,7 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	float32 m_flMaxJumpHeightLastJump;
 	float32 m_flStaminaAtJumpStart;
 	float32 m_flAccumulatedJumpError;
+	float32 m_flTicksSinceLastSurfingDetected;
+	// MNetworkEnable
+	bool m_bWasSurfing;
 };

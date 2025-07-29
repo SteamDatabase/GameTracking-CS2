@@ -1,0 +1,3 @@
+class C_EnvCombinedLightProbeVolumeAlias_func_combined_light_probe_volume : public C_EnvCombinedLightProbeVolume
+{
+};

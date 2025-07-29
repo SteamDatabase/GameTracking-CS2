@@ -16,10 +16,18 @@ class C_INIT_PositionPlaceOnGround : public CParticleFunctionInitializer
 	bool m_bIncludeWater;
 	// MPropertyFriendlyName = "set normal"
 	bool m_bSetNormal;
+	// MPropertyFriendlyName = "Attribute to Set"
+	// MPropertyAttributeChoiceName = "particlefield_vector"
+	ParticleAttributeIndex_t m_nAttribute;
 	// MPropertyFriendlyName = "set Previous XYZ only"
+	// MPropertySuppressExpr = "m_nAttribute != PARTICLE_ATTRIBUTE_XYZ"
 	bool m_bSetPXYZOnly;
 	// MPropertyFriendlyName = "Trace along particle normal"
 	bool m_bTraceAlongNormal;
+	// MPropertyFriendlyName = "Attribute for Trace Direction"
+	// MPropertyAttributeChoiceName = "particlefield_vector"
+	// MPropertySuppressExpr = "!m_bTraceAlongNormal"
+	ParticleAttributeIndex_t m_nTraceDirectionAttribute;
 	// MPropertyFriendlyName = "Offset only if trace hit"
 	bool m_bOffsetonColOnly;
 	// MPropertyFriendlyName = "offset final position by this fraction of the particle radius"

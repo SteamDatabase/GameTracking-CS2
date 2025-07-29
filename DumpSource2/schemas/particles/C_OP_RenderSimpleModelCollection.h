@@ -19,6 +19,8 @@ class C_OP_RenderSimpleModelCollection : public CParticleFunctionRenderer
 	bool m_bDisableMotionBlur;
 	// MPropertyFriendlyName = "accept decals"
 	bool m_bAcceptsDecals;
+	// MPropertyFriendlyName = "render filter"
+	CPerParticleFloatInput m_fDrawFilter;
 	// MPropertyFriendlyName = "angular velocity attribute (improves motion blur)"
 	// MPropertyAttributeChoiceName = "particlefield_vector"
 	ParticleAttributeIndex_t m_nAngularVelocityField;

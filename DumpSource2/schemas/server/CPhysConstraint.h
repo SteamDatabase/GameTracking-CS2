@@ -9,7 +9,6 @@ class CPhysConstraint : public CLogicalEntity
 	CUtlSymbolLarge m_breakSound;
 	float32 m_forceLimit;
 	float32 m_torqueLimit;
-	uint32 m_teleportTick;
 	float32 m_minTeleportDistance;
 	bool m_bSnapObjectPositions;
 	CEntityIOOutput m_OnBreak;

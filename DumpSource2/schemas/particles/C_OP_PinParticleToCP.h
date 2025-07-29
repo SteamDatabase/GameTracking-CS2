@@ -27,4 +27,7 @@ class C_OP_PinParticleToCP : public CParticleFunctionOperator
 	CParticleCollectionFloatInput m_flBreakValue;
 	// MPropertyFriendlyName = "Interpolation"
 	CPerParticleFloatInput m_flInterpolation;
+	// MPropertyFriendlyName = "Retain Initial Velocity "
+	// MPropertySuppressExpr = "m_nParticleSelection != PARTICLE_SELECTION_LAST"
+	bool m_bRetainInitialVelocity;
 };

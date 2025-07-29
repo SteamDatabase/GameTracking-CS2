@@ -12,4 +12,6 @@ class PostProcessingResource_t
 	int32 m_nColorCorrectionVolumeDim;
 	CUtlBinaryBlock m_colorCorrectionVolumeData;
 	bool m_bHasColorCorrection;
+	bool m_bHasFogScatteringParams;
+	PostProcessingFogScatteringParameters_t m_fogScatteringParams;
 };

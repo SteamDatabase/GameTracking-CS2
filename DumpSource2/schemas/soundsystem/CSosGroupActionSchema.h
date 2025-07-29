@@ -1,5 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CSosGroupActionSchema
 {
 	// MPropertyFriendlyName = "Name"

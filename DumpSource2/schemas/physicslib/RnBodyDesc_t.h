@@ -10,6 +10,7 @@ class RnBodyDesc_t
 	Vector[3] m_LocalInertiaInv;
 	float32 m_flMassInv;
 	float32 m_flGameMass;
+	float32 m_flMassScaleInv;
 	float32 m_flInertiaScaleInv;
 	float32 m_flLinearDamping;
 	float32 m_flAngularDamping;
@@ -33,7 +34,8 @@ class RnBodyDesc_t
 	bool m_bIsContinuousEnabled;
 	bool m_bDragEnabled;
 	bool m_bBuoyancyDragEnabled;
-	bool m_bGravityDisabled;
+	Vector m_vGravity;
 	bool m_bSpeculativeEnabled;
 	bool m_bHasShadowController;
+	DynamicContinuousContactBehavior_t m_nDynamicContinuousContactBehavior;
 };

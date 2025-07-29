@@ -45,7 +45,7 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	// MParticleRequireDefaultArrayEntry
 	// MPropertyAutoExpandSelf
 	// MPropertySortPriority = 600
-	CUtlVector< TextureGroup_t > m_vecTexturesInput;
+	CUtlLeanVector< TextureGroup_t > m_vecTexturesInput;
 	// MPropertyStartGroup = "Animation"
 	// MPropertyFriendlyName = "animation rate"
 	// MPropertyAttributeRange = "0 5"
@@ -94,7 +94,7 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	bool m_bGammaCorrectVertexColors;
 	// MPropertyFriendlyName = "Saturate color pre alphablend"
 	// MPropertySortPriority = 300
-	// MPropertySuppressExpr = "mod!=dota"
+	// MPropertySuppressExpr = "mod != dota && mod != hlx"
 	bool m_bSaturateColorPreAlphaBlend;
 	// MPropertyFriendlyName = "add self amount over alphablend"
 	// MPropertySortPriority = 300
@@ -214,9 +214,13 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	// MPropertyFriendlyName = "particle feathering farthest distance to surface"
 	// MPropertySortPriority = 900
 	CParticleCollectionRendererFloatInput m_flFeatheringMaxDist;
-	// MPropertyFriendlyName = "particle feathering filter"
+	// MPropertyFriendlyName = "particle feathering alpha filter"
 	// MPropertySortPriority = 900
 	CParticleCollectionRendererFloatInput m_flFeatheringFilter;
+	// MPropertyFriendlyName = "particle feathering depthmap layer filter"
+	// MPropertySortPriority = 900
+	// MPropertySuppressExpr = "mod != hlx"
+	CParticleCollectionRendererFloatInput m_flFeatheringDepthMapFilter;
 	// MPropertyFriendlyName = "depth comparison bias"
 	// MPropertySortPriority = 900
 	CParticleCollectionRendererFloatInput m_flDepthBias;

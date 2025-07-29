@@ -1,6 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MVDataNodeType = 1
-// MFgdFromSchemaEditablePolymorphicThisClass
+// MPropertyPolymorphicClass
 // MPropertyFriendlyName = "Analysis Container"
 // MPropertyDescription = "Does Not Play Sound, member of CVoiceContainerDefaultDefault"
 class CVoiceContainerAnalysisBase

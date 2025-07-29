@@ -13,10 +13,4 @@ class CPhysSurfacePropertiesPhysics
 	float32 m_softContactFrequency;
 	// MKV3TransferName = "softcontactdampingratio"
 	float32 m_softContactDampingRatio;
-	// MKV3TransferName = "wheeldrag"
-	float32 m_wheelDrag;
-	// MKV3TransferName = "heatconductivity"
-	float32 m_heatConductivity;
-	// MKV3TransferName = "flashpoint"
-	float32 m_flashpoint;
 };

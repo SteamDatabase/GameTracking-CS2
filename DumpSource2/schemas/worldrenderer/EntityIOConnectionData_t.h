@@ -8,4 +8,5 @@ class EntityIOConnectionData_t
 	CUtlString m_overrideParam;
 	float32 m_flDelay;
 	int32 m_nTimesToFire;
+	KeyValues3 m_paramMap;
 };

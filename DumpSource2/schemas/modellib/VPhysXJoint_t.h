@@ -8,6 +8,8 @@ class VPhysXJoint_t
 	CTransform m_Frame1;
 	CTransform m_Frame2;
 	bool m_bEnableCollision;
+	bool m_bIsLinearConstraintDisabled;
+	bool m_bIsAngularConstraintDisabled;
 	bool m_bEnableLinearLimit;
 	VPhysXRange_t m_LinearLimit;
 	bool m_bEnableLinearMotor;
@@ -28,4 +30,5 @@ class VPhysXJoint_t
 	float32 m_flElasticity;
 	float32 m_flElasticDamping;
 	float32 m_flPlasticity;
+	CUtlString m_Tag;
 };

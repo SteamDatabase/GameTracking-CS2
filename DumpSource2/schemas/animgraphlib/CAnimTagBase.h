@@ -1,4 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimTagBase
 {
 	// MPropertyFriendlyName = "Name"
@@ -8,10 +9,10 @@ class CAnimTagBase
 	// MPropertyAttributeEditor = "TextBlock()"
 	// MPropertySortPriority = -100
 	CUtlString m_sComment;
-	// MPropertyHideField
+	// MPropertySuppressField
 	CGlobalSymbol m_group;
-	// MPropertyHideField
+	// MPropertySuppressField
 	AnimTagID m_tagID;
-	// MPropertyHideField
+	// MPropertySuppressField
 	bool m_bIsReferenced;
 };

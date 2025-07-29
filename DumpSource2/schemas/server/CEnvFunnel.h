@@ -1,3 +1,0 @@
-class CEnvFunnel : public CBaseEntity
-{
-};

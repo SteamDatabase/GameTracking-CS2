@@ -9,9 +9,9 @@
 // MNetworkVarNames = "float32 m_flMaxGustDelay"
 // MNetworkVarNames = "float32 m_flGustDuration"
 // MNetworkVarNames = "uint16 m_iGustDirChange"
-// MNetworkVarNames = "Vector m_location"
 // MNetworkVarNames = "uint16 m_iInitialWindDir"
 // MNetworkVarNames = "float32 m_flInitialWindSpeed"
+// MNetworkVarNames = "Vector m_location"
 class C_EnvWindShared
 {
 	// MNetworkEnable
@@ -37,25 +37,11 @@ class C_EnvWindShared
 	// MNetworkEnable
 	uint16 m_iGustDirChange;
 	// MNetworkEnable
-	// MNetworkEncoder = "coord"
-	Vector m_location;
-	int32 m_iszGustSound;
-	int32 m_iWindDir;
-	float32 m_flWindSpeed;
-	Vector m_currentWindVector;
-	Vector m_CurrentSwayVector;
-	Vector m_PrevSwayVector;
-	// MNetworkEnable
 	uint16 m_iInitialWindDir;
 	// MNetworkEnable
 	float32 m_flInitialWindSpeed;
-	GameTime_t m_flVariationTime;
-	GameTime_t m_flSwayTime;
-	GameTime_t m_flSimTime;
-	GameTime_t m_flSwitchTime;
-	float32 m_flAveWindSpeed;
-	bool m_bGusting;
-	float32 m_flWindAngleVariation;
-	float32 m_flWindSpeedVariation;
+	// MNetworkEnable
+	// MNetworkEncoder = "coord"
+	Vector m_location;
 	CHandle< C_BaseEntity > m_hEntOwner;
 };

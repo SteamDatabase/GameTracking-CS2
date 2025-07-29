@@ -13,4 +13,7 @@ class C_OP_SetChildControlPoints : public CParticleFunctionOperator
 	bool m_bReverse;
 	// MPropertyFriendlyName = "set orientation"
 	bool m_bSetOrientation;
+	// MPropertyFriendlyName = "orientation set method"
+	// MPropertySuppressExpr = "m_bSetOrientation == false"
+	ParticleOrientationType_t m_nOrientation;
 };

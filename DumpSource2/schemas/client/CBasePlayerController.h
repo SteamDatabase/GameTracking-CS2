@@ -13,11 +13,11 @@
 // MNetworkVarNames = "PlayerConnectedState m_iConnected"
 // MNetworkVarNames = "char m_iszPlayerName"
 // MNetworkVarNames = "uint64 m_steamID"
+// MNetworkVarNames = "bool m_bNoClipEnabled"
 // MNetworkVarNames = "uint32 m_iDesiredFOV"
 // MNetworkReplayCompatField = "m_skeletonInstance\.m_vecOrigin\..*|"
 class CBasePlayerController : public C_BaseEntity
 {
-	int32 m_nFinalPredictedTick;
 	C_CommandContext m_CommandContext;
 	uint64 m_nInButtonsWhichAreToggles;
 	// MNetworkEnable
@@ -45,6 +45,9 @@ class CBasePlayerController : public C_BaseEntity
 	// MNetworkChangeCallback = "OnSteamIDChanged"
 	uint64 m_steamID;
 	bool m_bIsLocalPlayerController;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnNoClipEnableChanged"
+	bool m_bNoClipEnabled;
 	// MNetworkEnable
 	uint32 m_iDesiredFOV;
 };

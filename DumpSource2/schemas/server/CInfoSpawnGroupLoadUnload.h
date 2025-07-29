@@ -9,6 +9,8 @@ class CInfoSpawnGroupLoadUnload : public CLogicalEntity
 	CUtlSymbolLarge m_iszLandmarkName;
 	CUtlString m_sFixedSpawnGroupName;
 	float32 m_flTimeoutInterval;
-	bool m_bStreamingStarted;
+	bool m_bAutoActivate;
 	bool m_bUnloadingStarted;
+	bool m_bQueueActiveSpawnGroupChange;
+	bool m_bQueueFinishLoading;
 };

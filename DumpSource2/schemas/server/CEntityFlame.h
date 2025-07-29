@@ -12,7 +12,6 @@ class CEntityFlame : public CBaseEntity
 	float32 m_flHitboxFireScale;
 	GameTime_t m_flLifetime;
 	CHandle< CBaseEntity > m_hAttacker;
-	int32 m_iDangerSound;
 	float32 m_flDirectDamagePerSecond;
 	int32 m_iCustomDamageType;
 };

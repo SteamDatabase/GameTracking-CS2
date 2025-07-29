@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MVDataRoot
 // MVDataNodeType = 1
-// MFgdFromSchemaEditablePolymorphicThisClass
+// MPropertyPolymorphicClass
 // MVDataFileExtension = "vsnd"
 // MPropertyFriendlyName = "VSND Container"
 // MPropertyDescription = "Voice Container Base"
