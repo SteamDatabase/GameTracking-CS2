@@ -65,6 +65,17 @@ if [ "$UNAME" == "Linux" ]; then
 	export ENABLE_PATHMATCH=1
 fi
 
+# There is Wayland support in SDL but a recent (7/30/2025) attempt at
+# allowing SDL to default to Wayland caused a number of customer issues so
+# keep the default at X11 for now. Don't override any user setting so
+# people can easily use Wayland if they want.
+if [ "$UNAME" == "Linux" ]; then
+	if [ -z "$SDL_VIDEO_DRIVER" ]; then
+		export SDL_VIDEO_DRIVER=x11
+	fi
+fi
+
+
 # Do the following for strace:
 # 	GAME_DEBUGGER="strace -f -o strace.log"
 
