@@ -8,4 +8,6 @@ class CNmSoundEvent : public CNmEvent
 	CUtlString m_attachmentName;
 	CUtlString m_tags;
 	bool m_bIsServerOnly;
+	bool m_bContinuePlayingSoundAtDurationEnd;
+	float32 m_flDurationInterruptionThreshold;
 };
