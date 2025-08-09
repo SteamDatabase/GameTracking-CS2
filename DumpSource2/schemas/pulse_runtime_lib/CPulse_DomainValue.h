@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nType": "INVALID",
+//	"m_Value": "",
+//	"m_RequiredRuntimeType": "PVAL_VOID"
+//}
 class CPulse_DomainValue
 {
 	PulseDomainValueType_t m_nType;

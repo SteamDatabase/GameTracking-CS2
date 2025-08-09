@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nCompositeMaterialMatchFilterType": "MATCH_FILTER_MATERIAL_ATTRIBUTE_EXISTS",
+//	"m_strMatchFilter": "composite_inputs",
+//	"m_strMatchValue": "",
+//	"m_bPassWhenTrue": true
+//}
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
 class CompositeMaterialMatchFilter_t
 {

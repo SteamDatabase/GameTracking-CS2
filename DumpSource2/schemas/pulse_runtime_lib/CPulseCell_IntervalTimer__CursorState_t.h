@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_StartTime": null,
+//	"m_EndTime": null,
+//	"m_flWaitInterval": 0.000000,
+//	"m_flWaitIntervalHigh": 0.000000,
+//	"m_bCompleteOnNextWake": false
+//}
 class CPulseCell_IntervalTimer::CursorState_t
 {
 	GameTime_t m_StartTime;

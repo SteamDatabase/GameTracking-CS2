@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmBlend2DNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_sourceNodeIndices":
+//	[
+//	],
+//	"m_nInputParameterNodeIdx0": -1,
+//	"m_nInputParameterNodeIdx1": -1,
+//	"m_values":
+//	[
+//	],
+//	"m_indices":
+//	[
+//	],
+//	"m_hullIndices":
+//	[
+//	],
+//	"m_bAllowLooping": true
+//}
 class CNmBlend2DNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	CUtlVectorFixedGrowable< int16, 5 > m_sourceNodeIndices;

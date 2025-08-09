@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimGraphModelBinding",
+//	"m_modelName": "",
+//	"m_pSharedData": null
+//}
 class CAnimGraphModelBinding
 {
 	CUtlString m_modelName;

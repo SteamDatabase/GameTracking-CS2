@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sName": "",
+//	"m_sBreakablePieceName": "",
+//	"m_sBodyGroupName": "",
+//	"m_nBodyGroupValue": -1,
+//	"m_nHealth": 1,
+//	"m_nDamagePassthroughType": "Normal",
+//	"m_nDestructionDeathBehavior": "eDoNotKill",
+//	"m_sCustomDeathHandshake": "",
+//	"m_bShouldDestroyOnDeath": false,
+//	"m_flDeathDestroyTime":
+//	[
+//		0.100000,
+//		1.000000
+//	]
+//}
 class CDestructiblePartsSystemData_DamageLevel
 {
 	// MPropertyDescription = "Name for this damage level."

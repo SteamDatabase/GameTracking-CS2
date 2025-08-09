@@ -1,4 +1,26 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_PlaySequence",
+//	"m_nEditorNodeID": -1,
+//	"m_SequenceName": "",
+//	"m_PulseAnimEvents":
+//	{
+//		"m_Outflows":
+//		[
+//		]
+//	},
+//	"m_OnFinished":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_OnCanceled":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	}
+//}
 // MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

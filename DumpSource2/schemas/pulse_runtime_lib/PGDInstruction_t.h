@@ -1,4 +1,17 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nCode": "INVALID",
+//	"m_nVar": -1,
+//	"m_nReg0": -1,
+//	"m_nReg1": -1,
+//	"m_nReg2": -1,
+//	"m_nInvokeBindingIndex": -1,
+//	"m_nChunk": -1,
+//	"m_nDestInstruction": 0,
+//	"m_nCallInfoIndex": -1,
+//	"m_nConstIdx": -1,
+//	"m_nDomainValueIdx": -1,
+//	"m_nBlackboardReferenceIdx": -1
+//}
 class PGDInstruction_t
 {
 	PulseInstructionCode_t m_nCode;

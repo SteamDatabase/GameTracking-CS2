@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_connections":
+//	[
+//	],
+//	"m_keyValuesData": "[BINARY BLOB]"
+//}
 class EntityKeyValueData_t
 {
 	CUtlVector< EntityIOConnectionData_t > m_connections;

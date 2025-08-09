@@ -1,4 +1,52 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nBaseClusterCount": 0,
+//	"m_nPVSBytesPerCluster": 0,
+//	"m_vMinBounds":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vMaxBounds":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_flGridSize": 0.000000,
+//	"m_nSkyVisibilityCluster": 0,
+//	"m_nSunVisibilityCluster": 0,
+//	"m_NodeBlock":
+//	{
+//		"m_nOffset": 32736,
+//		"m_nElementCount": 2
+//	},
+//	"m_RegionBlock":
+//	{
+//		"m_nOffset": 0,
+//		"m_nElementCount": 2172650104
+//	},
+//	"m_EnclosedClusterListBlock":
+//	{
+//		"m_nOffset": 22019,
+//		"m_nElementCount": 3
+//	},
+//	"m_EnclosedClustersBlock":
+//	{
+//		"m_nOffset": 0,
+//		"m_nElementCount": 0
+//	},
+//	"m_MasksBlock":
+//	{
+//		"m_nOffset": 0,
+//		"m_nElementCount": 0
+//	},
+//	"m_nVisBlocks":
+//	{
+//		"m_nOffset": 0,
+//		"m_nElementCount": 0
+//	}
+//}
 class CVoxelVisibility
 {
 	uint32 m_nBaseClusterCount;

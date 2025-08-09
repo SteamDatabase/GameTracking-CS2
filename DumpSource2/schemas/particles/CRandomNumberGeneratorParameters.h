@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bDistributeEvenly": false,
+//	"m_nSeed": -1
+//}
 class CRandomNumberGeneratorParameters
 {
 	// MPropertyFriendlyName = "Distribute evenly"

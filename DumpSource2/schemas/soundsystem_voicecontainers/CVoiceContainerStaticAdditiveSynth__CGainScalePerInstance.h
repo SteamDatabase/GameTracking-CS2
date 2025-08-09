@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flMinVolume": 1.000000,
+//	"m_nInstancesAtMinVolume": 1,
+//	"m_flMaxVolume": 1.000000,
+//	"m_nInstancesAtMaxVolume": 1
+//}
 class CVoiceContainerStaticAdditiveSynth::CGainScalePerInstance
 {
 	// MPropertyFriendlyName = "Quietest Volume"

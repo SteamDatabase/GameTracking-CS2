@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CBasePlayerVData",
+//	"m_sModelName": "",
+//	"m_flHeadDamageMultiplier": 3.000000,
+//	"m_flChestDamageMultiplier": 1.000000,
+//	"m_flStomachDamageMultiplier": 1.000000,
+//	"m_flArmDamageMultiplier": 1.000000,
+//	"m_flLegDamageMultiplier": 1.000000,
+//	"m_flHoldBreathTime": 15.000000,
+//	"m_flDrowningDamageInterval": 1.000000,
+//	"m_nDrowningDamageInitial": 10,
+//	"m_nDrowningDamageMax": 10,
+//	"m_nWaterSpeed": 100,
+//	"m_flUseRange": 55.000000,
+//	"m_flUseAngleTolerance": 45.000000,
+//	"m_flCrouchTime": 0.400000
+//}
 class CBasePlayerVData : public CEntitySubclassVDataBase
 {
 	// MPropertyProvidesEditContextString = "ToolEditContext_ID_VMDL"

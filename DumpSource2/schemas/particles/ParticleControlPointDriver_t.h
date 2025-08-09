@@ -1,4 +1,21 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_iControlPoint": 0,
+//	"m_iAttachType": "PATTACH_ABSORIGIN_FOLLOW",
+//	"m_attachmentName": "",
+//	"m_vecOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_angOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_entityName": ""
+//}
 class ParticleControlPointDriver_t
 {
 	int32 m_iControlPoint;

@@ -1,4 +1,43 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_materialName": "",
+//	"m_shaderName": "",
+//	"m_intParams":
+//	[
+//	],
+//	"m_floatParams":
+//	[
+//	],
+//	"m_vectorParams":
+//	[
+//	],
+//	"m_textureParams":
+//	[
+//	],
+//	"m_dynamicParams":
+//	[
+//	],
+//	"m_dynamicTextureParams":
+//	[
+//	],
+//	"m_intAttributes":
+//	[
+//	],
+//	"m_floatAttributes":
+//	[
+//	],
+//	"m_vectorAttributes":
+//	[
+//	],
+//	"m_textureAttributes":
+//	[
+//	],
+//	"m_stringAttributes":
+//	[
+//	],
+//	"m_renderAttributesUsed":
+//	[
+//	]
+//}
 class MaterialResourceData_t
 {
 	CUtlString m_materialName;

@@ -1,4 +1,27 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"angle":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"fov": 45.000000,
+//	"znear": 4.000000,
+//	"zfar": 1000.000000,
+//	"target":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"target_nudge":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"orbit_distance": 0.000000
+//}
 class inv_image_camera_t
 {
 	// MPropertyFriendlyName = "Angle"

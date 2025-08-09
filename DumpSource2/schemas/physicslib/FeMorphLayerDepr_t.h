@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Name": "",
+//	"m_nNameHash": 0,
+//	"m_Nodes":
+//	[
+//	],
+//	"m_InitPos":
+//	[
+//	],
+//	"m_Gravity":
+//	[
+//	],
+//	"m_GoalStrength":
+//	[
+//	],
+//	"m_GoalDamping":
+//	[
+//	],
+//	"m_nFlags": 0
+//}
 class FeMorphLayerDepr_t
 {
 	CUtlString m_Name;

@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CSosGroupActionSoundeventMinMaxValuesSchema",
+//	"m_name": "None",
+//	"m_actionType": "SOS_ACTION_SOUNDEVENT_MIN_MAX_VALUES",
+//	"m_actionInstanceType": "SOS_ACTION_SOUNDEVENT_MIN_MAX_VALUES",
+//	"m_strQueryPublicFieldName": "min_max_query",
+//	"m_strDelayPublicFieldName": "delay",
+//	"m_bExcludeStoppedSounds": true,
+//	"m_bExcludeDelayedSounds": true,
+//	"m_bExcludeSoundsBelowThreshold": false,
+//	"m_flExcludeSoundsMinThresholdValue": -1.000000,
+//	"m_bExcludSoundsAboveThreshold": false,
+//	"m_flExcludeSoundsMaxThresholdValue": -1.000000,
+//	"m_strMinValueName": "min",
+//	"m_strMaxValueName": "max"
+//}
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CSosGroupActionSoundeventMinMaxValuesSchema : public CSosGroupActionSchema
 {

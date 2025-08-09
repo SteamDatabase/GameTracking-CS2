@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nStateNodeIdx": -1,
+//	"m_nEntryConditionNodeIdx": -1,
+//	"m_transitionDefinitions":
+//	[
+//	]
+//}
 class CNmStateMachineNode::StateDefinition_t
 {
 	int16 m_nStateNodeIdx;

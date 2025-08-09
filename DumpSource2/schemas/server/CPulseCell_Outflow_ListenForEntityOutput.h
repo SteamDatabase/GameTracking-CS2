@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_Outflow_ListenForEntityOutput",
+//	"m_nEditorNodeID": -1,
+//	"m_OnFired":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_OnCanceled":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_strEntityOutput": "",
+//	"m_strEntityOutputParam": "",
+//	"m_bListenUntilCanceled": false
+//}
 // MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

@@ -1,4 +1,17 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmBoneMaskSelectorNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_defaultMaskNodeIdx": -1,
+//	"m_parameterValueNodeIdx": -1,
+//	"m_switchDynamically": false,
+//	"m_maskNodeIndices":
+//	[
+//	],
+//	"m_parameterValues":
+//	[
+//	],
+//	"m_flBlendTimeSeconds": 0.100000
+//}
 class CNmBoneMaskSelectorNode::CDefinition : public CNmBoneMaskValueNode::CDefinition
 {
 	int16 m_defaultMaskNodeIdx;

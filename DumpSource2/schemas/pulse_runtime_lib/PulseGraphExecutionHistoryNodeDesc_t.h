@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"strCellDesc": "",
+//	"strBindingName": ""
+//}
 class PulseGraphExecutionHistoryNodeDesc_t
 {
 	CBufferString strCellDesc;

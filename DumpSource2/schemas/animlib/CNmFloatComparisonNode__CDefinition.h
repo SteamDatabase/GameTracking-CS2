@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmFloatComparisonNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_nInputValueNodeIdx": -1,
+//	"m_nComparandValueNodeIdx": -1,
+//	"m_comparison": "GreaterThanEqual",
+//	"m_flEpsilon": 0.000000,
+//	"m_flComparisonValue": 0.000000
+//}
 class CNmFloatComparisonNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;

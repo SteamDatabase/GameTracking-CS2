@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_code": "",
+//	"m_paramsModified":
+//	[
+//	],
+//	"m_proxyReadParams":
+//	[
+//	],
+//	"m_proxyWriteParams":
+//	[
+//	],
+//	"m_eScriptType": "ANIMSCRIPT_TYPE_INVALID"
+//}
 class ScriptInfo_t
 {
 	CUtlString m_code;

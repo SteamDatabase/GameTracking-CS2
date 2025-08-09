@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nSequence": 0,
+//	"m_flRelativeWeight": 1.000000
+//}
 class SequenceWeightedList_t
 {
 	// MPropertyFriendlyName = "sequence"

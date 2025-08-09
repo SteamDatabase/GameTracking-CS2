@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Planes": "[BINARY BLOB]",
+//	"m_Nodes": "[BINARY BLOB]"
+//}
 class CRegionSVM
 {
 	CUtlVector< RnPlane_t > m_Planes;

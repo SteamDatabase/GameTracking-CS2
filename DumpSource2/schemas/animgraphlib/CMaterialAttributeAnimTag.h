@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CMaterialAttributeAnimTag",
+//	"m_name": "Unnamed Tag",
+//	"m_sComment": "",
+//	"m_group": "",
+//	"m_tagID":
+//	{
+//		"m_id": 4294967295
+//	},
+//	"m_bIsReferenced": false,
+//	"m_AttributeName": "",
+//	"m_AttributeType": "MATERIAL_ATTRIBUTE_TAG_VALUE",
+//	"m_flValue": 0.000000,
+//	"m_Color":
+//	[
+//		255,
+//		255,
+//		255
+//	]
+//}
 // MPropertyFriendlyName = "Material Attribute Tag"
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CMaterialAttributeAnimTag : public CAnimTagBase

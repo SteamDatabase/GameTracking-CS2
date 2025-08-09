@@ -1,5 +1,21 @@
 // MVDataRoot
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bAgentEnabled": true,
+//	"m_agentRadius": 15.000000,
+//	"m_agentHeight": 71.000000,
+//	"m_agentShortHeightEnabled": false,
+//	"m_agentShortHeight": 35.500000,
+//	"m_agentCrawlEnabled": false,
+//	"m_agentCrawlHeight": 17.500000,
+//	"m_agentMaxClimb": 17.500000,
+//	"m_agentMaxSlope": 50,
+//	"m_agentMaxJumpDownDist": 240.000000,
+//	"m_agentMaxJumpHorizDistBase": 64.000000,
+//	"m_agentMaxJumpUpDist": 0.000000,
+//	"m_agentBorderErosion": -1,
+//	"m_flowMapGenerationEnabled": false,
+//	"m_flowMapNodeMaxRadius": 400.000000
+//}
 class CNavHullVData
 {
 	// MPropertyFriendlyName = "Enabled"

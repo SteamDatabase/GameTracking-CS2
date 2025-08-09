@@ -1,4 +1,40 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flUvDensity": 0.000000,
+//	"m_vTintColor":
+//	[
+//		1.000000,
+//		1.000000,
+//		1.000000
+//	],
+//	"m_flAlpha": 1.000000,
+//	"m_nNumMeshlets": 0,
+//	"m_nFirstMeshlet": 0,
+//	"m_nAppliedIndexOffset": 0,
+//	"m_nDepthVertexBufferIndex": 255,
+//	"m_nMeshletPackedIVBIndex": 255,
+//	"m_rigidMeshParts":
+//	[
+//	],
+//	"m_nPrimitiveType": "RENDER_PRIM_TRIANGLES",
+//	"m_nBaseVertex": 0,
+//	"m_nVertexCount": 0,
+//	"m_nStartIndex": 0,
+//	"m_nIndexCount": 0,
+//	"m_indexBuffer":
+//	{
+//		"m_hBuffer": 0,
+//		"m_nBindOffsetBytes": 0
+//	},
+//	"m_meshletPackedIVB":
+//	{
+//		"m_hBuffer": 0,
+//		"m_nBindOffsetBytes": 0
+//	},
+//	"m_material": "",
+//	"m_vertexBuffers":
+//	[
+//	]
+//}
 class CMaterialDrawDescriptor
 {
 	float32 m_flUvDensity;

@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nNode": 0,
+//	"nWeight": 0
+//}
 class FeWeightedNode_t
 {
 	uint16 nNode;

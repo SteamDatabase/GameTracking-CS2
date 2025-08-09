@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nBandCount": 2014718599,
+//	"m_flBandwidth": -nan,
+//	"m_fldBModGain": 17202030347499006847920673652736.000000,
+//	"m_flFreqRangeStart": 0.000000,
+//	"m_flFreqRangeEnd": 0.000000,
+//	"m_fldBUnvoicedGain": 0.000000,
+//	"m_flAttackTimeMS": 0.000000,
+//	"m_flReleaseTimeMS": 0.000000,
+//	"m_nDebugBand": 0,
+//	"m_bPeakMode": false
+//}
 class VMixVocoderDesc_t
 {
 	int32 m_nBandCount;

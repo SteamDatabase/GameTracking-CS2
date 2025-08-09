@@ -1,4 +1,24 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimParameterManagerUpdater",
+//	"m_parameters":
+//	[
+//	],
+//	"m_idToIndexMap":
+//	[
+//	],
+//	"m_nameToIndexMap":
+//	{
+//	},
+//	"m_indexToHandle":
+//	[
+//	],
+//	"m_autoResetParams":
+//	[
+//	],
+//	"m_autoResetMap":
+//	[
+//	]
+//}
 class CAnimParameterManagerUpdater
 {
 	CUtlVector< CSmartPtr< CAnimParameterBase > > m_parameters;

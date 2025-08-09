@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Name": "",
+//	"m_Description": "",
+//	"m_Args":
+//	[
+//	]
+//}
 class CPulse_PublicOutput
 {
 	PulseSymbol_t m_Name;

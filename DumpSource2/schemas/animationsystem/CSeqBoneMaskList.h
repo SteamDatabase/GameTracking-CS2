@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sName": "",
+//	"m_nLocalBoneArray":
+//	[
+//	],
+//	"m_flBoneWeightArray":
+//	[
+//	],
+//	"m_flDefaultMorphCtrlWeight": 1.000000,
+//	"m_morphCtrlWeightArray":
+//	[
+//	]
+//}
 class CSeqBoneMaskList
 {
 	CBufferString m_sName;

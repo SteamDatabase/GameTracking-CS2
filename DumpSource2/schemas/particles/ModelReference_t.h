@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_model": "",
+//	"m_flRelativeProbabilityOfSpawn": 1.000000
+//}
 class ModelReference_t
 {
 	// MPropertyFriendlyName = "model"

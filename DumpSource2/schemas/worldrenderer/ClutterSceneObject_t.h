@@ -1,4 +1,41 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Bounds":
+//	{
+//		"m_vMinBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vMaxBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_flags": "OBJECT_TYPE_NONE",
+//	"m_nLayer": 0,
+//	"m_instancePositions":
+//	[
+//	],
+//	"m_instanceScales":
+//	[
+//	],
+//	"m_instanceTintSrgb":
+//	[
+//	],
+//	"m_tiles":
+//	[
+//	],
+//	"m_renderableModel": "",
+//	"m_materialGroup": "",
+//	"m_flBeginCullSize": 0.020000,
+//	"m_flEndCullSize": 0.012500,
+//	"m_InstanceOrientations32":
+//	[
+//	]
+//}
 class ClutterSceneObject_t
 {
 	AABB_t m_Bounds;

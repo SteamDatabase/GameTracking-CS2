@@ -1,4 +1,44 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimationGraphVisualizerPrimitiveBase",
+//	"m_Type": "ANIMATIONGRAPHVISUALIZERPRIMITIVETYPE_Text",
+//	"m_OwningAnimNodePaths":
+//	[
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		},
+//		{
+//			"m_id": 4294967295
+//		}
+//	],
+//	"m_nOwningAnimNodePathCount": 0
+//}
 class CAnimationGraphVisualizerPrimitiveBase
 {
 	CAnimationGraphVisualizerPrimitiveType m_Type;

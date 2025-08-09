@@ -1,4 +1,30 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimSkeleton",
+//	"m_localSpaceTransforms":
+//	[
+//	],
+//	"m_modelSpaceTransforms":
+//	[
+//	],
+//	"m_boneNames":
+//	[
+//	],
+//	"m_children":
+//	[
+//	],
+//	"m_parents":
+//	[
+//	],
+//	"m_feet":
+//	[
+//	],
+//	"m_morphNames":
+//	[
+//	],
+//	"m_lodBoneCounts":
+//	[
+//	]
+//}
 class CAnimSkeleton
 {
 	CUtlVector< CTransform > m_localSpaceTransforms;

@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nMutatorCondition": "COMP_MAT_MUTATOR_CONDITION_INPUT_CONTAINER_EXISTS",
+//	"m_strMutatorConditionContainerName": "",
+//	"m_strMutatorConditionContainerVarName": "",
+//	"m_strMutatorConditionContainerVarValue": "",
+//	"m_bPassWhenTrue": true
+//}
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
 class CompMatMutatorCondition_t
 {

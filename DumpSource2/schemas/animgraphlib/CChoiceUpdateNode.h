@@ -1,4 +1,64 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CChoiceUpdateNode",
+//	"m_nodePath":
+//	{
+//		"m_path":
+//		[
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			}
+//		],
+//		"m_nCount": 0
+//	},
+//	"m_networkMode": "ServerAuthoritative",
+//	"m_name": "",
+//	"m_children":
+//	[
+//	],
+//	"m_weights":
+//	[
+//	],
+//	"m_blendTimes":
+//	[
+//	],
+//	"m_choiceMethod": "WeightedRandom",
+//	"m_choiceChangeMethod": "OnReset",
+//	"m_blendMethod": "SingleBlendTime",
+//	"m_blendTime": 0.000000,
+//	"m_bCrossFade": false,
+//	"m_bResetChosen": false,
+//	"m_bDontResetSameSelection": false
+//}
 class CChoiceUpdateNode : public CAnimUpdateNodeBase
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;

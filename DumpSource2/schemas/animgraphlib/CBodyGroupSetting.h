@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_BodyGroupName": "",
+//	"m_nBodyGroupOption": 0
+//}
 // MPropertyFriendlyName = "Body Group Setting"
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
 // M_LEGACY_OptInToSchemaPropertyDomain

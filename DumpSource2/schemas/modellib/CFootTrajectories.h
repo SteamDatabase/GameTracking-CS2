@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_trajectories":
+//	[
+//	]
+//}
 class CFootTrajectories
 {
 	CUtlVector< CFootTrajectory > m_trajectories;

@@ -1,4 +1,26 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_boneName":
+//	[
+//	],
+//	"m_nParent":
+//	[
+//	],
+//	"m_boneSphere":
+//	[
+//	],
+//	"m_nFlag":
+//	[
+//	],
+//	"m_bonePosParent":
+//	[
+//	],
+//	"m_boneRotParent":
+//	[
+//	],
+//	"m_boneScaleParent":
+//	[
+//	]
+//}
 class ModelSkeletonData_t
 {
 	CUtlVector< CUtlString > m_boneName;

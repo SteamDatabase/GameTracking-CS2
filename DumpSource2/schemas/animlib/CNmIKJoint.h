@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nParentIndex": -1,
+//	"m_nBodyIndex": -1,
+//	"m_xLocalFrame":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000
+//	],
+//	"m_flSwingLimit": 90.000000,
+//	"m_flMinTwistLimit": -180.000000,
+//	"m_flMaxTwistLimit": 180.000000,
+//	"m_flWeight": 1.000000
+//}
 class CNmIKJoint
 {
 	int32 m_nParentIndex;

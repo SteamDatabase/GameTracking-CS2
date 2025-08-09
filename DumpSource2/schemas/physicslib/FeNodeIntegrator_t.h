@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"flPointDamping": 0.000000,
+//	"flAnimationForceAttraction": 0.000000,
+//	"flAnimationVertexAttraction": 0.000000,
+//	"flGravity": 0.000000
+//}
 class FeNodeIntegrator_t
 {
 	float32 flPointDamping;

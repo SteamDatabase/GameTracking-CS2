@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_tags":
+//	[
+//	],
+//	"m_nFootIndex": -1,
+//	"m_triggerPhase": "StepPhase_OnGround"
+//}
 class FootStepTrigger
 {
 	CUtlVector< int32 > m_tags;

@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CMorphConstraint",
+//	"m_name": "",
+//	"m_vUpVector":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_slaves":
+//	[
+//	],
+//	"m_targets":
+//	[
+//	],
+//	"m_sTargetMorph": "",
+//	"m_nSlaveChannel": 0,
+//	"m_flMin": 0.000000,
+//	"m_flMax": 1.000000
+//}
 class CMorphConstraint : public CBaseConstraint
 {
 	CUtlString m_sTargetMorph;

@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_SoundEventStart",
+//	"m_nEditorNodeID": -1,
+//	"m_Type": "SOUNDEVENT_START_PLAYER"
+//}
 // MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

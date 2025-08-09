@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_skeleton": "",
+//	"m_vecBodies":
+//	[
+//	],
+//	"m_vecJoints":
+//	[
+//	]
+//}
 class CNmIKRig
 {
 	CStrongHandle< InfoForResourceTypeCNmSkeleton > m_skeleton;

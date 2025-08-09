@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nShape": 0,
+//	"m_fldbDrive": 0.000000,
+//	"m_fldbOutputGain": 0.000000,
+//	"m_flWetMix": 1.000000,
+//	"m_nOversampleFactor": 1
+//}
 class VMixShaperDesc_t
 {
 	// MPropertyFriendlyName = "Shape"

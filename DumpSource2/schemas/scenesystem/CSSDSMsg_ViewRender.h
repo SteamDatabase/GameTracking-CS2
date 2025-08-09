@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_viewId":
+//	{
+//		"m_nViewId": 3,
+//		"m_nFrameCount": 0
+//	},
+//	"m_ViewName": ""
+//}
 class CSSDSMsg_ViewRender
 {
 	SceneViewId_t m_viewId;

@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sToolsOnlyOwnerModelName": "",
+//	"m_bIsInterpolated": false,
+//	"m_unRecommendedDistance": 0,
+//	"m_vecAnimgraphVars":
+//	[
+//	]
+//}
 // MVDataRoot
 class CNavLinkMovementVData
 {

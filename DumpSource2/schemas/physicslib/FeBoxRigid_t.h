@@ -1,4 +1,26 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"tmFrame2":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000
+//	],
+//	"nNode": 0,
+//	"nCollisionMask": 65535,
+//	"vSize":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"nVertexMapIndex": 65535,
+//	"nFlags": 0
+//}
 class FeBoxRigid_t
 {
 	CTransform tmFrame2;

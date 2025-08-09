@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimStateMachineUpdater",
+//	"m_states":
+//	[
+//	],
+//	"m_transitions":
+//	[
+//	],
+//	"m_startStateIndex": -1
+//}
 class CAnimStateMachineUpdater
 {
 	CUtlVector< CStateUpdateData > m_states;

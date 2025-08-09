@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_CursorQueue",
+//	"m_nEditorNodeID": -1,
+//	"m_nCursorsAllowedToWait": -1,
+//	"m_WaitComplete":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_nCursorsAllowedToRunParallel": 1
+//}
 // MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

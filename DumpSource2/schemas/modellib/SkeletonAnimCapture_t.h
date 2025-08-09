@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nEntIndex": -1,
+//	"m_nEntParent": -1,
+//	"m_ImportedCollision":
+//	[
+//	],
+//	"m_ModelName": "",
+//	"m_CaptureName": "",
+//	"m_ModelBindPose":
+//	[
+//	],
+//	"m_FeModelInitPose":
+//	[
+//	],
+//	"m_nFlexControllers": 0,
+//	"m_bPredicted": false,
+//	"m_Frames":
+//	[
+//	]
+//}
 class SkeletonAnimCapture_t
 {
 	CEntityIndex m_nEntIndex;

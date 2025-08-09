@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bUseReference": true,
+//	"m_sound": "",
+//	"m_pSound": null
+//}
 // MPropertyFriendlyName = "Sound"
 // MPropertyDescription = "Reference to a vsnd file or another container."
 class CSoundContainerReference

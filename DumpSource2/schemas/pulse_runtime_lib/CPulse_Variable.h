@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Name": "",
+//	"m_Description": "",
+//	"m_Type": "PVAL_VOID",
+//	"m_DefaultValue": null,
+//	"m_nKeysSource": "PRIVATE",
+//	"m_bIsPublicBlackboardVariable": false,
+//	"m_bIsObservable": false,
+//	"m_nEditorNodeID": -1
+//}
 class CPulse_Variable
 {
 	PulseSymbol_t m_Name;

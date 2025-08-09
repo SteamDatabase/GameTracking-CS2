@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_name": "",
+//	"m_boneArray":
+//	[
+//	],
+//	"m_userArray":
+//	[
+//	],
+//	"m_morphArray":
+//	[
+//	],
+//	"m_nChannelElements": 0,
+//	"m_dataChannelArray":
+//	[
+//	]
+//}
 class CAnimKeyData
 {
 	CBufferString m_name;

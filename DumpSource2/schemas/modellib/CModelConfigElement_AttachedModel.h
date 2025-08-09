@@ -1,4 +1,34 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CModelConfigElement_AttachedModel",
+//	"m_ElementName": "",
+//	"m_NestedElements":
+//	[
+//	],
+//	"m_InstanceName": "",
+//	"m_EntityClass": "",
+//	"m_hModel": "",
+//	"m_vOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_aAngOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_AttachmentName": "",
+//	"m_LocalAttachmentOffsetName": "",
+//	"m_AttachmentType": "MODEL_CONFIG_ATTACHMENT_ROOT_RELATIVE",
+//	"m_bBoneMergeFlex": false,
+//	"m_bUserSpecifiedColor": false,
+//	"m_bUserSpecifiedMaterialGroup": false,
+//	"m_bAcceptParentMaterialDrivenDecals": false,
+//	"m_BodygroupOnOtherModels": "",
+//	"m_MaterialGroupOnOtherModels": ""
+//}
 class CModelConfigElement_AttachedModel : public CModelConfigElement
 {
 	CUtlString m_InstanceName;

@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Instructions":
+//	[
+//	],
+//	"m_Registers":
+//	[
+//	],
+//	"m_InstructionEditorIDs":
+//	[
+//	]
+//}
 class CPulse_Chunk
 {
 	CUtlLeanVector< PGDInstruction_t > m_Instructions;

@@ -1,4 +1,29 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CVoiceContainerEnvelopeAnalyzer",
+//	"m_bRegenerateCurveOnCompile": false,
+//	"m_curve":
+//	{
+//		"m_spline":
+//		[
+//		],
+//		"m_tangents":
+//		[
+//		],
+//		"m_vDomainMins":
+//		[
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vDomainMaxs":
+//		[
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_mode": "Peak",
+//	"m_fAnalysisWindowMs": 200.000000,
+//	"m_flThreshold": 0.000000
+//}
 // MPropertyFriendlyName = "Envelope Analyzer"
 // MPropertyDescription = "Generates an Envelope Curve on compile"
 class CVoiceContainerEnvelopeAnalyzer : public CVoiceContainerAnalysisBase

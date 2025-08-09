@@ -1,4 +1,28 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_harmonics":
+//	[
+//	],
+//	"m_curve":
+//	{
+//		"m_spline":
+//		[
+//		],
+//		"m_tangents":
+//		[
+//		],
+//		"m_vDomainMins":
+//		[
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vDomainMaxs":
+//		[
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_bSyncInstances": false
+//}
 class CVoiceContainerStaticAdditiveSynth::CTone
 {
 	// MPropertyFriendlyName = "Harmonics"

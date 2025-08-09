@@ -1,4 +1,111 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CParticleSystemDefinition",
+//	"m_nBehaviorVersion": 0,
+//	"m_PreEmissionOperators":
+//	[
+//	],
+//	"m_Emitters":
+//	[
+//	],
+//	"m_Initializers":
+//	[
+//	],
+//	"m_Operators":
+//	[
+//	],
+//	"m_ForceGenerators":
+//	[
+//	],
+//	"m_Constraints":
+//	[
+//	],
+//	"m_Renderers":
+//	[
+//	],
+//	"m_Children":
+//	[
+//	],
+//	"m_nFirstMultipleOverride_BackwardCompat": -1,
+//	"m_nInitialParticles": 0,
+//	"m_nMaxParticles": 1000,
+//	"m_nGroupID": 0,
+//	"m_BoundingBoxMin":
+//	[
+//		-10.000000,
+//		-10.000000,
+//		-10.000000
+//	],
+//	"m_BoundingBoxMax":
+//	[
+//		10.000000,
+//		10.000000,
+//		10.000000
+//	],
+//	"m_flDepthSortBias": 0.000000,
+//	"m_nSortOverridePositionCP": -1,
+//	"m_bInfiniteBounds": false,
+//	"m_bEnableNamedValues": false,
+//	"m_NamedValueDomain": "",
+//	"m_NamedValueLocals":
+//	[
+//	],
+//	"m_ConstantColor":
+//	[
+//		255,
+//		255,
+//		255
+//	],
+//	"m_ConstantNormal":
+//	[
+//		0.000000,
+//		0.000000,
+//		1.000000
+//	],
+//	"m_flConstantRadius": 5.000000,
+//	"m_flConstantRotation": 0.000000,
+//	"m_flConstantRotationSpeed": 0.000000,
+//	"m_flConstantLifespan": 1.000000,
+//	"m_nConstantSequenceNumber": 0,
+//	"m_nConstantSequenceNumber1": 0,
+//	"m_nSnapshotControlPoint": 0,
+//	"m_hSnapshot": "",
+//	"m_pszCullReplacementName": "",
+//	"m_flCullRadius": 0.000000,
+//	"m_flCullFillCost": 1.000000,
+//	"m_nCullControlPoint": 0,
+//	"m_hFallback": "",
+//	"m_nFallbackMaxCount": -1,
+//	"m_hLowViolenceDef": "",
+//	"m_hReferenceReplacement": "",
+//	"m_flPreSimulationTime": 0.000000,
+//	"m_flStopSimulationAfterTime": 1000000000.000000,
+//	"m_flMaximumTimeStep": 0.100000,
+//	"m_flMaximumSimTime": 0.000000,
+//	"m_flMinimumSimTime": 0.000000,
+//	"m_flMinimumTimeStep": 0.000000,
+//	"m_nMinimumFrames": 0,
+//	"m_nMinCPULevel": 0,
+//	"m_nMinGPULevel": 0,
+//	"m_flNoDrawTimeToGoToSleep": 8.000000,
+//	"m_flMaxDrawDistance": -1.000000,
+//	"m_flStartFadeDistance": 200000.000000,
+//	"m_flMaxCreationDistance": -1.000000,
+//	"m_nAggregationMinAvailableParticles": 1,
+//	"m_flAggregateRadius": 0.000000,
+//	"m_bShouldBatch": false,
+//	"m_bShouldHitboxesFallbackToRenderBounds": true,
+//	"m_bShouldHitboxesFallbackToSnapshot": true,
+//	"m_bShouldHitboxesFallbackToCollisionHulls": true,
+//	"m_nViewModelEffect": "INHERITABLE_BOOL_INHERIT",
+//	"m_bScreenSpaceEffect": false,
+//	"m_pszTargetLayerID": "",
+//	"m_nSkipRenderControlPoint": -1,
+//	"m_nAllowRenderControlPoint": -1,
+//	"m_bShouldSort": true,
+//	"m_controlPointConfigurations":
+//	[
+//	]
+//}
 class CParticleSystemDefinition : public IParticleSystemDefinition
 {
 	// MPropertyFriendlyName = "version"

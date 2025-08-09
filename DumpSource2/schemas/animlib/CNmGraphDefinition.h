@@ -1,4 +1,35 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_variationID": "",
+//	"m_skeleton": "",
+//	"m_persistentNodeIndices":
+//	[
+//	],
+//	"m_nRootNodeIdx": -1,
+//	"m_controlParameterIDs":
+//	[
+//	],
+//	"m_virtualParameterIDs":
+//	[
+//	],
+//	"m_virtualParameterNodeIndices":
+//	[
+//	],
+//	"m_referencedGraphSlots":
+//	[
+//	],
+//	"m_externalGraphSlots":
+//	[
+//	],
+//	"m_nodePaths":
+//	[
+//	],
+//	"m_resources":
+//	[
+//	],
+//	"m_nodes":
+//	[
+//	]
+//}
 class CNmGraphDefinition
 {
 	CGlobalSymbol m_variationID;

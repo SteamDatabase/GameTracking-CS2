@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strVariable": "",
+//	"m_nVariableField": 18,
+//	"m_flScale": 1.000000
+//}
 class MaterialVariable_t
 {
 	// MPropertyFriendlyName = "material variable"

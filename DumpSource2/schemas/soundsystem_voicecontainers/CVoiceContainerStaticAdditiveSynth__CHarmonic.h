@@ -1,4 +1,36 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nWaveform": "Sine",
+//	"m_nFundamental": "A",
+//	"m_nOctave": 4,
+//	"m_flCents": 0.000000,
+//	"m_flPhase": 0.000000,
+//	"m_curve":
+//	{
+//		"m_spline":
+//		[
+//		],
+//		"m_tangents":
+//		[
+//		],
+//		"m_vDomainMins":
+//		[
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vDomainMaxs":
+//		[
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_volumeScaling":
+//	{
+//		"m_flMinVolume": 1.000000,
+//		"m_nInstancesAtMinVolume": 1,
+//		"m_flMaxVolume": 1.000000,
+//		"m_nInstancesAtMaxVolume": 1
+//	}
+//}
 class CVoiceContainerStaticAdditiveSynth::CHarmonic
 {
 	// MPropertyFriendlyName = "Waveform"

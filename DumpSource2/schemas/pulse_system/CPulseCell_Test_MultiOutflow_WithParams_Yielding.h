@@ -1,4 +1,37 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_Test_MultiOutflow_WithParams_Yielding",
+//	"m_nEditorNodeID": -1,
+//	"m_Out1":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_AsyncChild1":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_AsyncChild2":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_YieldResume1":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_YieldResume2":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	}
+//}
 // MCellForDomain = "TestDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

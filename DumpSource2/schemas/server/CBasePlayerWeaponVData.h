@@ -1,4 +1,36 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CBasePlayerWeaponVData",
+//	"m_szWorldModel": "",
+//	"m_sToolsOnlyOwnerModelName": "",
+//	"m_bBuiltRightHanded": true,
+//	"m_bAllowFlipping": true,
+//	"m_sMuzzleAttachment": "muzzle",
+//	"m_szMuzzleFlashParticle": "",
+//	"m_szBarrelSmokeParticle": "",
+//	"m_nMuzzleSmokeShotThreshold": 4,
+//	"m_flMuzzleSmokeTimeout": 0.250000,
+//	"m_flMuzzleSmokeDecrementRate": 1.000000,
+//	"m_bLinkedCooldowns": false,
+//	"m_iFlags": "",
+//	"m_nPrimaryAmmoType": "",
+//	"m_nSecondaryAmmoType": "",
+//	"m_iMaxClip1": 0,
+//	"m_iMaxClip2": 0,
+//	"m_iDefaultClip1": -1,
+//	"m_iDefaultClip2": -1,
+//	"m_bReserveAmmoAsClips": false,
+//	"m_bTreatAsSingleClip": false,
+//	"m_iWeight": 0,
+//	"m_bAutoSwitchTo": true,
+//	"m_bAutoSwitchFrom": true,
+//	"m_iRumbleEffect": "RUMBLE_INVALID",
+//	"m_flDropSpeed": 300.000000,
+//	"m_iSlot": 0,
+//	"m_iPosition": 0,
+//	"m_aShootSounds":
+//	{
+//	}
+//}
 class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 {
 	// MPropertyStartGroup = "Visuals"

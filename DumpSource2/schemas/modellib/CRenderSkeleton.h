@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bones":
+//	[
+//	],
+//	"m_boneParents":
+//	[
+//	],
+//	"m_nBoneWeightCount": 4
+//}
 class CRenderSkeleton
 {
 	CUtlVector< RenderSkeletonBone_t > m_bones;

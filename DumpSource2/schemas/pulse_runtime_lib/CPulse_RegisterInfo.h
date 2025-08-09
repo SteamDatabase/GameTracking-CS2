@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nReg": -1,
+//	"m_Type": "PVAL_VOID",
+//	"m_OriginName": "",
+//	"m_nWrittenByInstruction": -1,
+//	"m_nLastReadByInstruction": -1
+//}
 class CPulse_RegisterInfo
 {
 	PulseRuntimeRegisterIndex_t m_nReg;

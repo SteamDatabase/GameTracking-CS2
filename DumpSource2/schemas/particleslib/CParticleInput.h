@@ -1,4 +1,5 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//}
 class CParticleInput
 {
 };

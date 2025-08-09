@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_Inflow_EntOutputHandler",
+//	"m_nEditorNodeID": -1,
+//	"m_EntryChunk": -1,
+//	"m_RegisterMap":
+//	{
+//		"m_Inparams": null,
+//		"m_Outparams": null
+//	},
+//	"m_SourceEntity": "",
+//	"m_SourceOutput": "",
+//	"m_ExpectedParamType": "PVAL_VOID"
+//}
 // MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

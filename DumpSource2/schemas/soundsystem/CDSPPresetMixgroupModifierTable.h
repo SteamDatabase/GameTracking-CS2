@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_table":
+//	[
+//	]
+//}
 // MVDataRoot
 // MVDataNodeType = 1
 class CDSPPresetMixgroupModifierTable

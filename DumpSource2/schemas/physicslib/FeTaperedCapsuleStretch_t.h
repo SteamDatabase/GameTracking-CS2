@@ -1,4 +1,17 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nNode":
+//	[
+//		0,
+//		0
+//	],
+//	"nCollisionMask": 65535,
+//	"nDummy": 0,
+//	"flRadius":
+//	[
+//		0.000000,
+//		0.000000
+//	]
+//}
 class FeTaperedCapsuleStretch_t
 {
 	uint16[2] nNode;

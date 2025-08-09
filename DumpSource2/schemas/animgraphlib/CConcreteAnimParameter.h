@@ -1,4 +1,4 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = Could not parse KV3 Defaults
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CConcreteAnimParameter : public CAnimParameterBase
 {

@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CMotionGraph",
+//	"m_paramSpans":
+//	{
+//		"m_spans":
+//		[
+//		]
+//	},
+//	"m_tags":
+//	[
+//	],
+//	"m_pRootNode": null,
+//	"m_nParameterCount": 0,
+//	"m_nConfigStartIndex": -1,
+//	"m_nConfigCount": -1,
+//	"m_bLoop": false
+//}
 class CMotionGraph
 {
 	CParamSpanUpdater m_paramSpans;

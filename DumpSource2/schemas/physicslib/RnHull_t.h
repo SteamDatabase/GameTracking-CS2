@@ -1,4 +1,57 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_vCentroid":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_flMaxAngularRadius": 0.000000,
+//	"m_Bounds":
+//	{
+//		"m_vMinBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vMaxBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_vOrthographicAreas":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_MassProperties":
+//	[
+//		1.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000,
+//		0.000000
+//	],
+//	"m_flVolume": 0.000000,
+//	"m_flSurfaceArea": 0.000000,
+//	"m_nFlags": 0,
+//	"m_pRegionSVM": null,
+//	"m_Vertices": "[BINARY BLOB]",
+//	"m_VertexPositions": "[BINARY BLOB]",
+//	"m_Edges": "[BINARY BLOB]",
+//	"m_Faces": "[BINARY BLOB]",
+//	"m_Planes": "[BINARY BLOB]"
+//}
 class RnHull_t
 {
 	Vector m_vCentroid;

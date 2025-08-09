@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"sName": "",
+//	"nNameHash": 0,
+//	"nType": 0,
+//	"m_Params": null
+//}
 class FeEffectDesc_t
 {
 	CUtlString sName;

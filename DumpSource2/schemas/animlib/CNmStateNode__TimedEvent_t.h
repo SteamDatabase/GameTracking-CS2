@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_ID": "",
+//	"m_flTimeValueSeconds": 0.000000,
+//	"m_comparisionOperator": "LessThanEqual"
+//}
 class CNmStateNode::TimedEvent_t
 {
 	CGlobalSymbol m_ID;

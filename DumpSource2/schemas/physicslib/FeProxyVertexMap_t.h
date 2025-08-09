@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Name": "",
+//	"m_flWeight": 1.000000
+//}
 class FeProxyVertexMap_t
 {
 	CUtlString m_Name;

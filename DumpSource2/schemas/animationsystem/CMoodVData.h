@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sModelName": "",
+//	"m_nMoodType": "eMoodType_Head",
+//	"m_animationLayers":
+//	[
+//	]
+//}
 // MVDataRoot
 // MVDataOverlayType = 1
 class CMoodVData

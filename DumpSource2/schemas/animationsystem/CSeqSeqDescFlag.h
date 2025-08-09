@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bLooping": false,
+//	"m_bSnap": false,
+//	"m_bAutoplay": false,
+//	"m_bPost": false,
+//	"m_bHidden": false,
+//	"m_bMulti": false,
+//	"m_bLegacyDelta": false,
+//	"m_bLegacyWorldspace": false,
+//	"m_bLegacyCyclepose": false,
+//	"m_bLegacyRealtime": false,
+//	"m_bModelDoc": false
+//}
 class CSeqSeqDescFlag
 {
 	bool m_bLooping;

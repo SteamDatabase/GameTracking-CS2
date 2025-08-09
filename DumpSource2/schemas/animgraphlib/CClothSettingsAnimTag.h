@@ -1,4 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CClothSettingsAnimTag",
+//	"m_name": "Unnamed Tag",
+//	"m_sComment": "",
+//	"m_group": "",
+//	"m_tagID":
+//	{
+//		"m_id": 4294967295
+//	},
+//	"m_bIsReferenced": false,
+//	"m_flStiffness": 1.000000,
+//	"m_flEaseIn": 0.000000,
+//	"m_flEaseOut": 0.000000,
+//	"m_nVertexSet": ""
+//}
 // MPropertyFriendlyName = "Cloth Settings Tag"
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CClothSettingsAnimTag : public CAnimTagBase

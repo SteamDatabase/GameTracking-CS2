@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_name": "",
+//	"m_materials":
+//	[
+//	]
+//}
 class MaterialGroup_t
 {
 	CUtlString m_name;

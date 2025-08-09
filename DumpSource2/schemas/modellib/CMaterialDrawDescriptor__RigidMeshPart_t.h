@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nRigidBLASIndex": 0,
+//	"m_nBoneIndex": -1,
+//	"m_nStartIndexOffset": 0,
+//	"m_nPrimitiveCount": 0
+//}
 class CMaterialDrawDescriptor::RigidMeshPart_t
 {
 	uint16 m_nRigidBLASIndex;

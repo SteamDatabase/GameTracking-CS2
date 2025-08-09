@@ -1,4 +1,6 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CEntitySubclassVDataBase"
+//}
 // MVDataRoot
 // MVDataNodeType = 1
 // MVDataOverlayType = 1

@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nUniqueFrameIndex": 0,
+//	"m_nLocalElementMasks": 0,
+//	"m_nLocalChannel": 0,
+//	"m_container": "[BINARY BLOB]"
+//}
 class CAnimFrameSegment
 {
 	int32 m_nUniqueFrameIndex;

@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nNode":
+//	[
+//		0,
+//		0,
+//		0,
+//		0,
+//		0,
+//		0
+//	],
+//	"nFlags": 0,
+//	"flWeight4": 0.000000,
+//	"flWeight5": 0.000000,
+//	"flAngleCenter": 0.000000,
+//	"flAngleExtents": 0.000000
+//}
 class FeHingeLimit_t
 {
 	uint16[6] nNode;

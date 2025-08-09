@@ -1,4 +1,25 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_children":
+//	[
+//	],
+//	"m_quantizer":
+//	{
+//		"m_centroidVectors":
+//		[
+//		],
+//		"m_nCentroids": 0,
+//		"m_nDimensions": 0
+//	},
+//	"m_sampleCodes":
+//	[
+//	],
+//	"m_sampleIndices":
+//	[
+//	],
+//	"m_selectableSamples":
+//	[
+//	]
+//}
 class CMotionSearchNode
 {
 	CUtlVector< CMotionSearchNode* > m_children;

@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_Step_FollowEntity",
+//	"m_nEditorNodeID": -1,
+//	"m_ParamBoneOrAttachName": "",
+//	"m_ParamBoneOrAttachNameChild": ""
+//}
 // MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

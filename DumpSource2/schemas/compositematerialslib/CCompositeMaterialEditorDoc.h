@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CCompositeMaterialEditorDoc",
+//	"m_nVersion": 1,
+//	"m_Points":
+//	[
+//	],
+//	"m_KVthumbnail": null
+//}
 class CCompositeMaterialEditorDoc
 {
 	int32 m_nVersion;

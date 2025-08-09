@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nVertexNode": 0,
+//	"flWeight": 0.000000,
+//	"nMatrixNode": 0
+//}
 class FeFitInfluence_t
 {
 	uint32 nVertexNode;

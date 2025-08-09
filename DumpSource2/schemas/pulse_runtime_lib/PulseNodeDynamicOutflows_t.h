@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Outflows":
+//	[
+//	]
+//}
 class PulseNodeDynamicOutflows_t
 {
 	CUtlVector< PulseNodeDynamicOutflows_t::DynamicOutflow_t > m_Outflows;

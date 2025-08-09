@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_outputName": "",
+//	"m_targetType": 0,
+//	"m_targetName": "",
+//	"m_inputName": "",
+//	"m_overrideParam": "",
+//	"m_flDelay": 0.000000,
+//	"m_nTimesToFire": 0,
+//	"m_paramMap": null
+//}
 class EntityIOConnectionData_t
 {
 	CUtlString m_outputName;

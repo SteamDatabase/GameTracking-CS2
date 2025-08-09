@@ -1,4 +1,39 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_DomainIdentifier": "",
+//	"m_DomainSubType": "PVAL_VOID",
+//	"m_ParentMapName": "",
+//	"m_ParentXmlName": "",
+//	"m_Chunks":
+//	[
+//	],
+//	"m_Cells":
+//	[
+//	],
+//	"m_Vars":
+//	[
+//	],
+//	"m_PublicOutputs":
+//	[
+//	],
+//	"m_InvokeBindings":
+//	[
+//	],
+//	"m_CallInfos":
+//	[
+//	],
+//	"m_Constants":
+//	[
+//	],
+//	"m_DomainValues":
+//	[
+//	],
+//	"m_BlackboardReferences":
+//	[
+//	],
+//	"m_OutputConnections":
+//	[
+//	]
+//}
 class CPulseGraphDef
 {
 	PulseSymbol_t m_DomainIdentifier;

@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nGroup": 65535,
+//	"m_nConfig": 65535
+//}
 class ConfigIndex
 {
 	uint16 m_nGroup;

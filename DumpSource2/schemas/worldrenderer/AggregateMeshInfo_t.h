@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nVisClusterMemberOffset": 0,
+//	"m_nVisClusterMemberCount": 0,
+//	"m_bHasTransform": false,
+//	"m_nLODGroupMask": 0,
+//	"m_nDrawCallIndex": -1,
+//	"m_nLODSetupIndex": -1,
+//	"m_vTintColor":
+//	[
+//		255,
+//		255,
+//		255
+//	],
+//	"m_objectFlags": "OBJECT_TYPE_MODEL",
+//	"m_nLightProbeVolumePrecomputedHandshake": 0,
+//	"m_nInstanceStreamOffset": 0,
+//	"m_nVertexAlbedoStreamOffset": 0,
+//	"m_instanceStreams": "AGGREGATE_INSTANCE_STREAM_NONE"
+//}
 class AggregateMeshInfo_t
 {
 	uint32 m_nVisClusterMemberOffset;

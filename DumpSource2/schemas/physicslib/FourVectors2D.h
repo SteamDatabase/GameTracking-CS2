@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"x":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"y":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	]
+//}
 class FourVectors2D
 {
 	fltx4 x;

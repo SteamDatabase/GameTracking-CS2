@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmFollowBoneNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_nChildNodeIdx": -1,
+//	"m_bone": "",
+//	"m_followTargetBone": "",
+//	"m_nEnabledNodeIdx": -1,
+//	"m_mode": "RotationAndTranslation"
+//}
 class CNmFollowBoneNode::CDefinition : public CNmPassthroughNode::CDefinition
 {
 	CGlobalSymbol m_bone;

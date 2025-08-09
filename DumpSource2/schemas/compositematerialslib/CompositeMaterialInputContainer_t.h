@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bEnabled": true,
+//	"m_nCompositeMaterialInputContainerSourceType": "CONTAINER_SOURCE_TYPE_TARGET_MATERIAL",
+//	"m_strSpecificContainerMaterial": "",
+//	"m_strAttrName": "",
+//	"m_strAlias": "",
+//	"m_vecLooseVariables":
+//	[
+//	],
+//	"m_strAttrNameForVar": "",
+//	"m_bExposeExternally": false
+//}
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
 class CompositeMaterialInputContainer_t
 {

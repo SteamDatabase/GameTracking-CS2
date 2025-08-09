@@ -1,4 +1,27 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmStateNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_nChildNodeIdx": -1,
+//	"m_entryEvents":
+//	[
+//	],
+//	"m_executeEvents":
+//	[
+//	],
+//	"m_exitEvents":
+//	[
+//	],
+//	"m_timedRemainingEvents":
+//	[
+//	],
+//	"m_timedElapsedEvents":
+//	[
+//	],
+//	"m_nLayerWeightNodeIdx": -1,
+//	"m_nLayerRootMotionWeightNodeIdx": -1,
+//	"m_nLayerBoneMaskNodeIdx": -1,
+//	"m_bIsOffState": false
+//}
 class CNmStateNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nChildNodeIdx;

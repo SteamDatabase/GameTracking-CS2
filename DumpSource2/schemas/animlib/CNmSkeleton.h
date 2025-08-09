@@ -1,4 +1,26 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_ID": "",
+//	"m_boneIDs":
+//	[
+//	],
+//	"m_parentIndices":
+//	[
+//	],
+//	"m_parentSpaceReferencePose":
+//	[
+//	],
+//	"m_modelSpaceReferencePose":
+//	[
+//	],
+//	"m_numBonesToSampleAtLowLOD": 0,
+//	"m_maskDefinitions":
+//	[
+//	],
+//	"m_secondarySkeletons":
+//	[
+//	],
+//	"m_bIsPropSkeleton": false
+//}
 class CNmSkeleton
 {
 	CGlobalSymbol m_ID;

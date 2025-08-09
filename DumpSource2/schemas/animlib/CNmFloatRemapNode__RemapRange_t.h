@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flBegin": 0.000000,
+//	"m_flEnd": 0.000000
+//}
 class CNmFloatRemapNode::RemapRange_t
 {
 	float32 m_flBegin;

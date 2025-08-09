@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_szName": "",
+//	"m_nVersion": 0,
+//	"m_nType": 0
+//}
 class CAnimDecoder
 {
 	CBufferString m_szName;

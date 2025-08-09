@@ -1,4 +1,68 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sceneObjects":
+//	[
+//	],
+//	"m_infoOverlays":
+//	[
+//	],
+//	"m_visClusterMembership":
+//	[
+//	],
+//	"m_aggregateSceneObjects":
+//	[
+//	],
+//	"m_clutterSceneObjects":
+//	[
+//	],
+//	"m_extraVertexStreamOverrides":
+//	[
+//	],
+//	"m_materialOverrides":
+//	[
+//	],
+//	"m_extraVertexStreams":
+//	[
+//	],
+//	"m_aggregateInstanceStreams":
+//	[
+//	],
+//	"m_vertexAlbedoStreams":
+//	[
+//	],
+//	"m_layerNames":
+//	[
+//	],
+//	"m_sceneObjectLayerIndices":
+//	[
+//	],
+//	"m_overlayLayerIndices":
+//	[
+//	],
+//	"m_grassFileName": "",
+//	"m_nodeLightingInfo":
+//	{
+//		"m_nLightmapVersionNumber": 0,
+//		"m_nLightmapGameVersionNumber": 0,
+//		"m_vLightmapUvScale":
+//		[
+//			1.000000,
+//			1.000000
+//		],
+//		"m_bHasLightmaps": false,
+//		"m_bBakedShadowsGamma20": false,
+//		"m_bCompressionEnabled": false,
+//		"m_bSHLightmaps": false,
+//		"m_nChartPackIterations": 0,
+//		"m_nVradQuality": 0,
+//		"m_lightMaps":
+//		[
+//		],
+//		"m_bakedShadows":
+//		[
+//		]
+//	},
+//	"m_bHasBakedGeometryFlag": false
+//}
 class WorldNode_t
 {
 	CUtlVector< SceneObject_t > m_sceneObjects;

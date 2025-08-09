@@ -1,4 +1,50 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nObjectID": 0,
+//	"m_vTransform":
+//	[
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	],
+//	"m_flFadeStartDistance": 0.000000,
+//	"m_flFadeEndDistance": 0.000000,
+//	"m_vTintColor":
+//	[
+//		1.000000,
+//		1.000000,
+//		1.000000,
+//		1.000000
+//	],
+//	"m_skin": "",
+//	"m_nObjectTypeFlags": "OBJECT_TYPE_MODEL",
+//	"m_vLightingOrigin":
+//	[
+//		340282346638528859811704183484516925440.000000,
+//		340282346638528859811704183484516925440.000000,
+//		340282346638528859811704183484516925440.000000
+//	],
+//	"m_nOverlayRenderOrder": 0,
+//	"m_nLODOverride": -1,
+//	"m_nCubeMapPrecomputedHandshake": 0,
+//	"m_nLightProbeVolumePrecomputedHandshake": 0,
+//	"m_renderableModel": "",
+//	"m_renderable": ""
+//}
 class SceneObject_t
 {
 	uint32 m_nObjectID;

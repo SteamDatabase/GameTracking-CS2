@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_name": "",
+//	"m_vBallOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vHeelOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_ankleBoneIndex": -1,
+//	"m_toeBoneIndex": -1
+//}
 class CAnimFoot
 {
 	CUtlString m_name;

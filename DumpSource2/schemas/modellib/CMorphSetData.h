@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nWidth": 0,
+//	"m_nHeight": 0,
+//	"m_bundleTypes":
+//	[
+//	],
+//	"m_morphDatas":
+//	[
+//	],
+//	"m_pTextureAtlas": "",
+//	"m_FlexDesc":
+//	[
+//	],
+//	"m_FlexControllers":
+//	[
+//	],
+//	"m_FlexRules":
+//	[
+//	]
+//}
 class CMorphSetData
 {
 	int32 m_nWidth;

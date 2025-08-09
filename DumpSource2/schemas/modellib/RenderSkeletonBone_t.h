@@ -1,4 +1,38 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_boneName": "",
+//	"m_parentName": "",
+//	"m_invBindPose":
+//	[
+//		1.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		1.000000,
+//		0.000000
+//	],
+//	"m_bbox":
+//	{
+//		"m_vecCenter":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vecSize":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_flSphereRadius": 0.000000
+//}
 class RenderSkeletonBone_t
 {
 	CUtlString m_boneName;

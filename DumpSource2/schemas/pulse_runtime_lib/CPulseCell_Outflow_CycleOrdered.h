@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_Outflow_CycleOrdered",
+//	"m_nEditorNodeID": -1,
+//	"m_Outputs":
+//	[
+//	]
+//}
 // MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sName": "",
+//	"m_flWeight": 1.000000
+//}
 // MPropertyArrayElementNameKey = "m_sName"
 class MoodAnimation_t
 {

@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nOp": "VMIX_CHAN_STEREO",
+//	"m_flInputPan": 0.000000,
+//	"m_flOutputBalance": 0.000000,
+//	"m_fldbOutputGain": 0.000000,
+//	"m_bBassMono": false,
+//	"m_flBassFreq": 120.000000
+//}
 class VMixUtilityDesc_t
 {
 	// MPropertyFriendlyName = "Channels"

@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_mixgroup": "default",
+//	"m_flModifier": 1.000000,
+//	"m_flModifierMin": 0.000000,
+//	"m_flSourceModifier": -1.000000,
+//	"m_flSourceModifierMin": -1.000000,
+//	"m_flListenerReverbModifierWhenSourceReverbIsActive": 1.000000
+//}
 class CDSPMixgroupModifier
 {
 	// MPropertyDescription = "Name of the mixgroup. TODO: needs to be autopopulated with mixgroups."

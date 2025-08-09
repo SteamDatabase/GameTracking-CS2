@@ -1,4 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"color":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"angle":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"brightness": 1.000000
+//}
 class inv_image_light_fill_t
 {
 	// MPropertyFriendlyName = "Color"

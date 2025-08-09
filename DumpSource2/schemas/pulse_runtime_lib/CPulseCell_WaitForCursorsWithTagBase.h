@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_WaitForCursorsWithTagBase",
+//	"m_nEditorNodeID": -1,
+//	"m_nCursorsAllowedToWait": -1,
+//	"m_WaitComplete":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	}
+//}
 // MPulseEditorCanvasItemSpecKV3 = "{ className = 'IsControlFlowNode' }"
 class CPulseCell_WaitForCursorsWithTagBase : public CPulseCell_BaseYieldingInflow
 {

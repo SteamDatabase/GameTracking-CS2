@@ -1,5 +1,17 @@
 // M_LEGACY_OptInToSchemaPropertyDomain
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CSosGroupMatchPattern",
+//	"m_bMatchEventName": false,
+//	"m_bMatchEventSubString": false,
+//	"m_bMatchEntIndex": false,
+//	"m_bMatchOpvar": false,
+//	"m_bMatchString": false,
+//	"m_matchSoundEventName": "",
+//	"m_matchSoundEventSubString": "",
+//	"m_flEntIndex": -1.000000,
+//	"m_flOpvar": -1.000000,
+//	"m_opvarString": ""
+//}
 class CSosGroupMatchPattern : public CSosGroupBranchPattern
 {
 	// MPropertyFriendlyName = "Event Name"

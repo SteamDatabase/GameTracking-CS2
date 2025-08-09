@@ -1,4 +1,50 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flRealTime": 0.000000,
+//	"m_rootToWorld":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_bBonesInWorldSpace": false,
+//	"m_boneSetupMask":
+//	[
+//	],
+//	"m_boneTransforms":
+//	[
+//	],
+//	"m_flexControllers":
+//	[
+//	],
+//	"m_SnapshotType": "ANIMATION_SNAPSHOT_SERVER_SIMULATION",
+//	"m_bHasDecodeDump": false,
+//	"m_DecodeDump":
+//	{
+//		"m_nEntityIndex": 0,
+//		"m_modelName": "",
+//		"m_poseParams":
+//		[
+//		],
+//		"m_decodeOps":
+//		[
+//		],
+//		"m_internalOps":
+//		[
+//		],
+//		"m_decodedAnims":
+//		[
+//		]
+//	}
+//}
 class AnimationSnapshotBase_t
 {
 	float32 m_flRealTime;

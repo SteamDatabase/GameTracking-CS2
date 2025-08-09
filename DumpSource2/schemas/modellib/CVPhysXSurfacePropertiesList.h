@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"SurfacePropertiesList":
+//	[
+//	]
+//}
 class CVPhysXSurfacePropertiesList
 {
 	// MKV3TransferName = "SurfacePropertiesList"

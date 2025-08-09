@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"vOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"nBoneCtrl": 0,
+//	"nTargetNode": 0
+//}
 class FeNodeReverseOffset_t
 {
 	Vector vOffset;

@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_fldbOutputGain": 0.000000,
+//	"m_fldbCompressionThreshold": -6.000000,
+//	"m_fldbKneeWidth": 0.000000,
+//	"m_flCompressionRatio": 2.000000,
+//	"m_flAttackTimeMS": 100.000000,
+//	"m_flReleaseTimeMS": 400.000000,
+//	"m_flRMSTimeMS": 300.000000,
+//	"m_flWetMix": 1.000000,
+//	"m_bPeakMode": false
+//}
 class VMixDynamicsCompressorDesc_t
 {
 	// MPropertyFriendlyName = "Output Gain (dB)"

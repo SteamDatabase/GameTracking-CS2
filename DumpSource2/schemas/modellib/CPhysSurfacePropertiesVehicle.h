@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"wheeldrag": 0.000000,
+//	"wheelfrictionscale": 1.000000
+//}
 class CPhysSurfacePropertiesVehicle
 {
 	// MKV3TransferName = "wheeldrag"

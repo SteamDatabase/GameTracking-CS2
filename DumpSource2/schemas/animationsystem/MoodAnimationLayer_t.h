@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sName": "",
+//	"m_bActiveListening": true,
+//	"m_bActiveTalking": true,
+//	"m_layerAnimations":
+//	[
+//	],
+//	"m_flIntensity": 1.000000,
+//	"m_flDurationScale": 1.000000,
+//	"m_bScaleWithInts": false,
+//	"m_flNextStart": 1.000000,
+//	"m_flStartOffset": 0.000000,
+//	"m_flEndOffset": 0.000000,
+//	"m_flFadeIn": 0.200000,
+//	"m_flFadeOut": 0.200000
+//}
 // MPropertyArrayElementNameKey = "m_sName"
 class MoodAnimationLayer_t
 {

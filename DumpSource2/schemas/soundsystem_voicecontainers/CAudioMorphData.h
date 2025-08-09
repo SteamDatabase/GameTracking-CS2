@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_times":
+//	[
+//	],
+//	"m_nameHashCodes":
+//	[
+//	],
+//	"m_nameStrings":
+//	[
+//	],
+//	"m_samples":
+//	[
+//	],
+//	"m_flEaseIn": 0.200000,
+//	"m_flEaseOut": 0.200000
+//}
 class CAudioMorphData
 {
 	CUtlVector< float32 > m_times;

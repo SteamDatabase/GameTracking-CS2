@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_ChildRef": "",
+//	"m_flDelay": 0.000000,
+//	"m_bEndCap": false,
+//	"m_bDisableChild": false,
+//	"m_nDetailLevel": "PARTICLEDETAIL_LOW"
+//}
 class ParticleChildrenInfo_t
 {
 	// MPropertySuppressField

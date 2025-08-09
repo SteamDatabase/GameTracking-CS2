@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flDamage": 0.000000,
+//	"m_flNPCDamageScalarVsNPC": 1.000000,
+//	"m_flPhysicsForceDamage": 0.000000
+//}
 class CSkillDamage
 {
 	// MPropertyDescription = "Damage Dealt (in the case of NPC vs NPC damage, medium skill times the NPC damage scalar is used)"

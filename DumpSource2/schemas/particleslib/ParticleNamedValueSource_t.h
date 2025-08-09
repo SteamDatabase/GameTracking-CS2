@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_Name": "",
+//	"m_IsPublic": true,
+//	"m_ValueType": "PVAL_VEC3",
+//	"m_DefaultConfig":
+//	{
+//		"m_ConfigName": "",
+//		"m_ConfigValue": null,
+//		"m_iAttachType": "PATTACH_INVALID",
+//		"m_BoundEntityPath": "",
+//		"m_strEntityScope": "",
+//		"m_strAttachmentName": ""
+//	},
+//	"m_NamedConfigs":
+//	[
+//	]
+//}
 class ParticleNamedValueSource_t
 {
 	CUtlString m_Name;

@@ -1,4 +1,21 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAudioAnimTag",
+//	"m_name": "Unnamed Tag",
+//	"m_sComment": "",
+//	"m_group": "",
+//	"m_tagID":
+//	{
+//		"m_id": 4294967295
+//	},
+//	"m_bIsReferenced": false,
+//	"m_clipName": "",
+//	"m_attachmentName": "",
+//	"m_flVolume": 1.000000,
+//	"m_bStopWhenTagEnds": false,
+//	"m_bStopWhenGraphEnds": true,
+//	"m_bPlayOnServer": true,
+//	"m_bPlayOnClient": true
+//}
 // MPropertyFriendlyName = "Audio Tag"
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CAudioAnimTag : public CAnimTagBase

@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_PickBestOutflowSelector",
+//	"m_nEditorNodeID": -1,
+//	"m_nCheckType": "SORT_BY_NUMBER_OF_VALID_CRITERIA",
+//	"m_OutflowList":
+//	{
+//		"m_Outflows":
+//		[
+//		]
+//	}
+//}
 // MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

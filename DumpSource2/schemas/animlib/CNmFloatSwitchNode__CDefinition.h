@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmFloatSwitchNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_nSwitchValueNodeIdx": -1,
+//	"m_nTrueValueNodeIdx": -1,
+//	"m_nFalseValueNodeIdx": -1,
+//	"m_flFalseValue": 0.000000,
+//	"m_flTrueValue": 1.000000
+//}
 class CNmFloatSwitchNode::CDefinition : public CNmFloatValueNode::CDefinition
 {
 	int16 m_nSwitchValueNodeIdx;

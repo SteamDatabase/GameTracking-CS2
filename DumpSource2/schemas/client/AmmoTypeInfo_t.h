@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "AmmoTypeInfo_t",
+//	"m_nMaxCarry": 0,
+//	"m_nSplashSize": 0,
+//	"m_nFlags": "",
+//	"m_flMass": 0.000000,
+//	"m_flSpeed": 0.000000
+//}
 class AmmoTypeInfo_t
 {
 	int32 m_nMaxCarry;

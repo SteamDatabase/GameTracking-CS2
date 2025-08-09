@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmSoundEvent",
+//	"m_flStartTimeSeconds": 0.000000,
+//	"m_flDurationSeconds": 0.000000,
+//	"m_syncID": "",
+//	"m_bClientOnly": false,
+//	"m_relevance": "ClientAndServer",
+//	"m_type": "Play",
+//	"m_name": "",
+//	"m_position": "None",
+//	"m_attachmentName": "",
+//	"m_tags": "",
+//	"m_bIsServerOnly": false,
+//	"m_bContinuePlayingSoundAtDurationEnd": false,
+//	"m_flDurationInterruptionThreshold": 0.900000
+//}
 class CNmSoundEvent : public CNmEvent
 {
 	CNmEventRelevance_t m_relevance;

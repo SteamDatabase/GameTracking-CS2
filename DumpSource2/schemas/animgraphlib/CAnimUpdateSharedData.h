@@ -1,4 +1,71 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimUpdateSharedData",
+//	"m_nodes":
+//	[
+//	],
+//	"m_nodeIndexMap":
+//	[
+//	],
+//	"m_components":
+//	[
+//	],
+//	"m_pParamListUpdater": null,
+//	"m_pTagManagerUpdater": null,
+//	"m_scriptManager": null,
+//	"m_settings":
+//	{
+//		"_class": "CAnimGraphSettingsManager",
+//		"m_settingsGroups":
+//		[
+//			{
+//				"_class": "CAnimGraphNetworkSettings",
+//				"m_bNetworkingEnabled": true
+//			}
+//		]
+//	},
+//	"m_pStaticPoseCache": null,
+//	"m_pSkeleton": null,
+//	"m_rootNodePath":
+//	{
+//		"m_path":
+//		[
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			},
+//			{
+//				"m_id": 4294967295
+//			}
+//		],
+//		"m_nCount": 0
+//	}
+//}
 class CAnimUpdateSharedData
 {
 	CUtlVector< CSmartPtr< CAnimUpdateNodeBase > > m_nodes;

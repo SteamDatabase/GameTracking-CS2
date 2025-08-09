@@ -1,4 +1,65 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_name": "",
+//	"m_influenceNames":
+//	[
+//		"",
+//		"",
+//		""
+//	],
+//	"m_vInfluenceRotations":
+//	[
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000,
+//			1.000000
+//		],
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000,
+//			1.000000
+//		],
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000,
+//			1.000000
+//		]
+//	],
+//	"m_vInfluenceOffsets":
+//	[
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	],
+//	"m_influenceWeights":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_bInfluenceRootTransform":
+//	[
+//		false,
+//		false,
+//		false
+//	],
+//	"m_nInfluences": 0,
+//	"m_bIgnoreRotation": false
+//}
 class CAttachment
 {
 	CUtlString m_name;

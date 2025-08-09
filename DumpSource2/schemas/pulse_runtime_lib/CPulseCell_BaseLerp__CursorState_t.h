@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_StartTime": null,
+//	"m_EndTime": null
+//}
 class CPulseCell_BaseLerp::CursorState_t
 {
 	GameTime_t m_StartTime;

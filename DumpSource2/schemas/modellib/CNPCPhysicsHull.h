@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sName": "",
+//	"m_eType": "eInvalid",
+//	"m_flCapsuleHeight": 50.000000,
+//	"m_flCapsuleRadius": 11.000000,
+//	"m_vCapsuleCenter1":
+//	[
+//		0.000000,
+//		0.000000,
+//		11.000000
+//	],
+//	"m_vCapsuleCenter2":
+//	[
+//		0.000000,
+//		0.000000,
+//		61.000000
+//	],
+//	"m_flGroundBoxHeight": 50.000000,
+//	"m_flGroundBoxWidth": 11.000000
+//}
 // MModelGameData
 // MFgdHelper = "game_data_list{ key = 'CNPCPhysicsHull' }"
 // MFgdHelper = "npcphysicshull{}"

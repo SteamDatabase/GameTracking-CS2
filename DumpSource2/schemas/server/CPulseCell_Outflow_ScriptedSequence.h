@@ -1,4 +1,45 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CPulseCell_Outflow_ScriptedSequence",
+//	"m_nEditorNodeID": -1,
+//	"m_szSyncGroup": "",
+//	"m_nExpectedNumSequencesInSyncGroup": 0,
+//	"m_bEnsureOnNavmeshOnFinish": true,
+//	"m_bDontTeleportAtEnd": true,
+//	"m_bDisallowInterrupts": true,
+//	"m_scriptedSequenceDataMain":
+//	{
+//		"m_nActorID": 0,
+//		"m_szPreIdleSequence": "",
+//		"m_szEntrySequence": "",
+//		"m_szSequence": "",
+//		"m_szExitSequence": "",
+//		"m_nMoveTo": "eWaitFacing",
+//		"m_nMoveToGait": "eInvalid",
+//		"m_nHeldWeaponBehavior": "eInvalid",
+//		"m_bLoopPreIdleSequence": false,
+//		"m_bLoopActionSequence": false,
+//		"m_bLoopPostIdleSequence": false,
+//		"m_bIgnoreLookAt": false
+//	},
+//	"m_vecAdditionalActors":
+//	[
+//	],
+//	"m_OnFinished":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_OnCanceled":
+//	{
+//		"m_SourceOutflowName": "",
+//		"m_nDestChunk": -1,
+//		"m_nInstruction": -1
+//	},
+//	"m_Triggers":
+//	[
+//	]
+//}
 // MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)

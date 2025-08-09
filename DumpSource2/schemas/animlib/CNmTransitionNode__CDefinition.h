@@ -1,4 +1,24 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmTransitionNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_nTargetStateNodeIdx": -1,
+//	"m_nDurationOverrideNodeIdx": -1,
+//	"m_syncEventOffsetOverrideNodeIdx": -1,
+//	"m_startBoneMaskNodeIdx": -1,
+//	"m_flDuration": 0.000000,
+//	"m_boneMaskBlendInTimePercentage":
+//	{
+//		"m_flValue": 0.330000
+//	},
+//	"m_syncEventOffset": 0.000000,
+//	"m_transitionOptions":
+//	{
+//		"m_flags": 1
+//	},
+//	"m_targetSyncIDNodeIdx": -1,
+//	"m_blendWeightEasing": "Linear",
+//	"m_rootMotionBlend": "Blend"
+//}
 class CNmTransitionNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nTargetStateNodeIdx;

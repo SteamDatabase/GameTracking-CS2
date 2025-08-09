@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"itemType": "SOS_EDIT_ITEM_TYPE_SOUNDEVENTS",
+//	"itemName": "",
+//	"itemTypeName": "",
+//	"itemKVString": "",
+//	"itemPos":
+//	[
+//		0.000000,
+//		0.000000
+//	]
+//}
 class SosEditItemInfo_t
 {
 	SosEditItemType_t itemType;

@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CFootFallAnimTag",
+//	"m_name": "Unnamed Tag",
+//	"m_sComment": "",
+//	"m_group": "",
+//	"m_tagID":
+//	{
+//		"m_id": 4294967295
+//	},
+//	"m_bIsReferenced": false,
+//	"m_foot": "FOOT1"
+//}
 // MPropertyFriendlyName = "FootFall Tag"
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CFootFallAnimTag : public CAnimTagBase

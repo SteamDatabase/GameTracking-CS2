@@ -1,4 +1,19 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nEntityIndex": 0,
+//	"m_modelName": "",
+//	"m_poseParams":
+//	[
+//	],
+//	"m_decodeOps":
+//	[
+//	],
+//	"m_internalOps":
+//	[
+//	],
+//	"m_decodedAnims":
+//	[
+//	]
+//}
 class AnimationDecodeDebugDumpElement_t
 {
 	int32 m_nEntityIndex;

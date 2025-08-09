@@ -1,4 +1,6 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flCrossfadeTime": 1.000000
+//}
 class VMixEffectChainDesc_t
 {
 	// MPropertyFriendlyName = "Crossfade Time (s)"

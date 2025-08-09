@@ -1,4 +1,25 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_CollisionGroup": 0,
+//	"m_InteractAs":
+//	[
+//	],
+//	"m_InteractWith":
+//	[
+//	],
+//	"m_InteractExclude":
+//	[
+//	],
+//	"m_CollisionGroupString": "",
+//	"m_InteractAsStrings":
+//	[
+//	],
+//	"m_InteractWithStrings":
+//	[
+//	],
+//	"m_InteractExcludeStrings":
+//	[
+//	]
+//}
 class VPhysXCollisionAttributes_t
 {
 	uint32 m_CollisionGroup;

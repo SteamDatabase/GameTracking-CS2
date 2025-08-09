@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CSosGroupActionSchema",
+//	"m_name": "None",
+//	"m_actionType": "SOS_ACTION_NONE",
+//	"m_actionInstanceType": "SOS_ACTION_NONE"
+//}
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CSosGroupActionSchema

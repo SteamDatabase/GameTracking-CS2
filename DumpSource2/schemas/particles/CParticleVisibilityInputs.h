@@ -1,4 +1,24 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flCameraBias": 0.000000,
+//	"m_nCPin": -1,
+//	"m_flProxyRadius": 1.000000,
+//	"m_flInputMin": 0.000000,
+//	"m_flInputMax": 1.000000,
+//	"m_flInputPixelVisFade": 0.250000,
+//	"m_flNoPixelVisibilityFallback": 1.000000,
+//	"m_flDistanceInputMin": 0.000000,
+//	"m_flDistanceInputMax": 0.000000,
+//	"m_flDotInputMin": 0.000000,
+//	"m_flDotInputMax": 0.000000,
+//	"m_bDotCPAngles": true,
+//	"m_bDotCameraAngles": false,
+//	"m_flAlphaScaleMin": 0.000000,
+//	"m_flAlphaScaleMax": 1.000000,
+//	"m_flRadiusScaleMin": 1.000000,
+//	"m_flRadiusScaleMax": 1.000000,
+//	"m_flRadiusScaleFOVBase": 0.000000,
+//	"m_bRightEye": false
+//}
 class CParticleVisibilityInputs
 {
 	// MPropertyFriendlyName = "camera depth bias"

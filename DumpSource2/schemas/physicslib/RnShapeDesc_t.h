@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nCollisionAttributeIndex": 0,
+//	"m_nSurfacePropertyIndex": 0,
+//	"m_UserFriendlyName": "",
+//	"m_bUserFriendlyNameSealed": false,
+//	"m_bUserFriendlyNameLong": false,
+//	"m_nToolMaterialHash": 0
+//}
 class RnShapeDesc_t
 {
 	uint32 m_nCollisionAttributeIndex;

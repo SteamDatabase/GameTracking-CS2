@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_name": "",
+//	"m_morphRectDatas":
+//	[
+//	]
+//}
 class CMorphData
 {
 	CUtlString m_name;

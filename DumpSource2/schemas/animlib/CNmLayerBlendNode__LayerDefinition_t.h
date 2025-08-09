@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nInputNodeIdx": -1,
+//	"m_nWeightValueNodeIdx": -1,
+//	"m_nBoneMaskValueNodeIdx": -1,
+//	"m_nRootMotionWeightValueNodeIdx": -1,
+//	"m_bIsSynchronized": false,
+//	"m_bIgnoreEvents": false,
+//	"m_bIsStateMachineLayer": false,
+//	"m_blendMode": "Overlay"
+//}
 class CNmLayerBlendNode::LayerDefinition_t
 {
 	int16 m_nInputNodeIdx;

@@ -1,4 +1,17 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nActorID": 0,
+//	"m_szPreIdleSequence": "",
+//	"m_szEntrySequence": "",
+//	"m_szSequence": "",
+//	"m_szExitSequence": "",
+//	"m_nMoveTo": "eWaitFacing",
+//	"m_nMoveToGait": "eInvalid",
+//	"m_nHeldWeaponBehavior": "eInvalid",
+//	"m_bLoopPreIdleSequence": false,
+//	"m_bLoopActionSequence": false,
+//	"m_bLoopPostIdleSequence": false,
+//	"m_bIgnoreLookAt": false
+//}
 class PulseScriptedSequenceData_t
 {
 	int32 m_nActorID;

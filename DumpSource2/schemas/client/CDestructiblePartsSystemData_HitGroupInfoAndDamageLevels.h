@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_DebugName": "",
+//	"m_nHitGroup": "HITGROUP_GENERIC",
+//	"m_bDisableHitGroupWhenDestroyed": true,
+//	"m_nOtherHitgroupsToDestroyWhenFullyDestructed":
+//	[
+//	],
+//	"m_bOnlyDestroyWhenGibbing": false,
+//	"m_DamageLevels":
+//	[
+//	]
+//}
 // MModelGameData
 // MFgdHelper = "game_data_list{ key = 'CDestructiblePartsSystemData_HitGroupInfoAndDamageLevels' }"
 class CDestructiblePartsSystemData_HitGroupInfoAndDamageLevels

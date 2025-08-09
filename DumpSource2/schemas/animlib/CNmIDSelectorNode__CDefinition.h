@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmIDSelectorNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_conditionNodeIndices":
+//	[
+//	],
+//	"m_values":
+//	[
+//	],
+//	"m_defaultValue": ""
+//}
 class CNmIDSelectorNode::CDefinition : public CNmIDValueNode::CDefinition
 {
 	CUtlVectorFixedGrowable< int16, 5 > m_conditionNodeIndices;

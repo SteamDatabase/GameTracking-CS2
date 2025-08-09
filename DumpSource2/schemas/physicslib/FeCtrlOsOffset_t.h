@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nCtrlParent": 0,
+//	"nCtrlChild": 0
+//}
 class FeCtrlOsOffset_t
 {
 	uint16 nCtrlParent;

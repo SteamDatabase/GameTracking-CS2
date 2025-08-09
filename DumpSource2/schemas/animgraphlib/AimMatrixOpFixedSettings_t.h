@@ -1,4 +1,124 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_attachment":
+//	{
+//		"m_influenceRotations":
+//		[
+//			[
+//				0.000000,
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			],
+//			[
+//				0.000000,
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			],
+//			[
+//				0.000000,
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			]
+//		],
+//		"m_influenceOffsets":
+//		[
+//			[
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			],
+//			[
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			],
+//			[
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			]
+//		],
+//		"m_influenceIndices":
+//		[
+//			0,
+//			0,
+//			0
+//		],
+//		"m_influenceWeights":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_numInfluences": 0
+//	},
+//	"m_damping":
+//	{
+//		"_class": "CAnimInputDamping",
+//		"m_speedFunction": "NoDamping",
+//		"m_fSpeedScale": 1.000000,
+//		"m_fFallingSpeedScale": 1.000000
+//	},
+//	"m_poseCacheHandles":
+//	[
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		},
+//		{
+//			"m_nIndex": 65535,
+//			"m_eType": "POSETYPE_INVALID"
+//		}
+//	],
+//	"m_eBlendMode": "AimMatrixBlendMode_None",
+//	"m_flMaxYawAngle": 45.000000,
+//	"m_flMaxPitchAngle": 45.000000,
+//	"m_nSequenceMaxFrame": 0,
+//	"m_nBoneMaskIndex": -1,
+//	"m_bTargetIsPosition": true,
+//	"m_bUseBiasAndClamp": false,
+//	"m_flBiasAndClampYawOffset": 1.000000,
+//	"m_flBiasAndClampPitchOffset": 1.000000,
+//	"m_biasAndClampBlendCurve":
+//	{
+//		"m_flControlPoint1": 0.000000,
+//		"m_flControlPoint2": 1.000000
+//	}
+//}
 class AimMatrixOpFixedSettings_t
 {
 	CAnimAttachment m_attachment;

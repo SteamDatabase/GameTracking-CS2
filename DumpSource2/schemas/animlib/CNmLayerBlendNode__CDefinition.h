@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CNmLayerBlendNode::CDefinition",
+//	"m_nNodeIdx": -1,
+//	"m_nBaseNodeIdx": -1,
+//	"m_bOnlySampleBaseRootMotion": true,
+//	"m_layerDefinition":
+//	[
+//	]
+//}
 class CNmLayerBlendNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nBaseNodeIdx;

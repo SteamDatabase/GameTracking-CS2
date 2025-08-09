@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"flWeight": 1.000000,
+//	"flActivationDistance": 1.000000,
+//	"flBias": 0.000000,
+//	"flCurvature": 0.000000,
+//	"nFlags": 0,
+//	"nProbeNode": 0,
+//	"targetNodes":
+//	[
+//	]
+//}
 class FeAntiTunnelProbeBuild_t
 {
 	float32 flWeight;

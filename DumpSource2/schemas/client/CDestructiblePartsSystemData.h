@@ -1,5 +1,14 @@
 // MModelGameData
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_PartsDataByHitGroup":
+//	{
+//	},
+//	"m_nMinMaxNumberHitGroupsToDestroyWhenGibbing":
+//	[
+//		1,
+//		3
+//	]
+//}
 class CDestructiblePartsSystemData
 {
 	// MPropertyDescription = "Destructible Parts"

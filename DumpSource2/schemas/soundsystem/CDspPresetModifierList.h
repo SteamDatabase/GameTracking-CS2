@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_dspName": "default",
+//	"m_modifiers":
+//	[
+//	]
+//}
 class CDspPresetModifierList
 {
 	// MPropertyDescription = "Name of the DSP effect / subgraph used."

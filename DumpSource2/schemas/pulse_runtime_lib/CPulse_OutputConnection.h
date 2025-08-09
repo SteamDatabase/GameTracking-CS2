@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_SourceOutput": "",
+//	"m_TargetEntity": "",
+//	"m_TargetInput": "",
+//	"m_Param": ""
+//}
 class CPulse_OutputConnection
 {
 	PulseSymbol_t m_SourceOutput;

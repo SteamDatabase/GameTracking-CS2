@@ -1,4 +1,28 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nStartControlPointNumber": 0,
+//	"m_nEndControlPointNumber": 0,
+//	"m_nBulgeControl": 0,
+//	"m_flBulge": 0.000000,
+//	"m_flMidPoint": 0.500000,
+//	"m_vStartPointOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vMidPointOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vEndOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	]
+//}
 class CPathParameters
 {
 	// MPropertyFriendlyName = "start control point number"

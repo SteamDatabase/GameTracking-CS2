@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_name": "",
+//	"m_nameToken": "",
+//	"m_nIndex": 65535,
+//	"m_nNumComponents": 1,
+//	"m_eVarType": "INVALID",
+//	"m_eAccess": "WRITABLE"
+//}
 class VariableInfo_t
 {
 	CUtlString m_name;

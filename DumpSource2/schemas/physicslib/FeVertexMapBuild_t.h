@@ -1,4 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_VertexMapName": "",
+//	"m_nNameHash": 0,
+//	"m_Color":
+//	[
+//		255,
+//		255,
+//		255
+//	],
+//	"m_flVolumetricSolveStrength": 0.000000,
+//	"m_nScaleSourceNode": -1,
+//	"m_Weights":
+//	[
+//	]
+//}
 class FeVertexMapBuild_t
 {
 	CUtlString m_VertexMapName;

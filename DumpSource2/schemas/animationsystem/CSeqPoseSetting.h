@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sPoseParameter": "",
+//	"m_sAttachment": "",
+//	"m_sReferenceSequence": "",
+//	"m_flValue": 0.000000,
+//	"m_bX": false,
+//	"m_bY": false,
+//	"m_bZ": false,
+//	"m_eType": 0
+//}
 class CSeqPoseSetting
 {
 	CBufferString m_sPoseParameter;

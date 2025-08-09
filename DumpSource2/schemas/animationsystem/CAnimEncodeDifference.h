@@ -1,4 +1,26 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_boneArray":
+//	[
+//	],
+//	"m_morphArray":
+//	[
+//	],
+//	"m_userArray":
+//	[
+//	],
+//	"m_bHasRotationBitArray":
+//	[
+//	],
+//	"m_bHasMovementBitArray":
+//	[
+//	],
+//	"m_bHasMorphBitArray":
+//	[
+//	],
+//	"m_bHasUserBitArray":
+//	[
+//	]
+//}
 class CAnimEncodeDifference
 {
 	CUtlVector< CAnimBoneDifference > m_boneArray;

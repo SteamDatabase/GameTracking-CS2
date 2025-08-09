@@ -1,4 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CFootstepLandedAnimTag",
+//	"m_name": "Unnamed Tag",
+//	"m_sComment": "",
+//	"m_group": "",
+//	"m_tagID":
+//	{
+//		"m_id": 4294967295
+//	},
+//	"m_bIsReferenced": false,
+//	"m_FootstepType": "FOOTSOUND_Left",
+//	"m_OverrideSoundName": "",
+//	"m_DebugAnimSourceString": "",
+//	"m_BoneName": ""
+//}
 // MPropertyFriendlyName = "FootstepLanded Tag"
 // M_LEGACY_OptInToSchemaPropertyDomain
 class CFootstepLandedAnimTag : public CAnimTagBase

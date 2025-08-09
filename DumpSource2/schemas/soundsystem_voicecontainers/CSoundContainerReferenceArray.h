@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bUseReference": true,
+//	"m_sounds":
+//	[
+//	],
+//	"m_pSounds":
+//	[
+//	]
+//}
 // MPropertyFriendlyName = "Sound Array "
 // MPropertyDescription = "Reference to list of vsnd files or other containers."
 class CSoundContainerReferenceArray

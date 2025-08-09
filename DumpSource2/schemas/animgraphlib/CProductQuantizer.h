@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_subQuantizers":
+//	[
+//	],
+//	"m_nDimensions": 0
+//}
 class CProductQuantizer
 {
 	CUtlVector< CVectorQuantizer > m_subQuantizers;

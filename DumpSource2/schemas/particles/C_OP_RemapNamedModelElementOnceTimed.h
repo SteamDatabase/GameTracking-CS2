@@ -1,4 +1,4 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = Could not parse KV3 Defaults
 class C_OP_RemapNamedModelElementOnceTimed : public CParticleFunctionOperator
 {
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;

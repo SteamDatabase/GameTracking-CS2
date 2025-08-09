@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CStaticPoseCache",
+//	"m_poses":
+//	[
+//	],
+//	"m_nBoneCount": 0,
+//	"m_nMorphCount": 0
+//}
 class CStaticPoseCache
 {
 	CUtlVector< CCachedPose > m_poses;
