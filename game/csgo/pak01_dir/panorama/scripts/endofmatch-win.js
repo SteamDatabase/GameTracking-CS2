@@ -75,9 +75,10 @@ var EOM_Win;
             !_m_oScoreData["teamdata"]["CT"] ||
             !_m_oScoreData["teamdata"]["TERRORIST"])
             return false;
-        if (_m_oMatchEndData.hasOwnProperty('winning_player')) {
+        if (_m_oMatchEndData.hasOwnProperty('winning_player'))
             return false;
-        }
+        if (GameStateAPI.GetGameModeInternalName(false) == 'deathmatch')
+            return false;
         _SetVictoryStatement();
         return true;
     }

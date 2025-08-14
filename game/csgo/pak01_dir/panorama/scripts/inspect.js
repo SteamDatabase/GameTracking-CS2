@@ -100,8 +100,13 @@ var InspectModelImage;
             if (InventoryAPI.GetLoadoutCategory(itemId) === 'clothing') {
                 m_elPanel = _InitGlovesScene(itemId);
             }
-            else if (model.includes('models/props/crates/')) {
-                m_elPanel = _InitCaseScene(itemId);
+            else if (ItemInfo.ItemHasCapability(itemId, 'decodable')) {
+                if (InventoryAPI.GetItemAttributeValue(itemId, '{uint32}volatile container')) {
+                    m_elPanel = _InitLaptopScene(itemId);
+                }
+                else {
+                    m_elPanel = _InitCaseScene(itemId);
+                }
             }
         }
         else if (!model) {
@@ -353,6 +358,28 @@ var InspectModelImage;
         _TransitionCamera(panel, m_useAcknowledge ? 'case_new_item' : 'case', m_useAcknowledge ? true : false);
         return panel;
     }
+    function _InitLaptopScene(itemId) {
+        let oSettings = {
+            panel_type: "MapItemPreviewPanel",
+            active_item_idx: 10,
+            camera: 'cam_laptop_intro',
+            initial_entity: 'item',
+            mouse_rotate: "false",
+            rotation_limit_x: "",
+            rotation_limit_y: "",
+            auto_rotate_x: "",
+            auto_rotate_y: "",
+            auto_rotate_period_x: "",
+            auto_rotate_period_y: "",
+            auto_recenter: false,
+            map_override: 'warehouse_vanity',
+            player: "false",
+        };
+        const panel = _LoadInspectMap(itemId, oSettings);
+        _SetParticlesBg(panel);
+        _TransitionCamera(panel, m_useAcknowledge ? 'laptop_new_item' : 'laptop', m_useAcknowledge ? true : false);
+        return panel;
+    }
     function _InitGlovesScene(itemId) {
         let oSettings = {
             panel_type: "MapItemPreviewPanel",
@@ -407,7 +434,7 @@ var InspectModelImage;
         return backgroundMap;
     }
     function _LoadInspectMap(itemId, oSettings, bUseMainMenuMap = false) {
-        let mapName = _GetBackGroundMap(bUseMainMenuMap);
+        let mapName = oSettings.map_override ? oSettings.map_override : _GetBackGroundMap(bUseMainMenuMap);
         let elPanel = GetExistingItemPanel('ItemPreviewPanel');
         if (!elPanel) {
             let strAsyncWorkType = $.GetContextPanel().GetAttributeString("asyncworktype", "");
@@ -678,7 +705,7 @@ var InspectModelImage;
     }
     InspectModelImage.DisableItemLighting = DisableItemLighting;
     function _SetLightingForItem(indexShow, elPanel) {
-        let numItemEntitiesInMap = 9;
+        let numItemEntitiesInMap = 10;
         for (let i = 0; i <= numItemEntitiesInMap; i++) {
             let itemIndexMod = i === 0 ? '' : i.toString();
             if (indexShow !== i) {

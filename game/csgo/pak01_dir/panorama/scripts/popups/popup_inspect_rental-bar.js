@@ -138,7 +138,7 @@ var InspectRentalBar;
             $.DispatchEvent('StartDecodeableAnim');
             return;
         }
-        InventoryAPI.UseToolWithIntArg(m_itemToUseId, m_itemId, 1);
+        InventoryAPI.UseToolWithIntArg(m_itemToUseId, m_itemId, 5318008);
         $.DispatchEvent('StartRentalAnim');
         $.Schedule(2.75, ShowRentalInspect);
     }

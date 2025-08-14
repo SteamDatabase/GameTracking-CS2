@@ -3,6 +3,7 @@
 /// <reference path="inspect.ts" />
 /// <reference path="mainmenu_store_fullscreen.ts" />
 /// <reference path="common/prime_button_action.ts" />
+/// <reference path="common/xpshop_tile_weapon_camera_settings.ts" />
 /// <reference path="popups/popup_acknowledge_item.ts" />
 /// <reference path="common/icon.ts" />
 /// <reference path="xpshop_track.ts" />
@@ -21,44 +22,6 @@ var XpShop;
     let m_showTimeoutScheduleHandle;
     const m_passDefName = 'XpShopTicket1';
     const m_passId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_passDefName), 0);
-    let m_CameraSettingsPerWeapon = [
-        { type: 'weapon_awp', camera: '1' },
-        { type: 'weapon_aug', camera: '2' },
-        { type: 'weapon_sg556', camera: '0' },
-        { type: 'weapon_ssg08', camera: '1' },
-        { type: 'weapon_ak47', camera: '0' },
-        { type: 'weapon_m4a1_silencer', camera: '1' },
-        { type: 'weapon_famas', camera: '0' },
-        { type: 'weapon_g3sg1', camera: '1' },
-        { type: 'weapon_galilar', camera: '2' },
-        { type: 'weapon_m4a1', camera: '0' },
-        { type: 'weapon_scar20', camera: '1' },
-        { type: 'weapon_mp5sd', camera: '0' },
-        { type: 'weapon_mac10', camera: '5' },
-        { type: 'weapon_xm1014', camera: '2' },
-        { type: 'weapon_m249', camera: '1' },
-        { type: 'weapon_ump45', camera: '0' },
-        { type: 'weapon_bizon', camera: '2' },
-        { type: 'weapon_mag7', camera: '2' },
-        { type: 'weapon_nova', camera: '1' },
-        { type: 'weapon_sawedoff', camera: '2' },
-        { type: 'weapon_negev', camera: '1' },
-        { type: 'weapon_p90', camera: '3' },
-        { type: 'weapon_mp9', camera: '5' },
-        { type: 'weapon_mp7', camera: '5' },
-        { type: 'weapon_usp_silencer', camera: '4' },
-        { type: 'weapon_cz75a', camera: '6' },
-        { type: 'weapon_elite', camera: '5' },
-        { type: 'weapon_tec9', camera: '5' },
-        { type: 'weapon_revolver', camera: '6' },
-        { type: 'weapon_fiveseven', camera: '7' },
-        { type: 'weapon_p250', camera: '7' },
-        { type: 'weapon_glock', camera: '7' },
-        { type: 'weapon_deagle', camera: '6' },
-        { type: 'weapon_hkp2000', camera: '6' },
-        { type: 'weapon_c4', camera: '2' },
-        { type: 'weapon_taser', camera: '5' },
-    ];
     function Init() {
         m_nTrack = MissionsAPI.GetSeasonalOperationXpShopIndex();
         if (!m_nTrack || m_nTrack === 0) {
@@ -849,7 +812,7 @@ var XpShop;
         else {
             const defName = InventoryAPI.GetItemDefinitionName(itemId);
             elPanel.Data().defName = defName;
-            let cameraData = m_CameraSettingsPerWeapon.find(({ type }) => type === defName);
+            let cameraData = XpShopWeaponCameraSettings.CameraSettings.find(({ type }) => type === defName);
             let cameraSuffix = cameraData !== undefined ? cameraData.camera : '0';
             let camera = 'camera_' + ShopEntry.lootlist_item_type + '_' + cameraSuffix;
             MakeMapItemPreviewPanel(elPanel, camera, mapName, ShopEntry);

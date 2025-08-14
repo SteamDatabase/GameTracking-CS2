@@ -495,6 +495,14 @@
 		"models_gamedata"			"models_gamedata.fgd"
 		"features"					"cs2;modelconfig;animgraph;animgraph_compatibility_force;editorconfig;gamepreview"
 		"firstpersoncamerapreview"	"1"
+		"disallowed_materials"
+		{
+			"material" "materials/debug/debugempty.vmat"
+		}
+		"content_consider_warnings_as_errors"
+		{
+			"substr" "phase2/weapons/models/"
+		}
 	}
 
 	RenderSystem

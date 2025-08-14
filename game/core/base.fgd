@@ -176,7 +176,12 @@
 ]
 
 
-@BaseClass = Studiomodel
+@BaseClass 
+	metadata
+	{
+		input_output_cpp = [ "basemodelentity" ]
+	}
+= Studiomodel
 [
 	model(studio) { report = true sort_priority = 80 } : "World Model"
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
@@ -200,6 +205,7 @@
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
+	output OnDestructiblePartDestroyed(cpp)
 
 	add_attribute(string) : "Add Attribute" : "" : "Will add an additional attribute that AI/player entities can query when checking props for information (ex: 'DogToy' or 'GrabbableResource')"
 	add_modifier(string) : "Add Modifier" : "" : "Will add this modifier when the entity spawns."
@@ -2380,8 +2386,10 @@
 	"An entity that projects a decal onto the world (or props). If the decal has no target name, it will immediately apply itself when "+
 	"the level is loaded. If it has a name specified, it won't apply until it receives the 'Activate' input."
 [
-	texture(decal)
+	material(resource:material): "Decal Material" : "" 
+	sequence_name(string) : "Decal Texture Sequence" : "" : ""
 	Distance(float) : "Distance" : 64 : "Distance from the origin to project the decal."
+	not_in_multiplayer(boolean) : "Not in Multiplayer" : "0"
 
 	// Inputs
 	input Activate(void) : "Force the decal to apply itself to the world."
@@ -4682,13 +4690,15 @@
 	spawnflags(flags) =
 	[
 		1 : "Force only on stretch" : 0
+		2 : "Enable collision" : 0
 	]
-
+	
 	attach1(target_destination) : "Entity 1" : ""
 	attach2(target_destination) : "Entity 2" : ""
 
 	springaxis(vecline) : "Spring Axis" : "" : "Use the helper. Drag it out to match the virtual spring."
-	length(string) : "Length" : "0" : "How long the spring would be if it was at rest (nothing hanging on it or attached). 0 means the length of the helpr ."
+	length(string) : "Length" : "0" : "How long the spring would be if it was at rest (nothing hanging on it or attached). 0 means the length of the helper."
+	lengthscale(float) : "Length Scale" : "1" : "Scale on the rest length. You can use this to easily make the spring start out stretched. e.g. a value of 0.75 here means the spring will spawn stretched by ~25%."
 	frequency(string) : "Frequency" : "5" : "The stiffness of the spring.  The larger the number the less the spring will stretch. The maximum should be not more than 30!"
 	damping(string) : "Damping Ratio" : "0.7" : "How much energy the spring loses. Values less than one give you an osscilating spring. A value of one makes the spring return without overshooting"
 	//breaklength(string) : "Break on Length" : "0" : "If the spring's length ever exceeds this length, the spring breaks."
@@ -5017,6 +5027,7 @@
 
 	linearfrequency(float) : "Linear Frequency" : "0" : "Linear spring frequency (stiffness)."
 	lineardampingratio(float) : "Linear Damping Ratio" : "0" : "Linear spring damping ratio."
+	jointfriction(float) : "Friction" : "0" : "Resistance/friction for movement along the spline"
 
 	fireeventsonpath(bool) : "Fire Events On Path" : "0" : "Notify our path when the attached entity moves along it so it can fire passthrough events, etc."
 
@@ -7123,6 +7134,7 @@
 	ignore_input(boolean) : "Ignore Input" : "0"
 	interact_distance(float) : "Interact Distance" : "8"
 	lit(boolean) : "Lit" : "0"
+	css_class(string) : "Css Class(es)" : ""
 	horizontal_align(Choices) =
 	[
 		0: "Left"

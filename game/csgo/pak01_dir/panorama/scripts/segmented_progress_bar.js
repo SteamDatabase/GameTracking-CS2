@@ -106,15 +106,17 @@ var SegmentedProgressBar;
     }
     SegmentedProgressBar.Init = Init;
     function SetValue(elPanel, val, bar) {
-        switch (bar) {
-            case 'Live':
-                elPanel.Data().m_liveProgBar.setBarValue(val);
-                break;
-            case 'Base':
-                elPanel.Data().m_baseProgBar.setBarValue(val);
-                break;
+        if (elPanel && elPanel.IsValid() && elPanel.Data().m_liveProgBar) {
+            switch (bar) {
+                case 'Live':
+                    elPanel.Data().m_liveProgBar.setBarValue(val);
+                    break;
+                case 'Base':
+                    elPanel.Data().m_baseProgBar.setBarValue(val);
+                    break;
+            }
+            elPanel.Data().m_backgroundProgBar.setBarValue(val);
         }
-        elPanel.Data().m_backgroundProgBar.setBarValue(val);
     }
     SegmentedProgressBar.SetValue = SetValue;
 })(SegmentedProgressBar || (SegmentedProgressBar = {}));

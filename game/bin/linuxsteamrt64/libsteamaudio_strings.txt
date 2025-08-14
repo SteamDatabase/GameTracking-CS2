@@ -5,6 +5,7 @@
 %ld bytes leaked in %d chunks\n
 %lli
 %s(%d): OpenSSL internal error, assertion failed: %s\n
+%s: Too many bands (%d) to pack an energy field into an impulse response!\n
 %s: Unable to create energy field [%d]\n
 %s: Unable to create hybrid reverb estimator [%d]\n
 %s: Unable to create impulse response [%d]\n
@@ -23,7 +24,10 @@
 %s: Unable to load probe batch (%d)\n
 %s: Unable to load probe batch.\n
 %s: Unable to save data: %s\n
+%s: pathing data was baked with a different number of bands (expected %d, found %d), please re-bake\n
+%s: reverb data was baked with a different number of bands (expected %d, found %d), please re-bake\n
 %s_%03d.vpk
+*ZN16CSteamAudioScene14BakeDimensionsEP15IVPhysics2WorldR10CUtlVectorI5Vec3DIfEi25CUtlVectorMemory_GrowableIS4_iLm0EEERS2_IfiS5_IfiLm0EEER40SteamAudioCustomDataDimensionsSettings_tiR10CUtlBufferPFvfPvESG_EUliiE_
 -avx
 -no_hierarchical_vpk_memory_mapping
 -sse2
@@ -36,6 +40,7 @@
 .custom.occlusion
 .sapaths
 .sareverb
+0 = use biquad instead of svf, 1 = use vectorized svf, 2 = use scalar svf
 0: distance ratio only. 1: deviation only (1/r). 2: deviation only (linear). 3: Mode 0 and Mode 1, 4: Mode 0 and Mode 2
 11CSteamAudio
 11ISteamAudio
@@ -60,6 +65,7 @@
 22CSteamAudioPartitioner
 22IHybridReverbProcessor
 23CSteamAudioMaterialList
+25BufferedImpulseResponse_t
 25CSteamAudioSimulationData
 25CSurfacePropDataTableBase
 25ISteamAudioSimulationData
@@ -68,6 +74,7 @@
 30CSchemaRegistration_steamaudio
 <<ERROR>>
 <INVALID>
+AABB_t
 AD Time Stamping
 AD_DVCS
 AES-128-CBC
@@ -118,6 +125,9 @@ BIO routines
 BN lib
 BUF lib
 BakeDimensions
+BakeDimensions: Estimating inside field.\n
+BakeDimensions: Estimating outside field (1/2: Pathing).\n
+BakeDimensions: Estimating outside field (2/2: Outside probe lookups).\n
 BakeDimensions: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
 BakeDimensions: No probes generated. Bake cancelled.\n
 BakeDimensions: Unable to create probe batch. [%d]\n
@@ -257,17 +267,20 @@ E-mail Protection
 EC lib
 ENGINE lib
 EVP lib
+Enable SIMD code path for shoebox reverb processor.
 Enable caching listener probe neighborhood for pathing.
 Enable custom HRTF loading.
 Enable perspective correction for 3D audio.
 Enables tracy profiling when baking steam audio data in Hammer.
 Enterprises
 Error reading from loaded packed store "%s"
+Estimate Size
 Experimental
 Exported scene as OBJ to %s.\n
 Exported scene as PHONONSCENE to %s.\n
 Extended OCSP Status
 Extension Request
+ExtractDirectionalityFromEnergyField
 FILE pointer
 FIPS routines
 Failed to allocate an instance of a class
@@ -342,13 +355,13 @@ KV3TransferPostSaveFn
 Key field (file) missing in custom hrtf properties file. Using default HRTF.
 Key field (normalization) missing in custom hrtf properties file. Setting it to no normalization.
 Key field (volume) missing in custom hrtf properties file. Setting it to 0 dB.
+Li|eEG#
 LoadKV3Object error: %s\n
 Loaded custom HRTF [%s] with volume [%.2f dB] and normaliztion [%d]\n
 LocalKeySet
 MD5-SHA1
 MDC2
 MGF1
-MGetKV3ClassDefaults
 MIME MHS
 Mail
 Management
@@ -458,6 +471,7 @@ Perspective correction factor, ratio of screen size and view depth from screen, 
 Phonon_Log
 Policy Qualifier CPS
 Policy Qualifier User Notice
+Private
 Probes: Probe Array not initialized.\n
 Probes: Probe Batch is null.\n
 Proxy Certificate Information
@@ -594,6 +608,7 @@ SteamAudioReverbCompressionSettings_t
 SteamAudioReverbSettings_t
 Strong Extranet ID
 Subject Information Access
+SurfacePropertiesList
 TLS Web Client Authentication
 TLS Web Server Authentication
 TS lib
@@ -876,6 +891,7 @@ des-ede3-cfb1
 des-ede3-cfb8
 des-ede3-ofb
 des-ofb
+description
 destinationIndicator
 desx-cbc
 dh-cofactor-kdf
@@ -950,6 +966,7 @@ evp_pkey
 ex_data
 ex_data.c
 expecting an asn1 sequence
+experimental
 extReq
 extendedCertificateAttributes
 extendedKeyUsage
@@ -1238,6 +1255,7 @@ idea-cfb
 idea-ecb
 idea-ofb
 identified-organization
+info
 inhibitAnyPolicy
 initials
 int_err_get (err.c)
@@ -1294,6 +1312,7 @@ iplImpulseResponse2GetNumSamples
 iplImpulseResponse2Release
 iplImpulseResponse2Reset
 iplImpulseResponse2SwapSource
+iplImpulseResponseCopy
 iplImpulseResponseCreate
 iplImpulseResponseGetChannel
 iplImpulseResponseGetNumChannels
@@ -1443,6 +1462,7 @@ m_nAmbisonicsOrderInsideSizeField
 m_nAmbisonicsOrderOutsideField
 m_nBands
 m_nBins
+m_nChannels
 m_nCubeMapResolution
 m_nNumBounces
 m_nNumRays
@@ -1457,6 +1477,8 @@ m_probes
 m_reverbClusteringSettings
 m_reverbCompressionSettings
 m_reverbSettings
+m_vMaxBounds
+m_vMinBounds
 m_vecClusterForProbe
 m_vecCompressedData
 m_vecDictionary
@@ -1476,6 +1498,7 @@ m_vecOutsideField
 m_vecPathingDeviation
 m_vecPathingRatio
 m_vecReflectionRatio
+m_vecSize
 mail
 mailPreferenceOption
 malloc failure
@@ -1654,6 +1677,7 @@ safeContentsBag
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
+scattering
 scripts/custom_hrtfs.txt
 scripts/surfaceproperties_steamaudio.txt
 sdsiCertificate
@@ -1847,6 +1871,9 @@ shaWithRSAEncryption
 signingTime
 simpleSecurityObject
 singleLevelQuality
+snd_boxverb_simd
+snd_boxverb_simd_svf
+snd_hrtf_distance_behind
 snd_steamaudio_active_hrtf
 snd_steamaudio_baked_data_stats
 snd_steamaudio_baked_occlusion_mode
@@ -1955,6 +1982,7 @@ steamaudioscene.cpp
 store
 street
 streetAddress
+strncpy
 subjectAltName
 subjectDirectoryAttributes
 subjectInfoAccess
@@ -1963,6 +1991,7 @@ subtreeMaximumQuality
 subtreeMinimumQuality
 supportedAlgorithms
 supportedApplicationContext
+surfacePropertyName
 surname
 system lib
 system library
@@ -1995,6 +2024,7 @@ userClass
 userId
 userPassword
 valid
+volume
 vtable for std::bad_weak_ptr
 wap-wsg
 wap-wsg-idm-ecid-wtls1

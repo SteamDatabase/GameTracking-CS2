@@ -340,7 +340,10 @@ var InventoryPanel;
                 $.GetContextPanel().FindChildTraverse('Crafting-Ingredients').SetReadyForDisplay(true);
                 let RecipeId = InventoryAPI.GetTradeUpContractItemID();
                 let strCraftingFilter = InventoryAPI.GetItemAttributeValue(RecipeId, "recipe filter");
-                InventoryAPI.ClearCraftIngredients();
+                InventoryAPI.SetInventorySortAndFilters('inv_sort_age', false, 'ingredient', '', '');
+                if (InventoryAPI.GetInventoryCount() !== 1) {
+                    InventoryAPI.ClearCraftIngredients();
+                }
                 InventoryAPI.SetCraftTarget(Number(strCraftingFilter));
                 $.DispatchEvent('UpdateTradeUpPanel');
             }

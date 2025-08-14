@@ -4,13 +4,20 @@
 /// <reference path="../common/characteranims.ts" />
 var MainMenuVanityContextMenu;
 (function (MainMenuVanityContextMenu) {
+    function ChooseMapNameToken(map) {
+        let token = "#VanityMapName_" + map;
+        if ($.Localize(token) == token) {
+            token = "#SFUI_Map_" + map;
+        }
+        return token;
+    }
     function Init() {
         let strType = $.GetContextPanel().GetAttributeString("type", "");
         let team = $.GetContextPanel().GetAttributeString("team", "");
         let elContextMenuBodyNoScroll = $.GetContextPanel().FindChildTraverse('ContextMenuBodyNoScroll');
-        elContextMenuBodyNoScroll.SetDialogVariableLocString("mainmenu_bkgnd", "#SFUI_Map_" + GameInterfaceAPI.GetSettingString("ui_mainmenu_bkgnd_movie"));
+        elContextMenuBodyNoScroll.SetDialogVariableLocString("mainmenu_bkgnd", ChooseMapNameToken(GameInterfaceAPI.GetSettingString("ui_mainmenu_bkgnd_movie")));
         $.RegisterForUnhandledEvent("CSGOMainInitBackgroundMovie", () => {
-            elContextMenuBodyNoScroll.SetDialogVariableLocString("mainmenu_bkgnd", "#SFUI_Map_" + GameInterfaceAPI.GetSettingString("ui_mainmenu_bkgnd_movie"));
+            elContextMenuBodyNoScroll.SetDialogVariableLocString("mainmenu_bkgnd", ChooseMapNameToken(GameInterfaceAPI.GetSettingString("ui_mainmenu_bkgnd_movie")));
         });
         if (strType === 'catagory')
             MakeCatBtns(team);
@@ -86,7 +93,7 @@ var MainMenuVanityContextMenu;
         let elContextMenuBodyNoScroll = $.GetContextPanel().FindChildTraverse('ContextMenuBodyNoScroll');
         elContextMenuBodyNoScroll.RemoveAndDeleteChildren();
         for (let map of aMaps) {
-            fnAddVanityPopupMenuItem('context-menu-vanity-' + map, '#SFUI_Map_' + map, () => {
+            fnAddVanityPopupMenuItem('context-menu-vanity-' + map, ChooseMapNameToken(map), () => {
                 if ($.GetContextPanel().GetAttributeString("inspect-map", "") === "true") {
                     GameInterfaceAPI.SetSettingString('ui_inspect_bkgnd_map', map);
                 }

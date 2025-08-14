@@ -17,6 +17,9 @@ Instance.InitialActivate(() => {
             Instance.Msg("score: " + score.toString());
             var slot = controller.GetPlayerSlot();
             Instance.Msg("slot: " + slot.toString());
+            var weapon_0 = controller.GetWeaponDataForLoadoutSlot(0);
+            var name = weapon_0?.GetName();
+            Instance.Msg("weapon 0 vdata name: " + name);
         }
         else {
             Instance.Msg("no controller");

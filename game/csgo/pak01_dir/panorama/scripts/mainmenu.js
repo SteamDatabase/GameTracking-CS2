@@ -1340,14 +1340,24 @@ var MainMenu;
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
     MainMenu.ShowVote = ShowVote;
-    function _HideStoreStatusPanel() {
+    function _HasStoreStatusPanelTrapPopups() {
+        let elStorePanels = $.GetContextPanel().FindChildInLayoutFile('PopupManager').
+            Children().filter(panel => panel.BHasClass('ShowStoreStatusPanelHandler'));
+        return (elStorePanels && (elStorePanels.length > 0));
+    }
+    function _HideStoreStatusPanelInternal() {
         if (_m_storePopupElement && _m_storePopupElement.IsValid()) {
             _m_storePopupElement.DeleteAsync(0);
         }
         _m_storePopupElement = null;
     }
+    function _HideStoreStatusPanel() {
+        if (_HasStoreStatusPanelTrapPopups())
+            return;
+        _HideStoreStatusPanelInternal();
+    }
     function _ShowStoreStatusPanel(strText, bAllowClose, bCancel, strOkCmd) {
-        _HideStoreStatusPanel();
+        _HideStoreStatusPanelInternal();
         let paramclose = '0';
         if (bAllowClose) {
             paramclose = '1';
@@ -1356,6 +1366,8 @@ var MainMenu;
         if (bCancel) {
             paramcancel = '1';
         }
+        if (_HasStoreStatusPanelTrapPopups())
+            return;
         _m_storePopupElement = UiToolkitAPI.ShowCustomLayoutPopupParameters('store_popup', 'file://{resources}/layout/popups/popup_store_status.xml', 'text=' + strText +
             '&' + 'allowclose=' + paramclose +
             '&' + 'cancel=' + paramcancel +

@@ -54,7 +54,11 @@ var FriendTile;
     function _SetName(elTile) {
         let elLabel = elTile.FindChildTraverse('JsFriendName');
         if (!_m_isClan) {
-            elLabel.text = FriendsListAPI.GetFriendName(_m_xuid);
+            let name = FriendsListAPI.GetFriendName(_m_xuid);
+            if (name === "[unknown]") {
+                name = '[' + $.Localize('SFUI_Friends_Unknown') + ']';
+            }
+            elLabel.text = name;
         }
         else {
             elLabel.text = MyPersonaAPI.GetMyClanNameById(_m_xuid);

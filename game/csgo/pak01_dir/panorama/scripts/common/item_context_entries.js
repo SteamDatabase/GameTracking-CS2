@@ -299,8 +299,24 @@ var ItemContextEntries;
             }
         },
         {
+            name: 'secure_connection_line',
+            AvailableForItem: (id) => {
+                return ItemInfo.ItemHasCapability(id, 'decodable') &&
+                    !!InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container') &&
+                    InventoryAPI.IsRental(id) &&
+                    (InventoryAPI.GetItemQuality(id) === 14);
+            },
+            bActionIsRentalAware: true,
+            OnSelected: (id) => {
+                $.DispatchEvent('ContextMenuEvent', '');
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('secure_connection_line_' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id);
+            }
+        },
+        {
             name: (id) => {
-                if (InventoryAPI.GetDecodeableRestriction(id) === 'restricted' && !InventoryAPI.IsTool(id) && !InventoryAPI.CanOpenForRental(id))
+                if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container'))
+                    return InventoryAPI.IsRental(id) ? 'inspect_contents' : 'open_package';
+                else if (InventoryAPI.GetDecodeableRestriction(id) === 'restricted' && !InventoryAPI.IsTool(id) && !InventoryAPI.CanOpenForRental(id))
                     return 'look_inside';
                 else if (InventoryAPI.IsRental(id))
                     return 'look_inside';
@@ -313,9 +329,20 @@ var ItemContextEntries;
             bActionIsRentalAware: true,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
+                if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container')
+                    && InventoryAPI.IsRental(id)) {
+                    $.DispatchEvent("LootlistItemPreview", InventoryAPI.GetLootListItemIdByIndex(id, 0), id +
+                        ',' + id);
+                    return;
+                }
                 if (InventoryAPI.GetChosenActionItemsCount(id, 'decodable') === 0) {
                     if (InventoryAPI.IsTool(id)) {
                         $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'decodable', id, '');
+                    }
+                    else if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container')) {
+                        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
+                            '&' + 'asyncworktype=decodeable');
+                        return;
                     }
                     else {
                         UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +

@@ -13,7 +13,6 @@ var HudDemoController;
         ObserverMode[ObserverMode["OBS_MODE_IN_EYE"] = 2] = "OBS_MODE_IN_EYE";
         ObserverMode[ObserverMode["OBS_MODE_CHASE"] = 3] = "OBS_MODE_CHASE";
         ObserverMode[ObserverMode["OBS_MODE_ROAMING"] = 4] = "OBS_MODE_ROAMING";
-        ObserverMode[ObserverMode["OBS_MODE_DIRECTED"] = 5] = "OBS_MODE_DIRECTED";
     })(ObserverMode || (ObserverMode = {}));
     const timeStepSeconds = 15;
     const cp = $.GetContextPanel();

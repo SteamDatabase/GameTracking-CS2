@@ -299,7 +299,7 @@ var CapabilityDecodable;
         }
         else {
             m_elCaseModelImagePanel.TransitionToCamera('cam_case_open', 1.5);
-            $.Schedule(0.75, () => { m_elCaseModelImagePanel?.OpenCaseModel(); });
+            $.Schedule(0.75, () => { m_elCaseModelImagePanel?.SetAnimgraphBool('open', true); });
             delay = 2.0;
         }
         $.Schedule(delay, _ShowScroll.bind(undefined, m_elCaseModelImagePanel));
@@ -415,7 +415,7 @@ var CapabilityDecodable;
             elTile.AddClass('magnified');
         }
         itemId = (elTile.id === 'ItemFromContainer' && m_itemFromContainer) ? m_itemFromContainer : itemId;
-        if (InventoryAPI.IsItemUnusual(itemId) && m_unusualItemImagePath) {
+        if ((InventoryAPI.GetItemQuality(itemId) === 3) && m_unusualItemImagePath) {
             _UpdateUnusualItemInfo(elTile, m_caseId, m_unusualItemImagePath);
         }
         else {
@@ -727,7 +727,7 @@ var CapabilityDecodable;
         _ShowHideLootList(false);
         _PlayContainerSound(m_caseId, 'open');
         m_elCaseModelImagePanel.TransitionToCamera('cam_case_open', 1.5);
-        $.Schedule(0.75, () => { m_elCaseModelImagePanel?.OpenCaseModel(); });
+        $.Schedule(0.75, () => { m_elCaseModelImagePanel?.SetAnimgraphBool('open', true); });
     }
     CapabilityDecodable._PlayOpenCaseAnimForRental = _PlayOpenCaseAnimForRental;
     $.RegisterForUnhandledEvent('PanoramaComponent_Inventory_ItemCustomizationNotification', _UpdateScrollResultTile);
