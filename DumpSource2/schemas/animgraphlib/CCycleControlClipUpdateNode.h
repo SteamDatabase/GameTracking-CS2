@@ -52,7 +52,8 @@
 //	{
 //		"m_type": "ANIMPARAM_UNKNOWN",
 //		"m_index": 255
-//	}
+//	},
+//	"m_bLockWhenWaning": false
 //}
 class CCycleControlClipUpdateNode : public CLeafUpdateNode
 {
@@ -61,4 +62,5 @@ class CCycleControlClipUpdateNode : public CLeafUpdateNode
 	float32 m_duration;
 	AnimValueSource m_valueSource;
 	CAnimParamHandle m_paramIndex;
+	bool m_bLockWhenWaning;
 };

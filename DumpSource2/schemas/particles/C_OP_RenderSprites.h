@@ -2276,6 +2276,7 @@
 //			]
 //		}
 //	},
+//	"m_bSequenceNumbersAreRawSequenceIndices": false,
 //	"m_nOrientationType": "PARTICLE_ORIENTATION_SCREEN_ALIGNED",
 //	"m_nOrientationControlPoint": -1,
 //	"m_bUseYawWithNormalAligned": false,
@@ -3780,6 +3781,9 @@ class C_OP_RenderSprites : public CBaseRendererSource2
 	// MPropertyFriendlyName = "sequence id override"
 	// MPropertySortPriority = 500
 	CParticleCollectionRendererFloatInput m_nSequenceOverride;
+	// MPropertyFriendlyName = "Sequence Numbers Are Indices (Tools Particles Only)"
+	// MParticleAdvancedField
+	bool m_bSequenceNumbersAreRawSequenceIndices;
 	// MPropertyStartGroup = "Orientation"
 	// MPropertyFriendlyName = "orientation type"
 	// MPropertySortPriority = 750

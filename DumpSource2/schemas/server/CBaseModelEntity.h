@@ -20,6 +20,8 @@
 // MNetworkVarNames = "Vector m_vDecalForwardAxis"
 // MNetworkVarNames = "float m_flDecalHealBloodRate"
 // MNetworkVarNames = "float m_flDecalHealHeightRate"
+// MNetworkVarNames = "DecalMode_t m_nDecalMode"
+// MNetworkVarNames = "DecalMode_t m_nRequiredDecalMode"
 // MNetworkVarNames = "CHandle< CBaseModelEntity > m_ConfigEntitiesToPropagateMaterialDecalsTo"
 // MNetworkVarNames = "CNetworkViewOffsetVector m_vecViewOffset"
 class CBaseModelEntity : public CBaseEntity
@@ -92,6 +94,10 @@ class CBaseModelEntity : public CBaseEntity
 	float32 m_flDecalHealBloodRate;
 	// MNetworkEnable
 	float32 m_flDecalHealHeightRate;
+	// MNetworkEnable
+	DecalMode_t m_nDecalMode;
+	// MNetworkEnable
+	DecalMode_t m_nRequiredDecalMode;
 	// MNetworkEnable
 	CNetworkUtlVectorBase< CHandle< CBaseModelEntity > > m_ConfigEntitiesToPropagateMaterialDecalsTo;
 	// MNetworkEnable

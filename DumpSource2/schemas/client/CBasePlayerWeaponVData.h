@@ -6,6 +6,7 @@
 //	"m_bAllowFlipping": true,
 //	"m_sMuzzleAttachment": "muzzle",
 //	"m_szMuzzleFlashParticle": "",
+//	"m_szMuzzleFlashParticleConfig": "",
 //	"m_szBarrelSmokeParticle": "",
 //	"m_nMuzzleSmokeShotThreshold": 4,
 //	"m_flMuzzleSmokeTimeout": 0.250000,
@@ -47,6 +48,10 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	CAttachmentNameSymbolWithStorage m_sMuzzleAttachment;
 	// MPropertyDescription = "Effect when firing this weapon"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szMuzzleFlashParticle;
+	// MPropertyDescription = "Effect Config for Muzzle Flash - if set, will use this config specified in the particle effect, using whatever CP configuration is specified there, vdata muzzleflash attachment will be ignored"
+	// MPropertyAttributeEditor = "ParticleConfigName()"
+	// MPropertyEditContextOverrideKey (UNKNOWN FOR PARSER)
+	CUtlString m_szMuzzleFlashParticleConfig;
 	// MPropertyDescription = "Barrel smoke after firing this weapon"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szBarrelSmokeParticle;
 	// MPropertyDescription = "Barrel smoke shot threshold to create smoke"

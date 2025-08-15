@@ -1,4 +1,3 @@
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByName = "m_flexWeight"
 // MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"

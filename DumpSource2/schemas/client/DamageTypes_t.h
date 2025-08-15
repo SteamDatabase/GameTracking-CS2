@@ -25,5 +25,4 @@ enum DamageTypes_t : uint32_t
 	// MEnumeratorIsNotAFlag
 	DMG_LASTGENERICFLAG = 4194304,
 	DMG_HEADSHOT = 8388608,
-	DMG_DANGERZONE = 16777216,
 };

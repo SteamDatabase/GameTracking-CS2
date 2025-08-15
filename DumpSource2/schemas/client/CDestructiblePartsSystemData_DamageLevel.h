@@ -1,7 +1,6 @@
 // MGetKV3ClassDefaults = {
 //	"m_sName": "",
 //	"m_sBreakablePieceName": "",
-//	"m_sBodyGroupName": "",
 //	"m_nBodyGroupValue": -1,
 //	"m_nHealth": 1,
 //	"m_nDamagePassthroughType": "Normal",
@@ -22,14 +21,11 @@ class CDestructiblePartsSystemData_DamageLevel
 	// MPropertyDescription = "Name of the breakable to trigger breaking on when health reaches zero."
 	// MPropertyAttributeEditor = "ModelDocPicker( 16 )"
 	CGlobalSymbol m_sBreakablePieceName;
-	// MPropertyStartGroup = "+Model Setup/+Body Group"
-	// MPropertyDescription = "Body group to set when this damage level is broken."
-	// MPropertyAttributeEditor = "ModelDocPicker( 4 )"
-	CGlobalSymbol m_sBodyGroupName;
 	// MPropertyDescription = "Value to set for the body group when the damage level is broken."
 	int32 m_nBodyGroupValue;
 	// MPropertyStartGroup = "+Damage"
 	// MPropertyDescription = "Total health of this damage level. When it reaches 0, the damage level is 'broken' using the breakable prop system."
+	// MPropertySuppressExpr = "m_nDamagePassthroughType == InvincibleAbsorb || m_nDamagePassthroughType == InvinciblePassthrough"
 	CSkillInt m_nHealth;
 	// MPropertyDescription = "How damage to this damage level is handled."
 	EDestructiblePartDamagePassThroughType m_nDamagePassthroughType;

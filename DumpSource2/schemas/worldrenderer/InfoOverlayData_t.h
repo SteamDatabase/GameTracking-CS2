@@ -36,7 +36,7 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_nSequenceOverride": -1
+//	"m_sSequenceOverrideName": ""
 //}
 class InfoOverlayData_t
 {
@@ -49,5 +49,5 @@ class InfoOverlayData_t
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_pMaterial;
 	int32 m_nRenderOrder;
 	Vector4D m_vTintColor;
-	int32 m_nSequenceOverride;
+	CUtlStringToken m_sSequenceOverrideName;
 };

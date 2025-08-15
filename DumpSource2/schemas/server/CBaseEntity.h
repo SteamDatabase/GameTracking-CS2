@@ -17,6 +17,7 @@
 // MNetworkVarNames = "MoveCollide_t m_MoveCollide"
 // MNetworkVarNames = "MoveType_t m_MoveType"
 // MNetworkVarNames = "EntitySubclassID_t m_nSubclassID"
+// MNetworkUserGroupProxy = "CBaseEntity"
 // MNetworkVarNames = "float32 m_flAnimTime"
 // MNetworkVarNames = "float32 m_flSimulationTime"
 // MNetworkVarNames = "GameTime_t m_flCreateTime"
@@ -96,7 +97,7 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkEnable
 	// MNetworkPriority = 0
 	// MNetworkSerializer = "animTimeSerializer"
-	// MNetworkSendProxyRecipientsFilter (UNKNOWN FOR PARSER)
+	// MNetworkUserGroup = "AnimTime"
 	float32 m_flAnimTime;
 	// MNetworkEnable
 	// MNetworkPriority = 1

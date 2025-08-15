@@ -6,6 +6,7 @@
 //	[
 //	],
 //	"m_bOnlyDestroyWhenGibbing": false,
+//	"m_sBodyGroupName": "",
 //	"m_DamageLevels":
 //	[
 //	]
@@ -27,6 +28,10 @@ class CDestructiblePartsSystemData_HitGroupInfoAndDamageLevels
 	// MPropertyStartGroup = "+Gibbing"
 	// MPropertyDescription = "Only allow this part to be destroyed when gibbing.  Useful for special case gibbing breakables like torsos."
 	bool m_bOnlyDestroyWhenGibbing;
+	// MPropertyStartGroup = "+Model Setup/+Body Group"
+	// MPropertyDescription = "Body group to set when this damage level is broken."
+	// MPropertyAttributeEditor = "ModelDocPicker( 4 )"
+	CGlobalSymbol m_sBodyGroupName;
 	// MPropertyDescription = "The various damage levels for this hitgroup."
 	// MPropertyFriendlyName = "Damage Levels"
 	// MPropertyAutoExpandSelf

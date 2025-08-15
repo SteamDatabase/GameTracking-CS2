@@ -12,7 +12,7 @@
 // MNetworkVarNames = "uint32 m_nDamageType"
 // MNetworkVarNames = "uint8 m_nPenetrate"
 // MNetworkVarNames = "uint16 m_nMaterial"
-// MNetworkVarNames = "uint16 m_nHitBox"
+// MNetworkVarNames = "int16 m_nHitBox"
 // MNetworkVarNames = "uint8 m_nColor"
 // MNetworkVarNames = "uint8 m_fFlags"
 // MNetworkVarNames = "AttachmentHandle_t m_nAttachmentIndex"
@@ -62,7 +62,7 @@ class CEffectData
 	// MNetworkEnable
 	uint16 m_nMaterial;
 	// MNetworkEnable
-	uint16 m_nHitBox;
+	int16 m_nHitBox;
 	// MNetworkEnable
 	uint8 m_nColor;
 	// MNetworkEnable

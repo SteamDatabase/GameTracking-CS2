@@ -11,7 +11,6 @@
 // MNetworkVarNames = "GameTick_t m_nPostponeFireReadyTicks"
 // MNetworkVarNames = "float m_flPostponeFireReadyFrac"
 // MNetworkVarNames = "bool m_bInReload"
-// MNetworkVarNames = "GameTime_t m_flDisallowAttackAfterReloadStartUntilTime"
 // MNetworkVarNames = "GameTime_t m_flDroppedAtTime"
 // MNetworkVarNames = "bool m_bIsHauledBack"
 // MNetworkVarNames = "bool m_bSilencerOn"
@@ -69,8 +68,6 @@ class CCSWeaponBase : public CBasePlayerWeapon
 	float32 m_flPostponeFireReadyFrac;
 	// MNetworkEnable
 	bool m_bInReload;
-	// MNetworkEnable
-	GameTime_t m_flDisallowAttackAfterReloadStartUntilTime;
 	// MNetworkEnable
 	GameTime_t m_flDroppedAtTime;
 	// MNetworkEnable

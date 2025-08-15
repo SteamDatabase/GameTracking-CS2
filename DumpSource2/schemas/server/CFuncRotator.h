@@ -1,0 +1,38 @@
+class CFuncRotator : public CBaseModelEntity
+{
+	CHandle< CBaseEntity > m_hRotatorTarget;
+	bool m_bIsRotating;
+	bool m_bIsReversing;
+	float32 m_flTimeToReachMaxSpeed;
+	float32 m_flTimeToReachZeroSpeed;
+	float32 m_flDistanceAlongArcTraveled;
+	float32 m_flTimeToWaitOscillate;
+	GameTime_t m_flTimeRotationStart;
+	Quaternion m_qLSPrevChange;
+	Quaternion m_qWSPrev;
+	Quaternion m_qWSInit;
+	Quaternion m_qLSInit;
+	Quaternion m_qLSOrientation;
+	CEntityIOOutput m_OnRotationStarted;
+	CEntityIOOutput m_OnRotationCompleted;
+	CEntityIOOutput m_OnOscillate;
+	CEntityIOOutput m_OnOscillateStartArrive;
+	CEntityIOOutput m_OnOscillateStartDepart;
+	CEntityIOOutput m_OnOscillateEndArrive;
+	CEntityIOOutput m_OnOscillateEndDepart;
+	bool m_bOscillateDepart;
+	int32 m_nOscillateCount;
+	CFuncRotator::Rotate_t m_eRotateType;
+	CFuncRotator::Rotate_t m_ePrevRotateType;
+	bool m_bHasTargetOverride;
+	Quaternion m_qOrientationOverride;
+	RotatorTargetSpace_t m_eSpaceOverride;
+	QAngle m_qAngularVelocity;
+	Vector m_vLookAtForcedUp;
+	CUtlSymbolLarge m_strRotatorTarget;
+	bool m_bRecordHistory;
+	CUtlVector< RotatorHistoryEntry_t > m_vecRotatorHistory;
+	bool m_bReturningToPreviousOrientation;
+	CUtlVector< RotatorQueueEntry_t > m_vecRotatorQueue;
+	CUtlVector< RotatorHistoryEntry_t > m_vecRotatorQueueHistory;
+};

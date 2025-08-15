@@ -14,4 +14,6 @@ enum CompositeMaterialInputTextureType_t : uint32_t
 	INPUT_TEXTURE_TYPE_PEARLESCENCE_MASK = 5,
 	// MPropertyFriendlyName = "Ambient Occlusion"
 	INPUT_TEXTURE_TYPE_AO = 6,
+	// MPropertyFriendlyName = "Position"
+	INPUT_TEXTURE_TYPE_POSITION = 7,
 };

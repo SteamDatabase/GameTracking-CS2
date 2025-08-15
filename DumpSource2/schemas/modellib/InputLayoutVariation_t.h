@@ -1,4 +1,4 @@
-enum InputLayoutVariation_t : uint32_t
+enum InputLayoutVariation_t : uint8_t
 {
 	INPUT_LAYOUT_VARIATION_DEFAULT = 0,
 	INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID = 1,

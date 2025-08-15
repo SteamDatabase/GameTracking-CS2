@@ -5,7 +5,6 @@
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"
 // MNetworkExcludeByName = "m_nResetEventsParity"
 // MNetworkExcludeByUserGroup = "overlay_vars"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_baseLayer.m_hSequence"
 // MNetworkExcludeByName = "m_animationController.m_flPlaybackRate"

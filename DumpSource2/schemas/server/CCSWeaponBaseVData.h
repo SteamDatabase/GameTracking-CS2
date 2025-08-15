@@ -6,6 +6,7 @@
 //	"m_bAllowFlipping": true,
 //	"m_sMuzzleAttachment": "muzzle",
 //	"m_szMuzzleFlashParticle": "",
+//	"m_szMuzzleFlashParticleConfig": "",
 //	"m_szBarrelSmokeParticle": "",
 //	"m_nMuzzleSmokeShotThreshold": 4,
 //	"m_flMuzzleSmokeTimeout": 0.250000,

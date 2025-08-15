@@ -8,4 +8,6 @@ enum CNmTransitionNode::TransitionOptions_t : uint8_t
 	MatchSyncEventID = 5,
 	MatchSyncEventPercentage = 6,
 	PreferClosestSyncEventID = 7,
+	MatchTimeInSeconds = 8,
+	OffsetTimeInSeconds = 9,
 };

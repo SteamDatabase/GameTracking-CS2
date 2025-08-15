@@ -6,6 +6,7 @@
 // MNetworkVarNames = "int m_nPersonaDataPublicCommendsFriendly"
 // MNetworkVarNames = "int m_nPersonaDataXpTrailLevel"
 // MNetworkVarNames = "ServerAuthoritativeWeaponSlot_t m_vecServerAuthoritativeWeaponSlots"
+// MNetworkVarNames = "CSNetworkableLoadout_t m_vecNetworkableLoadout"
 class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 {
 	// MNetworkEnable
@@ -26,4 +27,8 @@ class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	CUtlVectorEmbeddedNetworkVar< ServerAuthoritativeWeaponSlot_t > m_vecServerAuthoritativeWeaponSlots;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnNetworkableLoadoutChanged"
+	// MNetworkUserGroup = "LocalPlayerOwnerAndObserversExclusive"
+	CUtlVectorEmbeddedNetworkVar< CSNetworkableLoadout_t > m_vecNetworkableLoadout;
 };

@@ -48,6 +48,7 @@ enum PulseValueType_t : uint32_t
 	PVAL_MODEL_MATERIAL_GROUP = 21,
 	// MPropertySuppressEnumerator
 	PVAL_CURSOR_FLOW = 22,
+	// MPropertyFriendlyName = "Variant"
 	// MPropertySuppressEnumerator
 	PVAL_VARIANT = 23,
 	// MPropertyFriendlyName = "Unknown"

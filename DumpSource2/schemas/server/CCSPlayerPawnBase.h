@@ -1,5 +1,4 @@
 // MNetworkVarNames = "CTouchExpansionComponent::Storage_t m_CTouchExpansionComponent"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByName = "m_flexWeight"
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"
 // MNetworkExcludeByName = "m_baseLayer.m_hSequence"

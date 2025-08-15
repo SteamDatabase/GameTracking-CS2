@@ -1,0 +1,3 @@
+class CNmAimCSTask : public CNmPoseTask
+{
+};

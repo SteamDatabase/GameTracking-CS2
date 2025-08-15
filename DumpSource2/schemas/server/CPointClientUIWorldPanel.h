@@ -15,6 +15,7 @@
 // MNetworkVarNames = "string_t m_vecCSSClasses"
 // MNetworkVarNames = "bool m_bOpaque"
 // MNetworkVarNames = "bool m_bNoDepth"
+// MNetworkVarNames = "bool m_bVisibleWhenParentNoDraw"
 // MNetworkVarNames = "bool m_bRenderBackface"
 // MNetworkVarNames = "bool m_bUseOffScreenIndicator"
 // MNetworkVarNames = "bool m_bExcludeFromSaveGames"
@@ -56,6 +57,8 @@ class CPointClientUIWorldPanel : public CBaseClientUIEntity
 	bool m_bOpaque;
 	// MNetworkEnable
 	bool m_bNoDepth;
+	// MNetworkEnable
+	bool m_bVisibleWhenParentNoDraw;
 	// MNetworkEnable
 	bool m_bRenderBackface;
 	// MNetworkEnable

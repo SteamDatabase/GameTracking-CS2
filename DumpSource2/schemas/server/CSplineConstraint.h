@@ -9,5 +9,6 @@ class CSplineConstraint : public CPhysConstraint
 	bool m_bFireEventsOnPath;
 	float32 m_flLinearFrequency;
 	float32 m_flLinarDampingRatio;
+	float32 m_flJointFriction;
 	Vector m_vPreSolveAnchorPos;
 };

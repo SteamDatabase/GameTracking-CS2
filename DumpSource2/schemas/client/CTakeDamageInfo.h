@@ -15,7 +15,6 @@ class CTakeDamageInfo
 	float32 m_flOriginalDamage;
 	bool m_bShouldBleed;
 	bool m_bShouldSpark;
-	float32 m_flDamageAbsorbed;
 	TakeDamageFlags_t m_nDamageFlags;
 	CGlobalSymbol m_sDamageSourceName;
 	HitGroup_t m_iHitGroupId;

@@ -35,6 +35,9 @@ class CGameSceneNode
 	Vector m_vecAbsOrigin;
 	QAngle m_angAbsRotation;
 	float32 m_flAbsScale;
+	Vector m_vecWrappedLocalOrigin;
+	QAngle m_angWrappedLocalRotation;
+	float32 m_flWrappedScale;
 	int16 m_nParentAttachmentOrBone;
 	bool m_bDebugAbsOriginChanges;
 	bool m_bDormant;

@@ -82,9 +82,6 @@ enum DebugOverlayBits_t : uint64_t
 	// MPropertyFriendlyName = "NPC Kill"
 	// MPropertyDescription = "kill the NPC, running all appropriate AI."
 	OVERLAY_NPC_KILL_BIT = 268435456,
-	// MPropertyFriendlyName = "OVERLAY_WC_CHANGE_ENTITY"
-	// MPropertyDescription = "object changed during WC edit (probably unused)"
-	OVERLAY_WC_CHANGE_ENTITY = 536870912,
 	// MPropertyFriendlyName = "Buddha Mode"
 	// MPropertyDescription = "TODO take damage but don't die"
 	OVERLAY_BUDDHA_MODE = 1073741824,

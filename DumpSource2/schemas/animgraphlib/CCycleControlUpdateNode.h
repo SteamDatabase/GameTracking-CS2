@@ -51,10 +51,12 @@
 //	{
 //		"m_type": "ANIMPARAM_UNKNOWN",
 //		"m_index": 255
-//	}
+//	},
+//	"m_bLockWhenWaning": false
 //}
 class CCycleControlUpdateNode : public CUnaryUpdateNode
 {
 	AnimValueSource m_valueSource;
 	CAnimParamHandle m_paramIndex;
+	bool m_bLockWhenWaning;
 };
