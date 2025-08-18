@@ -81,6 +81,7 @@
 // MNetworkVarNames = "GameTime_t m_fImmuneToGunGameDamageTime"
 // MNetworkVarNames = "bool m_bGunGameImmunity"
 // MNetworkVarNames = "float m_fMolotovDamageTime"
+// MNetworkVarNames = "QAngle m_angEyeAngles"
 class CCSPlayerPawn : public CCSPlayerPawnBase
 {
 	// MNetworkEnable
@@ -294,4 +295,8 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	bool m_bGunGameImmunity;
 	// MNetworkEnable
 	float32 m_fMolotovDamageTime;
+	// MNetworkEnable
+	// MNetworkEncoder = "qangle_precise"
+	// MNetworkPriority = 32
+	QAngle m_angEyeAngles;
 };

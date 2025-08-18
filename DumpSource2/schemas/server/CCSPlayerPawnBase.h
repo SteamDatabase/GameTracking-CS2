@@ -10,7 +10,6 @@
 // MNetworkVarNames = "float m_flFlashMaxAlpha"
 // MNetworkVarNames = "float m_flProgressBarStartTime"
 // MNetworkVarNames = "int m_iProgressBarDuration"
-// MNetworkVarNames = "QAngle m_angEyeAngles"
 // MNetworkVarNames = "CHandle< CCSPlayerController> m_hOriginalController"
 class CCSPlayerPawnBase : public CBasePlayerPawn
 {
@@ -39,10 +38,6 @@ class CCSPlayerPawnBase : public CBasePlayerPawn
 	float32 m_flProgressBarStartTime;
 	// MNetworkEnable
 	int32 m_iProgressBarDuration;
-	// MNetworkEnable
-	// MNetworkEncoder = "qangle_precise"
-	// MNetworkPriority = 32
-	QAngle m_angEyeAngles;
 	// MNetworkEnable
 	CHandle< CCSPlayerController > m_hOriginalController;
 };

@@ -289,4 +289,18 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	GameTime_t m_fImmuneToGunGameDamageTimeLast;
 	// MNetworkEnable
 	float32 m_fMolotovDamageTime;
+	Vector m_vecLastAliveLocalVelocity;
+	float32[4] m_fRenderingClipPlane;
+	int32 m_nLastClipPlaneSetupFrame;
+	Vector m_vecLastClipCameraPos;
+	Vector m_vecLastClipCameraForward;
+	bool m_bClipHitStaticWorld;
+	bool m_bCachedPlaneIsValid;
+	C_CSWeaponBase* m_pClippingWeapon;
+	ParticleIndex_t m_nPlayerInfernoBodyFx;
+	// MNetworkEnable
+	// MNetworkEncoder = "qangle_precise"
+	// MNetworkChangeCallback = "playerEyeAnglesChanged"
+	// MNetworkPriority = 32
+	QAngle m_angEyeAngles;
 };

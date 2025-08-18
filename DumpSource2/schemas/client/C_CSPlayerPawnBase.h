@@ -14,13 +14,6 @@ class C_CSPlayerPawnBase : public C_BasePlayerPawn
 {
 	// MNetworkEnable
 	CCSPlayer_PingServices* m_pPingServices;
-	float32[4] m_fRenderingClipPlane;
-	int32 m_nLastClipPlaneSetupFrame;
-	Vector m_vecLastClipCameraPos;
-	Vector m_vecLastClipCameraForward;
-	bool m_bClipHitStaticWorld;
-	bool m_bCachedPlaneIsValid;
-	C_CSWeaponBase* m_pClippingWeapon;
 	CSPlayerState m_previousPlayerState;
 	// MNetworkEnable
 	CSPlayerState m_iPlayerState;
@@ -46,11 +39,6 @@ class C_CSPlayerPawnBase : public C_BasePlayerPawn
 	float32 m_flFlashDuration;
 	GameTime_t m_flClientHealthFadeChangeTimestamp;
 	int32 m_nClientHealthFadeParityValue;
-	// MNetworkEnable
-	// MNetworkEncoder = "qangle_precise"
-	// MNetworkChangeCallback = "playerEyeAnglesChanged"
-	// MNetworkPriority = 32
-	QAngle m_angEyeAngles;
 	float32 m_fNextThinkPushAway;
 	CEntityIndex m_iIDEntIndex;
 	CountdownTimer m_delayTargetIDTimer;
@@ -63,8 +51,6 @@ class C_CSPlayerPawnBase : public C_BasePlayerPawn
 	float32 m_flLastSmokeOverlayAlpha;
 	float32 m_flLastSmokeAge;
 	Vector m_vLastSmokeOverlayColor;
-	ParticleIndex_t m_nPlayerInfernoBodyFx;
-	Vector m_vecLastAliveLocalVelocity;
 	// MNetworkEnable
 	CHandle< CCSPlayerController > m_hOriginalController;
 };

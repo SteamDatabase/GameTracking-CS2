@@ -501,6 +501,7 @@
 		}
 		"content_consider_warnings_as_errors"
 		{
+			"substr" "phase2/characters/models/"
 			"substr" "phase2/weapons/models/"
 		}
 	}

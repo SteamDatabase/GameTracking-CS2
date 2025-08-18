@@ -18,17 +18,17 @@
 //	"m_nSunVisibilityCluster": 0,
 //	"m_NodeBlock":
 //	{
-//		"m_nOffset": 32629,
+//		"m_nOffset": 32672,
 //		"m_nElementCount": 2
 //	},
 //	"m_RegionBlock":
 //	{
 //		"m_nOffset": 0,
-//		"m_nElementCount": 3738319816
+//		"m_nElementCount": 577743816
 //	},
 //	"m_EnclosedClusterListBlock":
 //	{
-//		"m_nOffset": 21860,
+//		"m_nOffset": 22021,
 //		"m_nElementCount": 3
 //	},
 //	"m_EnclosedClustersBlock":
