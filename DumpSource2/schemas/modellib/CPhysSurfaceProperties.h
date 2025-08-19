@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults = {
 //	"surfacePropertyName": "",
-//	"m_nameHash": 0,
-//	"m_baseNameHash": 0,
+//	"m_nameHash": 134686672,
+//	"m_baseNameHash": 32765,
 //	"hidden": false,
 //	"description": "",
 //	"physics":

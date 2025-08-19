@@ -18,33 +18,33 @@
 //	"m_nSunVisibilityCluster": 0,
 //	"m_NodeBlock":
 //	{
-//		"m_nOffset": 32720,
-//		"m_nElementCount": 2
+//		"m_nOffset": <HIDDEN FOR DIFF>,
+//		"m_nElementCount": 134686576
 //	},
 //	"m_RegionBlock":
 //	{
-//		"m_nOffset": 0,
-//		"m_nElementCount": 959130568
+//		"m_nOffset": <HIDDEN FOR DIFF>,
+//		"m_nElementCount": 1760408
 //	},
 //	"m_EnclosedClusterListBlock":
 //	{
-//		"m_nOffset": 22018,
-//		"m_nElementCount": 3
+//		"m_nOffset": <HIDDEN FOR DIFF>,
+//		"m_nElementCount": 21
 //	},
 //	"m_EnclosedClustersBlock":
 //	{
-//		"m_nOffset": 0,
-//		"m_nElementCount": 0
+//		"m_nOffset": <HIDDEN FOR DIFF>,
+//		"m_nElementCount": 4
 //	},
 //	"m_MasksBlock":
 //	{
-//		"m_nOffset": 0,
-//		"m_nElementCount": 0
+//		"m_nOffset": <HIDDEN FOR DIFF>,
+//		"m_nElementCount": 134686800
 //	},
 //	"m_nVisBlocks":
 //	{
-//		"m_nOffset": 0,
-//		"m_nElementCount": 0
+//		"m_nOffset": <HIDDEN FOR DIFF>,
+//		"m_nElementCount": 30174504
 //	}
 //}
 class CVoxelVisibility

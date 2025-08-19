@@ -122,7 +122,7 @@
 //		"m_bTargetIsPosition": true,
 //		"m_bUseHysteresis": false
 //	},
-//	"m_target": -9316864,
+//	"m_target": <HIDDEN FOR DIFF>,
 //	"m_paramIndex":
 //	{
 //		"m_type": "ANIMPARAM_UNKNOWN",

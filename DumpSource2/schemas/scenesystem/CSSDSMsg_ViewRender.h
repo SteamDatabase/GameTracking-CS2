@@ -1,8 +1,8 @@
 // MGetKV3ClassDefaults = {
 //	"m_viewId":
 //	{
-//		"m_nViewId": 3,
-//		"m_nFrameCount": 0
+//		"m_nViewId": 140724738140064,
+//		"m_nFrameCount": 140484002534001
 //	},
 //	"m_ViewName": ""
 //}

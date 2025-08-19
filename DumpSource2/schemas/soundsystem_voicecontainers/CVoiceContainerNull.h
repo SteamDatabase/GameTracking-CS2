@@ -2,9 +2,9 @@
 //	"_class": "CVoiceContainerNull",
 //	"m_vSound":
 //	{
-//		"m_nRate": 0,
-//		"m_nFormat": "PCM16",
-//		"m_nChannels": 0,
+//		"m_nRate": -635035224,
+//		"m_nFormat": 23,
+//		"m_nChannels": 3,
 //		"m_nLoopStart": 0,
 //		"m_nSampleCount": 0,
 //		"m_flDuration": 0.000000,

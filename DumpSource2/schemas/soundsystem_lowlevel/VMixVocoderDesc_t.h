@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults = {
 //	"m_nBandCount": 2014718599,
 //	"m_flBandwidth": -nan,
-//	"m_fldBModGain": -0.000000,
+//	"m_fldBModGain": <HIDDEN FOR DIFF>,
 //	"m_flFreqRangeStart": 0.000000,
 //	"m_flFreqRangeEnd": 0.000000,
 //	"m_fldBUnvoicedGain": 0.000000,

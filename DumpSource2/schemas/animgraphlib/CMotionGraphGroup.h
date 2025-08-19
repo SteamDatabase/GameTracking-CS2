@@ -11,8 +11,8 @@
 //				"m_centroidVectors":
 //				[
 //				],
-//				"m_nCentroids": 0,
-//				"m_nDimensions": 0
+//				"m_nCentroids": 134687680,
+//				"m_nDimensions": 32765
 //			},
 //			"m_sampleCodes":
 //			[

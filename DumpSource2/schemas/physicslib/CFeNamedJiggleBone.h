@@ -1,17 +1,7 @@
 // MGetKV3ClassDefaults = {
 //	"m_strParentBone": "",
-//	"m_transform":
-//	[
-//		-0.000000,
-//		0.000000,
-//		0.000000,
-//		0.000000,
-//		0.000001,
-//		0.000000,
-//		0.000000,
-//		0.000000
-//	],
-//	"m_nJiggleParent": 894094080,
+//	"m_transform": <HIDDEN FOR DIFF>,
+//	"m_nJiggleParent": <HIDDEN FOR DIFF>,
 //	"m_jiggleBone":
 //	{
 //		"m_nFlags": 0,

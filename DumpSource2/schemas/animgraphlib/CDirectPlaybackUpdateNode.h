@@ -46,8 +46,8 @@
 //	{
 //		"m_nodeIndex": -1
 //	},
-//	"m_bFinishEarly": false,
-//	"m_bResetOnFinish": false,
+//	"m_bFinishEarly": true,
+//	"m_bResetOnFinish": true,
 //	"m_allTags":
 //	[
 //	]
