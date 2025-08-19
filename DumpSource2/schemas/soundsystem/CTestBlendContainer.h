@@ -2,16 +2,16 @@
 //	"_class": "CTestBlendContainer",
 //	"m_vSound":
 //	{
-//		"m_nRate": 1530796080,
-//		"m_nFormat": 28,
+//		"m_nRate": 993970224,
+//		"m_nFormat": 161,
 //		"m_nChannels": 8,
 //		"m_nLoopStart": 0,
-//		"m_nSampleCount": 1618024112,
+//		"m_nSampleCount": 894093808,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
 //		],
-//		"m_nStreamingSize": 568496557,
+//		"m_nStreamingSize": 2885849517,
 //		"m_nSeekTable":
 //		[
 //		],
