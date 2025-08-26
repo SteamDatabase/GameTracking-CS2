@@ -2,20 +2,20 @@
 //	"_class": "CVoiceContainerDecayingSineWave",
 //	"m_vSound":
 //	{
-//		"m_nRate": -635032536,
-//		"m_nFormat": 23,
-//		"m_nChannels": 3,
-//		"m_nLoopStart": 0,
-//		"m_nSampleCount": 0,
+//		"m_nRate": <HIDDEN FOR DIFF>,
+//		"m_nFormat": <HIDDEN FOR DIFF>,
+//		"m_nChannels": <HIDDEN FOR DIFF>,
+//		"m_nLoopStart": <HIDDEN FOR DIFF>,
+//		"m_nSampleCount": <HIDDEN FOR DIFF>,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
 //		],
-//		"m_nStreamingSize": 0,
+//		"m_nStreamingSize": <HIDDEN FOR DIFF>,
 //		"m_nSeekTable":
 //		[
 //		],
-//		"m_nLoopEnd": 0,
+//		"m_nLoopEnd": <HIDDEN FOR DIFF>,
 //		"m_encodedHeader": "[BINARY BLOB]"
 //	},
 //	"m_pEnvelopeAnalyzer": null,

@@ -3,6 +3,7 @@
 // MNetworkVarNames = "GameTime_t m_flWeaponGameplayAnimStateTimestamp"
 // MNetworkVarNames = "GameTime_t m_flInspectCancelCompleteTime"
 // MNetworkVarNames = "bool m_bInspectPending"
+// MNetworkVarNames = "bool m_bInspectShouldLoop"
 // MNetworkVarNames = "CSWeaponMode m_weaponMode"
 // MNetworkVarNames = "float m_fAccuracyPenalty"
 // MNetworkVarNames = "int m_iRecoilIndex"
@@ -39,6 +40,7 @@ class C_CSWeaponBase : public C_BasePlayerWeapon
 	GameTime_t m_flInspectCancelCompleteTime;
 	// MNetworkEnable
 	bool m_bInspectPending;
+	// MNetworkEnable
 	bool m_bInspectShouldLoop;
 	float32 m_flCrosshairDistance;
 	int32 m_iAmmoLastCheck;

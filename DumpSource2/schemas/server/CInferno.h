@@ -27,7 +27,6 @@ class CInferno : public CBaseModelEntity
 	float32 m_nFireLifetime;
 	// MNetworkEnable
 	bool m_bInPostEffectTime;
-	int32 m_nFiresExtinguishCount;
 	bool m_bWasCreatedInSmoke;
 	Extent m_extent;
 	CountdownTimer m_damageTimer;

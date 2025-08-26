@@ -7,7 +7,7 @@
 //	"m_flTimeScale": 0.000000,
 //	"m_flLowCutoffFreq": <HIDDEN FOR DIFF>,
 //	"m_flHighCutoffFreq": 0.000000,
-//	"m_bPeakMode": false,
+//	"m_bPeakMode": true,
 //	"m_bandDesc":
 //	[
 //		{

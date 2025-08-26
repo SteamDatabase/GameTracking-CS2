@@ -533,7 +533,7 @@
 
 	Physics
 	{
-		"BuildMeshWings" "1"
+		"BuildMeshWings" "0"
 	}
 	PostProcessingEditor
 	{

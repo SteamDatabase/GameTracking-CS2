@@ -235,7 +235,6 @@ class C_CSGameRules : public C_TeamplayRules
 	int32 m_iNumConsecutiveCTLoses;
 	// MNetworkEnable
 	int32 m_iNumConsecutiveTerroristLoses;
-	bool m_bMarkClientStopRecordAtRoundEnd;
 	// MNetworkEnable
 	int32 m_nMatchAbortedEarlyReason;
 	bool m_bHasTriggeredRoundStartMusic;

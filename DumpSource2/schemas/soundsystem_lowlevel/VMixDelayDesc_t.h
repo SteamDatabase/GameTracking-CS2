@@ -12,7 +12,7 @@
 //	"m_flDelay": 0.000000,
 //	"m_flDirectGain": 0.000000,
 //	"m_flDelayGain": 0.000000,
-//	"m_flFeedbackGain": 0.000000,
+//	"m_flFeedbackGain": 328182792192.000000,
 //	"m_flWidth": 0.000000
 //}
 class VMixDelayDesc_t

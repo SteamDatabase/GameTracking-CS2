@@ -10,9 +10,9 @@
 //	},
 //	"m_bPhaseInvert": true,
 //	"m_flGlideTime": 0.000000,
-//	"m_flDelay": 0.000000,
+//	"m_flDelay": <HIDDEN FOR DIFF>,
 //	"m_flOutputGain": 0.000000,
-//	"m_flFeedbackGain": 0.000000,
+//	"m_flFeedbackGain": 328188035072.000000,
 //	"m_flModRate": 0.000000,
 //	"m_flModDepth": 0.000000,
 //	"m_bApplyAntialiasing": true

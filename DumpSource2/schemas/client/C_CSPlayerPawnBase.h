@@ -40,11 +40,6 @@ class C_CSPlayerPawnBase : public C_BasePlayerPawn
 	GameTime_t m_flClientHealthFadeChangeTimestamp;
 	int32 m_nClientHealthFadeParityValue;
 	float32 m_fNextThinkPushAway;
-	CEntityIndex m_iIDEntIndex;
-	CountdownTimer m_delayTargetIDTimer;
-	CEntityIndex m_iTargetItemEntIdx;
-	CEntityIndex m_iOldIDEntIndex;
-	CountdownTimer m_holdTargetIDTimer;
 	float32 m_flCurrentMusicStartTime;
 	float32 m_flMusicRoundStartTime;
 	bool m_bDeferStartMusicOnWarmup;

@@ -303,4 +303,12 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	// MNetworkChangeCallback = "playerEyeAnglesChanged"
 	// MNetworkPriority = 32
 	QAngle m_angEyeAngles;
+	GameTime_t[4] m_arrOldEyeAnglesTimes;
+	QAngle[4] m_arrOldEyeAngles;
+	QAngle m_angEyeAnglesVelocity;
+	CEntityIndex m_iIDEntIndex;
+	CountdownTimer m_delayTargetIDTimer;
+	CEntityIndex m_iTargetItemEntIdx;
+	CEntityIndex m_iOldIDEntIndex;
+	CountdownTimer m_holdTargetIDTimer;
 };
