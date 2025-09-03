@@ -53,6 +53,7 @@
 !expected_len || s->s3->previous_server_finished_len
 !fUY\n
 !hcK+dbF&
+!m_nPackFileNumber
 !s8p
 "!"%"+"1"9"K"O"c"g"s"u"
 "2MR
@@ -189,6 +190,7 @@ $hRh
 'pSN.F
 'prB2
 'sp3s
+( m_nChunkHashesSize % sizeof( ChunkHashFraction_t ) ) == 0
 (!(1(=(?(I(Q([(](a(g(u(
 ((long)msg_hdr->msg_len) > 0
 ()*+,-./*(((
@@ -273,7 +275,6 @@ $hRh
 -U`5K
 -\6G5
 -disable_auto_vpk_loading
--fake_workshop_dir
 -l34
 -mB:t
 -no_hierarchical_vpk_memory_mapping
@@ -282,6 +283,8 @@ $hRh
 ....................
 ../common/crypto.cpp
 ../common/opensslwrapper.cpp
+../public/tier0/check_cast.h
+../public/vpklib/packedstore.h
 ..uR5&m
 .4bb
 .97yY
@@ -821,6 +824,7 @@ Alignment
 Any Extended Key Usage
 Any Purpose
 Any language
+AssertFatalCast
 AsyncCopyFile %s -> %s failed: %s
 AsyncFileSystem2: io threads changed %i -> %i
 AsyncFilesystem Callback
@@ -1188,6 +1192,7 @@ COPY_ISSUER
 COpenSSLConnection
 COpenSSLContext
 CPBQ
+CPackedStore
 CR&C
 CRL Sign
 CRL has expired
@@ -1219,6 +1224,7 @@ Camellia(128)
 Camellia(256)
 Cannot rename file "%s" that exists in a VPK or UGC file!\n
 Cannot rename file "%s" that exists in a read only search path!\n
+Cast of %s loses value information (returning %s) in %s on %s:%u\n
 Certificate Hold
 Certificate Sign
 Certificate:\n
@@ -1884,7 +1890,12 @@ GenerateSHA256Digest
 Generator (compressed):
 Generator (hybrid):
 Generator (uncompressed):
+GetBLAKE3HashContents
 GetFileTime
+GetHashType() == ChunkHashFraction_t::EHashType::BLAKE3
+GetHashType() == ChunkHashFraction_t::EHashType::MD5
+GetMD5HashContents
+GetPackFileNumber
 GetPathTime
 Gew}
 GoJJw
@@ -2898,6 +2909,7 @@ Signature failed for %s (reason: %d)\n
 Signature verification failed.
 Signature verified for %s.\n
 Sn^G
+SortKey_t
 Sr89[
 St23_Sp_counted_ptr_inplaceIN17CAsyncFileSystem215CBarrierRequestESaIvELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceIN17CAsyncFileSystem215CCopyFileHandleESaIvELN9__gnu_cxx12_Lock_policyE2EE
@@ -3042,6 +3054,7 @@ Unable to rename "%s" to "%s"!\n
 Unknown read error %d\n
 Unknown version %d for vpk %s
 Unprocessed type %d\n
+Unrecognized EHashType found: %d
 Unspecified
 Unsupported extension feature
 Unused
@@ -3088,6 +3101,7 @@ Vcsc
 Vemn\t
 Verify error:
 Verify failure\n
+VerifySingleChunk
 Verifying - %s
 Version
 Vg3LE

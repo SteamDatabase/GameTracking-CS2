@@ -1,5 +1,6 @@
  offset=
  thread=%lu, file=%s, line=%d, info="
+!m_nPackFileNumber
 %019lu
 %5lu file=%s, line=%d, 
 %ld bytes leaked in %d chunks\n
@@ -27,6 +28,7 @@
 %s: pathing data was baked with a different number of bands (expected %d, found %d), please re-bake\n
 %s: reverb data was baked with a different number of bands (expected %d, found %d), please re-bake\n
 %s_%03d.vpk
+( m_nChunkHashesSize % sizeof( ChunkHashFraction_t ) ) == 0
 *ZN16CSteamAudioScene14BakeDimensionsEP15IVPhysics2WorldR10CUtlVectorI5Vec3DIfEi25CUtlVectorMemory_GrowableIS4_iLm0EEERS2_IfiS5_IfiLm0EEER40SteamAudioCustomDataDimensionsSettings_tiR10CUtlBufferPFvfPvESG_EUliiE_
 -avx
 -no_hierarchical_vpk_memory_mapping
@@ -35,6 +37,8 @@
 -sse4
 -steamaudio_validation
 ../../public/tier0/utlrbtree.h
+../public/tier0/check_cast.h
+../public/vpklib/packedstore.h
 .custom.dimensions
 .custom.materials
 .custom.occlusion
@@ -113,6 +117,7 @@ Ambisonics order to use for convolution reverb. 0th order = 1 channel, 1st order
 Ambisonics order to use for simulating reverb.
 Any Extended Key Usage
 Any language
+AssertFatalCast
 Authority Information Access
 BF-CBC
 BF-CFB
@@ -189,6 +194,7 @@ CImpulseResponse
 CMAC
 CMS routines
 CONF lib
+CPackedStore
 CRLReason
 CRYPTO lib
 CSPName
@@ -211,6 +217,7 @@ CT Precertificate Signer
 CUtlString
 CUtlStringToken
 Cannot allocate abstract class
+Cast of %s loses value information (returning %s) in %s on %s:%u\n
 Chunk hash not found.
 Class does not allow allocation from its schema binding
 Code Signing
@@ -304,6 +311,11 @@ GOST R 3410-2001 Parameter Set Cryptocom
 Generate Halton Sequence for a given order and number of samples.
 Generated %d probes with %.2f spacing and %.2f height.\n
 Generating Halton Sequence of %d order for %d samples.\n
+GetBLAKE3HashContents
+GetHashType() == ChunkHashFraction_t::EHashType::BLAKE3
+GetHashType() == ChunkHashFraction_t::EHashType::MD5
+GetMD5HashContents
+GetPackFileNumber
 HMAC
 HMAC GOST 34.11-94
 HMAC routines
@@ -592,6 +604,7 @@ SetProbes
 SetSerializedData
 Sets the number of threads used for realtime reflection by Steam Audio.
 Signature verification failed.
+SortKey_t
 SoundSystemLowLevel
 St12bad_weak_ptr
 SteamAudio
@@ -629,9 +642,11 @@ Unable to create serialized object for scene export.\n
 Unable to create static mesh: %d.\n
 Unable to load custom HRTF [%s]\n
 Unknown version %d for vpk %s
+Unrecognized EHashType found: %d
 Usage: snd_steamaudio_halton_sequence <order> <numsamples>.\n
 Use compressed reverb data if available.
 VPK directory for '%s' corrupt
+VerifySingleChunk
 X500
 X500algorithms
 X509

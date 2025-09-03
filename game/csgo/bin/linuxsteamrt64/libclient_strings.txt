@@ -325,6 +325,7 @@
 !m_bGraphBindingsCreated
 !m_compressedData.CheckOverflow()
 !m_hDenyInputToGame
+!m_nPackFileNumber
 !pPanel || pResult
 !player
 !s8p
@@ -2437,7 +2438,6 @@ $taser_charge
 %s: data for '%s' v%s cannot be provided.\n
 %s: file too large (%llu bytes)\n
 %s: integrating data for '%s' v%s\n
-%s: invalid add count %d\n
 %s: nItemToSelect:%d\n
 %s: nLen:%d, nStart:%d, nEnd:%d\n
 %s: nLen:%d\n
@@ -2565,6 +2565,7 @@ $taser_charge
 'vertical' cue-setting already used
 'vertical' setting must have a value of either 'lr' or 'rl'
 ( iSeed ) - Creates a separate random number stream.
+( m_nChunkHashesSize % sizeof( ChunkHashFraction_t ) ) == 0
 ( modelName, context ) - Manually precache a single model
 ( resourceType, resourcePath, context ) - Manually precache a single resource. Types: "model|model_folder|sound|soundfile|particle|particle_folder"
 ( string ) - Returns a 32-bit hash for a string
@@ -3011,7 +3012,6 @@ $taser_charge
 ,Reason=
 ,ShfPQ
 ,ZFDGn
-,]p3Q
 ,ar_monastery
 ,fQM(
 ,h11]
@@ -3020,7 +3020,7 @@ $taser_charge
 ,kj8\te
 ,name:
 ,oYR
-,sK3+
+,sK3?
 ,section=
 ,value:
 - "%s" = "%.2f"\n
@@ -3257,6 +3257,7 @@ $taser_charge
 ../public/networksystem/networkfieldscratchdata.h
 ../public/panorama/controls/panel2d.h
 ../public/tier0/check_cast.h
+../public/vpklib/packedstore.h
 ../src/devtools/bin/certificates/game/
 ..uR5&m
 ./base_world_panel.cpp
@@ -7254,12 +7255,12 @@ $taser_charge
 8192
 8285-YOAZ-6049
 82\n:XPH
-83'4
 851Pe
 8835-KLXV-0292
 8<pl
 8= zp
 8A6j
+8B3\n
 8CAmmoDef
 8CFXQueueI16ParticleParams_t19ImpactTraceParams_tE
 8CHeatMap
@@ -8158,6 +8159,7 @@ AspectRatio21x9
 AspectRatio4x3
 AspectRatioEnum
 Assault
+AssembleFile
 Assembly
 Assembly Procedure
 Assert True
@@ -8236,6 +8238,7 @@ AudioVolumeMuted
 AudioVolumeUnder33
 AudioVolumeUnder66
 AuditData
+Aug 26 2025
 Australia
 Austria
 Authority Information Access
@@ -9539,6 +9542,7 @@ CPUID
 CPULogicalCores
 CPUModel
 CPUPhysicalCores
+CPackedStore
 CPanel2D::BSetProperty
 CPanel2D::Initialize
 CPanel2D::SetDialogVariable - char *
@@ -10461,6 +10465,7 @@ Chinatown
 Chlorine
 Chosen
 Chunk hash not found.
+ChunkHashFraction_t
 CircleScreenOriented
 CircularProgressBar
 CircularProgressBarBG
@@ -13293,6 +13298,7 @@ GetAttributeUInt32
 GetAudioVolume
 GetAvailableWorkshopAnnotations
 GetAvailableWorkshopMaps
+GetBLAKE3HashContents
 GetBannerEntryCount
 GetBannerEntryCustomFormatString
 GetBannerEntryDefIdx
@@ -13491,6 +13497,8 @@ GetGroupTeamScoreByIndex
 GetGroupTeamsCount
 GetGroupTeamsPickableCount
 GetGuidelinePositions
+GetHashType() == ChunkHashFraction_t::EHashType::BLAKE3
+GetHashType() == ChunkHashFraction_t::EHashType::MD5
 GetHealth
 GetHostSteamID
 GetHudIconFileName
@@ -13575,6 +13583,7 @@ GetLootListItemIdByIndex
 GetLootListItemsCount
 GetLootListUnusualItemImage
 GetLootListUnusualItemName
+GetMD5HashContents
 GetMVPXuid
 GetManagementMapsJSO
 GetManagementMatchJSO
@@ -13674,6 +13683,7 @@ GetOrCreatePrivateScriptScope
 GetOrCreatePublicScriptScope
 GetOriginalDamage
 GetOwnerEntityID
+GetPackFileNumber
 GetParent
 GetParticleReplacement
 GetPartyClanTag
@@ -15179,7 +15189,6 @@ JSCreatePanelWithCurrentContext was not called within a context
 JSDelayLoadList
 JSValueFromKeyValue failed to package parameter %s (type %d)\n
 JS_!0
-JY3P
 JZIX
 J\nHBF
 J`KL
@@ -21489,6 +21498,7 @@ Solved Foot
 Solved Knee
 Solved Thigh
 Sonar
+SortKey_t
 SortedBy
 Sound Area Game System
 Sound event '%s' missing duration\n
@@ -22615,6 +22625,7 @@ UnloadSpawnGroupByHandle
 Unlock crate response: %d\n
 Unprocessed type %d\n
 UnreadyForDisplay
+Unrecognized EHashType found: %d
 Unregister a javascript calloback previously registered with RegisterJSCallback.
 UnregisterJSCallback
 Unserialization error: %s\n
@@ -22830,6 +22841,7 @@ Vemn\t
 Verify error:
 Verify failure\n
 VerifyLevelShutdownState: List %d has remaining entity of type %s with name %s\n
+VerifySingleChunk
 Verifying - %s
 Version
 VertArrow
@@ -23964,7 +23976,7 @@ _var
 _xU`u
 _}eOk
 `28)fk
-`43i@
+`43a@
 `:zQF
 `D$daM-l
 `DZG
@@ -25895,6 +25907,7 @@ chocolate
 choice_name
 choppers_incoming_warning
 chunk >= 0
+chunkHashFraction.GetHashType() != ChunkHashFraction_t::EHashType::Unset
 ci;e*
 ciO"A
 cipher
@@ -28040,16 +28053,25 @@ file://{images}/icons/ui/vote%s.svg
 file://{images}/icons/ui/warning.svg
 file://{images}/map_icons/map_icon_%s.svg
 file://{images}/map_icons/screenshots/720p/ar_baggage.png
-file://{images}/map_icons/screenshots/720p/ar_shoot.pngs
+file://{images}/map_icons/screenshots/720p/ar_pool_day.png
+file://{images}/map_icons/screenshots/720p/ar_shoots.png
+file://{images}/map_icons/screenshots/720p/ar_shoots_night.png
+file://{images}/map_icons/screenshots/720p/cs_agency.png
 file://{images}/map_icons/screenshots/720p/cs_italy.png
 file://{images}/map_icons/screenshots/720p/cs_office.png
 file://{images}/map_icons/screenshots/720p/de_ancient.png
+file://{images}/map_icons/screenshots/720p/de_ancient_night.png
 file://{images}/map_icons/screenshots/720p/de_anubis.png
+file://{images}/map_icons/screenshots/720p/de_brewery.png
+file://{images}/map_icons/screenshots/720p/de_dogtown.png
 file://{images}/map_icons/screenshots/720p/de_dust2.png
+file://{images}/map_icons/screenshots/720p/de_grail.png
 file://{images}/map_icons/screenshots/720p/de_inferno.png
+file://{images}/map_icons/screenshots/720p/de_jura.png
 file://{images}/map_icons/screenshots/720p/de_mirage.png
 file://{images}/map_icons/screenshots/720p/de_nuke.png
 file://{images}/map_icons/screenshots/720p/de_overpass.png
+file://{images}/map_icons/screenshots/720p/de_train.png
 file://{images}/map_icons/screenshots/720p/de_vertigo.png
 file://{images}/overheadmaps/%s_radar.%s
 file://{resources}/layout/base_globalpopups.xml
@@ -30464,7 +30486,7 @@ k+Aq
 k/sn
 k0>Z,
 k26C*
-k3%5
+k3,5
 k8\vD
 k8fo
 k8xA
@@ -30972,7 +30994,6 @@ mS'7
 mXRecord
 mZKB
 m\ta=\ruWb
-m\vPy*
 m_16ByteOrLessStack out of space, falling through after %d entries, consider upping NETWORKFIELDSCRATCHDATA_16BYTE_COUNT\n
 m_AdditiveAnims
 m_Entity_pEnvMap

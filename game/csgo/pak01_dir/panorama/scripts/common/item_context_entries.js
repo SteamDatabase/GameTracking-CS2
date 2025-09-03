@@ -603,6 +603,7 @@ var ItemContextEntries;
             name: 'remove_from_favorites_ct',
             style: (id) => 'TopSeparator',
             populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            bActionIsRentalAware: true,
             AvailableForItem: (id) => InventoryAPI.ItemIsInFavorites('ct', id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
