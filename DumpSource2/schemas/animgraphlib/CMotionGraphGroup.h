@@ -12,7 +12,7 @@
 //				[
 //				],
 //				"m_nCentroids": <HIDDEN FOR DIFF>,
-//				"m_nDimensions": 32764
+//				"m_nDimensions": 32766
 //			},
 //			"m_sampleCodes":
 //			[

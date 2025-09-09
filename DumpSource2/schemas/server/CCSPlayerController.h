@@ -93,7 +93,6 @@ class CCSPlayerController : public CBasePlayerController
 	GameTime_t m_flLastJoinTeamTime;
 	// MNetworkEnable
 	CUtlSymbolLarge m_szClan;
-	char[32] m_szClanName;
 	// MNetworkEnable
 	int32 m_iCoachingTeam;
 	// MNetworkEnable
