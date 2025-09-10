@@ -10,7 +10,7 @@
 //	},
 //	"m_bEnableFilter": true,
 //	"m_flDelay": 0.000000,
-//	"m_flDirectGain": -1.478607,
+//	"m_flDirectGain": 0.000000,
 //	"m_flDelayGain": 0.000000,
 //	"m_flFeedbackGain": 0.000000,
 //	"m_flWidth": 0.000000
