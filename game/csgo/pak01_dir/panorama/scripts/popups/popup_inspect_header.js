@@ -14,6 +14,7 @@ var InspectHeader;
         _SetRarity(elPanel, itemId);
         _SetCollectionInfo(elPanel, itemId);
         _SetRentalTime(elPanel, itemId);
+        _SetOriginalOwner(elPanel, itemId);
     }
     InspectHeader.Init = Init;
     function _SetName(elPanel, ItemId, funcGetSettingCallback) {
@@ -36,6 +37,9 @@ var InspectHeader;
             elLabel.RemoveClass('hide');
         }
         elLabel.SetHasClass('hide', !bHasExpirationDate);
+    }
+    function _SetOriginalOwner(elPanel, itemId) {
+        elPanel.FindChildInLayoutFile('InspectOriginalOwner').visible = (InventoryAPI.GetItemAttributeValue(itemId, '{uint32}purchaser account id') != undefined);
     }
     function _SetRarity(elPanel, itemId) {
         let rarityColor = InventoryAPI.GetItemRarityColor(itemId);

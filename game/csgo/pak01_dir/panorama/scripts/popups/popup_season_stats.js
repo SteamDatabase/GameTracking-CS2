@@ -269,9 +269,6 @@ var PopupSeasonStats;
                         mostPlayedMapCount = (map.wins + map.losses + map.ties);
                         mostPlayedMap = map.map_name;
                     }
-                    else {
-                        mostPlayedMapCount = mostPlayedMapCount;
-                    }
                 }
                 else {
                     let elBtn = _MakeMapRadioButton(elBtns, mapName, false);

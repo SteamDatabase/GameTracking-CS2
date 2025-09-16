@@ -33,6 +33,8 @@ var CapabilityHeader;
                     m_itemtype = "_graffiti";
                 else if (itemDefName && itemDefName.indexOf("tournament_pass_") != -1)
                     m_itemtype = "_fantoken";
+                else if (InventoryAPI.GetItemAttributeValue(m_itemid, '{uint32}volatile container'))
+                    m_itemtype = "_terminal";
             }
             else if (m_worktype === 'useitem') {
                 if (itemDefName && itemDefName.startsWith('Remove Keychain Tool'))

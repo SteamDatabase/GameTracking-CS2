@@ -25,6 +25,10 @@ var TooltipInventoryItem;
             }
         }
         ctx.SetDialogVariable('description', strDesc);
+        let isOriginalOwner = (InventoryAPI.GetItemAttributeValue(id, '{uint32}purchaser account id') != undefined);
+        let elOrignalOwner = $('#JsOriginalOwnerTooltip');
+        elOrignalOwner.visible = isOriginalOwner;
+        $('#JsOriginalOwnerTooltipSeperator').visible = isOriginalOwner;
         let strSetName = InventoryAPI.GetTag(id, 'ItemSet');
         let elCollectionLogo = $('#CollectionLogo');
         if (elCollectionLogo)
@@ -90,7 +94,6 @@ var TooltipInventoryItem;
             Print("--------------------------------------");
             let oTags = InventoryAPI.BuildItemTagsObject(id);
             for (let key of Object.keys(oTags)) {
-                // @ts-ignore
                 let tag = oTags[key];
                 let cat = Object.keys(tag)[0];
                 let val = tag[Object.keys(tag)[0]];

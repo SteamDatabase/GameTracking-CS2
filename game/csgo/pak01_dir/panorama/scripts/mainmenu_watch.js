@@ -23,10 +23,9 @@ var mainmenu_watch;
     };
     let MATCHLISTTABBYNAME = {
         "live": "JsLive",
-        "downloaded": "JsDownloaded"
+        "downloaded": "JsDownloaded",
+        [_m_myXuid]: "JsYourMatches"
     };
-    //@ts-ignore
-    MATCHLISTTABBYNAME[_m_myXuid] = "JsYourMatches";
     function GetActiveTab() {
         return _m_activeTab;
     }
@@ -252,7 +251,6 @@ var mainmenu_watch;
     }
     mainmenu_watch.UpdateActiveTab = UpdateActiveTab;
     function _UpdateMatchList(listId, optbFromMatchListChangeEvent) {
-        // @ts-ignore
         let tabbyid = MATCHLISTTABBYNAME[listId];
         if (tabbyid) {
             _UpdateTab($("#" + tabbyid), optbFromMatchListChangeEvent);
@@ -353,9 +351,8 @@ var mainmenu_watch;
     }
     mainmenu_watch.CloseSubMenuContent = CloseSubMenuContent;
     function _InitResourceManagement(elTab) {
-        // @ts-ignore
-        elTab.OnPropertyTransitionEndEvent = function (panelName, propertyName) {
-            if (elTab.id === panelName && propertyName === 'opacity') {
+        $.RegisterEventHandler('PropertyTransitionEnd', elTab, (panelName, propertyName) => {
+            if (elTab === panelName && propertyName === 'opacity') {
                 if (elTab.visible === true && elTab.BIsTransparent()) {
                     elTab.visible = false;
                     elTab.SetReadyForDisplay(false);
@@ -363,9 +360,7 @@ var mainmenu_watch;
                 }
             }
             return false;
-        };
-        // @ts-ignore
-        $.RegisterEventHandler('PropertyTransitionEnd', elTab, elTab.OnPropertyTransitionEndEvent);
+        });
         elTab.Data().elMainMenuRoot = $.GetContextPanel().Data().elMainMenuRoot;
     }
     function _InitTab(tab) {
@@ -384,7 +379,6 @@ var mainmenu_watch;
         _InitTab('JsDownloaded');
         _InitTab('JsLive');
         _InitResourceManagement($('#JsTournaments'));
-        $.GetContextPanel().Data().elMainMenuRoot;
         if (_m_bPerfectWorld) {
             let elWatchNavBarButtonStreams = $('#WatchNavBarButtonStreams');
             if (elWatchNavBarButtonStreams)
@@ -398,12 +392,6 @@ var mainmenu_watch;
         }
         let restrictions = LicenseUtil.GetCurrentLicenseRestrictions();
         if (restrictions === false) {
-            if (false) {
-                _InitResourceManagement($('#JsActiveTournament'));
-                NavigateToTab('JsActiveTournament');
-                $('#WatchNavBarActiveTourament').checked = true;
-                return;
-            }
         }
         NavigateToTab('JsYourMatches');
         $('#WatchNavBarYourMatches').checked = true;

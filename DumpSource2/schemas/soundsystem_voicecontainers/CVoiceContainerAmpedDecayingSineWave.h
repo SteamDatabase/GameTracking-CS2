@@ -4,9 +4,9 @@
 //	{
 //		"m_nRate": <HIDDEN FOR DIFF>,
 //		"m_nFormat": <HIDDEN FOR DIFF>,
-//		"m_nChannels": 3,
+//		"m_nChannels": 2,
 //		"m_nLoopStart": 0,
-//		"m_nSampleCount": 0,
+//		"m_nSampleCount": 3483189208,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[

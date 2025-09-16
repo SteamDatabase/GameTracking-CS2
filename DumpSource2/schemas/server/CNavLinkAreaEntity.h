@@ -1,7 +1,7 @@
 class CNavLinkAreaEntity : public CPointEntity
 {
 	float32 m_flWidth;
-	Vector m_vLocatorOffset;
+	VectorWS m_vLocatorOffset;
 	QAngle m_qLocatorAnglesOffset;
 	CUtlSymbolLarge m_strMovementForward;
 	CUtlSymbolLarge m_strMovementReverse;

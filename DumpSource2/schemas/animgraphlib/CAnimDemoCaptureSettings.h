@@ -43,7 +43,6 @@
 //	[
 //	]
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimDemoCaptureSettings
 {
 	// MPropertyFriendlyName = "Rotation Error Range"

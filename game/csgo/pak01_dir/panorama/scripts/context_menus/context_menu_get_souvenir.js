@@ -99,7 +99,7 @@ var ContextMenuGetSouvenir;
                 MatchInfoAPI.RequestMatchTournamentSouvenir(umid, _m_coinId);
                 $.GetContextPanel().FindChildInLayoutFile('id-get-souvenir-matches-spinner').visible = true;
                 $.GetContextPanel().FindChildInLayoutFile('id-get-souvenir-matches-spinner').SetPanelEvent('onactivate', () => { });
-                m_scheduleHandle = $.Schedule(5, _CancelWaitforCallBack.bind(undefined, $.GetContextPanel()));
+                m_scheduleHandle = $.Schedule(5, () => _CancelWaitforCallBack());
             });
             return;
         }
@@ -144,9 +144,9 @@ var ContextMenuGetSouvenir;
         }
     }
     ;
-    function _CancelWaitforCallBack(elPanel) {
+    function _CancelWaitforCallBack() {
         m_scheduleHandle = null;
-        var elPanel = $.GetContextPanel();
+        const elPanel = $.GetContextPanel();
         if (!elPanel || !elPanel.IsValid()) {
             return;
         }

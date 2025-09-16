@@ -128,6 +128,10 @@
 		// Panorama - enable minidumps on JS exceptions
 		"panorama_js_minidumps" "1"
 
+		// Panorama - use f6 to close and open debugger
+		// (Otherwise f6 just opens debugger, and a subsequent f6 does an inspect)
+		"panorama_toggledebugger_mode" "1"
+
 		// HLTV AutoDirector - disable it for now so that it doesn't interfere with our spectator camera during replays / hltv / demos
 		// Needs to be revisited when we re-enable AutoDirector
 		"spec_autodirector" "false"

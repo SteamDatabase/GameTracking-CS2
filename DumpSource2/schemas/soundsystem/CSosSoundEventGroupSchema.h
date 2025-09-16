@@ -1,81 +1,65 @@
 // MGetKV3ClassDefaults = {
-//	"m_name": "New Group",
-//	"m_nType": "SOS_GROUPTYPE_DYNAMIC",
-//	"m_bIsBlocking": false,
+//	"m_nGroupType": "SOS_GROUPTYPE_DYNAMIC",
+//	"m_bBlocksEvents": false,
 //	"m_nBlockMaxCount": 0,
+//	"m_flMemberLifespanTime": -1.000000,
 //	"m_bInvertMatch": false,
-//	"m_matchPattern":
-//	{
-//		"_class": "CSosGroupMatchPattern",
-//		"m_bMatchEventName": false,
-//		"m_bMatchEventSubString": false,
-//		"m_bMatchEntIndex": false,
-//		"m_bMatchOpvar": false,
-//		"m_bMatchString": false,
-//		"m_matchSoundEventName": "",
-//		"m_matchSoundEventSubString": "",
-//		"m_flEntIndex": -1.000000,
-//		"m_flOpvar": -1.000000,
-//		"m_opvarString": ""
-//	},
-//	"m_branchPattern":
-//	{
-//		"_class": "CSosGroupBranchPattern",
-//		"m_bMatchEventName": false,
-//		"m_bMatchEventSubString": false,
-//		"m_bMatchEntIndex": false,
-//		"m_bMatchOpvar": false,
-//		"m_bMatchString": false
-//	},
-//	"m_flLifeSpanTime": -1.000000,
+//	"m_Behavior_EventName": "kIgnore",
+//	"m_matchSoundEventName": "",
+//	"m_bMatchEventSubString": false,
+//	"m_matchSoundEventSubString": "",
+//	"m_Behavior_EntIndex": "kIgnore",
+//	"m_flEntIndex": -1.000000,
+//	"m_Behavior_Opvar": "kIgnore",
+//	"m_flOpvar": -1.000000,
+//	"m_Behavior_String": "kIgnore",
+//	"m_opvarString": "",
 //	"m_vActions":
 //	[
-//		{
-//			"_class": "CSosGroupActionSchema",
-//			"m_name": "None",
-//			"m_actionType": "SOS_ACTION_NONE",
-//			"m_actionInstanceType": "SOS_ACTION_NONE"
-//		},
-//		{
-//			"_class": "CSosGroupActionSchema",
-//			"m_name": "None",
-//			"m_actionType": "SOS_ACTION_NONE",
-//			"m_actionInstanceType": "SOS_ACTION_NONE"
-//		},
-//		{
-//			"_class": "CSosGroupActionSchema",
-//			"m_name": "None",
-//			"m_actionType": "SOS_ACTION_NONE",
-//			"m_actionInstanceType": "SOS_ACTION_NONE"
-//		},
-//		{
-//			"_class": "CSosGroupActionSchema",
-//			"m_name": "None",
-//			"m_actionType": "SOS_ACTION_NONE",
-//			"m_actionInstanceType": "SOS_ACTION_NONE"
-//		}
 //	]
 //}
-// MPropertyElementNameFn (UNKNOWN FOR PARSER)
-// M_LEGACY_OptInToSchemaPropertyDomain
+// MVDataRoot
 class CSosSoundEventGroupSchema
 {
-	// MPropertyFriendlyName = "Group Name"
-	CUtlString m_name;
-	// MPropertyFriendlyName = "Group Type"
-	SosGroupType_t m_nType;
-	// MPropertyFriendlyName = "Blocks Events"
-	bool m_bIsBlocking;
-	// MPropertyFriendlyName = "Block Max Count"
+	// MPropertyAttributeEditor = "Radio"
+	SosGroupType_t m_nGroupType;
+	// MPropertyStartGroup = "+Block Events"
+	bool m_bBlocksEvents;
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
 	int32 m_nBlockMaxCount;
-	// MPropertyFriendlyName = "Invert Match"
+	// MPropertyStartGroup = ""
+	float32 m_flMemberLifespanTime;
 	bool m_bInvertMatch;
-	// MPropertyFriendlyName = "Match Rules"
-	CSosGroupMatchPattern m_matchPattern;
-	// MPropertyFriendlyName = "Branch Rules"
-	CSosGroupBranchPattern m_branchPattern;
-	// MPropertyFriendlyName = "Member Lifespan Time"
-	float32 m_flLifeSpanTime;
-	// MPropertyFriendlyName = "Actions"
-	CSosGroupActionSchema*[4] m_vActions;
+	// MPropertyStartGroup = "+Event Name"
+	// MPropertyAttributeEditor = "Radio"
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
+	SosGroupFieldBehavior_t m_Behavior_EventName;
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
+	CUtlString m_matchSoundEventName;
+	// MPropertyStartGroup = "+Event SubString"
+	bool m_bMatchEventSubString;
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
+	CUtlString m_matchSoundEventSubString;
+	// MPropertyStartGroup = "+Ent Index"
+	// MPropertyAttributeEditor = "Radio"
+	SosGroupFieldBehavior_t m_Behavior_EntIndex;
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
+	float32 m_flEntIndex;
+	// MPropertyStartGroup = "+OpVar Float"
+	// MPropertySuppressExpr = "m_nGroupType == SOS_GROUPTYPE_STATIC"
+	// MPropertyAttributeEditor = "Radio"
+	SosGroupFieldBehavior_t m_Behavior_Opvar;
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
+	// MPropertySuppressExpr = "m_nGroupType == SOS_GROUPTYPE_STATIC"
+	float32 m_flOpvar;
+	// MPropertyStartGroup = "+OpVar String"
+	// MPropertySuppressExpr = "m_nGroupType == SOS_GROUPTYPE_STATIC"
+	// MPropertyAttributeEditor = "Radio"
+	SosGroupFieldBehavior_t m_Behavior_String;
+	// MPropertyReadonlyExpr (UNKNOWN FOR PARSER)
+	// MPropertySuppressExpr = "m_nGroupType == SOS_GROUPTYPE_STATIC"
+	CUtlString m_opvarString;
+	// MPropertyStartGroup = ""
+	// MPropertyAutoExpandSelf
+	CUtlVector< CSosGroupActionSchema* > m_vActions;
 };

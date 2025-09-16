@@ -22,7 +22,7 @@ var CanApplyPickSlot;
             _AddItemImage(oSettings, oSettings.toolId);
             m_elItemToApply = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons').Children()[0];
         }
-        _ShowHideStickerApplyHints(oSettings);
+        _ShowHideApplyHints(oSettings);
         _BtnActions(oSettings);
     }
     CanApplyPickSlot.Init = Init;
@@ -60,9 +60,10 @@ var CanApplyPickSlot;
         }
     }
     CanApplyPickSlot.UpdateSelectedRemoveForSticker = UpdateSelectedRemoveForSticker;
-    function _ShowHideStickerApplyHints(oSettings) {
-        m_infoPanel.SetHasClass('show-sticker-apply-hints', !oSettings.isRemove && oSettings.type === "sticker");
-        m_infoPanel.SetHasClass('show-sticker-remove-hints', oSettings.isRemove && oSettings.type === "sticker");
+    function _ShowHideApplyHints(oSettings) {
+        m_infoPanel.FindChildInLayoutFile('popup-capability-keychain-hints').SetHasClass('show-keychain-apply-hints', !oSettings.isRemove && oSettings.type === "keychain");
+        m_infoPanel.FindChildInLayoutFile('popup-capability-sticker-hints').SetHasClass('show-sticker-apply-hints', !oSettings.isRemove && oSettings.type === "sticker");
+        m_infoPanel.FindChildInLayoutFile('popup-capability-sticker-remove-hint').SetHasClass('show-sticker-remove-hints', oSettings.isRemove && oSettings.type === "sticker");
     }
     function ShowHideInfoPanel(bHide) {
         m_infoPanel.SetHasClass('hidden', bHide);

@@ -326,7 +326,6 @@ $MonitorTexture
 %08dx.geo
 %c [%02d] where %03d, insert %03d, delete %03d, char_storage %03d "%s"
 %d (%d depth-only
-%d (%ukb), %d (%ukb)\n
 %d columns
 %d current allocations
 %d draw calls for particles\n
@@ -445,7 +444,9 @@ $MonitorTexture
 *ZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE0_
 *ZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE_
 *ZN15CLightBinnerGPU27AddLightProbeVolumesForViewEP10CSceneViewiEUlP28CSceneLightProbeVolumeObjectE_
+*ZN25CAggregateSceneObjectDesc9DrawArrayEP14IRenderContextP20CMeshDrawPrimitive_tiPK10ISceneViewP11ISceneLayerR26SceneSystemPerFrameStats_tEUlvE_
 *ZN29CInstancedMeshSceneObjectDesc25OnBeginSubmitDisplayListsEP14IRenderContextE19ReadStatsCallback_t
+*ZNK21CAggregateSceneObject26FindVisClustersForMeshletsERK10CUtlVectorI6AABB_ti25CUtlVectorMemory_GrowableIS1_iLm0EEERKNS_18FragmentCullInfo_tERKS1_RK6Mat3x4IfEPK18CMeshletDescriptorjP16PerMeshletData_tEUlvE_
 *ZZN12CSceneSystem22Thread_RenderViewLayerESt10shared_ptrI13CViewDrawListEP11CSceneLayerENKUlbE_clEbEUlvE_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE0_clES3_EUlvE0_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE0_clES3_EUlvE_
@@ -471,6 +472,7 @@ $MonitorTexture
 0..255
 0.00..1.00
 0.17
+0Dark
 0x%02X
 0x%04X
 0x%08X
@@ -544,11 +546,11 @@ $MonitorTexture
 18IModelRenderHelper
 18IRenderingPipeline
 19CClutterSceneObject
-19CDebugLayerRenderer
 19CRenderGraphBuilder
 19CRenderingPipelines
 19CScalableAORenderer
 19CSceneMonitorObject
+19CSimpleQuadRenderer
 19ILightBinnerFactory
 19IReadBufferCallback
 19ISceneLightListener
@@ -698,7 +700,6 @@ $MonitorTexture
 <td>LAYERFLAGS_PRESERVE_COLOR_BUFFERS</td>
 <td>LAYERFLAGS_PRESERVE_DEPTH_BUFFER</td>
 <td>LAYERFLAGS_PRESERVE_STENCIL_BUFFER</td>
-<td>LAYERFLAGS_PRIMARY_TARGET_OUTPUT</td>
 <td>LAYERFLAGS_READONLY_DEPTH_STENCIL</td>
 <td>LAYERFLAGS_READONLY_DEPTH_STENCIL_NORESOLVE</td>
 <tr><td><b>Excluded obj flags</b></td><td>0x%llx</td>
@@ -731,7 +732,6 @@ $MonitorTexture
 =n4X?e
 =uvz?
 =v?ke
->*ZNK21CAggregateSceneObject26FindVisClustersForMeshletsERK10CUtlVectorI6AABB_ti25CUtlVectorMemory_GrowableIS1_iLm0EEERKNS_18FragmentCullInfo_tERKS1_RK6Mat3x4IfEPK18CMeshletDescriptorjP16PerMeshletData_tEUlvE_
 >0G??Ou
 >333?
 >c<yXH?B
@@ -746,7 +746,7 @@ $MonitorTexture
 ?333333
 ?Bxt>
 ?JA7=
-@19CSimpleQuadRenderer
+@19CDebugLayerRenderer
 @33333
 @33333#
 @33333'
@@ -1062,7 +1062,6 @@ Blue shape is drawn first: appears in back
 BlueNoise
 Blueberry
 Bobby
-BoneConstraintList
 BoneIdxBits
 BoneIdxOffset
 BoneWeightOffset
@@ -1073,6 +1072,8 @@ Borders, background
 Both
 Both types:
 Bottom
+Bottom-left
+Bottom-right
 Bound Last Frame
 BoundingBoxBloat
 Box Select
@@ -1317,6 +1318,7 @@ Clipper: Step(): computed ItemsHeight: %.2f.\n
 Clipper: Step(): display %d to %d.\n
 Clipper: Step(): inside frozen table row.\n
 Clipping
+Close
 Close All Documents
 Close Console
 Close this window
@@ -1529,7 +1531,6 @@ D_DEBUG_DRAW_MESHLETS
 D_DEBUG_OUTPUT_STATS
 D_DECALS_ENABLED
 D_DECAL_DECODE_MODE
-D_EIGHT_BONE_SKINNING
 D_ENABLE_INDIRECT
 D_ENABLE_VOLUMETRIC_FOG
 D_FAST_CONSERVATIVE_BOUNDS
@@ -1555,7 +1556,7 @@ D_OVERWRITE_DEPTH
 D_PASS
 D_ROUGHNESS_TEXTURE
 D_SCENE_DEPTH_MSAA
-D_SHADOW_CULL_FRONTFACES
+D_SELF_SHADOW
 D_SMOOTH_ACROSS_UV_SEAMS
 D_SPECULAR_CUBE_MAP_STATIC
 D_SRGBREADINPUT
@@ -1860,7 +1861,6 @@ FarPlaneOverride
 Faster lines using texture data. Require backend to render with bilinear filtering (not point/nearest filtering).
 Fatal error in tiny_bvh.h, line %i:\n%s\n
 Features:
-FeetSettings
 Field
 Field_%d
 File
@@ -1996,10 +1996,13 @@ GLOBAL
 GOOGL
 GPOS
 GPU Animated Vertex Cache allocation too large! Requested: %d, max allowed: %d\nUse smaller draw calls or increase cache buffer block size\n
-GPU Instance Mem : %s allocated, %s used this frame
+GPU Instance Mem  : %s allocated, %s written, %s used
+GPU Instance Mem  : %s written, %s used, %s allocated\n
 GPU Memory Size
+GPU Meshlet Mem   : %s written, %s used, %s allocated\n
 GPU Time: %.2f ms
-GPU Transform Mem : %s allocated, %s used this frame
+GPU Transform Mem : %s allocated, %s written, %s used
+GPU Transform Mem : %s written, %s used, %s allocated\n
 GPUProfiler
 GPUSort
 Gamepad
@@ -2061,6 +2064,7 @@ Grid
 Grid Lines
 GroomID
 GroomRenderingDescSet
+Groups
 Guide Hair Visualization
 Guide Hair update
 GuideHairDensityBuffer
@@ -2112,7 +2116,6 @@ HairThickness
 HairVolumeInfoBuffer
 HairVolumeInfoBufferCount
 HairVolumeTexture
-HairVoxelizationLayer
 HairWorldTransform
 Half True
 Half of available width.\n(~ right-cursor_pos)\n(works within a column set)
@@ -2583,6 +2586,7 @@ LegendInnerPadding
 LegendPadding
 LegendSpacing
 LegendText
+LerpOsFromWs0
 Liars
 Light
 Light Bounds Debugger
@@ -2655,7 +2659,6 @@ Logs
 Long Text
 Long text display
 Long text that is likely to clip
-LookAtList
 Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -2702,6 +2705,7 @@ Master disable flag (also hide from context menu)
 Material %s - cannot find raytrace shader!\n
 Material changes: 
 Max Height (in Lines)
+Max Time
 Max: %.1f %%
 Max: %d units
 Max: (%.2f, %.2f)
@@ -2814,7 +2818,6 @@ MouseX1
 MouseX2
 Move %s
 Move your mouse to change the data!
-MovementSettings
 MovingWindow: '%s'
 Multi-Axis Plot
 Multi-component Widgets
@@ -2978,7 +2981,6 @@ Number of pushconstant sets:
 Number of rendertarget binds: 
 Number of resolves: %d\n
 Number of targets (%d) exceeds maximum (%d).  List of targets:\n
-Number of transforms, instances allocated: 
 Number of unique materials in the frame: 
 Number of views allocated : %d\n
 Number of views rendered: %d (%d with world traversals)\n
@@ -3367,7 +3369,6 @@ ResizeNESW
 ResizeNS
 ResizeNWSE
 ResizedColumn: %d, ReorderColumn: %d, HeldHeaderColumn: %d
-Resizing MeshletBuffer %i -> %i\n
 Resizing lock-free scratch allocation pool to %s.\n
 Resolve vel volume
 ResolveMSAARenderTargetIfNecessary
@@ -3762,7 +3763,6 @@ SkyBrightnessExposureBias
 SkyColor
 SkyConstantBuffer_t
 SkyIBLSource
-SkyTextureFormat
 SkyTextureScale
 SkyTint
 Skybox
@@ -4060,6 +4060,8 @@ Tooltip are typically created by using a IsItemHovered() + SetTooltip() sequence
 Tooltip at target location
 Tooltip here
 Tooltips
+Top-left
+Top-right
 Total : %d (%ukb)\n
 TouchExtraPadding
 TouchScreen
@@ -4498,11 +4500,6 @@ _TexBarrierRT9
 _WidthFixed
 _WidthStretch
 _atlas
-_base
-_include
-_localization_path
-_multibase
-_not_pickable
 aaa1.c
 aaa2.cpp
 aaaa
@@ -4514,6 +4511,9 @@ active sceneobject: %i clusters
 additionalExcludedFlags
 additionalRenderAttributes
 additionalRequiredFlags
+aggregate.fragmentCount
+aggregate.material.name
+aggregate.meshletCount
 aggregatedesc.cpp
 aggregatedesc.cpp:1995
 aliasing
@@ -4750,7 +4750,6 @@ g_tHeightfield
 g_tLastFrameFogVolume
 g_tNoise
 generatecullrequests
-generic_data_type
 global scale
 glyf
 glyph
@@ -4831,9 +4830,9 @@ input u32 hex
 input u64
 input u8
 inputTexture
+instance buffer
 instance cull stats
 instance cull stats shadow
-instancebuffer
 instanced mesh data
 instancedmeshdesc.cpp
 instanceidbuffer
@@ -4928,17 +4927,7 @@ m_Luminaire
 m_Positions
 m_ScaledTangents
 m_Tangents
-m_bBakedTwoSided
-m_bCanBatchWithDynamicShaderConstants
-m_bDrawLast
-m_bHasBakedLightingFromLightMap
-m_bHasBakedLightingFromVertexStream
-m_bIsNotMatchedToMaterial
 m_bLightInsideFrustum
-m_bNoShadow
-m_bOnlyShadow
-m_bUseCompressedNormalTangent
-m_bUseShadowFastPath
 m_flEndcapAreaPercentage
 m_flLightColorToRadiance
 m_mFromClipSpace
@@ -5019,7 +5008,7 @@ maxp
 maxtime
 medium
 mergedindices
-meshletbuffer
+meshlet buffer
 meshletdata
 min_row_height = %.2f
 mindate
@@ -5136,8 +5125,8 @@ scenesysCone
 scenesysDodecahedron
 scenesysPyramid
 scenesystem.cpp
-scenesystem.cpp(5318): Expecting 1 renderable pass for material "%s" but found %d!\n
-scenesystem.cpp:3182
+scenesystem.cpp(5341): Expecting 1 renderable pass for material "%s" but found %d!\n
+scenesystem.cpp:3205
 scenesystem.h
 scenesystemdebug
 scenesystemperframedata
@@ -5228,6 +5217,7 @@ srand
 srgb
 sstdebugcolor%d
 static const ImU32 %s_Data[%d] = {\n
+std::__shared_count<(__gnu_cxx::_Lock_policy)2>::operator=(std::__shared_count<(__gnu_cxx::_Lock_policy)2> const&)
 std::piecewise_construct
 style.FrameBorderSize: %.2f
 style.FramePadding: %.2f,%.2f
@@ -5288,18 +5278,15 @@ tom-hi
 tom-low
 tom-mid
 tools.toolsmaterial
-transformbuffer
-transformbuffer0
-transformbuffer1
+transform buffer a
+transform buffer b
 translucent
 transmissive_color
 transmissive_saturation
 tree
-typeinfo for std::_Sp_make_shared_tag
 undo_point: %d, redo_point: %d, undo_char_point: %d, redo_char_point: %d
 undopoints
 uniform_color
-unrecognized string in token spec %s\n
 uppercase
 utils/characterdecalrenderer.cpp
 utils/hairrenderer.cpp
@@ -5316,6 +5303,7 @@ vertical
 vertical split
 very_fast
 views
+void std::__detail::__to_chars_10_impl<unsigned int>(char*, unsigned int, unsigned int)
 void_context
 volumetric fog
 volumetric_fog.vtex

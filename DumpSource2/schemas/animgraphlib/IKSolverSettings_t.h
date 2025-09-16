@@ -1,4 +1,3 @@
-// M_LEGACY_OptInToSchemaPropertyDomain
 class IKSolverSettings_t
 {
 	// MPropertyFriendlyName = "Solver Type"

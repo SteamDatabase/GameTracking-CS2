@@ -15,7 +15,7 @@
 //	"m_flFeedbackGain": 0.000000,
 //	"m_flModRate": 0.000000,
 //	"m_flModDepth": 0.000000,
-//	"m_bApplyAntialiasing": false
+//	"m_bApplyAntialiasing": true
 //}
 class VMixModDelayDesc_t
 {

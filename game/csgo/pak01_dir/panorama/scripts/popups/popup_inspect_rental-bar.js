@@ -118,7 +118,7 @@ var InspectRentalBar;
             $.GetContextPanel().SetDialogVariable('time-remaining', sTimeRemainingString);
             $.GetContextPanel().SetDialogVariable('name', InventoryAPI.GetItemName(m_itemId));
             $.GetContextPanel().SetDialogVariable('expiration-time', $.Localize(sTimeRemainingString));
-            UiToolkitAPI.ShowGenericPopupOk('#popup_container_confirm_title_rent', $.Localize('#popup_container_confirm_already_rented', $.GetContextPanel()), '', function () { () => { $.DispatchEvent('UIPopupButtonClicked', ''); }; });
+            UiToolkitAPI.ShowGenericPopupOk('#popup_container_confirm_title_rent', $.Localize('#popup_container_confirm_already_rented', $.GetContextPanel()), '', () => $.DispatchEvent('UIPopupButtonClicked', ''));
         }
         else {
             OpenConfirmPopup(type);

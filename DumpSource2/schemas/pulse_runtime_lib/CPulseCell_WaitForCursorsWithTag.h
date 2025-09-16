@@ -11,9 +11,7 @@
 //	"m_bTagSelfWhenComplete": false,
 //	"m_nDesiredKillPriority": "None"
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Wait For Cursors With Tag"
 // MPropertyDescription = "Causes this execution cursor to wait for the completion of other cursors with the given tag. Can optionally kill the tag while waiting."
 // MPulseEditorHeaderIcon = "tools/images/pulse_editor/cursor_tag.png"

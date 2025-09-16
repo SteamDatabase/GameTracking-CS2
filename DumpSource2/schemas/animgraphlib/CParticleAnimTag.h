@@ -21,7 +21,6 @@
 //	"m_attachmentCP1Type": "PATTACH_INVALID"
 //}
 // MPropertyFriendlyName = "Particle Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CParticleAnimTag : public CAnimTagBase
 {
 	// MPropertySuppressField

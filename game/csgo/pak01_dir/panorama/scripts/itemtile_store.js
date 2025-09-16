@@ -123,7 +123,7 @@ var ItemTileStore;
     }
     function SetClaimed(elPanel, oItemData) {
         if (oItemData.isDropItem) {
-            const bIsFauxItem = InventoryAPI.IsClaimedItem(oItemData.id);
+            const bIsFauxItem = InventoryAPI.IsFauxItemID(oItemData.id);
             elPanel.SetHasClass('item-claimed', bIsFauxItem);
         }
     }
@@ -162,9 +162,13 @@ var ItemTileStore;
         else if (ItemInfo.ItemHasCapability(oItemData.id, 'decodable')) {
             let displayItemId = '';
             let isNew = isNewRelease(oItemData);
+            const isVolatile = !!InventoryAPI.GetItemAttributeValue(oItemData.id, '{uint32}volatile container');
             if (InventoryAPI.GetItemTypeFromEnum(oItemData.id) === 'coupon') {
                 displayItemId = InventoryAPI.GetLootListItemIdByIndex(oItemData.id, 0);
                 elPanel.SetPanelEvent('onactivate', ShowDecodePopup.bind(undefined, oItemData.id, displayItemId, isNew));
+            }
+            else if (isVolatile) {
+                elPanel.SetPanelEvent('onactivate', ShowVolatilePopup.bind(undefined, oItemData.id));
             }
             else if (InventoryAPI.GetLootListItemsCount(oItemData.id) > 0) {
                 elPanel.SetPanelEvent('onactivate', ShowDecodePopup.bind(undefined, oItemData.id, oItemData.id, isNew));
@@ -181,6 +185,12 @@ var ItemTileStore;
         let m_CommunityUrl = SteamOverlayAPI.GetSteamCommunityURL();
         let strSetName = InventoryAPI.GetItemSet(itemId);
         SteamOverlayAPI.OpenURL(m_CommunityUrl + "/market/search?q=&appid=" + m_AppID + "&lock_appid=" + m_AppID + "&category_" + m_AppID + "_ItemSet%5B%5D=tag_" + strSetName);
+    }
+    function ShowVolatilePopup(id) {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
+            '&' + 'inspectonly=true' +
+            '&' + 'asyncworktype=decodeable' +
+            '&' + 'onlyclosepurchasebar=true');
     }
     function ShowDecodePopup(id, displayItemId, isNew) {
         var strExtraSettings = '';

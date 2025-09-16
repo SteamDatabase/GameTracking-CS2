@@ -1,8 +1,5 @@
 // MGetKV3ClassDefaults = {
 //	"_class": "CSosGroupActionMemberCountEnvelopeSchema",
-//	"m_name": "None",
-//	"m_actionType": "SOS_ACTION_COUNT_ENVELOPE",
-//	"m_actionInstanceType": "SOS_ACTION_COUNT_ENVELOPE",
 //	"m_nBaseCount": 0,
 //	"m_nTargetCount": 1,
 //	"m_flBaseValue": 0.000000,
@@ -12,7 +9,7 @@
 //	"m_resultVarName": "envelope_result",
 //	"m_bSaveToGroup": false
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
+// MPropertyFriendlyName = "Count Envelope"
 class CSosGroupActionMemberCountEnvelopeSchema : public CSosGroupActionSchema
 {
 	// MPropertyFriendlyName = "Min Threshold Count"

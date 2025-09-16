@@ -1,8 +1,5 @@
 // MGetKV3ClassDefaults = {
 //	"_class": "CSosGroupActionSoundeventClusterSchema",
-//	"m_name": "None",
-//	"m_actionType": "SOS_ACTION_SOUNDEVENT_CLUSTER",
-//	"m_actionInstanceType": "SOS_ACTION_SOUNDEVENT_CLUSTER",
 //	"m_nMinNearby": 6,
 //	"m_flClusterEpsilon": 36.000000,
 //	"m_shouldPlayOpvar": "cluster_should_play",
@@ -11,7 +8,7 @@
 //	"m_groupBoundingBoxMinsOpvar": "cluster_group_box_mins",
 //	"m_groupBoundingBoxMaxsOpvar": "cluster_group_box_maxs"
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
+// MPropertyFriendlyName = "Soundevent Cluster"
 class CSosGroupActionSoundeventClusterSchema : public CSosGroupActionSchema
 {
 	// MPropertyFriendlyName = "Minimum Nearby Soundevents"

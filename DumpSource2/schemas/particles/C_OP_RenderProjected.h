@@ -10,6 +10,7 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
@@ -132,6 +133,7 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
@@ -210,6 +212,7 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
@@ -283,6 +286,7 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
@@ -356,6 +360,7 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
@@ -474,6 +479,7 @@
 //			"m_nScalarAttribute": 3,
 //			"m_nVectorAttribute": 6,
 //			"m_nVectorComponent": 0,
+//			"m_bReverseOrder": false,
 //			"m_flRandomMin": 0.000000,
 //			"m_flRandomMax": 1.000000,
 //			"m_bHasRandomSignFlip": false,
@@ -547,6 +553,7 @@
 //			"m_nScalarAttribute": 3,
 //			"m_nVectorAttribute": 6,
 //			"m_nVectorComponent": 0,
+//			"m_bReverseOrder": false,
 //			"m_flRandomMin": 0.000000,
 //			"m_flRandomMax": 1.000000,
 //			"m_bHasRandomSignFlip": false,
@@ -620,6 +627,7 @@
 //			"m_nScalarAttribute": 3,
 //			"m_nVectorAttribute": 6,
 //			"m_nVectorComponent": 0,
+//			"m_bReverseOrder": false,
 //			"m_flRandomMin": 0.000000,
 //			"m_flRandomMax": 1.000000,
 //			"m_bHasRandomSignFlip": false,
@@ -693,6 +701,7 @@
 //			"m_nScalarAttribute": 3,
 //			"m_nVectorAttribute": 6,
 //			"m_nVectorComponent": 0,
+//			"m_bReverseOrder": false,
 //			"m_flRandomMin": 0.000000,
 //			"m_flRandomMax": 1.000000,
 //			"m_bHasRandomSignFlip": false,
@@ -794,10 +803,13 @@
 class C_OP_RenderProjected : public CParticleFunctionRenderer
 {
 	// MPropertyFriendlyName = "project on characters"
+	// MPropertySuppressExpr = "mod != dota"
 	bool m_bProjectCharacter;
 	// MPropertyFriendlyName = "project on world"
+	// MPropertySuppressExpr = "mod != dota"
 	bool m_bProjectWorld;
 	// MPropertyFriendlyName = "project on water"
+	// MPropertySuppressExpr = "mod != dota"
 	bool m_bProjectWater;
 	// MPropertyFriendlyName = "flip horizontal"
 	bool m_bFlipHorizontal;

@@ -87,27 +87,33 @@ var RankUpRedemptionStore;
         _OnGhostItemActivate(elGhostItem, itemId);
     }
     function _AddTileToBlurPanel(elGhostItem) {
-        let parent = elGhostItem;
-        let newParent;
+        let parent = elGhostItem.GetParent();
         let count = 0;
-        while (newParent = parent.GetParent()) {
-            if (newParent.id === 'id-rewards-background') {
-                let blurTarget = newParent.FindChildInLayoutFile('id-rewards-background-blur');
+        while (parent) {
+            if (parent.id === 'id-rewards-background') {
+                let blurTarget = parent.FindChildInLayoutFile('id-rewards-background-blur');
                 blurTarget.AddBlurPanel(elGhostItem);
                 break;
             }
             if (count > 5)
                 break;
-            parent = newParent;
+            parent = parent.GetParent();
             count++;
         }
     }
     function _OnGhostItemActivate(elGhostItem, itemId) {
-        if (!InventoryAPI.IsClaimedItem(itemId)) {
+        if (!InventoryAPI.IsFauxItemID(itemId)) {
             elGhostItem.SetPanelEvent('onactivate', () => _OnItemSelected(elGhostItem));
             const elInspect = elGhostItem.FindChildTraverse('id-itemtile-store-inspect-btn');
+            const isVolatile = !!InventoryAPI.GetItemAttributeValue(itemId, '{uint32}volatile container');
             elInspect.SetPanelEvent('onactivate', () => {
-                if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !InventoryAPI.IsTool(itemId)) {
+                if (isVolatile) {
+                    UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + itemId +
+                        '&' + 'inspectonly=true' +
+                        '&' + 'asyncworktype=decodeable' +
+                        '&' + 'onlyclosepurchasebar=true');
+                }
+                else if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !InventoryAPI.IsTool(itemId)) {
                     UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + itemId +
                         '&' + 'asyncworkitemwarning=no' +
                         '&' + 'inspectonly=true' +

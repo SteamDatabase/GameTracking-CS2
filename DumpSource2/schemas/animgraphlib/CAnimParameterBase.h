@@ -1,5 +1,4 @@
 // MGetKV3ClassDefaults = Could not parse KV3 Defaults
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimParameterBase
 {
 	// MPropertyFriendlyName = "Name"
@@ -10,8 +9,10 @@ class CAnimParameterBase
 	// MPropertySortPriority = -100
 	CUtlString m_sComment;
 	// MPropertyReadOnly
+	// MPropertySortPriority = -90
 	CUtlString m_group;
 	// MPropertyReadOnly
+	// MPropertySortPriority = -90
 	AnimParamID m_id;
 	// MPropertySuppressField
 	// MPropertyAutoRebuildOnChange

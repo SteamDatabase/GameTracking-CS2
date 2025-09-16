@@ -7,7 +7,6 @@
 //	"m_flErrorQuantizationTranslationMax": 1.000000,
 //	"m_flErrorQuantizationScaleMax": 1.000000
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
 class BoneDemoCaptureSettings_t
 {
 	// MPropertyFriendlyName = "Bone"

@@ -33,7 +33,6 @@ class CRagdollProp : public CBaseAnimGraph
 	CUtlSymbolLarge m_strOriginClassName;
 	CUtlSymbolLarge m_strSourceClassName;
 	bool m_bHasBeenPhysgunned;
-	bool m_bShouldTeleportPhysics;
 	bool m_bAllowStretch;
 	// MNetworkEnable
 	// MNetworkBitCount = 8
@@ -45,5 +44,4 @@ class CRagdollProp : public CBaseAnimGraph
 	CUtlVector< Vector > m_ragdollMins;
 	CUtlVector< Vector > m_ragdollMaxs;
 	bool m_bShouldDeleteActivationRecord;
-	bool m_bValidatePoweredRagdollPose;
 };

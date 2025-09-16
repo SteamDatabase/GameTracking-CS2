@@ -18,6 +18,8 @@
  Vector b
  [*OBSERVABLE*]
  next: %p, parent: %p\n
+ pos[
+ radius[
 "Position within sphere random" no longer supports the "randomly distribute to highest supplied Control Point" feature\n\t"Emit continuously" and "Emit noise" no longer support "scale emission to used control points".\n\t"Position from control points" had a max control point added to it.
 "Remap control point orientation to rotation" does something approaching sanity for the cases I looked at.  If we have cases where this isn't appropriate, we can split out the behavior.\n
 "Remap control point orientation to rotation" rewritten to make more sense.\n
@@ -58,7 +60,6 @@ $SPECULARWARP
 %s is trying to get CP object %d but the function read limit is %d\n
 %s is trying to get CP renderable %d but the function read limit is %d\n
 %s took %8.6f seconds. %g iterations/sec
-%s: __pos (which is %zu) > __size (which is %zu)
 %s:( ActiveParticleCount()=%d, m_bounds=%? simtime=%g )
 %s::%s (%u)
 %s::%s (Entity Output Handler)
@@ -75,12 +76,14 @@ $SPECULARWARP
 *ZN20CGpuImplicitRenderer23DrawBlobulatorImplicitsEP14IRenderContextPK13IMaterialModeffRKNS_8Config_tERK10CUtlVectorINS_10Particle_tEi25CUtlVectorMemory_GrowableIS9_iLm0EEEEUlP17CRenderAttributesE_
 *ZN20CGpuImplicitRenderer23DrawSoftObjectImplicitsEP14IRenderContextPK13IMaterialModeffRKNS_8Config_tERK10CUtlVectorINS_10Particle_tEi25CUtlVectorMemory_GrowableIS9_iLm0EEEEUlP17CRenderAttributesE_
 *ZN20CGpuImplicitRenderer32DrawSoftObjectImplicitsWithRadiiEP14IRenderContextPK13IMaterialModefRKNS_8Config_tERK10CUtlVectorINS_10Particle_tEi25CUtlVectorMemory_GrowableIS9_iLm0EEEEUlP17CRenderAttributesE_
+*ZNK18C_OP_RenderSprites6RenderERK26FunctionRenderingContext_tEUlvE_
 *ZNK23C_OP_IntraParticleForce9AddForcesEP11FourVectorsP19CParticleCollectionRK19CUtlLocalStackArrayIDv4_fLi1EEifPvEUlPK25ObjectPairCollisionList_tE_
 *ZNK26C_OP_VelocityMatchingForce7OperateEP19CParticleCollectionfPvEUlPK25ObjectPairCollisionList_tE_
 ,m_nStride=%d m_pData=%p )
 -1 for all asleep, 1 for all awake
 -avx
 -sse2
+-sse3
 -sse4
 ../public/scenesystem/vertexformat.h
 0=don't clear particle attrs at init 1=clear to zero 2=clear to 0xdb
@@ -224,6 +227,7 @@ $SPECULARWARP
 20C_OP_CPVelocityForce
 20C_OP_CollideWithSelf
 20C_OP_DecayClampCount
+20C_OP_GameLiquidSpill
 20C_OP_LagCompensation
 20C_OP_LockToPointList
 20C_OP_MaintainEmitter
@@ -407,10 +411,10 @@ $SPECULARWARP
 28CParticleFunctionInitializer
 28CParticleFunctionPreEmission
 28CParticleSnapshotTypeManager
-28CPulseCell_Outflow_IntSwitch
 28CPulseCell_Step_PublicOutput
 28CPulseCell_Value_RandomFloat
 28CPulseCell_WaitForObservable
+28C_INIT_CheckParticleForWater
 28C_INIT_CreateOnModelAtHeight
 28C_INIT_CreateParticleImpulse
 28C_INIT_PositionPlaceOnGround
@@ -455,7 +459,6 @@ $SPECULARWARP
 30C_OP_ScreenSpaceDistanceToEdge
 30C_OP_SelectivelyEnableChildren
 31CPulseCell_Outflow_CycleOrdered
-31CPulseCell_Outflow_StringSwitch
 31C_INIT_InitialRepulsionVelocity
 31C_INIT_InitialSequenceFromModel
 31C_INIT_RandomNamedModelBodyPart
@@ -562,6 +565,7 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI20C_OP_CPVelocityForceE
 32CParticleFunctionDefinitionTypedI20C_OP_CollideWithSelfE
 32CParticleFunctionDefinitionTypedI20C_OP_DecayClampCountE
+32CParticleFunctionDefinitionTypedI20C_OP_GameLiquidSpillE
 32CParticleFunctionDefinitionTypedI20C_OP_LagCompensationE
 32CParticleFunctionDefinitionTypedI20C_OP_LockToPointListE
 32CParticleFunctionDefinitionTypedI20C_OP_MaintainEmitterE
@@ -698,6 +702,7 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI27C_OP_RampScalarLinearSimpleE
 32CParticleFunctionDefinitionTypedI27C_OP_RampScalarSplineSimpleE
 32CParticleFunctionDefinitionTypedI27C_OP_WorldCollideConstraintE
+32CParticleFunctionDefinitionTypedI28C_INIT_CheckParticleForWaterE
 32CParticleFunctionDefinitionTypedI28C_INIT_CreateOnModelAtHeightE
 32CParticleFunctionDefinitionTypedI28C_INIT_CreateParticleImpulseE
 32CParticleFunctionDefinitionTypedI28C_INIT_PositionPlaceOnGroundE
@@ -765,6 +770,7 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI32C_OP_SetControlPointToCPVelocityE
 32CParticleFunctionDefinitionTypedI33C_INIT_InheritFromParentParticlesE
 32CParticleFunctionDefinitionTypedI33C_INIT_RemapParticleCountToScalarE
+32CParticleFunctionDefinitionTypedI33C_OP_CreateParticleSystemRendererE
 32CParticleFunctionDefinitionTypedI33C_OP_InheritFromParentParticlesV2E
 32CParticleFunctionDefinitionTypedI33C_OP_RemapVectorComponentToScalarE
 32CParticleFunctionDefinitionTypedI33C_OP_SetControlPointToImpactPointE
@@ -777,10 +783,12 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI34C_OP_SetControlPointToWaterSurfaceE
 32CParticleFunctionDefinitionTypedI34C_OP_SetRandomControlPointPositionE
 32CParticleFunctionDefinitionTypedI34C_OP_SetSingleControlPointPositionE
+32CParticleFunctionDefinitionTypedI35C_INIT_CreateWithinCapsuleTransformE
 32CParticleFunctionDefinitionTypedI35C_INIT_RemapInitialVisibilityScalarE
 32CParticleFunctionDefinitionTypedI35C_OP_CPOffsetToPercentageBetweenCPsE
 32CParticleFunctionDefinitionTypedI35C_OP_ConnectParentParticleToNearestE
 32CParticleFunctionDefinitionTypedI35C_OP_CylindricalDistanceToTransformE
+32CParticleFunctionDefinitionTypedI35C_OP_PinRopeSegmentParticleToParentE
 32CParticleFunctionDefinitionTypedI35C_OP_RemapNamedModelMeshGroupEndCapE
 32CParticleFunctionDefinitionTypedI35C_OP_RemapTransformOrientationToYawE
 32CParticleFunctionDefinitionTypedI35C_OP_SetAttributeToScalarExpressionE
@@ -857,10 +865,12 @@ $SPECULARWARP
 33C_INIT_InheritFromParentParticles
 33C_INIT_RandomAlphaWindowThreshold
 33C_INIT_RemapParticleCountToScalar
+33C_OP_CreateParticleSystemRenderer
 33C_OP_InheritFromParentParticlesV2
 33C_OP_RemapNamedModelElementEndCap
 33C_OP_RemapVectorComponentToScalar
 33C_OP_SetControlPointToImpactPoint
+33ParticleRendererCollectionCache_t
 34CKV3Transfer_ResourceLoadInterface
 34CParticleCollectionBindingInstance
 34CPulseCell_Inflow_EntOutputHandler
@@ -876,10 +886,12 @@ $SPECULARWARP
 34C_OP_SetRandomControlPointPosition
 34C_OP_SetSingleControlPointPosition
 35CParticleCollectionRendererVecInput
+35C_INIT_CreateWithinCapsuleTransform
 35C_INIT_RemapInitialVisibilityScalar
 35C_OP_CPOffsetToPercentageBetweenCPs
 35C_OP_ConnectParentParticleToNearest
 35C_OP_CylindricalDistanceToTransform
+35C_OP_PinRopeSegmentParticleToParent
 35C_OP_RemapDistanceToLineSegmentBase
 35C_OP_RemapNamedModelMeshGroupEndCap
 35C_OP_RemapTransformOrientationToYaw
@@ -913,11 +925,13 @@ $SPECULARWARP
 38C_OP_RemapSDFDistanceToVectorAttribute
 38C_OP_RemapSDFGradientToVectorAttribute
 38C_OP_SetControlPointToVectorExpression
+38CableParticleRendererCollectionCache_t
 39C_INIT_RemapNamedModelMeshGroupToScalar
 39C_OP_MovementMoveAlongSkinnedCPSnapshot
 39C_OP_RemapControlPointDirectionToVector
 39C_OP_RemapDistanceToLineSegmentToScalar
 39C_OP_RemapDistanceToLineSegmentToVector
+39SpriteParticleRendererCollectionCache_t
 3E"F
 3E"W
 3E"g
@@ -1062,7 +1076,6 @@ Blobulator
 BlobulatorConstants
 Bone Indices
 Bone Weights
-BoneConstraintList
 Box Angles
 Box Flags
 Box Maxs
@@ -1267,9 +1280,9 @@ Creating collection:
 Creation Time
 Cross Product Vector
 Cross Product of Vector a x Vector b
+Cull or modify relative to neighboring particles
 Cull random
 Cull relative to model
-Cull relative to neighboring particles
 Cull relative to plane
 Cull relative to ray trace environment
 Cull relative to sphere
@@ -1285,9 +1298,6 @@ D_DEPTH_FEATHERING
 D_FASTPATH
 D_FIELD_MODE
 D_FORCE_LEGACY_SHADER_MODEL
-D_MBOIT_4_MOMENTS
-D_MBOIT_PASS1
-D_MBOIT_PASS2
 D_MESH_SHADER
 D_NO_GBUFFER_NORMALS
 D_PANORAMA_PARTICLE
@@ -1337,6 +1347,7 @@ Error: Sort failed\n
 Evaluate the curve at the specified input position
 Evaluate the gradient at a position between 0 and 1
 Exp2
+Expected %s, got %s
 Expected 'systems' or 'operators' as first argument to particle_profile\n
 Expected 'systems' or 'operators' as first argument to particle_profile_spike\n
 External game force
@@ -1381,7 +1392,6 @@ F_TINT_BY_FOW
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
 Failed to init snapshot data for resource '%s'\n
-FeetSettings
 FilterTaps_t
 Find all the yielded cursors on this graph and cancel them.
 Find all the yielded cursors on this graph with the matching tag and cancel them.
@@ -1403,7 +1413,6 @@ Frac
 Fractional component (ie. returns 0.34 for 12.34)
 FrameBufferCopyTexture
 Frames Measured: %d\n
-FrontDepth
 Function "%s" not found while loading particle system\n
 Function is disabled
 GBufferNormalWs
@@ -1436,14 +1445,10 @@ Hitbox Index
 Hitbox Offset Position
 How aggressive the switch to fallbacks will be depending on how far over the cl_particle_sim_fallback_threshold_ms the sim time is.  Higher numbers are more aggressive.
 IKV3TransferInterface_UtlSymbolLarge
-IPulseInstanceSaveAPI
 IS_EFFECTS_LAYER
 IS_EFFECTS_WATER_LAYER
-IS_MBOIT_4_MOMENTS
-IS_MBOIT_PASS
 IS_MODE_MIXED_RESOLUTION
 IS_MODE_MIXED_RESOLUTION_MBOIT
-IS_MODE_MIXED_RESOLUTION_STENCIL
 IS_MODE_PARTICLE_SHADOWS
 IS_PARTICLE_MIXED_RESOLUTION_LAYER
 IS_SCREENSPACE_LAYER
@@ -1512,7 +1517,6 @@ Kill This Cursor And Fail
 L?33S@
 LIFE_DURATION
 LONG PARTICLE RENDER: "%s" took %fms to submit to render.\n
-LPVIndex
 Lazily Cull on Float Comparison
 Leap to Chunk C%d
 Length (magnitude) of Vector
@@ -1551,22 +1555,17 @@ Lock a subsection of particles to control point
 Lock vector attribute to a list of values
 Log10
 Log2
-LookAtList
 LookupTables
 Ls?q
 MANUAL_ANIMATION_FRAME
 MAtomicTransfersAsPlainString
-MClassIsParticleFloat
-MClassIsParticleModel
-MClassIsParticleTransform
-MClassIsParticleVec
+MCustomFGDMetadata
 MODEL_RENDER_HELPER_PTR
 MODEL_RENDER_HELPER_PTR_2
 MODEL_RENDER_HELPER_PTR_3
 MODEL_RENDER_HELPER_PTR_4
 MObsoleteParticleFunction
 MParticleAdvancedField
-MParticleCustomFieldDefaultValue
 MParticleHelpField
 MParticleInputOptional
 MParticleMaxVersion
@@ -1580,29 +1579,19 @@ MPropertyAutoExpandSelf
 MPropertyAutoRebuildOnChange
 MPropertyColorPlusAlpha
 MPropertyCustomEditor
+MPropertyEditContextOverrideKey
 MPropertyFlattenIntoParentRow
 MPropertySortPriority
 MPropertyStartGroup
 MPropertySuppressExpr
 MPropertySuppressField
 MPulseAdvanced
-MPulseCell_WithNoDefaultOutflow
-MPulseDomainHiddenInTool
-MPulseDomainHookInfo
-MPulseDomainOptInFeatureTag
-MPulseDomainScopeInfo
 MPulseEditorCanvasItemSpecKV3
 MPulseEditorHeaderIcon
 MPulseExpressionAlias
 MPulseFunctionHiddenInTool
-MPulseInstanceDomainInfo
-MPulseLibraryBindings
 MPulsePolymorphicDependentArg
 MPulsePolymorphicDependentReturn
-MPulseRequirementPass
-MPulseRequirementSummaryExpr
-MPulseSelectorAllowRequirementCriteria
-MPulseSelectorHasSpecificity
 MPulseSignatureForOutflow
 MVectorIsCoordinate
 MVectorIsSometimesCoordinate
@@ -1669,14 +1658,13 @@ Movement rotate particle around axis
 Movement set to control point
 Movement skin to bones
 Movement skin to bones rigid
-MovementSettings
 Mul R%d <- R%d * R%d
 Multiplier for falling back to cheaper effects under load.
+N17C_OP_RenderTrails38TrailParticleRendererCollectionCache_tE
 NI>R
 NONE/Disabled
 NORMAL
 NULL CELL
-NUM_SEQUENCES_PER_PARTICLE
 Named model body part random
 Named model mesh group random
 Named model sequence random
@@ -1756,18 +1744,15 @@ Particles/Budget_ProfilePoint4US
 Particles/Budget_RenderUS
 Particles/Budget_SimulationUS
 Particles/MixedResoluion/Slices
-Particles/ParticleFilterTapsCBSlot
-Particles/ParticlePixelCBSlot
 Particles/ParticleTextureBaseSlot
 Particles/ParticleTraceOffsetOnlyHit
-Particles/ParticleVertexCBSlot
 ParticlesFoggedByDefault
 ParticlesLib
 Pause particle simulation
 Per-Particle Force
-PerViewLightProbeVolumeConstantBuffer_t
 Physics
 Pin Particle to control point
+Pin Rope Segment Particle to Parent Particle
 Play EndCap when Finished
 Point vector at next particle position
 Position On Grid
@@ -1792,6 +1777,7 @@ Position set rigid attachment to CP
 Position skin to bones from CP snapshot
 Position with phyllotaxis distribution
 Position within box random
+Position within capsule random
 Position within sphere random
 PostSimulate
 Prevent passing through a plane
@@ -1821,6 +1807,8 @@ RADIUS
 REFCOUNTED_PTR
 RESOURCE_TYPE_PARTICLE_SNAPSHOT
 RESOURCE_TYPE_PARTICLE_SYSTEM
+ROPE_SEGMENT_DATA
+ROPE_SEGMENT_ID
 ROTATION
 ROTATION_SPEED
 Rad2 Deg
@@ -1905,6 +1893,7 @@ Remap scalar
 Remap scalar once timed
 Remap scalar to vector
 Remap speed to scalar
+Remap touching water to scalar
 Remap vector to CP
 Remap velocity to vector
 Remove Tag From Cursor
@@ -1915,9 +1904,11 @@ Remove the given tag from this cursor. If other cursors are waiting on us, they 
 Render Cables
 Render Callback
 Render Client Physics Objects
+Render Create Particle System From Event
 Render Flatten Grass
 Render Game Decal Trace From Event
 Render Gpu Implicit
+Render Liquid Spill
 Render Post Processing
 Render Simple Model Collection
 Render Status Effect
@@ -1958,6 +1949,8 @@ Returns true if the Vector is valid
 Returns true if the World Vector is valid
 Returns up to the maximum requested elements. Never grows the array (unlike SetCount).
 Roll Speed
+Rope Segment Data
+Rope Segment ID
 Rope Spring constraint
 Ropes and Trails now properly use visibility settings for radius and alpha - previously settings here were ignored so systems which have this set will begin working on update.  Double-check your Rope/Trail Visibility Inputs.\n
 Rotate vector random
@@ -2063,6 +2056,8 @@ SetBlackboardReference BR%d (%s) <- R%d
 SetControlPointOrientationFLU
 SetVar V%d (%s) <- R%d
 SetVarArrayElement1D V%d (%s) [ R%d ] <- R%d R%d
+Show rope segments when debugging particle systems - specify a number to isolate to that segment id
+Show specific attribute when debugging particle systems
 Show the sorting position when debugging particle systems
 Sign Float
 Sign Int
@@ -2092,6 +2087,8 @@ Split a Vector2D into component parts.
 Split a World Vector into component parts.
 Split an Angle into component parts.
 Spring to Vector constraint
+SpriteCardPixelCB
+SpriteCardVertexCB
 SpritecardPixelControls_t
 SpritecardVertexControls_t
 Sqr Float
@@ -2122,7 +2119,6 @@ Teleport Beam
 Terminate()
 Test Mode Assert True
 TestCheckpoint: %s
-TextureLayer%d
 TextureLayer1
 TextureLayer2
 TextureLayer3
@@ -2133,6 +2129,7 @@ Threshold to warn about when rendering particles.
 Time since the start of the timer
 Time varying force
 TintColor
+ToolEditContext_ID_VPCF
 Total Frames
 Total Render (us)
 Total Sim (us)
@@ -2235,7 +2232,7 @@ bE"g
 bInherit
 bValue
 bWantsFBCopyTexture
-basic_string_view::substr
+basic_ios::clear
 beginFrame
 beginTile
 blob indirect draw
@@ -2255,7 +2252,6 @@ can't solve quadratic for light %f %f\n
 castshadowmode
 ceil
 cg solver
-cl_aggregate_particles
 cl_max_particle_pvs_aabb_edge_length
 cl_particle_batch_mode
 cl_particle_fallback_base
@@ -2352,24 +2348,15 @@ lwK?
 m_Children.m_pHead: [%p]\n
 m_Stops
 m_TagValue
-m_bBakedTwoSided
-m_bCanBatchWithDynamicShaderConstants
 m_bConditionValue
-m_bDrawLast
 m_bFirstEvaluate
-m_bHasBakedLightingFromLightMap
-m_bHasBakedLightingFromVertexStream
-m_bIsNotMatchedToMaterial
-m_bNoShadow
-m_bOnlyShadow
-m_bUseCompressedNormalTangent
-m_bUseShadowFastPath
 m_buffer=
 m_externalMethodTargetGraph
 m_flSlopeIncoming
 m_flSlopeOutgoing
 m_hDef
 m_nCurrentWakeIndex
+m_szEffect
 manual_animation_frame
 materials/dev/implicit_surface.vmat
 materials/dev/roomwalls_white.vmat
@@ -2384,8 +2371,6 @@ max_sim
 medium
 mesh group
 modulation
-moments
-moments_extra
 n?9a
 nDenominator
 nFirstParticle=%?
@@ -2408,6 +2393,10 @@ operators
 pCheckpointName
 pDescription
 pTagName
+particle.collection.name
+particle.count
+particle.material.name
+particle.renderer
 particle_id
 particle_initialization.cpp
 particle_layer_id_whitelist
@@ -2444,6 +2433,7 @@ r_draw_particle_children_with_parents
 r_drawparticles
 r_freezeparticles
 r_limit_particle_job_duration
+r_particle_allowprerender
 r_particle_batch_collections
 r_particle_cables_cast_shadows
 r_particle_cables_culling
@@ -2453,10 +2443,11 @@ r_particle_cables_visualize_roundness
 r_particle_debug_filter
 r_particle_debug_force_simulation
 r_particle_debug_randomseeds
+r_particle_debug_show_attribute
+r_particle_debug_show_rope_segments
 r_particle_debug_show_sort_position
 r_particle_enable_fastpath
 r_particle_fixedrandomseeds
-r_particle_force_material_binds
 r_particle_gpu_implicit
 r_particle_gpu_implicit_cull_columns
 r_particle_gpu_implicit_debug_bricks
@@ -2476,6 +2467,7 @@ r_particle_newinput
 r_particle_render_refreshes_sleep_timer
 r_particle_render_test
 r_particle_skip_postsim
+r_particle_testbuffers
 r_particle_timescale
 r_particle_warn_threshold_ms
 r_particles_memset_at_init
@@ -2495,6 +2487,7 @@ report_title
 report_type
 resourcesystem
 root
+rope_segment_id
 rotation_speed
 rsqrt
 saturate
@@ -2520,7 +2513,10 @@ spritecardparticlestrail
 spritecardparticlestrailwithnormal
 spritecardparticlestrailwithselfillum
 spritecardtessvb
+std::__shared_count<(__gnu_cxx::_Lock_policy)2>::operator=(std::__shared_count<(__gnu_cxx::_Lock_policy)2> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&, char const*)
+std::basic_string_view<char, std::char_traits<char>>::find(char, unsigned long) const
 std::vector<std::string, std::allocator<std::string>>::~vector()
 string_list
 systems
@@ -2548,9 +2544,9 @@ vecValueA
 vecValueB
 very_fast
 viewmodel
+void std::__detail::__to_chars_10_impl<unsigned int>(char*, unsigned int, unsigned int)
 wH>r
 water
 xn>8
 y?U0
 zW>w
-zeroth_moment

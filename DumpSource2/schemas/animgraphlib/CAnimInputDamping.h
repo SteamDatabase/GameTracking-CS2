@@ -5,7 +5,6 @@
 //	"m_fFallingSpeedScale": 1.000000
 //}
 // MPropertyFriendlyName = "Damping"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimInputDamping
 {
 	// MPropertyFriendlyName = "Speed Function"

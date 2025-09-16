@@ -32,33 +32,37 @@ var Async;
     }
     Async.AbortController = AbortController;
     function Condition(predicate, abortSignal) {
-        return new Promise(async (resolve) => {
-            while (abortSignal === undefined || !abortSignal.aborted) {
-                if (predicate()) {
-                    resolve();
-                    return;
+        return new Promise(resolve => {
+            (async function () {
+                while (abortSignal === undefined || !abortSignal.aborted) {
+                    if (predicate()) {
+                        resolve();
+                        return;
+                    }
+                    await NextFrame();
                 }
-                await NextFrame();
-            }
+            })();
         });
     }
     Async.Condition = Condition;
     function RunSequence(sequenceFn, abortSignal) {
-        return new Promise(async (resolve) => {
-            const generator = sequenceFn(abortSignal || new Async.AbortController().signal);
-            let value;
-            while (true) {
-                const iterResult = await generator.next(value);
-                if (iterResult.done) {
-                    resolve(true);
-                    return;
+        return new Promise(resolve => {
+            (async function () {
+                const generator = sequenceFn(abortSignal || new Async.AbortController().signal);
+                let value;
+                while (true) {
+                    const iterResult = await generator.next(value);
+                    if (iterResult.done) {
+                        resolve(true);
+                        return;
+                    }
+                    value = await iterResult.value;
+                    if (abortSignal && abortSignal.aborted) {
+                        resolve(false);
+                        return;
+                    }
                 }
-                value = await iterResult.value;
-                if (abortSignal && abortSignal.aborted) {
-                    resolve(false);
-                    return;
-                }
-            }
+            })();
         });
     }
     Async.RunSequence = RunSequence;

@@ -5,20 +5,23 @@ var MuteSpinner;
     let m_curVal;
     let m_isMuted;
     let m_hFadeOutMuteBar = undefined;
+    function HasXuid(elPanel) {
+        return 'xuid' in elPanel;
+    }
     function ToggleMute() {
         let elSpinner = $.GetContextPanel().FindChildTraverse('id-mute-spinner');
-        if ('xuid' in $.GetContextPanel().GetParent()) {
-            // @ts-ignore
-            let xuid = $.GetContextPanel().GetParent().xuid;
+        const elParent = $.GetContextPanel().GetParent();
+        if (HasXuid(elParent)) {
+            let xuid = elParent.xuid;
             GameStateAPI.ToggleMute(xuid);
             UpdateVolumeDisplay();
         }
     }
     MuteSpinner.ToggleMute = ToggleMute;
     function _GetCurrentValues() {
-        if ('xuid' in $.GetContextPanel().GetParent()) {
-            // @ts-ignore
-            let xuid = $.GetContextPanel().GetParent().xuid;
+        const elParent = $.GetContextPanel().GetParent();
+        if (HasXuid(elParent)) {
+            let xuid = elParent.xuid;
             m_curVal = GameStateAPI.GetPlayerVoiceVolume(xuid).toFixed(2);
             m_isMuted = GameStateAPI.IsSelectedPlayerMuted(xuid);
             let locMsg = GameStateAPI.HasCommunicationBan(xuid) ? '#tooltip_cannot_unmute' : '#tooltip_mute';
@@ -28,9 +31,9 @@ var MuteSpinner;
         }
     }
     function _OnValueChanged(panel, flNewVal) {
-        if ('xuid' in $.GetContextPanel().GetParent()) {
-            // @ts-ignore
-            let xuid = $.GetContextPanel().GetParent().xuid;
+        const elParent = $.GetContextPanel().GetParent();
+        if (HasXuid(elParent)) {
+            let xuid = elParent.xuid;
             let sNewVal = flNewVal.toFixed(2);
             _GetCurrentValues();
             if (m_curVal != sNewVal) {

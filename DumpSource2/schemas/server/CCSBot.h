@@ -1,6 +1,6 @@
 class CCSBot : public CBot
 {
-	Vector m_eyePosition;
+	VectorWS m_eyePosition;
 	char[64] m_name;
 	float32 m_combatRange;
 	bool m_isRogue;

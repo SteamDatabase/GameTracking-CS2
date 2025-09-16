@@ -11,7 +11,6 @@
 //	"m_bIsDisableTag": false
 //}
 // MPropertyFriendlyName = "Task Handshake Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CTaskHandshakeAnimTag : public CHandshakeAnimTagBase
 {
 };

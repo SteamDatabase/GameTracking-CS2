@@ -1,10 +1,3 @@
-// MPulseInstanceDomainInfo (UNKNOWN FOR PARSER)
-// MPulseDomainHookInfo (UNKNOWN FOR PARSER)
-// MPulseDomainScopeInfo (UNKNOWN FOR PARSER)
-// MPulseLibraryBindings (UNKNOWN FOR PARSER)
-// MPulseDomainOptInFeatureTag (UNKNOWN FOR PARSER)
-// MPulseDomainOptInVariableKeysSource (UNKNOWN FOR PARSER)
-// MPulseDomainDebuggerCanCreateInstance
 class CPulseGraphInstance_TestDomain : public CBasePulseGraphInstance
 {
 	bool m_bIsRunningUnitTests;

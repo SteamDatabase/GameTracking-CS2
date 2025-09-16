@@ -362,6 +362,7 @@ var MainMenu;
     function _OnShowPauseMenu() {
         const elContextPanel = $.GetContextPanel();
         elContextPanel.AddClass('MainMenuRootPanel--PauseMenuMode');
+        elContextPanel.SetHasClass('MainMenuRootPanel--PauseMenuDuringDemoPlayback', GameStateAPI.IsDemoOrHltv());
         const bQueuedMatchmaking = GameStateAPI.IsQueuedMatchmaking();
         const bGotvSpectating = elContextPanel.IsGotvSpectating();
         const bIsCommunityServer = !_m_bPerfectWorld && MatchStatsAPI.IsConnectedToCommunityServer();
@@ -373,6 +374,7 @@ var MainMenu;
     }
     function _OnHidePauseMenu() {
         $.GetContextPanel().RemoveClass('MainMenuRootPanel--PauseMenuMode');
+        $.GetContextPanel().SetHasClass('MainMenuRootPanel--PauseMenuDuringDemoPlayback', false);
         _DeletePauseMenuMissionPanel();
         OnHomeButtonPressed();
     }

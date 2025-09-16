@@ -102,7 +102,7 @@
 //	"m_flMinRootHeightOffset": 0.000000,
 //	"m_flTiltPlanePitchSpringStrength": <HIDDEN FOR DIFF>,
 //	"m_flTiltPlaneRollSpringStrength": <HIDDEN FOR DIFF>,
-//	"m_bApplyFootRotationLimits": false,
+//	"m_bApplyFootRotationLimits": true,
 //	"m_bApplyHipShift": false,
 //	"m_bModulateStepHeight": false,
 //	"m_bResetChild": false,

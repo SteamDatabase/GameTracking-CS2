@@ -10,10 +10,7 @@
 //	"m_nBlackboardReference": -1,
 //	"m_bSelfReference": false
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
-// MPulseCellWithCustomDocNode
 class CPulseCell_Inflow_ObservableVariableListener : public CPulseCell_Inflow_BaseEntrypoint
 {
 	PulseRuntimeBlackboardReferenceIndex_t m_nBlackboardReference;

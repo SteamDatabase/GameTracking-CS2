@@ -224,6 +224,7 @@ $xmm9
 %s: Unable to get executable filename (%d byte buffer).
 %s: Unable to load SDL\n
 %s: Unable to progress %d jobs to finished state (%llums elapsed)\n
+%s: __pos (which is %zu) > __size (which is %zu)
 %s: __pos (which is %zu) > this->size() (which is %zu)
 %s: added string size %d overflows (added to %d)\n
 %s: allocation of %u too large, max %u\n
@@ -453,6 +454,7 @@ $xmm9
 -assertbreak
 -attachtodebugger
 -breakimmediately
+-bufferdebugstring
 -clearassertstate
 -debug_exitprocess
 -debugbreak
@@ -482,6 +484,7 @@ $xmm9
 -noassert
 -noautoargs
 -nocustomermachine
+-nodebugstringbuffer
 -norestart
 -profile
 -retail
@@ -528,6 +531,7 @@ $xmm9
 /content/
 /debuginfo
 /dev/null
+/dev/random
 /dev/urandom
 /etc/je_malloc.conf
 /executable
@@ -642,7 +646,6 @@ $xmm9
 20IMobileEventListener
 21CCountedStringPool_CI
 21CPooledStdFunctionJob
-21CUtlCStringConversion
 21CUtlStringTokenSystem
 21CVDebugProcessorAMD64
 21IKeyValuesDumpContext
@@ -681,6 +684,7 @@ $xmm9
 31CBufferStringFormatOutputStream
 31CParallelProcessorAbstract_Base
 31CTier0MasterMobileEventListener
+31IForceSignalNumberIntoCallStack
 35CKeyValuesDumpContextToBufferString
 37CKeyValuesDumpContextToLoggingChannel
 3Pzr)
@@ -821,7 +825,7 @@ $xmm9
 >5PJ>
 >ZF9
 >vf,U
-?31IForceSignalNumberIntoCallStack
+?21CUtlCStringConversion
 ?456789:;<=
 @aQY
 AA40J6
@@ -886,6 +890,7 @@ AddPage
 Address range refers to non-existent CU at 0x%llx\n
 Align
 AlignedByteArray not properly aligned\n
+AllProjects_FatalWriteMiniDumpOrBreak
 Alloc
 AllocUnlocked
 Allocated: %zu, active: %zu, metadata: %zu (n_thp %zu), resident: %zu, mapped: %zu, retained: %zu\n
@@ -1281,6 +1286,8 @@ CAnimationGraph
 CAnimationSubGraph
 CAuthPhysBody
 CAuthPhysJoint
+CAutoLockMutexTrait<CThreadMutex>::Lock
+CAutoLockT<CThreadMutex,CAutoLockMutexTrait<CThreadMutex> >::{ctor}
 CBindPoseAnimNode
 CBlake3HashContext::CBlake3HashContext()
 CBlake3HashContext::Finalize(unsigned char*, unsigned long)
@@ -1607,8 +1614,11 @@ CIE data alignment (%lld) out of range\n
 CIE return register (%llu) too large\n
 CInputStreamAnimNode
 CIntAnimParameter
+CInterlockedIntT<int,4>::AtomicAdd
+CInterlockedIntT<int,4>::operator++
 CJiggleBoneAnimNode
 CJumpHelperAnimNode
+CKV3TransferContextBase::ErrorListener_Report
 CKeyValuesDumpContextAsDevMsg::KvBeginKey(KeyValues*, int)
 CKeyValuesDumpContextAsDevMsg::KvWriteText(char const*)
 CKeyValuesDumpContextToBufferString::KvWriteText(char const*)
@@ -1666,6 +1676,7 @@ CLZSS::SafeUncompress(unsigned char*, unsigned char*, unsigned int)
 CLZSS::Uncompress(unsigned char*, unsigned char*)
 CLeanMatrixAnimNode
 CLoggingSystem::AllocTag overflowed!\n
+CLoggingSystem::LogDirect
 CLookAtAnimNode
 CLookComponent
 CLookComponentUpdater
@@ -1967,8 +1978,10 @@ CTSList
 CTSListBase: Misaligned list\n
 CTSListBase::CTSListBase()
 CTSListBase::Detach()
+CTSListBase::InternalPop
 CTSListBase::InternalPop()
 CTSListBase::InternalPush(TSLNodeBase_t*)
+CTSListBase::Pop
 CTSQueue
 CTSQueue corruption
 CTagCondition
@@ -1986,7 +1999,6 @@ CThread::GetCurrentCThreadClassKind()
 CThread::GetName()
 CThread::GetResult()
 CThread::GetThreadHandle()
-CThread::Init()
 CThread::IsAlive()
 CThread::IsThreadRunning()
 CThread::Join(unsigned int)
@@ -2033,6 +2045,7 @@ CThreadMultiWaitObject::~CThreadMultiWaitObject()
 CThreadMultiWaitSemaphore::CThreadMultiWaitSemaphore()
 CThreadMultiWaitSemaphore::Release()
 CThreadMultiWaitSemaphore::~CThreadMultiWaitSemaphore()
+CThreadMutex::Lock
 CThreadMutex::TryLock(char const*, int)
 CThreadNullVerificationMutex: Thread %llu acquiring null-mutex while thread %llu is still holding it, indicates unexpected thread-safety issue
 CThreadPool::Start called and it was already initialized.
@@ -2293,6 +2306,7 @@ CUtlString::Replace(char const*, char const*, bool) const
 CUtlString::Replace(char, char const*) const
 CUtlString::Replace(char, char) const
 CUtlString::Right(int) const
+CUtlString::Set
 CUtlString::Set(char const*)
 CUtlString::SetDirect(char const*, int)
 CUtlString::SetLength(int)
@@ -2322,6 +2336,7 @@ CUtlString::operator+=(char const*)
 CUtlString::operator+=(char)
 CUtlString::operator+=(double)
 CUtlString::operator+=(int)
+CUtlString::operator=
 CUtlString::operator=(CBufferString const&)
 CUtlString::operator==(CBufferString const&) const
 CUtlString::operator==(CUtlString const&) const
@@ -2339,6 +2354,8 @@ CUtlStringTokenSystem could not open database file "%s" for writing. Aborting up
 CUtlStringTokenSystem could not update token database "%s" because the file is read-only.\n
 CUtlStringTokenSystem: Encountered string token collision: "%s" and "%s" both hash to %X!\n
 CUtlSymbol::FormatTo(IFormatOutputStream*, CFormatStringElement) const
+CUtlSymbolLarge::IsNullString
+CUtlSymbolLarge::IsValid
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::AddString(char const*, int, bool*)
 CUtlSymbolTable::AllocSize() const
@@ -2738,7 +2755,6 @@ CreateSimpleThread
 CreateUniqueId
 CuaW
 Cupv
-CxxThrowException
 Cycle or diamond double-reference to '%s'
 CycleOverride
 D"A/oyu
@@ -2806,6 +2822,7 @@ Data corruption detected
 Debug server download process failed with exit code %d
 Debug server download running more than %u seconds, aborted
 Debug test scripts.
+DebugBuild_InitFillMemory
 DebugPrintBitStringBits
 DebugPrintKV3(KeyValues3 const*)
 December
@@ -2906,6 +2923,7 @@ Expected hex byte (eg. 00-FF)
 Expected member name or '}'
 Expected object member name to be a string literal.
 Expected string (member name) or '}'
+Expected syntax is 'Name{ args... }'
 Expected token
 Expected type of next member
 Expected value after =
@@ -3088,6 +3106,7 @@ GAME
 GAMECONSOLE
 GAMEDLL
 GCC: (SteamRT 14.2.0-12~steamrt3.1+bsrt3.1) 14.2.0
+GCC: (SteamRT 14.2.0-19~steamrt3.1+bsrt3.1) 14.2.0
 GCoroutineMgr().IsValidCoroutine( hCoroutine )
 GENERAL_INTERRUPTABILITY
 GERMAN
@@ -3296,6 +3315,7 @@ IEEE 754r decimal floating point (128 bits)
 IEEE 754r decimal floating point (32 bits)
 IEEE 754r decimal floating point (64 bits)
 IEEE 754r half-precision floating point (16 bits)
+IErrorListener::ReportError
 IFormatOutputStream::Format2DTable(CTypeErasedFormattingWrapper, CFormatStringElement, void const**, int, int)
 IFormatOutputStream::FormatArray(CTypeErasedFormattingWrapper, CFormatStringElement, void const**, int, bool)
 IFormatOutputStream::FormatEnumHelper(CFormatStringElement, int, std::initializer_list<std::pair<int, char const*>>)
@@ -3484,6 +3504,7 @@ IsUniqueIdEqual
 IsUniqueIdValid
 IterateCapturedStackAnnotations
 JAPANESE
+JArray
 JE_MALLOC_CONF
 JIxX
 JJK1
@@ -3632,7 +3653,6 @@ LOG_DEVELOPER_VERBOSE
 LOG_GENERAL
 LOG_SYMBOLS
 LOG_VPROF
-LX)\rpQ
 Last %u output lines:\n
 Last %u stderr lines:\n
 Launch Debugger
@@ -4167,6 +4187,7 @@ Plat_CreateWindow:  Could not create SDL window: %s\n
 Plat_DebugPrint
 Plat_DebugPrintV
 Plat_DebugString
+Plat_DebugString_Buffered
 Plat_DesktopNotify
 Plat_DestroyGameInstanceMutex
 Plat_DestroyWindow
@@ -4432,7 +4453,6 @@ RDTSC
 RDTSCP 
 RELEASE
 REPLICATED
-RTDynamicCast
 RUSSIAN
 RVfQp
 RaiseException
@@ -4544,6 +4564,9 @@ ReverseChars
 Root
 Root_Motion_Speed
 Root_Motion_Turn_Speed
+RtlEnterCriticalSection
+RtlpEnterCriticalSectionContended
+RtlpWaitOnCriticalSection
 Run-time option settings
 RunTSListTests
 RunTSQueueTests
@@ -4905,6 +4928,7 @@ Speed
 SpeedIn
 SpeedOut
 Spews information about all CUtlLRUCaches
+SplitNameAndKV3Args
 Spring
 Src size is incorrect
 St10bad_typeid
@@ -4933,6 +4957,8 @@ St14codecvt_bynameIwc11__mbstate_tE
 St14collate_bynameIcE
 St14collate_bynameIwE
 St14overflow_error
+St15basic_streambufIcSt11char_traitsIcEE
+St15basic_streambufIwSt11char_traitsIwEE
 St15messages_bynameIcE
 St15messages_bynameIwE
 St15numpunct_bynameIcE
@@ -5119,7 +5145,6 @@ TfAX
 The specific type '%s' cannot be persisted
 The specific type '%u' cannot be persisted
 This convar is being accessed prior to ConVar_Register being called
-Thread failed to initialize\n
 Thread pool %s requested %d threads, using %u\n
 Thread(%p/0x%llx)
 ThreadCloseProcess
@@ -5136,6 +5161,10 @@ ThreadGetProcessPriority
 ThreadInMainThread
 ThreadInitOnceCall_Finish
 ThreadInitOnceCall_ShouldRun
+ThreadInterlockedAssignIf128
+ThreadInterlockedAssignIfPointerX2
+ThreadInterlockedExchangeAdd
+ThreadInterlockedIncrement
 ThreadIsProcessActive
 ThreadIsProcessIdActive
 ThreadJoin
@@ -5417,6 +5446,7 @@ VProf_AssignNextTimespanId
 VProf_EnterScopeAdHoc
 VProf_ExitScope
 VProf_FindOrCreateCounter
+VPureCall
 VRenderDeviceSetupV001
 VSNAPFile
 VScriptManager010
@@ -5781,6 +5811,7 @@ V_stricmp_fast
 V_stricmp_fast_NegativeForUnequal
 V_stristr_fast
 V_stristr_fast(char const*, char const*)
+V_strlen
 V_strlower_fast
 V_strncat
 V_strnchr
@@ -6188,6 +6219,7 @@ _-report-_
 _CCallStackStatsGatherer_GetSharedGlobalInstance
 _CCallStackStatsGatherer_Internal_DumpStatsToFile
 _CCallStackStatsGatherer_ReleaseSharedGlobalInstance
+_CxxThrowException
 _DOD3D
 _Error_AlwaysSpewCallStack_Enable
 _Error_AlwaysSpewCallStack_Length
@@ -6238,6 +6270,9 @@ _V_wcsncat_cch
 _V_wcsncpy_bytes
 _Warning_AlwaysSpewCallStack_Enable
 _Warning_AlwaysSpewCallStack_Length
+_ZNKSt13__facet_shims12__any_stringcvNSt7__cxx1112basic_stringIT_St11char_traitsIS3_ESaIS3_EEEB5cxx11IcEEv
+_ZNKSt13__facet_shims12__any_stringcvNSt7__cxx1112basic_stringIT_St11char_traitsIS3_ESaIS3_EEEB5cxx11IwEEv
+__RTDynamicCast
 ___ Begin jemalloc statistics ___\n
 __ctype_get_mb_cur_max
 __cxa_allocate_dependent_exception
@@ -6267,11 +6302,17 @@ __cxa_thread_atexit
 __cxa_thread_atexit_impl
 __cxa_throw
 __cxa_throw_bad_array_new_length
+__cxxabiv1::__base_class_type_info::__is_public_p() const
+__cxxabiv1::__base_class_type_info::__is_virtual_p() const
+__cxxabiv1::__base_class_type_info::__offset() const
 __cxxabiv1::__class_type_info::__do_catch(std::type_info const*, void**, unsigned int) const
 __cxxabiv1::__class_type_info::__do_dyncast(long, __cxxabiv1::__class_type_info::__sub_kind, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__dyncast_result&) const
 __cxxabiv1::__class_type_info::__do_find_public_src(long, void const*, __cxxabiv1::__class_type_info const*, void const*) const
 __cxxabiv1::__class_type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__upcast_result&) const
 __cxxabiv1::__class_type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void**) const
+__cxxabiv1::__class_type_info::__dyncast_result::__dyncast_result(int)
+__cxxabiv1::__class_type_info::__find_public_src(long, void const*, __cxxabiv1::__class_type_info const*, void const*) const
+__cxxabiv1::__class_type_info::__upcast_result::__upcast_result(int)
 __cxxabiv1::__class_type_info::~__class_type_info()
 __cxxabiv1::__forced_unwind::~__forced_unwind()
 __cxxabiv1::__foreign_exception::~__foreign_exception()
@@ -6298,17 +6339,78 @@ __gcclibcxx_demangle_callback
 __gmon_start__
 __gnu_cxx::__concat_size_t(char*, unsigned long, unsigned long)
 __gnu_cxx::__concurrence_lock_error
+__gnu_cxx::__concurrence_lock_error::__concurrence_lock_error()
 __gnu_cxx::__concurrence_lock_error::what() const
 __gnu_cxx::__concurrence_lock_error::~__concurrence_lock_error()
 __gnu_cxx::__concurrence_unlock_error
+__gnu_cxx::__concurrence_unlock_error::__concurrence_unlock_error()
 __gnu_cxx::__concurrence_unlock_error::what() const
 __gnu_cxx::__concurrence_unlock_error::~__concurrence_unlock_error()
+__gnu_cxx::__enable_if<std::__is_char<char>::__value, int>::__type std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>::_M_find<char>(char const*, unsigned long, char) const
+__gnu_cxx::__enable_if<std::__is_char<wchar_t>::__value, int>::__type std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_find<wchar_t>(wchar_t const*, unsigned long, wchar_t) const
 __gnu_cxx::__freeres()
+__gnu_cxx::__mutex::__mutex()
+__gnu_cxx::__mutex::lock()
+__gnu_cxx::__mutex::unlock()
+__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::__normal_iterator(char const* const&)
+__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::__normal_iterator<char*, void>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
+__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::base() const
+__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::difference_type __gnu_cxx::operator-<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
+__gnu_cxx::__normal_iterator<char const*, std::string>::__normal_iterator(char const* const&)
+__gnu_cxx::__normal_iterator<char const*, std::string>::base() const
+__gnu_cxx::__normal_iterator<char const*, std::string>::difference_type __gnu_cxx::operator-<char const*, std::string>(__gnu_cxx::__normal_iterator<char const*, std::string> const&, __gnu_cxx::__normal_iterator<char const*, std::string> const&)
+__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::insert<char const*, void>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, char const*, char const*)
+__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::__normal_iterator(char* const&)
+__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::base() const
+__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>::difference_type __gnu_cxx::operator-<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
+__gnu_cxx::__normal_iterator<char*, std::string>::__normal_iterator(char* const&)
+__gnu_cxx::__normal_iterator<char*, std::string>::base() const
+__gnu_cxx::__normal_iterator<char*, std::string>::difference_type __gnu_cxx::operator-<char*, std::string>(__gnu_cxx::__normal_iterator<char*, std::string> const&, __gnu_cxx::__normal_iterator<char*, std::string> const&)
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::__lower_bound<__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int, __gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>>(__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const&, __gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>)
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::lower_bound<__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int, std::_CatalogIdComp>(__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const&, std::_CatalogIdComp)
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::__normal_iterator(std::Catalog_info* const* const&)
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::base() const
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::difference_type __gnu_cxx::operator-<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>(__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&, __gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&)
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator*() const
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator++()
+__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator+=(long)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::__copy_move_a<false, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::__lower_bound<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int, __gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const&, __gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::__miter_base<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::__niter_wrap<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, std::Catalog_info**>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, std::Catalog_info**)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::copy<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> std::lower_bound<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int, std::_CatalogIdComp>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const&, std::_CatalogIdComp)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::__normal_iterator(std::Catalog_info** const&)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::base() const
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::difference_type __gnu_cxx::operator-<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&)
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator*() const
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator+(long) const
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator++()
+__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>::operator+=(long)
+__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::__normal_iterator(wchar_t const* const&)
+__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::base() const
+__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::difference_type __gnu_cxx::operator-<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
+__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::__normal_iterator(wchar_t const* const&)
+__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::base() const
+__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::difference_type __gnu_cxx::operator-<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
+__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::insert<wchar_t const*, void>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, wchar_t const*, wchar_t const*)
+__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::__normal_iterator(wchar_t* const&)
+__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::base() const
+__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::difference_type __gnu_cxx::operator-<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
+__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::__normal_iterator(wchar_t* const&)
+__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::base() const
+__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>::difference_type __gnu_cxx::operator-<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
+__gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp> __gnu_cxx::__ops::__iter_comp_val<std::_CatalogIdComp>(std::_CatalogIdComp)
+__gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>::_Iter_comp_val(std::_CatalogIdComp)
+__gnu_cxx::__scoped_lock::__scoped_lock(__gnu_cxx::__mutex&)
+__gnu_cxx::__scoped_lock::~__scoped_lock()
 __gnu_cxx::__snprintf_lite(char*, unsigned long, char const*, __va_list_tag*)
 __gnu_cxx::__throw_concurrence_lock_error()
 __gnu_cxx::__throw_concurrence_unlock_error()
 __gnu_cxx::__throw_insufficient_space(char const*, char const*)
 __gnu_cxx::__verbose_terminate_handler()
+__gnu_cxx::char_traits<char>::eq(char const&, char const&)
+__gnu_cxx::char_traits<char>::length(char const*)
 __gnu_cxx::recursive_init_error::recursive_init_error()
 __gnu_cxx::recursive_init_error::~recursive_init_error()
 __gxx_personality_v0
@@ -6333,6 +6435,7 @@ __strtod_l
 __strtof_l
 __strxfrm_l
 __temp_unserialization_member__
+__test_and_acquire(long*)
 __tls_get_addr
 __towlower_l
 __towupper_l
@@ -6350,6 +6453,7 @@ _editor
 _elf_
 _exit
 _macho_
+_purecall
 _root_keyname
 _setjmp
 _test_conversion_counter
@@ -6507,6 +6611,7 @@ basic_string::insert
 basic_string::replace
 basic_string::resize
 basic_string::substr
+basic_string_view::substr
 batch_alloc
 batch_query
 bin/linuxsteamrt64/libtier0.so
@@ -6542,12 +6647,27 @@ bone_name
 bone_names
 bonemerge
 bool
+bool __gnu_cxx::__is_null_pointer<__gnu_cxx::__normal_iterator<char*, std::string>>(__gnu_cxx::__normal_iterator<char*, std::string>)
+bool __gnu_cxx::__is_null_pointer<__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>)
+bool __gnu_cxx::__is_null_pointer<char const>(char const*)
+bool __gnu_cxx::__is_null_pointer<char>(char*)
+bool __gnu_cxx::__is_null_pointer<wchar_t const>(wchar_t const*)
+bool __gnu_cxx::__is_null_pointer<wchar_t>(wchar_t*)
+bool __gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>::operator()<__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const>(__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const&)
+bool __gnu_cxx::__ops::_Iter_comp_val<std::_CatalogIdComp>::operator()<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, int const&)
+bool __gnu_cxx::operator!=<char*, std::string>(__gnu_cxx::__normal_iterator<char*, std::string> const&, __gnu_cxx::__normal_iterator<char*, std::string> const&)
+bool __gnu_cxx::operator!=<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>(__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&, __gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&)
+bool __gnu_cxx::operator!=<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&)
+bool __gnu_cxx::operator!=<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
+bool __gnu_cxx::operator==<char const*, char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
 bool __gnu_cxx::operator==<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
 bool __gnu_cxx::operator==<char const*, std::string>(__gnu_cxx::__normal_iterator<char const*, std::string> const&, __gnu_cxx::__normal_iterator<char const*, std::string> const&)
 bool __gnu_cxx::operator==<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
 bool __gnu_cxx::operator==<char*, std::string>(__gnu_cxx::__normal_iterator<char*, std::string> const&, __gnu_cxx::__normal_iterator<char*, std::string> const&)
+bool __gnu_cxx::operator==<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&, __gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>> const&)
 bool __gnu_cxx::operator==<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
 bool __gnu_cxx::operator==<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
+bool __gnu_cxx::operator==<wchar_t const*, wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
 bool __gnu_cxx::operator==<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
 bool __gnu_cxx::operator==<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
 bool std::has_facet<std::__cxx11::collate<char>>(std::locale const&)
@@ -6590,6 +6710,13 @@ bool std::has_facet<std::time_get<char, std::istreambuf_iterator<char, std::char
 bool std::has_facet<std::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::locale const&)
 bool std::has_facet<std::time_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>>(std::locale const&)
 bool std::has_facet<std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::locale const&)
+bool std::operator!=<char, std::char_traits<char>, std::allocator<char>>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&, char const*)
+bool std::operator!=<char, std::char_traits<char>>(std::istreambuf_iterator<char, std::char_traits<char>> const&, std::istreambuf_iterator<char, std::char_traits<char>> const&)
+bool std::operator!=<wchar_t, std::char_traits<wchar_t>>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> const&, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> const&)
+bool std::operator==<char, std::char_traits<char>, std::allocator<char>>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&, char const*)
+bool std::operator==<char, std::char_traits<char>, std::allocator<char>>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
+bool std::operator==<char, std::char_traits<char>>(std::istreambuf_iterator<char, std::char_traits<char>> const&, std::istreambuf_iterator<char, std::char_traits<char>> const&)
+bool std::operator==<wchar_t, std::char_traits<wchar_t>>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> const&, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> const&)
 bool8
 boolean
 borrow
@@ -6619,12 +6746,25 @@ carry_type
 center
 channels
 char
+char const (&std::forward<char const (&) [10]>(std::remove_reference<char const (&) [10]>::type&)) [10]
+char const (&std::forward<char const (&) [9]>(std::remove_reference<char const (&) [9]>::type&)) [9]
+char const* std::__addressof<char const>(char const&)
+char const* std::addressof<char const>(char const&)
 char* std::__add_grouping<char>(char*, char, char const*, unsigned long, char const*, char const*)
+char* std::__addressof<char>(char&)
+char* std::addressof<char>(char&)
+char* std::string::_S_construct<__gnu_cxx::__normal_iterator<char*, std::string>>(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::allocator<char> const&)
 char* std::string::_S_construct<__gnu_cxx::__normal_iterator<char*, std::string>>(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::allocator<char> const&, std::forward_iterator_tag)
+char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&)
 char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag)
+char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&)
 char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag)
+char* std::string::_S_construct_aux<__gnu_cxx::__normal_iterator<char*, std::string>>(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::allocator<char> const&, std::__false_type)
+char* std::string::_S_construct_aux<char const*>(char const*, char const*, std::allocator<char> const&, std::__false_type)
+char* std::string::_S_construct_aux<char*>(char*, char*, std::allocator<char> const&, std::__false_type)
 char16_t
 char32_t
+char32_t const& std::min<char32_t>(char32_t const&, char32_t const&)
 char8
 char8_t
 chdir
@@ -6730,6 +6870,8 @@ decimal64
 decltype 
 decltype (
 decltype(auto)
+decltype(fp.base() - fp0.base()) __gnu_cxx::operator-<char const*, char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>> const&)
+decltype(fp.base() - fp0.base()) __gnu_cxx::operator-<wchar_t const*, wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>> const&)
 decltype(nullptr)
 default
 default %s
@@ -6967,6 +7109,7 @@ getsockname
 gettimeofday
 getuid
 gfFeEaAG
+glibcxx.eh_pool
 global constructors keyed to 
 global destructors keyed to 
 glow
@@ -7026,6 +7169,7 @@ hPU3
 hTarget
 half
 handindex
+hardware
 has 
 header crc mismatch
 headtype
@@ -7082,6 +7226,7 @@ inherit_owner_joints
 initialized
 initializer for module 
 install
+int const& std::min<int>(int const&, int const&)
 int std::__facet_shims::__collate_compare<char>(std::integral_constant<bool, false>, std::locale::facet const*, char const*, char const*, char const*, char const*)
 int std::__facet_shims::__collate_compare<char>(std::integral_constant<bool, true>, std::locale::facet const*, char const*, char const*, char const*, char const*)
 int std::__facet_shims::__collate_compare<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, wchar_t const*, wchar_t const*, wchar_t const*, wchar_t const*)
@@ -7094,6 +7239,8 @@ int std::__int_to_char<char, unsigned long long>(char*, unsigned long long, char
 int std::__int_to_char<char, unsigned long>(char*, unsigned long, char const*, std::_Ios_Fmtflags, bool)
 int std::__int_to_char<wchar_t, unsigned long long>(wchar_t*, unsigned long long, wchar_t const*, std::_Ios_Fmtflags, bool)
 int std::__int_to_char<wchar_t, unsigned long>(wchar_t*, unsigned long, wchar_t const*, std::_Ios_Fmtflags, bool)
+int& std::forward<int&>(std::remove_reference<int&>::type&)
+int&& std::forward<int>(std::remove_reference<int>::type&)
 int( %d = 0x%X )
 int16
 int32
@@ -7236,8 +7383,13 @@ log_verbosity
 logf
 logging.cpp
 long
+long const& std::min<long>(long const&, long const&)
 long double
 long long
+long std::__copy_streambufs<char, std::char_traits<char>>(std::basic_streambuf<char, std::char_traits<char>>*, std::basic_streambuf<char, std::char_traits<char>>*)
+long std::__copy_streambufs<wchar_t, std::char_traits<wchar_t>>(std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>*, std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>*)
+long std::__copy_streambufs_eof<char, std::char_traits<char>>(std::basic_streambuf<char, std::char_traits<char>>*, std::basic_streambuf<char, std::char_traits<char>>*, bool&)
+long std::__copy_streambufs_eof<wchar_t, std::char_traits<wchar_t>>(std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>*, std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>*, bool&)
 longjmp
 lookat
 lookup
@@ -7838,6 +7990,7 @@ memcheck
 memchr
 memcmp
 memcpy
+memcpy_repmovs
 memmove
 mempool.cpp
 memset
@@ -7911,6 +8064,7 @@ mold 2.36.0 (compatible with GNU ld)
 moredetailed
 moveto
 mprotect
+mt19937
 multiplayer_break
 munmap
 mutex
@@ -7999,7 +8153,6 @@ non-virtual thunk to
 nonfull_slabs
 norecord
 normalWeight
-not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugs/):\n    
 not enough space to write RepOffsets \n
 not found
 not in a module
@@ -8045,18 +8198,22 @@ operator delete(void*)
 operator delete(void*, std::align_val_t)
 operator delete(void*, unsigned long)
 operator delete(void*, unsigned long, std::align_val_t)
+operator delete(void*, void*)
 operator delete[](void*)
 operator delete[](void*, std::align_val_t)
 operator delete[](void*, unsigned long)
 operator delete[](void*, unsigned long, std::align_val_t)
+operator delete[](void*, void*)
 operator new(unsigned long)
 operator new(unsigned long, std::align_val_t)
 operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
+operator new(unsigned long, void*)
 operator new[](unsigned long)
 operator new[](unsigned long, std::align_val_t)
 operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
+operator new[](unsigned long, void*)
 operator"" 
 opt.abort
 opt.abort_conf
@@ -8171,6 +8328,7 @@ placement_mode
 platform.cpp
 play_endcap
 pledged buffer stability condition is not respected
+pltgot
 pmuzzy
 point0
 point1
@@ -8280,6 +8438,9 @@ random_device: rdrand failed
 random_device: rdseed failed
 random_device::random_device(const std::string&): device not available
 random_device::random_device(const std::string&): unsupported token
+rdrand
+rdrnd
+rdseed
 read
 readdir64
 readlink
@@ -8478,16 +8639,35 @@ stats_print
 stats_print_opts
 statvfs64
 std::
+std::Catalog_info** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<std::Catalog_info*, std::Catalog_info*>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info** std::__copy_move_a1<false, std::Catalog_info**, std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info** std::__copy_move_a2<false, std::Catalog_info**, std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info** std::__copy_move_a<false, std::Catalog_info**, std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info** std::__miter_base<std::Catalog_info**>(std::Catalog_info**)
+std::Catalog_info** std::__niter_base<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>)
+std::Catalog_info** std::__niter_base<std::Catalog_info**>(std::Catalog_info**)
+std::Catalog_info** std::__niter_wrap<std::Catalog_info**>(std::Catalog_info** const&, std::Catalog_info**)
+std::Catalog_info** std::__uninitialized_copy<true>::__uninit_copy<std::Catalog_info**, std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info** std::__uninitialized_copy_a<std::Catalog_info**, std::Catalog_info**, std::Catalog_info*>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**, std::allocator<std::Catalog_info*>&)
+std::Catalog_info** std::__uninitialized_move_if_noexcept_a<std::Catalog_info**, std::Catalog_info**, std::allocator<std::Catalog_info*>>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**, std::allocator<std::Catalog_info*>&)
+std::Catalog_info** std::copy<std::Catalog_info**, std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info** std::uninitialized_copy<std::Catalog_info**, std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**, std::Catalog_info**)
+std::Catalog_info::Catalog_info(int, char const*, std::locale)
+std::Catalog_info::~Catalog_info()
+std::Catalogs::Catalogs()
 std::Catalogs::_M_add(char const*, std::locale)
 std::Catalogs::_M_erase(int)
 std::Catalogs::_M_get(int) const
 std::Catalogs::~Catalogs()
+std::_CatalogIdComp::operator()(std::Catalog_info const*, int) const
 std::_Rb_tree_black_count(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base*)
 std::_Rb_tree_increment(std::_Rb_tree_node_base const*)
 std::_Rb_tree_increment(std::_Rb_tree_node_base*)
 std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+std::_Rb_tree_node_base::_S_maximum(std::_Rb_tree_node_base*)
+std::_Rb_tree_node_base::_S_minimum(std::_Rb_tree_node_base*)
 std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
 std::_Rb_tree_rotate_left(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*&)
 std::_Rb_tree_rotate_right(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*&)
@@ -8496,10 +8676,35 @@ std::_V2::error_category::_M_message[abi:cxx11](int) const
 std::_V2::error_category::default_error_condition(int) const
 std::_V2::error_category::equivalent(int, std::error_condition const&) const
 std::_V2::error_category::equivalent(std::error_code const&, int) const
+std::_V2::error_category::operator==(std::_V2::error_category const&) const
 std::_V2::error_category::~error_category()
 std::_V2::generic_category()
 std::_V2::system_category()
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_allocate(unsigned long)
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_deallocate(std::Catalog_info**, unsigned long)
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_get_Tp_allocator()
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_get_Tp_allocator() const
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_Vector_base()
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_Vector_impl::_Vector_impl()
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_Vector_impl::~_Vector_impl()
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_Vector_impl_data::_Vector_impl_data()
+std::_Vector_base<std::Catalog_info*, std::allocator<std::Catalog_info*>>::~_Vector_base()
 std::__at_thread_exit(std::__at_thread_exit_elt*)
+std::__codecvt_abstract_base<char, char, __mbstate_t>::__codecvt_abstract_base(unsigned long)
+std::__codecvt_abstract_base<char, char, __mbstate_t>::~__codecvt_abstract_base()
+std::__codecvt_abstract_base<char16_t, char, __mbstate_t>::__codecvt_abstract_base(unsigned long)
+std::__codecvt_abstract_base<char16_t, char, __mbstate_t>::~__codecvt_abstract_base()
+std::__codecvt_abstract_base<char16_t, char8_t, __mbstate_t>::__codecvt_abstract_base(unsigned long)
+std::__codecvt_abstract_base<char16_t, char8_t, __mbstate_t>::~__codecvt_abstract_base()
+std::__codecvt_abstract_base<char32_t, char, __mbstate_t>::__codecvt_abstract_base(unsigned long)
+std::__codecvt_abstract_base<char32_t, char, __mbstate_t>::~__codecvt_abstract_base()
+std::__codecvt_abstract_base<char32_t, char8_t, __mbstate_t>::__codecvt_abstract_base(unsigned long)
+std::__codecvt_abstract_base<char32_t, char8_t, __mbstate_t>::~__codecvt_abstract_base()
+std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>::__codecvt_abstract_base(unsigned long)
+std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>::in(__mbstate_t&, char const*, char const*, char const*&, wchar_t*, wchar_t*, wchar_t*&) const
+std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>::max_length() const
+std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>::out(__mbstate_t&, wchar_t const*, wchar_t const*, wchar_t const*&, char*, char*, char*&) const
+std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>::~__codecvt_abstract_base()
 std::__codecvt_utf16_base<char16_t>::do_always_noconv() const
 std::__codecvt_utf16_base<char16_t>::do_encoding() const
 std::__codecvt_utf16_base<char16_t>::do_in(__mbstate_t&, char const*, char const*, char const*&, char16_t*, char16_t*, char16_t*&) const
@@ -8572,6 +8777,11 @@ std::__codecvt_utf8_utf16_base<wchar_t>::do_max_length() const
 std::__codecvt_utf8_utf16_base<wchar_t>::do_out(__mbstate_t&, wchar_t const*, wchar_t const*, wchar_t const*&, char*, char*, char*&) const
 std::__codecvt_utf8_utf16_base<wchar_t>::do_unshift(__mbstate_t&, char*, char*, char*&) const
 std::__codecvt_utf8_utf16_base<wchar_t>::~__codecvt_utf8_utf16_base()
+std::__condvar::__condvar()
+std::__condvar::notify_all()
+std::__condvar::notify_one()
+std::__condvar::wait(std::mutex&)
+std::__condvar::~__condvar()
 std::__convert_from_v(__locale_struct* const&, char*, int, char const*, ...)
 std::__cow_string::__cow_string()
 std::__cow_string::__cow_string(char const*, unsigned long)
@@ -8582,11 +8792,25 @@ std::__cow_string::__cow_string(std::string const&)
 std::__cow_string::operator=(std::__cow_string const&)
 std::__cow_string::operator=(std::__cow_string&&)
 std::__cow_string::~__cow_string()
+std::__ctype_abstract_base<wchar_t>::__ctype_abstract_base(unsigned long)
+std::__ctype_abstract_base<wchar_t>::is(unsigned short, wchar_t) const
+std::__ctype_abstract_base<wchar_t>::narrow(wchar_t, char) const
+std::__ctype_abstract_base<wchar_t>::scan_not(unsigned short, wchar_t const*, wchar_t const*) const
+std::__ctype_abstract_base<wchar_t>::tolower(wchar_t) const
+std::__ctype_abstract_base<wchar_t>::toupper(wchar_t) const
+std::__ctype_abstract_base<wchar_t>::widen(char const*, char const*, wchar_t*) const
+std::__ctype_abstract_base<wchar_t>::widen(char) const
+std::__ctype_abstract_base<wchar_t>::~__ctype_abstract_base()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const* std::__addressof<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> std::__str_concat<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::value_type const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::size_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::value_type const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::size_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::allocator_type const&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>* std::__addressof<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_Alloc_hider::_Alloc_hider(char*, std::allocator<char>&&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_Alloc_hider::~_Alloc_hider()
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_append(char const*, unsigned long)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_capacity(unsigned long)
@@ -8771,11 +8995,15 @@ std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::substr(unsigned long, unsigned long) const
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::swap(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&)
 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::~basic_string()
+std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const* std::__addressof<std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const>(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::__str_concat<std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::value_type const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::size_type, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::value_type const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::size_type, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::allocator_type const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(wchar_t, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>* std::__addressof<std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider::_Alloc_hider(wchar_t*, std::allocator<wchar_t> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider::_Alloc_hider(wchar_t*, std::allocator<wchar_t>&&)
+std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider::~_Alloc_hider()
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_append(wchar_t const*, unsigned long)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_assign(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_capacity(unsigned long)
@@ -8846,6 +9074,7 @@ std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wc
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::basic_string<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, void>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::allocator<wchar_t> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::basic_string<wchar_t const*, void>(wchar_t const*, wchar_t const*, std::allocator<wchar_t> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::basic_string<wchar_t*, void>(wchar_t*, wchar_t*, std::allocator<wchar_t> const&)
+std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::basic_string<wchar_t*>(wchar_t*, wchar_t*, std::allocator<wchar_t> const&)
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::begin()
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::begin() const
 std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::c_str() const
@@ -9293,19 +9522,50 @@ std::__detail::_List_node_base::_M_reverse()
 std::__detail::_List_node_base::_M_transfer(std::__detail::_List_node_base*, std::__detail::_List_node_base*)
 std::__detail::_List_node_base::_M_unhook()
 std::__detail::_List_node_base::swap(std::__detail::_List_node_base&, std::__detail::_List_node_base&)
+std::__facet_shims::__any_string& std::__facet_shims::__any_string::operator=<char>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
+std::__facet_shims::__any_string& std::__facet_shims::__any_string::operator=<char>(std::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
+std::__facet_shims::__any_string& std::__facet_shims::__any_string::operator=<wchar_t>(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::__facet_shims::__any_string& std::__facet_shims::__any_string::operator=<wchar_t>(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::__facet_shims::__any_string::__any_string()
+std::__facet_shims::__any_string::__str_rep::operator char const*() const
+std::__facet_shims::__any_string::__str_rep::operator wchar_t const*() const
+std::__facet_shims::__any_string::operator std::basic_string<char, std::char_traits<char>, std::allocator<char>><char>() const
+std::__facet_shims::__any_string::operator std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>><wchar_t>() const
+std::__facet_shims::__any_string::~__any_string()
 std::__moneypunct_cache<char, false>::_M_cache(std::locale const&)
+std::__moneypunct_cache<char, false>::_M_cache(std::locale const&)::_Scoped_str::_M_release(char const*&, unsigned long&)
+std::__moneypunct_cache<char, false>::_M_cache(std::locale const&)::_Scoped_str::_Scoped_str(std::string const&)
+std::__moneypunct_cache<char, false>::_M_cache(std::locale const&)::_Scoped_str::~_Scoped_str()
 std::__moneypunct_cache<char, false>::__moneypunct_cache(unsigned long)
 std::__moneypunct_cache<char, false>::~__moneypunct_cache()
 std::__moneypunct_cache<char, true>::_M_cache(std::locale const&)
+std::__moneypunct_cache<char, true>::_M_cache(std::locale const&)::_Scoped_str::_M_release(char const*&, unsigned long&)
+std::__moneypunct_cache<char, true>::_M_cache(std::locale const&)::_Scoped_str::_Scoped_str(std::string const&)
+std::__moneypunct_cache<char, true>::_M_cache(std::locale const&)::_Scoped_str::~_Scoped_str()
 std::__moneypunct_cache<char, true>::__moneypunct_cache(unsigned long)
 std::__moneypunct_cache<char, true>::~__moneypunct_cache()
 std::__moneypunct_cache<wchar_t, false>::_M_cache(std::locale const&)
+std::__moneypunct_cache<wchar_t, false>::_M_cache(std::locale const&)::_Scoped_str::_M_release(wchar_t const*&, unsigned long&)
+std::__moneypunct_cache<wchar_t, false>::_M_cache(std::locale const&)::_Scoped_str::_Scoped_str(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::__moneypunct_cache<wchar_t, false>::_M_cache(std::locale const&)::_Scoped_str::~_Scoped_str()
 std::__moneypunct_cache<wchar_t, false>::__moneypunct_cache(unsigned long)
 std::__moneypunct_cache<wchar_t, false>::~__moneypunct_cache()
 std::__moneypunct_cache<wchar_t, true>::_M_cache(std::locale const&)
+std::__moneypunct_cache<wchar_t, true>::_M_cache(std::locale const&)::_Scoped_str::_M_release(wchar_t const*&, unsigned long&)
+std::__moneypunct_cache<wchar_t, true>::_M_cache(std::locale const&)::_Scoped_str::_Scoped_str(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::__moneypunct_cache<wchar_t, true>::_M_cache(std::locale const&)::_Scoped_str::~_Scoped_str()
 std::__moneypunct_cache<wchar_t, true>::__moneypunct_cache(unsigned long)
 std::__moneypunct_cache<wchar_t, true>::~__moneypunct_cache()
 std::__narrow_multibyte_chars(char const*, __locale_struct*)
+std::__new_allocator<char>::allocate(unsigned long, void const*)
+std::__new_allocator<char>::deallocate(char*, unsigned long)
+std::__new_allocator<char>::~__new_allocator()
+std::__new_allocator<std::Catalog_info*>::allocate(unsigned long, void const*)
+std::__new_allocator<std::Catalog_info*>::deallocate(std::Catalog_info**, unsigned long)
+std::__new_allocator<std::Catalog_info*>::~__new_allocator()
+std::__new_allocator<wchar_t>::allocate(unsigned long, void const*)
+std::__new_allocator<wchar_t>::deallocate(wchar_t*, unsigned long)
+std::__new_allocator<wchar_t>::~__new_allocator()
 std::__num_base::_S_atoms_in
 std::__num_base::_S_atoms_out
 std::__num_base::_S_format_float(std::ios_base const&, char*, char)
@@ -9317,6 +9577,10 @@ std::__numpunct_cache<wchar_t>::__numpunct_cache(unsigned long)
 std::__numpunct_cache<wchar_t>::~__numpunct_cache()
 std::__pad<char, std::char_traits<char>>::_S_pad(std::ios_base&, char, char*, char const*, long, long)
 std::__pad<wchar_t, std::char_traits<wchar_t>>::_S_pad(std::ios_base&, wchar_t, wchar_t*, wchar_t const*, long, long)
+std::__ptr_traits_ptr_to<char const*, char const, false>::pointer_to(char const&)
+std::__ptr_traits_ptr_to<char*, char, false>::pointer_to(char&)
+std::__ptr_traits_ptr_to<wchar_t const*, wchar_t const, false>::pointer_to(wchar_t const&)
+std::__ptr_traits_ptr_to<wchar_t*, wchar_t, false>::pointer_to(wchar_t&)
 std::__sso_string::__sso_string()
 std::__sso_string::__sso_string(char const*, unsigned long)
 std::__sso_string::__sso_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
@@ -9326,6 +9590,7 @@ std::__sso_string::__sso_string(std::string const&)
 std::__sso_string::operator=(std::__sso_string const&)
 std::__sso_string::operator=(std::__sso_string&&)
 std::__sso_string::~__sso_string()
+std::__sv_check(unsigned long, unsigned long, char const*)
 std::__throw_bad_alloc()
 std::__throw_bad_array_new_length()
 std::__throw_bad_cast()
@@ -9388,25 +9653,42 @@ std::__timepunct_cache<char>::~__timepunct_cache()
 std::__timepunct_cache<wchar_t>::_S_timezones
 std::__timepunct_cache<wchar_t>::__timepunct_cache(unsigned long)
 std::__timepunct_cache<wchar_t>::~__timepunct_cache()
+std::__use_cache<std::__moneypunct_cache<char, false>>::operator()(std::locale const&) const
+std::__use_cache<std::__moneypunct_cache<char, true>>::operator()(std::locale const&) const
+std::__use_cache<std::__moneypunct_cache<wchar_t, false>>::operator()(std::locale const&) const
+std::__use_cache<std::__moneypunct_cache<wchar_t, true>>::operator()(std::locale const&) const
+std::__use_cache<std::__numpunct_cache<char>>::operator()(std::locale const&) const
+std::__use_cache<std::__numpunct_cache<wchar_t>>::operator()(std::locale const&) const
 std::__verify_grouping(char const*, unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::__verify_grouping(char const*, unsigned long, std::string const&)
 std::__verify_grouping_impl(char const*, unsigned long, char const*, unsigned long)
 std::allocator
+std::auto_ptr<std::Catalog_info>::auto_ptr(std::Catalog_info*)
+std::auto_ptr<std::Catalog_info>::get() const
+std::auto_ptr<std::Catalog_info>::operator->() const
+std::auto_ptr<std::Catalog_info>::release()
+std::auto_ptr<std::Catalog_info>::~auto_ptr()
 std::bad_alloc
+std::bad_alloc::bad_alloc()
 std::bad_alloc::what() const
 std::bad_alloc::~bad_alloc()
 std::bad_array_new_length
+std::bad_array_new_length::bad_array_new_length()
 std::bad_array_new_length::what() const
 std::bad_array_new_length::~bad_array_new_length()
 std::bad_cast
+std::bad_cast::bad_cast()
 std::bad_cast::what() const
 std::bad_cast::~bad_cast()
 std::bad_exception
+std::bad_exception::bad_exception()
 std::bad_exception::what() const
 std::bad_exception::~bad_exception()
+std::bad_function_call::bad_function_call()
 std::bad_function_call::what() const
 std::bad_function_call::~bad_function_call()
 std::bad_typeid
+std::bad_typeid::bad_typeid()
 std::bad_typeid::what() const
 std::bad_typeid::~bad_typeid()
 std::basic_iostream< char, std::char_traits< char > >
@@ -9415,6 +9697,96 @@ std::basic_istream< char, std::char_traits< char > >
 std::basic_istream<char, std::char_traits<char> >
 std::basic_ostream< char, std::char_traits< char > >
 std::basic_ostream<char, std::char_traits<char> >
+std::basic_streambuf<char, std::char_traits<char>>::__safe_gbump(long)
+std::basic_streambuf<char, std::char_traits<char>>::__safe_pbump(long)
+std::basic_streambuf<char, std::char_traits<char>>::basic_streambuf()
+std::basic_streambuf<char, std::char_traits<char>>::basic_streambuf(std::basic_streambuf<char, std::char_traits<char>> const&)
+std::basic_streambuf<char, std::char_traits<char>>::eback() const
+std::basic_streambuf<char, std::char_traits<char>>::egptr() const
+std::basic_streambuf<char, std::char_traits<char>>::epptr() const
+std::basic_streambuf<char, std::char_traits<char>>::gbump(int)
+std::basic_streambuf<char, std::char_traits<char>>::getloc() const
+std::basic_streambuf<char, std::char_traits<char>>::gptr() const
+std::basic_streambuf<char, std::char_traits<char>>::imbue(std::locale const&)
+std::basic_streambuf<char, std::char_traits<char>>::in_avail()
+std::basic_streambuf<char, std::char_traits<char>>::operator=(std::basic_streambuf<char, std::char_traits<char>> const&)
+std::basic_streambuf<char, std::char_traits<char>>::overflow(int)
+std::basic_streambuf<char, std::char_traits<char>>::pbackfail(int)
+std::basic_streambuf<char, std::char_traits<char>>::pbase() const
+std::basic_streambuf<char, std::char_traits<char>>::pbump(int)
+std::basic_streambuf<char, std::char_traits<char>>::pptr() const
+std::basic_streambuf<char, std::char_traits<char>>::pubimbue(std::locale const&)
+std::basic_streambuf<char, std::char_traits<char>>::pubseekoff(long, std::_Ios_Seekdir, std::_Ios_Openmode)
+std::basic_streambuf<char, std::char_traits<char>>::pubseekpos(std::fpos<__mbstate_t>, std::_Ios_Openmode)
+std::basic_streambuf<char, std::char_traits<char>>::pubsetbuf(char*, long)
+std::basic_streambuf<char, std::char_traits<char>>::pubsync()
+std::basic_streambuf<char, std::char_traits<char>>::sbumpc()
+std::basic_streambuf<char, std::char_traits<char>>::seekoff(long, std::_Ios_Seekdir, std::_Ios_Openmode)
+std::basic_streambuf<char, std::char_traits<char>>::seekpos(std::fpos<__mbstate_t>, std::_Ios_Openmode)
+std::basic_streambuf<char, std::char_traits<char>>::setbuf(char*, long)
+std::basic_streambuf<char, std::char_traits<char>>::setg(char*, char*, char*)
+std::basic_streambuf<char, std::char_traits<char>>::setp(char*, char*)
+std::basic_streambuf<char, std::char_traits<char>>::sgetc()
+std::basic_streambuf<char, std::char_traits<char>>::sgetn(char*, long)
+std::basic_streambuf<char, std::char_traits<char>>::showmanyc()
+std::basic_streambuf<char, std::char_traits<char>>::snextc()
+std::basic_streambuf<char, std::char_traits<char>>::sputbackc(char)
+std::basic_streambuf<char, std::char_traits<char>>::sputc(char)
+std::basic_streambuf<char, std::char_traits<char>>::sputn(char const*, long)
+std::basic_streambuf<char, std::char_traits<char>>::stossc()
+std::basic_streambuf<char, std::char_traits<char>>::sungetc()
+std::basic_streambuf<char, std::char_traits<char>>::swap(std::basic_streambuf<char, std::char_traits<char>>&)
+std::basic_streambuf<char, std::char_traits<char>>::sync()
+std::basic_streambuf<char, std::char_traits<char>>::uflow()
+std::basic_streambuf<char, std::char_traits<char>>::underflow()
+std::basic_streambuf<char, std::char_traits<char>>::xsgetn(char*, long)
+std::basic_streambuf<char, std::char_traits<char>>::xsputn(char const*, long)
+std::basic_streambuf<char, std::char_traits<char>>::~basic_streambuf()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::__safe_gbump(long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::__safe_pbump(long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::basic_streambuf()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::basic_streambuf(std::basic_streambuf<wchar_t, std::char_traits<wchar_t>> const&)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::eback() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::egptr() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::epptr() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::gbump(int)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::getloc() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::gptr() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::imbue(std::locale const&)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::in_avail()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::operator=(std::basic_streambuf<wchar_t, std::char_traits<wchar_t>> const&)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::overflow(unsigned int)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pbackfail(unsigned int)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pbase() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pbump(int)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pptr() const
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pubimbue(std::locale const&)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pubseekoff(long, std::_Ios_Seekdir, std::_Ios_Openmode)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pubseekpos(std::fpos<__mbstate_t>, std::_Ios_Openmode)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pubsetbuf(wchar_t*, long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::pubsync()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sbumpc()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::seekoff(long, std::_Ios_Seekdir, std::_Ios_Openmode)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::seekpos(std::fpos<__mbstate_t>, std::_Ios_Openmode)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::setbuf(wchar_t*, long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::setg(wchar_t*, wchar_t*, wchar_t*)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::setp(wchar_t*, wchar_t*)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sgetc()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sgetn(wchar_t*, long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::showmanyc()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::snextc()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sputbackc(wchar_t)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sputc(wchar_t)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sputn(wchar_t const*, long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::stossc()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sungetc()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::swap(std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>&)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::sync()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::uflow()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::underflow()
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::xsgetn(wchar_t*, long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::xsputn(wchar_t const*, long)
+std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>::~basic_streambuf()
 std::basic_string
 std::basic_string< char, std::char_traits< char >, std::allocator< char > >
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >
@@ -9438,10 +9810,13 @@ std::basic_string<char, std::char_traits<char>, std::allocator<char>>::basic_str
 std::basic_string<char, std::char_traits<char>, std::allocator<char>>::basic_string<char const*>(char const*, char const*, std::allocator<char> const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char>>::basic_string<char*>(char*, char*, std::allocator<char> const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char>>::~basic_string()
+std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::__str_concat<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::value_type const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::size_type, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::value_type const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::size_type, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::allocator_type const&)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(wchar_t, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&)
+std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider::_Alloc_hider(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider&&)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider::_Alloc_hider(wchar_t*, std::allocator<wchar_t> const&)
+std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider::~_Alloc_hider()
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_assign(wchar_t*, unsigned long, wchar_t)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_check(unsigned long, char const*) const
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_check_length(unsigned long, unsigned long, char const*) const
@@ -9617,7 +9992,39 @@ std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::substr(unsigned long, unsigned long) const
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::swap(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>&)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::~basic_string()
+std::basic_string_view<char, std::char_traits<char>>::_S_compare(unsigned long, unsigned long)
+std::basic_string_view<char, std::char_traits<char>>::basic_string_view(char const*)
+std::basic_string_view<char, std::char_traits<char>>::basic_string_view(char const*, unsigned long)
+std::basic_string_view<char, std::char_traits<char>>::compare(std::basic_string_view<char, std::char_traits<char>>) const
+std::basic_string_view<char, std::char_traits<char>>::compare(unsigned long, unsigned long, char const*, unsigned long) const
+std::basic_string_view<char, std::char_traits<char>>::size() const
+std::basic_string_view<char, std::char_traits<char>>::substr(unsigned long, unsigned long) const
 std::bfloat16_t
+std::char_traits<char>::assign(char&, char const&)
+std::char_traits<char>::assign(char*, unsigned long, char)
+std::char_traits<char>::compare(char const*, char const*, unsigned long)
+std::char_traits<char>::copy(char*, char const*, unsigned long)
+std::char_traits<char>::eof()
+std::char_traits<char>::eq(char const&, char const&)
+std::char_traits<char>::eq_int_type(int const&, int const&)
+std::char_traits<char>::find(char const*, unsigned long, char const&)
+std::char_traits<char>::length(char const*)
+std::char_traits<char>::lt(char const&, char const&)
+std::char_traits<char>::move(char*, char const*, unsigned long)
+std::char_traits<char>::to_char_type(int const&)
+std::char_traits<char>::to_int_type(char const&)
+std::char_traits<wchar_t>::assign(wchar_t&, wchar_t const&)
+std::char_traits<wchar_t>::assign(wchar_t*, unsigned long, wchar_t)
+std::char_traits<wchar_t>::compare(wchar_t const*, wchar_t const*, unsigned long)
+std::char_traits<wchar_t>::copy(wchar_t*, wchar_t const*, unsigned long)
+std::char_traits<wchar_t>::eof()
+std::char_traits<wchar_t>::eq(wchar_t const&, wchar_t const&)
+std::char_traits<wchar_t>::eq_int_type(unsigned int const&, unsigned int const&)
+std::char_traits<wchar_t>::find(wchar_t const*, unsigned long, wchar_t const&)
+std::char_traits<wchar_t>::length(wchar_t const*)
+std::char_traits<wchar_t>::move(wchar_t*, wchar_t const*, unsigned long)
+std::char_traits<wchar_t>::to_char_type(unsigned int const&)
+std::char_traits<wchar_t>::to_int_type(wchar_t const&)
 std::codecvt<char, char, __mbstate_t> const& std::use_facet<std::codecvt<char, char, __mbstate_t>>(std::locale const&)
 std::codecvt<char, char, __mbstate_t> const* std::__try_use_facet<std::codecvt<char, char, __mbstate_t>>(std::locale const&)
 std::codecvt<char, char, __mbstate_t>::codecvt(__locale_struct*, unsigned long)
@@ -9631,6 +10038,7 @@ std::codecvt<char, char, __mbstate_t>::do_out(__mbstate_t&, char const*, char co
 std::codecvt<char, char, __mbstate_t>::do_unshift(__mbstate_t&, char*, char*, char*&) const
 std::codecvt<char, char, __mbstate_t>::id
 std::codecvt<char, char, __mbstate_t>::~codecvt()
+std::codecvt<char16_t, char, __mbstate_t>::codecvt(unsigned long)
 std::codecvt<char16_t, char, __mbstate_t>::do_always_noconv() const
 std::codecvt<char16_t, char, __mbstate_t>::do_encoding() const
 std::codecvt<char16_t, char, __mbstate_t>::do_in(__mbstate_t&, char const*, char const*, char const*&, char16_t*, char16_t*, char16_t*&) const
@@ -9640,6 +10048,7 @@ std::codecvt<char16_t, char, __mbstate_t>::do_out(__mbstate_t&, char16_t const*,
 std::codecvt<char16_t, char, __mbstate_t>::do_unshift(__mbstate_t&, char*, char*, char*&) const
 std::codecvt<char16_t, char, __mbstate_t>::id
 std::codecvt<char16_t, char, __mbstate_t>::~codecvt()
+std::codecvt<char16_t, char8_t, __mbstate_t>::codecvt(unsigned long)
 std::codecvt<char16_t, char8_t, __mbstate_t>::do_always_noconv() const
 std::codecvt<char16_t, char8_t, __mbstate_t>::do_encoding() const
 std::codecvt<char16_t, char8_t, __mbstate_t>::do_in(__mbstate_t&, char8_t const*, char8_t const*, char8_t const*&, char16_t*, char16_t*, char16_t*&) const
@@ -9649,6 +10058,7 @@ std::codecvt<char16_t, char8_t, __mbstate_t>::do_out(__mbstate_t&, char16_t cons
 std::codecvt<char16_t, char8_t, __mbstate_t>::do_unshift(__mbstate_t&, char8_t*, char8_t*, char8_t*&) const
 std::codecvt<char16_t, char8_t, __mbstate_t>::id
 std::codecvt<char16_t, char8_t, __mbstate_t>::~codecvt()
+std::codecvt<char32_t, char, __mbstate_t>::codecvt(unsigned long)
 std::codecvt<char32_t, char, __mbstate_t>::do_always_noconv() const
 std::codecvt<char32_t, char, __mbstate_t>::do_encoding() const
 std::codecvt<char32_t, char, __mbstate_t>::do_in(__mbstate_t&, char const*, char const*, char const*&, char32_t*, char32_t*, char32_t*&) const
@@ -9658,6 +10068,7 @@ std::codecvt<char32_t, char, __mbstate_t>::do_out(__mbstate_t&, char32_t const*,
 std::codecvt<char32_t, char, __mbstate_t>::do_unshift(__mbstate_t&, char*, char*, char*&) const
 std::codecvt<char32_t, char, __mbstate_t>::id
 std::codecvt<char32_t, char, __mbstate_t>::~codecvt()
+std::codecvt<char32_t, char8_t, __mbstate_t>::codecvt(unsigned long)
 std::codecvt<char32_t, char8_t, __mbstate_t>::do_always_noconv() const
 std::codecvt<char32_t, char8_t, __mbstate_t>::do_encoding() const
 std::codecvt<char32_t, char8_t, __mbstate_t>::do_in(__mbstate_t&, char8_t const*, char8_t const*, char8_t const*&, char32_t*, char32_t*, char32_t*&) const
@@ -9743,8 +10154,15 @@ std::ctype<char>::do_toupper(char*, char const*) const
 std::ctype<char>::do_widen(char const*, char const*, char*) const
 std::ctype<char>::do_widen(char) const
 std::ctype<char>::id
+std::ctype<char>::is(unsigned short, char) const
 std::ctype<char>::narrow(char, char) const
+std::ctype<char>::scan_not(unsigned short, char const*, char const*) const
+std::ctype<char>::table() const
 std::ctype<char>::table_size
+std::ctype<char>::tolower(char) const
+std::ctype<char>::toupper(char) const
+std::ctype<char>::widen(char const*, char const*, char*) const
+std::ctype<char>::widen(char) const
 std::ctype<char>::~ctype()
 std::ctype<wchar_t> const& std::use_facet<std::ctype<wchar_t>>(std::locale const&)
 std::ctype<wchar_t> const* std::__try_use_facet<std::ctype<wchar_t>>(std::locale const&)
@@ -9790,18 +10208,45 @@ std::domain_error::domain_error(char const*)
 std::domain_error::domain_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::domain_error::domain_error(std::string const&)
 std::domain_error::~domain_error()
+std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<char*>>, std::is_move_constructible<char*>, std::is_move_assignable<char*>>::value, void>::type std::swap<char*>(char*&, char*&)
+std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<std::locale>>, std::is_move_constructible<std::locale>, std::is_move_assignable<std::locale>>::value, void>::type std::swap<std::locale>(std::locale&, std::locale&)
+std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<wchar_t*>>, std::is_move_constructible<wchar_t*>, std::is_move_assignable<wchar_t*>>::value, void>::type std::swap<wchar_t*>(wchar_t*&, wchar_t*&)
+std::error_code::category() const
 std::error_code::default_error_condition() const
+std::error_code::error_code(int, std::_V2::error_category const&)
+std::error_code::message[abi:cxx11]() const
+std::error_code::value() const
+std::error_condition::category() const
+std::error_condition::error_condition(int, std::_V2::error_category const&)
+std::error_condition::value() const
 std::exception
+std::exception::exception()
+std::exception::exception(std::exception const&)
+std::exception::exception(std::exception&&)
+std::exception::operator=(std::exception&&)
 std::exception::what() const
 std::exception::~exception()
+std::fpos<__mbstate_t>::fpos(long)
 std::get_catalogs()
-std::get_new_handler()
 std::get_terminate()
 std::get_unexpected()
+std::initializer_list<char>::begin() const
+std::initializer_list<char>::end() const
+std::initializer_list<char>::size() const
+std::initializer_list<wchar_t>::begin() const
+std::initializer_list<wchar_t>::end() const
+std::initializer_list<wchar_t>::size() const
 std::invalid_argument::invalid_argument(char const*)
 std::invalid_argument::invalid_argument(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::invalid_argument::invalid_argument(std::string const&)
 std::invalid_argument::~invalid_argument()
+std::ios_base::_M_getloc() const
+std::ios_base::flags() const
+std::ios_base::flags(std::_Ios_Fmtflags)
+std::ios_base::getloc() const
+std::ios_base::precision() const
+std::ios_base::width() const
+std::ios_base::width(long)
 std::iostream
 std::istream
 std::istreambuf_iterator<char, std::char_traits<char>> std::__cxx11::money_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>::_M_extract<false>(std::istreambuf_iterator<char, std::char_traits<char>>, std::istreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, std::_Ios_Iostate&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&) const
@@ -9824,8 +10269,12 @@ std::istreambuf_iterator<char, std::char_traits<char>> std::num_get<char, std::i
 std::istreambuf_iterator<char, std::char_traits<char>> std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>::_M_extract_int[abi:cxx11]<unsigned long long>(std::istreambuf_iterator<char, std::char_traits<char>>, std::istreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, std::_Ios_Iostate&, unsigned long long&) const
 std::istreambuf_iterator<char, std::char_traits<char>> std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>::_M_extract_int[abi:cxx11]<unsigned long>(std::istreambuf_iterator<char, std::char_traits<char>>, std::istreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, std::_Ios_Iostate&, unsigned long&) const
 std::istreambuf_iterator<char, std::char_traits<char>> std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>::_M_extract_int[abi:cxx11]<unsigned short>(std::istreambuf_iterator<char, std::char_traits<char>>, std::istreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, std::_Ios_Iostate&, unsigned short&) const
+std::istreambuf_iterator<char, std::char_traits<char>>::_M_at_eof() const
 std::istreambuf_iterator<char, std::char_traits<char>>::_M_get() const
+std::istreambuf_iterator<char, std::char_traits<char>>::_S_is_eof(int)
 std::istreambuf_iterator<char, std::char_traits<char>>::equal(std::istreambuf_iterator<char, std::char_traits<char>> const&) const
+std::istreambuf_iterator<char, std::char_traits<char>>::operator*() const
+std::istreambuf_iterator<char, std::char_traits<char>>::operator++()
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__cxx11::money_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_extract<false>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, std::_Ios_Iostate&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&) const
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__cxx11::money_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_extract<true>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, std::_Ios_Iostate&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&) const
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__facet_shims::__money_get<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, bool, std::ios_base&, std::_Ios_Iostate&, long double*, std::__facet_shims::__any_string*)
@@ -9846,18 +10295,28 @@ std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_get<wchar_
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_extract_int[abi:cxx11]<unsigned long long>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, std::_Ios_Iostate&, unsigned long long&) const
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_extract_int[abi:cxx11]<unsigned long>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, std::_Ios_Iostate&, unsigned long&) const
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_extract_int[abi:cxx11]<unsigned short>(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, std::_Ios_Iostate&, unsigned short&) const
+std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::_M_at_eof() const
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::_M_get() const
+std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::_S_is_eof(unsigned int)
 std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::equal(std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>> const&) const
+std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::operator*() const
+std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::operator++()
 std::length_error::length_error(char const*)
 std::length_error::length_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::length_error::length_error(std::string const&)
 std::length_error::~length_error()
+std::less<char const*>::operator()(char const*, char const*) const
+std::less<void const*>::operator()(void const*, void const*) const
+std::less<wchar_t const*>::operator()(wchar_t const*, wchar_t const*) const
 std::locale::_Impl::_Impl(std::locale::_Impl const&, unsigned long)
 std::locale::_Impl::_Impl(unsigned long)
+std::locale::_Impl::_M_add_reference()
+std::locale::_Impl::_M_check_same_name()
 std::locale::_Impl::_M_init_extra(std::locale::facet**)
 std::locale::_Impl::_M_init_extra(void*, void*, char const*, char const*)
 std::locale::_Impl::_M_install_cache(std::locale::facet const*, unsigned long)
 std::locale::_Impl::_M_install_facet(std::locale::id const*, std::locale::facet const*)
+std::locale::_Impl::_M_remove_reference()
 std::locale::_Impl::_M_replace_category(std::locale::_Impl const*, std::locale::id const* const*)
 std::locale::_Impl::_M_replace_facet(std::locale::_Impl const*, std::locale::id const*)
 std::locale::_Impl::_S_facet_categories
@@ -9880,6 +10339,7 @@ std::locale::all
 std::locale::classic()
 std::locale::collate
 std::locale::ctype
+std::locale::facet::_M_add_reference() const
 std::locale::facet::_M_cow_shim(std::locale::id const*) const
 std::locale::facet::_M_remove_reference() const
 std::locale::facet::_M_sso_shim(std::locale::id const*) const
@@ -9893,10 +10353,15 @@ std::locale::facet::_S_get_c_name()
 std::locale::facet::_S_initialize_once()
 std::locale::facet::_S_lc_ctype_c_locale(__locale_struct*, char const*)
 std::locale::facet::_S_once
+std::locale::facet::__shim::_M_get() const
+std::locale::facet::__shim::__shim(std::locale::facet const*)
+std::locale::facet::__shim::~__shim()
+std::locale::facet::facet(unsigned long)
 std::locale::facet::~facet()
 std::locale::global(std::locale const&)
 std::locale::id::_M_id() const
 std::locale::id::_S_refcount
+std::locale::id::id()
 std::locale::locale()
 std::locale::locale(std::locale const&)
 std::locale::locale(std::locale::_Impl*)
@@ -10118,7 +10583,8 @@ std::moneypunct_byname<wchar_t, true>::intl
 std::moneypunct_byname<wchar_t, true>::moneypunct_byname(char const*, unsigned long)
 std::moneypunct_byname<wchar_t, true>::moneypunct_byname(std::string const&, unsigned long)
 std::moneypunct_byname<wchar_t, true>::~moneypunct_byname()
-std::nothrow
+std::mutex::native_handle()
+std::mutex::unlock()
 std::notify_all_at_thread_exit(std::condition_variable&, std::unique_lock<std::mutex>)
 std::nullptr_t
 std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>> const& std::use_facet<std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>>(std::locale const&)
@@ -10225,6 +10691,13 @@ std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t
 std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::put(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, unsigned long) const
 std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::put(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, void const*) const
 std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::~num_put()
+std::numeric_limits<double>::infinity()
+std::numeric_limits<double>::max()
+std::numeric_limits<float>::infinity()
+std::numeric_limits<float>::max()
+std::numeric_limits<int>::max()
+std::numeric_limits<long double>::infinity()
+std::numeric_limits<long double>::max()
 std::numpunct<char> const& std::use_facet<std::numpunct<char>>(std::locale const&)
 std::numpunct<char> const* std::__try_use_facet<std::numpunct<char>>(std::locale const&)
 std::numpunct<char>::_M_initialize_numpunct(__locale_struct*)
@@ -10267,11 +10740,18 @@ std::numpunct_byname<char>::~numpunct_byname()
 std::numpunct_byname<wchar_t>::numpunct_byname(char const*, unsigned long)
 std::numpunct_byname<wchar_t>::numpunct_byname(std::string const&, unsigned long)
 std::numpunct_byname<wchar_t>::~numpunct_byname()
+std::operator&(std::_Ios_Fmtflags, std::_Ios_Fmtflags)
+std::operator==(std::error_condition const&, std::error_condition const&)
+std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags)
+std::operator|(std::_Ios_Iostate, std::_Ios_Iostate)
+std::operator|=(std::_Ios_Iostate&, std::_Ios_Iostate)
+std::operator~(std::_Ios_Fmtflags)
 std::ostream
 std::ostreambuf_iterator<char, std::char_traits<char>> std::__cxx11::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert<false>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&) const
 std::ostreambuf_iterator<char, std::char_traits<char>> std::__cxx11::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert<true>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&) const
 std::ostreambuf_iterator<char, std::char_traits<char>> std::__facet_shims::__money_put<char>(std::integral_constant<bool, false>, std::locale::facet const*, std::ostreambuf_iterator<char, std::char_traits<char>>, bool, std::ios_base&, char, long double, std::__facet_shims::__any_string const*)
 std::ostreambuf_iterator<char, std::char_traits<char>> std::__facet_shims::__money_put<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::ostreambuf_iterator<char, std::char_traits<char>>, bool, std::ios_base&, char, long double, std::__facet_shims::__any_string const*)
+std::ostreambuf_iterator<char, std::char_traits<char>> std::__write<char>(std::ostreambuf_iterator<char, std::char_traits<char>>, char const*, int)
 std::ostreambuf_iterator<char, std::char_traits<char>> std::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert<false>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, std::string const&) const
 std::ostreambuf_iterator<char, std::char_traits<char>> std::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert<true>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, std::string const&) const
 std::ostreambuf_iterator<char, std::char_traits<char>> std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert_float<double>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, char, double) const
@@ -10280,10 +10760,15 @@ std::ostreambuf_iterator<char, std::char_traits<char>> std::num_put<char, std::o
 std::ostreambuf_iterator<char, std::char_traits<char>> std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, long) const
 std::ostreambuf_iterator<char, std::char_traits<char>> std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert_int<unsigned long long>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, unsigned long long) const
 std::ostreambuf_iterator<char, std::char_traits<char>> std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>::_M_insert_int<unsigned long>(std::ostreambuf_iterator<char, std::char_traits<char>>, std::ios_base&, char, unsigned long) const
+std::ostreambuf_iterator<char, std::char_traits<char>>::_M_put(char const*, long)
+std::ostreambuf_iterator<char, std::char_traits<char>>::operator*()
+std::ostreambuf_iterator<char, std::char_traits<char>>::operator++()
+std::ostreambuf_iterator<char, std::char_traits<char>>::operator=(char)
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__cxx11::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert<false>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&) const
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__cxx11::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert<true>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&) const
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__facet_shims::__money_put<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, bool, std::ios_base&, wchar_t, long double, std::__facet_shims::__any_string const*)
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__facet_shims::__money_put<wchar_t>(std::integral_constant<bool, true>, std::locale::facet const*, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, bool, std::ios_base&, wchar_t, long double, std::__facet_shims::__any_string const*)
+std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::__write<wchar_t>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, wchar_t const*, int)
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert<false>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&) const
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert<true>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>> const&) const
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert_float<double>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, char, double) const
@@ -10292,6 +10777,10 @@ std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_put<wchar_
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert_int<long>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, long) const
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert_int<unsigned long long>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, unsigned long long) const
 std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>> std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>::_M_insert_int<unsigned long>(std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>, std::ios_base&, wchar_t, unsigned long) const
+std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::_M_put(wchar_t const*, long)
+std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::operator*()
+std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::operator++()
+std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>::operator=(wchar_t)
 std::out_of_range::out_of_range(char const*)
 std::out_of_range::out_of_range(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::out_of_range::out_of_range(std::string const&)
@@ -10300,6 +10789,8 @@ std::overflow_error::overflow_error(char const*)
 std::overflow_error::overflow_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::overflow_error::overflow_error(std::string const&)
 std::overflow_error::~overflow_error()
+std::pair<std::basic_string_view<char, std::char_traits<char>>, int>::pair<char const (&) [10], int&, true>(char const (&) [10], int&)
+std::pair<std::basic_string_view<char, std::char_traits<char>>, int>::pair<char const (&) [9], int, true>(char const (&) [9], int&&)
 std::random_device::_M_fini()
 std::random_device::_M_getentropy() const
 std::random_device::_M_getval()
@@ -10313,6 +10804,24 @@ std::range_error::range_error(char const*)
 std::range_error::range_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
 std::range_error::range_error(std::string const&)
 std::range_error::~range_error()
+std::remove_reference<char*&>::type&& std::move<char*&>(char*&)
+std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&>::type&& std::move<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>&)
+std::remove_reference<std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>&>::type&& std::move<std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>&>(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>&)
+std::remove_reference<std::allocator<char>&>::type&& std::move<std::allocator<char>&>(std::allocator<char>&)
+std::remove_reference<std::allocator<wchar_t>&>::type&& std::move<std::allocator<wchar_t>&>(std::allocator<wchar_t>&)
+std::remove_reference<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider&>::type&& std::move<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider&>(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_Alloc_hider&)
+std::remove_reference<std::locale&>::type&& std::move<std::locale&>(std::locale&)
+std::remove_reference<std::string&>::type&& std::move<std::string&>(std::string&)
+std::remove_reference<std::string::_Alloc_hider&>::type&& std::move<std::string::_Alloc_hider&>(std::string::_Alloc_hider&)
+std::remove_reference<wchar_t*&>::type&& std::move<wchar_t*&>(wchar_t*&)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>::reverse_iterator(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<char const*, std::string>>::reverse_iterator(__gnu_cxx::__normal_iterator<char const*, std::string>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>::reverse_iterator(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<char*, std::string>>::reverse_iterator(__gnu_cxx::__normal_iterator<char*, std::string>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>::reverse_iterator(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>::reverse_iterator(__gnu_cxx::__normal_iterator<wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>::reverse_iterator(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>)
+std::reverse_iterator<__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>::reverse_iterator(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>)
 std::runtime_error::operator=(std::runtime_error const&)
 std::runtime_error::operator=(std::runtime_error&&)
 std::runtime_error::runtime_error(char const*)
@@ -10322,11 +10831,13 @@ std::runtime_error::runtime_error(std::runtime_error&&)
 std::runtime_error::runtime_error(std::string const&)
 std::runtime_error::what() const
 std::runtime_error::~runtime_error()
-std::set_new_handler(void (*)())
 std::set_terminate(void (*)())
 std::set_unexpected(void (*)())
 std::string
+std::string std::__str_concat<std::string>(std::string::value_type const*, std::string::size_type, std::string::value_type const*, std::string::size_type, std::string::allocator_type const&)
 std::string::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)
+std::string::_Alloc_hider::_Alloc_hider(std::string::_Alloc_hider&&)
+std::string::_Alloc_hider::~_Alloc_hider()
 std::string::_M_assign(char*, unsigned long, char)
 std::string::_M_check(unsigned long, char const*) const
 std::string::_M_check_length(unsigned long, unsigned long, char const*) const
@@ -10485,6 +10996,8 @@ std::string::shrink_to_fit()
 std::string::size() const
 std::string::substr(unsigned long, unsigned long) const
 std::string::swap(std::string&)
+std::system_error::system_error(int, std::_V2::error_category const&)
+std::system_error::system_error(int, std::_V2::error_category const&, char const*)
 std::system_error::system_error(std::error_code, char const*)
 std::system_error::~system_error()
 std::terminate()
@@ -10576,6 +11089,8 @@ std::type_info::__do_catch(std::type_info const*, void**, unsigned int) const
 std::type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void**) const
 std::type_info::__is_function_p() const
 std::type_info::__is_pointer_p() const
+std::type_info::name() const
+std::type_info::operator==(std::type_info const&) const
 std::type_info::~type_info()
 std::uncaught_exception()
 std::uncaught_exceptions()
@@ -10584,7 +11099,26 @@ std::underflow_error::underflow_error(std::__cxx11::basic_string<char, std::char
 std::underflow_error::underflow_error(std::string const&)
 std::underflow_error::~underflow_error()
 std::unexpected()
+std::unique_lock<std::mutex>::mutex() const
+std::unique_lock<std::mutex>::release()
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_check_len(unsigned long, char const*) const
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_erase(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>)
 std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_realloc_append(std::Catalog_info* const&)
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_realloc_append(std::Catalog_info* const&)::_Guard::_Guard(std::Catalog_info**, unsigned long, std::allocator<std::Catalog_info*>&)
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_realloc_append(std::Catalog_info* const&)::_Guard::~_Guard()
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_realloc_append(std::Catalog_info* const&)::_Guard_elts::_Guard_elts(std::Catalog_info**, std::allocator<std::Catalog_info*>&)
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_M_realloc_append(std::Catalog_info* const&)::_Guard_elts::~_Guard_elts()
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::_S_max_size(std::allocator<std::Catalog_info*> const&)
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::begin()
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::begin() const
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::end()
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::end() const
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::erase(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>)
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::max_size() const
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::push_back(std::Catalog_info* const&)
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::size() const
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::vector()
+std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>::~vector()
 stderr
 stdin
 stdout
@@ -10827,6 +11361,8 @@ typeinfo for std::bad_cast
 typeinfo for std::bad_exception
 typeinfo for std::bad_function_call
 typeinfo for std::bad_typeid
+typeinfo for std::basic_streambuf<char, std::char_traits<char>>
+typeinfo for std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>
 typeinfo for std::codecvt<char, char, __mbstate_t>
 typeinfo for std::codecvt<char16_t, char, __mbstate_t>
 typeinfo for std::codecvt<char16_t, char8_t, __mbstate_t>
@@ -10980,6 +11516,8 @@ typeinfo name for std::bad_cast
 typeinfo name for std::bad_exception
 typeinfo name for std::bad_function_call
 typeinfo name for std::bad_typeid
+typeinfo name for std::basic_streambuf<char, std::char_traits<char>>
+typeinfo name for std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>
 typeinfo name for std::codecvt<char, char, __mbstate_t>
 typeinfo name for std::codecvt<char16_t, char, __mbstate_t>
 typeinfo name for std::codecvt<char16_t, char8_t, __mbstate_t>
@@ -11076,6 +11614,8 @@ unsigned __int128
 unsigned char
 unsigned int
 unsigned long
+unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&)
+unsigned long const& std::min<unsigned long>(unsigned long const&, unsigned long const&)
 unsigned long long
 unsigned short
 unspecified
@@ -11131,18 +11671,40 @@ vmdlkeys2
 vmdlkeys3
 vmdlkeys4
 void
+void std::_Destroy<std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**)
+void std::_Destroy_aux<true>::__destroy<std::Catalog_info**>(std::Catalog_info**, std::Catalog_info**)
+void std::__advance<__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, long>(__gnu_cxx::__normal_iterator<std::Catalog_info* const*, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>&, long, std::random_access_iterator_tag)
+void std::__advance<__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>, long>(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*>>>&, long, std::random_access_iterator_tag)
 void std::__convert_to_v<double>(char const*, double&, std::_Ios_Iostate&, __locale_struct* const&)
 void std::__convert_to_v<float>(char const*, float&, std::_Ios_Iostate&, __locale_struct* const&)
 void std::__convert_to_v<long double>(char const*, long double&, std::_Ios_Iostate&, __locale_struct* const&)
+void std::__copy_move<false, false, std::random_access_iterator_tag>::__assign_one<std::Catalog_info*, std::Catalog_info*>(std::Catalog_info**, std::Catalog_info**)
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>*)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>*)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>*)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<char*>(char*, char*, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<char*>(char*, char*, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>*)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::_M_construct<char*>(char*, char*, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>::insert<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>>>)
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::forward_iterator_tag)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>*)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t const*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::forward_iterator_tag)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>*)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::forward_iterator_tag)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>*)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::forward_iterator_tag)::_Guard::~_Guard()
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<wchar_t*>(wchar_t*, wchar_t*, std::forward_iterator_tag)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<wchar_t*>(wchar_t*, wchar_t*, std::forward_iterator_tag)::_Guard::_Guard(std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>*)
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct<wchar_t*>(wchar_t*, wchar_t*, std::forward_iterator_tag)::_Guard::~_Guard()
+void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_M_construct_aux<wchar_t*>(wchar_t*, wchar_t*, std::__false_type)
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::insert<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>)
 void std::__facet_shims::__collate_transform<char>(std::integral_constant<bool, false>, std::locale::facet const*, std::__facet_shims::__any_string&, char const*, char const*)
 void std::__facet_shims::__collate_transform<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__facet_shims::__any_string&, char const*, char const*)
@@ -11168,6 +11730,56 @@ void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool
 void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<char>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::collate<char>>(std::__cxx11::collate<char>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::collate<wchar_t>>(std::__cxx11::collate<wchar_t>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::messages<char>>(std::__cxx11::messages<char>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::messages<wchar_t>>(std::__cxx11::messages<wchar_t>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::money_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>>(std::__cxx11::money_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::money_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::__cxx11::money_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>>(std::__cxx11::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::__cxx11::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::moneypunct<char, false>>(std::__cxx11::moneypunct<char, false>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::moneypunct<char, true>>(std::__cxx11::moneypunct<char, true>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::moneypunct<wchar_t, false>>(std::__cxx11::moneypunct<wchar_t, false>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::moneypunct<wchar_t, true>>(std::__cxx11::moneypunct<wchar_t, true>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::numpunct<char>>(std::__cxx11::numpunct<char>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::numpunct<wchar_t>>(std::__cxx11::numpunct<wchar_t>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::time_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>>(std::__cxx11::time_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet<std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet<std::__timepunct<char>>(std::__timepunct<char>*)
+void std::locale::_Impl::_M_init_facet<std::__timepunct<wchar_t>>(std::__timepunct<wchar_t>*)
+void std::locale::_Impl::_M_init_facet<std::codecvt<char, char, __mbstate_t>>(std::codecvt<char, char, __mbstate_t>*)
+void std::locale::_Impl::_M_init_facet<std::codecvt<char16_t, char, __mbstate_t>>(std::codecvt<char16_t, char, __mbstate_t>*)
+void std::locale::_Impl::_M_init_facet<std::codecvt<char16_t, char8_t, __mbstate_t>>(std::codecvt<char16_t, char8_t, __mbstate_t>*)
+void std::locale::_Impl::_M_init_facet<std::codecvt<char32_t, char, __mbstate_t>>(std::codecvt<char32_t, char, __mbstate_t>*)
+void std::locale::_Impl::_M_init_facet<std::codecvt<char32_t, char8_t, __mbstate_t>>(std::codecvt<char32_t, char8_t, __mbstate_t>*)
+void std::locale::_Impl::_M_init_facet<std::codecvt<wchar_t, char, __mbstate_t>>(std::codecvt<wchar_t, char, __mbstate_t>*)
+void std::locale::_Impl::_M_init_facet<std::ctype<char>>(std::ctype<char>*)
+void std::locale::_Impl::_M_init_facet<std::ctype<wchar_t>>(std::ctype<wchar_t>*)
+void std::locale::_Impl::_M_init_facet<std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>>(std::num_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet<std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::num_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet<std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>>(std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet<std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::num_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet<std::time_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>>(std::time_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet<std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::collate<char>>(std::collate<char>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::collate<wchar_t>>(std::collate<wchar_t>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::messages<char>>(std::messages<char>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::messages<wchar_t>>(std::messages<wchar_t>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::money_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>>(std::money_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::money_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::money_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>>(std::money_put<char, std::ostreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::money_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::moneypunct<char, false>>(std::moneypunct<char, false>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::moneypunct<char, true>>(std::moneypunct<char, true>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::moneypunct<wchar_t, false>>(std::moneypunct<wchar_t, false>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::moneypunct<wchar_t, true>>(std::moneypunct<wchar_t, true>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::numpunct<char>>(std::numpunct<char>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::numpunct<wchar_t>>(std::numpunct<wchar_t>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::time_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>>(std::time_get<char, std::istreambuf_iterator<char, std::char_traits<char>>>*)
+void std::locale::_Impl::_M_init_facet_unchecked<std::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>>(std::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t>>>*)
+void std::swap<std::_Rb_tree_color>(std::_Rb_tree_color&, std::_Rb_tree_color&)
+void std::swap<std::__detail::_List_node_base*>(std::__detail::_List_node_base*&, std::__detail::_List_node_base*&)
 volatile
 vpcf
 vpcf1
@@ -11345,6 +11957,8 @@ vtable for std::bad_cast
 vtable for std::bad_exception
 vtable for std::bad_function_call
 vtable for std::bad_typeid
+vtable for std::basic_streambuf<char, std::char_traits<char>>
+vtable for std::basic_streambuf<wchar_t, std::char_traits<wchar_t>>
 vtable for std::codecvt<char, char, __mbstate_t>
 vtable for std::codecvt<char16_t, char, __mbstate_t>
 vtable for std::codecvt<char16_t, char8_t, __mbstate_t>
@@ -11422,10 +12036,20 @@ warning : could not compress sample size %u \n
 warning : pathological dataset : literals are not compressible : samples are noisy or too regular \n
 wayland
 wchar_t
+wchar_t const* std::__addressof<wchar_t const>(wchar_t const&)
+wchar_t const* std::addressof<wchar_t const>(wchar_t const&)
 wchar_t* std::__add_grouping<wchar_t>(wchar_t*, wchar_t, char const*, unsigned long, wchar_t const*, wchar_t const*)
+wchar_t* std::__addressof<wchar_t>(wchar_t&)
+wchar_t* std::addressof<wchar_t>(wchar_t&)
+wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::allocator<wchar_t> const&)
 wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::allocator<wchar_t> const&, std::forward_iterator_tag)
+wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::allocator<wchar_t> const&)
 wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::allocator<wchar_t> const&, std::forward_iterator_tag)
+wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<wchar_t*>(wchar_t*, wchar_t*, std::allocator<wchar_t> const&)
 wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct<wchar_t*>(wchar_t*, wchar_t*, std::allocator<wchar_t> const&, std::forward_iterator_tag)
+wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct_aux<__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>>(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>, std::allocator<wchar_t> const&, std::__false_type)
+wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct_aux<wchar_t const*>(wchar_t const*, wchar_t const*, std::allocator<wchar_t> const&, std::__false_type)
+wchar_t* std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>::_S_construct_aux<wchar_t*>(wchar_t*, wchar_t*, std::allocator<wchar_t> const&, std::__false_type)
 wcrtomb
 wcschr
 wcscmp

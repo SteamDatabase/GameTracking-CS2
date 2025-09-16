@@ -1,7 +1,7 @@
 class CSNetworkableLoadout_t
 {
 	// MNetworkEnable
-	C_EconItemView m_Item;
+	C_AttributeContainer m_ItemAttributeContainer;
 	// MNetworkEnable
 	uint16 m_unTeam;
 	// MNetworkEnable

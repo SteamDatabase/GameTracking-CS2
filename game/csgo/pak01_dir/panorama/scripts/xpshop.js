@@ -251,7 +251,7 @@ var XpShop;
             };
             for (let key in ShopEntry) {
                 let field_value = MissionsAPI.GetSeasonalOperationRedeemableGoodsSchema(m_nTrack, i, key);
-                //@ts-ignore
+                //@ts-expect-error this is hacky
                 ShopEntry[key] = field_value;
             }
             ShopEntry.shop_index = i;
@@ -462,6 +462,11 @@ var XpShop;
                     return;
                 }
                 if (ShopEntry.lootlist?.length === 1) {
+                    elModel = elShopTile.FindChildInLayoutFile('ItemPreviewPanel');
+                    if (elModel.PanZoomEnabled()) {
+                        elGrid.defaultfocus = 'ItemPreviewPanel';
+                        elGrid.SetAcceptsFocus(true);
+                    }
                     return;
                 }
                 elModel.SetActiveItem(0);
@@ -511,6 +516,14 @@ var XpShop;
                 let elLimitedItem = elGrid.FindChildInLayoutFile(ShopEntry.lootlist[0]);
                 if (elLimitedItem && elLimitedItem.IsValid()) {
                     InspectModelImage.Init(elLimitedItem, ShopEntry.lootlist[0]);
+                }
+            }
+            if (ShopEntry.lootlist?.length === 1) {
+                let elModel = elGrid.FindChildInLayoutFile('ItemPreviewPanel');
+                if (elModel.PanZoomEnabled()) {
+                    elGrid.defaultfocus = 'ItemPreviewPanel';
+                    elGrid.SetAcceptsFocus(true);
+                    elModel.ResetPanZoom();
                 }
             }
         }

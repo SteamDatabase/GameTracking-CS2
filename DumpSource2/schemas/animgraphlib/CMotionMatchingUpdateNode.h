@@ -82,8 +82,8 @@
 //	},
 //	"m_flDistanceScale_OuterRadius": 0.000000,
 //	"m_flDistanceScale_InnerRadius": 0.000000,
-//	"m_flDistanceScale_MaxScale": -nan,
-//	"m_flDistanceScale_MinScale": -nan,
+//	"m_flDistanceScale_MaxScale": 0.000000,
+//	"m_flDistanceScale_MinScale": 0.000000,
 //	"m_bEnableDistanceScaling": true
 //}
 class CMotionMatchingUpdateNode : public CLeafUpdateNode

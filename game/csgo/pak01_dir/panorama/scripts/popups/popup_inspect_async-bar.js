@@ -115,6 +115,10 @@ var InspectAsyncActionBar;
             else if (InventoryAPI.GetDecodeableRestriction(m_itemid) === "xray" && !m_allowXrayClaim) {
                 InventoryAPI.UseTool(m_itemid, m_itemid);
             }
+            else if (InventoryAPI.GetItemAttributeValue(m_itemid, '{uint32}volatile container')) {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.Laptop.Unlock', 'MOUSE');
+                InventoryAPI.UseTool(m_toolid, m_itemid);
+            }
             else {
                 InventoryAPI.UseTool(m_toolid, m_itemid);
             }
@@ -178,6 +182,8 @@ var InspectAsyncActionBar;
                 sOkButtonText = sOkButtonText + "_graffiti";
             else if (itemDefName && itemDefName.indexOf("tournament_pass_") != -1)
                 sOkButtonText = sOkButtonText + "_fantoken";
+            else if (InventoryAPI.GetItemAttributeValue(m_itemid, '{uint32}volatile container'))
+                sOkButtonText = sOkButtonText + "_terminal";
         }
         if (m_worktype === 'nameable' && itemDefName === 'casket') {
             sOkButtonText = '#popup_newcasket_button';
@@ -312,6 +318,8 @@ var InspectAsyncActionBar;
     }
     InspectAsyncActionBar.EnableDisableChangeSceneryBtn = EnableDisableChangeSceneryBtn;
     function _ShowZoomBtn() {
+        if (InspectModelImage.PanZoomEnabled())
+            return;
         const defName = InventoryAPI.GetItemDefinitionName(m_itemid);
         let result = InspectModelImage.m_CameraSettingsPerWeapon.find(({ type }) => type === defName);
         if (!result || !result.hasOwnProperty('zoom_camera'))

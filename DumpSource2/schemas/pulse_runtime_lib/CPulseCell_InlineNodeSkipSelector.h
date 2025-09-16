@@ -16,12 +16,8 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPulseFunctionHiddenInTool
-// MPulseSelectorAllowRequirementCriteria = "CPulseCell_IsRequirementValid"
-// MPulseSelectorAllowRequirementCriteria = "CPulseCell_LimitCount"
 class CPulseCell_InlineNodeSkipSelector : public CPulseCell_BaseFlow
 {
 	PulseDocNodeID_t m_nFlowNodeID;

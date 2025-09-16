@@ -1,5 +1,3 @@
-// MPulseLibraryBindings (UNKNOWN FOR PARSER)
-// MPulseInternal_IsCursor
 class CPulseTurtleGraphicsCursor : public CPulseExecCursor
 {
 	Color m_Color;

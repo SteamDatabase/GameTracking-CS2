@@ -14,10 +14,7 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
-// MPulseCellWithCustomDocNode
 class CPulseCell_Step_CallExternalMethod : public CPulseCell_BaseYieldingInflow
 {
 	PulseSymbol_t m_MethodName;

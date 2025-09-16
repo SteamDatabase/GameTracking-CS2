@@ -1078,7 +1078,7 @@ var Scoreboard;
                     }
                     let onSelected = entry.OnSelected;
                     elEntryBtn.SetPanelEvent('onactivate', () => onSelected(xuid, ''));
-                    if (true) {
+                    {
                         elEntryBtn.SetPanelEvent('onmouseover', () => UiToolkitAPI.ShowTextTooltip(elEntryBtn.id, tooltip));
                         elEntryBtn.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
                     }
@@ -1331,7 +1331,10 @@ var Scoreboard;
             return;
         let result = roundData['result'].replace(/^(ct_|t_)/, '');
         if (roundData['result'].charAt(0) === 'c') {
-            bFlippedSides ? m_botScore++ : m_topScore++;
+            if (bFlippedSides)
+                m_botScore++;
+            else
+                m_topScore++;
             elRndTop.FindChildTraverse('result').SetImage(dictRoundResultImage[result]);
             elRndTop.FindChildTraverse('result').AddClass('sb-timeline__segment__round--active');
             elRndBot.FindChildTraverse('result').SetImage('');
@@ -1342,7 +1345,10 @@ var Scoreboard;
             elRnd.FindChildTraverse('id-sb-timeline__segment__round__tick__label').RemoveClass('sb-team--TERRORIST');
         }
         else if (roundData['result'].charAt(0) === 't') {
-            bFlippedSides ? m_topScore++ : m_botScore++;
+            if (bFlippedSides)
+                m_topScore++;
+            else
+                m_botScore++;
             elRndBot.FindChildTraverse('result').SetImage(dictRoundResultImage[result]);
             elRndBot.FindChildTraverse('result').AddClass('sb-timeline__segment__round--active');
             elRndTop.FindChildTraverse('result').SetImage('');

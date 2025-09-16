@@ -11,7 +11,6 @@
 //	"m_profileName": ""
 //}
 // MPropertyFriendlyName = "Ragdoll Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CRagdollAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Profile Name"

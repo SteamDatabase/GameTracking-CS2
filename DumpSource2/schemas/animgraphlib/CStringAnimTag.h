@@ -10,7 +10,6 @@
 //	"m_bIsReferenced": false
 //}
 // MPropertyFriendlyName = "Internal Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CStringAnimTag : public CAnimTagBase
 {
 };

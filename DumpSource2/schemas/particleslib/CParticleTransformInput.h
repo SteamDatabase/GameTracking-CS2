@@ -9,8 +9,7 @@
 //	"m_flEndCPGrowthTime": 0.000000
 //}
 // MPropertyCustomEditor = "TransformInput()"
-// MClassIsParticleTransform
-// MParticleCustomFieldDefaultValue (UNKNOWN FOR PARSER)
+// MCustomFGDMetadata = "{ KV3DefaultTestFnName = 'CParticleTransformInputDefaultTestFunc' }"
 class CParticleTransformInput : public CParticleInput
 {
 	ParticleTransformType_t m_nType;

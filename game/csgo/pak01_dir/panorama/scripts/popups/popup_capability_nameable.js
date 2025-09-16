@@ -61,6 +61,14 @@ var CapabilityNameable;
             if (elItemPanel && elItemPanel.IsValid()) {
                 elItemPanel.RefreshWeaponItemNameTag(m_itemIdCreatedTemp, strTextForTempItem);
             }
+            if (elItemPanel && elItemPanel.PanZoomEnabled()) {
+                if (bNameTagModelVisible) {
+                    elItemPanel.ResetPanZoom();
+                }
+                else {
+                    elItemPanel.SetFocus();
+                }
+            }
         }
         let elNameTagModel = $.GetContextPanel().FindChildInLayoutFile('id-inspect-nametag-model');
         if (elNameTagModel && elNameTagModel.IsValid()) {
@@ -215,6 +223,9 @@ var CapabilityNameable;
         AcknowledgeItems.GetItemsByType(['name tag'], bShouldAcknowledge);
     }
     ;
+    function _UpdateInspectMap() {
+        InspectModelImage.SwitchMap($.GetContextPanel());
+    }
     function ClosePopup() {
         let elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
         let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
@@ -230,4 +241,5 @@ var CapabilityNameable;
     $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _NameTagAcquired);
     $.RegisterForUnhandledEvent('CSGOShowMainMenu', Init);
     $.RegisterForUnhandledEvent('PopulateLoadingScreen', ClosePopup);
+    $.RegisterForUnhandledEvent("CSGOInspectBackgroundMapChanged", _UpdateInspectMap);
 })(CapabilityNameable || (CapabilityNameable = {}));

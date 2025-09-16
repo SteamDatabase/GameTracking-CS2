@@ -1,5 +1,6 @@
 enum EDestructibleParts_DestroyParameterFlags : uint32_t
 {
+	None = 0,
 	GenerateBreakpieces = 1,
 	EnableFlinches = 2,
 	ForceDamageApply = 4,

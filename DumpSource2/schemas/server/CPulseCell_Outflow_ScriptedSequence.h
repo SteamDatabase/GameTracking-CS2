@@ -40,10 +40,7 @@
 //	[
 //	]
 //}
-// MCellForDomain = "ServerEntity"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
-// MPulseCellWithCustomDocNode
 class CPulseCell_Outflow_ScriptedSequence : public CPulseCell_BaseYieldingInflow
 {
 	CUtlString m_szSyncGroup;

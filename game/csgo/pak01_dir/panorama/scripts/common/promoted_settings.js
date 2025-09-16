@@ -241,22 +241,10 @@ var g_PromotedSettings = [
 var PromotedSettingsUtil;
 (function (PromotedSettingsUtil) {
     function GetUnacknowledgedPromotedSettings() {
-        const settingsInfo = GameInterfaceAPI.GetSettingString("cl_promoted_settings_acknowledged").split(':');
-        const version = parseInt(settingsInfo.shift());
-        const arrNewSettings = [];
-        if (0) {
-            const timeLastViewed = new Date(parseInt(settingsInfo.shift()));
-            for (const setting of g_PromotedSettings) {
-                const now = new Date();
-                if (setting.start_date > timeLastViewed && setting.start_date <= now)
-                    arrNewSettings.push(setting);
-            }
-        }
-        else {
+        {
             const now = new Date();
             return g_PromotedSettings.filter(setting => setting.start_date <= now && setting.end_date > now);
         }
-        return arrNewSettings;
     }
     PromotedSettingsUtil.GetUnacknowledgedPromotedSettings = GetUnacknowledgedPromotedSettings;
     const hPromotedSettingsViewedEvt = $.RegisterForUnhandledEvent("MainMenu_PromotedSettingsViewed", () => {

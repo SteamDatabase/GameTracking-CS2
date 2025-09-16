@@ -11,10 +11,7 @@
 //	"m_SourceOutput": "",
 //	"m_ExpectedParamType": "PVAL_VOID"
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
-// MPulseCellWithCustomDocNode
 class CPulseCell_Inflow_EntOutputHandler : public CPulseCell_Inflow_BaseEntrypoint
 {
 	PulseSymbol_t m_SourceEntity;

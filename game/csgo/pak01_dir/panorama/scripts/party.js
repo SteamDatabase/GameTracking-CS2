@@ -130,8 +130,6 @@ var PartyMenu;
     }
     function _SetPrimeForMember(elPartyMember, xuid) {
         return;
-        let elPrime = elPartyMember.FindChildInLayoutFile('PartyPrime');
-        elPrime.visible = PartyListAPI.GetFriendPrimeEligible(xuid);
     }
     function _TintForOverPlayerCountForMode(elPartyMember, isOverCount) {
         elPartyMember.SetHasClass('friendtile--warning', isOverCount);

@@ -30,7 +30,7 @@ class CBasePropDoor : public CDynamicProp
 	bool m_bFirstBlocked;
 	locksound_t m_ls;
 	bool m_bForceClosed;
-	Vector m_vecLatchWorldPosition;
+	VectorWS m_vecLatchWorldPosition;
 	CHandle< CBaseEntity > m_hActivator;
 	CUtlSymbolLarge m_SoundMoving;
 	CUtlSymbolLarge m_SoundOpen;

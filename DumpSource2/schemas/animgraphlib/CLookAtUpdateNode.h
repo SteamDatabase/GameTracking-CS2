@@ -133,7 +133,7 @@
 //		"m_type": "ANIMPARAM_UNKNOWN",
 //		"m_index": 255
 //	},
-//	"m_bResetChild": false,
+//	"m_bResetChild": true,
 //	"m_bLockWhenWaning": false
 //}
 class CLookAtUpdateNode : public CUnaryUpdateNode

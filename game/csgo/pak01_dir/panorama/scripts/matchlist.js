@@ -408,7 +408,6 @@ var matchList;
             }
             SetListMessage($.Localize(msg), true, parentPanel);
         }
-        let displayedMatches = new Array();
         let elMatchList = parentPanel.FindChildTraverse("JsMatchList");
         if (!elMatchList) {
             return;

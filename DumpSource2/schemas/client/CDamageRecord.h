@@ -6,8 +6,10 @@
 // MNetworkVarNames = "CUtlString m_szPlayerRecipientName"
 // MNetworkVarNames = "uint64 m_DamagerXuid"
 // MNetworkVarNames = "uint64 m_RecipientXuid"
-// MNetworkVarNames = "int m_iDamage"
-// MNetworkVarNames = "int m_iActualHealthRemoved"
+// MNetworkReplayCompatField = "m_iDamage"
+// MNetworkVarNames = "float m_flDamage"
+// MNetworkReplayCompatField = "m_iActualHealthRemoved"
+// MNetworkVarNames = "float m_flActualHealthRemoved"
 // MNetworkVarNames = "int m_iNumHits"
 // MNetworkVarNames = "int m_iLastBulletUpdate"
 // MNetworkVarNames = "bool m_bIsOtherEnemy"
@@ -30,11 +32,11 @@ class CDamageRecord
 	uint64 m_DamagerXuid;
 	// MNetworkEnable
 	uint64 m_RecipientXuid;
-	int32 m_iBulletsDamage;
+	float32 m_flBulletsDamage;
 	// MNetworkEnable
-	int32 m_iDamage;
+	float32 m_flDamage;
 	// MNetworkEnable
-	int32 m_iActualHealthRemoved;
+	float32 m_flActualHealthRemoved;
 	// MNetworkEnable
 	int32 m_iNumHits;
 	// MNetworkEnable

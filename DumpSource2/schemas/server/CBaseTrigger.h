@@ -13,6 +13,7 @@ class CBaseTrigger : public CBaseToggle
 	CUtlSymbolLarge m_iFilterName;
 	CHandle< CBaseFilter > m_hFilter;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnNetworkedDisableChanged"
 	bool m_bDisabled;
 	bool m_bUseAsyncQueries;
 };

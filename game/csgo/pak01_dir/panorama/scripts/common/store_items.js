@@ -112,7 +112,7 @@ var StoreItems;
                     storeItem.linkedid = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[i][1], 0);
                 }
                 if (GroupName) {
-                    storeItem.groupName != GroupName;
+                    storeItem.groupName = GroupName.toString();
                 }
                 if (warning) {
                     storeItem.linkedWarning = warning;

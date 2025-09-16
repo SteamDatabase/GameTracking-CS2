@@ -24,7 +24,7 @@
 // MNetworkVarNames = "float32 m_flFrame"
 // MNetworkVarNames = "BeamClipStyle_t m_nClipStyle"
 // MNetworkVarNames = "bool m_bTurnedOff"
-// MNetworkVarNames = "Vector m_vecEndPos"
+// MNetworkVarNames = "VectorWS m_vecEndPos"
 class CBeam : public CBaseModelEntity
 {
 	// MNetworkEnable
@@ -97,7 +97,7 @@ class CBeam : public CBaseModelEntity
 	bool m_bTurnedOff;
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
-	Vector m_vecEndPos;
+	VectorWS m_vecEndPos;
 	CHandle< CBaseEntity > m_hEndEntity;
 	int32 m_nDissolveType;
 };

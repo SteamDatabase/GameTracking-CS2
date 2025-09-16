@@ -9,9 +9,11 @@ var MatchStakes;
     }
     function _GetRootPanel() {
         let parent = $.GetContextPanel().GetParent();
-        let newParent;
-        while (newParent = parent.GetParent())
+        let newParent = parent.GetParent();
+        while (newParent) {
             parent = newParent;
+            newParent = parent.GetParent();
+        }
         return parent;
     }
     function _GetMatchStakesPanel() {

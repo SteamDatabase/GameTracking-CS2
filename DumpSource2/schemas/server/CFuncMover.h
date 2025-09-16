@@ -2,6 +2,7 @@ class CFuncMover : public CBaseModelEntity
 {
 	CUtlSymbolLarge m_iszPathName;
 	CHandle< CPathMover > m_hPathMover;
+	CHandle< CPathMover > m_hPrevPathMover;
 	CUtlSymbolLarge m_iszPathNodeStart;
 	CUtlSymbolLarge m_iszPathNodeEnd;
 	CFuncMover::Move_t m_eMoveType;

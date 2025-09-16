@@ -26,12 +26,10 @@
 // MNetworkVarNames = "GameTime_t m_fLastShotTime"
 // MNetworkVarNames = "int m_iIronSightMode"
 // MNetworkVarNames = "float m_flWatTickOffset"
+// MNetworkVarNames = "GameTime_t m_flLastShakeTime"
 class CCSWeaponBase : public CBasePlayerWeapon
 {
 	bool m_bRemoveable;
-	CUtlVector< HSequence > m_thirdPersonFireSequences;
-	HSequence m_hCurrentThirdPersonSequence;
-	HSequence[7] m_thirdPersonSequences;
 	bool m_bPlayerAmmoStockOnPickup;
 	bool m_bRequireUseToTouch;
 	// MNetworkEnable
@@ -109,4 +107,6 @@ class CCSWeaponBase : public CBasePlayerWeapon
 	GameTime_t m_flLastLOSTraceFailureTime;
 	// MNetworkEnable
 	float32 m_flWatTickOffset;
+	// MNetworkEnable
+	GameTime_t m_flLastShakeTime;
 };

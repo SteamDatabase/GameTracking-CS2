@@ -55,7 +55,6 @@ var SettingsMenuSearch;
                 if (ShouldSearchPanelText(setting)) {
                     let bPass = arrStrings.every(s => {
                         let search = new RegExp(s, "giu");
-                        // @ts-ignore
                         return search.test(setting.text);
                     });
                     if (bPass) {
@@ -66,7 +65,6 @@ var SettingsMenuSearch;
                         }
                         arrMatches.push({
                             panel: setting.GetParent(),
-                            // @ts-ignore
                             text: setting.text,
                             menu: curMenuTab,
                             submenu: curSubMenu

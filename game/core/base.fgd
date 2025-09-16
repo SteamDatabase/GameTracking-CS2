@@ -205,7 +205,7 @@
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
-	output OnDestructiblePartDestroyed(cpp)
+	output OnDestructiblePartDamageLevelChanged(cpp)
 
 	add_attribute(string) : "Add Attribute" : "" : "Will add an additional attribute that AI/player entities can query when checking props for information (ex: 'DogToy' or 'GrabbableResource')"
 	add_modifier(string) : "Add Modifier" : "" : "Will add this modifier when the entity spawns."
@@ -1239,6 +1239,7 @@
 	]	
 
 	interactAs(string) [ group="Physics Properties" ] : "interactAs" : "" : "comma-separated list of interaction layers"
+	interactWith(string) [ group="Physics Properties" ] : "interactWith" : "" : "comma-separated list of interaction layers to interact with"
 	interactExclude(string) [ group="Physics Properties" ] : "interactExclude" : "" : "comma-separated list of interaction layers to not collide with"
 	solidbsp(boolean) : "Solid BSP" : 0 : "Set this if this brush is in hierarchy with a moving object of some kind, and the player can stand on this brush."
 	ScriptedMovement(boolean) : "Scripted Movement" : 0 : "Set this to allow vscript code to move the brush via SetVelocity() calls."
@@ -2380,21 +2381,6 @@
 //
 //-------------------------------------------------------------------------
 
-// A decal to be applied to a prop or the world using specified origin and orientation and radius, uses an orientation angle and a radius to determine
-//  ray to cast for projection
-@PointClass base(Targetname) tags( Overlay ) decal() drawangles{} editormodel("models/editor/axis_helper_thick.vmdl") = info_projecteddecal : 
-	"An entity that projects a decal onto the world (or props). If the decal has no target name, it will immediately apply itself when "+
-	"the level is loaded. If it has a name specified, it won't apply until it receives the 'Activate' input."
-[
-	material(resource:material): "Decal Material" : "" 
-	sequence_name(string) : "Decal Texture Sequence" : "" : ""
-	Distance(float) : "Distance" : 64 : "Distance from the origin to project the decal."
-	not_in_multiplayer(boolean) : "Not in Multiplayer" : "0"
-
-	// Inputs
-	input Activate(void) : "Force the decal to apply itself to the world."
-]
-
 @PointClass base(Targetname, EnableDisable, PlayerClass) tags( Info, PlayerPosition ) editormodel("models/editor/playerstart.vmdl", fixedbounds) = info_player_start :
 	"This entity indicates the position and facing direction at which the player will spawn. Any number of "+
 	"info_player_start entities may be placed in a map for when working in cordoned-off portions of the map. "+
@@ -2408,47 +2394,6 @@
 	input Toggle(void) : "Toggle the enable/disable state of this player spawn position."
 ]
 
-
-@PointClass color(80 150 225) editormodel("models/editor/overlay_helper", nobounds) tags( Overlay ) sphere(fademindist) sphere(fademaxdist) overlay() = info_overlay : 
-	"An entity that places an overlay on the world." 
-[
-	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
-	material(material) : "Material" : "materials/decaltests/red_paint_decal.vmat"
-	RenderOrder(integer) : "Render Order" : 0 : "Higher values render after lower values. This value can be 0-3."
-	sequence(integer) : "Sequence Index" : -1 : "Sequence override index"
-	width(float) : "Overlay Width" : "-1.0"
-	height(float) : "Overlay Height" : "-1.0"
-	depth(float) : "Overlay Depth" : "1.0"
-	startu(float) : "U Start" : "0.0"
-	endu(float) : "U End" : "1.0"
-	startv(float) : "V Start" : "0.0"
-	endv(float) : "V End" : "1.0"
-	centeru(float) : "Center U" : "0.5"
-	centerv(float) : "Center V" : "0.5"
-	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist" : -1 : "Distance at which the overlay starts to fade (<0 = use fademaxdist)."
-	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist" : 0 : "Maximum distance at which the overlay is visible (0 = don't fade out)."
-	rendercolor(color255) : "Color (R G B)" : "255 255 255"
-	disablelowviolence(choices) : "Turn Off in Low-Violence" : 0 =
-	[
-		0: "No"
-		1: "Yes"
-	]
-]
-
-
-@PointClass tags( Overlay ) size(-8 -8 -8, 8 8 8) sidelist(sides) sidelist(sides2) overlay_transition() = info_overlay_transition : "Overlay Transition" 
-[
-	material(material) : "Material"
-	sides(sidelist) : "Brush faces"
-	sides2(sidelist) : "Water faces"
-	LengthTexcoordStart(float) : "Texcoord Length Start" : "0.0"
-	LengthTexcoordEnd(float) : "Texcoord Length End" : "1.0"
-	WidthTexcoordStart(float) : "Texcoord Width Start" : "0.0"
-	WidthTexcoordEnd(float) : "Texcoord Width End" : "1.0"
-	Width1(float) : "Width Land" : "25.0"
-	Width2(float) : "Width Water" : "25.0"
-	DebugDraw(integer) : "Show Debug" : 0 : "Boolean value (0 or 1)."
-]
 
 @PointClass tags( Info ) size(-4 -4 -4, 4 4 4) color(0 180 0) = info_intermission : 
 	"An entity that defines an intermission spot where dead players will float until they respawn."
@@ -4511,7 +4456,7 @@
 	"An entity that does damage to all entities in a radius around itself, with a specified delay." +
 	"If 'Target Entity' is specified, the damage is only done to that entity."
 [
-	DamageTarget(string) : "Target Entity" : "" : "If specified, only this entity will take damage. Otherwise, all entities within the Radius will take damage."
+	DamageTarget(target_destination) : "Target Entity" : "" : "If specified, only this entity will take damage. Otherwise, all entities within the Radius will take damage."
 	
 	DamageRadius(float) : "Radius" : 256 : "All entities within this radius of this entity will take damage. If a 'Target Entity' is specified, only that entity will take damage."
 	Damage(integer) : "Damage" : 5 : "Damage done to all affected entities each time this entity fires."
@@ -6602,57 +6547,6 @@
 	input SetLocatorTargetEntity(string) : "Set the entity that the HUD locator should track. (Usually a vehicle)"
 	
 ]
-
-
-@PointClass base(Targetname, Parentname) editormodel("models/editor/spot.vmdl") frustum(lightfov, nearz, farz, lightcolor) = env_projectedtexture :
-	"Projected texture entity, used for things like flashlights."
-[
-	spawnflags(flags) =
-	[
-		1  : "Enabled"				: 1
-		2  : "Always Update (moving light)"	: 0
-	]
-
-	target(target_destination)	: "target" : : "target"	
-	lightfov(float)				: "FOV" : "90.0" : "FOV"
-	nearz(float)				: "NearZ" : "4.0" : "Near Z for projected texture"
-	farz(float)					: "FarZ" : "750.0" : "Far Z for projected texture"	
-	
-	enableshadows(boolean) : "Enable Shadows" : 0 : "Enables/disables shadows from this projected texture."
-	shadowquality(Choices) : "Shadow Quality" : 1 : "Quality of shadows." =
-	[
-		0 : "Low"
-		1 : "High"
-	]
-	lightonlytarget(boolean) : "Light Only Target" : 0 : "Limit flashlight effect to only effect target entity."
-	lightworld(boolean) : "Light World" : 1 : "Flashlight effects static world geometry."
-
-	simpleprojection(boolean) : "Simple Projection" : 0 : "Indicates if this is a simple, non-light casting texture projection"
-	
-	brightnessscale(float)		: "Brightness Scale" : "1.0" : "Scale the light color by this brightness"	
-
-	lightcolor(color255)		: "Light Color" : "255 255 255 200" : "Light Color RGB-Intensity"
-	cameraspace(integer)		: "Camera Space" : 0 : "Angles are interpreted as being relative to camera."
-
-	texturename(material) : "Texture Name" : "effects/flashlight001"
-
-	flip_horizontal(Choices) : "Flip Horizontal" : 0 : "Should the projected texture be flipped horizontally?" =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	// Inputs
-	input TurnOn(void)		: "Turn on the texture"
-	input TurnOff(void)		: "Turn off the texture"
-	input AlwaysUpdateOn(void)	: "Turn on per frame updating (for moving lights)"
-	input AlwaysUpdateOff(void)	: "Turn off per frame updating (for moving lights)"
-	input SetFOV(float)		: "Set FOV"
-	input SpotlightTexture(string)		: "Set the spotlight texture"
-	input EnableShadows(bool)		: "Set the if shadows are enabled"
-	input LightColor(color255)		: "Change the light color/brightness"
-]
-
 
 @PointClass base(Targetname, Parentname) overlay() editormodel("models/editor/axis_helper_thick.vmdl") = env_decal :
 	"Simple projected decal entity"

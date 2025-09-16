@@ -14,7 +14,6 @@
 //	"m_BoneName": ""
 //}
 // MPropertyFriendlyName = "FootstepLanded Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CFootstepLandedAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Footstep Type"

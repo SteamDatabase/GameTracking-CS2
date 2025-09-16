@@ -1,6 +1,6 @@
 // MNetworkVarNames = "CRenderComponent::Storage_t m_CRenderComponent"
 // MNetworkVarNames = "CHitboxComponent::Storage_t m_CHitboxComponent"
-// MNetworkVarNames = "CDestructiblePartsSystemComponent * m_pDestructiblePartsSystemComponent"
+// MNetworkVarNames = "CDestructiblePartsComponent * m_pDestructiblePartsSystemComponent"
 // MNetworkVarNames = "RenderMode_t m_nRenderMode"
 // MNetworkVarNames = "RenderFx_t m_nRenderFX"
 // MNetworkVarNames = "Color m_clrRender"
@@ -24,6 +24,7 @@
 // MNetworkVarNames = "DecalMode_t m_nRequiredDecalMode"
 // MNetworkVarNames = "CHandle< CBaseModelEntity > m_ConfigEntitiesToPropagateMaterialDecalsTo"
 // MNetworkVarNames = "CNetworkViewOffsetVector m_vecViewOffset"
+// MNetworkVarNames = "uint32 m_bvDisabledHitGroups"
 class CBaseModelEntity : public CBaseEntity
 {
 	// MNetworkEnable
@@ -47,7 +48,8 @@ class CBaseModelEntity : public CBaseEntity
 	int32 m_nDestructiblePartInitialStateDestructed3_PartIndex;
 	int32 m_nDestructiblePartInitialStateDestructed4_PartIndex;
 	// MNetworkEnable
-	CDestructiblePartsSystemComponent* m_pDestructiblePartsSystemComponent;
+	// MNetworkTypeAlias = "CDestructiblePartsSystemComponent*"
+	CDestructiblePartsComponent* m_pDestructiblePartsSystemComponent;
 	HitGroup_t m_LastHitGroup;
 	CGlobalSymbol m_sLastDamageSourceName;
 	Vector m_vLastDamagePosition;
@@ -104,4 +106,7 @@ class CBaseModelEntity : public CBaseEntity
 	// MNetworkPriority = 32
 	// MNetworkUserGroup = "Player"
 	CNetworkViewOffsetVector m_vecViewOffset;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnDisabledHitgroupsChanged"
+	uint32[1] m_bvDisabledHitGroups;
 };

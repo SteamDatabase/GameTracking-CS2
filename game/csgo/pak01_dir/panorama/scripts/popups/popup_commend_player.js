@@ -51,7 +51,6 @@ var PopupCommendPlayer;
                     let bHasPrevCommendations = false;
                     $.GetContextPanel().FindChildInLayoutFile("id-commend").Children().forEach(el => {
                         let category = el.GetAttributeString("data-category", "");
-                        // @ts-ignore
                         if (oCommends[category]) {
                             el.checked = true;
                             bHasPrevCommendations = true;

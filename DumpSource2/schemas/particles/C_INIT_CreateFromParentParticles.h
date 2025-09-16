@@ -10,6 +10,7 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
@@ -93,7 +94,8 @@
 //	"m_flIncrement": 1.000000,
 //	"m_bRandomDistribution": false,
 //	"m_nRandomSeed": 0,
-//	"m_bSubFrame": true
+//	"m_bSubFrame": true,
+//	"m_bSetRopeSegmentID": false
 //}
 class C_INIT_CreateFromParentParticles : public CParticleFunctionInitializer
 {
@@ -107,4 +109,6 @@ class C_INIT_CreateFromParentParticles : public CParticleFunctionInitializer
 	int32 m_nRandomSeed;
 	// MPropertyFriendlyName = "sub frame interpolation"
 	bool m_bSubFrame;
+	// MPropertyFriendlyName = "set rope segment id"
+	bool m_bSetRopeSegmentID;
 };

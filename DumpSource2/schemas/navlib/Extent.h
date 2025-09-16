@@ -1,5 +1,5 @@
 class Extent
 {
-	Vector lo;
-	Vector hi;
+	VectorWS lo;
+	VectorWS hi;
 };

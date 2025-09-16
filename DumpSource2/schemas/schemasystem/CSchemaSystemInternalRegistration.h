@@ -2,6 +2,7 @@ class CSchemaSystemInternalRegistration
 {
 	Vector2D m_Vector2D;
 	Vector m_Vector;
+	VectorWS m_VectorWS;
 	VectorAligned m_VectorAligned;
 	Quaternion m_Quaternion;
 	QAngle m_QAngle;

@@ -167,6 +167,26 @@ var FormatText;
         }
     }
     FormatText.FormatRentalTime = FormatRentalTime;
+    function FormatExpirationToDDHHMMSSWithSymbolSeperator(expirationDate) {
+        let currentDate = Math.trunc(Date.now() / 1000);
+        if (expirationDate <= currentDate) {
+            return {
+                time: '',
+                locString: '#item-rental-time-expired',
+                isExpired: true
+            };
+        }
+        else {
+            let seconds = expirationDate - currentDate;
+            return {
+                time: FormatText.SecondsToDDHHMMSSWithSymbolSeperator(seconds),
+                locString: '#item-rental-time-remaining',
+                isExpired: false,
+                seconds: seconds
+            };
+        }
+    }
+    FormatText.FormatExpirationToDDHHMMSSWithSymbolSeperator = FormatExpirationToDDHHMMSSWithSymbolSeperator;
     function FormatNumberToNiceString(value, nsigdigits) {
         let strNum = value.toFixed(nsigdigits);
         strNum = strNum.replace('.', $.Localize('#LOC_Number_DecimalPoint'));

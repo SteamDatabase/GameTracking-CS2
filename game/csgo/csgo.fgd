@@ -63,7 +63,6 @@
 @exclude env_cubemap
 @exclude env_instructor_vr_hint
 @exclude env_laser
-@exclude env_projectedtexture
 @exclude env_rotorshooter
 @exclude env_rotorwash_emitter
 @exclude env_smokestack
@@ -1177,21 +1176,6 @@
     input SetTimer(float) : "Specify how many seconds before it explodes."
 ]
 
-@PointClass base(Weapon, TeamNum) studio("models/weapons/w_eq_fraggrenade.mdl") = hegrenade_projectile : "HE Grenade Projectile"
-[
-    input InitializeSpawnFromWorld(void) : "If spawned from a env_entity_maker, you need to call this after spawn for it to work properly."
-]
-
-@PointClass base(Weapon, TeamNum) studio("models/weapons/w_eq_molotov.mdl") = molotov_projectile : "Molotov Projectile"
-[
-    input InitializeSpawnFromWorld(void) : "If spawned from a env_entity_maker, you NEED to call this after spawn for it to work properly."
-]
-
-@PointClass base(Weapon, TeamNum) studio("models/weapons/w_eq_smokegrenade.vmdl") = smokegrenade_projectile : "SmokeGrenade Projectile"
-[
-    input InitializeSpawnFromWorld(void) : "If spawned from a env_entity_maker, you NEED to call this after spawn for it to work properly."
-]
-
 @PointClass base(GameEntity) = point_dz_weaponspawn : "DZ Spawn Location"
 [
 	default_weight(float) : "Spawn weight" : 100 : "How likely it is to spawn at this location, default 100."
@@ -1293,6 +1277,8 @@
 	"A trigger used to define a buyzone." 
 [
 	TeamNum(integer) : "Team Num" : : "Team number associated with this buyzone."
+	input Enable(void) : ""
+	input Disable(void) : ""
 ]
 
 @SolidClass base( GameEntity )
@@ -1640,4 +1626,11 @@
 
 @PointClass base( Angles) studio("characters/models/shared/spawn/ctm_spawnpoint.vmdl") = point_scale_reference_human : "Scale Reference (Human)"
 [
+]
+
+@PointClass iconsprite("materials/editor/point_script.vmat") = point_script
+[
+	targetname(target_source) { sort_priority = 90 } : "Name" : : "The name that other entities refer to this entity by."
+	cs_script(resource:vjs) : "cs_script"
+	input RunScriptInput(string) : "Run callback registered using OnScriptInput."
 ]

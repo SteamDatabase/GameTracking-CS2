@@ -7,6 +7,7 @@
 // MNetworkVarNames = "bool m_bIsUsingAG2"
 // MNetworkVarNames = "uint8 m_serializedPoseRecipeAG2"
 // MNetworkVarNames = "int m_nSerializePoseRecipeSizeAG2"
+// MNetworkVarNames = "int m_nSerializePoseRecipeVersionAG2"
 // MNetworkVarNames = "uint8 m_nGraphCreationFlagsAG2"
 // MNetworkVarNames = "int m_nServerGraphDefReloadCountAG2"
 class CBaseAnimGraphController : public CSkeletonAnimationController
@@ -56,6 +57,8 @@ class CBaseAnimGraphController : public CSkeletonAnimationController
 	CNetworkUtlVectorBase< uint8 > m_serializedPoseRecipeAG2;
 	// MNetworkEnable
 	int32 m_nSerializePoseRecipeSizeAG2;
+	// MNetworkEnable
+	int32 m_nSerializePoseRecipeVersionAG2;
 	// MNetworkEnable
 	uint8 m_nGraphCreationFlagsAG2;
 	// MNetworkEnable

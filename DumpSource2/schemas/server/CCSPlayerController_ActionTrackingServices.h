@@ -2,7 +2,7 @@
 // MNetworkVarNames = "CSMatchStats_t m_matchStats"
 // MNetworkVarNames = "int m_iNumRoundKills"
 // MNetworkVarNames = "int m_iNumRoundKillsHeadshots"
-// MNetworkVarNames = "uint32 m_unTotalRoundDamageDealt"
+// MNetworkVarNames = "float m_flTotalRoundDamageDealt"
 class CCSPlayerController_ActionTrackingServices : public CPlayerControllerComponent
 {
 	// MNetworkEnable
@@ -14,5 +14,5 @@ class CCSPlayerController_ActionTrackingServices : public CPlayerControllerCompo
 	// MNetworkEnable
 	int32 m_iNumRoundKillsHeadshots;
 	// MNetworkEnable
-	uint32 m_unTotalRoundDamageDealt;
+	float32 m_flTotalRoundDamageDealt;
 };

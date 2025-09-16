@@ -54,7 +54,6 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	int32 m_nTraceCount;
 	int32 m_StuckLast;
 	bool m_bSpeedCropped;
-	float32 m_flGroundMoveEfficiency;
 	int32 m_nOldWaterLevel;
 	float32 m_flWaterEntryTime;
 	Vector m_vecForward;

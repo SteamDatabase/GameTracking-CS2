@@ -1,4 +1,3 @@
-// M_LEGACY_OptInToSchemaPropertyDomain
 // MGetKV3ClassDefaults = {
 //	"_class": "CIntAnimParameter",
 //	"m_name": "Unnamed Parameter",

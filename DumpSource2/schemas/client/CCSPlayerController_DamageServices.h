@@ -1,5 +1,6 @@
 // MNetworkVarNames = "int m_nSendUpdate"
 // MNetworkVarNames = "CDamageRecord m_DamageList"
+// MNetworkReplayCompatField = "m_DamageList.*"
 class CCSPlayerController_DamageServices : public CPlayerControllerComponent
 {
 	// MNetworkEnable

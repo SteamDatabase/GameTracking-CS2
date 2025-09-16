@@ -26,11 +26,9 @@
 // MNetworkVarNames = "GameTime_t m_fLastShotTime"
 // MNetworkVarNames = "int m_iIronSightMode"
 // MNetworkVarNames = "float m_flWatTickOffset"
+// MNetworkVarNames = "GameTime_t m_flLastShakeTime"
 class C_CSWeaponBase : public C_BasePlayerWeapon
 {
-	CUtlVector< HSequence > m_thirdPersonFireSequences;
-	HSequence m_hCurrentThirdPersonSequence;
-	HSequence[7] m_thirdPersonSequences;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "WeaponGameplayAnimStateNetworkChangeCallback"
 	WeaponGameplayAnimState m_iWeaponGameplayAnimState;
@@ -110,4 +108,6 @@ class C_CSWeaponBase : public C_BasePlayerWeapon
 	GameTime_t m_flLastLOSTraceFailureTime;
 	// MNetworkEnable
 	float32 m_flWatTickOffset;
+	// MNetworkEnable
+	GameTime_t m_flLastShakeTime;
 };

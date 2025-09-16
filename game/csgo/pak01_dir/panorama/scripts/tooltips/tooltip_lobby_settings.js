@@ -52,7 +52,6 @@ var TooltipLobby;
                 p.SetDialogVariable('stat', time);
             }
             else {
-                // @ts-ignore
                 p.SetDialogVariableInt('stat', matchmakeingStats[statType]);
             }
             if (statType === 'playersLockedIn') {

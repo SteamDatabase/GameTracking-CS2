@@ -18,7 +18,6 @@ class CDecalInstance
 	float32 m_flFadeStartTime;
 	float32 m_flFadeDuration;
 	float32 m_flLightingOriginOffset;
-	int32 m_nVBSlot;
 	float32 m_flBoundingRadiusSqr;
 	int16 m_nSequenceIndex;
 	bool m_bIsAdjacent;

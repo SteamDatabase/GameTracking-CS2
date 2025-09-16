@@ -29,7 +29,7 @@
 // MNetworkVarNames = "GameTime_t m_flHealthShotBoostExpirationTime"
 // MNetworkVarNames = "QAngle m_aimPunchAngle"
 // MNetworkVarNames = "QAngle m_aimPunchAngleVel"
-// MNetworkVarNames = "int m_aimPunchTickBase"
+// MNetworkVarNames = "GameTick_t m_aimPunchTickBase"
 // MNetworkVarNames = "float m_aimPunchTickFraction"
 // MNetworkVarNames = "bool m_bIsBuyMenuOpen"
 // MNetworkVarNames = "GameTime_t m_flTimeOfLastInjury"
@@ -132,7 +132,7 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	// MNetworkBitCount = 32
 	QAngle m_aimPunchAngleVel;
 	// MNetworkEnable
-	int32 m_aimPunchTickBase;
+	GameTick_t m_aimPunchTickBase;
 	// MNetworkEnable
 	float32 m_aimPunchTickFraction;
 	CUtlVector< QAngle > m_aimPunchCache;

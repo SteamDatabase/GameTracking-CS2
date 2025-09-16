@@ -168,7 +168,7 @@
 //			"m_flControlPoint2": 1.000000
 //		}
 //	},
-//	"m_target": -232,
+//	"m_target": "MoveDirection",
 //	"m_paramIndex":
 //	{
 //		"m_type": "ANIMPARAM_UNKNOWN",

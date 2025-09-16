@@ -13,5 +13,6 @@ class C_BaseTrigger : public C_BaseToggle
 	CUtlSymbolLarge m_iFilterName;
 	CHandle< CBaseFilter > m_hFilter;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnNetworkedDisableChanged"
 	bool m_bDisabled;
 };

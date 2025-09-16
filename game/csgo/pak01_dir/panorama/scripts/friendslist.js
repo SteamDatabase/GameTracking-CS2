@@ -255,18 +255,15 @@ var FriendsList;
         elTile.RemoveClass('hidden');
     }
     function _AddTransitionEndEventHandler(elTile) {
-        // @ts-ignore
-        elTile.OnPropertyTransitionEndEvent = (panelName, propertyName) => {
-            if (elTile.id === panelName && propertyName === 'opacity') {
+        $.RegisterEventHandler('PropertyTransitionEnd', elTile, (panel, propertyName) => {
+            if (elTile === panel && propertyName === 'opacity') {
                 if (elTile.visible === true && elTile.BIsTransparent()) {
                     elTile.DeleteAsync(.0);
                     return true;
                 }
             }
             return false;
-        };
-        // @ts-ignore
-        $.RegisterEventHandler('PropertyTransitionEnd', elTile, elTile.OnPropertyTransitionEndEvent);
+        });
     }
     function _ShowRecentsLoadingBar() {
         let elBarOuter = $('#JsFriendsListRecentsLoadingBar');

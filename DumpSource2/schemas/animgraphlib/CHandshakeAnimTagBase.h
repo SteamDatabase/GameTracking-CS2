@@ -10,7 +10,6 @@
 //	"m_bIsReferenced": false,
 //	"m_bIsDisableTag": false
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CHandshakeAnimTagBase : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Disables Handshake"

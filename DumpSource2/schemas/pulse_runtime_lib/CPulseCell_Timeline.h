@@ -18,10 +18,7 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
-// MPulseCellWithCustomDocNode
 class CPulseCell_Timeline : public CPulseCell_BaseYieldingInflow
 {
 	CUtlVector< CPulseCell_Timeline::TimelineEvent_t > m_TimelineEvents;

@@ -5,7 +5,6 @@
 //	"m_oneBoneStart": "",
 //	"m_oneBoneEnd": ""
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
 class IKDemoCaptureSettings_t
 {
 	// MPropertyFriendlyName = "Target Parent"

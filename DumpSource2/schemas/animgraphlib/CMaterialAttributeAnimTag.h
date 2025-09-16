@@ -19,7 +19,6 @@
 //	]
 //}
 // MPropertyFriendlyName = "Material Attribute Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CMaterialAttributeAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Attribute Name"

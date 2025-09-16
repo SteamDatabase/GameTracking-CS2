@@ -1,4 +1,4 @@
-enum NavAttributeEnum : uint32_t
+enum NavAttributeEnum : uint64_t
 {
 	NAV_MESH_AVOID = 128,
 	NAV_MESH_STAIRS = 4096,
@@ -8,7 +8,6 @@ enum NavAttributeEnum : uint32_t
 	NAV_MESH_CRAWL_HEIGHT = 262144,
 	NAV_MESH_CROUCH = 65536,
 	NAV_MESH_JUMP = 2,
-	NAV_MESH_PRECISE = 4,
 	NAV_MESH_NO_JUMP = 8,
 	NAV_MESH_STOP = 16,
 	NAV_MESH_RUN = 32,
@@ -20,5 +19,5 @@ enum NavAttributeEnum : uint32_t
 	NAV_MESH_NO_MERGE = 8192,
 	NAV_MESH_OBSTACLE_TOP = 16384,
 	NAV_ATTR_FIRST_GAME_INDEX = 19,
-	NAV_ATTR_LAST_INDEX = 31,
+	NAV_ATTR_LAST_INDEX = 63,
 };

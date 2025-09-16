@@ -309,13 +309,13 @@ var ItemContextEntries;
             bActionIsRentalAware: true,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('secure_connection_line_' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id);
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id);
             }
         },
         {
             name: (id) => {
                 if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container'))
-                    return InventoryAPI.IsRental(id) ? 'inspect_contents' : 'open_package';
+                    return InventoryAPI.IsRental(id) ? 'inspect_contents' : 'open_terminal';
                 else if (InventoryAPI.GetDecodeableRestriction(id) === 'restricted' && !InventoryAPI.IsTool(id) && !InventoryAPI.CanOpenForRental(id))
                     return 'look_inside';
                 else if (InventoryAPI.IsRental(id))

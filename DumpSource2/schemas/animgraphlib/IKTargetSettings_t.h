@@ -1,4 +1,3 @@
-// M_LEGACY_OptInToSchemaPropertyDomain
 class IKTargetSettings_t
 {
 	// MPropertyFriendlyName = "Target Source"

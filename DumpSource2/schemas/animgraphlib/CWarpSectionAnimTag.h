@@ -12,7 +12,6 @@
 //	"m_bWarpOrientation": true
 //}
 // MPropertyFriendlyName = "Warp Section Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CWarpSectionAnimTag : public CWarpSectionAnimTagBase
 {
 	// MPropertyFriendlyName = "Warp Position"

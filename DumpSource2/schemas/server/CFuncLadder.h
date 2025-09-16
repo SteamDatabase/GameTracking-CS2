@@ -1,6 +1,6 @@
 // MNetworkVarNames = "Vector m_vecLadderDir"
-// MNetworkVarNames = "Vector m_vecPlayerMountPositionTop"
-// MNetworkVarNames = "Vector m_vecPlayerMountPositionBottom"
+// MNetworkVarNames = "VectorWS m_vecPlayerMountPositionTop"
+// MNetworkVarNames = "VectorWS m_vecPlayerMountPositionBottom"
 // MNetworkVarNames = "float m_flAutoRideSpeed"
 // MNetworkVarNames = "bool m_bFakeLadder"
 class CFuncLadder : public CBaseModelEntity
@@ -12,10 +12,10 @@ class CFuncLadder : public CBaseModelEntity
 	Vector m_vecLocalTop;
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
-	Vector m_vecPlayerMountPositionTop;
+	VectorWS m_vecPlayerMountPositionTop;
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
-	Vector m_vecPlayerMountPositionBottom;
+	VectorWS m_vecPlayerMountPositionBottom;
 	// MNetworkEnable
 	float32 m_flAutoRideSpeed;
 	bool m_bDisabled;

@@ -9,7 +9,6 @@
 //	},
 //	"m_bIsReferenced": false
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimTagBase
 {
 	// MPropertyFriendlyName = "Name"

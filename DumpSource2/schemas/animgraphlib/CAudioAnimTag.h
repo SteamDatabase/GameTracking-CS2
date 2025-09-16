@@ -17,7 +17,6 @@
 //	"m_bPlayOnClient": true
 //}
 // MPropertyFriendlyName = "Audio Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CAudioAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Sound Event"

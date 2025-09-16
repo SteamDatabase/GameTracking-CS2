@@ -1,6 +1,6 @@
 // MNetworkVarNames = "CRenderComponent::Storage_t m_CRenderComponent"
 // MNetworkVarNames = "CHitboxComponent::Storage_t m_CHitboxComponent"
-// MNetworkVarNames = "CDestructiblePartsSystemComponent * m_pDestructiblePartsSystemComponent"
+// MNetworkVarNames = "CDestructiblePartsComponent * m_pDestructiblePartsSystemComponent"
 // MNetworkVarNames = "RenderMode_t m_nRenderMode"
 // MNetworkVarNames = "RenderFx_t m_nRenderFX"
 // MNetworkVarNames = "Color m_clrRender"
@@ -23,6 +23,7 @@
 // MNetworkVarNames = "DecalMode_t m_nDecalMode"
 // MNetworkVarNames = "DecalMode_t m_nRequiredDecalMode"
 // MNetworkVarNames = "CHandle< C_BaseModelEntity > m_ConfigEntitiesToPropagateMaterialDecalsTo"
+// MNetworkVarNames = "uint32 m_bvDisabledHitGroups"
 class C_BaseModelEntity : public C_BaseEntity
 {
 	// MNetworkEnable
@@ -36,7 +37,8 @@ class C_BaseModelEntity : public C_BaseEntity
 	// MNetworkTypeAlias = "CHitboxComponent"
 	CHitboxComponent m_CHitboxComponent;
 	// MNetworkEnable
-	CDestructiblePartsSystemComponent* m_pDestructiblePartsSystemComponent;
+	// MNetworkTypeAlias = "CDestructiblePartsSystemComponent*"
+	CDestructiblePartsComponent* m_pDestructiblePartsSystemComponent;
 	HitGroup_t m_LastHitGroup;
 	CGlobalSymbol m_sLastDamageSourceName;
 	Vector m_vLastDamagePosition;
@@ -101,4 +103,7 @@ class C_BaseModelEntity : public C_BaseEntity
 	CClientAlphaProperty* m_pClientAlphaProperty;
 	Color m_ClientOverrideTint;
 	bool m_bUseClientOverrideTint;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnDisabledHitgroupsChanged"
+	uint32[1] m_bvDisabledHitGroups;
 };

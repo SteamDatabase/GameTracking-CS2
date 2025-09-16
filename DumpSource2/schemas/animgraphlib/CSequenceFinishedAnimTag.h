@@ -11,7 +11,6 @@
 //	"m_sequenceName": ""
 //}
 // MPropertyFriendlyName = "Sequence Finished Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CSequenceFinishedAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Sequence"

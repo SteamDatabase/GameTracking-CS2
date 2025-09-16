@@ -1,4 +1,3 @@
-// M_LEGACY_OptInToSchemaPropertyDomain
 // MGetKV3ClassDefaults = {
 //	"_class": "CBoolAnimParameter",
 //	"m_name": "Unnamed Parameter",

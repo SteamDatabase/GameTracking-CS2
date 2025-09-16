@@ -4,7 +4,6 @@
 //}
 // MPropertyFriendlyName = "Body Group Setting"
 // MPropertyElementNameFn (UNKNOWN FOR PARSER)
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CBodyGroupSetting
 {
 	// MPropertyFriendlyName = "BodyGroup"
@@ -13,6 +12,5 @@ class CBodyGroupSetting
 	CUtlString m_BodyGroupName;
 	// MPropertyFriendlyName = "BodyGroup Option"
 	// MPropertyAttributeChoiceName = "BodyGroupOption"
-	// MPropertyAttrExtraInfoFn (UNKNOWN FOR PARSER)
 	int32 m_nBodyGroupOption;
 };

@@ -2,9 +2,7 @@
 //	"_class": "CPulseCell_Value_RandomInt",
 //	"m_nEditorNodeID": -1
 //}
-// MCellForDomain = "BaseDomain"
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Random Integer"
 // MPropertyDescription = "Generate a random integer between min and max (inclusive)"
 // MPulseEditorHeaderIcon = "tools/images/pulse_editor/exit_cycle_random.png"

@@ -1,6 +1,7 @@
 // MNetworkUserGroupProxy = "CCSPlayerController"
 // MNetworkUserGroupProxy = "CCSPlayerController"
 // MNetworkUserGroupProxy = "CCSPlayerController"
+// MNetworkUserGroupProxy = "CCSPlayerController"
 // MNetworkVarNames = "CCSPlayerController_InGameMoneyServices * m_pInGameMoneyServices"
 // MNetworkVarNames = "CCSPlayerController_InventoryServices * m_pInventoryServices"
 // MNetworkVarNames = "CCSPlayerController_ActionTrackingServices * m_pActionTrackingServices"

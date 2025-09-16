@@ -269,11 +269,10 @@ var HudDemoController;
     }
     HudDemoController.OnStopPlayback = OnStopPlayback;
     function OnHighlightsToggle() {
-        let bIsEnabled = !lastState?.bIsPlayingHighlights;
-        bIsEnabled == bIsEnabled &&
+        let bIsEnabled = !lastState?.bIsPlayingHighlights &&
             lastState?.HighlightIntervals &&
             lastState.HighlightIntervals.length > 0;
-        cp.SetHighlightsModeEnabled(bIsEnabled);
+        cp.SetHighlightsModeEnabled(!!bIsEnabled);
     }
     HudDemoController.OnHighlightsToggle = OnHighlightsToggle;
     function OnHighlightButtonToggled(pIcon, nIndex) {

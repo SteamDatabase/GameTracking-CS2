@@ -116,9 +116,7 @@ var PremierPickBan;
                     $.DispatchEvent('CSGOPlaySoundEffectMuteBypass', 'UI.Premier.CounterTimer', 'MOUSE', 1.0);
                     nPlaySound++;
                 }
-                else
-                    (nPlaySound > 0);
-                {
+                else if (nPlaySound > 0) {
                     nPlaySound = 0;
                 }
             }

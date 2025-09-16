@@ -24,6 +24,7 @@ var ItemTile;
         _SetMultiSelect(id);
         _SetRentalTime(id);
         _SetIsRentable(id);
+        _SetOriginalOwner(id);
         let loadImage = $.GetContextPanel().GetAttributeString('loadimage', '');
         if (loadImage) {
             _SetImage(id);
@@ -131,6 +132,7 @@ var ItemTile;
                 class: 'item-tile__stickers__image'
             });
         }
+        elParentStickers.SetHasClass('hidden', listStickers.length <= 0 || listStickers === undefined);
         let listKeychains = ItemInfo.GetitemKeychainList(id);
         for (let entry of listKeychains) {
             $.CreatePanel('Image', elParentKeychains, 'ItemImage' + entry.image, {
@@ -139,6 +141,7 @@ var ItemTile;
                 class: 'item-tile__stickers__image'
             });
         }
+        elParentKeychains.SetHasClass('hidden', listKeychains.length <= 0 || listKeychains === undefined);
     }
     ;
     function _SetRecentLabel(id) {
@@ -209,6 +212,10 @@ var ItemTile;
         elLabel.RemoveClass('hidden');
     }
     ItemTile._SetIsRentable = _SetIsRentable;
+    function _SetOriginalOwner(id) {
+        const elImage = $.GetContextPanel().FindChildInLayoutFile('JsOriginalOwner');
+        elImage.SetHasClass('hidden', !(InventoryAPI.GetItemAttributeValue(id, '{uint32}purchaser account id') != undefined));
+    }
     function OnActivate() {
         HideTooltip();
         let id = $.GetContextPanel().GetAttributeString('itemid', '0');

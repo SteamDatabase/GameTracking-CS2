@@ -21,8 +21,8 @@ class CSMatchStats_t : public CSPerRoundStats_t
 	int32 m_iUtility_Enemies;
 	int32 m_iFlash_Count;
 	int32 m_iFlash_Successes;
-	int32 m_nHealthPointsRemovedTotal;
-	int32 m_nHealthPointsDealtTotal;
+	float32 m_flHealthPointsRemovedTotal;
+	float32 m_flHealthPointsDealtTotal;
 	int32 m_nShotsFiredTotal;
 	int32 m_nShotsOnTargetTotal;
 	int32 m_i1v1Count;

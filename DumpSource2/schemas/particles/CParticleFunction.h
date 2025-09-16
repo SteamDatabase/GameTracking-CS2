@@ -63,7 +63,6 @@ class CParticleFunction
 	bool m_bDisableOperator;
 	// MPropertyFriendlyName = "operator help and notes"
 	// MParticleHelpField
-	// MParticleAdvancedField
 	// MPropertySortPriority = -100
 	CUtlString m_Notes;
 };

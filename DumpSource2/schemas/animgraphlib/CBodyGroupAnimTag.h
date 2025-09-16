@@ -14,7 +14,6 @@
 //	]
 //}
 // MPropertyFriendlyName = "Body Group Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CBodyGroupAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Priority"

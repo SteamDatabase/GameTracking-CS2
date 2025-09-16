@@ -6,7 +6,7 @@
 // MNetworkVarNames = "CUtlStringToken m_hierarchyAttachName"
 class CGameSceneNode
 {
-	CTransform m_nodeToWorld;
+	CTransformWS m_nodeToWorld;
 	CEntityInstance* m_pOwner;
 	CGameSceneNode* m_pParent;
 	CGameSceneNode* m_pChild;
@@ -32,7 +32,7 @@ class CGameSceneNode
 	// MNetworkChangeCallback = "gameSceneNodeLocalScaleChanged"
 	// MNetworkPriority = 32
 	float32 m_flScale;
-	Vector m_vecAbsOrigin;
+	VectorWS m_vecAbsOrigin;
 	QAngle m_angAbsRotation;
 	float32 m_flAbsScale;
 	Vector m_vecWrappedLocalOrigin;

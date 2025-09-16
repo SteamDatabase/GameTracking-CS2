@@ -11,5 +11,5 @@ class CSAdditionalMatchStats_t : public CSAdditionalPerRoundStats_t
 	int32 m_numSniperKills;
 	int32 m_iNumSuicides;
 	int32 m_iNumTeamKills;
-	int32 m_iTeamDamage;
+	float32 m_flTeamDamage;
 };

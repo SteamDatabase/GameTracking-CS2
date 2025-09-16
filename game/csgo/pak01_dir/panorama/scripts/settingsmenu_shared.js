@@ -47,7 +47,7 @@ var SettingsMenuShared;
     SettingsMenuShared.ResetVideoSettings = ResetVideoSettings;
     function ResetVideoSettingsAdvanced() {
         $.DispatchEvent("CSGOVideoSettingsResetDefaultAdvanced");
-        VideoSettingsEnableDiscard;
+        VideoSettingsEnableDiscard();
     }
     SettingsMenuShared.ResetVideoSettingsAdvanced = ResetVideoSettingsAdvanced;
     function _RefreshControls() {

@@ -23,8 +23,6 @@ var Chat;
             elChatContainer.RemoveClass('closed-minimized');
             elChatContainer.AddClass("chat-open");
             $("#ChatInput").SetFocus();
-            // @ts-ignore
-            $("#ChatInput").activationenabled = true;
             $.Schedule(.1, _ScrollToBottom);
         }
     }
@@ -35,8 +33,6 @@ var Chat;
         if (elChatContainer.BHasClass("chat-open")) {
             elChatContainer.RemoveClass("chat-open");
             elChatContainer.SetFocus();
-            // @ts-ignore
-            $("#ChatInput").activationenabled = false;
             $.Schedule(.1, _ScrollToBottom);
             _SetClosedHeight();
             return true;

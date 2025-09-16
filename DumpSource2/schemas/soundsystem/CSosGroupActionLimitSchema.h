@@ -1,19 +1,18 @@
 // MGetKV3ClassDefaults = {
 //	"_class": "CSosGroupActionLimitSchema",
-//	"m_name": "None",
-//	"m_actionType": "SOS_ACTION_LIMITER",
-//	"m_actionInstanceType": "SOS_ACTION_LIMITER",
 //	"m_nMaxCount": -1,
 //	"m_nStopType": "SOS_STOPTYPE_NONE",
-//	"m_nSortType": "SOS_SORTTYPE_HIGHEST"
+//	"m_nSortType": "SOS_SORTTYPE_HIGHEST",
+//	"m_bStopImmediate": false,
+//	"m_bCountStopped": true
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
+// MPropertyFriendlyName = "Limiter"
 class CSosGroupActionLimitSchema : public CSosGroupActionSchema
 {
-	// MPropertyFriendlyName = "Max Count"
 	int32 m_nMaxCount;
-	// MPropertyFriendlyName = "Stop Type"
 	SosActionStopType_t m_nStopType;
-	// MPropertyFriendlyName = "Sort Type"
 	SosActionSortType_t m_nSortType;
+	bool m_bStopImmediate;
+	// MPropertyFriendlyName = "Count Stopped Events"
+	bool m_bCountStopped;
 };

@@ -13,7 +13,6 @@
 //	"m_expressionString": "",
 //	"m_eParamType": "ANIMPARAM_FLOAT"
 //}
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CVirtualAnimParameter : public CAnimParameterBase
 {
 	CUtlString m_expressionString;

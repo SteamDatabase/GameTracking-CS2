@@ -29,6 +29,6 @@ class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 	CUtlVectorEmbeddedNetworkVar< ServerAuthoritativeWeaponSlot_t > m_vecServerAuthoritativeWeaponSlots;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnNetworkableLoadoutChanged"
-	// MNetworkUserGroup = "LocalPlayerOwnerAndObserversExclusive"
+	// MNetworkUserGroup = "SpectatorsAndObserversExclusive"
 	CUtlVectorEmbeddedNetworkVar< CSNetworkableLoadout_t > m_vecNetworkableLoadout;
 };

@@ -95,7 +95,7 @@ var MatchmakingStatus;
             return;
         }
         if (_IsSeaching() && lobbySettings && lobbySettings.mapgroupname && _m_showMatchingMissions) {
-            // @ts-ignore
+            // @ts-expect-error OperationUtil is still JS
             OperationUtil.MissionsThatMatchYourMatchMakingSettings(lobbySettings.mode, lobbySettings.mapgroupname.split(','), nSeasonAccess);
             _m_showMatchingMissions = false;
         }

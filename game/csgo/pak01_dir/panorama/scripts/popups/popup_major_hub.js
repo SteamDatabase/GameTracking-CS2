@@ -309,7 +309,7 @@ var PopupMajorHub;
         var elList = _m_cp.FindChildInLayoutFile('id-major-challenges');
         var elChallenge = _m_cp.FindChildInLayoutFile('id-major-challenge-' + oChallenge.idx);
         if (!elChallenge) {
-            var elChallenge = $.CreatePanel("Panel", elList, 'id-major-challenge-' + oChallenge.idx);
+            elChallenge = $.CreatePanel("Panel", elList, 'id-major-challenge-' + oChallenge.idx);
             elChallenge.BLoadLayoutSnippet("major-challenge");
         }
         _UpdateChallenge(elChallenge, oChallenge);

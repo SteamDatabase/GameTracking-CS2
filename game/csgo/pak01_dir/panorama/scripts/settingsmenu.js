@@ -104,7 +104,6 @@ var SettingsMenu;
         if (gameSettingPanel != null) {
             let twitchTvSetting = gameSettingPanel.FindChildInLayoutFile("accountprivacydropdown");
             if (twitchTvSetting != null) {
-                // @ts-ignore
                 twitchTvSetting.OnShow();
             }
         }

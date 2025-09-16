@@ -89,18 +89,15 @@ var InventoryPanel;
         }
     }
     function _AddTransitionEventToPanel(newPanel) {
-        // @ts-ignore
-        newPanel.OnPropertyTransitionEndEvent = (panelName, propertyName) => {
-            if (newPanel.id === panelName && propertyName === 'opacity') {
+        $.RegisterEventHandler('PropertyTransitionEnd', newPanel, (panelName, propertyName) => {
+            if (propertyName === 'opacity') {
                 if (newPanel.visible === true && newPanel.BIsTransparent()) {
                     newPanel.visible = false;
                     return true;
                 }
             }
             return false;
-        };
-        // @ts-ignore
-        $.RegisterEventHandler('PropertyTransitionEnd', newPanel, newPanel.OnPropertyTransitionEndEvent);
+        });
     }
     function _CreateNavBar(idForNavBar, elParent) {
         let elNavBar = $.CreatePanel('Panel', elParent, idForNavBar + '-NavBarParent', {
@@ -379,11 +376,8 @@ var InventoryPanel;
         }
     }
     function _ClosePopups() {
-        // @ts-ignore
         if (_m_elInventoryMain.updatePlayerEquipSlotChangedHandler) {
-            // @ts-ignore
             $.UnregisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', _m_elInventoryMain.updatePlayerEquipSlotChangedHandler);
-            // @ts-ignore
             _m_elInventoryMain.updatePlayerEquipSlotChangedHandler = null;
         }
         if (_m_InventoryUpdatedHandler) {
@@ -490,9 +484,7 @@ var InventoryPanel;
         _UpdateActiveInventoryList();
         _ShowHideRentalTab();
         _UpdateCraftingPanelContentsIfCrafting();
-        // @ts-ignore
         if (!_m_elInventoryMain.updatePlayerEquipSlotChangedHandler) {
-            // @ts-ignore
             _m_elInventoryMain.updatePlayerEquipSlotChangedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', _ShowNotification);
         }
         if (!_m_InventoryUpdatedHandler) {

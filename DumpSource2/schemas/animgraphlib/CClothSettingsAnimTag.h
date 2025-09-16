@@ -14,7 +14,6 @@
 //	"m_nVertexSet": ""
 //}
 // MPropertyFriendlyName = "Cloth Settings Tag"
-// M_LEGACY_OptInToSchemaPropertyDomain
 class CClothSettingsAnimTag : public CAnimTagBase
 {
 	// MPropertyFriendlyName = "Stiffness"

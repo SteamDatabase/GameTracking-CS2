@@ -8,11 +8,13 @@ class CPlayer_WeaponServices : public CPlayerPawnComponent
 	// MNetworkChangeCallback = "OnMyWeaponsChanged"
 	CNetworkUtlVectorBase< CHandle< CBasePlayerWeapon > > m_hMyWeapons;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnActiveWeaponChanged"
 	CHandle< CBasePlayerWeapon > m_hActiveWeapon;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	CHandle< CBasePlayerWeapon > m_hLastWeapon;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnReserveAmmoChanged"
 	uint16[32] m_iAmmo;
 	bool m_bPreventWeaponPickup;
 };
