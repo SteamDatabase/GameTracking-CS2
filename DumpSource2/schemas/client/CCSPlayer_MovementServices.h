@@ -16,6 +16,7 @@
 // MNetworkVarNames = "float m_flOffsetTickCompleteTime"
 // MNetworkVarNames = "float m_flOffsetTickStashedSpeed"
 // MNetworkVarNames = "float m_flStamina"
+// MNetworkVarNames = "Vector m_vecInputRotated"
 // MNetworkVarNames = "bool m_bWasSurfing"
 class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 {
@@ -75,6 +76,8 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	float32 m_flOffsetTickStashedSpeed;
 	// MNetworkEnable
 	float32 m_flStamina;
+	// MNetworkEnable
+	Vector m_vecInputRotated;
 	float32 m_flHeightAtJumpStart;
 	float32 m_flMaxJumpHeightThisJump;
 	float32 m_flMaxJumpHeightLastJump;

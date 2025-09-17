@@ -263,8 +263,10 @@ var CollectionOffers;
         m_elScreen.FindChildInLayoutFile('id-orignal-owner-image').SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });
         m_elScreen.FindChildInLayoutFile('id-offer-zoom_hint').SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltipStyled('id-offer-zoom_hint', '#laptop_zoom_tooltip', 'tooltip-offer-wear'); });
         m_elScreen.FindChildInLayoutFile('id-offer-zoom_hint').SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });
-        m_elScreen.FindChildInLayoutFile('id-offer-pan_hint').SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltipStyled('id-offer-pan_hint', '#laptop_pan_tooltip', 'tooltip-offer-wear'); });
+        m_elScreen.FindChildInLayoutFile('id-offer-pan_hint').SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltipStyled('id-offer-pan_hint', '#laptop_pan_tooltip', 'tooltip-offer-actions'); });
         m_elScreen.FindChildInLayoutFile('id-offer-pan_hint').SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });
+        m_elScreen.FindChildInLayoutFile('id-price-tooltip').SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltipStyled('id-price-tooltip', '#laptop_pricing_tooltip', 'tooltip-offer-actions'); });
+        m_elScreen.FindChildInLayoutFile('id-price-tooltip').SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });
     }
     function Close(destoryAnim = false) {
         _TimerUpdateCancel();
@@ -650,6 +652,7 @@ var CollectionOffers;
         m_elYesBtn.enabled = bEnable;
         m_elNoBtn.enabled = bEnable;
         m_elEndBtn.enabled = bEnable;
+        m_elScreen.FindChildInLayoutFile('id-price-tooltip').SetHasClass('faded', !bEnable);
     }
     let _m_buttonDown = false;
     let _m_buttonTimer = 0;
@@ -670,6 +673,7 @@ var CollectionOffers;
             m_elYesBtn.enabled = true;
             m_elNoBtn.enabled = false;
             m_elNoBtn.visible = false;
+            m_elScreen.FindChildInLayoutFile('id-price-tooltip').SetHasClass('faded', false);
             m_elEndBtn.visible = true;
             m_elEndBtn.enabled = true;
             m_elEndBtn.SwitchClass('bnt-type', 'negative');
