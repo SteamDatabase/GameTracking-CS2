@@ -6,9 +6,9 @@
 // MNetworkVarNames = "int m_nPersonaDataPublicCommendsFriendly"
 // MNetworkVarNames = "int m_nPersonaDataXpTrailLevel"
 // MNetworkVarNames = "ServerAuthoritativeWeaponSlot_t m_vecServerAuthoritativeWeaponSlots"
-// MNetworkVarNames = "CSNetworkableLoadout_t m_vecNetworkableLoadout"
 class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 {
+	CUtlVector< CCSPlayerController_InventoryServices::NetworkedLoadoutSlot_t > m_vecNetworkableLoadout;
 	// MNetworkEnable
 	uint16 m_unMusicID;
 	// MNetworkEnable
@@ -26,7 +26,4 @@ class CCSPlayerController_InventoryServices : public CPlayerControllerComponent
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	C_UtlVectorEmbeddedNetworkVar< ServerAuthoritativeWeaponSlot_t > m_vecServerAuthoritativeWeaponSlots;
-	// MNetworkEnable
-	// MNetworkChangeCallback = "OnNetworkableLoadoutChanged"
-	C_UtlVectorEmbeddedNetworkVar< CSNetworkableLoadout_t > m_vecNetworkableLoadout;
 };

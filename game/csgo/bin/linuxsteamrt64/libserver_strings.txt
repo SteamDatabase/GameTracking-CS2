@@ -142,6 +142,7 @@
  failed to restore %s\n
  ignored
  ignored FL_FULL_EDICT_CHANGED
+ new hash %llu\n
  offset=
  ping=%.0fms
  restore failed entirely\n
@@ -1832,7 +1833,6 @@ $light_emissive
 ../../game/shared/cstrike15/cs_player_weaponservices.cpp
 ../../game/shared/cstrike15/cs_player_weapontiminggraph.cpp
 ../../game/shared/cstrike15/cs_shareddefs.cpp
-../../game/shared/cstrike15/cstrike15_item_inventory.cpp
 ../../game/shared/cstrike15/decoy_projectile.cpp
 ../../game/shared/cstrike15/flashbang_projectile.cpp
 ../../game/shared/cstrike15/hegrenade_projectile.cpp
@@ -1849,6 +1849,7 @@ $light_emissive
 ../../game/shared/dynamicprop.cpp
 ../../game/shared/econ_csgo_legacy/attribute_manager.cpp
 ../../game/shared/econ_csgo_legacy/econ_item.cpp
+../../game/shared/econ_csgo_legacy/econ_item_inventory.cpp
 ../../game/shared/econ_csgo_legacy/econ_item_schema.cpp
 ../../game/shared/entityspawner.h
 ../../game/shared/entitysubclassgamesystem.cpp
@@ -2324,6 +2325,7 @@ $light_emissive
 13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi385E23CCSUsrMsg_CounterStrafeL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi387E32CCSUsrMsg_RecurringMissionSchemaL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
+13CNetMessagePBILi388E27CCSUsrMsg_SendPlayerLoadoutL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE
 13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
@@ -2571,6 +2573,7 @@ $light_emissive
 14CUserMessagePBILi380E26CCSUsrMsg_CurrentRoundOddsL19NetChannelBufType_t1EE
 14CUserMessagePBILi383E19CCSUsrMsg_ShootInfoL19NetChannelBufType_t1EE
 14CUserMessagePBILi385E23CCSUsrMsg_CounterStrafeL19NetChannelBufType_t1EE
+14CUserMessagePBILi388E27CCSUsrMsg_SendPlayerLoadoutL19NetChannelBufType_t1EE
 14CUtlMapDataOpsI14CUtlOrderedMapI13CGlobalSymboli8CDefLessIS1_EiELi79ELi5EE
 14CWeaponGalilAR
 14CWeaponHKP2000
@@ -3679,7 +3682,6 @@ $light_emissive
 22CPulseCell_Value_Curve
 22CPulseEntityFindFilter
 22CPulseGraphIOSignature
-22CSNetworkableLoadout_t
 22CSOEconItemEventTicket
 22CSVCMsg_UserCommands_t
 22CScriptTriggerMultiple
@@ -3907,6 +3909,7 @@ $light_emissive
 24CGameSystemStaticFactoryI23CLagCompensationManager23ILagCompensationManagerE
 24CGameSystemStaticFactoryI23CShatterGlassGameSystemS0_E
 24CGameSystemStaticFactoryI24CEnvWindControllerSystemS0_E
+24CGameSystemStaticFactoryI24CSendPlayerLoadoutHelperS0_E
 24CGameSystemStaticFactoryI24CServerLogHTTPDispatcherS0_E
 24CGameSystemStaticFactoryI24CTriggerAsyncQuerySystemS0_E
 24CGameSystemStaticFactoryI25CEntitySubclassGameSystemS0_E
@@ -3941,6 +3944,7 @@ $light_emissive
 24CSchemaAttributeTypeBaseI5Vec3DIfEE
 24CSchemaAttributeTypeBaseIfE
 24CSchemaAttributeTypeBaseIjE
+24CSendPlayerLoadoutHelper
 24CServerLogHTTPDispatcher
 24CSosStopSoundEventInfo_t
 24CSoundEnvelopeController
@@ -4143,6 +4147,7 @@ $light_emissive
 27CCSObserverStatePickingTeam
 27CCSUsrMsg_DisconnectToLobby
 27CCSUsrMsg_PlayerStatsUpdate
+27CCSUsrMsg_SendPlayerLoadout
 27CCSUsrMsg_StopSpectatorMode
 27CCompressedStaticQuaternion
 27CDebugOverlayCombinedFilter
@@ -4286,6 +4291,7 @@ $light_emissive
 29CCSUsrMsg_PlayerStatsUpdate_t
 29CCSUsrMsg_SendPlayerItemDrops
 29CCSUsrMsg_SendPlayerItemFound
+29CCSUsrMsg_SendPlayerLoadout_t
 29CCSUsrMsg_ServerRankRevealAll
 29CChoreoServicesSaveRestoreOps
 29CDataGCCStrike15_v2_MatchInfo
@@ -4655,6 +4661,7 @@ $light_emissive
 39CCSPlayerController_InGameMoneyServices
 39CCSPlayerTakeDamageListenerEnemiesCount
 39CCSUsrMsg_PlayerDecalDigitalSignature_t
+39CCSUsrMsg_SendPlayerLoadout_LoadoutItem
 39CCommunity_GamePersonalDataCategoryInfo
 39CDataGCCStrike15_v2_TournamentGroupTeam
 39CDynamicPropAlias_prop_dynamic_override
@@ -5852,6 +5859,7 @@ CCSUsrMsg_SendAudio_t
 CCSUsrMsg_SendLastKillerDamageToClient_t
 CCSUsrMsg_SendPlayerItemDrops_t
 CCSUsrMsg_SendPlayerItemFound_t
+CCSUsrMsg_SendPlayerLoadout_t
 CCSUsrMsg_ServerRankRevealAll_t
 CCSUsrMsg_ServerRankUpdate_t
 CCSUsrMsg_ShootInfo_t
@@ -6475,6 +6483,7 @@ CScriptNativeOutputs
 CScriptParticleManager
 CScriptPrecacheContext
 CScriptSteamInfoAccessor
+CSendPlayerLoadoutHelper
 CSharedEdictChangeInfo high water mark %u\n
 CSharedMapManager
 CShatterGlassGameSystem
@@ -7865,6 +7874,8 @@ Failed to find a new goal area, returning false
 Failed to find a start area, returning false
 Failed to find a visible soundscape along the soundcast ray! Are soundscapes properly set up?\n
 Failed to find attachment point specified for particle effect anim event. Trying to spawn effect '%s' on attachment named '%s' on model %s\n
+Failed to find controller for observer target!\n
+Failed to find controller inventory for observer target!\n
 Failed to find custom physics damage table name: %s\n
 Failed to find entity %s during an autosave at distance from!\n
 Failed to find entity '%s' by name with type constraint '%s'. Found type '%s' instead\n
@@ -9511,6 +9522,7 @@ Invalid terrorist spawnpoint at (%.1f,%.1f,%.1f)\n
 Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 InvalidEntity (idx=%d)
 Invalidity Date
+Inventory
 InventoryUpdateThink
 Invert
 InvestigateNoise
@@ -9766,6 +9778,7 @@ Loaded %d rays\n
 Loaded server checkpoint %s, starting match with score %d:%d after round %d\n
 Loading custom game "%s" with map "%s"\n
 Loading stats from '%s'\n
+Loadout changed for %s: old hash %llu
 LobbyMapVetoFinished: %s %s %s -(%s)\n
 LobbyMapVetoFinished: invalid map pick string, cannot change level\n
 LocalKeySet
@@ -10292,6 +10305,7 @@ N13CNetMessagePBILi381E19CCSUsrMsg_DeepStatsL13SignonGroup_t13EL19NetChannelBufT
 N13CNetMessagePBILi383E19CCSUsrMsg_ShootInfoL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi385E23CCSUsrMsg_CounterStrafeL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi387E32CCSUsrMsg_RecurringMissionSchemaL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
+N13CNetMessagePBILi388E27CCSUsrMsg_SendPlayerLoadoutL13SignonGroup_t13EL19NetChannelBufType_t1ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi400E20CMsgTEEffectDispatchL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi401E19CMsgTEArmorRicochetL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi402E18CMsgTEBeamEntPointL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
@@ -10927,6 +10941,7 @@ OnLessThan
 OnLessThanOrEqualTo
 OnLevelTransition
 OnLoadGame
+OnLoadoutChanged
 OnLockedUse
 OnMapPicked
 OnMapSpawn
@@ -12658,7 +12673,6 @@ SetLinearFrequencyZ
 SetLinearMotionLockedX
 SetLinearMotionLockedY
 SetLinearMotionLockedZ
-SetLoadoutItem
 SetLocalAngles
 SetLocalOrigin
 SetLocalScale
@@ -20683,7 +20697,6 @@ taxonomy
 taxonomy/table_display
 taxonomy/wall_display
 te.proto
-team
 team-intro
 team-select
 team1

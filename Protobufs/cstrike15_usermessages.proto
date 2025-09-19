@@ -78,6 +78,7 @@ enum ECstrike15UserMessages {
 	CS_UM_CounterStrafe = 385;
 	CS_UM_DamagePrediction = 386;
 	CS_UM_RecurringMissionSchema = 387;
+	CS_UM_SendPlayerLoadout = 388;
 }
 
 enum ECSUsrMsg_DisconnectToLobby_Action {
@@ -606,4 +607,15 @@ message CCSUsrMsg_DamagePrediction {
 message CCSUsrMsg_RecurringMissionSchema {
 	optional uint32 period = 1;
 	optional bytes mission_schema = 2;
+}
+
+message CCSUsrMsg_SendPlayerLoadout {
+	message LoadoutItem {
+		optional .CEconItemPreviewDataBlock econ_item = 1;
+		optional int32 team = 2;
+		optional int32 slot = 3;
+	}
+
+	repeated .CCSUsrMsg_SendPlayerLoadout.LoadoutItem loadout = 1;
+	optional int32 playerslot = 2 [default = -1];
 }
