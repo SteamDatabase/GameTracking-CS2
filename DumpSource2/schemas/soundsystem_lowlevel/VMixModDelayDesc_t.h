@@ -14,7 +14,7 @@
 //	"m_flOutputGain": 0.000000,
 //	"m_flFeedbackGain": 0.000000,
 //	"m_flModRate": 0.000000,
-//	"m_flModDepth": -15784944426708213134138540032.000000,
+//	"m_flModDepth": 28712646647742464.000000,
 //	"m_bApplyAntialiasing": true
 //}
 class VMixModDelayDesc_t
