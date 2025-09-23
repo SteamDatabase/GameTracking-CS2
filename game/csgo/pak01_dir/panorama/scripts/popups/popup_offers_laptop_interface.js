@@ -432,7 +432,7 @@ var CollectionOffers;
             elUserButtonContainer.SetDialogVariable('user-response-title', $.Localize('#user_btn_purchase_final_title'));
         }
         else {
-            elUserButtonContainer.SetDialogVariable('offer-count', $.Localize('#EOM_Position_' + _CurrentOfferNumber()));
+            elUserButtonContainer.SetDialogVariable('offer-count', $.Localize('#dealer_offer_' + _CurrentOfferNumber()));
             elUserButtonContainer.SetDialogVariable('user-response-title', $.Localize('#user_btn_purchase_title', elUserButtonContainer));
         }
         m_elYesBtn.SetDialogVariable('price', OfferItemData.price);

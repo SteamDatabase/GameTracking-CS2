@@ -6,7 +6,7 @@
 //		"m_nFormat": <HIDDEN FOR DIFF>,
 //		"m_nChannels": 2,
 //		"m_nLoopStart": 0,
-//		"m_nSampleCount": 918828680,
+//		"m_nSampleCount": 2729313928,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
