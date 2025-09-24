@@ -12,9 +12,8 @@ var XpShop;
 (function (XpShop) {
     const m_tileWidth = 260;
     const m_tileHeight = 120;
-    const m_keychainTileWidth = 180;
-    const m_keychainTileHeight = m_keychainTileWidth - 10;
     const m_stickerTileWidth = 160;
+    const m_keychainTileHeight = m_stickerTileWidth - 10;
     const m_elContentPanel = $.GetContextPanel().FindChildInLayoutFile('id-xpshop-content');
     let m_nTrack;
     let m_nPass;
@@ -259,9 +258,7 @@ var XpShop;
                 ShopEntry.entry_type = 'lootlist';
                 ShopEntry.lootlist = _GetLootListForReward(ShopEntry.item_name);
                 ShopEntry.lootlist_item_type = ItemInfo.IsWeapon(ShopEntry.lootlist[0]) ? 'weapon' : ItemInfo.IsKeychain(ShopEntry.lootlist[0]) ? 'keychain' : 'sticker';
-                ShopEntry.tile_width = ShopEntry.lootlist_item_type === 'keychain' ?
-                    m_keychainTileWidth : ShopEntry.lootlist_item_type === 'sticker' ?
-                    m_stickerTileWidth : m_tileWidth;
+                ShopEntry.tile_width = ShopEntry.lootlist_item_type === 'keychain' || ShopEntry.lootlist_item_type === 'sticker' ? m_stickerTileWidth : m_tileWidth;
                 ShopEntry.tile_height = ShopEntry.lootlist_item_type === 'weapon' ? m_tileHeight : ShopEntry.lootlist_item_type === 'keychain' ? m_keychainTileHeight : ShopEntry.tile_width;
                 ShopEntry.on_item_activate = _OpenFullScreenInspectItem;
                 let strSetName = InventoryAPI.GetTag(ShopEntry.lootlist[0], 'ItemSet');
@@ -771,9 +768,13 @@ var XpShop;
         let initialYTranslate = (baseHeight / 2);
         let finalYTranslate = 0;
         let contentPanelHeight = Math.floor(m_elContentPanel.actuallayoutheight / m_elContentPanel.actualuiscale_y);
-        let bottomOffset = 64;
-        if ((tilePosY + zoomHeight) > (contentPanelHeight - 40)) {
+        let bottomOffset = 32 + 48;
+        let topOffset = 92;
+        if ((tilePosY + zoomHeight) > (contentPanelHeight - bottomOffset)) {
             finalYTranslate = (tilePosY - (contentPanelHeight - zoomHeight)) + bottomOffset;
+        }
+        else if ((tilePosY - baseHeight / 2) < topOffset) {
+            finalYTranslate = 0;
         }
         else {
             finalYTranslate = initialYTranslate;
@@ -791,22 +792,39 @@ var XpShop;
         }
         let nRows = 0;
         let nTileY = 0;
-        let itemsPerRow = ShopEntry.lootlist_item_type === 'weapon' ? 4 : ShopEntry.lootlist_item_type === 'sticker' ? 7 : 6;
-        let contentPanelWidth = Math.floor(elTilesContainer.actuallayoutwidth / elTilesContainer.actualuiscale_x);
-        let contentPanelHeight = Math.floor(elTilesContainer.actuallayoutheight / elTilesContainer.actualuiscale_y);
-        let tileWidth = ShopEntry.tile_width;
-        let tileHeight = ShopEntry.tile_height;
-        let aChildren = elTilesContainer.Children();
-        let xOffset = (contentPanelWidth - (tileWidth * itemsPerRow)) / 2;
-        let yOffset = (contentPanelHeight - (tileHeight * (aChildren.length / itemsPerRow))) / 2;
+        const aChildren = elTilesContainer.Children();
+        const nPanelsCount = aChildren.length;
+        const nMaxColumns = ShopEntry.lootlist_item_type === 'weapon' ? 4 : ShopEntry.lootlist_item_type === 'sticker' ? 8 : 7;
+        const oRowsAndColumns = StickerItemsPerRow(nPanelsCount, nMaxColumns);
+        const nTotalRows = oRowsAndColumns.rows;
+        const nColumns = oRowsAndColumns.cols;
+        const contentPanelWidth = Math.floor(elTilesContainer.actuallayoutwidth / elTilesContainer.actualuiscale_x);
+        const contentPanelHeight = Math.floor(elTilesContainer.actuallayoutheight / elTilesContainer.actualuiscale_y);
+        const tileWidth = ShopEntry.tile_width;
+        const tileHeight = ShopEntry.tile_height;
+        const xOffset = (contentPanelWidth - (tileWidth * nColumns)) / 2;
+        const yOffset = (contentPanelHeight - (tileHeight * nTotalRows)) / 2;
         aChildren.forEach((element, idx) => {
-            if (idx % itemsPerRow === 0) {
+            if (idx % nColumns === 0) {
                 nTileY = tileHeight * nRows;
                 nRows++;
             }
-            element.style.x = (idx % itemsPerRow * tileWidth) + xOffset + 'px';
+            element.style.x = (idx % nColumns * tileWidth) + xOffset + 'px';
             element.style.y = (nTileY + yOffset) + 'px';
         });
+    }
+    function StickerItemsPerRow(nPanelsCount, maxColumn) {
+        const maxRows = 4;
+        if (nPanelsCount >= 32) {
+            return { rows: maxRows, cols: maxColumn };
+        }
+        let cols = Math.min(maxColumn, Math.ceil(Math.sqrt(nPanelsCount)));
+        let rows = Math.ceil(nPanelsCount / cols);
+        if (rows > maxRows) {
+            rows = maxRows;
+            cols = Math.ceil(nPanelsCount / rows);
+        }
+        return { rows: rows, cols: cols };
     }
     function CreateShopTile(elTilesContainer, itemId, ShopEntry) {
         let sStyle = 'xpshop__inspect-grid__tile';
