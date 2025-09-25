@@ -3743,16 +3743,17 @@ function Init(oldChess) {
 
 /** @type {{ time: number, callback: () => void }[]} */
 const thinkQueue = [];
+/** @param {number} time @param {() => void} callback  */
 function QueueThink(time, callback) {
-    const indexAfter = thinkQueue.indexOf((t) => t.time > time);
+    const indexAfter = thinkQueue.findIndex((t) => t.time > time);
     if (indexAfter === -1) thinkQueue.push({ time, callback });
     else thinkQueue.splice(indexAfter, 0, { time, callback });
-    Instance.SetNextThink(thinkQueue[0].time);
+    if (indexAfter === 0 || indexAfter === -1) Instance.SetNextThink(time);
 }
 function RunThinkQueue() {
-    while (thinkQueue.length > 0 && thinkQueue[0].time <= Instance.GetGameTime()) {
-        thinkQueue.shift().callback();
-    }
+    const upperThinkTime = Instance.GetGameTime() + 1 / 128;
+    while (thinkQueue.length > 0 && thinkQueue[0].time <= upperThinkTime) thinkQueue.shift().callback();
+    if (thinkQueue.length > 0) Instance.SetNextThink(thinkQueue[0].time);
 }
 function Delay(delay) {
     return new Promise((resolve) => QueueThink(Instance.GetGameTime() + delay, resolve));

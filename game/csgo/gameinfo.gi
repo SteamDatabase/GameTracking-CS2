@@ -311,7 +311,7 @@
 			"include"       "panorama/images/map_icons"
 			"include"       "particles"
 			"include"       "resource/overviews"
-			"include"       "scripts/vscripts"
+			"include"       "scripts"
 			"include"       "sounds"
 			"include"       "soundevents"
 			"include"       "lighting/postprocessing"

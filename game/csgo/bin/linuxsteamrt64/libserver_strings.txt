@@ -1387,8 +1387,6 @@ $light_emissive
 (connectionId:number)
 (default)
 (duration: number)
-(entName: string, inputName: string, value?: string, delay?: number)
-(eventName: string, callback: function)
 (from angle, to angle, time) - Spherical lerp of angle from->to based on time
 (hInflictor, hAttacker, flDamage) - Allocate a damageinfo object, used as an argument to TakeDamage(). Call DestroyDamageInfo( hInfo ) to free the object.
 (health: number)
@@ -1397,10 +1395,12 @@ $light_emissive
 (int iIndex, int iPoint, Vector vOrigin, Vector vecForward ) - Set the origin and forward direction for a control on a particle effect
 (int iIndex, int iPoint, Vector vecOffset ) - Set the linear offset for a control on a particle effect
 (int index, bool bDestroyImmediately) - Destroy a particle, if bDestroyImmediately destroy it without playing end caps.
+(mins: Vector, maxs: Vector, duraiton: number, color: Color)
 (mode: number)
 (modelName:string)
 (name: string)
 (name: string, autoDeploy?: boolean )
+(name: string, input: string, value?: any, delay?: number)
 (name:string)
 (name:string, callback:function)
 (needs match)
@@ -1417,15 +1417,16 @@ $light_emissive
 (slot: number, command: string)
 (slot:number)
 (slot:number, team?:number)
+(start: Vector, end: Vector, duration: number, color: Color)
 (start:Vector, end:Vector, config:object)
+(target: Entity, input: string, value?: any, delay?: number)
 (target: entity)
-(target: entity, input: string, value?: string, delay?: number)
 (target: entity, output: string, callback: function)
 (target: weapon)
 (team:number)
 (text: string)
 (text: string, callback: function)
-(text:string, x:number, y:number, duration:number, color:Color)
+(text: string, x: number, y: number, duration: number, color: Color)
 (text:string, x:number, y:number, offset:number, duration:number, color:array, alpha?:number?)
 (time: number)
 (update disabled)
@@ -2154,6 +2155,7 @@ $light_emissive
 12CUtlAutoListI20CPhysicsEntitySolverE
 12CUtlAutoListI23CSmokeGrenadeProjectileE
 12CUtlAutoListI8CCSPlaceE
+12CUtlAutoListI9CCSScriptE
 12CVDiagnostic
 12CWaterBullet
 12CWeaponBizon
@@ -4999,7 +5001,6 @@ $light_emissive
 <resource>
 <shim>
 <skill>
-<type %u>
 <type name is DEBUG only>
 <unconnected>
 <unused>
@@ -6728,7 +6729,6 @@ CallHitTop
 CallPrivateScriptFunction
 CallScriptFunction
 Callback "%s" already registered\n
-Callback "%s" not registered\n
 Callback for event "%s" is NULL!!!\n
 Called when the damage level of destructible part for a particular hit group has been changed.
 Called when the parent entity has been told to think via SetNextThink
@@ -7233,6 +7233,7 @@ Debug World Sphere
 Debug World Text
 Debug bits %s toggled %s for '%s'\n
 Debug bits %s toggled on for '%s'\n
+DebugBox
 DebugBreak
 DebugDrawBox
 DebugDrawBoxDirection
@@ -7244,6 +7245,7 @@ DebugDrawQueueManager001
 DebugDrawScreenTextLine
 DebugDrawSphere
 DebugDrawText
+DebugLine
 DebugOverlayBullets
 DebugOverlayGrenades
 DebugOverlayWorldModel
@@ -8194,7 +8196,6 @@ Game is paused but no pause start tick?\n
 Game paused time showing up negative (rt %f pausestart %f)\n
 GameConfigServerV001
 GameDebugVisualizer
-GameEvent:%d
 GameEvent_RegisterHookupGameSystem
 GameFrame
 GameHeader
@@ -8433,6 +8434,7 @@ GetGameTime
 GetGameType
 GetGraphParameter
 GetGround
+GetGroundEntity
 GetHealth
 GetInflictor
 GetInlineConst R%d <- C%d (%s)
@@ -8503,6 +8505,7 @@ GetOrCreatePublicScriptScope
 GetOrigin
 GetOriginalController
 GetOriginalDamage
+GetOriginalPlayerController
 GetOwner
 GetOwnerEntity
 GetPartPosition
@@ -8519,6 +8522,7 @@ GetPlayerLimits:  default maxplayers must be >= 1 (%i)
 GetPlayerLimits:  max players limited to %i
 GetPlayerLimits:  min maxplayers %i > max %i
 GetPlayerLimits:  min maxplayers must be >= 1 (%i)
+GetPlayerName
 GetPlayerPawn
 GetPlayerSlot
 GetPlayerSpeechDuration
@@ -8918,7 +8922,6 @@ Inflictor is the entity that is dealing the damage.\nIt can be the attacker itse
 Info Data
 InfoPanel
 Inherit all
-Init cs_script[%d] from "%s"\n
 InitAllSystems
 InitEntity2NetworkClasses
 InitFromPacket
@@ -9512,6 +9515,7 @@ Invalid request for mesh %d in model %s with %d entry remapping start table\n
 Invalid request for mesh %d in model %s with no remapping table starts\n
 Invalid request for mesh %d in model %s with no remapping table\n
 Invalid save, failed to open file\n
+Invalid script. No valid imports found.\n
 Invalid skirmish '%s' in mp_endmatch_votenextmap_wargames_modes\n
 Invalid starting amplitude value in envelope!  (Cannot be -1)\n
 Invalid starting duration value in envelope! (Cannot be -1)\n
@@ -9551,6 +9555,8 @@ IsAttachedToParent
 IsBeingCarried
 IsBot
 IsClient
+IsCrouched
+IsCrouching
 IsDedicatedServer
 IsEnabled
 IsEnemyPartVisible
@@ -9629,7 +9635,6 @@ JOINT-ISO-ITU-T
 JQW[_c=DNV]c,3>JWc
 JRX\`c>HQX_c-7AMYc
 JSON_BEGIN{\n
-JSValueFromKeyValues3 failed to package parameter (type %d)\n
 Job %s has EXCEEDED TIMEOUT THRESHOLD exclusive time: %ums >= %ums\n
 Job %s has EXCEEDED TIMEOUT THRESHOLD yield time: %ums >= %ums\n
 Job %s has spent >%2.3fms without yielding: %2.3fms\n
@@ -9777,6 +9782,7 @@ LoadThink
 Loaded %d rays\n
 Loaded server checkpoint %s, starting match with score %d:%d after round %d\n
 Loading custom game "%s" with map "%s"\n
+Loading script "%s"\n
 Loading stats from '%s'\n
 Loadout changed for %s: old hash %llu
 LobbyMapVetoFinished: %s %s %s -(%s)\n
@@ -10047,6 +10053,7 @@ Metal.SawbladeStick
 Metal.Small
 Method %s.%s invoked in incorrect scope.
 Method %s.%s invoked with bad %s value. (parameter #%d)\n
+Method %s.%s invoked with bad inputData value. (parameter #3)\n
 Method %s.%s invoked with incorrect 'this' value.
 Method %s.%s invoked with unrecognized 'this' value.
 Method %s.%s requires %d argument(s), %s.
@@ -10840,9 +10847,11 @@ OnBeginSequence
 OnBlockedClosing
 OnBlockedOpening
 OnBombBeginDefuse
+OnBombDefuse
 OnBombDefuseAborted
 OnBombDefused
 OnBombExplode
+OnBombPlant
 OnBombPlanted
 OnBreak
 OnBroken
@@ -10902,12 +10911,13 @@ OnFirstPickedUp
 OnFoundEntity
 OnFullyClosed
 OnFullyOpen
-OnGameEvent
 OnGenericPulseEvent
 OnGetValue
 OnGlovePulled
 OnGreaterThan
 OnGreaterThanOrEqualTo
+OnGrenadeThrow
+OnGunFire
 OnGustEnd
 OnGustStart
 OnHealthChanged
@@ -10990,9 +11000,14 @@ OnPassThroughReverse
 OnPaused
 OnPickup
 OnPlay
+OnPlayerActivate
+OnPlayerChat
+OnPlayerConnect
+OnPlayerDisconnect
 OnPlayerGotOffLadder
 OnPlayerGotOnLadder
 OnPlayerInZone
+OnPlayerKill
 OnPlayerOutZone
 OnPlayerPickup
 OnPlayerTouch
@@ -11728,7 +11743,6 @@ Remove Filter
 Remove Tag From Cursor
 Remove all elements from 'a' which are invalid instances.
 Remove all elements from 'a' which compare equal to 'element'.
-Remove callback "%s"\n
 Remove the C proxy for a script-based spawn group filter
 Remove the element at the given index in 'a', decreasing its count by one and moving the elements after index.
 Remove the given tag from this cursor. If other cursors are waiting on us, they will resume.
@@ -14333,7 +14347,6 @@ Zone2Distance
 \t"%s" "%s"\n
 \t"sourcefile" "%s"\n
 \t%s - %zu KB (%%%.0f)\n
-\t(%s, %s, %s)\n
 \tBy default, additional arguments are of the form [{ "key1" "value1" "key2" "value2" }]\n
 \tFound %s\n
 \tGoTo
@@ -14364,6 +14377,7 @@ Zone2Distance
 \tv %f %f %f\n
 \tvn %f %f %f\n
 \t{%g,%g,%g}
+\v!xj1l
 ] Done (%.2f seconds)
 ^`bbccX^`bccPW[_bc@IOW_c.7;ETc
 ^accccY]`bccQUZ_ccAFMV_c/-2=Pc
@@ -17466,7 +17480,6 @@ inner_angle
 inner_radius
 innerconeangle
 inposition
-inputName
 inputOffset
 inputType
 input_angles
@@ -20463,7 +20476,6 @@ std::__detail::_State<char>::~_State()
 std::__detail::_StateSeq<std::regex_traits<char>>::_M_clone()
 std::deque<std::__detail::_StateSeq<std::regex_traits<char>>, std::allocator<std::__detail::_StateSeq<std::regex_traits<char>>>>::_M_reallocate_map(unsigned long, bool)
 std::deque<std::__detail::_StateSeq<std::regex_traits<char>>, std::allocator<std::__detail::_StateSeq<std::regex_traits<char>>>>::push_back(std::__detail::_StateSeq<std::regex_traits<char>> const&)
-std::function<void ()>::~function()
 std::pair<std::_Rb_tree_iterator<unsigned int>, bool> std::_Rb_tree<unsigned int, unsigned int, std::_Identity<unsigned int>, std::less<unsigned int>, std::allocator<unsigned int>>::_M_insert_unique<unsigned int const&>(unsigned int const&)
 std::regex_traits<char>::_RegexMask std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const
 std::regex_traits<char>::_RegexMask std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const::__classnames

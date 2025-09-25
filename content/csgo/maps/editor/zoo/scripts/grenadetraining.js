@@ -1,4 +1,4 @@
-import { Instance } from "cs_script/point_script";
+import { Entity, Instance } from "cs_script/point_script";
 
 let Rounds = 0;
 let Hits = 0;
@@ -12,37 +12,25 @@ Instance.ServerCommand("sv_cheats 1");
 Instance.ServerCommand("mp_warmup_offline_enabled 1");
 Instance.ServerCommand("mp_warmup_pausetimer 1");
 
-Instance.OnGameEvent("player_activate", (event) => {
-    const player = Instance.GetPlayerController(event.userid);
-    player?.JoinTeam(2);
-    player?.GetPlayerPawn()?.DestroyWeapons();
-});
-
 function SetNextTarget() {
     Rounds++;
 
-    Instance.EntFireAtName("worldtext.rounds", "SetMessage", Rounds.toString());
+    Instance.EntFireAtName("worldtext.rounds", "SetMessage", Rounds);
     Instance.EntFireAtName("cover.*", "Enable");
     Instance.EntFireAtName("tele.reset", "Teleport");
 
-	// Roll 1-11, if it duplicates last value choose value 12.
+    // Roll 1-11, if it duplicates last value choose value 12.
     let NewTarget = Math.floor(Math.random() * 11) + 1;
-	if ( NewTarget === Target )
-		NewTarget = 12;
-	Target = NewTarget;
+    if (NewTarget === Target) NewTarget = 12;
+    Target = NewTarget;
 
     let difficulty = "ez";
-    if ( Rounds > 7 ) difficulty = "hard";
-    else if ( Rounds > 4 ) difficulty = "med";
-    
+    if (Rounds > 7) difficulty = "hard";
+    else if (Rounds > 4) difficulty = "med";
 
     Instance.EntFireAtName(`cover.${Target}`, "Disable");
     Instance.EntFireAtName(`tele.${Target}`, "TeleportEntity", `targetbox.${difficulty}`);
 }
-
-Instance.OnScriptInput("GrenadeThrown", () => {
-    Instance.ClientCommand(0, "slot6");
-});
 
 // called if player leaves play area at any time
 Instance.OnScriptInput("ResetAndCleanUp", () => {
@@ -87,7 +75,11 @@ Instance.OnScriptInput("StartTraining", () => {
 Instance.OnScriptInput("GrenadeHit", () => {
     Hits++;
     Instance.EntFireAtName("snd.hit", "StartSound");
-    Instance.EntFireAtName("worldtext.hits", "SetMessage", Hits.toString());
+    Instance.EntFireAtName("worldtext.hits", "SetMessage", Hits);
+    if (trackedProjectile && trackedProjectile.IsValid()) {
+        trackedProjectile.Remove();
+        trackedProjectile = undefined;
+    }
 });
 
 // called from logic_timer "board.timer", 3 sec interval
@@ -100,5 +92,23 @@ Instance.OnScriptInput("SetNextTarget", () => {
         Instance.EntFireAtName("board.timer", "ResetTimer");
         Instance.EntFireAtName("tele.reset", "Teleport");
         Instance.EntFireAtName("cover.*", "Enable");
+    }
+});
+
+/** @type {Entity | undefined} */
+let trackedProjectile;
+/** @type {import("cs_script/point_script").Vector} */
+let trackedPos;
+Instance.OnGrenadeThrow((weapon, projectile) => {
+    Instance.ClientCommand(0, "slot6");
+    trackedProjectile = projectile;
+    trackedPos = trackedProjectile.GetAbsOrigin();
+    Instance.SetNextThink(Instance.GetGameTime());
+});
+Instance.SetThink(() => {
+    if (trackedProjectile && trackedProjectile.IsValid()) {
+        Instance.DebugLine(trackedPos, trackedProjectile.GetAbsOrigin(), 1, { r: 0, g: 0, b: 255 });
+        trackedPos = trackedProjectile.GetAbsOrigin();
+        Instance.SetNextThink(Instance.GetGameTime());
     }
 });
