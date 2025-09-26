@@ -514,6 +514,7 @@
 		"VulkanOnly"								"1"	[ $LINUX || $OSX ] // No OpenGL or D3D9/11 fallback on Linux or OSX, only Vulkan is supported.
 		"VulkanRequireSubgroupWaveOpSupport"			"1"	[ !$OSX ]
 		"VulkanRequireDescriptorIndexing"			"1"	[ !$OSX ]
+		"VulkanDefrag"								"1"
 		"VulkanAdditionalShaderCache"				"csgo_shaders.foz"	[ $OSX ]
 		//"AlwaysPreloadTexturesInGame"				"1"
 		//"MaxPreloadTextureResolution"				"256"
