@@ -185,15 +185,17 @@ var InspectActionBar;
             }
             let previewActionPrefix = displayName.startsWith('preview_') ? '' : 'preview_';
             elSingleActionBtn.text = '#inv_context_' + previewActionPrefix + displayName;
-            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, true));
+            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, false));
             elSingleActionBtn.RemoveClass('hidden');
         }
     }
     function _OnSingleAction(entry, id, closeInspect) {
+        if (m_isItemInLootlist) {
+            $.DispatchEvent('BlurPopupPanel', 'popup-lootlist-item-inspect-' + id, true);
+        }
         if (closeInspect) {
             CloseBtnAction();
         }
-        $.DispatchEvent('OpenInventory');
         entry.OnSelected(id);
     }
     function _OnActivateUpdateSelectionForMultiSelect(idSubjectItem) {
@@ -329,10 +331,10 @@ var InspectActionBar;
         InspectModelImage.StartWeaponLookat();
     }
     InspectActionBar.LookatWeapon = LookatWeapon;
-    function CloseBtnAction() {
+    function CloseBtnAction(callbackHandle = -1) {
         $.DispatchEvent("CSGOPlaySoundEffect", "inventory_inspect_close", "MOUSE");
         $.DispatchEvent('UIPopupButtonClicked', '');
-        const callbackFunc = m_callbackHandle;
+        const callbackFunc = callbackHandle > -1 ? callbackHandle : m_callbackHandle;
         if (callbackFunc != -1) {
             UiToolkitAPI.InvokeJSCallback(callbackFunc);
         }
@@ -346,14 +348,4 @@ var InspectActionBar;
         }
     }
     InspectActionBar.CloseBtnAction = CloseBtnAction;
-    function fnItemSelected(itemid) {
-    }
-    function SelectItemPopup() {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('Inspect_SelectItem', 'file://{resources}/layout/popups/popup_select_inventory_item.xml', 'associated_item=' + m_itemId +
-            '&filter_category=can_sticker:' + m_itemId);
-    }
-    InspectActionBar.SelectItemPopup = SelectItemPopup;
-    {
-        $.RegisterForUnhandledEvent("OnInventoryItemSelected", fnItemSelected);
-    }
 })(InspectActionBar || (InspectActionBar = {}));

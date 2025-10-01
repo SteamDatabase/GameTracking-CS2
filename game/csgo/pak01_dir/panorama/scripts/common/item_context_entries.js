@@ -31,29 +31,12 @@ var ItemContextEntries;
             populateFilter: ['lootlist', 'loadout', 'loadout_slot_t', 'loadout_slot_ct', 'tradeup_items', 'tradeup_ingredients'],
             bActionIsRentalAware: true,
             AvailableForItem: (id) => {
-                const defName = InventoryAPI.GetItemDefinitionName(id);
-                if (defName === 'casket')
-                    return InventoryAPI.GetItemAttributeValue(id, 'modification date') ? true : false;
                 if (InventoryAPI.DoesItemMatchDefinitionByName(id, "Remove Keychain Tool"))
                     return true;
                 return ItemInfo.IsPreviewable(id);
             },
             OnSelected: (id, contextmenuparam) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                const defName = InventoryAPI.GetItemDefinitionName(id);
-                if (defName === 'casket') {
-                    if (InventoryAPI.GetItemAttributeValue(id, 'items count')) {
-                        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_casket_operation.xml', 'op=loadcontents' +
-                            '&nextcapability=casketcontents' +
-                            '&spinner=1' +
-                            '&casket_item_id=' + id +
-                            '&subject_item_id=' + id);
-                    }
-                    else {
-                        UiToolkitAPI.ShowGenericPopupOk($.Localize('#popup_casket_title_error_casket_empty'), $.Localize('#popup_casket_message_error_casket_empty'), '', () => { });
-                    }
-                    return;
-                }
                 $.DispatchEvent("InventoryItemPreview", id, contextmenuparam);
             }
         },
@@ -120,7 +103,7 @@ var ItemContextEntries;
                 $.DispatchEvent('ContextMenuEvent', '');
                 const defName = InventoryAPI.GetItemDefinitionName(id);
                 if (defName === 'casket') {
-                    $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'casketstore', id, '');
+                    $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'casketstore');
                 }
             }
         },
@@ -337,7 +320,7 @@ var ItemContextEntries;
                 }
                 if (InventoryAPI.GetChosenActionItemsCount(id, 'decodable') === 0) {
                     if (InventoryAPI.IsTool(id)) {
-                        $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'decodable', id, '');
+                        $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'decodable');
                     }
                     else if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container')) {
                         UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
@@ -351,7 +334,7 @@ var ItemContextEntries;
                     $.DispatchEvent('ContextMenuEvent', '');
                     return;
                 }
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'decodable', id, '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'decodable');
             }
         },
         {
@@ -393,8 +376,8 @@ var ItemContextEntries;
                         '&' + 'asyncworktype=nameable');
                 }
                 else {
+                    $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'nameable');
                     $.DispatchEvent('ContextMenuEvent', '');
-                    $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'nameable', id, '');
                 }
             }
         },
@@ -405,20 +388,21 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.IsKeychain(id) && ItemInfo.ItemHasCapability(id, 'can_keychain'),
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_keychain');
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_keychain', id, '');
             }
         },
         {
             name: 'can_keychain',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'can_keychain') &&
                     InventoryAPI.GetItemKeychainSlotCount(id) > InventoryAPI.GetItemKeychainCount(id);
             },
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_keychain');
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_keychain', id, '');
             }
         },
         {
@@ -426,11 +410,12 @@ var ItemContextEntries;
             AvailableForItem: (id) => InventoryAPI.DoesItemMatchDefinitionByName(id, "Remove Keychain Tool"),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'remove_keychain', id, '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'remove_keychain');
             }
         },
         {
             name: 'remove_keychain',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_keychain') && InventoryAPI.GetItemKeychainCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -446,11 +431,12 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_sticker', id, '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_sticker');
             }
         },
         {
             name: 'can_sticker',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'can_sticker') &&
                     InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id);
@@ -458,11 +444,12 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_sticker', id, '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_sticker');
             }
         },
         {
             name: 'remove_sticker',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
@@ -478,11 +465,12 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_patch', id, '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_patch');
             }
         },
         {
             name: 'can_patch',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => {
                 return ItemInfo.ItemHasCapability(id, 'can_patch') &&
                     InventoryAPI.GetItemStickerSlotCount(id) > InventoryAPI.GetItemStickerCount(id);
@@ -490,7 +478,7 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
-                $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_patch', id, '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_patch');
             }
         },
         {
@@ -517,7 +505,7 @@ var ItemContextEntries;
                         '&' + 'inspectonly=true');
                 }
                 else {
-                    $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_stattrack_swap', id, '');
+                    $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_stattrack_swap');
                 }
                 $.DispatchEvent('ContextMenuEvent', '');
             }
@@ -793,7 +781,7 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
                 if (InventoryAPI.GetChosenActionItemsCount(id, 'can_collect') > 0) {
-                    $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_collect', id, '');
+                    $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_collect');
                 }
                 else {
                     const fauxCasket = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1201, 0);

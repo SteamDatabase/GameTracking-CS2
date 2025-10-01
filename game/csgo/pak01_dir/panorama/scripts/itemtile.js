@@ -1,16 +1,16 @@
 "use strict";
 /// <reference path="csgo.d.ts" />
 /// <reference path="common/iteminfo.ts" />
-/// <reference path="mainmenu_inventory.ts" />
+/// <reference path="popups/popup_select_item_for_capability.ts" />
 /// <reference path="common/formattext.ts" />
 var ItemTile;
 (function (ItemTile) {
-    function _OnTileUpdated() {
-        let id = $.GetContextPanel().GetAttributeString('itemid', '0');
+    function _OnTileUpdated(elTeamTile) {
+        let id = elTeamTile.GetAttributeString('itemid', '0');
         if (id === '0')
             return;
         let idForDisplay = id;
-        if ($.GetContextPanel().GetAttributeString('filter_category', '') === 'inv_graphic_art') {
+        if (elTeamTile.GetAttributeString('filter_category', '') === 'inv_graphic_art') {
             idForDisplay = ItemInfo.GetFauxReplacementItemID(id, 'graffiti');
         }
         _SetItemName(idForDisplay);
@@ -56,16 +56,15 @@ var ItemTile;
         }
     }
     function _SetMultiSelect(id) {
-        let bSelectedInMultiSelect = ($.GetContextPanel().GetParent() &&
-            $.GetContextPanel().GetParent().GetAttributeInt("capability_multistatus_selected", 0) != 0 &&
-            InventoryPanel.GetCapabilityInfo().multiselectItemIds &&
-            InventoryPanel.GetCapabilityInfo().multiselectItemIds.hasOwnProperty(id));
-        $.GetContextPanel().SetHasClass('capability_multistatus_selected', bSelectedInMultiSelect);
+        let ocapabilityInfo = _GetPopUpCapability();
+        if (ocapabilityInfo) {
+            let bSelectedInMultiSelect = (SelectItemForCapability.oCapabilityInfo.bIsMultiSelect &&
+                SelectItemForCapability.oCapabilityInfo.multiselectItemIds &&
+                SelectItemForCapability.oCapabilityInfo.multiselectItemIds.hasOwnProperty(id));
+            $.GetContextPanel().SetHasClass('capability_multistatus_selected', bSelectedInMultiSelect);
+        }
     }
     ;
-    function _UpdatePopUpCapabilityList() {
-        InventoryPanel.UpdateItemListCallback();
-    }
     function _SetImage(id) {
         $.GetContextPanel().FindChildInLayoutFile('ItemImage').itemid = id;
     }
@@ -219,7 +218,7 @@ var ItemTile;
     function OnActivate() {
         HideTooltip();
         let id = $.GetContextPanel().GetAttributeString('itemid', '0');
-        if ($.GetContextPanel().FindAncestor("Inspect_SelectItem") != null) {
+        if ($.GetContextPanel().FindAncestor("id-popup-select-item-list") != null) {
             $.DispatchEvent("OnItemTileActivated", $.GetContextPanel(), id);
             return;
         }
@@ -227,45 +226,12 @@ var ItemTile;
             $.DispatchEvent("OnItemTileActivated", $.GetContextPanel(), id);
             return;
         }
-        let capabilityInfo = _GetPopUpCapability();
-        if (capabilityInfo) {
-            $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_item_select', 'MOUSE');
-            InventoryAPI.PrecacheCustomMaterials(id);
-            if (capabilityInfo.capability === 'nameable') {
-                _CapabilityNameableAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
-            }
-            else if (capabilityInfo.capability === 'can_sticker') {
-                _CapabilityCanStickerAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId), capabilityInfo.bWorkshopItemPreview);
-            }
-            else if (capabilityInfo.capability === 'can_keychain') {
-                _CapabilityCanKeychainAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId), capabilityInfo.bWorkshopItemPreview);
-            }
-            else if (capabilityInfo.capability === 'remove_keychain') {
-                _CapabilityRemoveKeychainAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
-            }
-            else if (capabilityInfo.capability === 'can_patch') {
-                _CapabilityCanPatchAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
-            }
-            else if (capabilityInfo.capability === 'decodable') {
-                _CapabilityDecodableAction(SortIdsIntoToolAndItemID(id, capabilityInfo.initialItemId));
-            }
-            else if (capabilityInfo.capability === 'can_stattrack_swap') {
-                _CapabilityStatTrakSwapAction(capabilityInfo, id);
-            }
-            else if (capabilityInfo.capability === 'can_collect') {
-                _CapabilityPutIntoCasketAction(id, capabilityInfo.initialItemId);
-            }
-            else if (capabilityInfo.capability === 'casketcontents') {
-                _CapabilityItemInsideCasketAction(capabilityInfo.initialItemId, id);
-            }
-            else if (capabilityInfo.capability === 'casketretrieve') {
-                $.GetContextPanel().ToggleClass('capability_multistatus_selected');
-                $.DispatchEvent('UpdateSelectItemForCapabilityPopup', capabilityInfo.capability, id, $.GetContextPanel().BHasClass('capability_multistatus_selected'));
-            }
-            else if (capabilityInfo.capability === 'casketstore') {
-                $.GetContextPanel().ToggleClass('capability_multistatus_selected');
-                $.DispatchEvent('UpdateSelectItemForCapabilityPopup', capabilityInfo.capability, id, $.GetContextPanel().BHasClass('capability_multistatus_selected'));
-            }
+        if ($.GetContextPanel().FindAncestor("Crafting-Items") != null) {
+            InventoryAPI.AddCraftIngredient(id);
+            return;
+        }
+        if ($.GetContextPanel().FindAncestor("Crafting-Ingredients") != null) {
+            InventoryAPI.RemoveCraftIngredient(id);
             return;
         }
         let filterValue = $.GetContextPanel().GetAttributeString('context_menu_filter', '');
@@ -273,114 +239,42 @@ var ItemTile;
         let contextmenuparam = '';
         if ($.GetContextPanel().GetAttributeString('filter_category', '') === 'inv_graphic_art')
             contextmenuparam = '&contextmenuparam=graffiti';
-        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('popup-inspect-' + id, '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + id + filterForContextMenuEntries + contextmenuparam, () => { });
+        let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + id + filterForContextMenuEntries + contextmenuparam, () => { });
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
     ItemTile.OnActivate = OnActivate;
     ;
-    function OnActivateInspectButtonFropmTile() {
+    let updateItemListCallback;
+    function OnActivateInspectButtonFromTile() {
         let id = $.GetContextPanel().GetAttributeString('itemid', '0');
-        let capabilityInfo = _GetPopUpCapability();
-        _CapabilityItemInsideCasketAction(capabilityInfo.initialItemId, id);
+        if ($.GetContextPanel().FindAncestor("Crafting-Items") != null || $.GetContextPanel().FindAncestor("Crafting-Ingredients") != null) {
+            $.DispatchEvent("InventoryItemPreview", id, '');
+            return;
+        }
+        let oCapabilityInfo = _GetPopUpCapability();
+        if (oCapabilityInfo !== null && oCapabilityInfo.popupVisible) {
+            if (updateItemListCallback) {
+                UiToolkitAPI.UnregisterJSCallback(updateItemListCallback);
+            }
+            updateItemListCallback = UiToolkitAPI.RegisterJSCallback(SelectItemForCapability.UpdateSort);
+            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                '&' + 'inspectonly=true' +
+                '&' + 'insidecasketid=' + oCapabilityInfo.initialItemId +
+                '&' + 'capability=' + oCapabilityInfo.capability +
+                '&' + 'showallitemactions=false' +
+                '&' + 'allowsave=false' +
+                '&' + 'isselected=' + $.GetContextPanel().BHasClass('capability_multistatus_selected') +
+                '&' + 'callback=' + updateItemListCallback);
+        }
     }
-    ItemTile.OnActivateInspectButtonFropmTile = OnActivateInspectButtonFropmTile;
+    ItemTile.OnActivateInspectButtonFromTile = OnActivateInspectButtonFromTile;
     function _GetPopUpCapability() {
-        if (typeof InventoryPanel === "object") {
-            let capInfo = InventoryPanel.GetCapabilityInfo();
-            if (capInfo.popupVisible) {
-                return capInfo;
+        if (typeof SelectItemForCapability === "object") {
+            if (SelectItemForCapability.oCapabilityInfo.popupVisible) {
+                return SelectItemForCapability.oCapabilityInfo;
             }
         }
         return null;
-    }
-    ;
-    function SortIdsIntoToolAndItemID(id, initalId) {
-        let bIdIsTool = InventoryAPI.IsTool(id);
-        let toolId = bIdIsTool ? id : initalId;
-        let itemID = bIdIsTool ? initalId : id;
-        return {
-            tool: toolId,
-            item: itemID
-        };
-    }
-    ;
-    function _CapabilityNameableAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=nameable');
-    }
-    ;
-    function _CapabilityCanStickerAction(idsToUse, bWorkshopItemPreview) {
-        const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_sticker' +
-            '&' + 'workshopPreview=' + workshopPreview);
-    }
-    ;
-    function _CapabilityCanKeychainAction(idsToUse, bWorkshopItemPreview) {
-        const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_keychain' +
-            '&' + 'workshopPreview=' + workshopPreview);
-    }
-    ;
-    function _CapabilityRemoveKeychainAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + idsToUse.item +
-            '&' + 'asyncworktype=remove_keychain');
-    }
-    ;
-    function _CapabilityCanPatchAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_patch');
-    }
-    ;
-    function _CapabilityDecodableAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=decodeable');
-    }
-    ;
-    function _CapabilityPutIntoCasketAction(idCasket, idItem, cap) {
-        $.DispatchEvent('ContextMenuEvent', '');
-        if (!cap) {
-            $.DispatchEvent('HideSelectItemForCapabilityPopup');
-            $.DispatchEvent('UIPopupButtonClicked', '');
-            $.DispatchEvent('CapabilityPopupIsOpen', false);
-        }
-        if (InventoryAPI.GetItemAttributeValue(idCasket, 'modification date')) {
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_casket_operation.xml', 'op=add' +
-                (cap ? '&nextcapability=' + cap : '') +
-                '&spinner=1' +
-                '&casket_item_id=' + idCasket +
-                '&subject_item_id=' + idItem);
-        }
-        else {
-            let fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + idCasket +
-                '&' + 'asyncworktype=nameable' +
-                '&' + 'asyncworkitemwarningtext=#popup_newcasket_warning');
-        }
-    }
-    ;
-    let jsUpdateItemListCallback = UiToolkitAPI.RegisterJSCallback(_UpdatePopUpCapabilityList);
-    function _CapabilityItemInsideCasketAction(idCasket, idItem) {
-        let capabilityInfo = _GetPopUpCapability();
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + idItem +
-            '&' + 'inspectonly=true' +
-            '&' + 'insidecasketid=' + idCasket +
-            '&' + 'capability=' + capabilityInfo.capability +
-            '&' + 'showallitemactions=false' +
-            '&' + 'allowsave=false' +
-            '&' + 'isselected=' + $.GetContextPanel().BHasClass('capability_multistatus_selected') +
-            '&' + 'callback=' + jsUpdateItemListCallback);
-    }
-    function _CapabilityStatTrakSwapAction(capInfo, id) {
-        if (InventoryAPI.IsTool(capInfo.initialItemId)) {
-            $.DispatchEvent("ShowSelectItemForCapabilityPopup", 'can_stattrack_swap', id, capInfo.initialItemId);
-        }
-        else {
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_stattrack_swap.xml', 'swaptool=' + capInfo.secondaryItemId +
-                '&' + 'swapitem1=' + capInfo.initialItemId +
-                '&' + 'swapitem2=' + id);
-        }
     }
     ;
     let jsTooltipDelayHandle = null;

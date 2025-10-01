@@ -253,7 +253,7 @@ var InventoryInspect;
             InspectPurchaseBar.ClosePopup();
         }
         else {
-            InspectActionBar.CloseBtnAction();
+            InspectActionBar.CloseBtnAction(m_Inspectpanel.GetAttributeInt('callback', -1));
         }
     }
     InventoryInspect.ClosePopup = ClosePopup;
@@ -266,6 +266,12 @@ var InventoryInspect;
         _UpdatePanelData(itemId);
         InspectActionBar.NavigateModelPanel('InspectModel');
     }
+    function _BlurPanel(panelId, shouldBlur) {
+        if (panelId == $.GetContextPanel().id) {
+            $.GetContextPanel().SetHasClass('popup-inspect-modelpanel_darken_blur', shouldBlur);
+        }
+    }
     $.RegisterForUnhandledEvent('CSGOShowMainMenu', _Refresh);
     $.RegisterForUnhandledEvent('PopulateLoadingScreen', ClosePopup);
+    $.RegisterForUnhandledEvent('BlurPopupPanel', _BlurPanel);
 })(InventoryInspect || (InventoryInspect = {}));

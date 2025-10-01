@@ -15,9 +15,9 @@ Instance.ServerCommand("mp_warmup_pausetimer 1");
 function SetNextTarget() {
     Rounds++;
 
-    Instance.EntFireAtName("worldtext.rounds", "SetMessage", Rounds);
-    Instance.EntFireAtName("cover.*", "Enable");
-    Instance.EntFireAtName("tele.reset", "Teleport");
+    Instance.EntFireAtName({ name: "worldtext.rounds", input: "SetMessage", value: Rounds });
+    Instance.EntFireAtName({ name: "cover.*", input: "Enable" });
+    Instance.EntFireAtName({ name: "tele.reset", input: "Teleport" });
 
     // Roll 1-11, if it duplicates last value choose value 12.
     let NewTarget = Math.floor(Math.random() * 11) + 1;
@@ -28,27 +28,27 @@ function SetNextTarget() {
     if (Rounds > 7) difficulty = "hard";
     else if (Rounds > 4) difficulty = "med";
 
-    Instance.EntFireAtName(`cover.${Target}`, "Disable");
-    Instance.EntFireAtName(`tele.${Target}`, "TeleportEntity", `targetbox.${difficulty}`);
+    Instance.EntFireAtName({ name: `cover.${Target}`, input: "Disable" });
+    Instance.EntFireAtName({ name: `tele.${Target}`, input: "TeleportEntity", value: `targetbox.${difficulty}` });
 }
 
 // called if player leaves play area at any time
 Instance.OnScriptInput("ResetAndCleanUp", () => {
-    Instance.EntFireAtName("trigger.start", "Enable");
-    Instance.EntFireAtName("trigger.end_early", "Disable");
-    Instance.EntFireAtName("worldtext.go_here", "Enable");
-    Instance.EntFireAtName("relay.start_countdown", "CancelPending");
+    Instance.EntFireAtName({ name: "trigger.start", input: "Enable" });
+    Instance.EntFireAtName({ name: "trigger.end_early", input: "Disable" });
+    Instance.EntFireAtName({ name: "worldtext.go_here", input: "Enable" });
+    Instance.EntFireAtName({ name: "relay.start_countdown", input: "CancelPending" });
 
-    Instance.EntFireAtName("worldtext.training_countdown_dyn", "SetMessage", "3");
-    Instance.EntFireAtName("worldtext.training_countdown_static", "Disable");
-    Instance.EntFireAtName("worldtext.training_countdown_dyn", "Disable");
-    Instance.EntFireAtName("board.timer", "Disable");
-    Instance.EntFireAtName("board.timer", "ResetTimer");
-    Instance.EntFireAtName("snd.tick", "StopSound");
-    Instance.EntFireAtName("tele.reset", "Teleport");
-    Instance.EntFireAtName("cover.*", "Enable");
-    Instance.EntFireAtName("worldtext.hits", "SetMessage", "0");
-    Instance.EntFireAtName("worldtext.rounds", "SetMessage", "0");
+    Instance.EntFireAtName({ name: "worldtext.training_countdown_dyn", input: "SetMessage", value: "3" });
+    Instance.EntFireAtName({ name: "worldtext.training_countdown_static", input: "Disable" });
+    Instance.EntFireAtName({ name: "worldtext.training_countdown_dyn", input: "Disable" });
+    Instance.EntFireAtName({ name: "board.timer", input: "Disable" });
+    Instance.EntFireAtName({ name: "board.timer", input: "ResetTimer" });
+    Instance.EntFireAtName({ name: "snd.tick", input: "StopSound" });
+    Instance.EntFireAtName({ name: "tele.reset", input: "Teleport" });
+    Instance.EntFireAtName({ name: "cover.*", input: "Enable" });
+    Instance.EntFireAtName({ name: "worldtext.hits", input: "SetMessage", value: "0" });
+    Instance.EntFireAtName({ name: "worldtext.rounds", input: "SetMessage", value: "0" });
 
     Instance.ServerCommand("sv_infinite_ammo 0");
     const player = Instance.GetPlayerController(0)?.GetPlayerPawn();
@@ -57,10 +57,10 @@ Instance.OnScriptInput("ResetAndCleanUp", () => {
 });
 
 Instance.OnScriptInput("StartTraining", () => {
-    Instance.EntFireAtName("trigger.start", "Disable");
-    Instance.EntFireAtName("trigger.end_early", "Enable");
-    Instance.EntFireAtName("worldtext.go_here", "Disable");
-    Instance.EntFireAtName("relay.start_countdown", "Trigger");
+    Instance.EntFireAtName({ name: "trigger.start", input: "Disable" });
+    Instance.EntFireAtName({ name: "trigger.end_early", input: "Enable" });
+    Instance.EntFireAtName({ name: "worldtext.go_here", input: "Disable" });
+    Instance.EntFireAtName({ name: "relay.start_countdown", input: "Trigger" });
 
     Instance.ServerCommand("sv_infinite_ammo 1");
     const player = Instance.GetPlayerController(0)?.GetPlayerPawn();
@@ -74,8 +74,8 @@ Instance.OnScriptInput("StartTraining", () => {
 // called from grenade trigger inside target area
 Instance.OnScriptInput("GrenadeHit", () => {
     Hits++;
-    Instance.EntFireAtName("snd.hit", "StartSound");
-    Instance.EntFireAtName("worldtext.hits", "SetMessage", Hits);
+    Instance.EntFireAtName({ name: "snd.hit", input: "StartSound" });
+    Instance.EntFireAtName({ name: "worldtext.hits", input: "SetMessage", value: Hits });
     if (trackedProjectile && trackedProjectile.IsValid()) {
         trackedProjectile.Remove();
         trackedProjectile = undefined;
@@ -87,11 +87,11 @@ Instance.OnScriptInput("SetNextTarget", () => {
     if (Rounds < 10) {
         SetNextTarget();
     } else {
-        Instance.EntFireAtName("snd.end", "StartSound");
-        Instance.EntFireAtName("board.timer", "Disable");
-        Instance.EntFireAtName("board.timer", "ResetTimer");
-        Instance.EntFireAtName("tele.reset", "Teleport");
-        Instance.EntFireAtName("cover.*", "Enable");
+        Instance.EntFireAtName({ name: "snd.end", input: "StartSound" });
+        Instance.EntFireAtName({ name: "board.timer", input: "Disable" });
+        Instance.EntFireAtName({ name: "board.timer", input: "ResetTimer" });
+        Instance.EntFireAtName({ name: "tele.reset", input: "Teleport" });
+        Instance.EntFireAtName({ name: "cover.*", input: "Enable" });
     }
 });
 
@@ -99,7 +99,7 @@ Instance.OnScriptInput("SetNextTarget", () => {
 let trackedProjectile;
 /** @type {import("cs_script/point_script").Vector} */
 let trackedPos;
-Instance.OnGrenadeThrow((weapon, projectile) => {
+Instance.OnGrenadeThrow(({ projectile }) => {
     Instance.ClientCommand(0, "slot6");
     trackedProjectile = projectile;
     trackedPos = trackedProjectile.GetAbsOrigin();
@@ -107,7 +107,7 @@ Instance.OnGrenadeThrow((weapon, projectile) => {
 });
 Instance.SetThink(() => {
     if (trackedProjectile && trackedProjectile.IsValid()) {
-        Instance.DebugLine(trackedPos, trackedProjectile.GetAbsOrigin(), 1, { r: 0, g: 0, b: 255 });
+        Instance.DebugLine({ start: trackedPos, end: trackedProjectile.GetAbsOrigin(), duration: 1, color: { r: 0, g: 0, b: 255 } });
         trackedPos = trackedProjectile.GetAbsOrigin();
         Instance.SetNextThink(Instance.GetGameTime());
     }

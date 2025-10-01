@@ -2,6 +2,7 @@
 /// <reference path="csgo.d.ts" />
 /// <reference path="common/formattext.ts" />
 /// <reference path="segmented_progress_bar.ts" />
+$.LogChannel("p.missions", "LV_OFF");
 var MissionTile;
 (function (MissionTile) {
     function IsTheInGamePanel() {

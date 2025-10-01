@@ -10,48 +10,59 @@ declare module "cs_script/point_script"
         /** Log a message to the console. */
         Msg(text: any): void;
         /** Print some text to the game window. Only works in dev environments. */
-        DebugScreenText(text: any, x: number, y: number, duration: number, color: Color): void;
+        DebugScreenText(config: { text: any, x: number, y: number, duration?: number, color?: Color }): void;
         /** Draw a line in the world. Only works in dev environments. */
-        DebugLine(start: Vector, end: Vector, duration: number, color: Color): void;
-        /** Draw an axis aligned box in the world. Only works in dev environments. */
-        DebugBox(mins: Vector, maxs: Vector, duraiton: number, color: Color): void;
+        DebugLine(config: { start: Vector, end: Vector, duration?: number, color?: Color }): void;
         /** Draw a wire sphere in the world. Only works in dev environments. */
-        DebugSphere(center: Vector, radius: number, duration: number, color: Color): void;
+        DebugSphere(config: { center: Vector, radius: number, duration?: number, color?: Color }): void;
+        /** Draw an axis aligned box in the world. Only works in dev environments. */
+        DebugBox(config: { mins: Vector, maxs: Vector, duration?: number, color?: Color }): void;
 
-        /** Called in Tools mode before the script is reloaded due to changes. A returned value will be passed to the OnReload callback. */
-        OnBeforeReload(callback: () => any): void;
-        /** Called in Tools mode after the script reloaded due to changes while. */
-        OnReload(callback: (memory: any) => void): void;
+        /**
+         * Called in Tools mode when the script is reloaded due to changes.
+         * The before callback will be invoked before pre-load teardown.
+         * The after callback will be invoked after the new script is evaluated and will be passed the return value of the before callback.
+         */
+        OnScriptReload<T>(config: { before?: () => T, after?: (memory: T) => void }): void;
 
         /** Called per-think. Control when this is run using SetNextThink. */
         SetThink(callback: () => void): void;
-        /** Set when the OnThink callback should next be run. The exact time will be the tick nearest to the specified time. Will be within 1/128th of a second, before or after. */
+        /** Set when the OnThink callback should next be run. The exact time will be on the tick nearest to the specified time, which may be earlier or later. */
         SetNextThink(time: number): void;
 
         /** Called when the point_script entity is activated */
         OnActivate(callback: () => void): void;
         /** Called when input RunScriptInput is triggered on the point_script entity with a parameter value that matches name. */
         OnScriptInput(name: string, callback: (inputData: { caller?: Entity, activator?: Entity }) => void): void;
-        OnPlayerConnect(callback: (player: CSPlayerController) => void): void;
-        OnPlayerActivate(callback: (player: CSPlayerController) => void): void;
-        OnPlayerDisconnect(callback: (playerSlot: number) => void): void;
+
+        OnPlayerConnect(callback: (event: { player: CSPlayerController }) => void): void;
+        OnPlayerActivate(callback: (event: { player: CSPlayerController }) => void): void;
+        OnPlayerDisconnect(callback: (event: { playerSlot: number }) => void): void;
+        OnPlayerReset(callback: (event: { player: CSPlayerPawn }) => void): void
         OnRoundStart(callback: () => void): void;
-        OnRoundEnd(callback: (winningTeam: number) => void): void;
-        OnBombPlant(callback: (c4: Entity, planter: CSPlayerPawn) => void): void;
-        OnBombDefuse(callback: (c4: Entity, defuser: CSPlayerPawn) => void): void;
-        OnPlayerKill(callback: (victim: CSPlayerPawn, info: { weapon?: CSWeaponBase, attacker?: Entity, inflictor?: Entity }) => void): void;
-        OnPlayerChat(callback: (speaker: CSPlayerController, team: number, text: string) => void): void;
-        OnGunFire(callback: (weapon: CSWeaponBase) => void): void;
-        OnGrenadeThrow(callback: (weapon: CSWeaponBase, projectile: Entity) => void): void;
+        OnRoundEnd(callback: (event: { winningTeam: number }) => void): void;
+        OnBombPlant(callback: (event: { plantedC4: Entity, planter: CSPlayerPawn }) => void): void;
+        OnBombDefuse(callback: (event: { plantedC4: Entity, defuser: CSPlayerPawn }) => void): void;
+        OnBeforePlayerDamage(callback: (event: { player: CSPlayerPawn, damage: number, inflictor?: Entity, attacker?: Entity, weapon?: CSWeaponBase }) => BeforeDamageResult): void;
+        OnPlayerDamage(callback: (event: { player: CSPlayerPawn, damage: number, inflictor?: Entity, attacker?: Entity, weapon?: CSWeaponBase }) => void): void;
+        OnPlayerKill(callback: (event: { player: CSPlayerPawn, inflictor?: Entity, attacker?: Entity, weapon?: CSWeaponBase }) => void): void;
+        OnPlayerJump(callback: (event: { player: CSPlayerPawn }) => void): void;
+        OnPlayerLand(callback: (event: { player: CSPlayerPawn }) => void): void;
+        OnPlayerChat(callback: (event: { player: CSPlayerController | undefined, text: string, team: number }) => void): void;
+        OnPlayerPing(callback: (event: { player: CSPlayerController, position: Vector }) => void): void;
+        OnGunReload(callback: (event: { weapon: CSWeaponBase }) => void): void;
+        OnGunFire(callback: (event: { weapon: CSWeaponBase }) => void): void;
+        OnBulletImpact(callback: (event: { weapon: CSWeaponBase, position: Vector }) => void): void;
+        OnGrenadeThrow(callback: (event: { weapon: CSWeaponBase, projectile: Entity }) => void): void;
+        OnGrenadeBounce(callback: (event: { projectile: Entity, bounces: number }) => void): void;
+        OnKnifeAttack(callback: (event: { weapon: CSWeaponBase }) => void): void;
 
         /** Fire the input on all targets matching the specified names. */
-        EntFireAtName(name: string, input: string, value?: InputValue, delay?: number): void;
-        EntFireAtName(name: string, input: string, inputData?: InputData, delay?: number): void;
+        EntFireAtName(config: { name: string, input: string, value?: InputValue, caller?: Entity, activator?: Entity, delay?: number }): void;
         /** Fire the input on the specified target. */
-        EntFireAtTarget(target: Entity, input: string, value?: InputValue, delay?: number): void;
-        EntFireAtTarget(target: Entity, input: string, inputData?: InputData, delay?: number): void;
+        EntFireAtTarget(config: { target: Entity, input: string, value?: InputValue, caller?: Entity, activator?: Entity, delay?: number }): void;
         /** Connect the output of an entity to a callback. The return value is a connection id that can be used in `DisconnectOutput` */
-        ConnectOutput(target: Entity, output: string, callback: (inputData: InputData) => any): number | undefined;
+        ConnectOutput(target: Entity, output: string, callback: (inputData: { value?: InputValue, caller?: Entity, activator?: Entity }) => any): number | undefined;
         /** Find entities by name. */
         DisconnectOutput(connectionId: number): void;
 
@@ -66,13 +77,21 @@ declare module "cs_script/point_script"
         /** Get the player controller in the given slot. */
         GetPlayerController(playerSlot: number): CSPlayerController | undefined;
 
-        /** Trace along a line and detect collisions */
-        GetTraceHit(start: Vector, end: Vector, config?: TraceConfig): TraceResult;
+        /** Trace a point along a line and detect collisions */
+        TraceLine(trace: { start: Vector, end: Vector, ignoreEntity?: Entity, ignorePlayers?: boolean }): TraceResult;
+        /** Trace a sphere along a line and detect collisions */
+        TraceSphere(trace: { start: Vector, end: Vector, radius: number, ignoreEntity?: Entity, ignorePlayers?: boolean }): TraceResult;
+        /** Trace an axis aligned bounding box along a line and detect collisions */
+        TraceBox(trace: { start: Vector, end: Vector, mins: Vector, maxs: Vector, ignoreEntity?: Entity, ignorePlayers?: boolean }): TraceResult;
+        /** Trace as a bullet and detect hits and damage */
+        TraceBullet(trace: BulletTrace): BulletTraceResult[];
 
         /** Get the game time in seconds. */
         GetGameTime(): number;
         /** Get if the game is currently in a Warmup period. */
         IsWarmupPeriod(): boolean;
+        /** Get if the game is currently in a Freeze period. */
+        IsFreezePeriod(): boolean;
         /** Get the current Game Type. */
         GetGameType(): number;
         /** Get the current Game Mode. */
@@ -86,25 +105,32 @@ declare module "cs_script/point_script"
         ClientCommand(playerSlot: number, command: string): void;
         /** Issue a command. */
         ServerCommand(command: string): void;
+
+        /** @deprecated */
+        OnBeforeReload(callback: () => any): void;
+        /** @deprecated */
+        OnReload(callback: (memory: any) => void): void;
+        /** @deprecated */
+        DebugScreenText(text: any, x: number, y: number, duration: number, color: Color): void;
+        /** @deprecated */
+        DebugLine(start: Vector, end: Vector, duration: number, color: Color): void;
+        /** @deprecated */
+        DebugBox(mins: Vector, maxs: Vector, duration: number, color: Color): void;
+        /** @deprecated */
+        DebugSphere(center: Vector, radius: number, duration: number, color: Color): void;
+        /** @deprecated */
+        GetTraceHit(start: Vector, end: Vector, config?: { ignoreEntity?: Entity, ignorePlayers?: boolean }): TraceResult;
+        /** @deprecated */
+        EntFireAtName(name: string, input: string, inputData?: InputValue | { value?: InputValue, caller?: Entity, activator?: Entity }, delay?: number): void;
+        /** @deprecated */
+        EntFireAtTarget(target: Entity, input: string, inputData?: InputValue | { value?: InputValue, caller?: Entity, activator?: Entity }, delay?: number): void;
     }
 
     type Vector = { x: number, y: number, z: number };
     type QAngle = { pitch: number, yaw: number, roll: number };
     type Color = { r: number, g: number, b: number, a?: number };
     type InputValue = boolean | number | string | Vector | Color | undefined;
-    type InputData = { value?: InputValue, caller?: Entity, activator?: Entity };
-    interface TraceConfig {
-        ignoreEnt?: Entity, // Set to ignore collisions with an entity, typically the source of a trace
-        interacts?: TraceInteracts, // Defaults to trace against any solid
-        sphereRadius?: number; // Set to trace a sphere with specified radius
-    }
-    interface TraceResult {
-        fraction: number;
-        end: Vector;
-        didHit: boolean;
-        normal: Vector;
-        hitEnt?: Entity;
-    }
+    type BeforeDamageResult = { damage?: number, abort?: boolean } | void;
 
     enum CSWeaponType {
         KNIFE = 0,
@@ -131,9 +157,34 @@ declare module "cs_script/point_script"
         C4 = 4
     }
 
-    enum TraceInteracts {
-        SOLID = 0,
-        WORLD = 1,
+    interface TraceResult {
+        fraction: number;
+        end: Vector;
+        didHit: boolean;
+        startedInSolid: boolean;
+        normal: Vector;
+        hitEntity?: Entity;
+    }
+
+    /**
+     * @example {damage:30, rangeModifer:.85, penetration:1} // Glock
+     * @example {damage:30, rangeModifer:.45, penetration:1} // Mag-7
+     * @example {damage:36, rangeModifier:.98, penetration:2} // AK47
+     * @example {damage:115, rangeModifier:.99, penetration:2.5} // AWP
+     */
+    interface BulletTrace {
+        start: Vector,
+        end: Vector,
+        shooter: CSPlayerPawn,
+        damage?: number, // Default = 100
+        rangeModifier?: number, // Default = .85
+        penetration?: number, // Default = 1
+    }
+
+    interface BulletTraceResult {
+        hitEntity: Entity;
+        damage: number; // Damage value reduced by travel, before damage modification (body armor, headhshots, etc)
+        position: Vector;
     }
 
     export class Entity {
@@ -146,18 +197,28 @@ declare module "cs_script/point_script"
         GetLocalVelocity(): Vector;
         GetEyeAngles(): QAngle;
         GetEyePosition(): Vector;
-        Teleport(newPosition: Vector | null, newAngles: QAngle | null, newVelocity: Vector | null): void;
+        Teleport(newValues: { position?: Vector, angles?: QAngle, velocity?: Vector }): void;
         GetClassName(): string;
         GetEntityName(): string;
         SetEntityName(name: string): void;
+        GetOwner(): Entity | undefined;
+        SetOwner(owner: Entity | undefined): void;
+        GetParent(): Entity | undefined;
+        SetParent(parent: Entity | undefined): void;
         GetTeamNumber(): number;
         GetHealth(): number;
         SetHealth(health: number): void;
         GetMaxHealth(): number;
         SetMaxHealth(health: number): void;
+        IsAlive(): boolean;
+        IsWorld(): boolean;
         GetGroundEntity(): Entity | undefined;
+        TakeDamage(takeDamage: { damage: number, inflictor?: Entity, attacker?: Entity, weapon?: CSWeaponBase }): number;
         Kill(): void;
         Remove(): void;
+
+        /** @deprecated */
+        Teleport(newPosition: Vector | null, newAngles: QAngle | null, newVelocity: Vector | null): void;
     }
 
     export class BaseModelEntity extends Entity {
@@ -177,6 +238,10 @@ declare module "cs_script/point_script"
         GetName(): string;
         GetType(): CSWeaponType;
         GetPrice(): number;
+        GetDamage(): number; // Starting damage as the bullet travels
+        GetRange(): number;
+        GetRangeModifier(): number; // Exponential damage drop off from traveling through air. nextDamage = currentDamage * rangeModifier ^ (distance / 500).
+        GetPenetration(): number; // Power to maintain damage during penetration
     }
 
     export class CSPlayerController extends Entity {
@@ -191,6 +256,7 @@ declare module "cs_script/point_script"
         GetWeaponDataForLoadoutSlot(slot: number, team?: number): CSWeaponData | undefined;
         IsObserving(): boolean;
         IsBot(): boolean;
+        IsConnected(): boolean;
         JoinTeam(team: number): void;
     }
 
@@ -213,6 +279,7 @@ declare module "cs_script/point_script"
         GetActiveWeapon(): CSWeaponBase | undefined;
         DestroyWeapon(target: CSWeaponBase): void;
         DestroyWeapons(): void;
+        DropWeapon(target: CSWeaponBase): void;
         SwitchToWeapon(target: CSWeaponBase): void;
         GiveNamedItem(name: string, autoDeploy?: boolean): void;
         GetArmor(): number;

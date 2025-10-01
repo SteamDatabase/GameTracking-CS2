@@ -8,6 +8,7 @@
 /// <reference path="common/icon.ts" />
 /// <reference path="xpshop_track.ts" />
 /// <reference path="particle_controls.ts" />
+$.LogChannel('p.armory', "LV_OFF");
 var XpShop;
 (function (XpShop) {
     const m_tileWidth = 260;
@@ -229,9 +230,12 @@ var XpShop;
     }
     function _UpdateShopGoods(m_nTrack) {
         let nCount = MissionsAPI.GetSeasonalOperationRedeemableGoodsCount(m_nTrack);
+        let aShopItemsData = [];
+        let itemsInRows = {};
         for (let i = 0; i < nCount; i++) {
             let ShopEntry = {
                 ui_order: 0,
+                items_in_row: 0,
                 nav_order: 0,
                 flags: 0,
                 ui_image: "",
@@ -254,6 +258,7 @@ var XpShop;
                 ShopEntry[key] = field_value;
             }
             ShopEntry.shop_index = i;
+            itemsInRows[ShopEntry.ui_order] = !itemsInRows[ShopEntry.ui_order] ? 1 : ++itemsInRows[ShopEntry.ui_order];
             if (ShopEntry.item_name.startsWith('lootlist:')) {
                 ShopEntry.entry_type = 'lootlist';
                 ShopEntry.lootlist = _GetLootListForReward(ShopEntry.item_name);
@@ -292,9 +297,13 @@ var XpShop;
                 if (numSecondsRemaining <= 0)
                     continue;
             }
-            _MakeShopTile(ShopEntry);
-            _MakeNavButton(ShopEntry);
+            aShopItemsData.push(ShopEntry);
         }
+        aShopItemsData.forEach((element) => {
+            element.items_in_row = itemsInRows[element.ui_order];
+            _MakeShopTile(element);
+            _MakeNavButton(element);
+        });
         let elParent = $.GetContextPanel().FindChildInLayoutFile('id-xpshop-top-nav');
         let aNavButtons = elParent.Children();
         aNavButtons.forEach((element, idx) => {
@@ -343,12 +352,11 @@ var XpShop;
                 let numDaysRemaining = StoreAPI.GetSecondsUntilTimestamp(parseInt(ShopEntry.limited_until));
                 numDaysRemaining = Math.floor(numDaysRemaining / (24 * 3600));
                 elPanelLimitedTimer.SetDialogVariableInt('daysremaining', numDaysRemaining);
-                let strTimer = $.Localize((numDaysRemaining > 0) ? '#SFUI_Store_Offer_Days_Remaining' : '#SFUI_Store_Last_Chance', elPanelLimitedTimer);
+                let strTimer = '#SFUI_Store_Offer_Days_Remaining' +
+                    ((numDaysRemaining > 0) ? '' : '_last') +
+                    (ShopEntry.bidding_cycle ? '_bid' : '_claim');
+                strTimer = $.Localize(strTimer, elPanelLimitedTimer);
                 elPanelLimitedTimer.SetDialogVariable('limitedtimeleft', strTimer);
-                let elPanelLabelBuy = elPanelLimitedTimer.FindChildInLayoutFile('id-xpshop-tile-limitedtimer-tag-buy');
-                let elPanelLabelBid = elPanelLimitedTimer.FindChildInLayoutFile('id-xpshop-tile-limitedtimer-tag-bid');
-                elPanelLabelBuy.SetHasClass('hidden', ShopEntry.bidding_cycle ? true : false);
-                elPanelLabelBid.SetHasClass('hidden', ShopEntry.bidding_cycle ? false : true);
             }
             elTile.style.backgroundImage = 'url("file://{images}/' + ShopEntry.ui_image_thumbnail + '.png")';
             elTile.style.backgroundPosition = '50% 50%';
@@ -367,13 +375,13 @@ var XpShop;
             else if (ShopEntry.lootlist && ShopEntry.lootlist.length > 1) {
                 let elCarousel = elTile.FindChildInLayoutFile('id-xpshop-tile-carousel');
                 let elPanel;
-                const numItemsPerTile = (ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") ? 4 : 1;
-                let numScrollingTilesToAdd = (ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") ? Math.floor((ShopEntry.lootlist.length + numItemsPerTile - 1) / numItemsPerTile) : 6;
+                const numItemsPerTile = ((ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") && ShopEntry.items_in_row < 5) ? 4 : 1;
+                let numScrollingTilesToAdd = ((ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") && numItemsPerTile > 1) ? Math.floor((ShopEntry.lootlist.length + numItemsPerTile - 1) / numItemsPerTile) : 6;
                 let shuffledArray = [...ShopEntry.lootlist];
                 shuffledArray.sort((a, b) => 0.5 - Math.random());
                 for (let iScrollingTile = 0; iScrollingTile < numScrollingTilesToAdd; ++iScrollingTile) {
                     for (let iTileItem = 0; iTileItem < numItemsPerTile; ++iTileItem) {
-                        if (ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") {
+                        if ((ShopEntry.lootlist_item_type === "keychain" || ShopEntry.lootlist_item_type === "sticker") && ShopEntry.items_in_row < 5) {
                             let entry = shuffledArray[((iScrollingTile * numScrollingTilesToAdd) + iTileItem) % shuffledArray.length];
                             if (iTileItem === 0) {
                                 elPanel = $.CreatePanel('Panel', elCarousel, '', { class: 'xpshop__item-tile__carousel-multi-image' });

@@ -3507,7 +3507,7 @@ async function RunChess() {
         await AnimateMove(move);
     }
 
-    Instance.EntFireAtName(`snd.chess.${chess.turn()}.win`, "StartSound");
+    Instance.EntFireAtName({ name: `snd.chess.${chess.turn()}.win`, input: "StartSound" });
     Instance.SetNextThink(Instance.GetGameTime() + 10);
     bIsRunning = false;
 }
@@ -3541,7 +3541,7 @@ function RenderPieces() {
             if (square.color === BLACK) {
                 angles.yaw -= 180;
             }
-            piece.Teleport(centers[square.square].origin, angles, null);
+            piece.Teleport({ position: centers[square.square].origin, angles });
         }
     }
 
@@ -3551,8 +3551,8 @@ function RenderPieces() {
 }
 
 function PlaySoundOnEnt(soundEntName, targetEntName) {
-    Instance.EntFireAtName(soundEntName, "SetSourceEntity", targetEntName);
-    Instance.EntFireAtName(soundEntName, "StartSound");
+    Instance.EntFireAtName({ name: soundEntName, input: "SetSourceEntity", value: targetEntName });
+    Instance.EntFireAtName({ name: soundEntName, input: "StartSound" });
 }
 
 async function AnimateMove(move) {
@@ -3597,11 +3597,11 @@ async function SlidePiece(piece, from, to) {
         }
         const t = (Instance.GetGameTime() - startTime) / slideTime;
         if (t >= 1) {
-            piece.Teleport(endPos, null, null);
+            piece.Teleport({ position: endPos });
             return;
         } else {
             const midPos = { x: startPos.x + dx * t, y: startPos.y + dy * t, z: startPos.z + dz * t };
-            piece.Teleport(midPos, null, null);
+            piece.Teleport({ position: midPos });
             await Delay(0);
         }
     }
@@ -3622,7 +3622,7 @@ async function DiePiece(piece) {
             piece.Remove();
             return;
         } else {
-            piece.Teleport({ ...startPos, z: startPos.z + dieZ * t }, null, null);
+            piece.Teleport({ position: { ...startPos, z: startPos.z + dieZ * t } });
             await Delay(0);
         }
     }
@@ -3735,6 +3735,7 @@ function GetFitness(color) {
     return totalPieceValue;
 }
 
+/** @param {Chess?} oldChess  */
 function Init(oldChess) {
     if (oldChess && !oldChess.isGameOver()) chess = oldChess;
     FindCenters();
@@ -3760,13 +3761,17 @@ function Delay(delay) {
 }
 
 Instance.OnActivate(Init);
-Instance.OnReload(Init);
-Instance.OnBeforeReload(() => {
-    for (let u = 0; u < undosNeeded; u++) {
-        chess.undo();
-    }
-    return chess;
+
+Instance.OnScriptReload({
+    before: () => {
+        for (let u = 0; u < undosNeeded; u++) {
+            chess.undo();
+        }
+        return chess;
+    },
+    after: (chessMemory) => Init(chessMemory),
 });
+
 Instance.SetThink(() => {
     RunThinkQueue();
     RunChess();

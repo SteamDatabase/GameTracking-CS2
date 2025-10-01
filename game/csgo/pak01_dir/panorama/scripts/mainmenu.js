@@ -11,6 +11,7 @@
 /// <reference path="vanity_pet_info.ts" />
 /// <reference path="particle_controls.ts" />
 /// <reference path="video_setting_recommendations.ts" />
+$.LogChannel('p.mainmenu', "LV_OFF");
 var MainMenu;
 (function (MainMenu) {
     const _m_bPerfectWorld = (MyPersonaAPI.GetLauncherType() === "perfectworld");
@@ -907,8 +908,23 @@ var MainMenu;
         }
     }
     function OnEscapeKeyPressed() {
-        if (_m_activeTab)
+        if (_m_activeTab) {
+            if (_m_activeTab === 'JsMainMenuStore') {
+                const xpStoreMenu = _m_elContentPanel.FindChildInLayoutFile('JsMainMenuStore').FindChildInLayoutFile('id-store-page-xpshop');
+                if (xpStoreMenu && xpStoreMenu.IsValid()) {
+                    const xpShopNavBar = xpStoreMenu.FindChildInLayoutFile('id-xpshop-top-nav');
+                    if (xpShopNavBar && xpShopNavBar.IsValid()) {
+                        const navBtns = xpShopNavBar.Children();
+                        let selectedTab = navBtns.filter(btn => btn.checked === true);
+                        if (selectedTab[0].id !== navBtns[0].id) {
+                            $.DispatchEvent('Activated', navBtns[0], 'mouse');
+                            return;
+                        }
+                    }
+                }
+            }
             OnHomeButtonPressed();
+        }
         else
             GameInterfaceAPI.ConsoleCommand("gameui_hide");
     }
@@ -989,7 +1005,7 @@ var MainMenu;
                 elPanel.SetHasClass('hide-for-lootlist', false);
             }
         });
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-lootlist-item-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'allowsave=false' +
             '&' + 'showallitemactions=false' +

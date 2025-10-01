@@ -19,6 +19,9 @@ var FormatText;
     }
     FormatText.FormatPluralLoc = FormatPluralLoc;
     function SetFormattedTextOnLabel(elLabel, fmtText) {
+        if (!elLabel || !elLabel.IsValid()) {
+            return;
+        }
         ClearFormattedTextFromLabel(elLabel);
         elLabel.text = fmtText.tag;
         elLabel.fmtTextVars = {};

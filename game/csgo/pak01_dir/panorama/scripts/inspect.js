@@ -79,7 +79,7 @@ var InspectModelImage;
             m_elPanel = _InitDisplayScene(itemId);
         }
         else if (ItemInfo.IsKeychain(itemId)) {
-            m_elPanel = _InitNametagScene(itemId);
+            m_elPanel = _InitKeyChainScene(itemId);
         }
         else if (InventoryAPI.GetLoadoutCategory(itemId) == "musickit") {
             m_elPanel = _InitMusicKitScene(itemId);
@@ -431,6 +431,27 @@ var InspectModelImage;
             mouse_rotate: "true",
             rotation_limit_x: "70",
             rotation_limit_y: "60",
+            auto_rotate_x: "20",
+            auto_rotate_y: "0",
+            auto_rotate_period_x: "10",
+            auto_rotate_period_y: "10",
+            auto_recenter: false,
+            player: "false",
+        };
+        const panel = _LoadInspectMap(itemId, oSettings);
+        _SetParticlesBg(panel);
+        _TransitionCamera(panel, 'nametag_close');
+        return panel;
+    }
+    function _InitKeyChainScene(itemId) {
+        let oSettings = {
+            panel_type: "MapItemPreviewPanel",
+            active_item_idx: 1,
+            camera: 'cam_nametag_close_intro',
+            initial_entity: 'item',
+            mouse_rotate: "true",
+            rotation_limit_x: "360",
+            rotation_limit_y: "360",
             auto_rotate_x: "20",
             auto_rotate_y: "0",
             auto_rotate_period_x: "10",

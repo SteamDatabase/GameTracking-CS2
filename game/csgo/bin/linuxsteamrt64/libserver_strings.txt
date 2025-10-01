@@ -984,8 +984,7 @@ $light_emissive
 %date%
 %f %f %f %f %f %f %f
 %f %f %f, %f %f %f
-%f - %f (dist: %.2f): %s [%s] damage %.2f\n
-%f: %s (%d)\n
+%f - %f (thick: %.2f): %s [%s] damage %.2f\n
 %f: Player %s at [%0.2f %0.2f %0.2f] took %.2f damage from %s, type %s; applied %d health and %d armor\n
 %f: Player %s at [%0.2f %0.2f %0.2f] took %f damage from %s, type %s\n
 %g %g %g %g
@@ -1286,6 +1285,7 @@ $light_emissive
 %s: TeleportEntityToCurrentPos input received; ignoring 'Teleport Home' spawnflag.\n
 %s: TeleportToCurrentPos input received; ignoring 'Teleport Home' spawnflag.\n
 %s: TraceShapeAgainstHitboxes\n
+%s: [%f %f %f]
 %s: ignoring unknown attribute '%s'\n
 %s: removed %d offsets from array\n
 %s: removed change %s, %s %s\n
@@ -1378,12 +1378,19 @@ $light_emissive
 (SERVER) Inventory for account (%d):\n
 (WIPE AND EXTRACT)
 (callback: function)
-(center: Vector, radius: number, duration: number, color: Color)
 (className: string)
 (color)
 (color:{r:number,g:number,b:number,a?:number})
 (command: string)
+(config:{before?:function,after?:function})
+(config:{center: Vector, radius: number, duration: number, color: Color})
+(config:{mins: Vector, maxs: Vector, duration: number, color: Color})
+(config:{name: string, input: string, value:any, caller:Entity, activator:Entity, delay:number})
+(config:{start: Vector, end: Vector, duration: number, color: Color})
+(config:{target: Entity, input: string, value:any, caller:Entity, activator:Entity, delay:number})
+(config:{text: string, x: number, y: number, duration: number, color: Color})
 (connectionId:number)
+(damage: number, info?: Object)
 (default)
 (duration: number)
 (from angle, to angle, time) - Spherical lerp of angle from->to based on time
@@ -1394,19 +1401,19 @@ $light_emissive
 (int iIndex, int iPoint, Vector vOrigin, Vector vecForward ) - Set the origin and forward direction for a control on a particle effect
 (int iIndex, int iPoint, Vector vecOffset ) - Set the linear offset for a control on a particle effect
 (int index, bool bDestroyImmediately) - Destroy a particle, if bDestroyImmediately destroy it without playing end caps.
-(mins: Vector, maxs: Vector, duraiton: number, color: Color)
 (mode: number)
 (modelName:string)
 (name: string)
 (name: string, autoDeploy?: boolean )
-(name: string, input: string, value?: any, delay?: number)
 (name:string)
 (name:string, callback:function)
 (needs match)
-(newPosition: [], newAngles: [], newVelocity: [])
+(newValues:object)
 (null)
 (number)
+(owner:Entity)
 (parent %d)
+(parent:Entity)
 (partial match ok)
 (quaternion,quaternion,float) very basic interpolation of v0 to v1 over t on [0,1]
 (quaternion,vector,float) rotates a quaternion by the specified angle around the specified vector axis
@@ -1416,18 +1423,16 @@ $light_emissive
 (slot: number, command: string)
 (slot:number)
 (slot:number, team?:number)
-(start: Vector, end: Vector, duration: number, color: Color)
 (start:Vector, end:Vector, config:object)
-(target: Entity, input: string, value?: any, delay?: number)
 (target: entity)
 (target: entity, output: string, callback: function)
 (target: weapon)
 (team:number)
 (text: string)
 (text: string, callback: function)
-(text: string, x: number, y: number, duration: number, color: Color)
 (text:string, x:number, y:number, offset:number, duration:number, color:array, alpha?:number?)
 (time: number)
+(trace:Object)
 (update disabled)
 (value: number)
 (vector,float) constructs a quaternion representing a rotation by angle around the specified vector axis
@@ -5008,7 +5013,7 @@ $light_emissive
 ========================================\n
 ========================================\n\n
 ===Intervals==\n
-===Spans==\n
+===Spans== (solid dist: %f, max frac: %f)\n
 =GMU\c6BIR\c/:@LYc'08CTc
 =HNV]c7=EQ\c04>IYc(*2?Qc
 >>NAVGEN MOVABLE: Skipping movable mesh... no polys present\n
@@ -7464,6 +7469,7 @@ Draws the attachments of the entity
 Draws the axis of the entity origin
 Draws the skeleton of the entity
 DropActiveWeapon
+DropWeapon
 DualHull
 DumpScriptBindings()
 Dumping %i/%i largest CPhysAggregateData - %zu KB total\n
@@ -7518,6 +7524,7 @@ ENERGYBEAM
 ENGAGE_AND_INVESTIGATE
 ENGINE lib
 ENT TEXT STICKY NAMES\n
+ENTER
 ENTITY IS NOT A PLAYER: %d\n
 ERROR: (%s) can't teleport object (%s) as it has a parent (%s)!\n
 ERROR: (%s) target '%s' not found. Deleting.\n
@@ -7593,6 +7600,7 @@ EVENT_START_RADIO_3
 EVERYONE CAN BUY!\n
 EVP lib
 EXCELLENT
+EXIT
 EXPERT
 EXPLOSIVE
 EXTERNALLY_CREATED
@@ -7892,7 +7900,7 @@ Failed to initialize sticker kit ID %d '%s'
 Failed to load %s: %s
 Failed to load %s\n
 Failed to load KV3 AI Data\n
-Failed to load cs_script "%s"
+Failed to load cs_script "%s"\n
 Failed to load file: %s\n
 Failed to open file
 Failed to play server side instructor hint: no player specified for hint\n
@@ -8507,11 +8515,13 @@ GetOriginalDamage
 GetOriginalPlayerController
 GetOwner
 GetOwnerEntity
+GetParent
 GetPartPosition
 GetParticleReplacement
 GetPawn
 GetPawn() : Returns the pawn for this controller
 GetPchTempTextBuffer() called after UninitTempTextBuffers()
+GetPenetration
 GetPercentageThrough
 GetPhysAngularVelocity
 GetPhysVelocity
@@ -8528,6 +8538,8 @@ GetPlayerSpeechDuration
 GetPrice
 GetPrivateScriptScope
 GetPublicScriptScope
+GetRange
+GetRangeModifier
 GetRenderAlpha
 GetRenderAlpha(): Get the alpha modulation of this entity.
 GetRenderColor
@@ -9463,6 +9475,20 @@ InspectCurrentWeapon
 Install updater 
 InstallClasses
 Instance
+Instance.EntFireAtName invoked with bad config value.\n
+Instance.EntFireAtTarget invoked with bad config value.\n
+Instance.TraceBox invoked with bad end value.\n
+Instance.TraceBox invoked with bad maxs value.\n
+Instance.TraceBox invoked with bad mins value.\n
+Instance.TraceBox invoked with bad start value.\n
+Instance.TraceBullet invoked with bad end value.\n
+Instance.TraceBullet invoked with bad shooter value.\n
+Instance.TraceBullet invoked with bad start value.\n
+Instance.TraceLine invoked with bad end value.\n
+Instance.TraceLine invoked with bad start value.\n
+Instance.TraceSphere invoked with bad end value.\n
+Instance.TraceSphere invoked with bad radius value.\n
+Instance.TraceSphere invoked with bad start value.\n
 InstanceData = %s
 InstancedAutoGeneratedSequenceScene:  Expecting non-NULL pActor for sound %s\n
 InstancedAutoGeneratedSoundScene:  Expecting non-NULL pActor for sound %s\n
@@ -9513,6 +9539,7 @@ Invalid radius: %0.3f
 Invalid request for mesh %d in model %s with %d entry remapping start table\n
 Invalid request for mesh %d in model %s with no remapping table starts\n
 Invalid request for mesh %d in model %s with no remapping table\n
+Invalid return type from Instance.OnBeforePlayerDamage.\n
 Invalid save, failed to open file\n
 Invalid script. No valid imports found.\n
 Invalid skirmish '%s' in mp_endmatch_votenextmap_wargames_modes\n
@@ -9554,12 +9581,14 @@ IsAttachedToParent
 IsBeingCarried
 IsBot
 IsClient
+IsConnected
 IsCrouched
 IsCrouching
 IsDedicatedServer
 IsEnabled
 IsEnemyPartVisible
 IsFakeClient
+IsFreezePeriod
 IsGrabbable
 IsInToolsMode
 IsLineBlockedBySmoke
@@ -9585,6 +9614,7 @@ IsValidEntity
 IsVisible
 IsVisibleThroughSmoke
 IsWarmupPeriod
+IsWorld
 IslandRemoval
 IslandRemoval - unable to find a poly near navlink location %g %g %g\n
 Item "%s" is missing schema item class!
@@ -10052,10 +10082,30 @@ Metal.SawbladeStick
 Metal.Small
 Method %s.%s invoked in incorrect scope.
 Method %s.%s invoked with bad %s value. (parameter #%d)\n
-Method %s.%s invoked with bad inputData value. (parameter #3)\n
 Method %s.%s invoked with incorrect 'this' value.
 Method %s.%s invoked with unrecognized 'this' value.
 Method %s.%s requires %d argument(s), %s.
+Method Entity.TakeDamage invoked with bad damage value.\n
+Method Instance.DebugBox invoked with bad config value.\n
+Method Instance.DebugBox invoked with bad maxs value.\n
+Method Instance.DebugBox invoked with bad mins value.\n
+Method Instance.DebugLine invoked with bad config value.\n
+Method Instance.DebugLine invoked with bad end value.\n
+Method Instance.DebugLine invoked with bad start value.\n
+Method Instance.DebugScreenText invoked with bad config value.\n
+Method Instance.DebugScreenText invoked with bad text value.\n
+Method Instance.DebugScreenText invoked with bad x value.\n
+Method Instance.DebugScreenText invoked with bad y value.\n
+Method Instance.DebugSphere invoked with bad center value.\n
+Method Instance.DebugSphere invoked with bad config value.\n
+Method Instance.DebugSphere invoked with bad radius value.\n
+Method Instance.DebugSphere invoked with bad start value.\n
+Method Instance.EntFireAtName invoked with bad input value.\n
+Method Instance.EntFireAtName invoked with bad inputData value.)\n
+Method Instance.EntFireAtName invoked with bad name value.\n
+Method Instance.EntFireAtTarget invoked with bad input value.\n
+Method Instance.EntFireAtTarget invoked with bad inputData value.)\n
+Method Instance.EntFireAtTarget invoked with bad target value.\n
 Microsoft CSP Name
 Microsoft Commercial Code Signing
 Microsoft Encrypted File System
@@ -10840,6 +10890,7 @@ OnAttach
 OnAwake
 OnAwakened
 OnBackgroundMap
+OnBeforePlayerDamage
 OnBeforeReload
 OnBeginFade
 OnBeginSequence
@@ -10855,6 +10906,7 @@ OnBombPlanted
 OnBreak
 OnBroken
 OnBufferNotStarved(), resolved starve queue\n
+OnBulletImpact
 OnCacheInteraction
 OnCancelFailedSequence
 OnCancelSequence
@@ -10915,8 +10967,10 @@ OnGetValue
 OnGlovePulled
 OnGreaterThan
 OnGreaterThanOrEqualTo
+OnGrenadeBounce
 OnGrenadeThrow
 OnGunFire
+OnGunReload
 OnGustEnd
 OnGustStart
 OnHealthChanged
@@ -10943,6 +10997,7 @@ OnInternalTestVector
 OnInternalTestVoid
 OnInterval
 OnKilled
+OnKnifeAttack
 OnLerpFinished
 OnLerpStarted
 OnLessThan
@@ -11002,13 +11057,18 @@ OnPlay
 OnPlayerActivate
 OnPlayerChat
 OnPlayerConnect
+OnPlayerDamage
 OnPlayerDisconnect
 OnPlayerGotOffLadder
 OnPlayerGotOnLadder
 OnPlayerInZone
+OnPlayerJump
 OnPlayerKill
+OnPlayerLand
 OnPlayerOutZone
 OnPlayerPickup
+OnPlayerPing
+OnPlayerReset
 OnPlayerTouch
 OnPlayerUse
 OnPostIdleEndSequence
@@ -11034,6 +11094,9 @@ OnRoundFreezeEnd
 OnRoundStart
 OnScriptEvent%02d
 OnScriptInput
+OnScriptReload
+OnScriptReload:after
+OnScriptReload:before
 OnShowMessage
 OnSidesPicked
 OnSimulate
@@ -13514,11 +13577,14 @@ TouchExpansionComponent_SetUp (ent %s [%d])%s\n
 TouchTest
 TouchType
 Trace using: %s\n
+TraceBox
+TraceBullet
 TraceCollideable
 TraceHull
 TraceLine
 TraceRayToNavmesh
 TraceRotatedBody
+TraceSphere
 Traced intervals in %.3fus\n
 Tracer
 TracerSound
@@ -14573,6 +14639,7 @@ aes-256-ecb
 aes-256-gcm
 aes-256-ofb
 aes-256-xts
+after
 against
 agent
 aggregate
@@ -14944,6 +15011,7 @@ basic_chatter_enable
 bbox.m_vMaxBounds
 bbox.m_vMinBounds
 beam
+before
 begin_new_match
 bentnormal
 beveragetype
@@ -15018,6 +15086,7 @@ botmaxvisiondistance
 botprofile.db
 bottomtrack
 bouncelight
+bounces
 bouncescale
 box_inner_maxs
 box_inner_mins
@@ -15678,6 +15747,7 @@ de_extraction
 de_facade
 de_favela
 de_glass
+de_golden
 de_grail
 de_grind
 de_guard
@@ -15701,6 +15771,7 @@ de_mutiny
 de_nuke
 de_overgrown
 de_overpass
+de_palacio
 de_palais
 de_piranesi
 de_pitstop
@@ -15709,6 +15780,7 @@ de_prodigy
 de_rails
 de_ravine
 de_resort
+de_rooftop
 de_royal
 de_ruby
 de_ruins
@@ -15728,6 +15800,7 @@ de_swamp
 de_thera
 de_thrill
 de_train
+de_transit
 de_tulip
 de_tuscan
 de_vertigo
@@ -17025,6 +17098,7 @@ hint_vr_offset_z
 hint_vr_panel_type
 hip_dip_chng_dir
 hitEnt
+hitEntity
 hit_group
 hitboxset
 hitgroup
@@ -17369,7 +17443,9 @@ ignite
 ignite_halfhealth
 ignore
 ignoreEnt
+ignoreEntity
 ignorePhonemes
+ignorePlayers
 ignore_depth
 ignore_enabled
 ignore_in_collection_view
@@ -19011,6 +19087,7 @@ pelvis
 pendingteamnumber
 penetrated
 penetrates_shatterglass
+penetration
 percent-sign
 perf=%s %s %s %s
 period
@@ -19110,9 +19187,11 @@ plant_bomb could not create a bomb.\n
 plant_bomb could not find the player's pawn.\n
 plant_bomb trace did not find a location to plant the bomb.\n
 planted
+plantedC4
 planted_c4
 planted_c4.ventr
 planted_c4_server
+planter
 plat_trigger
 platform_type
 play scripted sequence
@@ -19121,6 +19200,7 @@ playbackrate
 player 
 player pawn
 player.ventr
+playerSlot
 player_
 player_activate
 player_animation_extension
@@ -19338,6 +19418,7 @@ procedural_choreo_loop
 procedural_inputs
 procedural_outputs
 profile level %g
+projectile
 projectoncharacters
 projectonwater
 projectonworld
@@ -19464,6 +19545,7 @@ random_spawn_chance
 randomizecycle
 randomnum
 range
+rangeModifier
 range_max
 range_min
 rank
@@ -20095,6 +20177,7 @@ shifted_time
 shoot
 shoot_secondary
 shoot_unsilenced
+shooter
 should_leave_corpse
 show_in_armory
 show_lpv_sample_grid
@@ -20353,6 +20436,7 @@ startcolor
 startdark
 startdelay
 startdisabled
+startedInSolid
 startloop
 startpos
 starts_at_closest_point
@@ -20666,6 +20750,7 @@ tableName
 tagValue
 tagged_entities_input
 tagged_entities_to_expire
+takeDamage
 takepoint
 takingfire
 tangent
@@ -21044,6 +21129,7 @@ tournament_player_id
 tournament_reward
 tournament_team_id
 tpBasis
+trace
 tracer_effect
 tradable after date
 trade protected escrow date
@@ -21692,6 +21778,7 @@ wingman-intro
 wingman_intro_counterterrorist
 wingman_intro_terrorist
 winner
+winningTeam
 winstreak
 wipe
 with "%s"
