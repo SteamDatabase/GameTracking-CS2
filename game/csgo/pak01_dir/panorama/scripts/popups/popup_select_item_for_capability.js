@@ -127,9 +127,11 @@ var SelectItemForCapability;
         elMultiSelectDisplay.visible = true;
     }
     function ClosePopUp() {
-        const callbackFunc = _m_cp.GetAttributeInt('callback', -1);
-        if (callbackFunc != -1) {
-            UiToolkitAPI.InvokeJSCallback(callbackFunc);
+        if (_m_cp.IsValid()) {
+            const callbackFunc = _m_cp.GetAttributeInt('callback', -1);
+            if (callbackFunc != -1) {
+                UiToolkitAPI.InvokeJSCallback(callbackFunc);
+            }
         }
         SelectItemForCapability.oCapabilityInfo.popupVisible = false;
         $.DispatchEvent('CSGOPlaySoundEffect', 'inventory_inspect_close', 'MOUSE');

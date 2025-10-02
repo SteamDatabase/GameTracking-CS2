@@ -1,3 +1,3 @@
-class C_WeaponSawedoff : public C_CSWeaponBase
+class C_WeaponSawedoff : public C_CSWeaponBaseShotgun
 {
 };

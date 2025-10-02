@@ -86,9 +86,12 @@ var ContextMenuGetSouvenir;
         let elGetSouvenirBtn = elMatch.FindChildInLayoutFile('id-get-souvenir-btn');
         let elDropdown = elMatch.FindChildInLayoutFile('PurchaseCountDropdown');
         let tailUmid = umid.split('_').at(-1);
+        const nEventID = MatchInfoAPI.GetMatchTournamentEventID(umid);
         const nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
+        const team0 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 0);
+        const team1 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 1);
         const bPlayoffMatch = (nStageID >= 5) && (nStageID <= 13);
-        const bThisMatchHasRedeemsEnabled = !bPlayoffMatch || StoreAPI.GetStoreItemSalePrice(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentStoreLayout[g_ActiveTournamentStoreLayout.length - 1][0], 0), 1, '');
+        const bThisMatchHasRedeemsEnabled = !bPlayoffMatch || InventoryAPI.HasHighlightReelSchema(nEventID, nStageID, team0, team1);
         elGetSouvenir.SetHasClass('awaiting-highlights', !bThisMatchHasRedeemsEnabled);
         if (_m_redeemsAvailable > 0) {
             elGetSouvenir.SetDialogVariable('price', $.Localize('#popup_redeem_souvenir_action_redeem'));

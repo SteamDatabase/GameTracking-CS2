@@ -253,7 +253,9 @@ var InventoryInspect;
             InspectPurchaseBar.ClosePopup();
         }
         else {
-            InspectActionBar.CloseBtnAction(m_Inspectpanel.GetAttributeInt('callback', -1));
+            if (m_Inspectpanel.IsValid()) {
+                InspectActionBar.CloseBtnAction(m_Inspectpanel.GetAttributeInt('callback', -1));
+            }
         }
     }
     InventoryInspect.ClosePopup = ClosePopup;

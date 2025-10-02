@@ -1,0 +1,3 @@
+class CCSWeaponBaseShotgun : public CCSWeaponBase
+{
+};

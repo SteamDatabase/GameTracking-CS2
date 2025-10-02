@@ -1,3 +1,3 @@
-class CWeaponNOVA : public CCSWeaponBase
+class CWeaponNOVA : public CCSWeaponBaseShotgun
 {
 };
