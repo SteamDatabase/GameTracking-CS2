@@ -71,7 +71,6 @@
    Voice:%.1fkb
   %d classes, %d bytes\n
   %s = %s was changed between from/to ticks but is missed by CalcDelta (i.e., encoded values are same)\n
-  (And we were not able to hide it using interpolation!)
   * (No VConComm)\n
   * (No toolframework)\n
   * ToolFramework.AlwaysRenderAllWindows = %d\n
@@ -93,6 +92,9 @@
   Kb/sec. . . . . . . . : Avg:%.1f
   Messages/sec. . . . . : Avg:%.1f
   Missed. . . . . . . . : %u (%.1f%%)
+  Not hidden by buffering.
+  Not hidden by interpolation.
+  Not hidden; no interpolation/buffering.
   Queued   :  %s\n
   Receiving server updates. :%s\n
   Requested:  %s\n
@@ -7578,17 +7580,19 @@ Server shutdown
 Server shutting down because of using %lluMB with an sv_memory_limit of %dMB\n
 Server shutting down because sv_shutdown was done and a game has ended.\n
 Server tags. Used to provide extra information to clients when they're browsing for servers. Separate tags with a comma.
-Server tick %d arrived %.1fms after deadline (hidden by interpolation)\n
-Server tick %d delayed by %.1fms jitter (hidden by interpolation)\n
-Server tick %d delivered out of order (hidden by interpolation)\n
+Server tick %d arrived %.1fms after deadline (hidden by %s)\n
+Server tick %d delayed by %.1fms jitter (hidden by %s)\n
+Server tick %d delivered out of order (hidden by %s)\n
+Server tick %d dropped.   (Hidden by %s)\n
 Server tick %d dropped.%s\n
 Server tick %d never received, but no missing network frame (checked seqnum %d, status %d); assuming that server never sent it\n
+Server tick %d received out of order.   (Hidden by %s)\n
 Server tick %d received out of order.%s\n
 Server tick %d was long (%.1fms) due to '%s'\n
 Server tick %d was long (%.1fms)\n
 Server tick %d was not available when we needed it, arrived %.1fms too late due to network reordering\n
 Server tick %d was not available when we needed it, arrived %.1fms too late%s\n
-Server tick %d was was slow (%.1fms) and not available when we needed it, arrived %.1fms too late%s\n
+Server tick %d was slow (%.1fms) and not available when we needed it, arrived %.1fms too late%s\n
 Server waking up from hibernation\n
 Server was reserved for %d more seconds.  Reservation cleared.\n
 Server will not allow the client to buffer up more than N ms of commands.
@@ -8946,6 +8950,7 @@ Zq",9\fB
 [%d] Changing player name to Steam name '%s'\n
 [%s] %d - %s (refcount %d)\n
 [A:%u:%u:%u]
+[BUG - how?]
 [INCOMPLETE!]
 [Index: 
 [M:%u:%u:%u]
@@ -9619,6 +9624,7 @@ btowc
 buckets
 buffer error
 buffer too small
+buffering
 bug [auto_fill_tokens] [-title <text>] [-noscreenshot] : Activate the bug reporter.
 bug_%s_%d
 bug_submitter_override
@@ -10630,6 +10636,7 @@ internal error: previously-checked referenced subpattern not found
 internal error: unexpected repeat
 internal error: unknown opcode in find_fixedlength()
 interp_band_gain
+interpolation
 invalid
 invalid UTF-16 string
 invalid UTF-32 string
