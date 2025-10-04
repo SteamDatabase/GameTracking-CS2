@@ -12,7 +12,7 @@
 // MNetworkVarNames = "GameTime_t m_flDefuseCountDown"
 // MNetworkVarNames = "bool m_bBombDefused"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_hBombDefuser"
-class CPlantedC4 : public CBaseAnimGraph
+class CPlantedC4 : public CBaseAnimGraph, public IHasAttributes
 {
 	// MNetworkEnable
 	bool m_bBombTicking;

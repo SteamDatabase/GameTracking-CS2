@@ -8,7 +8,7 @@
 //		"m_flCutoffFreq": 1000.000000,
 //		"m_flQ": 0.707107
 //	},
-//	"m_bEnableFilter": true,
+//	"m_bEnableFilter": false,
 //	"m_flDelay": 0.000000,
 //	"m_flDirectGain": 0.000000,
 //	"m_flDelayGain": 0.000000,

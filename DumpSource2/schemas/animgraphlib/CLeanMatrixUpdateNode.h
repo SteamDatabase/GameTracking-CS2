@@ -42,7 +42,13 @@
 //	},
 //	"m_networkMode": "ServerAuthoritative",
 //	"m_name": "",
-//	"m_frameCorners": <HIDDEN FOR DIFF>,
+//	"m_frameCorners":
+//	[
+//		[
+//			0,
+//			0,
+//			0
+//		],
 //		[
 //			0,
 //			0,

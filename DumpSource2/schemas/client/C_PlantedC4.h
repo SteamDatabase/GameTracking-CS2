@@ -12,7 +12,7 @@
 // MNetworkVarNames = "bool m_bBombDefused"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_hBombDefuser"
 // MNetworkVarNames = "CAttributeContainer m_AttributeManager"
-class C_PlantedC4 : public CBaseAnimGraph
+class C_PlantedC4 : public CBaseAnimGraph, public IHasAttributes
 {
 	// MNetworkEnable
 	bool m_bBombTicking;

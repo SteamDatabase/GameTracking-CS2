@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_bShouldVoiceDuck": true,
+//	"m_bShouldVoiceDuck": false,
 //	"m_RunTimePhonemes":
 //	[
 //	],

@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_nRate": 3,
+//	"m_nRate": 0,
 //	"m_nFormat": "PCM16",
 //	"m_nChannels": 0,
 //	"m_nLoopStart": 0,

@@ -5,7 +5,7 @@
 // MNetworkVarNames = "int m_nFallbackSeed"
 // MNetworkVarNames = "float m_flFallbackWear"
 // MNetworkVarNames = "int m_nFallbackStatTrak"
-class C_EconEntity : public C_BaseFlex
+class C_EconEntity : public C_BaseFlex, public IHasAttributes
 {
 	float32 m_flFlexDelayTime;
 	float32* m_flFlexDelayedWeight;

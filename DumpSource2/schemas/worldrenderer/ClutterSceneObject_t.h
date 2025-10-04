@@ -1,8 +1,24 @@
 // MGetKV3ClassDefaults = {
 //	"m_Bounds":
 //	{
-//		"m_vMinBounds": <HIDDEN FOR DIFF>,
-//		"m_vMaxBounds": <HIDDEN FOR DIFF>,
+//		"m_vMinBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vMaxBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_flags": "OBJECT_TYPE_NONE",
+//	"m_nLayer": 0,
+//	"m_instancePositions":
+//	[
+//	],
 //	"m_instanceScales":
 //	[
 //	],

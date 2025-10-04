@@ -1,7 +1,7 @@
 // MNetworkVarNames = "CAttributeContainer m_AttributeManager"
 // MNetworkVarNames = "bool m_jumpedThisFrame"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_leader"
-class CChicken : public CDynamicProp
+class CChicken : public CDynamicProp, public IHasAttributes
 {
 	// MNetworkEnable
 	CAttributeContainer m_AttributeManager;

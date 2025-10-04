@@ -1,27 +1,4 @@
-// MGetKV3ClassDefaults = {
-//	"m_vDiag": <HIDDEN FOR DIFF>,
-//	"m_flXY":
-//	[
-//		0.000000,
-//		0.000000,
-//		0.000000,
-//		0.000000
-//	],
-//	"m_flXZ":
-//	[
-//		0.000000,
-//		0.000000,
-//		0.000000,
-//		0.000000
-//	],
-//	"m_flYZ":
-//	[
-//		0.000000,
-//		0.000000,
-//		0.000000,
-//		0.000000
-//	]
-//}
+// MGetKV3ClassDefaults = Could not parse KV3 Defaults
 class FourCovMatrices3
 {
 	FourVectors m_vDiag;

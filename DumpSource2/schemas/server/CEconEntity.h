@@ -5,7 +5,7 @@
 // MNetworkVarNames = "int m_nFallbackSeed"
 // MNetworkVarNames = "float m_flFallbackWear"
 // MNetworkVarNames = "int m_nFallbackStatTrak"
-class CEconEntity : public CBaseFlex
+class CEconEntity : public CBaseFlex, public IHasAttributes
 {
 	// MNetworkEnable
 	CAttributeContainer m_AttributeManager;

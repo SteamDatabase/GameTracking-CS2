@@ -122,7 +122,7 @@
 //		"m_bTargetIsPosition": true,
 //		"m_bUseHysteresis": false
 //	},
-//	"m_target": <HIDDEN FOR DIFF>,
+//	"m_target": "MoveDirection",
 //	"m_paramIndex":
 //	{
 //		"m_type": "ANIMPARAM_UNKNOWN",
@@ -133,7 +133,7 @@
 //		"m_type": "ANIMPARAM_UNKNOWN",
 //		"m_index": 255
 //	},
-//	"m_bResetChild": true,
+//	"m_bResetChild": false,
 //	"m_bLockWhenWaning": false
 //}
 class CLookAtUpdateNode : public CUnaryUpdateNode

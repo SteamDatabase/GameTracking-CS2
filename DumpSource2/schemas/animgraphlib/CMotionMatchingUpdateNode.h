@@ -84,7 +84,7 @@
 //	"m_flDistanceScale_InnerRadius": 0.000000,
 //	"m_flDistanceScale_MaxScale": 0.000000,
 //	"m_flDistanceScale_MinScale": 0.000000,
-//	"m_bEnableDistanceScaling": true
+//	"m_bEnableDistanceScaling": false
 //}
 class CMotionMatchingUpdateNode : public CLeafUpdateNode
 {

@@ -1,7 +1,7 @@
 // MNetworkVarNames = "bool m_jumpedThisFrame"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_leader"
 // MNetworkVarNames = "CAttributeContainer m_AttributeManager"
-class C_Chicken : public C_DynamicProp
+class C_Chicken : public C_DynamicProp, public IHasAttributes
 {
 	CHandle< CBaseAnimGraph > m_hHolidayHatAddon;
 	// MNetworkEnable

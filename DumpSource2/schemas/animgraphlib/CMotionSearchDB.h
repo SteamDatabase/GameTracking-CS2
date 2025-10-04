@@ -9,7 +9,7 @@
 //			"m_centroidVectors":
 //			[
 //			],
-//			"m_nCentroids": 3,
+//			"m_nCentroids": 0,
 //			"m_nDimensions": 0
 //		},
 //		"m_sampleCodes":

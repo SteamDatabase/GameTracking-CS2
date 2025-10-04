@@ -1,3 +1,3 @@
-class CPathQueryComponent : public CEntityComponent
+class CPathQueryComponent : public CEntityComponent, public CPathQueryUtil
 {
 };

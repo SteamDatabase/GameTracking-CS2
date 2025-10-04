@@ -8,7 +8,7 @@
 //	"m_blendItems":
 //	[
 //	],
-//	"m_nParamIndex": 1
+//	"m_nParamIndex": 0
 //}
 class CMotionNodeBlend1D : public CMotionNode
 {
