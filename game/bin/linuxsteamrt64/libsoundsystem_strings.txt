@@ -31,7 +31,6 @@ $toolgraphs
 %s references : 
 %s set to %.2f\n
 %s set to %x (%s)\n
-%s vmix_start_voice: %s is not a valid argument for %s\n
 %s%s%llu
 %s, UNKNOWN %i
 %s: %s (%i : %i)\n
@@ -142,11 +141,6 @@ $toolgraphs
 *ZN34CVoiceContainerStaticAdditiveSynth18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi25CUtlVectorMemory_GrowableIS6_iLm0EEEEUlPNS_26CAdditiveSynthInstanceViewERKiE_
 ---empty---
 ---invalid event---
--avx
--memory_map_sound
--nosound
--sdlaudiodriver
--sse2
 .custom.dimensions
 .custom.materials
 .custom.occlusion
@@ -767,6 +761,7 @@ CSosOperatorSetOpVarFloat3
 CSosOperatorSetOpVarString
 CSosOperatorSpeakers
 CSosOperatorStack: %i\n
+CSosOperatorStack::GetBaseEventParams: Sound event type: %s on base: %s does not match type %s on event %s.\n
 CSosOperatorStack::GetBaseEventParams: SoundEvent Base nesting maximum exceed with %s on %s: check convar "snd_sos_max_event_base_depth"\n
 CSosOperatorStack::GetOpField: Unable to find operator field hash %i in %s\n
 CSosOperatorStack::GetOpField: Unable to find opfield %s.%s in %s\n
@@ -838,8 +833,38 @@ Cluster size: %u
 Connection Offset: %i\n
 Container has %d Arguments:\n
 Container has %d Parameters:\n
-ControlInput_
-ControlOutput_
+ControlInput_0
+ControlInput_1
+ControlInput_10
+ControlInput_11
+ControlInput_12
+ControlInput_13
+ControlInput_14
+ControlInput_15
+ControlInput_2
+ControlInput_3
+ControlInput_4
+ControlInput_5
+ControlInput_6
+ControlInput_7
+ControlInput_8
+ControlInput_9
+ControlOutput_0
+ControlOutput_1
+ControlOutput_10
+ControlOutput_11
+ControlOutput_12
+ControlOutput_13
+ControlOutput_14
+ControlOutput_15
+ControlOutput_2
+ControlOutput_3
+ControlOutput_4
+ControlOutput_5
+ControlOutput_6
+ControlOutput_7
+ControlOutput_8
+ControlOutput_9
 Convert Fixed To Float
 Copy Deinterleaved Float
 Copying '%s' to '%s'\n
@@ -1084,6 +1109,8 @@ Match Event Hash: %i\n
 Match Event Name: %s\n
 Match Event Type: %i\n
 Match SubString ?: %s\n
+Max = Highest
+Max = Lowest
 Max Index
 Min Index
 Mirror
@@ -1207,11 +1234,14 @@ ProcessSoundEvent: %s unable to get "base" sound event %d from kv3.\n
 ProcessSoundEvent: %s unable to get "base" sound event %s, deferring load.\n
 ProcessSoundEvent: %s unable to get referenced stack %s. Soundevent load deferred.\n
 ProcessSoundEvent: Base event entry: %s contains field_name: %s of invalid type.\n
+ProcessSoundEvent: Base event entry: %s contains field_name: %s that could not be found in stack: %s.\n
+ProcessSoundEvent: Base event entry: %s contains field_name: %s with incorrect stack type: %s.\n
 ProcessSoundEvent: Base event entry: %s contains invalid field_name: %s.\n
 ProcessSoundEvent: Sound Event %s field %s data count doesn't match field type.\n
 ProcessSoundEvent: Sound Event %s field %s illegal empty array detected.\n
 ProcessSoundEvent: Sound Event %s, field %s: array length exceeds currently maximum of %i".\n
 ProcessSoundEvent: Sound Event %s, field %s: total array length of all soundevent_data has exceeded maximum selection bits for "random_exclusive".\n\t%i selection bytes reguired\n\t%i bytes available!\n
+ProcessSoundEvent: Soundevent: %s: base event entry: %s missing field_name and base event type does not match event type.\n
 Processor
 Processor Input
 Processor Sidechain
@@ -1248,6 +1278,10 @@ SEQUENCER ERROR: Reading vmidi manifest file %s!\n
 SOS PRINT FLOAT3: %s: %f, %f, %f\n
 SOS PRINT FLOAT: %s: %f\n
 SOS PRINT STRING: %s: %s\n
+SOS_LIMIT_SORTTYPE_HIGHEST
+SOS_LIMIT_SORTTYPE_LOWEST
+SOS_SETPARAM_SORTTYPE_HIGHEST
+SOS_SETPARAM_SORTTYPE_LOWEST
 SOUNDEVENT COMPARE SUCCESS: %s->%s\n
 STACK FPS: %f\n
 S_Init( finish )
@@ -1284,6 +1318,8 @@ Size in bytes
 Size of TRASHSYNTH instance on stack: %d\n
 Size of TRASHSYNTH on stack: %d\n
 SndOperators
+SosActionLimitSortType_t
+SosActionSetParamSortType_t
 SosBaseDataTypeDef_t: %i\n
 SosOpFieldInfo_t: %i\n
 SosOpFieldInfo_t::GetValue: index %i out of range on %s\n
@@ -1320,6 +1356,7 @@ Source2SDLDefaultDevice
 Speaker Config: %i\n
 Spline
 Square Wave
+St23_Sp_counted_ptr_inplaceI14CUtlOrderedMapI15CUtlStringToken24VoiceContainerParamMem_t8CDefLessIS1_EiESaIvELN9__gnu_cxx12_Lock_policyE2EE
 Stack %s: Unable to connect input to specified field: %s\n
 Stack Collection:\n
 Stack Compare Mismatch: field count error: %i -> %i\n
@@ -1343,6 +1380,8 @@ Starts VSND: %s\nStarts Event(s): %s\n
 Status: \t%d, %d (mix channels:%d)\n
 Steam Audio could not create probes.
 Steam Audio is not enabled.
+Stop Highest
+Stop Lowest
 Stop sound event: %s\n
 StopTime: %f\n
 Stopping All Sounds...\n
@@ -1457,10 +1496,13 @@ WARNING: Invalid vsnd version '%d' for file: %s\n
 WARNING: KV3 failed to parse for asset %s\n
 WARNING: KV3 failed to parse legacy vsound header for %s
 WARNING: KV3 failed to parse legacy vsound header for %s\n
+WARNING: Please use %s instead of %s for field %s in stack %s\n
+WARNING: Please use %s instead of %s for imported stack %s in stack %s\n
 WARNING: Stack %s Operator %s, opvar field %s overwriting existing parameter of the same name.
 WARNING: Stack %s Operator %s, opvar field %s overwriting existing parameter of the same name. THERE IS NO TYPE OR SIZE CHECKING IN PLACE, IT IS UP TO YOU TO MAKE SURE THEY ARE THE SAME.\n
 WARNING: Stack %s had %i stack field overwrite warnings. Set "snd_sos_show_parameter_overwrite_warnings 1" and recompile for details.\n
 WARNING: snd_sos_soundevent_profile disabled - ignoring!\n
+Warning:  math_curve_2d in %s : Curve 2d field %s won't cache more than 8 points currently. Increase cache size in sos_op_math.h::CSosOperatorCurve_t \n
 Warning: %s (error %s)!\n
 Warning: Attempting to add an addition field: %s %s\n
 Warning: Can't find sos strings file: %s!\n
@@ -1551,7 +1593,7 @@ attack
 audio_stream.cpp
 audio_stream_attached.cpp
 auto.convar.
-auto_connect_namespace
+auto_connect_field_scope
 auto_connect_public_fields
 backward
 band_0:gainReduction
@@ -1814,10 +1856,6 @@ input_add_velocity_on_deleted_entity
 input_angles
 input_animation_direction
 input_animation_pct
-input_arg1_1
-input_arg1_2
-input_argname1_1
-input_argname1_2
 input_arrangement
 input_atten
 input_base_angle
@@ -2683,6 +2721,7 @@ resourceManifest
 resourcesystem
 retrigger_current_event
 reverbTime.high
+reverbTime.low
 reverbTime.mid
 right.x
 right.y
@@ -2724,6 +2763,7 @@ snd_op_sys/sos_system.cpp
 snd_print_soundevent %s
 snd_sos_update_server_message %s
 snd_soundmixer_setmixlayer_amount %s %f\n
+snd_wave_data.cpp
 snd_wave_mixer_mp3.cpp
 sndevt
 sndlvl_max
@@ -2863,6 +2903,7 @@ update_stack
 use_entity_position_if_local_player
 use_local_namespace
 use_namespace
+use_public_opvar_scope
 use_trigger_amount
 use_world_position
 use_world_position_if_dormant

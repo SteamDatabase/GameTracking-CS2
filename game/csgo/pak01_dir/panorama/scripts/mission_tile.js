@@ -22,9 +22,6 @@ var MissionTile;
         function _msg(text) {
         }
         _msg("Init");
-        if (!$.GetContextPanel().Data().m_livePointsCache) {
-            $.GetContextPanel().Data().m_livePointsCache = -1;
-        }
         let missionData = undefined;
         if (IsThePauseMenuPanel()) {
             missionData = MissionsAPI.GetRecurringMission(false);
@@ -39,6 +36,9 @@ var MissionTile;
             return;
         }
         if (IsTheInGamePanel()) {
+            if (!$.GetContextPanel().Data().m_livePointsCache) {
+                $.GetContextPanel().Data().m_livePointsCache = -1;
+            }
             if (FriendsListAPI.IsGameInWarmup()) {
                 _msg("warmup");
                 $.GetContextPanel().AddClass('hidden');
@@ -56,6 +56,13 @@ var MissionTile;
             }
             $.GetContextPanel().SetHasClass('stop-anims', missionData.progress_saved +
                 $.GetContextPanel().Data().m_livePointsCache >= missionData.goal_points.slice(-1)[0]);
+            if (missionData.progress_this_match &&
+                missionData.progress_this_match > $.GetContextPanel().Data().m_livePointsCache) {
+                $.GetContextPanel().TriggerClass('progress-pulse');
+                $.GetContextPanel().Data().m_livePointsCache = missionData.progress_this_match;
+                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.Mission.QuotaUp', 'MOUSE');
+                _msg('PULSE');
+            }
         }
         else if (!IsTheInGamePanel()) {
             if (!MyPersonaAPI.IsConnectedToGC()) {
@@ -85,13 +92,6 @@ var MissionTile;
         $.GetContextPanel().SetHasClass('COMPLETE', missionData.progress_saved +
             (missionData.progress_this_match ? missionData.progress_this_match : 0) >= missionData.goal_points.slice(-1)[0]);
         _msg("progress_this_match " + missionData.progress_this_match);
-        if (missionData.progress_this_match &&
-            missionData.progress_this_match > $.GetContextPanel().Data().m_livePointsCache) {
-            $.GetContextPanel().TriggerClass('progress-pulse');
-            $.GetContextPanel().Data().m_livePointsCache = missionData.progress_this_match;
-            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.Mission.QuotaUp', 'MOUSE');
-            _msg('PULSE');
-        }
         $.GetContextPanel().RemoveClass('hidden');
         ConstructMissionStrings($.GetContextPanel());
         if (!$.GetContextPanel().Data().hasOwnProperty('id') ||

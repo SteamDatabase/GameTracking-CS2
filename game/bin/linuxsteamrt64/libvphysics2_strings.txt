@@ -31,6 +31,7 @@
 %s 0x%llX\n
 %s F=%d V=%d hE=%d
 %s Forcing Collision With All
+%s NameIndex:PreacquireName( %x ) without name string\n
 %s could not allocate (pre-acquire) layer name '%s'. It was expected to be #%d. %d names already used.\n
 %s has solid contacts disabled - no resolve
 %s%s.traces.txt
@@ -82,20 +83,13 @@
 , Fully Rigid
 -----------------\nObject: %s\n
 -aggs
--allsymdetailed
--allsymmessages
--allsymmoredetailed
--avx
 -cloth
 -mem
 -profiletraces
 -save
+-sdk
 -snapshots
--sse2
--sse3
--sse4
 -touch
--unittest
 ../common/stackhelpers/stackhelpers_vsymbolmodule_translation.cpp
 ../public/scenesystem/vertexformat.h
 ../public/tier0/utlatomicaddvector.h
@@ -113,6 +107,7 @@
 10CTraceHull
 10IVPhysics2
 11CRenderMesh
+11CRnLinkBase
 11CRnRopeLink
 11CTraceCloud
 11CTracePoint
@@ -488,10 +483,10 @@ Choppiness
 Class does not allow allocation from its schema binding
 Cloth: 
 Collision disabled by owner ID %08x ignored matching shape (OWNER:%08x, ENTITY:%08x).
-Collision filtering: Acquiring unregistered name '%s'\n
 Collision filtering: Cannot allocate name '%s' already used %d names\n
 Collision group pair flags=%d. Pair Interacts.
 Collision group pair flags=0. Will not collide.
+CollisionGroups
 Common interaction flags
 Compared Bodies
 ConditionallySolid
@@ -555,6 +550,7 @@ Interact-as-exclude: not excluded. All tests passed. These shapes should Collide
 Interact-as-with test fails: there no common interaction layers found in the shapes
 Interact-as-with test passes, common layers: 
 Interaction Analysis
+InteractionLayers
 Invalid blob for %s (%d,%d)
 Invalid collision attr index %u, must be below %d\n, 
 Invalid collision attribute palette entry %u, expected below %d\n
@@ -613,8 +609,9 @@ N33CBaseIntrospectedToKV3TypeManager18AsyncProcessResultE
 N37CTypesafeIntrospectedToKV3TypeManagerILy495958126710E21VPhysXAggregateData_tE26IKV3ResourceAllocatorUtilsE
 N37CTypesafeIntrospectedToKV3TypeManagerILy495958126710E21VPhysXAggregateData_tE28IKV3ResourceDeallocatorUtilsE
 NULL_JOINT
-NameIndex:AcquireName( %x ) without name string\n
-NameIndex:PreacquireName( %x ) without name string\n
+NameIndex %s acquiring unregistered name '%s'\n
+NameIndex %s attempting to acquire token ( %x ) without name string\n
+NameIndex %s releasing unused name '%s'\n
 NavIgnore
 NavLocalIgnore
 Next edge after queue update
@@ -685,6 +682,7 @@ Quaternion
 QuaternionStorage
 Query and shape in hierarchy id=%d
 Query ignored this shape by owner ID. query(%08x, %08x) shape owner:%08x, shape entity:%08x).\n
+RENDER_BUFFER_IMMOVABLE_ALLOCATION
 RESOURCE_TYPE_PHYSICSDATA_INTERNAL
 RESOURCE_TYPE_VPHYSX_SURFACE_PROPERTIES
 REVOLUTE_JOINT
@@ -709,11 +707,10 @@ RnMeshCreate
 RnMeshDestroy
 RnMeshHideTriangles
 RnMeshUpdateChangedVertices
+RnMeshUpdateTriangleAABBs
 RnShutdown
 RnStartup
 RnUnitTest
-Rubikon Collision Group name dictionary
-Rubikon Collision Layer name dictionary
 Rubikon Release No-Names non-SIMD
 Rubikon%s\n
 SPHERICAL_JOINT
@@ -843,7 +840,7 @@ body1
 body2
 bowling ball
 breakable_glass
-broadphase.cpp:725
+broadphase.cpp:720
 broadphase.inl:223
 burst
 burstRandomize
@@ -1228,8 +1225,8 @@ wireframe
 wireframe 
 with
 world.cpp
-world.cpp:1603
-world.cpp:1759
-world.cpp:2126
+world.cpp:1633
+world.cpp:1789
+world.cpp:2156
 worldGeometry
 }\n %llu aggs, %s total data\n

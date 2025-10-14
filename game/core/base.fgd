@@ -205,7 +205,7 @@
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
-	output OnDestructiblePartDamageLevelChanged(cpp)
+	output OnDestructibleHitGroupDamageLevelChanged(cpp)
 
 	add_attribute(string) : "Add Attribute" : "" : "Will add an additional attribute that AI/player entities can query when checking props for information (ex: 'DogToy' or 'GrabbableResource')"
 	add_modifier(string) : "Add Modifier" : "" : "Will add this modifier when the entity spawns."
@@ -544,7 +544,7 @@
 	]
 ]
 
-@BaseClass base(Breakable) vecline_local( burstlocation, 255, 200, 200, requires_breakable_model ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero, requires_breakable_model )
+@BaseClass base(Breakable) vecline_local( burstlocation, 255, 200, 200, hideifzero, requires_breakable_model ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero, requires_breakable_model )
 	= BreakableProp
 [
 	spawnflags(flags) =
@@ -3781,6 +3781,7 @@
 	attach2(target_destination) : "Attachment 2" : "" : "Second entity.  Must be a single entity unless \"Support multiple entities with same name\" is specified."
 
 	support_multiple_entities_with_same_name(boolean) : "Support multiple entities with same name" : 0 : "If true, we affect all entities matching our attachment names. If false, we only affect the first entity found matching each attachment name."
+	include_hierarchy(boolean) : "Include Hierarchy" : 0 : "Disable collision between the entire hierarchies of the two entities, instead of just the individual entities themselves."
 	startdisabled(boolean) : "Start with collisions disabled" : 1
 
 	// Inputs
@@ -4583,17 +4584,19 @@
 		1: "No Collision until break" : 0
 		// 2 is defined independently by subclasses, do not reuse
 		4: "Start inactive" : 0
-		8: "Change mass to keep stable attachment to world" : 0
 		16: "Do not connect entities until turned on" : 0
 	]
 	attach1(target_destination) : "Entity 1" : ""
 	attach2(target_destination) : "Entity 2" : ""
+	attachment1(string) : "Entity 1 Attachment Name" : "" : "If set, we'll attach to the body / location corresponding to this attachment."
+	attachment2(string) : "Entity 2 Attachment Name" : "" : "If set, we'll attach to the body / location corresponding to this attachment."
 
 	forcelimit(float) : "Impulse Limit to Break (kg)" : "0" : "The amount of impulse an impact must apply to the constraint to break it. A way of calculating this is to set it to the mass of an object that would break this constraint if it were resting on the constrainted objects."
 	torquelimit(float) : "Angular Impulse Limit to Break (kg * distance)" : "0" : "The amount of angular impulse required to break the constraint. A way of calculating this is to multiply any reference mass by the resting distance (from the center of mass of the object) needed to break the constraint."
 	breaksound(sound) : "Play Sound on Break" : "" : "A sound played when the constraint is broken."
 	teleportfollowdistance(float) : "Follow teleport distance" : "0" : "If one object teleports more than this many units away it will cause the other constrained object to teleport to an appropriate relative position."
-	
+	treat_entity1_as_infinite_mass(bool) : "Treat Entity 1 As Infinite Mass" : "0" : "If true, the joint will not affect the motion of Entity 1. Entity 2 will just follow Entity 1."
+
 	// Inputs
 	input Break(void) : "Force the constraint to break."
 	input TurnOn(void) : "Enable the constraint.  Do this when the objects don't exist when the constraint spawns - or when you have deactivated the constraint.  Broken constraints can NOT be turned on.  They have been deleted."
@@ -4650,6 +4653,8 @@
 
 	// Inputs
 	input SetRestLength(float) : "Set the spring rest length."
+	input AddRestLength(float) : "Increase the spring rest length by the given amount."
+	input RemoveRestLength(float) : "Decrease the spring rest length by the given amount."
 	input SetFrequency(float) : "Set the spring frequency (stiffness)."
 	input SetDampingRatio(float) : "Set the spring damping ratio."
 ]
@@ -4695,7 +4700,7 @@
 	input SetMinLimit(float) : "Set the minimum hinge angle (degrees)"
 	input SetMaxLimit(float) : "Set the maximum hinge angle (degrees)"
 	//input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
-	//input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
+	input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
 	//input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
 	input SetMotorTargetVelocity(float) : "Set Motor target velocity in deg/sec, use 0 to just turn friction on"
 	input SetMotorTargetAngle(float) : "Set Motor target angle, degrees. Exact number depends on constrained bodies reference frames and initial configuration. See constraint limits for reference to sensible range of values."
@@ -4730,7 +4735,7 @@
 	input SetMinLimit(float) : "Set the minimum hinge angle (degrees)"
 	input SetMaxLimit(float) : "Set the maximum hinge angle (degrees)"
 	//input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
-	//input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
+	input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
 	//input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
 	input SetMotorTargetVelocity(float) : "Set Motor target velocity in deg/sec, use 0 to just turn friction on"
 	input SetMotorTargetAngle(float) : "Set Motor target angle, degrees. Exact number depends on constrained bodies reference frames and initial configuration. See constraint limits for reference to sensible range of values."
@@ -4974,8 +4979,11 @@
 	lineardampingratio(float) : "Linear Damping Ratio" : "0" : "Linear spring damping ratio."
 	jointfriction(float) : "Friction" : "0" : "Resistance/friction for movement along the spline"
 
+	transitiontime(float) : "Transition Time" : "0" : "When changing splines (e.g. via SetSplineEntity), we smoothly transition the constraint anchor to the new spline over this time interval."
+
 	fireeventsonpath(bool) : "Fire Events On Path" : "0" : "Notify our path when the attached entity moves along it so it can fire passthrough events, etc."
 
+	input SetTransitionTime(float) : "Set the transition time used when changing splines"
 	input SetSplineEntity(string) : "Set the spline to a new entity"
 	input EnableLimit(void) : "Enable the limits at the ends of the spline"
 	input DisableLimit(void) : "Disable the limits at the ends of the spline"
@@ -5421,7 +5429,7 @@
 	input IgniteHitboxFireScale(float) : "Ignite, with a parameter hitbox fire scale."
 ]
 
-@PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) vecline_local( burstlocation, 255, 200, 200, requires_breakable_model ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero, requires_breakable_model )
+@PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) vecline_local( burstlocation, 255, 200, 200, hideifzero, requires_breakable_model ) text_local( burstlocation, "  Burst Location", 255, 200, 200, hideifzero, requires_breakable_model )
 	metadata
 	{
 		model_archetypes = [ "physics_prop_model", "breakable_prop_model" ]
@@ -6114,7 +6122,7 @@
 	"It is not necessary to create outputs for this trigger. It automatically will trigger the " +
 	"soundscape referred to by its 'Soundscape' property."
 [
-	soundscape(target_source) : "Soundscape" 
+	soundscape(target_destination) : "Soundscape" 
 ]
 
 @SolidClass base(Trigger, Targetname) = trigger_hurt :
@@ -6548,7 +6556,7 @@
 	
 ]
 
-@PointClass base(Targetname, Parentname) overlay() editormodel("models/editor/axis_helper_thick.vmdl") = env_decal :
+@PointClass base(Targetname, Parentname) overlay() editormodel("models/editor/axis_helper_thick.vmdl", nobounds) = env_decal :
 	"Simple projected decal entity"
 [
 	material(material) : "Decal Material" : ""
@@ -6556,6 +6564,7 @@
 	width(float) : "Decal Width" : "256.0"
 	height(float) : "Decal Height" : "256.0"
 	depth(float) : "Decal Depth" : "256.0"
+	sequence(string) : "Sequence" : "0"
 
 	RenderOrder(integer)		: "Render Order" : "0"
 	projectonworld(boolean)		: "Project on World" : "1"
@@ -7370,7 +7379,12 @@ centered_box_oriented
 ]
 
 
-@PathClass base(PathParticleRopeBase) tags( PathVisible ) particle_rope() = path_particle_rope
+@PathClass base(PathParticleRopeBase) tags( PathVisible ) particle_rope() 
+	metadata
+	{
+		always_hit_test = true
+	}
+= path_particle_rope
 [
 	// Inputs
 	input Start(void) : "Tell the particle system to start emitting."
@@ -7385,7 +7399,8 @@ centered_box_oriented
 
 @PathClass base(PathParticleRopeBase) tags( PathVisible ) particle_rope() 
 	metadata
-	{
+	{	
+		always_hit_test = true
 		class_game_keys =
 		[
 			{ key = "clientSideEntity" value = 1 }

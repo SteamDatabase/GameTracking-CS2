@@ -179,6 +179,8 @@ message CCLCMsg_RequestPause {
 }
 
 message CCLCMsg_CmdKeyValues {
+	option (maximum_size_bytes) = 1500;
+
 	optional bytes data = 1;
 }
 
@@ -240,6 +242,12 @@ message CMsgSource2NetworkFlowQuality {
 	optional uint32 enginemsgs_total = 20;
 	optional uint32 enginemsgs_sec_p95 = 21;
 	optional uint32 enginemsgs_sec_p99 = 22;
+	optional uint32 netframes_total = 30;
+	optional uint32 netframes_dropped = 31;
+	optional uint32 netframes_outoforder = 32;
+	optional uint32 netframes_size_exceeds_mtu = 34;
+	optional uint32 netframes_size_p95 = 35;
+	optional uint32 netframes_size_p99 = 36;
 	optional uint32 ticks_total = 40;
 	optional uint32 ticks_good = 41;
 	optional uint32 ticks_good_almost_late = 42;
@@ -260,6 +268,15 @@ message CMsgSource2NetworkFlowQuality {
 	optional sint32 recvmargin_p50 = 64;
 	optional sint32 recvmargin_p75 = 65;
 	optional sint32 recvmargin_p95 = 66;
+	optional uint32 netframe_jitter_p50 = 70;
+	optional uint32 netframe_jitter_p99 = 71;
+	optional uint32 interval_peakjitter_p50 = 72;
+	optional uint32 interval_peakjitter_p95 = 73;
+	optional uint32 packet_misdelivery_rate_p50_x4 = 74;
+	optional uint32 packet_misdelivery_rate_p95_x4 = 75;
+	optional uint32 net_ping_p5 = 80;
+	optional uint32 net_ping_p50 = 81;
+	optional uint32 net_ping_p95 = 82;
 }
 
 message CMsgSource2PerfIntervalSample {
@@ -277,6 +294,8 @@ message CMsgSource2PerfIntervalSample {
 }
 
 message CCLCMsg_Diagnostic {
+	option (maximum_size_bytes) = 16384;
+
 	optional .CMsgSource2SystemSpecs system_specs = 1;
 	optional .CMsgSource2VProfLiteReport vprof_report = 2;
 	optional .CMsgSource2NetworkFlowQuality downstream_flow = 3;
@@ -305,6 +324,8 @@ message CSource2Metrics_MatchPerfSummary_Notification {
 }
 
 message CSVCMsg_ServerInfo {
+	option (maximum_size_bytes) = 102400;
+
 	optional int32 protocol = 1;
 	optional int32 server_count = 2;
 	optional bool is_dedicated = 3;
@@ -458,6 +479,8 @@ message CSVCMsg_GameEventList {
 }
 
 message CSVCMsg_PacketEntities {
+	option (maximum_size_bytes) = 0;
+
 	message alternate_baseline_t {
 		optional int32 entity_index = 1;
 		optional int32 baseline_index = 2;
@@ -504,6 +527,8 @@ message CSVCMsg_TempEntities {
 }
 
 message CSVCMsg_CreateStringTable {
+	option (maximum_size_bytes) = 49152;
+
 	optional string name = 1;
 	optional int32 num_entries = 2;
 	optional bool user_data_fixed_size = 3;
@@ -517,6 +542,8 @@ message CSVCMsg_CreateStringTable {
 }
 
 message CSVCMsg_UpdateStringTable {
+	option (maximum_size_bytes) = 262144;
+
 	optional int32 table_id = 1;
 	optional int32 num_changed_entries = 2;
 	optional bytes string_data = 3;
@@ -615,6 +642,8 @@ message ProtoFlattenedSerializer_t {
 }
 
 message CSVCMsg_FlattenedSerializer {
+	option (maximum_size_bytes) = 0;
+
 	repeated .ProtoFlattenedSerializer_t serializers = 1;
 	repeated string symbols = 2;
 	repeated .ProtoFlattenedSerializerField_t fields = 3;

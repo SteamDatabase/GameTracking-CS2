@@ -1,4 +1,4 @@
-import { CSPlayerPawn, Instance } from "cs_script/point_script";
+import { CSHitGroup, CSPlayerPawn, Instance } from "cs_script/point_script";
 
 const traceFrequency = 0;
 const drawDuration = 0;
@@ -99,7 +99,11 @@ Instance.SetThink(() => {
             } else if (result.damage > 100) {
                 color.b = lerp(0, 255, (result.damage - 100) / 100);
             }
-            Instance.DebugBox({ mins: vectorAdd(result.position, mins), maxs: vectorAdd(result.position, maxs), duration: drawDuration, color });
+            if (result.hitGroup == CSHitGroup.HEAD) {
+                Instance.DebugSphere({ center: result.position, radius: 1, duration: drawDuration, color });
+            } else {
+                Instance.DebugBox({ mins: vectorAdd(result.position, mins), maxs: vectorAdd(result.position, maxs), duration: drawDuration, color });
+            }
         }
     }
 });

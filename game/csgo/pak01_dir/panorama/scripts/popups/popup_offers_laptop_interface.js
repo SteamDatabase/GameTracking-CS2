@@ -807,6 +807,7 @@ var CollectionOffers;
             elModel.SetRotationLimits(360, 360);
             elModel.SetAutoRotateAmount(30, 20);
             elModel.SetAutoRotatePeriod(16, 16);
+            m_elScreen.defaultfocus = 'id-offer-preview-panel';
         }
         elModel.SetActiveItem(0);
         elModel.SetItemItemId(OfferItemData.itemId, '');

@@ -15,7 +15,6 @@ var LoadingScreen;
         $('#LoadingScreenGameMode').SetLocString("#SFUI_LOADING");
         $('#LoadingScreenModeDesc').text = "";
         const elGameModeIcon = $('#LoadingScreenGameModeIcon');
-        $.RegisterEventHandler('ImageFailedLoad', elGameModeIcon, () => elGameModeIcon.visible = false);
         elGameModeIcon.visible = false;
         $('#LoadingScreenIcon').visible = false;
         const elSlideShow = $.GetContextPanel().FindChildTraverse('LoadingScreenSlideShow');
@@ -119,13 +118,7 @@ var LoadingScreen;
         }
         if (mapName) {
             m_mapName = mapName;
-            function mapIconFailedToLoad() {
-                $('#LoadingScreenMapName').RemoveClass("loading-screen-content__info__text-title-short");
-                $('#LoadingScreenMapName').AddClass("loading-screen-content__info__text-title-long");
-                $('#LoadingScreenIcon').visible = false;
-            }
             $('#LoadingScreenIcon').visible = true;
-            $.RegisterEventHandler('ImageFailedLoad', $('#LoadingScreenIcon'), mapIconFailedToLoad.bind(undefined));
             $('#LoadingScreenMapName').RemoveClass("loading-screen-content__info__text-title-long");
             $('#LoadingScreenMapName').AddClass("loading-screen-content__info__text-title-short");
             $('#LoadingScreenIcon').SetImage('file://{images}/map_icons/map_icon_' + mapName + '.svg');
@@ -160,5 +153,13 @@ var LoadingScreen;
         $.RegisterForUnhandledEvent('PopulateLoadingScreen', _UpdateLoadingScreenInfo);
         $.RegisterForUnhandledEvent('UnloadLoadingScreenAndReinit', _Init);
         $.RegisterForUnhandledEvent('JsOnMapLoadFinished', _OnMapLoadFinished);
+        const elGameModeIcon = $('#LoadingScreenGameModeIcon');
+        $.RegisterEventHandler('ImageFailedLoad', elGameModeIcon, () => elGameModeIcon.visible = false);
+        function mapIconFailedToLoad() {
+            $('#LoadingScreenMapName').RemoveClass("loading-screen-content__info__text-title-short");
+            $('#LoadingScreenMapName').AddClass("loading-screen-content__info__text-title-long");
+            $('#LoadingScreenIcon').visible = false;
+        }
+        $.RegisterEventHandler('ImageFailedLoad', $('#LoadingScreenIcon'), mapIconFailedToLoad.bind(undefined));
     }
 })(LoadingScreen || (LoadingScreen = {}));

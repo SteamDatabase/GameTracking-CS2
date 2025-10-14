@@ -13,7 +13,7 @@
   Verts: %.1fK
   Verts: %.1fM
   Verts: %d
-  [%i] %s %s\n
+  [%i] %s %s %s\n
   cpu culling: [vis %d] [vol %d] [dist %d] [size %d]\n
   gpu culling: [vis %d] [frust %d] [occ %d] [vol %d] [bface %d] [size %d] [density %d]
   w/ default threshold: %d,
@@ -355,11 +355,13 @@ $MonitorTexture
 %i textures
 %i tiles used, %i tiles rendered, %i tiles recycled, %i failed in %ix%i atlas
 %ix%i
-%ix%i %s:%i
+%ix%i %s:%i (%d)
 %ix%ix%i
 %lu ms
 %s %.1f %.1f %.1f %s
 %s %04d: pos (%8.2f,%8.2f), uv (%.6f,%.6f), col %08X\n
+%s (%-14s): FAIL %s\n
+%s (%-14s): pass\n
 %s 0x%04X%s: %d windows (vis: '%s')
 %s 0x%04X%s: %s (vis: '%s')
 %s 0x%08X (%d tabs)%s  {
@@ -412,6 +414,8 @@ $MonitorTexture
 (in ChildE: using same Shortcut)
 (in PopupF)
 (in WindowA)
+(no material)
+(no model)
 (null)
 (unnamed)
 (void*)0x%p
@@ -444,9 +448,11 @@ $MonitorTexture
 *ZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE0_
 *ZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE_
 *ZN15CLightBinnerGPU27AddLightProbeVolumesForViewEP10CSceneViewiEUlP28CSceneLightProbeVolumeObjectE_
+*ZN16CRenderBatchList21DrawCurrentPrimitivesEvEUlvE0_
+*ZN16CRenderBatchList21DrawCurrentPrimitivesEvEUlvE_
 *ZN25CAggregateSceneObjectDesc9DrawArrayEP14IRenderContextP20CMeshDrawPrimitive_tiPK10ISceneViewP11ISceneLayerR26SceneSystemPerFrameStats_tEUlvE_
 *ZN29CInstancedMeshSceneObjectDesc25OnBeginSubmitDisplayListsEP14IRenderContextE19ReadStatsCallback_t
-*ZNK21CAggregateSceneObject26FindVisClustersForMeshletsERK10CUtlVectorI6AABB_ti25CUtlVectorMemory_GrowableIS1_iLm0EEERKNS_18FragmentCullInfo_tERKS1_RK6Mat3x4IfEPK18CMeshletDescriptorjP16PerMeshletData_tEUlvE_
+*ZN29CInstancedMeshSceneObjectDesc9DrawArrayEP14IRenderContextP20CMeshDrawPrimitive_tiPK10ISceneViewP11ISceneLayerR26SceneSystemPerFrameStats_tEUlvE_
 *ZZN12CSceneSystem22Thread_RenderViewLayerESt10shared_ptrI13CViewDrawListEP11CSceneLayerENKUlbE_clEbEUlvE_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE0_clES3_EUlvE0_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE0_clES3_EUlvE_
@@ -462,6 +468,7 @@ $MonitorTexture
 ->\n  [%s:%s] %s
 .%03d %03d
 ..-         -XXXXXXX-    X    -           X           -XXXXXXX          -          XXXXXXX-     XX          - XX       XX ..-         -X.....X-   X.X   -          X.X          -X.....X          -          X.....X-    X..X         -X..X     X..X---         -XXX.XXX-  X...X  -         X...X         -X....X           -           X....X-    X..X         -X...X   X...XX           -  X.X  - X.....X -        X.....X        -X...X            -            X...X-    X..X         - X...X X...X XX          -  X.X  -X.......X-       X.......X       -X..X.X           -           X.X..X-    X..X         -  X...X...X  X.X         -  X.X  -XXXX.XXXX-       XXXX.XXXX       -X.X X.X          -          X.X X.X-    X..XXX       -   X.....X   X..X        -  X.X  -   X.X   -          X.X          -XX   X.X         -         X.X   XX-    X..X..XXX    -    X...X    X...X       -  X.X  -   X.X   -    XX    X.X    XX    -      X.X        -        X.X      -    X..X..X..XX  -     X.X     X....X      -  X.X  -   X.X   -   X.X    X.X    X.X   -       X.X       -       X.X       -    X..X..X..X.X -    X...X    X.....X     -  X.X  -   X.X   -  X..X    X.X    X..X  -        X.X      -      X.X        -XXX X..X..X..X..X-   X.....X   X......X    -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -         X.X   XX-XX   X.X         -X..XX........X..X-  X...X...X  X.......X   -  X.X  -   X.X   -X.....................X-          X.X X.X-X.X X.X          -X...X...........X- X...X X...X X........X  -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -           X.X..X-X..X.X           - X..............X-X...X   X...XX.........X -XXX.XXX-   X.X   -  X..X    X.X    X..X  -            X...X-X...X            -  X.............X-X..X     X..XX..........X-X.....X-   X.X   -   X.X    X.X    X.X   -           X....X-X....X           -  X.............X- XX       XX X......XXXXX-XXXXXXX-   X.X   -    XX    X.X    XX    -          X.....X-X.....X          -   X............X--------------X...X..X    ---------   X.X   -          X.X          -          XXXXXXX-XXXXXXX          -   X...........X -             X..X X..X   -       -XXXX.XXXX-       XXXX.XXXX       -------------------------------------    X..........X -             X.X  X..X   -       -X.......X-       X.......X       -    XX           XX    -           -    X..........X -             XX    X..X  -       - X.....X -        X.....X        -   X.X           X.X   -           -     X........X  -                   X..X  -       -  X...X  -         X...X         -  X..X           X..X  -           -     X........X  -                    XX   -       -   X.X   -          X.X          - X...XXXXXXXXXXXXX...X -           -     XXXXXXXXXX  -             -------------       -    X    -           X           -X.....................X-           -------------------                                 ----------------------------------- X...XXXXXXXXXXXXX...X -                                                                                                 -  X..X           X..X  -                                                                                                 -   X.X           X.X   -                                                                                                 -    XX           XX    -                                           
+../../src/thirdparty/tinybvh/inc_tiny_bvh.h
 ../public/scenesystem/vertexformat.h
 .vtex
 /*\n The Pentium F00F bug, shorthand for F0 0F C7 C8,\n the hexadecimal encoding of one offending instruction,\n more formally, the invalid operand with locked CMPXCHG8B\n instruction bug, is a design flaw in the majority of\n Intel Pentium, Pentium MMX, and Pentium OverDrive\n processors (all in the P5 microarchitecture).\n*/\n\nlabel:\n\tlock cmpxchg8b eax\n
@@ -481,6 +488,7 @@ $MonitorTexture
 0x%08X,%d
 0x%08X/
 0xDDDDDDDD
+1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 5 = LOD, 6 == LPV Binding, 7 == instancing
 1. I am selectable
 1.90.9
 10CSceneView
@@ -546,11 +554,11 @@ $MonitorTexture
 18IModelRenderHelper
 18IRenderingPipeline
 19CClutterSceneObject
+19CDebugLayerRenderer
 19CRenderGraphBuilder
 19CRenderingPipelines
 19CScalableAORenderer
 19CSceneMonitorObject
-19CSimpleQuadRenderer
 19ILightBinnerFactory
 19IReadBufferCallback
 19ISceneLightListener
@@ -566,6 +574,7 @@ $MonitorTexture
 20ISceneObjectDescBaseI21CSceneBarnLightObjectE
 20ISceneObjectDescBaseI21CSceneDebugTextObjectE
 20ISceneObjectDescBaseI25CSceneLPVSampleGridObjectE
+20ISceneObjectDescBaseI26CProjectedDecalSceneObjectE
 20ISceneObjectDescBaseI28CSceneLightProbeVolumeObjectE
 20ISceneObjectDescBaseI33CAmbientOcclusionProxySceneObjectE
 20ISceneObjectDescBaseI33CDistanceFieldInstanceSceneObjectE
@@ -611,6 +620,7 @@ $MonitorTexture
 26CAnimatableSceneObjectDesc
 26CParallelProcessorAbstractI18CParallelProcessorI22GenerateTileWorkUnit_t27CMemberFuncJobItemProcessorIS1_22CBuildSparseShadowTreeS3_ELi1EEE
 26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS2_ELi1EEE
+26CProjectedDecalSceneObject
 27CDirectionalLightObjectDesc
 27CLightProbeVolumeObjectDesc
 27CMeshBuilderSceneObjectDesc
@@ -732,6 +742,7 @@ $MonitorTexture
 =n4X?e
 =uvz?
 =v?ke
+>*ZNK21CAggregateSceneObject26FindVisClustersForMeshletsERK10CUtlVectorI6AABB_ti25CUtlVectorMemory_GrowableIS1_iLm0EEERKNS_18FragmentCullInfo_tERKS1_RK6Mat3x4IfEPK18CMeshletDescriptorjP16PerMeshletData_tEUlvE_
 >0G??Ou
 >333?
 >c<yXH?B
@@ -746,7 +757,7 @@ $MonitorTexture
 ?333333
 ?Bxt>
 ?JA7=
-@19CDebugLayerRenderer
+@19CSimpleQuadRenderer
 @33333
 @33333#
 @33333'
@@ -828,6 +839,7 @@ A0 Row 0
 A0 Row 1
 A1 Row 0
 A1 Row 1
+A5^Z?
 A8_UNORM
 A:%0.3f
 A:%3d
@@ -986,6 +998,9 @@ B8G8R8A8_UNORM
 B8G8R8X8_UNORM
 B:%0.3f
 B:%3d
+BAKED_LIGHTING_FROM_PROBE
+BAKED_LIGHTING_LIGHTMAP
+BAKED_LIGHTING_VERTEX_STREAM
 BAuto
 BBBB
 BBBBBBBB
@@ -1166,6 +1181,7 @@ COLOR_ATTACHMENT_OPTIMAL
 COLOR_ATTACHMENT_OUTPUT
 COLOR_ATTACHMENT_READ_BIT
 COLOR_ATTACHMENT_WRITE_BIT
+COMPRESSED_TANGENT_SPACE
 COMPUTE_SHADER
 CPU Cull
 CPU Render
@@ -1247,9 +1263,10 @@ CellPaddingX: %.1f, CellSpacingX: %.1f/%.1f, OuterPaddingX: %.1f
 Center
 Centroid
 Change Colormap
-Changing MeshGroupMask when PrunUnusedMeshGroups is set, after the sceneobject has been created (the groups have already been discarded)
+Changing MeshGroupMask when m_bPruneUnusedMeshGroups is set, after the sceneobject has been created (the groups have already been discarded)\n
 Changing sc_layer_batch_threshold from %d -> %d.\n
 Changing sc_layer_batch_threshold_fullsort from %d -> %d.\n
+CharacterDecal
 CharacterDecalMode
 CharacterDecalMonitorViewDS.vtex
 CharacterDecalMonitorViewRT.vtex
@@ -1496,6 +1513,7 @@ Custom: Always Square
 Custom: Aspect Ratio 16:9
 Custom: Fixed Steps (100)
 CustomShadowPipeline
+CustomTexture1
 CustomTexture2
 D16_UNORM
 D24_UNORM_S8_UINT
@@ -1545,7 +1563,6 @@ D_JITTER
 D_LATTICE_DEFORMER
 D_LODS
 D_LPV_INDIRECT
-D_MESH_SHADER
 D_MIN_ANGULAR_FOG
 D_NO_ZTEST
 D_OCCLUSION_CULLING
@@ -1607,6 +1624,7 @@ Debug##Default
 DebugDrawAllMeshlets
 DebugMeshletDrawArgs
 DebugText
+Decal
 DecalBlendMask
 DecalNormals_%d.vtex
 DecalRenderTarget_Staging.vtex
@@ -1762,6 +1780,7 @@ ERROR! Cannot load HairRendererManifest resource manifest!\n
 ERROR! Cannot load SubsurfaceProfilesManifest
 ERROR: Docking is not enabled! See Demo > Configuration.
 ESCAPE to revert.
+ESceneObjectVisualization
 Earth
 East
 Edit
@@ -1859,7 +1878,6 @@ Fallback character: '%s' (U+%04X)
 Fancy
 FarPlaneOverride
 Faster lines using texture data. Require backend to render with bilinear filtering (not point/nearest filtering).
-Fatal error in tiny_bvh.h, line %i:\n%s\n
 Features:
 Field
 Field_%d
@@ -2251,6 +2269,7 @@ If you see visual artifacts, do one of the following:
 If your company uses this, please consider funding the project.
 IgnoreFaceNormalsForLighting
 IgnoreTintAlpha
+Ignoring invalid new value for '%s'.\n
 Illum
 ImDrawIdx: %d-bit
 ImDrawVert
@@ -2460,6 +2479,7 @@ Invalid input layout field format %d for joint indices\n
 Invalid subsurface profile index (or duplicate): %i %s\n
 Invalid width/height for ScratchTarget, Size=%i, Width=%i/Height=%i
 Invert
+IsBatchable
 IsChild=%d
 IsChild=1\n
 IsFirstRender
@@ -2736,6 +2756,7 @@ Mesh contains %d blend weights per vertex;  truncating to %d\n
 Mesh: ElemCount: %d, VtxOffset: +%d, IdxOffset: +%d, Area: ~%0.f px
 MeshBuilderObject
 MeshData
+MeshName
 Meshbuilder2
 Meshbuilder2IndexData
 Meshbuilder2VertexData
@@ -2875,9 +2896,13 @@ N23CCharacterDecalRenderer27CCharacterDecalRendererDescE
 NAV,FOCUS
 NB: Cursor & selection are preserved when refocusing last used item in code.
 NEEDS_DIRTY_UPDATE 
+NEEDS_DYNAMIC_REFLECTION
 NEEDS_DYNAMIC_REFLECTION_OR_REFRACTION 
+NEEDS_FRAMEBUFFER_COPY
+NEEDS_GPU_CULLING
 NEEDS_STATIC_ENVMAP_BINDING 
 NI>R
+NOT_BATCHABLE
 NO_MOTION_VECTORS 
 NO_Z_PREPASS 
 NaN Values
@@ -2991,6 +3016,7 @@ Obama
 Object
 Object %4d: 0x%p, class=%20s, origin=(%13g,%13g,%13g), bounds=(%13g,%13g,%13g):(%13g,%13g,%13g), desc=0x%p, flags=0x%016llX\n
 Object %d
+ObjectBrowser
 ObjectDesc
 OcclusionQueryIssueLayer
 Offset %.2f
@@ -3194,7 +3220,8 @@ ProggyClean.ttf, %dpx
 Progress Bar
 Progress Bars
 Project constraints
-ProjectedDecalSceneObjectDesc
+ProjectedDecal
+ProjectedSceneObjectDesc
 PropWorldOrigin
 Property editor
 PushID
@@ -3384,7 +3411,7 @@ ResolvedHairDensityTextureMip2
 ResolvedHairDensityTextureMip3
 ResolvedHairDensityTextureMip4
 ResolvedHairTangentTexture
-Resource %s was created but never accessed
+Resource %s was created but never accessed\n
 ResourceCompiler/BakedLighting/DisableCullingForShadows
 ResourceCompiler/BakedLighting/LPVAtlas
 ResourceCompiler/WorldRendererBuilder/UseStaticEnvMapForObjectsWithLightingOrigin
@@ -3433,6 +3460,12 @@ Run simulation
 Ryan
 S:%0.3f
 S:%3d
+SCENEOBJECT_VIS_INSTANCING
+SCENEOBJECT_VIS_LOD
+SCENEOBJECT_VIS_MATERIAL
+SCENEOBJECT_VIS_NONE
+SCENEOBJECT_VIS_OBJECT
+SCENEOBJECT_VIS_TEXTURE_SIZE
 SHADER_READ_ONLY_OPTIMAL
 SHADER_WRITE_BIT
 SHIFT 
@@ -3465,6 +3498,7 @@ SSTTileStartX
 SSTTileStartY
 SSTUnpack
 SSTWidth
+STATIC_ENVMAP_BINDING
 STATIC_OBJECT 
 SUPER 
 Sailor
@@ -3535,6 +3569,7 @@ SceneSystem/NonTexturedGradientFog
 SceneSystem/PointLightShadowsEnabled
 SceneSystem/PunctualContactShadows
 SceneSystem/RenderMeshlets
+SceneSystem/SceneObject Browser
 SceneSystem/ShadowTextureImageFormat_D16
 SceneSystem/ShadowmapMaxFilterRadius
 SceneSystem/SkipLoadingRenderingPipelines
@@ -4023,6 +4058,10 @@ TimeSlicedShadowMapRendering
 Timer took %.4f
 Tint
 Tint with Text Color
+TinyBVH Fatal Error: %s at %s:%d
+TinyBVHFatalError
+TinyBVHFatalError(char const*, char const*, int)
+TinyBVHFatalError(char const*, char const*, int)::_assertionConstants
 Title
 Title bar Hovered/Active tests
 Title: %s
@@ -4092,9 +4131,12 @@ U+%04X
 U+%04X..U+%04X (%d %s)
 UNDEFINED
 UNIFORM_READ_BIT
+UNIQUE_BATCH_GROUP
 UNUSED
 USER GUIDE:
 USER:\nHold SHIFT or use mouse to select text.\nCTRL+Left/Right to word jump.\nCTRL+A or Double-Click to select all.\nCTRL+X,CTRL+C,CTRL+V clipboard.\nCTRL+Z,CTRL+Y undo/redo.\nESCAPE to revert.\n\nPROGRAMMER:\nYou can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputText() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example (this is not demonstrated in imgui_demo.cpp).
+USES_PAYLOAD
+USES_SHADOW_FAST_PATH
 UTF-8 Encoding viewer
 UTF-8 Text
 UTF-8 input
@@ -4309,6 +4351,7 @@ Without border:
 Word Wrapping
 Word-wrapping
 WorkRect
+WorldName
 WorldRenderer/EnvironmentMapFaceSize
 WorldRenderer/EnvironmentMapFormat
 WorldRenderer/EnvironmentMapUseCubeArray
@@ -4512,10 +4555,11 @@ additionalExcludedFlags
 additionalRenderAttributes
 additionalRequiredFlags
 aggregate.fragmentCount
-aggregate.material.name
+aggregate.material_name
 aggregate.meshletCount
+aggregate.model_name
 aggregatedesc.cpp
-aggregatedesc.cpp:1995
+aggregatedesc.cpp:2016
 aliasing
 alphatest
 altcolor
@@ -4549,6 +4593,10 @@ bakedshadowindex
 barn
 barnlightconstants
 bars
+batchlist
+batchlist.descriptor
+batchlist.flags_str
+batchlist.flags_uint
 bbb1.c
 bbb2.cpp
 bbbb
@@ -4586,6 +4634,10 @@ clap
 click here
 click on a button to set focus
 cmap
+coincident
+collinear
+collinear_parallel
+collinear_parallel_concave
 color 1
 color 2
 colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);\n
@@ -4601,6 +4653,7 @@ compacted draw count
 compacted drawindirectargs
 compaction requests
 compressedtangentframe
+concave
 contactshadow
 context
 copy_rt
@@ -4635,6 +4688,7 @@ define: IMGUI_HAS_VIEWPORT
 define: __GNUC__=%d
 define: __cplusplus=%d
 define: __linux__
+degenerate
 depth pass
 desktop.ini
 digital_%d
@@ -4777,6 +4831,7 @@ hello
 hello, world
 hexadecimal
 hhea
+hierarchy
 hihat-c
 hihat-o
 hitgroup_default_opaque:%d
@@ -4834,6 +4889,9 @@ instance buffer
 instance cull stats
 instance cull stats shadow
 instanced mesh data
+instancedmesh.material_name
+instancedmesh.max_instances
+instancedmesh.model_name
 instancedmeshdesc.cpp
 instanceidbuffer
 instanceidbuffer2
@@ -4896,6 +4954,8 @@ items_count
 items_type (first column)
 k>Mg
 k?C9
+kDecalCloakDamage
+kDecalInvalid
 kern
 label
 last used by %s
@@ -4909,6 +4969,8 @@ lightSetupPass
 light_cookie
 lightbinner
 lightbinner_gpu.cpp
+lightbinner_precompute
+lightbinner_test_computesumsilhouette
 lighting_array_fog_RT1.vtex
 lighting_array_fog_RT2.vtex
 lightmapuv
@@ -5037,8 +5099,8 @@ near_red
 near_weight
 nextafterf
 no blank
+no verts
 not 
-null material
 nxnstripped
 occlusionproxyvb
 offset_angles
@@ -5049,6 +5111,7 @@ outer_child
 outer_size
 outputNonDepth
 overlay_deferred
+parallel
 passes
 password (clear)
 password (w/ hint)
@@ -5101,6 +5164,8 @@ requireStatic
 resolved_rt
 ride
 right-align
+rot, inv
+rotated
 row bg target
 row bg type
 row_min_height
@@ -5109,12 +5174,12 @@ sc_dumpworld %d
 sc_dumpworld3d %d
 sc_gpu_profiler
 sc_setclassflags %s %d
+sc_show_object_browser
 scene_quadindexbuffer
 scenegfxresources
 scenegfxresources.cpp
 sceneinfo_gpu - Load Materials
 scenelayer.cpp
-scenelight.cpp
 scenelpvdebuggrid.cpp
 sceneobject_h
 sceneobject_methods.cpp
@@ -5125,9 +5190,8 @@ scenesysCone
 scenesysDodecahedron
 scenesysPyramid
 scenesystem.cpp
-scenesystem.cpp(5341): Expecting 1 renderable pass for material "%s" but found %d!\n
-scenesystem.cpp:3205
-scenesystem.h
+scenesystem.cpp(5333): Expecting 1 renderable pass for material "%s" but found %d!\n
+scenesystem.cpp:3209
 scenesystemdebug
 scenesystemperframedata
 scenetextureset_%d
@@ -5271,12 +5335,14 @@ this cell %d
 this is a 300-wide button
 this is a tree node
 three
+tied
 tile cull items
-timestampmgr.cpp
 tint_color
+tiny_bvh.h
 tom-hi
 tom-low
 tom-mid
+too few verts
 tools.toolsmaterial
 transform buffer a
 transform buffer b
@@ -5292,7 +5358,6 @@ utils/characterdecalrenderer.cpp
 utils/hairrenderer.cpp
 utils/modelutils.cpp
 utils/scalable_ambient_obscurance.cpp
-utils/sceneutils.cpp
 utils/sceneutils.h(68): Material %s cannot render in mode %s but is being asked to\n
 utils/volumetricfog.cpp
 utils/windcontroller.cpp
@@ -5322,6 +5387,7 @@ wellknown_one_16bit_1x1
 wellknown_one_array_16bit_1x1x1
 wellknown_opaque_black_2x2x2
 wellknown_transparent_black_1x1
+wellknown_transparent_black_1x1x1
 wellknown_transparent_black_array_1x1
 wellknown_white_1x1
 wellknown_white_1x1x1

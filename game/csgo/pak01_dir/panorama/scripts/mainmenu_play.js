@@ -9,6 +9,7 @@
 /// <reference path="common/licenseutil.ts" />
 /// <reference path="common/sessionutil.ts" />
 /// <reference path="rating_emblem.ts" />
+$.LogChannel("p.mainmenu", "LV_OFF");
 var PlayMenu;
 (function (PlayMenu) {
     const k_workshopPanelId = 'gameModeButtonContainer_workshop';

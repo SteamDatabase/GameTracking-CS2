@@ -241,6 +241,7 @@ var ItemTile;
             contextmenuparam = '&contextmenuparam=graffiti';
         let contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('', '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + id + filterForContextMenuEntries + contextmenuparam, () => { });
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
+        contextMenuPanel.AddClass("ContextMenuCursorTopLeft");
     }
     ItemTile.OnActivate = OnActivate;
     ;

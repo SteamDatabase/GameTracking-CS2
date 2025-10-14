@@ -36,10 +36,6 @@
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumShape_tEUlvE3_E
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumShape_tEUlvE4_E
 - Graph Def '
--avx
--sse2
--sse3
--sse4
 . Req FAIL
 . Req PASS
 . Retired
@@ -64,6 +60,7 @@
 20CPulseCell_BaseValue
 20FakeEntityDerivedA_t
 20FakeEntityDerivedB_t
+20IPulseBlackboardView
 20IResourceTypeManager
 21CPulseCell_LimitCount
 22CPulseCell_CursorQueue
@@ -77,6 +74,7 @@
 23CPulseCell_Inflow_Yield
 23CPulseDomainScopeLoader
 23CPulseTestHandleService
+23CReadOnlyBlackboardView
 24CPulseCell_IntervalTimer
 24CPulseCell_Step_DebugLog
 24CPulseCell_Test_NoInflow
@@ -119,6 +117,7 @@
 36CPulseCell_Outflow_TestExplicitYesNo
 36CPulseCell_Step_TestDomainTracepoint
 36CPulseCell_WaitForCursorsWithTagBase
+37CPulseBlackboardViewFromGraphInstance
 37CPulseCell_Test_MultiInflow_NoDefault
 37CSchemaRegistration_pulse_runtime_lib
 38CPulseCell_Val_TestDomainGetEntityName
@@ -128,9 +127,11 @@
 41CPulseCell_Val_TestDomainFindEntityByName
 42CPulseCell_Step_TestDomainCreateFakeEntity
 43CPulseCell_Step_TestDomainDestroyFakeEntity
-43PulseSystemEventObservableVariableChanged_t
 44CPulseCell_Inflow_ObservableVariableListener
 48CPulseCell_Test_MultiOutflow_WithParams_Yielding
+49PulseSystemEventObservableVariableSourceChanged_t
+50PulseSystemEventObservableVariableListenerNotify_t
+56CPulseGraphInstance_TestDomain_UseReadOnlyBlackboardView
 <No Cell>
 <map_key>
 <map_value>
@@ -211,12 +212,34 @@ CPulseArraylib::ArrayRemoveIndex
 CPulseArraylib::ArrayRemoveInvalidElements
 CPulseArraylib::ArraySetCount
 CPulseArraylib::ArrayShuffle
+CPulseCell_BooleanSwitchState::Activate
+CPulseCell_CursorQueue::Wait
+CPulseCell_ExampleCriteria::CheckRequirement
+CPulseCell_ExampleSelector::ProcessSelector
+CPulseCell_FireCursors::Cancel
+CPulseCell_FireCursors::Start
 CPulseCell_Inflow_EntOutputHandler '%s'.'%s' --> Chunk%d: %s
 CPulseCell_Inflow_EventHandler '%s' --> Chunk%d: %s
 CPulseCell_Inflow_GraphHook '%s' --> Chunk%d: %s
 CPulseCell_Inflow_ObservableVariableListener '%s'.'%s (%u)' --> Chunk%d: %s
 CPulseCell_IntervalTimer::OnInterval
+CPulseCell_IntervalTimer::Start
+CPulseCell_IntervalTimer::StopTimer
+CPulseCell_Outflow_TestExplicitYesNo::Run
+CPulseCell_Outflow_TestRandomYesNo::Run
 CPulseCell_Step_CallExternalMethod '%s'
+CPulseCell_Step_TestDomainCreateFakeEntity::Run
+CPulseCell_Step_TestDomainDestroyFakeEntity::Run
+CPulseCell_Step_TestDomainEntFire::Run
+CPulseCell_Step_TestDomainTracepoint::Run
+CPulseCell_TestWaitWithCursorState::FailImmediately
+CPulseCell_TestWaitWithCursorState::Wait
+CPulseCell_Test_MultiInflow_NoDefault::InflowA
+CPulseCell_Test_MultiInflow_NoDefault::InflowB
+CPulseCell_Test_MultiInflow_WithDefault::InflowA
+CPulseCell_Test_MultiInflow_WithDefault::InflowB
+CPulseCell_Test_MultiOutflow_WithParams::InflowA
+CPulseCell_Test_MultiOutflow_WithParams::InflowB
 CPulseCell_Test_MultiOutflow_WithParams::OnOut1
 CPulseCell_Test_MultiOutflow_WithParams::OnOut2
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnAsyncChild1
@@ -224,6 +247,18 @@ CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnAsyncChild2
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnOut1
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnYieldResume1
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnYieldResume2
+CPulseCell_Test_MultiOutflow_WithParams_Yielding::Start
+CPulseCell_Test_MultiOutflow_WithParams_Yielding::Stop
+CPulseCell_Timeline::Start
+CPulseCell_Timeline::Stop
+CPulseCell_Val_TestDomainFindEntityByName::Eval
+CPulseCell_Val_TestDomainGetEntityName::Eval
+CPulseCell_Value_Curve::Eval
+CPulseCell_Value_Gradient::Eval
+CPulseCell_Value_TestValue50::Eval
+CPulseCell_WaitForCursorsWithTag::Wait
+CPulseCell_WaitForObservable::Cancel
+CPulseCell_WaitForObservable::Start
 CPulseCursorFuncs::AnyOtherCursorsHaveTag
 CPulseCursorFuncs::CursorHasTag
 CPulseCursorFuncs::KillAllOtherCursors
@@ -239,6 +274,7 @@ CPulseGraphInstance_TestDomain::HandleInt
 CPulseGraphInstance_TestDomain_Derived::GetInstanceValueX
 CPulseGraphInstance_TestDomain_Derived::HandleIntDerived
 CPulseGraphInstance_TestDomain_Derived::SetInstanceValueX
+CPulseGraphInstance_TestDomain_UseReadOnlyBlackboardView
 CPulseGraphInstance_TurtleGraphics::Go
 CPulseMathlib::AbsFloat
 CPulseMathlib::AbsInt
@@ -270,6 +306,7 @@ CPulseMathlib::Log
 CPulseMathlib::Log10
 CPulseMathlib::Log2
 CPulseMathlib::MakeAngle
+CPulseMathlib::MakeAngleFromForwardVector
 CPulseMathlib::MakeColor
 CPulseMathlib::MakeTransform
 CPulseMathlib::MakeVector
@@ -438,7 +475,6 @@ External system requesting a vector from the test graph
 External system requesting an int from the test graph
 External system requesting an int from the test graph (variant)
 Fail Immediately
-FailImmediately
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
 Failed to apply FLC data to resource '%s': %s\n
@@ -521,7 +557,7 @@ InflowB
 Insert 'element' in the given index in 'a', increasing its count by one and moving the elements after index.
 Integer Divide
 Integer division - unlike the divide (/) node, this will truncate any remainder (floor) and return an integer.
-Invoke Cell%d [eid=%d] %s::%s
+Invoke Cell%d [eid=%d] %s%s
 Invoke Lib %s
 Invoke binding %d (%s) not found, converting to NOP\n
 Is In Test Mode
@@ -567,6 +603,7 @@ MPulsePolymorphicDependentArg
 MPulsePolymorphicDependentReturn
 MPulseSignatureForOutflow
 Make Angle
+Make Angle From Forward Vector
 Make Color
 Make Transform
 Make Vector
@@ -579,6 +616,7 @@ Make a Transform from component parts.
 Make a Vector from component parts.
 Make a Vector2D from component parts.
 Make a World Vector from component parts.
+Make an Angle from a Forward Vector
 Make an Angle from component parts
 Max Float
 Max Int
@@ -595,14 +633,12 @@ Move forward in the facing direction
 Mul R%d <- R%d * R%d
 Multiple Return Test
 Multiple pointer returns
-NULL CELL
+NULL CELL 
 NULL_ENT
 Natural logarithm (base e)
 Neg R%d <- -R%d
 Neq R%d <- R%d != R%d
 No DATA block for resource\n
-No cell method binding list for %s\n
-No class for cell binding %s index %d\n
 NodeID %d port '%s' called from C%d:I%d
 Normalize Vector
 Normalize Vector a
@@ -635,7 +671,8 @@ PrintStringWithLeafSuggestions: %s\n
 Probable infinite loop detected! Terminating pulse cursor after %d consecutive instructions (%s)
 Probable runaway cursor creation detected! Permanently disabling this graph instance (%s)
 PulseSystemEventCursorResult_t
-PulseSystemEventObservableVariableChanged_t
+PulseSystemEventObservableVariableListenerNotify_t
+PulseSystemEventObservableVariableSourceChanged_t
 PulseSystemEventYieldResume_t
 R Sqrt
 RESOURCE_TYPE_PULSE_GRAPH_DEF
@@ -734,7 +771,6 @@ Square root
 Start a timer with the specified duration, fire the OnInterval output 
 Stop Timer
 Stop any active timers - the completed outflow will still fire
-StopTimer
 Sub R%d <- R%d - R%d
 Tag Cursor
 Tangent of angle. Input in radians, output in radians
@@ -762,7 +798,9 @@ TestClock_ExplicitStepped
 TestDomain
 TestDomain Tracepoint: %s\n
 TestDomainEntity
+TestDomainReadOnlyBlackboardConsumer
 TestDomain_Derived
+TestDomain_UseReadOnlyBlackboardView
 TestFunctionRenamed_New
 TestFunctionRenamed_Old
 TestFunctionRenamed_WithArgs_New
@@ -860,6 +898,7 @@ length2d
 length3d
 libpulse_system.so
 listeners
+m_BlackboardResourceName
 m_ClockScopeID
 m_Inargs
 m_MissingRetvalDefault
@@ -880,6 +919,7 @@ m_hCursor
 m_hDef
 m_hGraphInstance
 m_hInstance
+m_hListenerInstance
 m_hObserver
 m_nCurrentWakeIndex
 m_nSubject
@@ -953,6 +993,7 @@ typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
+vForward
 vecValue
 vecValueA
 vecValueB

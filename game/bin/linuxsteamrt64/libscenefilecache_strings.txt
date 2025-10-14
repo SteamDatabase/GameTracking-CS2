@@ -2,11 +2,14 @@
   %20s = '%s'\n
   criterion '%25s':'%15s' 
 %d vcd names remaining (%d removed) after unload of '%s'\n
+%s has unexpected extension for include: '%s'\n
+%s restored from text format, should be converted to keyvalues3 text format using sceneimagebuilder -kv3convert -game <dota, etc.>\n
 %s | %s:  discarded rule because of invalid criterion %i:  %s\n
 %s%20s : %40s %5.3f\n
 %s(token %i) : %s
 %s(token %i) : %s\n
 %s/%s:  discarded rule because of invalid criterion %i:  %s\n
+%s: unexpected token %s\n
 '%20s' vs. '%20s' = 
 *Z14ComputeMatcherP8CriteriaP15CResponseSystemEUlPKcRbE_
 *ZN15CResponseSystem7CompareEPKcP8CriteriabEUlS1_RbE_
@@ -15,9 +18,16 @@
 ../../public/tier0/utldict.h
 ../../public/tier0/utlrbtree.h
 .vcd
+.vmdl
+12CChoreoActor
+12CChoreoEvent
+12CChoreoScene
 13CBaseUndoable
+13IBaseSequence
 14CBaseAppSystemI15ISceneFileCacheE
 14CBaseAppSystemI23IResponseRulesFileCacheE
+14CChoreoChannel
+14CEmptySequence
 15CResponseSystem
 15CSceneFileCache
 15CTier0AppSystemI15ISceneFileCacheLx0EE
@@ -27,24 +37,33 @@
 15CTier2AppSystemI15ISceneFileCacheLx0EE
 15IResponseSystem
 15ISceneFileCache
+17CChoreoObjectBase
 17CChoreoStringPool
 17CResponseDoc_Node
 17CResponseDoc_Root
 17CResponseDoc_Rule
 17IChoreoStringPool
+18ICurveDataAccessor
+19CFlexAnimationTrack
 19CGameResponseSystem
 20IResourceTypeManager
 21CResponseDoc_Response
 22IAddonListChangeNotify
+23CChoreoSceneTypeManager
+23CKV3ResourceBlockHelper
+23CKV3ResourceTypeManagerILy6579062EE
 23CResponseRulesFileCache
 23IResponseRulesFileCache
 24CResponseDoc_Requirement
 25CResponseRulesTypeManager
+25IAsyncProcessedDataResult
 26CResponseDoc_ResponseGroup
-27CChoreoSceneDataTypeManager
+27CChoreoSceneListTypeManager
 34CSchemaRegistration_scenefilecache
+9ISequence
 9IUndoable
 < WRITE DEFAULTS >
+<NONE>
 <map_key>
 <map_value>
 ???CRR_Response bogus index
@@ -54,12 +73,20 @@ AGResp_%s_%d
 AGRule_%s
 AI_ResponseSystem:  Unxpected TokenWaiting() with NULL buffer in %s
 AddMultipleToTail
+Allow Interrupt
+AnimGraph Controller
+Bad FLC data for resource '%s': %s\n
+Bad KV3 data for resource '%s': %s\n
+CChoreoScene::ImportEventFromKV3( %s ):  discarding invalid event of type '%s' [%f -> %f]\n
+CChoreoScene::ParseEvent( %s ): discarding invalid event of type '%s' [%f -> %f]\n
+CChoreoScene::RestoreFromBinaryBuffer( %s ):  discarding invalid event of type '%s' [%f -> %f]\n
 CResponseFileParser::LoadFromBuffer:  Unknown entry type '%s', expecting 'response', 'criterion', 'enumeration' or 'rules' in file %s(offset:%i)\n
 CResponseRulesLegacyTextImporter: ignoring commented-out #include "%s"\n
 CResponseRulesLegacyTextImporter::LoadFromBuffer:  Unknown entry type '%s', expecting 'response', 'criterion', 'enumeration' or 'rules' in file %s(offset:%i)\n
 CResponseSystem:  %s (%i rules, %i criteria, and %i responses)\n
 CResponseSystem:  failed to load %s\n
 CResponseSystem::LoadFromFile took %f msec
+CSceneTokenProcessor::Error:  %s in '%s' at offset %llu : line %u : char %llu
 CUtlSymbol
 Call Pulse
 Chance
@@ -69,12 +96,14 @@ ChoreoSceneFileDataManifest
 ChoreoSceneFileDataManifest_Staging
 Citadel
 Concept
+Couldn't load KV3 for resource: %s
 Discarded rule %s\n
 Dota
 Duplicate include: %s\n
 ENTITYIO
 Embedded criteria Generated: rule '%s' pointing to response '%s'.\n
 Embedded response receiving name: '%s'.\n
+Event %s was missing tag %s for wav %s\n
 Expecting '{' in enumeration '%s', got '%s'
 Expecting '{' in enumeration '%s', got '%s'\n
 Expecting '{' in rule '%s', got '%s'
@@ -84,12 +113,20 @@ Expecting more tokens in enumeration '%s'\n
 Expecting more tokens in rule '%s'
 Expecting more tokens in rule '%s'\n
 FIRE token in response needs exactly three parameters.
+Face
+Facial Expression
+Failed to apply FLC data to resource '%s': %s\n
+Fire Completion
 Fire Entity I/O
+Fire Trigger
+Flex Animation
 Found %i matching rules, selecting slot %i\n
+Gesture
 GetSceneDataFromImage( %s ) called with %u byte buffer, but compressed file is %u bytes\n
 GetSceneDataFromImage( %s ) called with %u byte buffer, but file data is %u bytes\n
 GetSceneDataFromImage( %s ) lzma decompression failed\n
 Hammer/GameFeatureSet
+Ignore External Lookats
 KV3 save transfer failed: %s
 LoadResponseSystem
 LoadResponseSystem %s - Finish\n
@@ -98,19 +135,28 @@ LoadResponseSystem: Failed to load response resource: %s\n
 LoadResponseSystem: failed to load '%s'\n
 Loaded %d .vcds from %d vcdlist files\n
 Loaded %d .vcds from '%s'\n
+Look At
+Loop Point
 Matched rule '%s', 
+Mood
+Mood Body
 Multiple definitions for criteria '%s' [%u]\n
 Multiple definitions for criteria '%s'\n
 Multiple responses with same name '%s' - SKIPPING response!\n
 Multiple responses with same name '%s'\n
 No .vcds loaded or no scenes/scenes.vrman\n
+No DATA block for resource\n
 No such enumeration '%s'\n
 No such response '%s' for rule '%s'\n
 Non-embedded Response Rules found! (presumably from a legacy .txt import?) Pairing up with Response Groups...\n
 PRINT
 PULSE
+Permit Responses
+Physics
+Play Subscene
 Print (for prototyping)
-RESOURCE_TYPE_CHOREO_SCENE_FILE_DATA
+RESOURCE_TYPE_CHOREO_SCENE
+RESOURCE_TYPE_CHOREO_SCENE_FILE_LIST
 RESOURCE_TYPE_RESPONSE_RULES_LIST
 RESPONSE
 RESPONSEDOC_LIB
@@ -145,8 +191,12 @@ Scene (vcd)
 SceneFileCache
 SceneFileCache002
 Scoring rule '%s' (%i)\n{\n
+Script
 Search criteria:\n
+Section Pause
+SetFacePoserModelName:  fixing extension for %s to .vmdl\n
 ShutdownSceneCache: %d vcd names remaining (%d removed)\n
+Speak
 Speak (sound event)
 Speaker contexts: '%s', 
 THEN token in response had a target '%s', but lacked any further info
@@ -160,31 +210,101 @@ THENSIMPLE incorrectly specified. Format: thensimple <delay> <single response>\n
 ThenSimple rule Generated: rule '%s' with criteria '%s' pointing to response '%s'.\n
 ThenSimple rule generated in response '%s'.\n
 Unable to load #included script %s\n
+Unable to restore binary scene '%s'\n
+Unable to restore scene '%s'\n
 Unnamed_Response(1)
+Unspecified
+Unsupported version %d for resource '%s' (Expected %d)\n
 World contexts: '%s', 
 \nFailed to save %s\n
 \nFailed to upconvert %s\n
 _Response
 _Rule
+_has_speak_events_
+_last_speak_time_
 _response
 _rule
+_scene_stop_time_
+_to_curve_
+absolutetags
+actor
+actors
+animgraphcontroller
 applycontext
 applycontexttoworld
 basic_ios::clear
+bezier
+bspline
 cancel_existing
+catmullrom
+catmullrom_normalize
+catmullrom_normalize_x
+catmullrom_tangent
+cc_noattenuate
+cctoken
+cctype
+combo
 concept
 conceptpriority
 criteria
 criterion
+curve_
+curvetype
+defaultcurvetype
 defaultdelay
 displayfirst
 displaylast
+distancetotarget
+easein
+easeinout
+easeout
 enumeration
+error %s:  %s\n
+event
+expecting =\n
+expecting channel got %s\n
+expecting event got %s\n
+expecting flex animation data\n
+expecting more tokens!
+expecting ramp data\n
+expecting relative tag\n
+expecting scalesettings data\n
+expecting valid tag type!!!
+expecting {
+expecting {\n
+exponential_decay
+faceposermodel
 failed (+exclude rule)
+fast
 fire
+firetrigger
+flc_columns
+flc_count
+flc_file_ids
+flc_file_list
+flc_lines
+flexanimation
+flexanimations
+flexanimations_default_curvetype
+flextimingtags
+forceshortmovement
+fraction
+gesture
+hardstopspeakevent
+hold
+ignorePhonemes
+ignorelookats
+interrupt
 interrupt_and_cancel
 interrupt_then_resume
+kochanek
+kochanek_early
+kochanek_late
+left_edge
+leftedge
 libscenefilecache.so
+linear_interp
+loopcount
 m_ConceptPriorities
 m_Enumerations
 m_Includes
@@ -244,14 +364,29 @@ m_speakerType
 m_suppressedTemplateResponseLines
 m_weapondelay.range
 m_weapondelay.start
+mapname
 matched, weight %4.2f (s %4.2f x c %4.2f)
 matchonce
+medium
+mood
+moodbody
+moodsfile
+moveforwarddistance
+moverightdistance
 nodelay
 nopriority
 norepeat
 noscene
+param3
 permitrepeats
+permitresponses
+playback_time
+playoverscript
 predelay
+range
+relativetag
+relativetag_name
+relativetag_sound
 resourcesystem
 respeakdelay
 response
@@ -264,8 +399,14 @@ response rule %s has no CONCEPT!\n
 response rule %s has no speaker!\n
 response_rules
 response_rules_staging
+right_edge
+rightedge
 rr_dumpresponses
 rule
+samples
+samples_use_time
+scalesettings
+scene_ramp
 scenefilecache
 scenefilecache.cpp
 scenes/scenes.vrman
@@ -273,20 +414,44 @@ scenes/scenes.vrman_c
 scenes_staging/scenes.vrman
 scenes_staging/scenes.vrman_c
 scripts/%s
+section
 self
+sequenceduration
+shifted_time
+simple_cubic
+slow
+snap
+speak
 speakonce
+startdelay
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
 std::_Sp_make_shared_tag::_S_ti()::__tag
 std::__shared_count<(__gnu_cxx::_Lock_policy)2>::operator=(std::__shared_count<(__gnu_cxx::_Lock_policy)2> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&, char const*)
+std::vector<std::string, std::allocator<std::string>>::~vector()
+stereo
 stop_on_nonidle
+stoppoint
+subscene
+synctofollowinggesture
 targetclassname
+targetposition
 then
 thensimple
+tool
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
+unified
+unweighted
+very_fast
+void std::__detail::__to_chars_10_impl<unsigned int>(char*, unsigned int, unsigned int)
+volumematcheseventramp
 vrr1
 vrr_c1
+vrr_template
 weapondelay
+zero_value

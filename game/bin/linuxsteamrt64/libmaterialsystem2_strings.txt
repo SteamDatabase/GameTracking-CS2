@@ -23,6 +23,7 @@
  (NumShaderHandles 
  All %d static combos set to zero
  All zero
+ No dynamic combos for this shader
  No static combos for this shader
  [Error Resource]
  [Fallback Resource]
@@ -54,7 +55,6 @@
 %s_intermediate_%d.vtex
 %vsB,
 (On the line reading %s):\n
-*** Error adding constant buffer to array!\n
 *** Error adding variable to array!\n
 *** Error masking unused parts! Equal sign not found after token "%s"! (line %d)\n
 *** Error! Multiple dynamic combos are putting the same constant (%s) in different descriptor sets. This won't work correctly.\n
@@ -63,38 +63,23 @@
 *** Error! Multiple dynamic combos are putting the same texure (%s) in different descriptor set slots. This won't work correctly.\n
 *** Problem remapping texture reference!\n
 *** UNKNOWN ***
-*** vfx_common.cpp(1268): Error opening file "%s"!\n\n
-*** vfx_common.cpp(1278): Error masking unused parts for "%s"!\n\n
-*** vfx_common.cpp(235): Don't call VfxInit() more than once!
-*** vfx_common.cpp(243): g_pFullFileSystem must be set up before calling VfxInit!\n
-*** vfx_common.cpp(7352): Programmer Error! The order of VfxVariableSourceType_t does not match s_shaderVariableSource!\n
-*N24CParallelProcessLauncher18CParallelLambdaJobIZ48CompileComboAndGetVariables_DynamicShaderCompileR10CUtlVectorI26DynamicShaderCompileTask_ti25CUtlVectorMemory_GrowableIS2_iLm0EEEPFviiEEUliE_EE
+*** vfx_common.cpp(1253): Error opening file "%s"!\n\n
+*** vfx_common.cpp(1263): Error masking unused parts for "%s"!\n\n
+*** vfx_common.cpp(220): Don't call VfxInit() more than once!
+*** vfx_common.cpp(228): g_pFullFileSystem must be set up before calling VfxInit!\n
+*** vfx_common.cpp(7014): Programmer Error! The order of VfxVariableSourceType_t does not match s_shaderVariableSource!\n
+*N24CParallelProcessLauncher18CParallelLambdaJobIZ48CompileComboAndGetVariables_DynamicShaderCompileR10CUtlVectorI26DynamicShaderCompileTask_ti25CUtlVectorMemory_GrowableIS2_iLm0EEEPFvibiEEUliE_EE
 *ZN10CMaterial222IssueAsyncLoadRequestsER14CUtlLeanVectorI32MaterialStaticComboLoadRequest_ti18CMemAllocAllocatorE11CWeakHandleI29InfoForResourceTypeIMaterial2E16ShaderLoadMode_tEUlP25IAsyncResourceDataRequestE_
 *ZN10CMaterial222IssueAsyncLoadRequestsER14CUtlLeanVectorI32MaterialStaticComboLoadRequest_ti18CMemAllocAllocatorE11CWeakHandleI29InfoForResourceTypeIMaterial2E16ShaderLoadMode_tEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteISC_EEE_
-+mat_clearshadercache
+*ZNK14CMaterialLayer49SetRenderStateForRenderablePassWithCommandBuffersEPK17CRenderAttributesS2_P14IRenderContextP21RenderInputLayout_t__RK24MaterialRenderablePass_tPK24RsStencilStateOverride_tPK26RsDepthBiasStateOverride_tijEUlvE0_
+*ZNK14CMaterialLayer49SetRenderStateForRenderablePassWithCommandBuffersEPK17CRenderAttributesS2_P14IRenderContextP21RenderInputLayout_t__RK24MaterialRenderablePass_tPK24RsStencilStateOverride_tPK26RsDepthBiasStateOverride_tijEUlvE_
 , GetFont used
 , LoadFont used
 --------------------------------------------------
--async_shader_load
--batcherrors
--batchwarnings
--dev
--mat_force_molten_vk
--mat_state_bundles
--materialsystem2_strict
--mobile_use_pc_graphics
--noasyncmaterialload
 -psrs
 -rtx
--shaderdebugging
--shaderopt
--shaders
--shaders_force_recompile
--shaderstats
 -show_none
 -show_used_combos
--vulkan_use_android_vcs
--vulkan_use_ios_vcs
 ../public/scenesystem/vertexformat.h
 .ini
 .uifont
@@ -261,7 +246,7 @@ Compile Target Expression
 Compile Targets
 CompileTargets
 Compiled 
-Compiled %i shaders in %.1fs\n
+Compiled %i shaders (%i cached) in %.1fs\n
 Compiling %i shaders:
 Compute Shader
 ComputeMaterialBatchableFlags
@@ -304,11 +289,9 @@ Engine2/RenderingPipeline
 Error decompressing static combo data (%i)\n
 Error decompressing static combo data (meta)\n
 Error decompressing static combo data\n
-Error finding static combo data in VCS file!\n
 Error in GetCharRGBA FT_Load_Glyph of 0x%x / 0x%x in %s (symbol %d): 0x%x\n
 Error in GetKernedCharWidth FT_Load_Glyph of 0x%x / 0x%x in %s (symbol %d): 0x%x\n
 Error loading %s for -batcherrors - %s\n
-Error loading static combo data from VCS file %s!\n
 Error parsing supported compile targets from vfx file "%s"\n
 Error reading default value from variable description\n
 Error resolving symbol "%s"\n
@@ -356,6 +339,7 @@ Feature
 FeatureAlias
 FeatureRule
 File
+Font size for the debug font
 FrameUpdate
 GLSL.std.450
 Geometry Shader
@@ -400,8 +384,8 @@ MaterialID
 MaterialSystem
 MaterialSystem2/ErrorMaterialIsFatalError
 MaterialSystem2/ToolsShadingComplexity/TargetRenderMode
-MaterialSystem2DefaultDebugFont
-MaterialSystem2DefaultDebugFontOutline
+MaterialSystem2DefaultDebugFont: %d
+MaterialSystem2DefaultDebugFontOutline: %d
 MaterialUtilsInit
 MatrixAxisAngle
 MatrixAxisToAxis
@@ -465,6 +449,7 @@ PROGRAM
 PS_RENDER_STATE
 PS_RS
 PS_RTX
+ParseResourceFileHeader
 Parser encountered %i errors parsing compile targets expression "%s"\n
 PerViewConstantBufferVR_t
 PerViewConstantBuffer_t
@@ -474,7 +459,6 @@ Polygon too large (%d points / max %d, %d indices / max %d), ignoring
 PostProcessing
 PostProcessingSystemManifest
 Program MD5 is out of date with features! %s\n
-Program MD5 is out of date with features! If you recompiled shaders in the background, reload shaders now! %s\n
 Programmer Error! Static combo not loaded!\n
 RD11<
 RDEFH
@@ -529,7 +513,6 @@ Shader uses push constants but they weren't supplied through attributes (%s)!\n
 ShaderIDColor
 ShaderIDColors
 ShadingComplexity
-SkipAndValidateVCSHeader
 SrcTex
 SrcTex_1x1
 SrcTex_2x2
@@ -569,7 +552,6 @@ Unable to parse vpk paths from shader %s\n
 Unknown DX level\n
 Uv scale variable %s referenced by texture %s doesn't evaluate to a constant value at material load time (%s).\n
 VCS3 %s Load Failure: Could not find DATA block\n
-VFX value %s out of range %d-%d: %d\n
 VFX_COMBO_ALIAS
 VFX_COMBO_DYNAMIC
 VFX_COMBO_STATIC
@@ -593,7 +575,6 @@ Verdana
 Vertex Shader
 VertexColorUVPos_t
 VertexUVPosColorNormalAndTangent_t
-Vfx Error: attribute type does not exist or does not support attribute literals.
 Vfx file "%s" has both compute shader and other shaders. Compute shaders must be the only shader type in a vfx file.\n
 VfxInit
 VguiTexture
@@ -676,16 +657,16 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy500152889462E24PostProcessingResourc
 \n*** Unable to parse Version in HEADER section of %s!\n\n
 \n*** Unknown rule "%s" in %s!\n\n
 \n*** Unknown text found in FEATURES section in %s: "%s"\n\n
-\n*** material2.cpp(1564): Error! Trying to load material "%s" without any params!\n
-\n*** vfx_common.cpp(1425): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(1502): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6159): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6309): Error opening include file in features list"%s"!\n\n
-\n*** vfx_common.cpp(6350): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6663): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6697): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6736): Error opening file "%s"!\n\n
-\n*** vfx_common.cpp(6840): Error opening file "%s"!\n\n
+\n*** material2.cpp(1587): Error! Trying to load material "%s" without any params!\n
+\n*** vfx_common.cpp(1410): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(1487): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(5821): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(5971): Error opening include file in features list"%s"!\n\n
+\n*** vfx_common.cpp(6012): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6325): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6359): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6398): Error opening file "%s"!\n\n
+\n*** vfx_common.cpp(6502): Error opening file "%s"!\n\n
 \n//-----------------------------------\n
 \nMS,\nVS_MS_RTX
 \nPS_RENDER_STATE
@@ -697,19 +678,19 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy500152889462E24PostProcessingResourc
 \n\t%02i%% (%i/%i)
 \n\t\tDynamic:
 \nmaterial2.cpp(119): ERROR! Can't load vfx_dx dll, dynamic shader compile unavailable!\n
-\nmaterial2.cpp(1559): Error! Material "%s" is already loaded!\n
-\nmaterial2.cpp(1593): Cannot find shader entry in material "%s"! Using error.vfx!\n
-\nmaterial2.cpp(1636): Error creating shader %s and cannot load error.vfx instead!\n
-\nmaterial2.cpp(1675): Error creating fallback shader %s for %s for material %s! A fallback shader cannot fallback to a different shader!\n
-\nmaterial2.cpp(1687): Error creating fallback shader %s for %s for material %s!\n
-\nmaterial2.cpp(1691): Error creating fallback shader %s for %s and cannot load error.vfx instead!\n
-\nmaterial2.cpp(1718): Error creating shader %s for material %s!\n
-\nmaterial2.cpp(1723): Error creating shader %s and cannot load error.vfx instead!\n
-\nmaterial2.cpp(1733): Error creating static combos for shader %s and error.vfx instead!\n
-\nmaterial2.cpp(2798): Dynamic Combos should be assumed to be unique for dynamic shader compile! %d != %d\n
-\nmaterial2.cpp(2877): Dynamic shader compile failed for %s in material "%s"!\n
-\nmaterial2.cpp(3613): All bad! The error material failed in dynamic shader compile!\n
-\nmaterial2.cpp(4429): Find a graphics programmer! Trying to bind a "%s" shader that doesn't exist! for %s\n
+\nmaterial2.cpp(1582): Error! Material "%s" is already loaded!\n
+\nmaterial2.cpp(1616): Cannot find shader entry in material "%s"! Using error.vfx!\n
+\nmaterial2.cpp(1659): Error creating shader %s and cannot load error.vfx instead!\n
+\nmaterial2.cpp(1698): Error creating fallback shader %s for %s for material %s! A fallback shader cannot fallback to a different shader!\n
+\nmaterial2.cpp(1710): Error creating fallback shader %s for %s for material %s!\n
+\nmaterial2.cpp(1714): Error creating fallback shader %s for %s and cannot load error.vfx instead!\n
+\nmaterial2.cpp(1741): Error creating shader %s for material %s!\n
+\nmaterial2.cpp(1746): Error creating shader %s and cannot load error.vfx instead!\n
+\nmaterial2.cpp(1756): Error creating static combos for shader %s and error.vfx instead!\n
+\nmaterial2.cpp(2863): Dynamic shader compile failed for %s in material "%s"!\n
+\nmaterial2.cpp(3588): All bad! The error material failed in dynamic shader compile!\n
+\nmaterial2.cpp(4412): Find a graphics programmer! Trying to bind a "%s" shader that doesn't exist! for %s\n
+\src\shaders\
 \t\tStatic:
 ^^^ Attribute-based texture warning is now disabled after outputting 50 warnings.\n
 ^^^ Constant buffer warning is now disabled after outputting 50 warnings.\n
@@ -731,7 +712,6 @@ _copy%u
 _feature
 _psrs
 _rtx
-a19CSchemaRegistration
 appendstructuredbuffer
 blendStateDesc
 bool2
@@ -747,6 +727,7 @@ colorcorrection_%p.vtex
 consumestructuredbuffer
 cs_5_0
 cs_6_0
+debug_font_size
 degrees
 depthStencilStateDesc
 dev/materialsystem2utils/pixel.vtex
@@ -926,7 +907,6 @@ m_dynamicComboRuleArray
 m_dynamicComboVars
 m_dynamicComboVarsRef
 m_expr
-m_extConstantBufferDescriptionArray
 m_flDefault
 m_flUiStep
 m_hash
@@ -1006,40 +986,40 @@ mat_print_materials %s -show_none
 mat_print_shader_info %s -show_used_combos
 mat_print_shader_info %s -show_used_combos -%s
 material2.cpp
-material2.cpp(1632): Error creating shader %s for material %s!\n
+material2.cpp(1655): Error creating shader %s for material %s!\n
 material2.cpp(2455): DxSupportLevel %d not supported!\n
-material2.cpp(3202): Failed call to FindOrLoadStaticComboData()!\n
-material2.cpp(651): Material "%s" is requesting a bad mode "%s"!\n
-material2.cpp(774): Error! Material "%s" doesn't have any valid layers to get the CVsInputSignatureVector from!\n
-material2.cpp(806): Error! Material "%s" doesn't have a CVsInputSignatureVector!\n
-material2.cpp(824): Error! Material "%s" has invalid signature index %d!\n
-material2.cpp:2817
-material_shader_params.cpp(1032): Invalid data type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1080): Invalid data type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1087): Error evaluating expression for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1093): Invalid variable source type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1152): Unsupported render state type in material "%s"!\n
-material_shader_params.cpp(1170): Sampler index %d out of bounds for "%s" in material "%s"!\n
-material_shader_params.cpp(1243): Unsupported sampler state type for "%s" in material "%s"!\n
-material_shader_params.cpp(1325): Could not bind constant buffer "%s" because the constant buffer handle was invalid in material "%s"!\n
-material_shader_params.cpp(1343): Error setting constant for REGISTER_FLOAT4 for "%s" in material "%s"! Talk to a programmer!\n
-material_shader_params.cpp(1441): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
-material_shader_params.cpp(1446): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
-material_shader_params.cpp(1736): Invalid data type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1772): Invalid data type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1858): Invalid data type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1866): Invalid variable source type for render state variable %s in material "%s"!\n
-material_shader_params.cpp(1931): Unsupported render state type in material "%s"!\n
-material_shader_params.cpp(2079): Unsupported render state in material "%s"!\n
-material_shader_params.cpp(2152): Unsupported sampler state type for "%s" in material "%s"!\n
-material_shader_params.cpp(2174): Unsupported sampler state type for "%s" in material "%s"!\n
-material_shader_params.cpp(400): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
-material_shader_params.cpp(405): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
-material_shader_params.cpp(460): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
-material_shader_params.cpp(465): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
-material_shader_params.cpp(542): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
-material_shader_params.cpp(547): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
-material_shader_params.cpp(988): Unknown variable type for %s in material "%s"!\n
+material2.cpp(3175): Failed call to FindOrLoadStaticComboData()!\n
+material2.cpp(674): Material "%s" is requesting a bad mode "%s"!\n
+material2.cpp(797): Error! Material "%s" doesn't have any valid layers to get the CVsInputSignatureVector from!\n
+material2.cpp(829): Error! Material "%s" doesn't have a CVsInputSignatureVector!\n
+material2.cpp(847): Error! Material "%s" has invalid signature index %d!\n
+material2.cpp:2806
+material_shader_params.cpp(1033): Invalid data type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1081): Invalid data type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1088): Error evaluating expression for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1094): Invalid variable source type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1153): Unsupported render state type in material "%s"!\n
+material_shader_params.cpp(1171): Sampler index %d out of bounds for "%s" in material "%s"!\n
+material_shader_params.cpp(1244): Unsupported sampler state type for "%s" in material "%s"!\n
+material_shader_params.cpp(1326): Could not bind constant buffer "%s" because the constant buffer handle was invalid in material "%s"!\n
+material_shader_params.cpp(1344): Error setting constant for REGISTER_FLOAT4 for "%s" in material "%s"! Talk to a programmer!\n
+material_shader_params.cpp(1442): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
+material_shader_params.cpp(1447): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
+material_shader_params.cpp(1737): Invalid data type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1773): Invalid data type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1859): Invalid data type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1867): Invalid variable source type for render state variable %s in material "%s"!\n
+material_shader_params.cpp(1932): Unsupported render state type in material "%s"!\n
+material_shader_params.cpp(2080): Unsupported render state in material "%s"!\n
+material_shader_params.cpp(2153): Unsupported sampler state type for "%s" in material "%s"!\n
+material_shader_params.cpp(2175): Unsupported sampler state type for "%s" in material "%s"!\n
+material_shader_params.cpp(401): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
+material_shader_params.cpp(406): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
+material_shader_params.cpp(461): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
+material_shader_params.cpp(466): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
+material_shader_params.cpp(543): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"\n
+material_shader_params.cpp(548): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!\n
+material_shader_params.cpp(989): Unknown variable type for %s in material "%s"!\n
 material_type_manager.cpp
 material_type_manager.cpp(52): GetErrorMaterial() called before error material exists!\n
 materials/dev/combine_colorcorrection_lut_cs.vmat
@@ -1048,22 +1028,26 @@ materials/dev/cs_compress_dxt5.vmat
 materials/dev/cs_mipgen.vmat
 materials/dev/msaa_resolve.vmat
 materials/error.vmat
+materialsystem.material_evaluated
+materialsystem.material_last_executed
+materialsystem.material_similaritykey
+materialsystem.mode_evaluated
+materialsystem.skip_mode
 materialsystem2.cpp
-materialsystem2.cpp(1084): ERROR!!! Shaders not freed before shader reload! (See spew above)\n\n
-materialsystem2.cpp(149): ERROR! Empty shader mode string found! Use "Default" instead!\n
-materialsystem2.cpp(165): ERROR! Shader mode "%s" has unsupported type "%s" specified gameinfo.gi!\n
-materialsystem2.cpp(3258): pVfx == NULL!\n
-materialsystem2.cpp(3307): pVfx == NULL!\n
-materialsystem2.cpp(3579): Error reading index!\n
-materialsystem2.cpp(505): ERROR!!! Materials not released by other systems on shutdown! (See spew above)\n
-materialsystem2.cpp(510): ERROR!!! Shaders not freed on shutdown, likely due to unreleased materials! (See spew above)\n
-materialsystem2.cpp(524): GetErrorMaterial() called when m_pMaterialTypeManager == NULL!\n
+materialsystem2.cpp(1081): ERROR!!! Shaders not freed before shader reload! (See spew above)\n\n
+materialsystem2.cpp(151): ERROR! Empty shader mode string found! Use "Default" instead!\n
+materialsystem2.cpp(167): ERROR! Shader mode "%s" has unsupported type "%s" specified gameinfo.gi!\n
+materialsystem2.cpp(3200): pVfx == NULL!\n
+materialsystem2.cpp(3249): pVfx == NULL!\n
+materialsystem2.cpp(3484): Error reading index!\n
+materialsystem2.cpp(507): ERROR!!! Materials not released by other systems on shutdown! (See spew above)\n
+materialsystem2.cpp(512): ERROR!!! Shaders not freed on shutdown, likely due to unreleased materials! (See spew above)\n
+materialsystem2.cpp(526): GetErrorMaterial() called when m_pMaterialTypeManager == NULL!\n
 matsystemtexture_%s_%lld.vtex
 modes
 ms_6_5
 nBatchIndices <= 16384
 nBatchIndices <= nMaxIndexCountPerPass
-nCombos
 normalize_safe
 panorama/fonts
 panorama_text_pango
@@ -1135,15 +1119,14 @@ typeinfo name for std::_Sp_make_shared_tag
 utils/materialsystem2utils.cpp
 v$G2
 vfx_common.cpp
-vfx_common.cpp(4463): Error! Ref count !=0 for static combo data cache entry!\n
-vfx_common.cpp(4569): Error! Ref count !=0 for static combo data cache entry!\n
-vfx_common.cpp(8071): Error opening file %s\n
-vfx_common.cpp(8152): VCS %s Unserialize failed\n
-vfx_common.cpp(8193): VCS3 %s Load Failure: %s\n
-vfx_common.cpp(8206): VCS3 %s Load Failure: %s\n
-vfx_common.cpp(8236): VCS %s Unserialize hit EOF\n
-vfx_common.cpp(8400): Error opening file %s\n
-vfx_common.cpp(8408): Error calling SkipAndValidateVCSHeader() for %s\n
+vfx_common.cpp(4373): Error! Ref count !=0 for static combo data cache entry!\n
+vfx_common.cpp(7724): Error opening file %s\n
+vfx_common.cpp(7757): VCS3 %s Load Failure: %s\n
+vfx_common.cpp(7770): VCS3 %s Load Failure: %s\n
+vfx_common.cpp(7799): VCS %s Unserialize hit EOF\n
+vfx_compile_helpers.cpp(16): Cannot use absolute paths for shader includes. Found %s\n
+vfx_compile_helpers.cpp(77): Cannot read file "%s"\n
+vfx_compile_helpers.cpp(85): Cannot find include file %s\n
 vfx_compile_target_expr.cpp(106): : Failed to create lexer from "%s"\n
 vfx_compile_target_expr.cpp(122): : Failed to create parser from "%s"\n
 vfx_compile_target_expr.cpp(98): : Failed to create input stream from "%s"\n

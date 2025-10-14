@@ -9,8 +9,6 @@ let TargetMedium = "targetbox.med";
 let TargetHard = "targetbox.hard";
 
 Instance.ServerCommand("sv_cheats 1");
-Instance.ServerCommand("mp_warmup_offline_enabled 1");
-Instance.ServerCommand("mp_warmup_pausetimer 1");
 
 function SetNextTarget() {
     Rounds++;

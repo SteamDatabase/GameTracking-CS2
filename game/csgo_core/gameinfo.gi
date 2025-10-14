@@ -516,7 +516,6 @@
 		"VulkanRequireDescriptorIndexing"			"1"	[ !$OSX ]
 		"VulkanDefrag"								"1"
 		"VulkanAdditionalShaderCache"				"csgo_shaders.foz"	[ $OSX ]
-		//"AlwaysPreloadTexturesInGame"				"1"
 		//"MaxPreloadTextureResolution"				"256"
 		"GraphicsPipelineLibrary"					"1"
 		"IndexBufferPoolSizeMB"						"64"
@@ -540,7 +539,7 @@
 	{
 		"supports_local_contrast"	"1"
 		"filmic_linear_scale" 		"1"
-		"compute_bloom"				"1"
+		"compute_bloom"				"0"
 
 	}
 

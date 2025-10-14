@@ -200,6 +200,7 @@ $xmm9
 %s allocation count overflow( %llu + %llu > %llu )\n
 %s allocation count overflow( %llu > %llu )\n
 %s bytes used out of %s bytes available (%.2f%%)
+%s called on a pool context (no root available)\n
 %s is out of range for KeyValues, which doesn't support signed 64-bit numbers
 %s not expected here.  A valid JSON document should be a single object, which begins with '{' and ends with '}'
 %s not expected here.  Missing ',' or ']'?
@@ -386,6 +387,8 @@ $xmm9
 (omitted %u previous lines...)\n
 (unknown)
 (wPu@
+) : AssertMsg Failed in function 
+) : Assertion Failed in function 
 )EVs
 )n/h%fPn
 ***** OUT OF MEMORY! /+/ Attempted allocation size: %llu ****\n
@@ -451,49 +454,12 @@ $xmm9
 -. +0123456789.
 -0123456789
 -RestartSelfFromAlternateLocation_RelaunchTime
--assertbreak
 -attachtodebugger
 -breakimmediately
--bufferdebugstring
--clearassertstate
--debug_exitprocess
--debugbreak
--dedicated
--emaildumps
--emaildumps_notes
--etwprofile
--force_battery_level
--force_battery_level_battery
--ignorecontentasserts
--ignoresortcheck
 -inf
--insecure
--inset_bottom
--inset_left
--inset_right
--inset_top
--lmvmax
--lmvmemgb
--lmvmemmb
--lmvmin
--lmvnoguard
--load_string_token_database
--memstackstats_disable_pools
--memstacktraceframes
--memstd_force_tracking
--noassert
 -noautoargs
--nocustomermachine
--nodebugstringbuffer
--norestart
--profile
--retail
--spew_detailed_cpu_info
--start_resource_profiling
 -testscript
 -testscript_inline
--tools
--uselmv
 .%0*llu
 .%x.%x.copy_tmp
 ............| 
@@ -508,7 +474,6 @@ $xmm9
 ../public/tier0/utldict.h
 ../public/tier0/utlrbtree.h
 ../public/tier0/utlsymboltablelarge.h
-../public/tier0/utltshash.h
 .DZP(7'
 .Ncp
 .build-id/
@@ -519,10 +484,13 @@ $xmm9
 .debug
 .eh_frame
 .gnu_debuglink
+.gnu_debuglink doesn't have a 32-bit CRC\n
 .gnu_debuglink doesn't have a filename\n
 .gnu_debuglink doesn't have string terminator\n
 .mdmp
 .pdb
+.raSearch
+.raSearchStart
 .so.zip
 .sym
 .txt
@@ -827,6 +795,7 @@ $xmm9
 >vf,U
 ?21CUtlCStringConversion
 ?456789:;<=
+?\tt\nn\rr""\\
 @aQY
 AA40J6
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
@@ -892,6 +861,7 @@ Align
 AlignedByteArray not properly aligned\n
 AllProjects_FatalWriteMiniDumpOrBreak
 Alloc
+Alloc exceeded allocation limit /+/ %llu > %llu
 AllocUnlocked
 Allocated: %zu, active: %zu, metadata: %zu (n_thp %zu), resident: %zu, mapped: %zu, retained: %zu\n
 Allocation error : not enough memory
@@ -973,6 +943,33 @@ AutoLayer
 Available flags to search for: \n
 Average %.2f fps, %.2f ms per frame\n
 BOOL
+BREAKPAD CFI UNWIND: unwind frame to IP 0x%llx, FP 0x%llx, SP 0x%llx\n
+BREAKPAD WIN FPO UNWIND: general use of base pointer not supported\n
+BREAKPAD WIN FPO UNWIND: local size 0x%x, saved register size 0x%x, %s frame register\n
+BREAKPAD WIN FPO UNWIND: unwind frame to IP 0x%llx, FP 0x%llx, SP 0x%llx\n
+BREAKPAD WIN PROG UNWIND: failed to evaluate '%s'\n
+BREAKPAD WIN PROG UNWIND: unwind frame to IP 0x%llx, FP 0x%llx, SP 0x%llx\n
+BREAKPAD:   can't open cached file\n
+BREAKPAD:   can't open file\n
+BREAKPAD:   can't verify cached file\n
+BREAKPAD:   invalid file content\n
+BREAKPAD:   invalid file header\n
+BREAKPAD:   mismatch (non-windows breakpad found for windows binary)\n
+BREAKPAD:   mismatch (windows breakpad found for non-windows binary)\n
+BREAKPAD:   mismatched alt debug ID\n
+BREAKPAD:   mismatched debug ID\n
+BREAKPAD:   success\n
+BREAKPAD:   unable to read file header\n
+BREAKPAD:   unknown CPU architecture '%s'\n
+BREAKPAD:   unsupported STACK entry of type '%s'\n
+BREAKPAD:   unsupported WIN FPO frame with a program\n
+BREAKPAD:   unsupported WIN frame type 0x%x\n
+BREAKPAD:   unsupported WIN frame without a program\n
+BREAKPAD:   unsupported file element '%s'\n
+BREAKPAD: copying '%s' into cache as '%s'\n
+BREAKPAD: reopen cached file '%s'\n
+BREAKPAD: search for '%s'\n
+BREAKPAD: try and open '%s'\n
 BREAKPAD_SYMBOL_PATH
 BTcq
 Background threads: %zu, num_runs: %lu, run_interval: %lu ns\n
@@ -1284,6 +1281,8 @@ CAnimTagSpanPtr
 CAnimUpdateSharedData
 CAnimationGraph
 CAnimationSubGraph
+CAtomicMutex::AcquireLock(unsigned long long)
+CAtomicSemaphore::DoWait()
 CAuthPhysBody
 CAuthPhysJoint
 CAutoLockMutexTrait<CThreadMutex>::Lock
@@ -1336,6 +1335,7 @@ CBufferString::GetInsertPtr(int, int, bool, int*)
 CBufferString::GetReplacePtr(int, int, int, bool, int*)
 CBufferString::GrowByChunks(int, int)
 CBufferString::Insert(int, char const*, int, bool)
+CBufferString::Length
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeFixedAbsolutePath(char const*, char const*, char)
 CBufferString::MakeRelativePath(char const*, char const*, bool)
@@ -1492,6 +1492,9 @@ CDwarfModule::GetSuggestedSymbolPath()
 CDwarfModule::GetValveSymbolPaths(CBufferString*)
 CDwarfVector capacity overflow\n
 CEmitTagAction
+CEntityHandle::GetEntityIdentity
+CEntityHandle::GetInstance
+CEntityHandle::IsInvalidHandleIndex
 CEnumAnimParameter
 CEnvironmentBlock::CEnvironmentBlock()
 CEnvironmentBlock::CaptureProcessEnvironment()
@@ -1612,6 +1615,7 @@ CIE code alignment (%llu) too large\n
 CIE count overflow\n
 CIE data alignment (%lld) out of range\n
 CIE return register (%llu) too large\n
+CIdentifyFailureMessages::ProcessText(char const*, int, char const**)
 CInputStreamAnimNode
 CIntAnimParameter
 CInterlockedIntT<int,4>::AtomicAdd
@@ -1619,6 +1623,8 @@ CInterlockedIntT<int,4>::operator++
 CJiggleBoneAnimNode
 CJumpHelperAnimNode
 CKV3TransferContextBase::ErrorListener_Report
+CKeyValues3Context::AllocString
+CKeyValues3Context::FreeString
 CKeyValuesDumpContextAsDevMsg::KvBeginKey(KeyValues*, int)
 CKeyValuesDumpContextAsDevMsg::KvWriteText(char const*)
 CKeyValuesDumpContextToBufferString::KvWriteText(char const*)
@@ -1726,10 +1732,10 @@ CModuleListSnapshot::FindMachoVirtualSize(void const*, unsigned long, unsigned l
 CModuleListSnapshot::FindModuleVirtualSize(void const*, unsigned long)
 CModuleListSnapshot::FindModuleVirtualSize(void*, unsigned long long, unsigned long long)
 CModuleListSnapshot::GetNextModule(void const**, char const**, void**, unsigned long*) const
-CModuleListSnapshot::IsElfHeader(void const*, unsigned long)
-CModuleListSnapshot::IsElfHeader(void*, unsigned long long, unsigned long long)
+CModuleListSnapshot::IsElfHeader(void const*, unsigned long, bool)
+CModuleListSnapshot::IsElfHeader(void*, unsigned long long, unsigned long long, bool)
 CModuleListSnapshot::IsExeModule(void const*, unsigned long)
-CModuleListSnapshot::IsMachoHeader(void const*, unsigned long)
+CModuleListSnapshot::IsMachoHeader(void const*, unsigned long, bool)
 CModuleListSnapshot::IsNotPlatModule(char const*, void const*, unsigned long)
 CModuleListSnapshot::Purge()
 CMotionBase
@@ -2049,12 +2055,6 @@ CThreadMutex::Lock
 CThreadMutex::TryLock(char const*, int)
 CThreadNullVerificationMutex: Thread %llu acquiring null-mutex while thread %llu is still holding it, indicates unexpected thread-safety issue
 CThreadPool::Start called and it was already initialized.
-CThreadRWLock::LockForWrite(char const*, int)
-CThreadRWLock::TryLockForWrite(char const*, int)
-CThreadRWLock::UnlockRead_LockForWrite(char const*, int)
-CThreadRWLock::UnlockWrite(char const*, int)
-CThreadRWLock::UnlockWrite_LockForRead(char const*, int)
-CThreadRWLock::WaitForRead()
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HaveWriteLock_BlockReadsNow(bool)
@@ -2070,12 +2070,6 @@ CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::WaitImpl(unsigned int)
 CThreadSemaphore::~CThreadSemaphore()
 CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
-CThreadSpinRWLock::LockForRead(char const*, int)
-CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
-CThreadSpinRWLock::UnlockRead(char const*, int)
-CThreadSpinRWLock::UnlockRead_LockForWrite(char const*, int)
-CThreadSpinRWLock::UnlockWrite(char const*, int)
-CThreadSpinRWLock::UnlockWrite_LockForRead(char const*, int)
 CThreadSwapContext_Base::CThreadSwapContext_Base(CThreadSwapTarget*, void*, unsigned long)
 CThreadSwapContext_Base::~CThreadSwapContext_Base()
 CThreadSwapJob::CThreadSwapJob(CThreadSwapTarget*)
@@ -2160,6 +2154,7 @@ CUtlBuffer::AccessPut(int)
 CUtlBuffer::ActivateByteSwapping(bool)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::AlignBuffer(int)
+CUtlBuffer::AlignBufferGet(int)
 CUtlBuffer::AssumeMemory(void*, int, int, CUtlBuffer::BufferFlags_t)
 CUtlBuffer::CUtlBuffer(int, int, CUtlBuffer::BufferFlags_t)
 CUtlBuffer::CUtlBuffer(void const*, int, CUtlBuffer::BufferFlags_t)
@@ -2295,6 +2290,7 @@ CUtlString::GetForModify()
 CUtlString::IsEqual_CaseSensitive(char const*) const
 CUtlString::IsEqual_FastCaseInsensitive(char const*) const
 CUtlString::Left(int) const
+CUtlString::Length
 CUtlString::MatchesPattern(CUtlString const&, int) const
 CUtlString::PathJoin(char const*, char const*)
 CUtlString::Purge()
@@ -2341,6 +2337,7 @@ CUtlString::operator=(CBufferString const&)
 CUtlString::operator==(CBufferString const&) const
 CUtlString::operator==(CUtlString const&) const
 CUtlString::operator[](int) const
+CUtlString::{ctor}
 CUtlStringAndToken::IsEqual_CaseSensitive(char const*) const
 CUtlStringAndToken::IsEqual_FastCaseInsensitive(char const*) const
 CUtlStringAndTokenWithStorage::Format(char const*, ...)
@@ -2370,10 +2367,14 @@ CUtlSymbolTable::SaveToBuffer(CUtlBuffer&) const
 CUtlSymbolTable::SetPageSize(unsigned int)
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
+CUtlSymbolTableLarge element limit of %u exceeded\n
 CV@@R
 CVAR_
 CVBreakpadSymbolModule::CVBreakpadSymbolModule()
-CVBreakpadSymbolModule::Open(char const*, char const*, unsigned long long, unsigned long long, unsigned int, StackTools_ModuleIDFormat_t, void const*, int, unsigned int)
+CVBreakpadSymbolModule::FindCfiFrameData(unsigned long long, BreakpadCfiFrameData_t*) const
+CVBreakpadSymbolModule::FindWinFpoData(unsigned long long, BreakpadWinFpoData_t*) const
+CVBreakpadSymbolModule::FindWinFrameProgram(unsigned long long, BreakpadWinFrameProgram_t*) const
+CVBreakpadSymbolModule::Open(char const*, char const*, char const*, unsigned long long, unsigned long long, unsigned int, StackTools_ModuleIDFormat_t, void const*, int, unsigned int)
 CVDwarfSymbolModule::CVDwarfSymbolModule()
 CVDwarfSymbolModule::Init(char const*, unsigned int, VWMD_CPU_ARCHITECTURE, unsigned long long, unsigned long long, StackTools_ModuleIDFormat_t, void const*, int)
 CVDwarfSymbolModule::OpenAndParseSymbols(char const*, unsigned int, char const*)
@@ -2643,6 +2644,7 @@ Cb.2
 Channel Name
 CharacterSetBuild
 CheckForUnsafeInputString
+ClearSingleThreadedWorkThread
 Client Input/Output
 Client Physics
 Client Rendering
@@ -2770,18 +2772,18 @@ DWARF
 DWARF UNWIND: CFA op %u not supported\n
 DWARF UNWIND: CFA relative to unknown register %u\n
 DWARF UNWIND: CFA rule op %u, offset %d\n
-DWARF UNWIND: CFA set to 0x%llx (from val-offset DWARF reg %u + %d)\n
-DWARF UNWIND: DWARF reg %u now 0x%llx (from DWARF reg %u)\n
-DWARF UNWIND: DWARF reg %u now 0x%llx (from mem-offset DWARF reg %u / 0x%llx + %d)\n
-DWARF UNWIND: DWARF reg %u now 0x%llx (from val-offset DWARF reg %u + %d)\n
-DWARF UNWIND: DWARF reg %u now undefined\n
+DWARF UNWIND: CFA set to 0x%llx (from val-offset DWARF reg %s (%u) + %d)\n
+DWARF UNWIND: DWARF reg %s (%u) now 0x%llx (from DWARF reg %s (%u))\n
+DWARF UNWIND: DWARF reg %s (%u) now 0x%llx (from mem-offset DWARF reg %s (%u) / 0x%llx + %d)\n
+DWARF UNWIND: DWARF reg %s (%u) now 0x%llx (from val-offset DWARF reg %s (%u) + %d)\n
+DWARF UNWIND: DWARF reg %s (%u) now undefined\n
 DWARF UNWIND: bad mem-offset rule ref register %u\n
 DWARF UNWIND: bad register rule ref register %u\n
 DWARF UNWIND: bad rule register %u\n
 DWARF UNWIND: bad val-offset rule ref register %u\n
 DWARF UNWIND: bad val-offset rule register %u\n
-DWARF UNWIND: rule for DWARF reg %u, op %u, ref DWARF reg %u, offset %d\n
-DWARF UNWIND: unable to read mem-offset value from 0x%llx (DWARF reg %u / 0x%llx + %d)\n
+DWARF UNWIND: rule for DWARF reg %s (%u), op %u, ref DWARF reg %s (%u), offset %d\n
+DWARF UNWIND: unable to read mem-offset value from 0x%llx (DWARF reg %s (%u) / 0x%llx + %d)\n
 DWARF UNWIND: unhandled rule op %u\n
 DWARF UNWIND: unwind frame to IP 0x%llx, FP 0x%llx, SP 0x%llx\n
 DWARF UNWIND: unwind table build failed\n
@@ -2827,6 +2829,7 @@ DebugPrintBitStringBits
 DebugPrintKV3(KeyValues3 const*)
 December
 DeclareCurrentThreadIsMainThread
+DeclareCurrentThreadIsSingleThreadedWorkThread
 Decompression failed, %d\n
 Decompression failure
 Default
@@ -2868,12 +2871,9 @@ EMPTY - ok for slot zero only!
 ENABLE_ASSERT_DIALOG_PRINT
 ENGLISH
 ENTITY_NAME
-ERROR
 ERROR: %s\n
-ERROR: Alloc exceeded allocation limit /+/ %llu > %llu
 ERROR: CUtlSymbolTableLarge element limit of %u exceeded\n
 ERROR: DWARF breakpad CFI is incomplete, breakpad symbols are incomplete\n
-ERROR: Virtual reservation exceeded limit /+/ %llu > %llu
 EXECUTE_PER_TICK
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
@@ -2941,12 +2941,7 @@ FAIL: Not all items popped\n
 FASTCOVER must have at least one input file\n
 FASTCOVER parameters incorrect\n
 FATAL
-FATAL ERROR
 FATAL ERROR: 
-FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded\n
-FATAL ERROR: unable to create temp directory under '%s'\n
-FATAL ERROR: unable to create temp file under '%s'\n
-FATAL: %s called on a pool context (no root available)\n
 FAYz
 FCMOV 
 FCVAR_ARCHIVE
@@ -3361,6 +3356,7 @@ IMovementComponent
 INFO
 INHERITABLE_BOOL_INHERIT
 INHERITABLE_BOOL_TRUE
+INIT
 INTEGER
 INodeBlend2DItem
 IParameterProvider
@@ -3832,6 +3828,7 @@ Mach-O DWARF symbols
 Mach-O fallback symbols
 MagnitudeOnly
 MailMiniDump
+MakeStringToken
 Malformed attribute list terminator\n
 MapListService_001
 March
@@ -4549,6 +4546,7 @@ ResourceCompilerSystem001
 ResourceHandleUtils001
 ResourceManifestRegistry001
 ResourceSystem013
+ResourceTypeIndex_t::operator==
 Resources
 Restart Error
 RestartSelfFromAlternateLocation
@@ -5147,6 +5145,10 @@ The specific type '%u' cannot be persisted
 This convar is being accessed prior to ConVar_Register being called
 Thread pool %s requested %d threads, using %u\n
 Thread(%p/0x%llx)
+ThreadAtomicNotifyAll(unsigned int*)
+ThreadAtomicNotifyN(unsigned int*, unsigned int)
+ThreadAtomicNotifyOne(unsigned int*)
+ThreadAtomicWait(unsigned int*, unsigned int)
 ThreadCloseProcess
 ThreadGetCurrentHandle
 ThreadGetCurrentId
@@ -5159,6 +5161,7 @@ ThreadGetProcessExitCode
 ThreadGetProcessIdFromHandle
 ThreadGetProcessPriority
 ThreadInMainThread
+ThreadInMainThreadOrSingleThreadedWorkThread
 ThreadInitOnceCall_Finish
 ThreadInitOnceCall_ShouldRun
 ThreadInterlockedAssignIf128
@@ -5194,7 +5197,6 @@ ThreadTerminateProcessCode
 ThreadWaitForProcessExit
 ThreadWrapProcessId
 ThreadYield
-ThreadYieldToThisProcessor
 Thursday
 Tier0GenericMiniDumpHandler
 Tier0GenericMiniDumpHandlerEx
@@ -5307,7 +5309,6 @@ Unexpected augmentation string byte 0x%x (shouldn't have augmentation data)\n
 Unexpected augmentation string byte 0x%x\n
 Unexpected character 0x%02x
 Unexpected character 0x%02x ('%c')
-Unexpected data at the end of .gnu_debuglink\n
 Unexpected duplicate table entry name '%s'\n
 Unexpected end of file
 Unexpected high PC attr in addition to ranges\n
@@ -5377,7 +5378,6 @@ UtlVectorMemory_CalcNewAllocationCount
 UtlVectorMemory_FailedAllocation
 VALVE_CLOCK_SPEED_CALCULATION
 VALVE_TESTMODE
-VALVE_TEST_MONITOR_PROCESS
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
@@ -5550,7 +5550,7 @@ V_RandomString(int)
 V_ReadLine
 V_RemoveDotSlashes
 V_RemoveFormatSpecifications
-V_SanitizeTextForCommandLine(char const*, CBufferString*, bool)
+V_SanitizeTextForCommandLine(char const*, CBufferString*, bool, int)
 V_SetErrno
 V_SplitNumbers(char const*, char, CUtlVector<double, int, CUtlVectorMemory_Growable<double, int, 0ul>>&)
 V_SplitNumbers(char const*, char, CUtlVector<float, int, CUtlVectorMemory_Growable<float, int, 0ul>>&)
@@ -5807,6 +5807,7 @@ V_snwprintf_cch
 V_sscanf
 V_strchr32
 V_strcmp32
+V_strcpy
 V_stricmp_fast
 V_stricmp_fast_NegativeForUnequal
 V_stristr_fast
@@ -5894,6 +5895,7 @@ Version not supported
 Vgh$
 Virtual Memory %s Report for PID %u\n
 Virtual memory regions sorted by size:\n
+Virtual reservation exceeded limit /+/ %llu > %llu
 VisBuilder_001
 VisibilityInputs
 VoidFnPtrLookup_Tier0
@@ -6447,7 +6449,9 @@ __wcsftime_l
 __wcsxfrm_l
 __wctype_l
 __xstat64
-_breakpad_
+_breakpad_elf_
+_breakpad_macho_
+_breakpad_sym_
 _class
 _editor
 _elf_
@@ -6556,11 +6560,13 @@ arenas.tcache_max
 arenas[%s]:\n
 arenas_create_ext
 argument not found
+arm64
 array
 asctime_r
 asin
 asinf
 assert
+assert_cast
 assert_dialog.cpp
 assigned threads
 atan
@@ -6844,7 +6850,6 @@ dX%g
 damage
 darwin
 darwin/
-dbg.cpp
 de2?/
 deallocated
 deallocatedp
@@ -6916,6 +6921,7 @@ dmg.bullets
 dmg.club
 dmg.explosive
 dmg.fire
+does not use
 domain_value
 done\n
 donotecho
@@ -7011,7 +7017,6 @@ fgets
 fibertools.cpp
 file
 fileio.cpp
-filenamesymboltable.cpp
 fileno
 fill
 find
@@ -7178,7 +7183,6 @@ health_override
 help
 help text
 help:  no cvar or command named %s\n
-hibernate.cpp
 hidden alias for 
 hljztL
 hm~iD
@@ -8399,6 +8403,9 @@ pthread_mutexattr_destroy
 pthread_mutexattr_init
 pthread_mutexattr_settype
 pthread_once
+pthread_rwlock_rdlock
+pthread_rwlock_unlock
+pthread_rwlock_wrlock
 pthread_self
 pthread_setaffinity_np
 pthread_setname_np
@@ -9581,6 +9588,8 @@ std::__ptr_traits_ptr_to<char const*, char const, false>::pointer_to(char const&
 std::__ptr_traits_ptr_to<char*, char, false>::pointer_to(char&)
 std::__ptr_traits_ptr_to<wchar_t const*, wchar_t const, false>::pointer_to(wchar_t const&)
 std::__ptr_traits_ptr_to<wchar_t*, wchar_t, false>::pointer_to(wchar_t&)
+std::__shared_mutex_pthread::lock()
+std::__shared_mutex_pthread::lock_shared()
 std::__sso_string::__sso_string()
 std::__sso_string::__sso_string(char const*, unsigned long)
 std::__sso_string::__sso_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>> const&)
@@ -11285,6 +11294,7 @@ typeinfo for CKeyValuesDumpContextToLoggingChannel
 typeinfo for CMiniDumpCommentBuilderBase
 typeinfo for CStdIOFormatOutputStream
 typeinfo for CThread
+typeinfo for CThreadEvent
 typeinfo for CThreadSemaphore
 typeinfo for CThreadSyncObject
 typeinfo for CUtlBufferFormatOutputStream
@@ -11440,6 +11450,7 @@ typeinfo name for CMiniDumpCommentBuilderBase
 typeinfo name for CStdIOFormatOutputStream
 typeinfo name for CThread
 typeinfo name for CThreadCrossProcessMutex
+typeinfo name for CThreadEvent
 typeinfo name for CThreadSemaphore
 typeinfo name for CThreadSyncObject
 typeinfo name for CUtlBufferFormatOutputStream
@@ -11598,6 +11609,8 @@ uint32
 uint64
 uint8
 ujQD
+unable to create temp directory under '%s'\n
+unable to create temp file under '%s'\n
 uname
 uname -mrsv
 ungetc
@@ -11627,6 +11640,7 @@ uptime_ns
 use_additional_offset
 user
 userinfo
+uses
 usleep
 util
 utilization
@@ -12079,6 +12093,7 @@ wqBv/?
 write
 wsbdp
 wsj=
+x86_64
 x=9v
 xSvf$
 xYiu

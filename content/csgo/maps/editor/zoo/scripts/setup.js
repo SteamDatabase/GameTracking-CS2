@@ -1,4 +1,4 @@
-import { Instance } from "cs_script/point_script";
+import { CSDamageFlags, CSLoadoutSlot, Instance } from "cs_script/point_script";
 
 Instance.ServerCommand("mp_warmup_offline_enabled 1");
 Instance.ServerCommand("mp_warmup_pausetimer 1");
@@ -11,6 +11,6 @@ Instance.OnPlayerActivate(({ player }) => {
 
 Instance.OnBeforePlayerDamage(({ player }) => {
     if (player.GetOriginalPlayerController().IsBot()) {
-        return { damage: 1 };
+        return { damageFlags: CSDamageFlags.PREVENT_DEATH };
     }
 });
