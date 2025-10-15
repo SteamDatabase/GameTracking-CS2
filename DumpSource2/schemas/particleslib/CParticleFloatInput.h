@@ -13,6 +13,7 @@
 //	"m_bHasRandomSignFlip": false,
 //	"m_nRandomSeed": -1,
 //	"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//	"m_strSnapshotSubset": "",
 //	"m_flLOD0": 0.000000,
 //	"m_flLOD1": 0.000000,
 //	"m_flLOD2": 0.000000,
@@ -88,6 +89,7 @@ class CParticleFloatInput : public CParticleInput
 	bool m_bHasRandomSignFlip;
 	int32 m_nRandomSeed;
 	ParticleFloatRandomMode_t m_nRandomMode;
+	CUtlString m_strSnapshotSubset;
 	float32 m_flLOD0;
 	float32 m_flLOD1;
 	float32 m_flLOD2;

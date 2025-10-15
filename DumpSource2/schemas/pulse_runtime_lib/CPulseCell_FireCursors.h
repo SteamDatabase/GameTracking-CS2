@@ -18,7 +18,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_FireCursors : public CPulseCell_BaseYieldingInflow
 {
 	CUtlVector< CPulse_OutflowConnection > m_Outflows;

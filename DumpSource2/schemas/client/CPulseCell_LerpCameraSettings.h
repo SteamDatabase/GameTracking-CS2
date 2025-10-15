@@ -23,7 +23,6 @@
 //		"m_flFarBlurryDistance": -1.000000
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_LerpCameraSettings : public CPulseCell_BaseLerp
 {
 	float32 m_flSeconds;

@@ -5,6 +5,8 @@
 // MPropertyCustomEditor = "ParticleVariableRef()"
 class CParticleVariableRef
 {
+	// MFgdFromSchemaCompletelySkipField
 	CKV3MemberNameWithStorage m_variableName;
-	PulseValueType_t m_variableType;
+	// MFgdFromSchemaCompletelySkipField
+	CPulseValueFullType m_variableType;
 };

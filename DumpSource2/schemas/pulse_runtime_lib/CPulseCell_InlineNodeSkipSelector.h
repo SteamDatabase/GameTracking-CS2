@@ -16,7 +16,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseFunctionHiddenInTool
 class CPulseCell_InlineNodeSkipSelector : public CPulseCell_BaseFlow
 {

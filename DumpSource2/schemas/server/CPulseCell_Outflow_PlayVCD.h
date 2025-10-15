@@ -16,10 +16,9 @@
 //	"m_Triggers":
 //	[
 //	],
-//	"m_vcdFilename": ""
+//	"m_hChoreoScene": ""
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_Outflow_PlayVCD : public CPulseCell_Outflow_PlaySceneBase
 {
-	CUtlString m_vcdFilename;
+	CStrongHandle< InfoForResourceTypeCChoreoSceneResource > m_hChoreoScene;
 };

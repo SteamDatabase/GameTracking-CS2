@@ -63,6 +63,7 @@
 //	"m_strGenerateTexture_InitialContainer": "",
 //	"m_nResolution": 256,
 //	"m_bIsScratchTarget": false,
+//	"m_strCompressionFormat": "",
 //	"m_bSplatDebugInfo": false,
 //	"m_bCaptureInRenderDoc": false,
 //	"m_vecTexGenInstructions":
@@ -146,6 +147,9 @@ class CompMatPropertyMutator_t
 	// MPropertyFriendlyName = "Scratch Target"
 	// MPropertyAttrStateCallback (UNKNOWN FOR PARSER)
 	bool m_bIsScratchTarget;
+	// MPropertyFriendlyName = "Compression Format"
+	// MPropertyAttrStateCallback (UNKNOWN FOR PARSER)
+	CUtlString m_strCompressionFormat;
 	// MPropertyAutoRebuildOnChange
 	// MPropertyFriendlyName = "Splat Debug info on Texture"
 	// MPropertyAttrStateCallback (UNKNOWN FOR PARSER)

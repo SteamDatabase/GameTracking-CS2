@@ -11,12 +11,7 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_vSrc":
-//	[
-//		0.000000,
-//		0.000000,
-//		0.000000
-//	],
+//	"m_vSrc": null,
 //	"m_angSrc":
 //	[
 //		0.000000,
@@ -57,7 +52,7 @@ class CGameScriptedMoveData
 {
 	Vector m_vAccumulatedRootMotion;
 	QAngle m_angAccumulatedRootMotionRotation;
-	Vector m_vSrc;
+	VectorWS m_vSrc;
 	QAngle m_angSrc;
 	QAngle m_angCurrent;
 	float32 m_flLockedSpeed;

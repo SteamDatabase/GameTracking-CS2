@@ -65,5 +65,8 @@ enum PulseValueType_t : uint32_t
 	// MPropertyFriendlyName = "Typesafe Int64"
 	PVAL_TYPESAFE_INT64 = 29,
 	// MPropertySuppressEnumerator
-	PVAL_COUNT = 30,
+	// MPropertyFriendlyName = "Particle Object"
+	PVAL_PARTICLE_EHANDLE = 30,
+	// MPropertySuppressEnumerator
+	PVAL_COUNT = 31,
 };

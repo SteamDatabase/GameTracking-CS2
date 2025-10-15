@@ -3,6 +3,7 @@
 //	"m_sBreakablePieceName": "",
 //	"m_nBodyGroupValue": -1,
 //	"m_nHealth": 1,
+//	"m_flCriticalDamagePercent": 0.000000,
 //	"m_nDamagePassthroughType": "Normal",
 //	"m_nDestructionDeathBehavior": "eDoNotKill",
 //	"m_sCustomDeathHandshake": "",
@@ -27,6 +28,8 @@ class CDestructiblePart_DamageLevel
 	// MPropertyDescription = "Total health of this damage level. When it reaches 0, the damage level is 'broken' using the breakable prop system."
 	// MPropertySuppressExpr = "m_nDamagePassthroughType == InvincibleAbsorb || m_nDamagePassthroughType == InvinciblePassthrough"
 	CSkillInt m_nHealth;
+	// MPropertyDescription = "% chance (0-1) of dealing 'critical' damage, which destroys this damage level, regardless of damage pass through type."
+	float32 m_flCriticalDamagePercent;
 	// MPropertyDescription = "How damage to this damage level is handled."
 	EDestructiblePartDamagePassThroughType m_nDamagePassthroughType;
 	// MPropertyStartGroup = "+Death"

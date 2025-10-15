@@ -1,7 +1,4 @@
-// MNetworkVarNames = "VectorWS m_vFanOrigin"
 // MNetworkVarNames = "Vector m_vFanOriginOffset"
-// MNetworkVarNames = "Vector m_vFanEnd"
-// MNetworkVarNames = "Vector m_vNoiseDirectionTarget"
 // MNetworkVarNames = "Vector m_vDirection"
 // MNetworkVarNames = "bool m_bPushTowardsInfoTarget"
 // MNetworkVarNames = "bool m_bPushAwayFromInfoTarget"
@@ -13,13 +10,7 @@
 class CTriggerFan : public C_BaseTrigger
 {
 	// MNetworkEnable
-	VectorWS m_vFanOrigin;
-	// MNetworkEnable
 	Vector m_vFanOriginOffset;
-	// MNetworkEnable
-	Vector m_vFanEnd;
-	// MNetworkEnable
-	Vector m_vNoiseDirectionTarget;
 	// MNetworkEnable
 	Vector m_vDirection;
 	// MNetworkEnable

@@ -15,7 +15,6 @@
 //	[
 //	]
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_Inflow_Method : public CPulseCell_Inflow_BaseEntrypoint
 {
 	PulseSymbol_t m_MethodName;

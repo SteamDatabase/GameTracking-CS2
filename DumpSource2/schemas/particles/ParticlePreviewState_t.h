@@ -16,6 +16,7 @@
 //	"m_bShouldDrawAttachmentNames": false,
 //	"m_bShouldDrawControlPointAxes": false,
 //	"m_bAnimationNonLooping": false,
+//	"m_bSequenceNameIsAnimClipPath": false,
 //	"m_vecPreviewGravity":
 //	[
 //		0.000000,
@@ -40,5 +41,6 @@ class ParticlePreviewState_t
 	bool m_bShouldDrawAttachmentNames;
 	bool m_bShouldDrawControlPointAxes;
 	bool m_bAnimationNonLooping;
+	bool m_bSequenceNameIsAnimClipPath;
 	Vector m_vecPreviewGravity;
 };

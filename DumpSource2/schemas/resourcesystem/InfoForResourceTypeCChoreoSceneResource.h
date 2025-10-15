@@ -1,0 +1,4 @@
+// MResourceTypeForInfoType = "vcd"
+class InfoForResourceTypeCChoreoSceneResource
+{
+};

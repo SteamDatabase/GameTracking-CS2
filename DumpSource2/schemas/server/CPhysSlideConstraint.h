@@ -1,6 +1,6 @@
 class CPhysSlideConstraint : public CPhysConstraint
 {
-	Vector m_axisEnd;
+	VectorWS m_axisEnd;
 	float32 m_slideFriction;
 	float32 m_systemLoadScale;
 	float32 m_initialOffset;

@@ -14,7 +14,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "[Test] Explicit Yes/No Outflow"
 // MPropertyDescription = "Test node that picks between two outflows as specified in the test domain."
 class CPulseCell_Outflow_TestExplicitYesNo : public CPulseCell_BaseFlow

@@ -1,5 +1,6 @@
 enum PreviewEOMCelebration : uint32_t
 {
+	INVALID = -1,
 	WALKUP = 0,
 	PUNCHING = 1,
 	SWAGGER = 2,

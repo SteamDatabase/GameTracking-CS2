@@ -167,7 +167,6 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	bool m_bRagdollDamageHeadshot;
 	// MNetworkEnable
 	Vector m_vRagdollServerOrigin;
-	bool m_bLastHeadBoneTransformIsValid;
 	GameTime_t m_lastLandTime;
 	bool m_bOnGroundLastTick;
 	CHandle< C_CS2HudModelArms > m_hHudModelArms;

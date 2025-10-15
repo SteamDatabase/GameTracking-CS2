@@ -138,8 +138,6 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	CUtlVector< QAngle > m_aimPunchCache;
 	// MNetworkEnable
 	bool m_bIsBuyMenuOpen;
-	CTransform m_xLastHeadBoneTransform;
-	bool m_bLastHeadBoneTransformIsValid;
 	GameTime_t m_lastLandTime;
 	bool m_bOnGroundLastTick;
 	int32 m_iPlayerLocked;

@@ -11,7 +11,7 @@ class C_BaseFlex : public CBaseAnimGraph
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
 	// MNetworkChangeCallback = "OnViewTargetChanged"
-	Vector m_vLookTargetPosition;
+	VectorWS m_vLookTargetPosition;
 	// MNetworkEnable
 	bool m_blinktoggle;
 	int32 m_nLastFlexUpdateFrameCount;

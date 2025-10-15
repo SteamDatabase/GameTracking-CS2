@@ -14,7 +14,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "[Test] Random Yes/No Outflow"
 // MPropertyDescription = "Test node that randomly picks between two outflows."
 class CPulseCell_Outflow_TestRandomYesNo : public CPulseCell_BaseFlow

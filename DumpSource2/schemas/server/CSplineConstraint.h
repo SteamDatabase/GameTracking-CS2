@@ -10,5 +10,8 @@ class CSplineConstraint : public CPhysConstraint
 	float32 m_flLinearFrequency;
 	float32 m_flLinarDampingRatio;
 	float32 m_flJointFriction;
-	Vector m_vPreSolveAnchorPos;
+	float32 m_flTransitionTime;
+	VectorWS m_vPreSolveAnchorPos;
+	GameTime_t m_StartTransitionTime;
+	Vector m_vTangentSpaceAnchorAtTransitionStart;
 };

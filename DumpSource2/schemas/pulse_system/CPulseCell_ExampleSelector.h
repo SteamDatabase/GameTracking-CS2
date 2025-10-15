@@ -8,7 +8,6 @@
 //		]
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Select Example Criteria"
 // MPropertyDescription = "Evaluate the requirements of each connected node"
 // MPulseEditorHeaderIcon = "tools/images/pulse_editor/requirements.png"

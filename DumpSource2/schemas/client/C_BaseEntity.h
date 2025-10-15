@@ -64,6 +64,7 @@ class C_BaseEntity : public CEntityInstance
 	// MNetworkUserGroup = "Player"
 	// MNetworkPriority = 32
 	int32 m_iHealth;
+	float32 m_flDamageAccumulator;
 	// MNetworkEnable
 	// MNetworkUserGroup = "Player"
 	// MNetworkPriority = 32

@@ -17,6 +17,10 @@ class CNewParticleEffect : public IParticleEffect
 	bitfield:1 m_bShouldSave;
 	bitfield:1 m_bShouldSimulateDuringGamePaused;
 	bitfield:1 m_bShouldCheckFoW;
+	bitfield:1 m_bIsAsyncCreate;
+	bitfield:1 m_bFreezeTransitionActive;
+	bitfield:1 m_bFreezeTargetState;
+	bitfield:1 m_bCanFreeze;
 	Vector m_vSortOrigin;
 	float32 m_flScale;
 	PARTICLE_EHANDLE__* m_hOwner;
@@ -24,9 +28,6 @@ class CNewParticleEffect : public IParticleEffect
 	float32 m_flFreezeTransitionStart;
 	float32 m_flFreezeTransitionDuration;
 	float32 m_flFreezeTransitionOverride;
-	bool m_bFreezeTransitionActive;
-	bool m_bFreezeTargetState;
-	bool m_bCanFreeze;
 	Vector m_LastMin;
 	Vector m_LastMax;
 	CSplitScreenSlot m_nSplitScreenUser;

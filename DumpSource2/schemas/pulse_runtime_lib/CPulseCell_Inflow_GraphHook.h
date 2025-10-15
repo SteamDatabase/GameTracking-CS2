@@ -9,7 +9,6 @@
 //	},
 //	"m_HookName": ""
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_Inflow_GraphHook : public CPulseCell_Inflow_BaseEntrypoint
 {
 	PulseSymbol_t m_HookName;

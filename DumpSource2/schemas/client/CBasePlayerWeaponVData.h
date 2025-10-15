@@ -21,6 +21,7 @@
 //	"m_iDefaultClip2": -1,
 //	"m_bReserveAmmoAsClips": false,
 //	"m_bTreatAsSingleClip": false,
+//	"m_bKeepLoadedAmmo": false,
 //	"m_iWeight": 0,
 //	"m_bAutoSwitchTo": true,
 //	"m_bAutoSwitchFrom": true,
@@ -89,6 +90,8 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	bool m_bReserveAmmoAsClips;
 	// MPropertyDescription = "Regardless of ammo position, we'll always use clip1 as where our bullets come from"
 	bool m_bTreatAsSingleClip;
+	// MPropertyDescription = "Indicates whether to keep any loaded ammo in the weapon on reload"
+	bool m_bKeepLoadedAmmo;
 	// MPropertyStartGroup = "UI"
 	// MPropertyDescription = "This value used to determine this weapon's importance in autoselection"
 	int32 m_iWeight;

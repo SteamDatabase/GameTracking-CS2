@@ -21,6 +21,7 @@
 //	"m_iDefaultClip2": -1,
 //	"m_bReserveAmmoAsClips": false,
 //	"m_bTreatAsSingleClip": false,
+//	"m_bKeepLoadedAmmo": false,
 //	"m_iWeight": 0,
 //	"m_bAutoSwitchTo": true,
 //	"m_bAutoSwitchFrom": true,
@@ -86,6 +87,8 @@
 //	"m_flInaccuracyReload": 0.000000,
 //	"m_flDeployDuration": 0.000000,
 //	"m_flDisallowAttackAfterReloadStartDuration": 0.000000,
+//	"m_nBurstShotCount": 2,
+//	"m_bAllowBurstHolster": true,
 //	"m_nRecoilSeed": 0,
 //	"m_nSpreadSeed": 0,
 //	"m_flAttackMovespeedFactor": 0.000000,
@@ -187,6 +190,8 @@ class CCSWeaponBaseVData : public CBasePlayerWeaponVData
 	float32 m_flInaccuracyReload;
 	float32 m_flDeployDuration;
 	float32 m_flDisallowAttackAfterReloadStartDuration;
+	int32 m_nBurstShotCount;
+	bool m_bAllowBurstHolster;
 	// MPropertyStartGroup = "Firing"
 	int32 m_nRecoilSeed;
 	int32 m_nSpreadSeed;

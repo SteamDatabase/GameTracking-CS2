@@ -22,6 +22,7 @@
 //		"m_bShouldDrawAttachmentNames": false,
 //		"m_bShouldDrawControlPointAxes": false,
 //		"m_bAnimationNonLooping": false,
+//		"m_bSequenceNameIsAnimClipPath": false,
 //		"m_vecPreviewGravity":
 //		[
 //			0.000000,

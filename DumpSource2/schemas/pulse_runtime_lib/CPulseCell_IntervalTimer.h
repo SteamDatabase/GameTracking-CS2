@@ -14,7 +14,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Interval Timer"
 // MPropertyDescription = "Wait for a duration, firing a child cursor at regular (or randomized) intervals"
 // MPulseEditorHeaderIcon = "tools/images/pulse_editor/node_timer.png"

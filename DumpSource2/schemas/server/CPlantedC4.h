@@ -22,6 +22,7 @@ class CPlantedC4 : public CBaseAnimGraph, public IHasAttributes
 	int32 m_nBombSite;
 	// MNetworkEnable
 	int32 m_nSourceSoundscapeHash;
+	bool m_bAbortDetonationBecauseWorldIsFrozen;
 	// MNetworkEnable
 	CAttributeContainer m_AttributeManager;
 	CEntityIOOutput m_OnBombDefused;

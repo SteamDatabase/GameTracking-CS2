@@ -11,5 +11,6 @@ class CPhysConstraint : public CLogicalEntity
 	float32 m_torqueLimit;
 	float32 m_minTeleportDistance;
 	bool m_bSnapObjectPositions;
+	bool m_bTreatEntity1AsInfiniteMass;
 	CEntityIOOutput m_OnBreak;
 };

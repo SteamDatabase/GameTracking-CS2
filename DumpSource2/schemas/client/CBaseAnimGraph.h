@@ -14,7 +14,7 @@ class CBaseAnimGraph : public C_BaseModelEntity
 	// MNetworkEnable
 	bool m_bAnimGraphUpdateEnabled;
 	float32 m_flMaxSlopeDistance;
-	Vector m_vLastSlopeCheckPos;
+	VectorWS m_vLastSlopeCheckPos;
 	bool m_bAnimationUpdateScheduled;
 	// MNetworkEnable
 	Vector m_vecForce;

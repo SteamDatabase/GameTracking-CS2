@@ -7,5 +7,5 @@ class CSpotlightEnd : public CBaseModelEntity
 	// MNetworkEnable
 	float32 m_Radius;
 	Vector m_vSpotlightDir;
-	Vector m_vSpotlightOrg;
+	VectorWS m_vSpotlightOrg;
 };

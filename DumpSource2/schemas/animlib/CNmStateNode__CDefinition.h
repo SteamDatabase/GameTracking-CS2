@@ -20,7 +20,8 @@
 //	"m_nLayerWeightNodeIdx": -1,
 //	"m_nLayerRootMotionWeightNodeIdx": -1,
 //	"m_nLayerBoneMaskNodeIdx": -1,
-//	"m_bIsOffState": false
+//	"m_bIsOffState": false,
+//	"m_bUseActualElapsedTimeInStateForTimedEvents": false
 //}
 class CNmStateNode::CDefinition : public CNmPoseNode::CDefinition
 {
@@ -34,4 +35,5 @@ class CNmStateNode::CDefinition : public CNmPoseNode::CDefinition
 	int16 m_nLayerRootMotionWeightNodeIdx;
 	int16 m_nLayerBoneMaskNodeIdx;
 	bool m_bIsOffState;
+	bool m_bUseActualElapsedTimeInStateForTimedEvents;
 };

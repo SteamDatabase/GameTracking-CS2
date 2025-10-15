@@ -1,0 +1,4 @@
+// MResourceTypeForInfoType = "vcdlist"
+class InfoForResourceTypeCChoreoSceneFileList
+{
+};

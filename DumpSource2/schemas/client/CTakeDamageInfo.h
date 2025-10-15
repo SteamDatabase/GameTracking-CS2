@@ -1,8 +1,8 @@
 class CTakeDamageInfo
 {
 	Vector m_vecDamageForce;
-	Vector m_vecDamagePosition;
-	Vector m_vecReportedPosition;
+	VectorWS m_vecDamagePosition;
+	VectorWS m_vecReportedPosition;
 	Vector m_vecDamageDirection;
 	CHandle< C_BaseEntity > m_hInflictor;
 	CHandle< C_BaseEntity > m_hAttacker;
@@ -20,5 +20,6 @@ class CTakeDamageInfo
 	HitGroup_t m_iHitGroupId;
 	int32 m_nNumObjectsPenetrated;
 	float32 m_flFriendlyFireDamageReductionRatio;
+	CUtlVector< DestructibleHitGroupToDestroy_t > m_nDestructibleHitGroupsToForceDestroy;
 	bool m_bInTakeDamageFlow;
 };

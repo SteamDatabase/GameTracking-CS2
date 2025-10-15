@@ -21,7 +21,6 @@
 //	},
 //	"m_TagName": ""
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Listen for AnimGraph Tag"
 // MPropertyDescription = "Creates new cursors for when an animgraph tag is handled. Will listen until canceled."
 // MPulseEditorSubHeaderText (UNKNOWN FOR PARSER)

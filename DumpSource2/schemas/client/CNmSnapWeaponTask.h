@@ -1,0 +1,3 @@
+class CNmSnapWeaponTask : public CNmPoseTask
+{
+};

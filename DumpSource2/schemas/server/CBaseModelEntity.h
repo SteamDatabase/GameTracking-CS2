@@ -18,8 +18,6 @@
 // MNetworkVarNames = "int m_nAddDecal"
 // MNetworkVarNames = "Vector m_vDecalPosition"
 // MNetworkVarNames = "Vector m_vDecalForwardAxis"
-// MNetworkVarNames = "float m_flDecalHealBloodRate"
-// MNetworkVarNames = "float m_flDecalHealHeightRate"
 // MNetworkVarNames = "DecalMode_t m_nDecalMode"
 // MNetworkVarNames = "DecalMode_t m_nRequiredDecalMode"
 // MNetworkVarNames = "CHandle< CBaseModelEntity > m_ConfigEntitiesToPropagateMaterialDecalsTo"
@@ -52,7 +50,7 @@ class CBaseModelEntity : public CBaseEntity
 	CDestructiblePartsComponent* m_pDestructiblePartsSystemComponent;
 	HitGroup_t m_LastHitGroup;
 	CGlobalSymbol m_sLastDamageSourceName;
-	Vector m_vLastDamagePosition;
+	VectorWS m_vLastDamagePosition;
 	GameTime_t m_flDissolveStartTime;
 	CEntityIOOutput m_OnIgnite;
 	// MNetworkEnable
@@ -92,10 +90,6 @@ class CBaseModelEntity : public CBaseEntity
 	Vector m_vDecalPosition;
 	// MNetworkEnable
 	Vector m_vDecalForwardAxis;
-	// MNetworkEnable
-	float32 m_flDecalHealBloodRate;
-	// MNetworkEnable
-	float32 m_flDecalHealHeightRate;
 	// MNetworkEnable
 	DecalMode_t m_nDecalMode;
 	// MNetworkEnable

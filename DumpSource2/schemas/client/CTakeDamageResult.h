@@ -6,4 +6,5 @@ class CTakeDamageResult
 	float32 m_flPreModifiedDamage;
 	int32 m_nTotalledHealthLost;
 	int32 m_nTotalledDamageDealt;
+	bool m_bWasDamageSuppressed;
 };

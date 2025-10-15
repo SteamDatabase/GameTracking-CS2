@@ -1,7 +1,6 @@
 // MNetworkVarNames = "bool m_ragEnabled"
 // MNetworkVarNames = "Vector m_ragPos"
 // MNetworkVarNames = "QAngle m_ragAngles"
-// MNetworkVarNames = "EHANDLE m_hRagdollSource"
 // MNetworkVarNames = "float32 m_flBlendWeight"
 class CRagdollProp : public CBaseAnimGraph
 {
@@ -16,8 +15,6 @@ class CRagdollProp : public CBaseAnimGraph
 	// MNetworkEncoder = "qangle"
 	// MNetworkBitCount = 13
 	CNetworkUtlVectorBase< QAngle > m_ragAngles;
-	// MNetworkEnable
-	CHandle< CBaseEntity > m_hRagdollSource;
 	uint32 m_lastUpdateTickCount;
 	bool m_allAsleep;
 	bool m_bFirstCollisionAfterLaunch;
@@ -27,7 +24,7 @@ class CRagdollProp : public CBaseAnimGraph
 	GameTime_t m_flLastPhysicsInfluenceTime;
 	GameTime_t m_flFadeOutStartTime;
 	float32 m_flFadeTime;
-	Vector m_vecLastOrigin;
+	VectorWS m_vecLastOrigin;
 	GameTime_t m_flAwakeTime;
 	GameTime_t m_flLastOriginChangeTime;
 	CUtlSymbolLarge m_strOriginClassName;

@@ -4,7 +4,7 @@
 //	"m_flMinValue": 0.000000,
 //	"m_flMaxValue": 1.000000,
 //	"m_opvarName": "None",
-//	"m_nSortType": "SOS_SORTTYPE_LOWEST"
+//	"m_nSortType": "SOS_SETPARAM_SORTTYPE_LOWEST"
 //}
 // MPropertyFriendlyName = "Set Sound Event Parameter"
 class CSosGroupActionSetSoundeventParameterSchema : public CSosGroupActionSchema
@@ -14,5 +14,5 @@ class CSosGroupActionSetSoundeventParameterSchema : public CSosGroupActionSchema
 	float32 m_flMaxValue;
 	// MPropertyFriendlyName = "Parameter Name"
 	CUtlString m_opvarName;
-	SosActionSortType_t m_nSortType;
+	SosActionSetParamSortType_t m_nSortType;
 };

@@ -10,6 +10,7 @@
 // MNetworkVarNames = "int m_nSerializePoseRecipeVersionAG2"
 // MNetworkVarNames = "uint8 m_nGraphCreationFlagsAG2"
 // MNetworkVarNames = "int m_nServerGraphDefReloadCountAG2"
+// MNetworkVarNames = "int m_nServerSerializationContextIteration"
 class CBaseAnimGraphController : public CSkeletonAnimationController
 {
 	// MNetworkEnable
@@ -63,4 +64,6 @@ class CBaseAnimGraphController : public CSkeletonAnimationController
 	uint8 m_nGraphCreationFlagsAG2;
 	// MNetworkEnable
 	int32 m_nServerGraphDefReloadCountAG2;
+	// MNetworkEnable
+	int32 m_nServerSerializationContextIteration;
 };

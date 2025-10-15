@@ -23,7 +23,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseEditorHeaderIcon = "tools/images/pulse_editor/observable_variable_listener.png"
 // MPropertyFriendlyName = "Wait For Observable Condition"
 class CPulseCell_WaitForObservable : public CPulseCell_BaseYieldingInflow

@@ -23,7 +23,7 @@ class CCSBot : public CBot
 	bool m_isAttacking;
 	bool m_isOpeningDoor;
 	CHandle< CBaseEntity > m_taskEntity;
-	Vector m_goalPosition;
+	VectorWS m_goalPosition;
 	CHandle< CBaseEntity > m_goalEntity;
 	CHandle< CBaseEntity > m_avoid;
 	float32 m_avoidTimestamp;

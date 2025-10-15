@@ -14,7 +14,7 @@ class CBaseAnimGraph : public CBaseModelEntity
 	// MNetworkEnable
 	bool m_bAnimGraphUpdateEnabled;
 	float32 m_flMaxSlopeDistance;
-	Vector m_vLastSlopeCheckPos;
+	VectorWS m_vLastSlopeCheckPos;
 	bool m_bAnimationUpdateScheduled;
 	// MNetworkEnable
 	Vector m_vecForce;
@@ -28,4 +28,5 @@ class CBaseAnimGraph : public CBaseModelEntity
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnClientRagdollChanged"
 	bool m_bRagdollClientSide;
+	CTransform m_xParentedRagdollRootInEntitySpace;
 };

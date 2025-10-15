@@ -18,7 +18,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_Timeline : public CPulseCell_BaseYieldingInflow
 {
 	CUtlVector< CPulseCell_Timeline::TimelineEvent_t > m_TimelineEvents;

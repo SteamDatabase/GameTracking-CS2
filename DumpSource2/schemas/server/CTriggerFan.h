@@ -1,7 +1,4 @@
-// MNetworkVarNames = "VectorWS m_vFanOrigin"
 // MNetworkVarNames = "Vector m_vFanOriginOffset"
-// MNetworkVarNames = "Vector m_vFanEnd"
-// MNetworkVarNames = "Vector m_vNoiseDirectionTarget"
 // MNetworkVarNames = "Vector m_vDirection"
 // MNetworkVarNames = "bool m_bPushTowardsInfoTarget"
 // MNetworkVarNames = "bool m_bPushAwayFromInfoTarget"
@@ -13,13 +10,7 @@
 class CTriggerFan : public CBaseTrigger
 {
 	// MNetworkEnable
-	VectorWS m_vFanOrigin;
-	// MNetworkEnable
 	Vector m_vFanOriginOffset;
-	// MNetworkEnable
-	Vector m_vFanEnd;
-	// MNetworkEnable
-	Vector m_vNoiseDirectionTarget;
 	// MNetworkEnable
 	Vector m_vDirection;
 	// MNetworkEnable
@@ -36,6 +27,10 @@ class CTriggerFan : public CBaseTrigger
 	bool m_bFalloff;
 	// MNetworkEnable
 	CountdownTimer m_RampTimer;
+	VectorWS m_vFanOriginWS;
+	Vector m_vFanOriginLS;
+	Vector m_vFanEndLS;
+	Vector m_vNoiseDirectionTarget;
 	CUtlSymbolLarge m_iszInfoFan;
 	float32 m_flRopeForceScale;
 	float32 m_flParticleForceScale;

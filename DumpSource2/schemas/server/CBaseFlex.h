@@ -1,5 +1,5 @@
 // MNetworkVarNames = "float32 m_flexWeight"
-// MNetworkVarNames = "Vector m_vLookTargetPosition"
+// MNetworkVarNames = "VectorWS m_vLookTargetPosition"
 // MNetworkVarNames = "bool m_blinktoggle"
 class CBaseFlex : public CBaseAnimGraph
 {
@@ -11,7 +11,7 @@ class CBaseFlex : public CBaseAnimGraph
 	CNetworkUtlVectorBase< float32 > m_flexWeight;
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
-	Vector m_vLookTargetPosition;
+	VectorWS m_vLookTargetPosition;
 	// MNetworkEnable
 	bool m_blinktoggle;
 	GameTime_t m_flAllowResponsesEndTime;

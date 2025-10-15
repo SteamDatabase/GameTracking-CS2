@@ -21,7 +21,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Play Sequence"
 // MPropertyDescription = "Play the specified animation sequence on a NON-ANIMGRAPH entity, and wait for it to complete."
 class CPulseCell_PlaySequence : public CPulseCell_BaseYieldingInflow

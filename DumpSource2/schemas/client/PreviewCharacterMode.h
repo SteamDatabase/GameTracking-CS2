@@ -1,5 +1,6 @@
 enum PreviewCharacterMode : uint32_t
 {
+	INVALID = -1,
 	DIORAMA = 0,
 	MAIN_MENU = 1,
 	BUY_MENU = 2,

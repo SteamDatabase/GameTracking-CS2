@@ -40,7 +40,6 @@
 //	[
 //	]
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_Outflow_ScriptedSequence : public CPulseCell_BaseYieldingInflow
 {
 	CUtlString m_szSyncGroup;

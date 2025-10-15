@@ -8,7 +8,7 @@ class CPointAngularVelocitySensor : public CPointEntity
 	float32 m_flFireInterval;
 	float32 m_flLastAngVelocity;
 	QAngle m_lastOrientation;
-	Vector m_vecAxis;
+	VectorWS m_vecAxis;
 	bool m_bUseHelper;
 	CEntityOutputTemplate< float32 > m_AngularVelocity;
 	CEntityIOOutput m_OnLessThan;

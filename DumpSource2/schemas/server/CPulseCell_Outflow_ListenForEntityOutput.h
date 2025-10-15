@@ -17,7 +17,6 @@
 //	"m_strEntityOutputParam": "",
 //	"m_bListenUntilCanceled": false
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Wait for Entity Output"
 // MPropertyDescription = "Waits for the entity to fire a specific output. By default, this listens once, but can be configured to listen until canceled."
 // MPulseEditorSubHeaderText (UNKNOWN FOR PARSER)

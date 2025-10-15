@@ -14,7 +14,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 class CPulseCell_Step_CallExternalMethod : public CPulseCell_BaseYieldingInflow
 {
 	PulseSymbol_t m_MethodName;

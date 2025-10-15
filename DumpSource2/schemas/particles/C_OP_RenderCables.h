@@ -16,6 +16,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -129,6 +130,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -203,6 +205,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -321,6 +324,7 @@
 //			"m_bHasRandomSignFlip": false,
 //			"m_nRandomSeed": -1,
 //			"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//			"m_strSnapshotSubset": "",
 //			"m_flLOD0": 0.000000,
 //			"m_flLOD1": 0.000000,
 //			"m_flLOD2": 0.000000,
@@ -395,6 +399,7 @@
 //			"m_bHasRandomSignFlip": false,
 //			"m_nRandomSeed": -1,
 //			"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//			"m_strSnapshotSubset": "",
 //			"m_flLOD0": 0.000000,
 //			"m_flLOD1": 0.000000,
 //			"m_flLOD2": 0.000000,
@@ -469,6 +474,7 @@
 //			"m_bHasRandomSignFlip": false,
 //			"m_nRandomSeed": -1,
 //			"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//			"m_strSnapshotSubset": "",
 //			"m_flLOD0": 0.000000,
 //			"m_flLOD1": 0.000000,
 //			"m_flLOD2": 0.000000,
@@ -543,6 +549,7 @@
 //			"m_bHasRandomSignFlip": false,
 //			"m_nRandomSeed": -1,
 //			"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//			"m_strSnapshotSubset": "",
 //			"m_flLOD0": 0.000000,
 //			"m_flLOD1": 0.000000,
 //			"m_flLOD2": 0.000000,
@@ -653,6 +660,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -727,6 +735,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -801,6 +810,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -875,6 +885,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -949,6 +960,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -1023,6 +1035,7 @@
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -1088,6 +1101,7 @@
 //	"m_nMinTesselation": 1,
 //	"m_nMaxTesselation": 128,
 //	"m_nRoundness": 1,
+//	"m_nForceRoundnessFixed": false,
 //	"m_LightingTransform":
 //	{
 //		"m_nType": "PT_TYPE_INVALID",
@@ -1154,7 +1168,10 @@ class C_OP_RenderCables : public CParticleFunctionRenderer
 	// MPropertyFriendlyName = "maximum steps between particles"
 	int32 m_nMaxTesselation;
 	// MPropertyFriendlyName = "roundness factor"
+	// MPropertyAttributeRange = "0 3"
 	int32 m_nRoundness;
+	// MPropertyFriendlyName = "force roundness factor fixed"
+	bool m_nForceRoundnessFixed;
 	// MPropertyFriendlyName = "diffuse lighting origin"
 	// MParticleInputOptional
 	CParticleTransformInput m_LightingTransform;

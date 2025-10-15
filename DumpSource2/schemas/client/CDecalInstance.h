@@ -5,6 +5,7 @@ class CDecalInstance
 	CUtlStringToken m_sSequenceName;
 	CHandle< C_BaseEntity > m_hEntity;
 	int32 m_nBoneIndex;
+	int32 m_nTriangleIndex;
 	Vector m_vPositionLS;
 	Vector m_vNormalLS;
 	Vector m_vSAxisLS;
@@ -22,6 +23,5 @@ class CDecalInstance
 	int16 m_nSequenceIndex;
 	bool m_bIsAdjacent;
 	bool m_bDoDecalLightmapping;
-	CDecalInstance* m_pNext;
-	CDecalInstance* m_pPrev;
+	DecalMode_t m_nSkinnedModelMode;
 };

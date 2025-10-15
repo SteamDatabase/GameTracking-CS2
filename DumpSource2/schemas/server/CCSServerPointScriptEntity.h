@@ -1,3 +1,0 @@
-class CCSServerPointScriptEntity : public CCSPointScriptEntity
-{
-};

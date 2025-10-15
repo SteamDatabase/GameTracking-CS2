@@ -5,6 +5,6 @@ class CPulseGameBlackboard : public CBaseEntity
 	// MNetworkEnable
 	CUtlString m_strGraphName;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnStateChanged"
+	// MNetworkChangeCallback = "OnBlackboardStateChanged"
 	CUtlString m_strStateBlob;
 };
