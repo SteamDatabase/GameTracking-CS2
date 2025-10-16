@@ -237,7 +237,6 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	// MNetworkEnable
 	bool m_bKilledByHeadshot;
 	int32 m_LastHitBox;
-	int32 m_LastHealth;
 	CCSBot* m_pBot;
 	bool m_bBotAllowActive;
 	// MNetworkEnable
