@@ -3,6 +3,7 @@
 // MNetworkVarNames = "bool m_bRoundInProgress"
 // MNetworkVarNames = "int m_iFirstSecondHalfRound"
 // MNetworkVarNames = "int m_iBombSite"
+// MNetworkVarNames = "CHandle< CCSPlayerPawn> m_hBombPlanter"
 class CRetakeGameRules
 {
 	// MNetworkEnable
@@ -15,4 +16,6 @@ class CRetakeGameRules
 	int32 m_iFirstSecondHalfRound;
 	// MNetworkEnable
 	int32 m_iBombSite;
+	// MNetworkEnable
+	CHandle< CCSPlayerPawn > m_hBombPlanter;
 };

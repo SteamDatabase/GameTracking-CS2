@@ -497,6 +497,14 @@ var MainMenu;
         _m_activeTab = '';
         _ShowFloatingPanels();
     }
+    function _OnShowFullScreenOpaquePopup() {
+        _msg("_OnShowFullScreenOpaquePopup");
+        $('#MainMenuInput').SetHasClass('HiddenByPopup', true);
+    }
+    function _OnCloseAllFullScreenOpaquePopups() {
+        _msg("_OnCloseAllFullScreenOpaquePopups");
+        $('#MainMenuInput').SetHasClass('HiddenByPopup', false);
+    }
     function _GetActiveNavBarButton() {
         const elNavBar = $('#MainMenuNavBarTop');
         const children = elNavBar.Children();
@@ -1001,7 +1009,6 @@ var MainMenu;
             let idtoUse = storeId ? storeId : caseId;
             let elPanel = $.GetContextPanel().FindChildInLayoutFile('PopupManager').FindChildInLayoutFile('popup-inspect-' + idtoUse);
             if (elPanel && elPanel.IsValid()) {
-                elPanel.visible = true;
                 elPanel.SetHasClass('hide-for-lootlist', false);
             }
         });
@@ -1019,7 +1026,7 @@ var MainMenu;
     function _WeaponPreviewRequest(id, bWorkshopItemPreview = false) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
         UiToolkitAPI.CloseAllVisiblePopups();
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-weapon-preview-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'allowsave=false' +
             '&' + 'showallitemactions=false' +
@@ -1573,5 +1580,7 @@ var MainMenu;
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_ProfileUpdated', _UpdateLocalPlayerVanity);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_PipRankUpdate', _UpdateLocalPlayerVanity);
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', _UpdateLocalPlayerVanity);
+        $.RegisterForUnhandledEvent('ShowFullScreenOpaquePopup', _OnShowFullScreenOpaquePopup);
+        $.RegisterForUnhandledEvent('CloseAllFullScreenOpaquePopups', _OnCloseAllFullScreenOpaquePopups);
     }
 })(MainMenu || (MainMenu = {}));

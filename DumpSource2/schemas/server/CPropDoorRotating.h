@@ -5,6 +5,7 @@ class CPropDoorRotating : public CBasePropDoor
 	PropDoorRotatingSpawnPos_t m_eSpawnPosition;
 	PropDoorRotatingOpenDirection_e m_eOpenDirection;
 	PropDoorRotatingOpenDirection_e m_eCurrentOpenDirection;
+	doorCheck_e m_eDefaultCheckDirection;
 	float32 m_flAjarAngle;
 	QAngle m_angRotationAjarDeprecated;
 	QAngle m_angRotationClosed;

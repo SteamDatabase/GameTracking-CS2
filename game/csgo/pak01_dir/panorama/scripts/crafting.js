@@ -43,13 +43,18 @@ var Crafting;
             $.DispatchEvent('SetInventoryFilter', $('#Crafting-Ingredients'), 'inv_group_equipment', 'any', 'any', '', 'ingredient', '');
         }
         {
-            function _UpdateItemCount(ItemListName, LabelName) {
+            function _UpdateItemCount(ItemListName, LabelName, nRecipeCount) {
                 let elItemList = $.GetContextPanel().FindChildTraverse(ItemListName);
                 let elLabel = $.GetContextPanel().FindChildTraverse(LabelName);
                 elLabel.SetDialogVariableInt('count', elItemList.count);
+                if (nRecipeCount >= 0) {
+                    elLabel.SetDialogVariableInt('recipecount', nRecipeCount);
+                    elLabel.text = $.Localize((nRecipeCount > 0) ? '#CSGO_Recipe_TradeUp_Items_XofY' : '#CSGO_Recipe_TradeUp_Items_NoSelection', elLabel);
+                }
             }
-            _UpdateItemCount('Crafting-Items', 'CraftingItemsText');
-            _UpdateItemCount('Crafting-Ingredients', 'CraftingIngredientsText');
+            _UpdateItemCount('Crafting-Items', 'CraftingItemsText', -1);
+            let numRequiredToCraft = InventoryAPI.GetCraftIngredientsRequired();
+            _UpdateItemCount('Crafting-Ingredients', 'CraftingIngredientsText', numRequiredToCraft);
         }
     }
     {

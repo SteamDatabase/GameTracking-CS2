@@ -1,6 +1,6 @@
-// MNetworkVarNames = "CHandle< CBaseEntity> m_hPlayerPing"
+// MNetworkVarNames = "CHandle< CPlayerPing> m_hPlayerPing"
 class CCSPlayer_PingServices : public CPlayerPawnComponent
 {
 	// MNetworkEnable
-	CHandle< C_BaseEntity > m_hPlayerPing;
+	CHandle< C_PlayerPing > m_hPlayerPing;
 };

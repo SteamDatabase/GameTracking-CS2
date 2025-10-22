@@ -10,6 +10,7 @@
 // MNetworkVarNames = "int m_nCTTimeOuts"
 // MNetworkVarNames = "bool m_bTechnicalTimeOut"
 // MNetworkVarNames = "bool m_bMatchWaitingForResume"
+// MNetworkVarNames = "int m_iFreezeTime"
 // MNetworkVarNames = "int m_iRoundTime"
 // MNetworkVarNames = "float m_fMatchStartTime"
 // MNetworkVarNames = "GameTime_t m_fRoundStartTime"
@@ -117,6 +118,8 @@ class C_CSGameRules : public C_TeamplayRules
 	bool m_bTechnicalTimeOut;
 	// MNetworkEnable
 	bool m_bMatchWaitingForResume;
+	// MNetworkEnable
+	int32 m_iFreezeTime;
 	// MNetworkEnable
 	int32 m_iRoundTime;
 	// MNetworkEnable

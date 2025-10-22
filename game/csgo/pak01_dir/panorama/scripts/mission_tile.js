@@ -84,7 +84,7 @@ var MissionTile;
             if (elBgArt) {
                 elBgArt.style.backgroundImage = 'url("file://{images}/map_icons/screenshots/720p/' + (imagePath) + '.png")';
                 elBgArt.style.backgroundPosition = '50% 0%';
-                elBgArt.style.backgroundSize = '200% 100%';
+                elBgArt.style.backgroundSize = 'cover';
             }
             SetButtonPlayMission();
             SessionUpdate();

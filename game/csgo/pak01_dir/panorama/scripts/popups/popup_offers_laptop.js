@@ -148,21 +148,9 @@ var OffersLaptop;
         _HidePanelForLootlistItemPreview();
         $.DispatchEvent("LootlistItemPreview", itemid, caseId + ',' + caseId);
     }
-    let _m_handlerForHideEvent = null;
     function _HidePanelForLootlistItemPreview() {
         if (!m_InspectPanel.IsValid())
             return;
-        if (!_m_handlerForHideEvent) {
-            _m_handlerForHideEvent = $.RegisterEventHandler('PropertyTransitionEnd', m_InspectPanel, (panel, propertyName) => {
-                if (m_InspectPanel.id === panel.id && propertyName === 'opacity') {
-                    if (m_InspectPanel.visible === true && m_InspectPanel.BIsTransparent()) {
-                        m_InspectPanel.visible = false;
-                        return true;
-                    }
-                }
-                return false;
-            });
-        }
         m_InspectPanel.SetHasClass('hide-for-lootlist', true);
     }
     function _ViewOnMarket(id) {

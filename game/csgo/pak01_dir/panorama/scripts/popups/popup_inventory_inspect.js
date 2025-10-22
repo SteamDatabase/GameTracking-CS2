@@ -12,6 +12,7 @@ var InventoryInspect;
     let _m_PanelRegisteredForEvents;
     function Init() {
         let itemId = $.GetContextPanel().GetAttributeString("itemid", '');
+        $.GetContextPanel().SetAttributeString('popup-id', $.GetContextPanel().id);
         if (InventoryAPI.IsRental(itemId)) {
             $.GetContextPanel().SetAttributeString('showallitemactions', 'false');
             $.GetContextPanel().SetAttributeString('inspectonly', 'true');
@@ -269,8 +270,15 @@ var InventoryInspect;
         InspectActionBar.NavigateModelPanel('InspectModel');
     }
     function _BlurPanel(panelId, shouldBlur) {
-        if (panelId == $.GetContextPanel().id) {
-            $.GetContextPanel().SetHasClass('popup-inspect-modelpanel_darken_blur', shouldBlur);
+        if (shouldBlur) {
+            if (panelId == $.GetContextPanel().id) {
+                $.GetContextPanel().SetHasClass('popup-inspect-modelpanel_darken_blur', shouldBlur);
+            }
+        }
+        else {
+            if ($.GetContextPanel().BHasClass('popup-inspect-modelpanel_darken_blur')) {
+                $.GetContextPanel().SetHasClass('popup-inspect-modelpanel_darken_blur', false);
+            }
         }
     }
     $.RegisterForUnhandledEvent('CSGOShowMainMenu', _Refresh);

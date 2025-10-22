@@ -18,6 +18,7 @@ var InspectActionBar;
     let m_isSelected = false;
     let m_schfnMusicMvpPreviewEnd = null;
     let m_isItemInLootlist = false;
+    let m_popupId = '';
     function Init(elPanel, itemId, funcGetSettingCallback, funcGetSettingCallbackInt, elItemModelImagePanel) {
         if (funcGetSettingCallback('inspectonly', 'false') === 'false')
             return;
@@ -33,6 +34,7 @@ var InspectActionBar;
         m_showCharSelect = (funcGetSettingCallback('showcharselect', 'true') === 'true');
         m_isSelected = (funcGetSettingCallback('isselected', 'false') === 'true');
         m_isItemInLootlist = funcGetSettingCallback ? funcGetSettingCallback('isItemInLootlist', 'false') === 'true' : false;
+        m_popupId = funcGetSettingCallback('popup-id', '');
         _SetUpItemCertificate(elPanel, itemId);
         _SetupEquipItemBtns(elPanel, itemId);
         _ShowButtonsForWeaponInspect(elPanel, itemId);
@@ -185,14 +187,17 @@ var InspectActionBar;
             }
             let previewActionPrefix = displayName.startsWith('preview_') ? '' : 'preview_';
             elSingleActionBtn.text = '#inv_context_' + previewActionPrefix + displayName;
-            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, false));
+            elSingleActionBtn.SetPanelEvent('onactivate', () => {
+                const bCloseInspect = (m_isItemInLootlist && m_popupId) ? false : true;
+                _OnSingleAction(entry, id, bCloseInspect);
+                if (!bCloseInspect) {
+                    $.DispatchEvent('BlurPopupPanel', m_popupId, true);
+                }
+            });
             elSingleActionBtn.RemoveClass('hidden');
         }
     }
     function _OnSingleAction(entry, id, closeInspect) {
-        if (m_isItemInLootlist) {
-            $.DispatchEvent('BlurPopupPanel', 'popup-lootlist-item-inspect-' + id, true);
-        }
         if (closeInspect) {
             CloseBtnAction();
         }

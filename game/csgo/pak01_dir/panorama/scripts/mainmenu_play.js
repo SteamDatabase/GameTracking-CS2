@@ -448,7 +448,7 @@ var PlayMenu;
                 isAvailable = true;
             }
             else if (MyPersonaAPI.GetCurrentLevel() < 2) {
-                isAvailable = (gameMode == 'deathmatch' || gameMode == 'casual' || gameMode == 'gungameprogressive');
+                isAvailable = (gameMode == 'deathmatch' || gameMode == 'casual' || gameMode == 'gungameprogressive' || gameMode == 'retakes');
             }
         }
         else if (!_IsValveOfficialServer(serverType)) {
@@ -1369,7 +1369,7 @@ var PlayMenu;
             if (strFeatureName === "annotations") {
                 elAnnotationsDropDown.enabled = bAnnotationAvailable && bAnnotationSelected;
             }
-            if (bForceHidden || (sessionSettings.game.type !== 'classic')) {
+            if (bForceHidden || (sessionSettings.game.type !== 'classic' || sessionSettings.game.mode === 'retakes')) {
                 elChild.visible = false;
                 continue;
             }

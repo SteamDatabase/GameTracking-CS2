@@ -314,7 +314,7 @@ var ItemInfo;
             itemSchemaDef.name &&
             (itemSchemaDef.name.startsWith("customplayer_")
                 ? GameInterfaceAPI.IsUsingAG2Pawns()
-                : GameInterfaceAPI.IsUsingAG2Weapons())) {
+                : true)) {
             itemSchemaDef.model_player = itemSchemaDef.model_ag2;
             itemSchemaDef.model_world = itemSchemaDef.model_ag2;
         }
