@@ -152,7 +152,7 @@ var MockAdapter = (function () {
         const slots = JSON.parse(slotStrings);
         slots.forEach(slot => {
             const itemId = LoadoutAPI.GetItemID(team, slot);
-            const bIsWeapon = ItemInfo.IsWeapon(itemId);
+            const bIsWeapon = ItemInfo.IsWeapon(itemId) || ItemInfo.IsMelee(itemId);
             if (bIsWeapon) {
                 list.push(itemId);
             }

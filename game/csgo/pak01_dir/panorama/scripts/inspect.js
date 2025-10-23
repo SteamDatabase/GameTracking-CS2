@@ -67,7 +67,7 @@ var InspectModelImage;
         if (ItemInfo.IsCharacter(itemId)) {
             m_elPanel = _InitCharScene(itemId);
         }
-        else if (InventoryAPI.GetLoadoutCategory(itemId) == "melee") {
+        else if (ItemInfo.IsMelee(itemId)) {
             m_elPanel = _InitMeleeScene(itemId);
         }
         else if (ItemInfo.IsWeapon(itemId)) {
@@ -744,7 +744,7 @@ var InspectModelImage;
                     _AdditionalMapLoadSettings(elPanel, elPanel.Data().active_item_idx, elPanel.Data().loadedMap);
                     const itemId = elPanel.Data().itemId;
                     const category = InventoryAPI.GetLoadoutCategory(itemId);
-                    if (ItemInfo.IsWeapon(itemId) && category !== 'melee') {
+                    if (ItemInfo.IsWeapon(itemId)) {
                         SetItemCameraByWeaponType(itemId, elPanel, true);
                     }
                     else {

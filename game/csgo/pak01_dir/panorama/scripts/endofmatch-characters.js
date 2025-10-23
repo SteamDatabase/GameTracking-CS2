@@ -223,7 +223,7 @@ var EOM_Characters;
                     if (glovesItem) {
                         sGlovesItemId = glovesItem['itemid'];
                     }
-                    let weaponItem = oPlayer['items'].filter(oItem => ItemInfo.IsWeapon(oItem['itemid']))[0];
+                    let weaponItem = oPlayer['items'].filter(oItem => ItemInfo.IsWeapon(oItem['itemid']) || ItemInfo.IsMelee(oItem['itemid']))[0];
                     if (weaponItem) {
                         sWeaponItemId = weaponItem['itemid'];
                     }

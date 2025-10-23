@@ -141,7 +141,7 @@ var InventoryInspect;
         });
     }
     function _UpdateCharacterModelPanel(itemId) {
-        if (!ItemInfo.IsWeapon(itemId)) {
+        if (!(ItemInfo.IsWeapon(itemId) || ItemInfo.IsMelee(itemId))) {
             return;
         }
         let elActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectActionBar');

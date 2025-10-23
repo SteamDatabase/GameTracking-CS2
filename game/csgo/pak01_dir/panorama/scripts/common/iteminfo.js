@@ -92,8 +92,8 @@ var ItemInfo;
         const slots = JSON.parse(slotStrings);
         for (let slot of slots) {
             const weaponItemId = LoadoutAPI.GetItemID(teamName, slot);
-            const bIsWeapon = ItemInfo.IsWeapon(weaponItemId);
-            if (bIsWeapon) {
+            const bIsLoadoutWeapon = ItemInfo.IsWeapon(weaponItemId) || ItemInfo.IsMelee(weaponItemId);
+            if (bIsLoadoutWeapon) {
                 list.push([slot, weaponItemId]);
             }
         }
@@ -151,7 +151,7 @@ var ItemInfo;
                 const nRandomSlotIndex = Math.floor(Math.random() * slots.length);
                 myResult.loadoutSlot = slots.splice(nRandomSlotIndex, 1)[0];
                 myResult.weaponItemId = LoadoutAPI.GetItemID(strTeam, myResult.loadoutSlot);
-                if (ItemInfo.IsWeapon(myResult.weaponItemId))
+                if (ItemInfo.IsWeapon(myResult.weaponItemId) || ItemInfo.IsMelee(myResult.weaponItemId))
                     break;
             }
             return myResult;
@@ -161,7 +161,7 @@ var ItemInfo;
         if (!JSON.parse(LoadoutAPI.GetLoadoutSlotNames(false)).includes(oSettings.loadoutSlot))
             oSettings.loadoutSlot = '';
         oSettings.weaponItemId = LoadoutAPI.GetItemID(oSettings.team, oSettings.loadoutSlot);
-        if (!ItemInfo.IsWeapon(oSettings.weaponItemId)) {
+        if (!(ItemInfo.IsWeapon(oSettings.weaponItemId) || ItemInfo.IsMelee(oSettings.weaponItemId))) {
             const randomResult = RollRandomLoadoutSlotAndWeapon(oSettings.team);
             oSettings.loadoutSlot = randomResult.loadoutSlot;
             oSettings.weaponItemId = randomResult.weaponItemId;
@@ -232,6 +232,10 @@ var ItemInfo;
         return (itemSchemaDef["craft_class"] === "weapon");
     }
     ItemInfo.IsWeapon = IsWeapon;
+    function IsMelee(id) {
+        return InventoryAPI.GetLoadoutCategory(id) === "melee";
+    }
+    ItemInfo.IsMelee = IsMelee;
     function IsCase(id) {
         return ItemInfo.ItemHasCapability(id, 'decodable') && InventoryAPI.GetAssociatedItemsCount(id) > 0;
     }

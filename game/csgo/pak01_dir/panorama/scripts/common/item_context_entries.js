@@ -1101,7 +1101,7 @@ var ItemContextEntries;
     }
     function CanAddToFavorites(id, team) {
         const [_, slot] = _GetLoadoutSlot(id, team);
-        if (!ItemInfo.IsWeapon(id) && slot != 'customplayer' && slot != 'clothing_hands' && slot != 'musickit')
+        if (!(ItemInfo.IsWeapon(id) || ItemInfo.IsMelee(id)) && slot != 'customplayer' && slot != 'clothing_hands' && slot != 'musickit')
             return false;
         if (slot == 'musickit' && team != 'noteam')
             return false;

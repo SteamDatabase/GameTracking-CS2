@@ -211,7 +211,7 @@ var InspectActionBar;
         if (m_showCharSelect === false) {
             return;
         }
-        const hasAnims = ItemInfo.IsCharacter(id) || ItemInfo.IsWeapon(id);
+        const hasAnims = ItemInfo.IsCharacter(id) || ItemInfo.IsWeapon(id) || ItemInfo.IsMelee(id);
         if (hasAnims &&
             !ItemInfo.IsEquippalbleButNotAWeapon(id) &&
             !ItemInfo.IsSticker(id) &&
@@ -220,7 +220,7 @@ var InspectActionBar;
             !ItemInfo.ItemDefinitionNameSubstrMatch(id, "tournament_pass_")) {
             elPanel.FindChildInLayoutFile('InspectCharBtn').SetHasClass('hidden', !hasAnims);
             elPanel.FindChildInLayoutFile('InspectWeaponBtn').SetHasClass('hidden', !hasAnims);
-            elPanel.FindChildInLayoutFile('LookatWeaponBtn').SetHasClass('hidden', !ItemInfo.IsWeapon(id));
+            elPanel.FindChildInLayoutFile('LookatWeaponBtn').SetHasClass('hidden', !(ItemInfo.IsWeapon(id) || ItemInfo.IsMelee(id)));
             const list = CharacterAnims.GetValidCharacterModels(true).filter((entry) => {
                 return (ItemInfo.IsItemCt(id) && (entry.team === 'ct' || entry.team === 'any')) ||
                     (ItemInfo.IsItemT(id) && (entry.team === 't' || entry.team === 'any')) ||

@@ -21,7 +21,7 @@ var CapabilityNameable;
         let idList = strMsg.split(',');
         m_toolId = idList[0];
         m_itemIdRealOwned = idList[1];
-        if (ItemInfo.IsWeapon(m_itemIdRealOwned)) {
+        if (ItemInfo.IsWeapon(m_itemIdRealOwned) || ItemInfo.IsMelee(m_itemIdRealOwned)) {
             m_itemIdCreatedTemp = InventoryAPI.CreateTempCombinedItemWithTool(m_itemIdRealOwned, _GetNameTagFauxItemID());
         }
         else {
