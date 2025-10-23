@@ -7,12 +7,14 @@ var SessionUtil;
     }
     SessionUtil.DoesGameModeHavePrimeQueue = DoesGameModeHavePrimeQueue;
     function GetMaxLobbySlotsForGameMode(gameMode) {
-        let numLobbySlots = 5;
-        if (gameMode == "scrimcomp2v2" ||
-            gameMode == "cooperative" ||
-            gameMode == "coopmission")
-            numLobbySlots = 2;
-        return numLobbySlots;
+        switch (gameMode) {
+            case "scrimcomp2v2":
+                return 2;
+            case "retakes":
+                return 4;
+            default:
+                return 5;
+        }
     }
     SessionUtil.GetMaxLobbySlotsForGameMode = GetMaxLobbySlotsForGameMode;
     function AreLobbyPlayersPrime() {
