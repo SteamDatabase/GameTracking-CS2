@@ -560,6 +560,7 @@
 	{
         "cl_joystick_enabled" "0"
         "panorama_joystick_enabled" "0"
+        "demo_max_consecutive_skip_packets" "2500"
 
 		"spec_replay_enable"
 		{

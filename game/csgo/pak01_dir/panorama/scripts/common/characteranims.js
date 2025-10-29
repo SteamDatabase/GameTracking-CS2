@@ -77,10 +77,20 @@ var CharacterAnims;
     function GetValidCharacterModels(bUniquePerTeamModelsOnly) {
         InventoryAPI.SetInventorySortAndFilters('inv_sort_rarity', false, 'customplayer', '', '');
         const count = InventoryAPI.GetInventoryCount();
-        const itemsList = [];
-        const uniqueTracker = {};
+        let aAllItems = [];
         for (let i = 0; i < count; i++) {
             const itemId = InventoryAPI.GetInventoryItemIDByIndex(i);
+            aAllItems.push(itemId);
+        }
+        let loadoutItemId = LoadoutAPI.GetItemID('ct', 'customplayer');
+        aAllItems.unshift(loadoutItemId);
+        loadoutItemId = LoadoutAPI.GetItemID('t', 'customplayer');
+        aAllItems.unshift(loadoutItemId);
+        const itemsList = [];
+        const uniqueTracker = {};
+        const allItemsCount = aAllItems.length;
+        for (let i = 0; i < allItemsCount; i++) {
+            const itemId = aAllItems[i];
             const modelplayer = ItemInfo.GetModelPlayer(itemId);
             if (!modelplayer)
                 continue;
