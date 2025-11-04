@@ -17,6 +17,7 @@
 // MNetworkVarNames = "float m_flOffsetTickStashedSpeed"
 // MNetworkVarNames = "float m_flStamina"
 // MNetworkVarNames = "bool m_bWasSurfing"
+// MNetworkVarNames = "bool m_bJumpApexPending"
 class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 {
 	// MNetworkEnable
@@ -84,4 +85,6 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	// MNetworkEnable
 	bool m_bWasSurfing;
 	Vector m_vecInputRotated;
+	// MNetworkEnable
+	bool m_bJumpApexPending;
 };
