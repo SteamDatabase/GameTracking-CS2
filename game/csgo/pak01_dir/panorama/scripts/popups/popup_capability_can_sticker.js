@@ -45,6 +45,13 @@ var CapabilityCanApplyAction;
                     return;
                 }
             }
+            if ((m_worktype === 'can_wrap_sticker') && m_toolId) {
+                m_itemIdCreatedTemp = itemId = InventoryAPI.CreateTempCombinedItemWithTool(m_itemId, m_toolId);
+                if (!itemId) {
+                    ClosePopUp();
+                    return;
+                }
+            }
         }
         let oSettings = {
             headerPanel: m_cP.FindChildInLayoutFile('PopUpCanApplyHeader'),
@@ -52,12 +59,14 @@ var CapabilityCanApplyAction;
             asyncbarPanel: m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar'),
             itemId: itemId,
             toolId: toolId,
-            isRemove: m_isRemove,
+            isRemove: (m_worktype === 'can_wrap_sticker') ? true
+                : m_isRemove,
             worktype: m_worktype,
-            type: (m_worktype.indexOf('sticker') !== -1) ? 'sticker'
-                : (m_worktype.indexOf('patch') !== -1) ? 'patch'
-                    : (m_worktype.indexOf('keychain') !== -1) ? 'keychain'
-                        : '',
+            type: (m_worktype === 'can_wrap_sticker') ? 'keychain'
+                : (m_worktype.indexOf('sticker') !== -1) ? 'sticker'
+                    : (m_worktype.indexOf('patch') !== -1) ? 'patch'
+                        : (m_worktype.indexOf('keychain') !== -1) ? 'keychain'
+                            : '',
             isWorkshopPreview: m_isWorkshopPreview,
             funcOnConfirm: _OnConfirmPressed,
             funcOnNext: _OnNextPressed,
@@ -188,25 +197,38 @@ var CapabilityCanApplyAction;
     function _SetUpAsyncActionBar(toolId, itemId) {
         m_cP.SetAttributeString('toolid', toolId);
         const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
-        InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback, _AsyncActionPerformedPositiveBind, (m_worktype === 'remove_sticker') ? _AsyncActionPerformedNegativeBind : undefined);
+        InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback, _AsyncActionPerformedPositiveBind, (m_worktype === 'remove_sticker'
+            || (m_worktype === 'can_wrap_sticker' && !toolId)) ? _AsyncActionPerformedNegativeBind : undefined);
+        let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
+        let bConfigurePurchaseBar = false;
+        let mustPurchaseItemID = '';
+        if (m_worktype === 'can_wrap_sticker' && InventoryAPI.IsFauxItemID(m_itemId)) {
+            bConfigurePurchaseBar = true;
+            mustPurchaseItemID = m_itemId;
+        }
         if (m_worktype === 'remove_keychain' || m_worktype === 'can_keychain') {
-            let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
-            let mustPurchaseItemID = '';
+            bConfigurePurchaseBar = true;
             if (m_worktype === 'remove_keychain') {
                 let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
                 let defidxForPurchase = (numKeychainRemoveToolChargesRemaining > 0) ? 0 : InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_szRemoveKeychainToolChargesForPurchase);
                 if (defidxForPurchase) {
                     mustPurchaseItemID = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxForPurchase, 0);
-                    $.GetContextPanel().SetAttributeString('purchaseItemId', mustPurchaseItemID);
                 }
+            }
+        }
+        if (elPurchase && bConfigurePurchaseBar) {
+            if (mustPurchaseItemID) {
+                $.GetContextPanel().SetAttributeString('purchaseItemId', mustPurchaseItemID);
+                m_cP.SetAttributeString('toolid', '');
             }
             InspectPurchaseBar.Init(elPurchase, mustPurchaseItemID, _GetSettingCallback);
             if (mustPurchaseItemID) {
+                m_cP.SetAttributeString('toolid', toolId);
                 elAsyncActionBarPanel.AddClass('hidden');
             }
         }
     }
-    function _OnStorePurchaseToolChargesAcquired(ItemId) {
+    function _OnStorePurchaseCompleted(ItemId) {
         if (InventoryAPI.DoesItemMatchDefinitionByName(ItemId, m_szRemoveKeychainToolChargesForPurchase)) {
             $.DispatchEvent('HideStoreStatusPanel');
             let bAutoAcknowledge = true;
@@ -214,6 +236,17 @@ var CapabilityCanApplyAction;
             ClosePopUp();
             $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ItemId +
                 '&' + 'asyncworktype=useitem');
+        }
+        if (m_worktype === 'can_wrap_sticker' &&
+            InventoryAPI.IsFauxItemID(m_itemId) &&
+            InventoryAPI.DoesItemMatchDefinitionByName(ItemId, "sticker_display_case")) {
+            $.DispatchEvent('HideStoreStatusPanel');
+            let bAutoAcknowledge = true;
+            AcknowledgeItems.GetItemsByType(["sticker_display_case"], bAutoAcknowledge);
+            ClosePopUp();
+            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + m_toolId + ',' + ItemId
+                + '&' +
+                'asyncworktype=can_wrap_sticker');
         }
     }
     ;
@@ -237,10 +270,19 @@ var CapabilityCanApplyAction;
             CapabilityCanSticker.OnScratchSticker(itemid, slot, !bPositiveAction);
         }
         else if (m_worktype === 'remove_patch') {
-            CapabilityCanPatch.OnRemovePatch(itemid, slot);
+            InspectAsyncActionBar.ResetTimeouthandle();
+            InventoryAPI.WearItemSticker(itemid, slot, 0);
+            InspectAsyncActionBar.SetCallbackTimeout();
         }
         else if (m_worktype === 'remove_keychain') {
-            CapabilityCanKeychain.OnRemoveKeychain(itemid, slot);
+            InspectAsyncActionBar.ResetTimeouthandle();
+            InventoryAPI.RemoveKeychain(itemid, 0);
+            InspectAsyncActionBar.SetCallbackTimeout();
+        }
+        else if (m_worktype === 'can_wrap_sticker' && !toolid) {
+            InspectAsyncActionBar.ResetTimeouthandle();
+            InventoryAPI.RemoveKeychain(itemid, 0);
+            InspectAsyncActionBar.SetCallbackTimeout();
         }
         else {
             InventoryAPI.SetStickerToolSlot(itemid, slot);
@@ -262,7 +304,7 @@ var CapabilityCanApplyAction;
         let _m_PanelRegisteredForEventsStickerApply;
         if (!_m_PanelRegisteredForEventsStickerApply) {
             _m_PanelRegisteredForEventsStickerApply = $.RegisterForUnhandledEvent('CSGOShowMainMenu', Init);
-            $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _OnStorePurchaseToolChargesAcquired);
+            $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _OnStorePurchaseCompleted);
             $.RegisterForUnhandledEvent("CSGOInspectBackgroundMapChanged", _UpdateInspectMap);
             $.RegisterForUnhandledEvent("CS2StickerPreviewMoved", _StickerPlacementUpdated);
             $.RegisterForUnhandledEvent("CS2StickerScrapeClickedStickerIndex", _OnSelectForRemove);
@@ -311,16 +353,9 @@ var CapabilityCanSticker;
         if (bRemoveCompletely || InventoryAPI.IsItemStickerAtExtremeWear(itemId, slotIndex)) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
             m_isFinalScratch = true;
-            UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Sticker_Remove'), $.Localize(bRemoveCompletely ? '#SFUI_Sticker_RemoveImmediate_Desc' : '#SFUI_Sticker_Remove_Desc'), '', $.Localize('#SFUI_Sticker_Remove'), () => {
-                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
-                InspectAsyncActionBar.ResetTimeouthandle();
-                InventoryAPI.WearItemSticker(itemId, slotIndex, 111);
-                InspectAsyncActionBar.SetCallbackTimeout();
-            }, $.Localize('#UI_Cancel'), () => {
-                m_isFinalScratch = false;
-                InspectAsyncActionBar.ResetTimeouthandle();
-                InspectAsyncActionBar.OnCloseRemove();
-            });
+            InspectAsyncActionBar.ResetTimeouthandle();
+            InventoryAPI.WearItemSticker(itemId, slotIndex, 111);
+            InspectAsyncActionBar.SetCallbackTimeout();
         }
         else {
             let valTargetWear = 0;

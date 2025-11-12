@@ -135,12 +135,13 @@ var InspectActionBar;
             return;
         }
         const isFanToken = ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_');
+        const isStickerDisplaySleeve = InventoryAPI.DoesItemMatchDefinitionByName(id, 'sticker_display_case');
         const isSticker = ItemInfo.IsSticker(id);
         const isPatch = ItemInfo.IsPatch(id);
         const isKeychain = ItemInfo.IsKeychain(id);
         const isSpraySealed = ItemInfo.IsSpraySealed(id);
         const isEquipped = InventoryAPI.IsEquipped(id, 't') || InventoryAPI.IsEquipped(id, 'ct') || InventoryAPI.IsEquipped(id, "noteam");
-        let bCloseInspectOnSingleAction = (isSticker || isSpraySealed || isFanToken || isPatch || isKeychain);
+        let bCloseInspectOnSingleAction = (isSticker || isSpraySealed || isFanToken || isPatch || isKeychain || isStickerDisplaySleeve);
         if (ItemInfo.IsEquippalbleButNotAWeapon(id) ||
             bCloseInspectOnSingleAction ||
             isEquipped) {

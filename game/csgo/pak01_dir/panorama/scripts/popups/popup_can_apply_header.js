@@ -20,16 +20,25 @@ var CanApplyHeader;
             return;
         }
         let title = oTitleSettings.isRemove ? '#SFUI_InvContextMenu_can_stick_Wear_full_' + oTitleSettings.type : '#SFUI_InvContextMenu_stick_use_' + oTitleSettings.type;
+        if (oTitleSettings.worktype === 'can_wrap_sticker')
+            title = oTitleSettings.toolId ? '#CSGO_Tool_WrapStickerInDisplayCase_Title' : '#CSGO_Tool_UnWrapStickerInDisplayCase_Title';
         m_cP.SetDialogVariable("CanApplyTitle", $.Localize(title, m_cP));
     }
     function _SetUpDesc(oTitleSettings) {
         let currentName = InventoryAPI.GetItemNameUncustomized(oTitleSettings.itemId);
         m_cP.SetDialogVariable('tool_target_name', currentName);
         let desc = oTitleSettings.isRemove ? '#popup_can_stick_scrape_full_' + oTitleSettings.type : '#popup_can_stick_desc';
+        if (oTitleSettings.worktype === 'can_wrap_sticker')
+            desc = '';
         m_cP.SetDialogVariable("CanApplyDesc", $.Localize(desc, m_cP));
     }
     function _SetUpWarning(oTitleSettings) {
         let elLabel = m_cP.FindChildInLayoutFile('id-can-apply-warning');
+        if (oTitleSettings.worktype === 'can_wrap_sticker') {
+            elLabel.visible = true;
+            elLabel.FindChildInLayoutFile('id-can-apply-warning-text').SetLocString(oTitleSettings.toolId ? '#CSGO_Tool_WrapStickerInDisplayCase_Desc' : '#CSGO_Tool_UnWrapStickerInDisplayCase_Desc');
+            return;
+        }
         if (oTitleSettings.isRemove && oTitleSettings.worktype == 'remove_keychain') {
             elLabel.visible = true;
             let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');

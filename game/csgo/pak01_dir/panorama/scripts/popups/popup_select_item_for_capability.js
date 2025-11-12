@@ -145,6 +145,9 @@ var SelectItemForCapability;
         if (SelectItemForCapability.oCapabilityInfo.capability === 'can_sticker') {
             _CapabilityCanStickerAction(SortIdsIntoToolAndItemID(itemid, SelectItemForCapability.oCapabilityInfo.initialItemId), SelectItemForCapability.oCapabilityInfo.bWorkshopItemPreview);
         }
+        else if (SelectItemForCapability.oCapabilityInfo.capability === 'can_wrap_sticker') {
+            _CapabilityWrapStickerAsKeychainAction(SortIdsIntoToolAndItemID(itemid, SelectItemForCapability.oCapabilityInfo.initialItemId, ItemInfo.IsSticker));
+        }
         else if (SelectItemForCapability.oCapabilityInfo.capability === 'nameable') {
             _CapabilityNameableAction(SortIdsIntoToolAndItemID(itemid, SelectItemForCapability.oCapabilityInfo.initialItemId));
         }
@@ -178,8 +181,8 @@ var SelectItemForCapability;
         }
         ClosePopUp();
     }
-    function SortIdsIntoToolAndItemID(id, initalId) {
-        let bIdIsTool = InventoryAPI.IsTool(id);
+    function SortIdsIntoToolAndItemID(id, initalId, fnWhatIsTool) {
+        let bIdIsTool = fnWhatIsTool ? fnWhatIsTool(id) : InventoryAPI.IsTool(id);
         let toolId = bIdIsTool ? id : initalId;
         let itemID = bIdIsTool ? initalId : id;
         return {
@@ -205,6 +208,11 @@ var SelectItemForCapability;
         UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=can_keychain' +
             '&' + 'workshopPreview=' + workshopPreview);
+    }
+    ;
+    function _CapabilityWrapStickerAsKeychainAction(idsToUse) {
+        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
+            '&' + 'asyncworktype=can_wrap_sticker');
     }
     ;
     function _CapabilityRemoveKeychainAction(idsToUse) {

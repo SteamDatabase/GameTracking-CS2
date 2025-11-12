@@ -30,7 +30,8 @@ var InventoryInspect;
     InventoryInspect.Init = Init;
     function _UpdatePanelData(itemId) {
         let elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectModelOrImage');
-        InspectModelImage.Init(elItemModelImagePanel, itemId, _GetSettingCallback);
+        const strInspectAttributes = $.GetContextPanel().GetAttributeString('inspect-attributes', '');
+        InspectModelImage.Init(elItemModelImagePanel, itemId, _GetSettingCallback, strInspectAttributes);
         let elActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectActionBar');
         InspectActionBar.Init(elActionBarPanel, itemId, _GetSettingCallback, _GetSettingCallbackInt, elItemModelImagePanel);
         let elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');

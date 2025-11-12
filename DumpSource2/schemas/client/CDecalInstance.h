@@ -15,6 +15,7 @@ class CDecalInstance
 	float32 m_flHeight;
 	float32 m_flDepth;
 	float32 m_flAnimationScale;
+	float32 m_flAnimationStartTime;
 	GameTime_t m_flPlaceTime;
 	float32 m_flFadeStartTime;
 	float32 m_flFadeDuration;

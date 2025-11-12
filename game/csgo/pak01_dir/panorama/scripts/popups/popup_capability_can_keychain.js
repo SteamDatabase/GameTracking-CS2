@@ -17,15 +17,4 @@ var CapabilityCanKeychain;
         m_firstCameraAnim = false;
     }
     CapabilityCanKeychain.ResetPos = ResetPos;
-    function OnRemoveKeychain(itemId, slotIndex) {
-        UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Keychain_Remove'), $.Localize('#SFUI_Keychain_Remove_Desc'), '', $.Localize('#SFUI_Keychain_Remove'), () => {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InventoryAPI.RemoveKeychain(itemId, 0);
-            InspectAsyncActionBar.SetCallbackTimeout();
-        }, $.Localize('#UI_Cancel'), () => {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InspectAsyncActionBar.OnCloseRemove();
-        });
-    }
-    CapabilityCanKeychain.OnRemoveKeychain = OnRemoveKeychain;
 })(CapabilityCanKeychain || (CapabilityCanKeychain = {}));

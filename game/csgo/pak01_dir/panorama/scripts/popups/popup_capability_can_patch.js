@@ -28,17 +28,6 @@ var CapabilityCanPatch;
     }
     CapabilityCanPatch.PreviewPatchOnChar = PreviewPatchOnChar;
     ;
-    function OnRemovePatch(itemId, slotIndex) {
-        UiToolkitAPI.ShowGenericPopupTwoOptions($.Localize('#SFUI_Patch_Remove'), $.Localize('#SFUI_Patch_Remove_Desc'), '', $.Localize('#SFUI_Patch_Remove'), () => {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InventoryAPI.WearItemSticker(itemId, slotIndex, 0);
-            InspectAsyncActionBar.SetCallbackTimeout();
-        }, $.Localize('#UI_Cancel'), () => {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InspectAsyncActionBar.OnCloseRemove();
-        });
-    }
-    CapabilityCanPatch.OnRemovePatch = OnRemovePatch;
     function CameraAnim(activeIndex) {
         if ((m_prevCameraSlot === activeIndex || activeIndex == -1) && m_firstCameraAnim)
             return;

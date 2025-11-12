@@ -12,8 +12,8 @@ var PopupTournamentTeamsList;
         graffitis.push(g_ActiveTournamentInfo.stickerid_graffiti);
         let elBackground = $.GetContextPanel().FindChild('id-popup-tournament-teams-bg');
         elBackground.style.backgroundImage = 'url( "file://{images}/tournaments/backgrounds/pickem_bg_' + $.GetContextPanel().GetAttributeString('eventid', '') + '.png");';
-        elBackground.style.backgroundSize = '140% 100%;';
-        elBackground.style.backgroundPosition = ' 70% 50%;';
+        elBackground.style.backgroundSize = 'cover';
+        elBackground.style.backgroundPosition = ' 50% 50%;';
         $.GetContextPanel().SetHasClass('major-' + $.GetContextPanel().GetAttributeString('eventid', ''), true);
         graffitis.forEach(stickerid => {
             let itemid = ItemInfo.GetFauxItemIdForGraffiti(stickerid);

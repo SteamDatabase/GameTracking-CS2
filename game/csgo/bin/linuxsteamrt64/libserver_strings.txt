@@ -1307,6 +1307,7 @@ $light_emissive
 %s\t%d\t\t(total: %d)\tAddAccountFromTeam: REASON: %s\n
 %s_%s_%i-%i-%i_%02uh%02um%02us
 %s_%s_physics_proxy
+%s_1355_37
 %s__%2d_%3d_%2d_%2d_%2d.txt
 %s_crouch
 %s_dir.vpk
@@ -2355,6 +2356,7 @@ $light_emissive
 13CNetMessagePBILi423E17CMsgTEPhysicsPropL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi426E11CMsgTESmokeL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNetMessagePBILi452E17CMsgTEFireBulletsL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
+13CNetMessagePBILi453E19CMsgPlayerBulletHitL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE
 13CNmSampleTask
 13CNmSoundEvent
 13COrnamentProp
@@ -2410,7 +2412,6 @@ $light_emissive
 14CBreakableProp
 14CBtNodeSubtree
 14CBtSensorShape
-14CCSGameJournal
 14CCSPlayerState
 14CCSUsrMsg_Fade
 14CCSUsrMsg_SSUI
@@ -3317,6 +3318,7 @@ $light_emissive
 19CMsgAdjustEquipSlot
 19CMsgApplyEggEssence
 19CMsgPlaceDecalEvent
+19CMsgPlayerBulletHit
 19CMsgServerAvailable
 19CMsgSystemBroadcast
 19CMsgTEArmorRicochet
@@ -3342,7 +3344,6 @@ $light_emissive
 19CPulseCell_BaseLerp
 19CPulseCell_Timeline
 19CReadyForMatchIssue
-19CSGameJournalPage_t
 19CSOEconItemEquipped
 19CSoundControllerImp
 19CSoundEmitterSystem
@@ -3891,7 +3892,6 @@ $light_emissive
 24CGameSystemStaticFactoryI12CCSGameStatsS0_E
 24CGameSystemStaticFactoryI12CGlobalStateS0_E
 24CGameSystemStaticFactoryI12ChangeLoggerS0_E
-24CGameSystemStaticFactoryI14CCSGameJournalS0_E
 24CGameSystemStaticFactoryI14CGameJobSystemS0_E
 24CGameSystemStaticFactoryI14CGameTimescaleS0_E
 24CGameSystemStaticFactoryI15CCSAddonManagerS0_E
@@ -5830,7 +5830,6 @@ CCSEntitySpotting
 CCSFatDemoRecorder
 CCSGCServerSystem
 CCSGOSteamWorksGameStatsServer
-CCSGameJournal
 CCSGameModeRules *
 CCSGameStats
 CCSHLTVDirector
@@ -8677,6 +8676,7 @@ Getting out of NULL area...\n
 Gibbed %s(%s)\n
 GiveAmmo
 GiveNamedItem
+GiveNamedItem: interpreting '%s' as '%s'\n
 Given a "start" entity, this will return the next one so you can loop over all matching entities.
 Giving up attempts to make more random spawn points. Current count: %i.\n
 Giving up hunting.\n
@@ -10500,6 +10500,7 @@ N13CNetMessagePBILi422E12CMsgTESparksL13SignonGroup_t5EL19NetChannelBufType_t0EL
 N13CNetMessagePBILi423E17CMsgTEPhysicsPropL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi426E11CMsgTESmokeL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13CNetMessagePBILi452E17CMsgTEFireBulletsL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
+N13CNetMessagePBILi453E19CMsgPlayerBulletHitL13SignonGroup_t5EL19NetChannelBufType_t0ELb1EE16CProtobufBindingE
 N13V8HelpersImpl13V8WeakWrapperI15CCSScriptObjectEE
 N13V8HelpersImpl17V8WeakWrapperBaseE
 N13sky3dparams_t14NetworkVar_fogE
@@ -11581,6 +11582,7 @@ Player.Respawn
 Player.SonicDamage
 Player.Swim
 Player.Wade
+PlayerBulletHit_GameEvent_t
 PlayerClose
 PlayerDSP
 PlayerDamage.Bullet
@@ -14736,6 +14738,8 @@ action_subtype
 action_teleport
 action_trick
 action_turn
+action_ui_keychain
+action_ui_tumble
 action_use
 action_wait
 action_walk
@@ -15419,7 +15423,6 @@ campaign
 campaign_definitions
 canRemoveVertex: Out of memory 'edges' (%d).
 canSupportSet
-can_be_restored
 can_collect
 can_craft_count
 can_craft_mark
@@ -15434,6 +15437,7 @@ can_patch
 can_player_pickup_piece
 can_stattrack_swap
 can_sticker
+can_wrap_sticker
 canbuy
 cancel scripted sequence
 cannot create std::deque larger than max_size()
@@ -16033,7 +16037,6 @@ default_env_map
 default_game_mode
 default_game_type
 default_glove_arm_model
-default_gloves
 default_spec_env_map
 defaultcurvetype
 defaults
@@ -16162,6 +16165,7 @@ disablereceiveshadows
 disableshadows
 disallowed
 disconnect\n
+display case keychain id
 displaytext
 dissolvetype
 dist: %.2f/%.2f (%.5f/1.f)\nspeed: %.2f (%.2f->%.2f) \nstopping: %s \ndir: %s
@@ -17901,12 +17905,14 @@ keychain slot %d offset x
 keychain slot %d offset y
 keychain slot %d offset z
 keychain slot %d seed
+keychain slot %d sticker
 keychain slot 0 highlight
 keychain slot 0 id
 keychain slot 0 offset x
 keychain slot 0 offset y
 keychain slot 0 offset z
 keychain slot 0 seed
+keychain slot 0 sticker
 keychain_definitions
 keychain_material
 keychain_tool_charges
@@ -20742,6 +20748,7 @@ sticker slot %d rotation
 sticker slot %d scale
 sticker slot %d schema
 sticker slot %d wear
+sticker_display_case
 sticker_kits
 sticker_lists
 sticker_material
@@ -21723,6 +21730,7 @@ weapon%d
 weapon.C4.Impact
 weapon_
 weapon_%s
+weapon_action_speedscale
 weapon_ak47
 weapon_ak47.ventr
 weapon_ak47_server
@@ -21736,7 +21744,6 @@ weapon_aug_server
 weapon_awp
 weapon_awp.ventr
 weapon_awp_server
-weapon_base
 weapon_basecsgrenade
 weapon_bizon
 weapon_bizon.ventr

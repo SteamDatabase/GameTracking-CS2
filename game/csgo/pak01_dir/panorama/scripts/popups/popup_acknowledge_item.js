@@ -180,10 +180,21 @@ var AcknowledgeItems;
         for (let i = 0; i < itemCount; i++) {
             const itemId = InventoryAPI.GetUnacknowledgeItemByIndex(i);
             const pickUpType = InventoryAPI.GetItemPickupMethod(itemId);
+            let strCustomization = InventoryAPI.GetItemSessionPropertyValue(itemId, 'item_customization');
+            if (!strCustomization || !(strCustomization.startsWith('crate_')
+                || strCustomization.startsWith('nametag_')
+                || strCustomization.startsWith('sticker_')
+                || strCustomization.startsWith('keychain_')
+                || strCustomization.startsWith('patch_')
+                || strCustomization.startsWith('stattrack_')
+                || strCustomization.startsWith('quest_')
+                || strCustomization.startsWith('xpshop'))) {
+                strCustomization = 'acknowledge';
+            }
             if (ItemstoAcknowlegeRightAway(itemId))
                 InventoryAPI.AcknowledgeNewItembyItemID(itemId);
             else
-                newItems.unshift({ type: 'acknowledge', id: itemId, pickuptype: pickUpType });
+                newItems.unshift({ type: strCustomization, id: itemId, pickuptype: pickUpType });
         }
         const getUpdateItem = GetUpdatedItem();
         if (getUpdateItem && newItems.filter(item => item.id === getUpdateItem.id).length < 1) {
@@ -199,8 +210,7 @@ var AcknowledgeItems;
         const aItems = GetItems();
         const alist = aItems.filter(oItem => afilters.includes(InventoryAPI.GetItemDefinitionName(oItem.id)));
         if (bShouldAcknowledgeItems) {
-            AcknowledgeAllItems.SetItemsToSaveAsNew(alist);
-            AcknowledgeAllItems.AcknowledgeItems();
+            AcknowledgeAllItems.AcknowledgeItems(alist);
         }
         return alist.map(item => item.id);
     }
@@ -241,15 +251,17 @@ var AcknowledgeItems;
             itemsToSave = items;
         }
         AcknowledgeAllItems.SetItemsToSaveAsNew = SetItemsToSaveAsNew;
-        function AcknowledgeItems() {
-            for (let item of itemsToSave) {
+        function AcknowledgeItems(alist) {
+            const acklist = alist ? alist : itemsToSave;
+            for (let item of acklist) {
                 InventoryAPI.SetItemSessionPropertyValue(item.id, 'item_pickup_method', InventoryAPI.GetItemPickupMethod(item.id));
                 if (item.type === 'acknowledge') {
                     InventoryAPI.SetItemSessionPropertyValue(item.id, 'recent', '1');
                     InventoryAPI.AcknowledgeNewItembyItemID(item.id);
                 }
                 else {
-                    InventoryAPI.SetItemSessionPropertyValue(item.id, 'updated', '1');
+                    const bWasNew = InventoryAPI.AcknowledgeNewItembyItemID(item.id);
+                    InventoryAPI.SetItemSessionPropertyValue(item.id, bWasNew ? 'recent' : 'updated', '1');
                     $.DispatchEvent('RefreshActiveInventoryList');
                 }
             }

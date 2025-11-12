@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
+/// <reference path="../common/hold_button.ts" />
 /// <reference path="../common/iteminfo.ts" />
 /// <reference path="../inspect.ts" />
 /// <reference path="popup_can_apply_pick_slot.ts" />
@@ -103,6 +104,11 @@ var InspectAsyncActionBar;
             let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
             funcCallbackOnAction(m_itemid, m_toolid, selectedSlot);
         }
+        else if (m_worktype === 'can_wrap_sticker') {
+            let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
+            $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applyConfirm', 'MOUSE');
+            funcCallbackOnAction(m_itemid, m_toolid, selectedSlot);
+        }
         else if (m_worktype === 'can_sticker' || m_worktype === 'can_patch' || m_worktype === 'can_keychain') {
             $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applyConfirm', 'MOUSE');
             let selectedSlot = parseInt(funcGetSettingCallback('selectedItemToApplySlot', ''));
@@ -130,6 +136,7 @@ var InspectAsyncActionBar;
     function _SetUpButtonStates(elPanel, funcGetSettingCallback, funcCallbackOnAction, funcCallbackOnActionNegative) {
         let elOK = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
         let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
+        let sOkButtonText = '#popup_' + m_worktype + '_button';
         if (m_isWorkshopPreview) {
             elOK.AddClass('hidden');
             if (elNegative)
@@ -138,6 +145,82 @@ var InspectAsyncActionBar;
         function _SetPanelEventOnAccept() {
             elOK.SetPanelEvent('onactivate', () => _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnAction));
         }
+        if (m_worktype === '') {
+            return;
+        }
+        if (m_worktype === 'can_wrap_sticker') {
+            elOK.visible = false;
+            elNegative.visible = false;
+            let btnId = m_toolid ? 'AsyncItemWorkAcceptConfirmHold' : 'AsyncItemWorkAcceptNegativeHold';
+            let btnHoldAction = elPanel.FindChildInLayoutFile(btnId);
+            let locString = !m_toolid ? '#popup_' + m_worktype + '_button_negative' : '#popup_' + m_worktype + '_button';
+            btnHoldAction.RemoveClass('AsyncItemWorkAcceptNegativeHidden');
+            let btnSettings = {
+                btn: btnHoldAction,
+                tooltip: !m_toolid ? '#popup_can_wrap_sticker_button_negative_tooltip' : '#popup_can_wrap_sticker_button_tooltip',
+                locString: locString,
+                loopingSound: 'UI.Laptop.ButtonFillLoop',
+                timerCompleteAction: () => {
+                    _OnAccept(elPanel, funcGetSettingCallback, !m_toolid ? funcCallbackOnActionNegative : funcCallbackOnAction);
+                    btnHoldAction.enabled = false;
+                }
+            };
+            HoldButton.SetupButton(btnSettings);
+            return;
+        }
+        if (m_worktype === 'remove_keychain') {
+            elOK.visible = false;
+            elNegative.visible = false;
+            let btnHoldAction = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
+            btnHoldAction.RemoveClass('AsyncItemWorkAcceptNegativeHidden');
+            let btnSettings = {
+                btn: btnHoldAction,
+                tooltip: '#SFUI_Keychain_Remove_Tooltip',
+                locString: '#popup_' + m_worktype + '_button',
+                loopingSound: 'UI.Laptop.ButtonFillLoop',
+                timerCompleteAction: () => {
+                    _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnAction);
+                    btnHoldAction.enabled = false;
+                }
+            };
+            HoldButton.SetupButton(btnSettings);
+            return;
+        }
+        if (m_worktype === 'remove_patch') {
+            elOK.visible = false;
+            elNegative.visible = false;
+            let btnHoldAction = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
+            btnHoldAction.RemoveClass('AsyncItemWorkAcceptNegativeHidden');
+            let btnSettings = {
+                btn: btnHoldAction,
+                tooltip: '#SFUI_Patch_Remove_Desc_Tooltip',
+                locString: '#popup_' + m_worktype + '_button',
+                loopingSound: 'UI.Laptop.ButtonFillLoop',
+                timerCompleteAction: () => {
+                    _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnAction);
+                    btnHoldAction.enabled = false;
+                }
+            };
+            HoldButton.SetupButton(btnSettings);
+            return;
+        }
+        if (m_worktype === 'remove_sticker') {
+            elNegative.visible = false;
+            let btnHoldAction = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
+            btnHoldAction.RemoveClass('AsyncItemWorkAcceptNegativeHidden');
+            let btnSettings = {
+                btn: btnHoldAction,
+                tooltip: '#SFUI_Sticker_RemoveImmediate_Tooltip',
+                locString: '#popup_' + m_worktype + '_button_negative',
+                loopingSound: 'UI.Laptop.ButtonFillLoop',
+                timerCompleteAction: () => {
+                    _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnActionNegative);
+                    btnHoldAction.enabled = false;
+                }
+            };
+            HoldButton.SetupButton(btnSettings);
+        }
+        let itemDefName = InventoryAPI.GetItemDefinitionName(m_itemid);
         if (m_worktype === 'decodeable') {
             let sRestriction = InventoryAPI.GetDecodeableRestriction(m_itemid);
             let elDescLabel = elPanel.FindChildInLayoutFile('AsyncItemWorkDesc');
@@ -169,21 +252,17 @@ var InspectAsyncActionBar;
                 elDescImage.visible = false;
                 return;
             }
-        }
-        let sOkButtonText = '#popup_' + m_worktype + '_button';
-        if (m_worktype === 'can_sticker') {
-            let listStickers = ItemInfo.GetitemStickerList(m_itemid);
-            elOK.SetDialogVariableInt('sticker_count', listStickers.length + 1);
-            elOK.SetDialogVariableInt('max_stickers', 5);
-        }
-        let itemDefName = InventoryAPI.GetItemDefinitionName(m_itemid);
-        if (m_worktype === 'decodeable') {
             if (itemDefName && itemDefName.indexOf("spray") != -1)
                 sOkButtonText = sOkButtonText + "_graffiti";
             else if (itemDefName && itemDefName.indexOf("tournament_pass_") != -1)
                 sOkButtonText = sOkButtonText + "_fantoken";
             else if (InventoryAPI.GetItemAttributeValue(m_itemid, '{uint32}volatile container'))
                 sOkButtonText = sOkButtonText + "_terminal";
+        }
+        if (m_worktype === 'can_sticker') {
+            let listStickers = ItemInfo.GetitemStickerList(m_itemid);
+            elOK.SetDialogVariableInt('sticker_count', listStickers.length + 1);
+            elOK.SetDialogVariableInt('max_stickers', 5);
         }
         if (m_worktype === 'nameable' && itemDefName === 'casket') {
             sOkButtonText = '#popup_newcasket_button';
@@ -201,11 +280,6 @@ var InspectAsyncActionBar;
         elOK.text = sOkButtonText;
         elOK.AddClass(m_okButtonClass);
         _SetPanelEventOnAccept();
-        if (funcCallbackOnActionNegative && elNegative) {
-            elNegative.SetPanelEvent('onactivate', () => _OnAccept(elPanel, funcGetSettingCallback, funcCallbackOnActionNegative));
-            elNegative.text = '#popup_' + m_worktype + '_button_negative';
-            elNegative.RemoveClass('AsyncItemWorkAcceptNegativeHidden');
-        }
     }
     function _SetUpDescription(elPanel) {
         let elDescLabel = elPanel.FindChildInLayoutFile('AsyncItemWorkDesc');
@@ -235,12 +309,21 @@ var InspectAsyncActionBar;
                 elNegative.TriggerClass('popup-capability-update-anim');
             elNegative.enabled = bEnable;
         }
+        elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
+        if (elNegative && elNegative.visible) {
+            if (elNegative.enabled !== bEnable)
+                elNegative.TriggerClass('popup-capability-update-anim');
+            elNegative.enabled = bEnable;
+        }
     }
     InspectAsyncActionBar.EnableDisableOkBtn = EnableDisableOkBtn;
     function ShowHideOkBtn(elPanel, bShow) {
         let elOK = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
         elOK.SetHasClass('move-down', !bShow);
         let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
+        if (elNegative)
+            elNegative.SetHasClass('move-down', !bShow);
+        elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
         if (elNegative)
             elNegative.SetHasClass('move-down', !bShow);
     }
@@ -274,9 +357,9 @@ var InspectAsyncActionBar;
         let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
         if (elNegative)
             elNegative.AddClass('hidden');
-        if (m_worktype !== 'remove_patch' && m_worktype !== 'remove_sticker' && m_worktype !== 'remove_keychain') {
-            m_scheduleHandle = $.Schedule(5, () => _CancelWaitforCallBack(elPanel));
-        }
+        elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
+        if (elNegative)
+            elNegative.AddClass('hidden');
         _PerformAsyncAction(funcGetSettingCallback, funcCallbackOnAction);
     }
     function _ShowHideInspectViewButtons() {
@@ -306,6 +389,7 @@ var InspectAsyncActionBar;
             m_panel.FindChildInLayoutFile('InspectWeaponBtn').GetParent().SetHasClass('hidden', true);
         }
         m_panel.FindChildInLayoutFile('ChangeScenery').SetHasClass('hidden', m_worktype === 'decodeable' || m_worktype === 'remove_patch'
+            || m_worktype === 'can_wrap_sticker'
             || m_worktype === 'remove_sticker' || m_worktype === 'remove_keychain');
     }
     function UpdateScenery() {
@@ -355,11 +439,15 @@ var InspectAsyncActionBar;
             let elNegative = m_panel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
             if (elNegative)
                 elNegative.RemoveClass('hidden');
+            elNegative = m_panel.FindChildInLayoutFile('AsyncItemWorkAcceptNegativeHold');
+            if (elNegative)
+                elNegative.RemoveClass('hidden');
         }
     }
     InspectAsyncActionBar.OnCloseRemove = OnCloseRemove;
     function _ClosePopup() {
         ResetTimeouthandle();
+        HoldButton.StopLoopingSound('UI.Laptop.ButtonFillLoop');
         $.DispatchEvent('HideSelectItemForCapabilityPopup');
         $.DispatchEvent('UIPopupButtonClicked', '');
         $.DispatchEvent('CapabilityPopupIsOpen', false);
@@ -426,6 +514,7 @@ var InspectAsyncActionBar;
             m_worktype === "remove_patch" ||
             m_worktype === "remove_keychain" ||
             m_worktype === "can_sticker" ||
+            m_worktype === "can_wrap_sticker" ||
             m_worktype === "can_patch" ||
             m_worktype === "can_keychain" ||
             m_worktype === "useitem" ||

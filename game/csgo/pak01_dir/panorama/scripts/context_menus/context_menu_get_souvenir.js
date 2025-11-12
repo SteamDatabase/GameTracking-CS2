@@ -90,7 +90,7 @@ var ContextMenuGetSouvenir;
         const nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
         const team0 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 0);
         const team1 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 1);
-        const bPlayoffMatch = (nStageID >= 5) && (nStageID <= 13);
+        const bPlayoffMatch = MatchInfoAPI.IsMatchTournamentStageIDPlayoff(nStageID);
         const bThisMatchHasRedeemsEnabled = !bPlayoffMatch || InventoryAPI.HasHighlightReelSchema(nEventID, nStageID, team0, team1);
         elGetSouvenir.SetHasClass('awaiting-highlights', !bThisMatchHasRedeemsEnabled);
         if (_m_redeemsAvailable > 0) {
@@ -166,7 +166,7 @@ var ContextMenuGetSouvenir;
             let nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
             let team0 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 0);
             let team1 = MatchInfoAPI.GetMatchTournamentTeamID(umid, 1);
-            const bPlayoffMatch = (nStageID >= 5) && (nStageID <= 13);
+            const bPlayoffMatch = MatchInfoAPI.IsMatchTournamentStageIDPlayoff(nStageID);
             let idFaux = InventoryAPI.GetFauxItemIDFromDefAndPaintIndexUB1(g_ActiveTournamentInfo.souvenirs[rawMapName], 0, bPlayoffMatch ? 13 : 0);
             let attributes = `{ "tournament event id": ${nEventID}, "tournament event stage id": ${nStageID}, "tournament event team0 id": ${team0}, "tournament event team1 id": ${team1} }`;
             UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + idFaux

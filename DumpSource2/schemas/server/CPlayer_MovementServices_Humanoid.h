@@ -9,9 +9,9 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 {
 	float32 m_flStepSoundTime;
 	// MNetworkEnable
-	// MNetworkBitCount = 17
-	// MNetworkMinValue = -4096.000000
-	// MNetworkMaxValue = 4096.000000
+	// MNetworkBitCount = 20
+	// MNetworkMinValue = -16384.000000
+	// MNetworkMaxValue = 16384.000000
 	// MNetworkEncodeFlags = 4
 	float32 m_flFallVelocity;
 	// MNetworkEnable

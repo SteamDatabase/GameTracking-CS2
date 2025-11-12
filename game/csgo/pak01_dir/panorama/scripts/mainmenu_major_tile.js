@@ -19,7 +19,7 @@ var MainMenuMajorTile;
             return;
         _m_cp.FindChildInLayoutFile('id-btn-open-major-hub').SetPanelEvent('onactivate', OpenMajorHub);
         _m_cp.SetHasClass('major-' + g_ActiveTournamentInfo.eventid.toString(), true);
-        _m_cp.FindChildInLayoutFile('id-img-open-major-hub').SetImage('file://{images}/tournaments/backgrounds/pickem_mainmenu_promo_' + g_ActiveTournamentInfo.eventid + '.png');
+        _m_cp.FindChildInLayoutFile('id-img-open-major-hub').SetImage('file://{images}/tournaments/backgrounds/pickem_mainmenu_promo_' + g_ActiveTournamentInfo.eventid + '.psd');
         let sRestriction = InventoryAPI.GetDecodeableRestriction("capsule");
         let bCanSellCapsules = (sRestriction !== "restricted" && sRestriction !== "xray");
         let bHasActualCapsulesForPurchase = false;

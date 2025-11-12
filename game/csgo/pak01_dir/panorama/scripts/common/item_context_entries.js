@@ -33,6 +33,8 @@ var ItemContextEntries;
             AvailableForItem: (id) => {
                 if (InventoryAPI.DoesItemMatchDefinitionByName(id, "Remove Keychain Tool"))
                     return true;
+                if (InventoryAPI.DoesItemMatchDefinitionByName(id, "sticker_display_case"))
+                    return true;
                 return ItemInfo.IsPreviewable(id);
             },
             OnSelected: (id, contextmenuparam) => {
@@ -393,6 +395,19 @@ var ItemContextEntries;
             }
         },
         {
+            name: 'can_unwrap_sticker',
+            style: (id) => 'TopSeparator',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            AvailableForItem: (id) => ItemInfo.IsKeychain(id) && ItemInfo.ItemHasCapability(id, 'can_keychain') &&
+                !!InventoryAPI.GetItemAttributeValue(id, '{uint32}keychain slot 0 sticker'),
+            OnSelected: (id) => {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ContextMenuEvent', '');
+                UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=,' + id +
+                    '&' + 'asyncworktype=can_wrap_sticker');
+            }
+        },
+        {
             name: 'can_keychain',
             populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
             AvailableForItem: (id) => {
@@ -445,6 +460,40 @@ var ItemContextEntries;
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
                 $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_sticker');
+            }
+        },
+        {
+            name: 'can_wrap_sticker',
+            populateFilter: ['inspect', 'loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            AvailableForItem: (id) => {
+                return InventoryAPI.DoesItemMatchDefinitionByName(id, "sticker_display_case");
+            },
+            OnSelected: (id) => {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ContextMenuEvent', '');
+                $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_wrap_sticker');
+            }
+        },
+        {
+            name: 'wrap_sticker',
+            populateFilter: ['loadout', 'loadout_slot_t', 'loadout_slot_ct'],
+            AvailableForItem: (id) => {
+                return ItemInfo.ItemHasCapability(id, 'can_wrap_sticker') &&
+                    !InventoryAPI.DoesItemMatchDefinitionByName(id, "sticker_display_case");
+            },
+            OnSelected: (id) => {
+                $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
+                $.DispatchEvent('ContextMenuEvent', '');
+                if (InventoryAPI.GetChosenActionItemsCount(id, 'can_wrap_sticker') > 0) {
+                    $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_wrap_sticker');
+                }
+                else {
+                    const defidxWrapper = InventoryAPI.GetItemDefinitionIndexFromDefinitionName("sticker_display_case");
+                    const fauxCasket = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxWrapper, 0);
+                    UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + id + ',' + fauxCasket
+                        + '&' +
+                        'asyncworktype=can_wrap_sticker');
+                }
             }
         },
         {

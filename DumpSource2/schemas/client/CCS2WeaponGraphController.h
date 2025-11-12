@@ -2,6 +2,7 @@ class CCS2WeaponGraphController : public CAnimGraphControllerBase
 {
 	CAnimGraph2ParamOptionalRef< CGlobalSymbol > m_action;
 	CAnimGraph2ParamOptionalRef< bool > m_bActionReset;
+	CAnimGraph2ParamOptionalRef< float32 > m_flWeaponActionSpeedScale;
 	CAnimGraph2ParamOptionalRef< CGlobalSymbol > m_weaponCategory;
 	CAnimGraph2ParamOptionalRef< CGlobalSymbol > m_weaponType;
 	CAnimGraph2ParamOptionalRef< CGlobalSymbol > m_weaponExtraInfo;

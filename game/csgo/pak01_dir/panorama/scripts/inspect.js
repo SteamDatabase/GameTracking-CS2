@@ -81,6 +81,12 @@ var InspectModelImage;
         else if (ItemInfo.IsKeychain(itemId)) {
             m_elPanel = _InitKeyChainScene(itemId);
         }
+        else if (InventoryAPI.DoesItemMatchDefinitionByName(itemId, "sticker_display_case")) {
+            const defKeychain = InventoryAPI.GetItemDefinitionIndexFromDefinitionName('keychain');
+            const kcModel = InventoryAPI.GetItemAttributeValue(itemId, '{uint32}display case keychain id');
+            const fauxItemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defKeychain, kcModel);
+            m_elPanel = _InitKeyChainScene(fauxItemId);
+        }
         else if (InventoryAPI.GetLoadoutCategory(itemId) == "musickit") {
             m_elPanel = _InitMusicKitScene(itemId);
         }

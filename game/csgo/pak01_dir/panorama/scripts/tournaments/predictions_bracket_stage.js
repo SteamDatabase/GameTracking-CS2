@@ -341,23 +341,23 @@ var PredictionsBracket;
                 teamStates[teamid] = {
                     wins: 0,
                     loss: 0,
-                    bo3w: 0,
-                    bo3l: 0
+                    boXw: 0,
+                    boXl: 0
                 };
             }
             return teamStates[teamid];
         }
-        function AddWin(state) {
-            ++state.bo3w;
-            if (state.bo3w >= 2) {
-                state.bo3w = state.bo3l = 0;
+        function AddWin(state, winsNeeded) {
+            ++state.boXw;
+            if (state.boXw >= winsNeeded) {
+                state.boXw = state.boXl = 0;
                 ++state.wins;
             }
         }
-        function AddLoss(state) {
-            ++state.bo3l;
-            if (state.bo3l >= 2) {
-                state.bo3l = state.bo3w = 0;
+        function AddLoss(state, winsNeeded) {
+            ++state.boXl;
+            if (state.boXl >= winsNeeded) {
+                state.boXl = state.boXw = 0;
                 ++state.loss;
             }
         }
@@ -398,6 +398,8 @@ var PredictionsBracket;
                 let winteam = ((res == 2) ? team1 : team0);
                 let keyteam = (_m_elSections[matchup]['slot:' + team0] === 0) ? team0 : team1;
                 let steam = GetTeamState(keyteam);
+                const nStageID = MatchInfoAPI.GetMatchTournamentStageID(umid);
+                const numWinsNeeded = MatchInfoAPI.GetMatchTournamentStageIDWinsNeeded(nStageID);
                 if (_m_elSections[matchup][keyteam] < _m_elSections[matchup].matches.length) {
                     let omatch = _m_elSections[matchup].matches[_m_elSections[matchup][keyteam]];
                     let elTeamPair = omatch.panel;
@@ -410,12 +412,12 @@ var PredictionsBracket;
                     let nRightScore = omatch.keyteam_loss;
                     elTeamPair.SetHasClass('has_valid_matchup', true);
                     elTeamPair.SetHasClass('has_match_in_progress', bMatchStillInProgress);
-                    _SetTeamDataIntoPanel(elTeamPair, 0, (bSwap01 ? team1 : team0), (bSwap01 ? team1name : team0name), nLeftScore, false, (nLeftScore == 2 || nRightScore == 2) ? (nLeftScore == 2 ? 'is_winner' : 'is_loser') : '');
-                    _SetTeamDataIntoPanel(elTeamPair, 1, (bSwap01 ? team0 : team1), (bSwap01 ? team0name : team1name), nRightScore, false, (nLeftScore == 2 || nRightScore == 2) ? (nRightScore == 2 ? 'is_winner' : 'is_loser') : '');
+                    _SetTeamDataIntoPanel(elTeamPair, 0, (bSwap01 ? team1 : team0), (bSwap01 ? team1name : team0name), nLeftScore, false, (nLeftScore == numWinsNeeded || nRightScore == numWinsNeeded) ? (nLeftScore == numWinsNeeded ? 'is_winner' : 'is_loser') : '');
+                    _SetTeamDataIntoPanel(elTeamPair, 1, (bSwap01 ? team0 : team1), (bSwap01 ? team0name : team1name), nRightScore, false, (nLeftScore == numWinsNeeded || nRightScore == numWinsNeeded) ? (nRightScore == numWinsNeeded ? 'is_winner' : 'is_loser') : '');
                     elTeamPair.Data().umids.push(umid);
                     if (bMatchStillInProgress)
                         elTeamPair.Data().umids = [];
-                    if (nLeftScore == 2 || nRightScore == 2) {
+                    if (nLeftScore == numWinsNeeded || nRightScore == numWinsNeeded) {
                         let matchOffset = _m_elSections[matchup][keyteam];
                         let groupOffset = ((idxSection == 2) ? 6 : (idxSection * 4)) + matchOffset;
                         let teamidPicked = PredictionsAPI.GetMyPredictionTeamID(oPageData.tournamentId, oPageData.groupId + groupOffset, 0);
@@ -426,8 +428,8 @@ var PredictionsBracket;
                     }
                 }
                 if (!bMatchStillInProgress) {
-                    AddWin(GetTeamState(winteam));
-                    AddLoss(GetTeamState((team0 == winteam) ? team1 : team0));
+                    AddWin(GetTeamState(winteam), numWinsNeeded);
+                    AddLoss(GetTeamState((team0 == winteam) ? team1 : team0), numWinsNeeded);
                 }
             }
         }

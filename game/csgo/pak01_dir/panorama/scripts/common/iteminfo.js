@@ -196,11 +196,12 @@ var ItemInfo;
         const count = InventoryAPI.GetItemKeychainCount(id);
         const keychainList = [];
         for (let i = 0; i < count; i++) {
-            const oKeychainInfo = {
-                image: InventoryAPI.GetItemKeychainImageByIndex(id, i),
-                name: InventoryAPI.GetItemKeychainNameByIndex(id, i)
-            };
-            keychainList.push(oKeychainInfo);
+            const jsdata = InventoryAPI.GetItemKeychainJsonByIndex(id, i);
+            if (jsdata) {
+                const o = JSON.parse(jsdata);
+                if (o)
+                    keychainList.push(o);
+            }
         }
         return keychainList;
     }
