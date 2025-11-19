@@ -2745,6 +2745,7 @@ CAsyncShaderCompilePrerequisite
 CBasePulseGraphInstance
 CBenchmarkService
 CBroadcastPlayer
+CBroadcastPlayer got DEM_Stop, server tick %d\n
 CBroadcastPlayer::SkipToTick( %d, %u )\n
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
@@ -3266,6 +3267,7 @@ CHLTVServer::SendClientMessages client %s is inactive.\n
 CHLTVServer::SendClientMessages skipping client %s updating to %d from %d: CanPacket()? %s\n
 CHLTVServer::SendClientMessages skipping on relay -- not connected to remote server\n
 CHLTVServer::ServerPostSimulate
+CHLTVServer::Shutdown
 CHLTVServer::Shutdown:  Calling Plat_ExitProcess as tv_relay_hard_shutdown is set and this is a relay server.\n
 CHLTVServer::Shutdown\n
 CHLTVServer::StartRelay: WriteSendTables %s.\n
@@ -3315,8 +3317,6 @@ CL:  Connection to '%s' failed\n
 CL:  Connection to server '%s' timed out, disconnecting\n
 CL:  Deferring SIGNONSTATE_SPAWN (spawn count %d) message\n
 CL:  Disconnected - Client delta ticks out of order!\n
-CL:  Disconnecting from server: %s\n
-CL:  Disconnecting from server: changelevel\n
 CL:  FCVAR_CHEAT and FCVAR_REPLICATED cvars reverted to defaults (remote connection).\n
 CL:  Finished logging most recent client ticks.\n
 CL:  Forcing %s to blocking load during demo playback due to having incomplete/updateable manifest\n
@@ -3929,7 +3929,7 @@ Connected [%s] [last packet %.3f sec ago]
 Connecting to %s\n
 Connection State: Connected=%s, Ever=%s\n
 Connection closed: %s.\n
-Connection lost: %s.\n
+Connection lost: %s\n
 Connection rejected by game\n
 Connection timeout detected at source engine layer after %i retries.
 Connection to Steam servers lost.\n
@@ -3995,7 +3995,7 @@ Could not find type "
 Could not get ILegacyGameUI interface from client %s\n
 Couldn't open %s\n
 Couldn't parse default value "
-Couldn't unserialize CCompressedResourceManifest\n
+Couldn't unserialize CCompressedResourceManifest
 Couldn't write to read-only file %s, using file _temp_mapcycle.txt instead.\n
 CpuId
 Crash
@@ -4160,7 +4160,9 @@ Disconnect: %s\n
 DisconnectAllClients
 Disconnected
 Disconnected from server: %s\n
-Disconnection during connection phase. Sign-on state: %d (%s). Disconnect reason: %d (%s).\n
+Disconnecting from server: %s\n
+Disconnecting from server: changelevel\n
+Disconnection during connection phase. Sign-on state: %d (%s). Disconnect reason: %s.\n
 Dispatch clients to relay proxies: 0=never, 1=if appropriate, 2=always
 DispatchEvent( %s ) took %f msecs
 Dispatching EventAppShutdown_t {\n
@@ -6189,6 +6191,7 @@ Non-repeated field "
 None
 Not Connected
 Not a JPEG file: starts with 0x%02x 0x%02x
+Not a SourceTV proxy
 Not a key frame.
 Not creating socket NS_HLTV due to -nohltv command line option.\n
 Not implemented field number 
@@ -6681,6 +6684,7 @@ ProcessClassInfo: invalid class index (%d).\n
 ProcessConVar
 ProcessPacketEntitiesWorkItem_Decode: DecodeClassBaseline(%d) failed for class %s.
 ProcessReadPacketEntitiesWorkItems
+ProcessServerInfo failed
 ProcessServerInfo( %s : %s : #%d ) - client requesting connection abort!\n
 ProcessServerInfo: Failed to initialize the game client!\n
 ProcessServerInfo: Failed to parse the game session manifest!\n
@@ -6920,6 +6924,7 @@ Rejecting connection request from %s (reservation cookie 0x%llx), server is rese
 Rejecting reservation because sv_shutdown was requested.\n
 Relay "%s", connect to %s (GSID:%s)\n
 Relay "%s", not connected.\n
+Relay connecting to a different upstream server
 Relay proxies retry connection after network timeout
 Relay server is hibernating\n
 Relay server waking up from hibernation\n
@@ -10048,6 +10053,7 @@ execute_command_every_frame
 exists
 exit
 exp_rotation
+expecting to re-create serializers from server serializers
 expr
 extend .$0 {\n
 f == nullptr || dynamic_cast<To>(f) != nullptr
@@ -11241,7 +11247,6 @@ pitch_filter
 pitch_search
 playcast
 playcast: %d dem_consolecmd [%s]\n
-playcast: %d dem_stop\n
 playcast: Demo message, tick %i, %i bytes\n
 playcast: Packet tick %d size %u\n
 playdemo
