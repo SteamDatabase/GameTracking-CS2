@@ -352,6 +352,25 @@ var InspectAsyncActionBar;
                 return;
             }
         }
+        if (m_worktype === 'useitem' || m_worktype === 'decodeable') {
+            let strToolType = InventoryAPI.GetToolType(m_itemid);
+            if (strToolType === 'fantoken') {
+                const nTournamentEventID = InventoryAPI.GetItemAttributeValue(m_itemid, '{uint32}tournament event id');
+                if (nTournamentEventID && (nTournamentEventID > 0)) {
+                    const coinItemId = InventoryAPI.GetActiveTournamentCoinItemId(nTournamentEventID);
+                    if (coinItemId && (coinItemId !== '0')) {
+                        $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applyConfirm', 'MOUSE');
+                        UiToolkitAPI.ShowGenericPopupOk(InventoryAPI.GetItemName(coinItemId), '#Store_DuplicateItemInBackpack', '', () => {
+                            ResetTimeouthandle();
+                            _ClosePopup();
+                            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + coinItemId +
+                                '&inspectonly=true&viewfunc=primary');
+                        });
+                        return;
+                    }
+                }
+            }
+        }
         elPanel.FindChildInLayoutFile('NameableSpinner').RemoveClass('hidden');
         elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm').AddClass('hidden');
         let elNegative = elPanel.FindChildInLayoutFile('AsyncItemWorkAcceptNegative');
