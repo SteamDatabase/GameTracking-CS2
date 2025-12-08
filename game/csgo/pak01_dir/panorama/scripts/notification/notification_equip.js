@@ -42,7 +42,8 @@ var EquipNotification;
     }
     function MakeDescString(elPanel, id, team) {
         let rarityColor = InventoryAPI.GetItemRarityColor(id);
-        let itemName = '<font color="' + rarityColor + '">' + InventoryAPI.GetItemName(id) + '</font>';
+        let sName = InventoryAPI.HasCustomName(id) ? $.HTMLEscape(InventoryAPI.GetItemNameCustomized(id)) : InventoryAPI.GetItemName(id);
+        let itemName = '<font color="' + rarityColor + '">' + sName + '</font>';
         elPanel.SetDialogVariable('name', itemName);
         if (team === 'noteam') {
             return $.Localize('#inv_equipped_item_noteam', elPanel);

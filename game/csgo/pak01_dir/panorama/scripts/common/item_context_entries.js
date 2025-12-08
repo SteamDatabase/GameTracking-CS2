@@ -1025,7 +1025,8 @@ var ItemContextEntries;
     }
     function GetNameWithRarity(id) {
         const rarityColor = InventoryAPI.GetItemRarityColor(id);
-        return '<font color="' + rarityColor + '">' + InventoryAPI.GetItemName(id) + '</font>';
+        let sName = InventoryAPI.HasCustomName(id) ? $.HTMLEscape(InventoryAPI.GetItemNameCustomized(id)) : InventoryAPI.GetItemName(id);
+        return '<font color="' + rarityColor + '">' + sName + '</font>';
     }
     function EquipItem(id, team, slot) {
         if (slot === null || slot === undefined || slot === '') {
