@@ -55,7 +55,7 @@ if [ -z $GAMEEXE ]; then
    fi
 fi
 
-ulimit -n 2048
+ulimit -n 65535
 
 # Set default thread size.
 ulimit -Ss 1024
