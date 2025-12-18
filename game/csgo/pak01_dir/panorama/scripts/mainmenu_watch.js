@@ -107,7 +107,7 @@ var mainmenu_watch;
                 elTournamentPanel.SetDialogVariable('tournament-title', $.Localize('#CSGO_Tournament_Event_Location_' + i));
                 let elTOLogo = elTournamentPanel.FindChildTraverse('id-tournament-to-logo');
                 elTOLogo.SetImage('file://{images}/tournaments/events/tournament_logo_' + i + '.svg');
-                elTOLogo.GetParent().SetHasClass('tall-logo', i == 22 || i == 24);
+                elTOLogo.GetParent().SetHasClass('tall-logo', i == 22 || i == 24 || i == 25);
                 let ProEventJSO = TournamentsAPI.GetProEventDataJSO(i, 8);
                 let oWinningTeam;
                 let hasEventData = false;
