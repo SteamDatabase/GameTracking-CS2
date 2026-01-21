@@ -2,17 +2,11 @@
 /// <reference path="common/characteranims.ts" />
 /// <reference path="common/iteminfo.ts" />
 /// <reference path="common/tint_spray_icon.ts" />
+/// <reference path="popups/popup_inspect_shared.ts" />
 var InspectModelImage;
 (function (InspectModelImage) {
     let m_elPanel = null;
     let m_elContainer = null;
-    let m_useAcknowledge = false;
-    let m_itemAttributes = '';
-    let m_rarityColor = '';
-    let m_isStickerApplyRemove = false;
-    let m_isItemInLootlist = false;
-    let m_strWorkType = '';
-    let m_isWorkshopPreview = false;
     let m_isLaptopOpening = false;
     InspectModelImage.m_CameraSettingsPerWeapon = [
         { type: 'weapon_awp', camera: '7', zoom_camera: 'weapon_awp_zoom,weapon_awp_front_zoom' },
@@ -38,24 +32,18 @@ var InspectModelImage;
         { type: 'weapon_usp_silencer', camera: '2', zoom_camera: '0' },
         { type: 'weapon_elite', camera: '2' },
         { type: 'weapon_tec9', camera: '2' },
-        { type: 'weapon_revolver', camera: '1' },
+        { type: 'weapon_revolver', camera: '2' },
+        { type: 'weapon_p250', camera: '2' },
         { type: 'weapon_c4', camera: '3' },
         { type: 'weapon_taser', camera: '0' },
     ];
-    function Init(elContainer, itemId, funcGetSettingCallback, itemAttributes) {
-        const strViewFunc = funcGetSettingCallback ? funcGetSettingCallback('viewfunc', '') : '';
-        m_itemAttributes = itemAttributes ? itemAttributes : '';
-        m_isWorkshopPreview = funcGetSettingCallback ? funcGetSettingCallback('workshopPreview', 'false') === 'true' : false;
-        m_isStickerApplyRemove = funcGetSettingCallback ? funcGetSettingCallback('stickerApplyRemove', 'false') === 'true' : false;
-        m_isItemInLootlist = funcGetSettingCallback ? funcGetSettingCallback('isItemInLootlist', 'false') === 'true' : false;
+    function Init(elContainer, itemId, funcGetSettingCallback) {
+        const strViewFunc = InspectShared.GetPopupSetting('force_inspect_view_type');
         m_isLaptopOpening = funcGetSettingCallback ? funcGetSettingCallback('isLapTopOpening', 'false') === 'true' : false;
         if (!InventoryAPI.IsValidItemID(itemId)) {
             return '';
         }
-        m_strWorkType = funcGetSettingCallback ? funcGetSettingCallback('asyncworktype', '') : '';
         m_elContainer = elContainer;
-        m_useAcknowledge = m_elContainer.Data().useAcknowledge ? m_elContainer.Data().useAcknowledge : false;
-        m_rarityColor = InventoryAPI.GetItemRarityColor(itemId);
         if (ItemInfo.ItemDefinitionNameSubstrMatch(itemId, 'tournament_journal_') && strViewFunc === 'graffiti')
             itemId = ItemInfo.GetFauxReplacementItemID(itemId, 'graffiti');
         const model = ItemInfo.GetModelPathFromJSONOrAPI(itemId);
@@ -63,6 +51,9 @@ var InspectModelImage;
         return model;
     }
     InspectModelImage.Init = Init;
+    function _UseAcknowledge() {
+        return m_elContainer.Data().useAcknowledge ? m_elContainer.Data().useAcknowledge : false;
+    }
     function _InitSceneBasedOnItemType(model, itemId) {
         if (ItemInfo.IsCharacter(itemId)) {
             m_elPanel = _InitCharScene(itemId);
@@ -139,7 +130,7 @@ var InspectModelImage;
                 playername: "vanity_character",
                 animgraphcharactermode: "inventory-inspect",
                 animgraphturns: "false",
-                workshop_preview: m_isWorkshopPreview
+                workshop_preview: InspectShared.GetPopupSetting('is_workshop_preview')
             });
             elPanel.Data().loadedMap = mapName;
         }
@@ -149,7 +140,8 @@ var InspectModelImage;
         settings.panel = elPanel;
         settings.weaponItemId = weaponItemId ? weaponItemId : settings.weaponItemId ? settings.weaponItemId : '';
         CharacterAnims.PlayAnimsOnPanel(settings);
-        if (m_strWorkType !== 'can_patch' && m_strWorkType !== 'remove_patch') {
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        if (worktype !== 'can_patch' && worktype !== 'remove_patch') {
             _TransitionCamera(elPanel, 'char_inspect_wide');
         }
         if (!bHide) {
@@ -222,6 +214,7 @@ var InspectModelImage;
         }
     }
     function _InitWeaponScene(itemId) {
+        const IsItemApplyRemove = InspectShared.GetPopupSetting('is_apply_remove_item');
         let oSettings = {
             panel_type: "MapItemPreviewPanel",
             active_item_idx: 0,
@@ -230,15 +223,15 @@ var InspectModelImage;
             mouse_rotate: "true",
             rotation_limit_x: "360",
             rotation_limit_y: "90",
-            auto_rotate_x: m_isStickerApplyRemove ? "2" : "35",
-            auto_rotate_y: m_isStickerApplyRemove ? "3" : "10",
-            auto_rotate_period_x: m_isStickerApplyRemove ? "10" : "15",
-            auto_rotate_period_y: m_isStickerApplyRemove ? "10" : "25",
+            auto_rotate_x: IsItemApplyRemove ? "2" : "35",
+            auto_rotate_y: IsItemApplyRemove ? "3" : "10",
+            auto_rotate_period_x: IsItemApplyRemove ? "10" : "15",
+            auto_rotate_period_y: IsItemApplyRemove ? "10" : "25",
             auto_recenter: false,
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         SetItemCameraByWeaponType(itemId, panel, false);
         const settings = ItemInfo.GetOrUpdateVanityCharacterSettings();
         settings.panel = panel;
@@ -262,7 +255,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'melee');
         return panel;
     }
@@ -283,7 +276,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'sticker_close');
         return panel;
     }
@@ -328,7 +321,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'display_close');
         return panel;
     }
@@ -349,7 +342,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'musickit_close');
         return panel;
     }
@@ -370,8 +363,9 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
-        _TransitionCamera(panel, m_useAcknowledge ? 'case_new_item' : 'case', m_useAcknowledge ? true : false);
+        _SetParticlesBg(itemId, panel);
+        const useAcknowledge = _UseAcknowledge();
+        _TransitionCamera(panel, useAcknowledge ? 'case_new_item' : 'case', useAcknowledge ? true : false);
         return panel;
     }
     function _InitLaptopScene(itemId) {
@@ -392,7 +386,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         if (m_isLaptopOpening) {
             panel.TransitionToCamera('cam_laptop', 0);
             $.Schedule(.25, () => {
@@ -403,7 +397,8 @@ var InspectModelImage;
             });
         }
         else {
-            _TransitionCamera(panel, m_useAcknowledge ? 'laptop_new_item' : 'laptop', m_useAcknowledge ? true : false);
+            const useAcknowledge = _UseAcknowledge();
+            _TransitionCamera(panel, useAcknowledge ? 'laptop_new_item' : 'laptop', useAcknowledge ? true : false);
         }
         return panel;
     }
@@ -424,7 +419,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'gloves', true);
         return panel;
     }
@@ -445,7 +440,7 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'nametag_close');
         return panel;
     }
@@ -466,12 +461,12 @@ var InspectModelImage;
             player: "false",
         };
         const panel = _LoadInspectMap(itemId, oSettings);
-        _SetParticlesBg(panel);
+        _SetParticlesBg(itemId, panel);
         _TransitionCamera(panel, 'nametag_close');
         return panel;
     }
     function _GetBackGroundMap(bUseMainMenuMap = false) {
-        if (m_useAcknowledge) {
+        if (_UseAcknowledge()) {
             return 'ui/acknowledge_item';
         }
         let backgroundMap = GameInterfaceAPI.GetSettingString('ui_inspect_bkgnd_map');
@@ -489,7 +484,7 @@ var InspectModelImage;
             elPanel = $.CreatePanel(oSettings.panel_type, m_elContainer, 'ItemPreviewPanel', {
                 "require-composition-layer": "true",
                 'transparent-background': 'false',
-                'disable-depth-of-field': m_useAcknowledge ? 'true' : 'false',
+                'disable-depth-of-field': _UseAcknowledge() ? 'true' : 'false',
                 "pin-fov": "vertical",
                 class: 'inspect-model-image-panel inspect-model-image-panel--hidden',
                 camera: oSettings.camera,
@@ -504,7 +499,7 @@ var InspectModelImage;
                 auto_rotate_period_x: oSettings.auto_rotate_period_x,
                 auto_rotate_period_y: oSettings.auto_rotate_period_y,
                 auto_recenter: oSettings.auto_recenter,
-                workshop_preview: m_isWorkshopPreview,
+                workshop_preview: InspectShared.GetPopupSetting('is_workshop_preview'),
                 panzoom_enabled: oSettings.mouse_rotate,
                 tabindex: "auto",
                 selectionpos: "auto",
@@ -517,10 +512,10 @@ var InspectModelImage;
         elPanel.Data().active_item_idx = oSettings.active_item_idx;
         elPanel.Data().loadedMap = mapName;
         elPanel.SetActiveItem(oSettings.active_item_idx);
-        elPanel.SetItemItemId(itemId, m_itemAttributes);
+        elPanel.SetItemItemId(itemId, '');
         elPanel.RemoveClass('inspect-model-image-panel--hidden');
         _AdditionalMapLoadSettings(elPanel, oSettings.active_item_idx, mapName);
-        _SetParticlesBg(elPanel);
+        _SetParticlesBg(itemId, elPanel);
         if (elPanel.PanZoomEnabled()) {
             elPanel.SetAcceptsFocus(true);
             elPanel.SetFocus();
@@ -567,7 +562,7 @@ var InspectModelImage;
         _SetWorkshopPreviewPanelProperties(elPanel);
     }
     function _SetWorkshopPreviewPanelProperties(elItemPanel) {
-        if (m_isWorkshopPreview) {
+        if (InspectShared.GetPopupSetting('is_workshop_preview')) {
             let sTransparentBackground = InventoryAPI.GetPreviewSceneStateAttribute("transparent_background");
             let sBackgroundColor = InventoryAPI.GetPreviewSceneStateAttribute("background_color");
             let sPreviewIdleAnimation = InventoryAPI.GetPreviewSceneStateAttribute("idle_animation");
@@ -619,22 +614,23 @@ var InspectModelImage;
         _TransitionCamera(elItemPanel, strCamera, bSkipIntro);
     }
     InspectModelImage.SetItemCameraByWeaponType = SetItemCameraByWeaponType;
-    let m_scheduleHandle = 0;
+    let m_scheduleHandle = -1;
     function _TransitionCamera(elPanel, strCamera, bSkipIntro = false, nDuration = 0) {
         elPanel.Data().camera = strCamera;
-        if (m_isWorkshopPreview) {
+        if (InspectShared.GetPopupSetting('is_workshop_preview')) {
             elPanel.TransitionToCamera('cam_' + strCamera, 0);
             return;
         }
-        if (bSkipIntro || m_isItemInLootlist) {
+        if (bSkipIntro || InspectShared.GetPopupSetting('is_item_in_lootlist')) {
             elPanel.TransitionToCamera('cam_' + strCamera, nDuration);
             return;
         }
         elPanel.TransitionToCamera('cam_' + strCamera + '_intro', 0);
-        if (m_scheduleHandle === 0) {
+        if (m_scheduleHandle === -1) {
             m_scheduleHandle = $.Schedule(.25, () => {
                 if (elPanel.IsValid() && elPanel) {
                     elPanel.TransitionToCamera('cam_' + strCamera, 1);
+                    m_scheduleHandle = -1;
                 }
             });
         }
@@ -651,19 +647,6 @@ var InspectModelImage;
         _TransitionCamera(elPanel, aCameras[0], true, .75);
     }
     InspectModelImage.ZoomCamera = ZoomCamera;
-    function PanCamera(bPanLeft) {
-        let elPanel = m_elPanel;
-        const defName = InventoryAPI.GetItemDefinitionName(elPanel.Data().itemId);
-        let result = InspectModelImage.m_CameraSettingsPerWeapon.find(({ type }) => type === defName);
-        let strCamera = result?.zoom_camera;
-        if (!strCamera || strCamera === '')
-            return;
-        let aCameras = strCamera.split(',');
-        let strCameraToUse = bPanLeft ? aCameras[1] : aCameras[0];
-        elPanel.SetRotation(0, 0, 1);
-        _TransitionCamera(elPanel, strCameraToUse, true, .75);
-    }
-    InspectModelImage.PanCamera = PanCamera;
     function _SetImage(itemId) {
         let elPanel = GetExistingItemPanel('InspectItemImage');
         if (!elPanel) {
@@ -778,18 +761,19 @@ var InspectModelImage;
             }
         }
     }
-    function _SetParticlesBg(elPanel) {
-        if (!m_useAcknowledge) {
+    function _SetParticlesBg(itemId, elPanel) {
+        if (!_UseAcknowledge()) {
             return;
         }
-        const oColor = _HexColorToRgb(m_rarityColor);
+        const oColor = _HexColorToRgb(InventoryAPI.GetItemRarityColor(itemId));
         const sColor = `${oColor.r} ${oColor.g} ${oColor.b}`;
         elPanel.FireEntityInput('acknowledge_particle', 'SetControlPoint', '16: ' + sColor);
     }
     function _SetRimLight(indexShow, elPanel) {
-        if (m_useAcknowledge) {
+        if (_UseAcknowledge()) {
             elPanel.FireEntityInput('light_item' + indexShow, 'Disable');
-            const oColor = _HexColorToRgb(m_rarityColor);
+            const itemId = InspectShared.GetPopupSetting('item_id');
+            const oColor = _HexColorToRgb(InventoryAPI.GetItemRarityColor(itemId));
             const sColor = `${oColor.r} ${oColor.g} ${oColor.b}`;
             let lightNameInMap = "light_item_new" + indexShow;
             elPanel.FireEntityInput(lightNameInMap, 'SetColor', sColor);

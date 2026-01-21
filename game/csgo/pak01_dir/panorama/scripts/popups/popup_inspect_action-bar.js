@@ -5,57 +5,45 @@
 /// <reference path="../characterbuttons.ts" />
 var InspectActionBar;
 (function (InspectActionBar) {
-    let m_modelImagePanel = null;
-    let m_itemId = '';
-    let m_callbackHandle = -1;
-    let m_doNotShowCert = true;
-    let m_bShowAllItemActions = false;
-    let m_insideCasketID = '';
-    let m_capability = '';
-    let m_showMarketLink = false;
-    let m_showCharSelect = true;
-    let m_previewingMusic = false;
-    let m_isSelected = false;
-    let m_schfnMusicMvpPreviewEnd = null;
-    let m_isItemInLootlist = false;
-    let m_popupId = '';
-    function Init(elPanel, itemId, funcGetSettingCallback, funcGetSettingCallbackInt, elItemModelImagePanel) {
-        if (funcGetSettingCallback('inspectonly', 'false') === 'false')
+    function Init() {
+        const elActionBar = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectActionBar');
+        if (!InspectShared.GetPopupSetting('inspect_only')) {
+            elActionBar.AddClass('hidden');
             return;
-        elPanel.RemoveClass('hidden');
-        m_modelImagePanel = elItemModelImagePanel;
-        m_itemId = itemId;
-        m_callbackHandle = funcGetSettingCallbackInt('callback', -1);
-        m_doNotShowCert = (funcGetSettingCallback('showitemcert', 'true') === 'false');
-        m_bShowAllItemActions = (funcGetSettingCallback('showallitemactions', 'true') !== 'false');
-        m_insideCasketID = funcGetSettingCallback('insidecasketid', '');
-        m_capability = funcGetSettingCallback('capability', '');
-        m_showMarketLink = (funcGetSettingCallback('showmarketlink', 'false') === 'true');
-        m_showCharSelect = (funcGetSettingCallback('showcharselect', 'true') === 'true');
-        m_isSelected = (funcGetSettingCallback('isselected', 'false') === 'true');
-        m_isItemInLootlist = funcGetSettingCallback ? funcGetSettingCallback('isItemInLootlist', 'false') === 'true' : false;
-        m_popupId = funcGetSettingCallback('popup-id', '');
-        _SetUpItemCertificate(elPanel, itemId);
-        _SetupEquipItemBtns(elPanel, itemId);
-        _ShowButtonsForWeaponInspect(elPanel, itemId);
-        _ShowButtonsForCharacterInspect(elPanel, itemId);
-        _SetCloseBtnAction(elPanel);
-        _SetUpMarketLink(elPanel, itemId);
-        _SetUpOpenSeasonStatsAction(elPanel, itemId);
-        _SetUpViewHighlightReelAction(elPanel, itemId);
+        }
+        elActionBar.Data().schfnMusicMvpPreviewEnd = null;
+        elActionBar.Data().previewingMusic = false;
+        elActionBar.RemoveClass('hidden');
+        elActionBar.Data().panelRegisteredForEvents = false;
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        _SetUpItemCertificate(elActionBar, itemId);
+        _SetupEquipItemBtns(elActionBar, itemId);
+        _ShowButtonsForWeaponInspect(elActionBar, itemId);
+        _ShowButtonsForCharacterInspect(elActionBar, itemId);
+        _SetCloseBtnAction(elActionBar, $.GetContextPanel());
+        _SetUpMarketLink(elActionBar, itemId);
+        _SetUpOpenSeasonStatsAction(elActionBar, $.GetContextPanel(), itemId);
+        _SetUpViewHighlightReelAction(elActionBar, itemId);
+        if (!elActionBar.Data().panelRegisteredForEvents) {
+            elActionBar.Data().panelRegisteredForEvents = true;
+            $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', () => _SetupEquipItemBtns(elActionBar, itemId));
+        }
+        const contentPanel = $.GetContextPanel();
+        elActionBar.FindChildInLayoutFile('InspectPlayMvpBtn').SetPanelEvent('onactivate', () => InspectPlayMusic('mvp', contentPanel));
         const category = InventoryAPI.GetLoadoutCategory(itemId);
         if (category == "musickit") {
             InventoryAPI.PlayItemPreviewMusic(itemId, '');
-            m_previewingMusic = true;
-            const elMusicBtn = elPanel.FindChildInLayoutFile('InspectPlayMvpBtn');
+            elActionBar.Data().previewingMusic = true;
+            const elMusicBtn = elActionBar.FindChildInLayoutFile('InspectPlayMvpBtn');
             elMusicBtn.SetHasClass('hidden', (InventoryAPI.GetItemRarity(itemId) <= 0));
         }
-        elPanel.FindChildInLayoutFile('InspectWeaponBtn').checked =
-            (!elPanel.FindChildInLayoutFile('InspectCharBtn').checked &&
-                !elPanel.FindChildInLayoutFile('LookatWeaponBtn').checked) ||
-                m_isItemInLootlist;
-        if (m_isItemInLootlist) {
-            $.DispatchEvent("Activated", elPanel.FindChildInLayoutFile('InspectWeaponBtn'), "mouse");
+        const bisItemInLootlist = InspectShared.GetPopupSetting('is_item_in_lootlist');
+        elActionBar.FindChildInLayoutFile('InspectWeaponBtn').checked =
+            (!elActionBar.FindChildInLayoutFile('InspectCharBtn').checked &&
+                !elActionBar.FindChildInLayoutFile('LookatWeaponBtn').checked) ||
+                bisItemInLootlist;
+        if (bisItemInLootlist) {
+            $.DispatchEvent("Activated", elActionBar.FindChildInLayoutFile('InspectWeaponBtn'), "mouse");
         }
     }
     InspectActionBar.Init = Init;
@@ -65,7 +53,7 @@ var InspectActionBar;
             return;
         }
         const certData = InventoryAPI.GetItemCertificateInfo(id);
-        if (!certData || m_doNotShowCert) {
+        if (!certData || InspectShared.GetPopupSetting('hide_item_cert')) {
             elCert.visible = false;
             return;
         }
@@ -82,8 +70,9 @@ var InspectActionBar;
     }
     function _SetUpMarketLink(elPanel, id) {
         const elMarketLinkBtn = elPanel.FindChildInLayoutFile('InspectMarketLink');
-        elMarketLinkBtn.SetHasClass('hidden', !m_showMarketLink);
-        if (!m_showMarketLink) {
+        const bMarketLink = InspectShared.GetPopupSetting('show_market_link');
+        elMarketLinkBtn.SetHasClass('hidden', !bMarketLink);
+        if (!bMarketLink) {
             return;
         }
         elMarketLinkBtn.SetPanelEvent('onmouseover', () => UiToolkitAPI.ShowTextTooltip('InspectMarketLink', '#SFUI_Store_Market_Link'));
@@ -92,8 +81,8 @@ var InspectActionBar;
             SteamOverlayAPI.OpenURL(ItemInfo.GetMarketLinkForLootlistItem(id));
         });
     }
-    function _SetUpOpenSeasonStatsAction(elPanel, id) {
-        if (!m_bShowAllItemActions)
+    function _SetUpOpenSeasonStatsAction(elPanel, contextPanel, id) {
+        if (InspectShared.GetPopupSetting('hide_all_action_items'))
             return;
         const elOpenSeasonPanel = elPanel.FindChildInLayoutFile('OpenSeasonStats');
         if (ItemInfo.ItemDefinitionNameStartsWith(id, 'premier season coin')) {
@@ -101,7 +90,7 @@ var InspectActionBar;
             elOpenSeasonPanel.SetPanelEvent('onactivate', () => {
                 UiToolkitAPI.ShowCustomLayoutPopupParameters('id-popup-season-stats', 'file://{resources}/layout/popups/popup_season_stats.xml', 'seasonid=' + season + '&' +
                     'itemid=' + id);
-                CloseBtnAction();
+                CloseBtnAction(_GetSettingCallback(contextPanel), elPanel);
             });
             $.DispatchEvent('ContextMenuEvent', '');
             elOpenSeasonPanel.SetHasClass('hidden', false);
@@ -120,15 +109,17 @@ var InspectActionBar;
     }
     function _SetupEquipItemBtns(elPanel, id) {
         const elMoreActionsBtn = elPanel.FindChildInLayoutFile('InspectActionsButton');
+        const contextPanel = $.GetContextPanel();
+        elMoreActionsBtn.SetPanelEvent('onactivate', () => ShowContextMenu(contextPanel));
         const elSingleActionBtn = elPanel.FindChildInLayoutFile('SingleAction');
-        if (m_insideCasketID) {
+        if (InspectShared.GetPopupSetting('is_inside_casket')) {
             elMoreActionsBtn.AddClass('hidden');
             elSingleActionBtn.RemoveClass('hidden');
-            elSingleActionBtn.text = !m_isSelected ? '#UI_Select' : '#UI_Unselect';
-            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnActivateUpdateSelectionForMultiSelect(id));
+            elSingleActionBtn.text = !InspectShared.GetPopupSetting('is_selected') ? '#UI_Select' : '#UI_Unselect';
+            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnActivateUpdateSelectionForMultiSelect(id, contextPanel));
             return;
         }
-        if (!m_bShowAllItemActions) {
+        if (InspectShared.GetPopupSetting('hide_all_action_items')) {
             elMoreActionsBtn.AddClass('hidden');
             elSingleActionBtn.AddClass('hidden');
             _TrySetUpSingleActionPreviewBtn(elPanel, id);
@@ -148,7 +139,7 @@ var InspectActionBar;
             elMoreActionsBtn.AddClass('hidden');
             if (!isEquipped) {
                 elSingleActionBtn.RemoveClass('hidden');
-                _SetUpSingleActionBtn(elPanel, id, bCloseInspectOnSingleAction);
+                _SetUpSingleActionBtn(elPanel, id, bCloseInspectOnSingleAction, contextPanel);
             }
             return;
         }
@@ -157,7 +148,7 @@ var InspectActionBar;
             elSingleActionBtn.AddClass('hidden');
         }
     }
-    function _SetUpSingleActionBtn(elPanel, id, closeInspect) {
+    function _SetUpSingleActionBtn(elPanel, id, closeInspect, contextPanel) {
         const validEntries = ItemContextEntries.FilterEntries(id, 'inspect');
         const elSingleActionBtn = elPanel.FindChildInLayoutFile('SingleAction');
         for (let i = 0; i < validEntries.length; i++) {
@@ -170,7 +161,7 @@ var InspectActionBar;
                 displayName = entry.name;
             }
             elSingleActionBtn.text = '#inv_context_' + displayName;
-            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, closeInspect));
+            elSingleActionBtn.SetPanelEvent('onactivate', () => _OnSingleAction(entry, id, closeInspect, contextPanel));
             elSingleActionBtn.RemoveClass('hidden');
         }
     }
@@ -186,33 +177,35 @@ var InspectActionBar;
             else {
                 displayName = entry.name;
             }
-            let previewActionPrefix = displayName.startsWith('preview_') ? '' : 'preview_';
+            const previewActionPrefix = displayName.startsWith('preview_') ? '' : 'preview_';
+            const bisItemInLootlist = InspectShared.GetPopupSetting('is_item_in_lootlist');
+            const contextPanel = $.GetContextPanel();
             elSingleActionBtn.text = '#inv_context_' + previewActionPrefix + displayName;
             elSingleActionBtn.SetPanelEvent('onactivate', () => {
-                const bCloseInspect = (m_isItemInLootlist && m_popupId) ? false : true;
-                _OnSingleAction(entry, id, bCloseInspect);
+                const bCloseInspect = (bisItemInLootlist && contextPanel.IsValid()) ? false : true;
+                _OnSingleAction(entry, id, bCloseInspect, contextPanel);
                 if (!bCloseInspect) {
-                    $.DispatchEvent('BlurPopupPanel', m_popupId, true);
+                    $.DispatchEvent('BlurPopupPanel', contextPanel.id, true);
                 }
             });
             elSingleActionBtn.RemoveClass('hidden');
         }
     }
-    function _OnSingleAction(entry, id, closeInspect) {
+    function _OnSingleAction(entry, id, closeInspect, contextPanel) {
         if (closeInspect) {
-            CloseBtnAction();
+            CloseBtnAction(_GetSettingCallback(contextPanel), contextPanel);
         }
         entry.OnSelected(id);
     }
-    function _OnActivateUpdateSelectionForMultiSelect(idSubjectItem) {
-        CloseBtnAction();
-        $.DispatchEvent('UpdateSelectItemForCapabilityPopup', m_capability, idSubjectItem, !m_isSelected);
+    function _OnActivateUpdateSelectionForMultiSelect(idSubjectItem, contextPanel) {
+        CloseBtnAction(_GetSettingCallback(contextPanel), contextPanel);
+        $.DispatchEvent('UpdateSelectItemForCapabilityPopup', InspectShared.GetPopupSetting('capability', contextPanel), idSubjectItem, !InspectShared.GetPopupSetting('is_selected', contextPanel));
     }
     function _ShowButtonsForWeaponInspect(elPanel, id) {
-        if (m_showCharSelect === false) {
+        const hasAnims = ItemInfo.IsCharacter(id) || ItemInfo.IsWeapon(id) || ItemInfo.IsMelee(id);
+        if (InspectShared.GetPopupSetting('hide_char_select')) {
             return;
         }
-        const hasAnims = ItemInfo.IsCharacter(id) || ItemInfo.IsWeapon(id) || ItemInfo.IsMelee(id);
         if (hasAnims &&
             !ItemInfo.IsEquippalbleButNotAWeapon(id) &&
             !ItemInfo.IsSticker(id) &&
@@ -272,7 +265,8 @@ var InspectActionBar;
             });
             elDropdown.AddOption(newEntry);
         }
-        elDropdown.SetPanelEvent('oninputsubmit', () => InspectActionBar.OnUpdateCharModel(elDropdown, m_itemId));
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        elDropdown.SetPanelEvent('oninputsubmit', () => InspectActionBar.OnUpdateCharModel(elDropdown, itemId));
         elDropdown.SetSelected(currentMainMenuVanitySettings.charItemId);
     }
     function OnUpdateCharModel(elDropdown, weaponItemId) {
@@ -288,39 +282,45 @@ var InspectActionBar;
         if (bEndWeaponLookat) {
             InspectModelImage.EndWeaponLookat();
         }
-        let elDesc = $.GetContextPanel().GetParent().FindChildInLayoutFile('InspectItemDesc');
+        const elDesc = $.GetContextPanel().GetParent().FindChildInLayoutFile('InspectItemDesc');
         if (elDesc && elDesc.IsValid()) {
             elDesc.SetHasClass('hidden', false);
         }
     }
     InspectActionBar.NavigateModelPanel = NavigateModelPanel;
-    function InspectPlayMusic(type) {
-        if (!m_previewingMusic)
+    function InspectPlayMusic(type, contentPanel) {
+        const elActionBar = contentPanel.FindChildInLayoutFile('PopUpInspectActionBar');
+        if (!elActionBar.Data().previewingMusic)
             return;
+        const itemId = InspectShared.GetPopupSetting('item_id', contentPanel);
         if (type === 'mvp') {
-            if (m_schfnMusicMvpPreviewEnd)
+            if (elActionBar.Data().schfnMusicMvpPreviewEnd)
                 return;
             InventoryAPI.StopItemPreviewMusic();
-            InventoryAPI.PlayItemPreviewMusic(m_itemId, 'MVPPreview');
-            m_schfnMusicMvpPreviewEnd = $.Schedule(6.8, () => InspectActionBar.InspectPlayMusic('schfn'));
+            InventoryAPI.PlayItemPreviewMusic(itemId, 'MVPPreview');
+            elActionBar.Data().schfnMusicMvpPreviewEnd = $.Schedule(6.8, () => InspectActionBar.InspectPlayMusic('schfn', contentPanel));
         }
         else if (type === 'schfn') {
-            m_schfnMusicMvpPreviewEnd = null;
+            elActionBar.Data().schfnMusicMvpPreviewEnd = null;
             InventoryAPI.StopItemPreviewMusic();
-            InventoryAPI.PlayItemPreviewMusic(m_itemId, '');
+            InventoryAPI.PlayItemPreviewMusic(itemId, '');
         }
     }
     InspectActionBar.InspectPlayMusic = InspectPlayMusic;
-    function ShowContextMenu() {
-        const elBtn = $.GetContextPanel().FindChildTraverse('InspectActionsButton');
-        const id = m_itemId;
+    function ShowContextMenu(contextPanel) {
+        const elBtn = contextPanel.FindChildTraverse('InspectActionsButton');
+        const id = InspectShared.GetPopupSetting('item_id', contextPanel);
         const contextMenuPanel = UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent(elBtn.id, '', 'file://{resources}/layout/context_menus/context_menu_inventory_item.xml', 'itemid=' + id + '&populatefiltertext=inspect', () => $.DispatchEvent("CSGOPlaySoundEffect", "weapon_selectReplace", "MOUSE"));
         contextMenuPanel.AddClass("ContextMenu_NoArrow");
     }
     InspectActionBar.ShowContextMenu = ShowContextMenu;
-    function _SetCloseBtnAction(elPanel) {
+    function _SetCloseBtnAction(elPanel, contextPanel) {
         const elBtn = elPanel.FindChildInLayoutFile('InspectCloseBtn');
-        elBtn.SetPanelEvent('onactivate', CloseBtnAction);
+        elBtn.SetPanelEvent('onactivate', () => CloseBtnAction(_GetSettingCallback(contextPanel), elPanel));
+    }
+    function _GetSettingCallback(contextPanel) {
+        let callbackFromPopup = InspectShared.GetPopupSetting('callback_handle', contextPanel);
+        return !callbackFromPopup ? -1 : callbackFromPopup;
     }
     function UpdateScenery() {
         UiToolkitAPI.ShowCustomLayoutContextMenuParametersDismissEvent('id-inspect-contextmenu-maps', '', 'file://{resources}/layout/context_menus/context_menu_mainmenu_vanity.xml', 'type=maps' +
@@ -330,26 +330,25 @@ var InspectActionBar;
     function LookatWeapon() {
         const bEndWeaponLookat = false;
         NavigateModelPanel('InspectModel', bEndWeaponLookat);
-        let elDesc = $.GetContextPanel().GetParent().FindChildInLayoutFile('InspectItemDesc');
+        const elDesc = $.GetContextPanel().GetParent().FindChildInLayoutFile('InspectItemDesc');
         if (elDesc && elDesc.IsValid()) {
             elDesc.SetHasClass('hidden', true);
         }
         InspectModelImage.StartWeaponLookat();
     }
     InspectActionBar.LookatWeapon = LookatWeapon;
-    function CloseBtnAction(callbackHandle = -1) {
+    function CloseBtnAction(callbackHandle = -1, elActionBar) {
         $.DispatchEvent("CSGOPlaySoundEffect", "inventory_inspect_close", "MOUSE");
         $.DispatchEvent('UIPopupButtonClicked', '');
-        const callbackFunc = callbackHandle > -1 ? callbackHandle : m_callbackHandle;
-        if (callbackFunc != -1) {
-            UiToolkitAPI.InvokeJSCallback(callbackFunc);
+        if (callbackHandle != -1) {
+            UiToolkitAPI.InvokeJSCallback(callbackHandle);
         }
-        if (m_previewingMusic) {
+        if (elActionBar.Data().previewingMusic) {
             InventoryAPI.StopItemPreviewMusic();
-            m_previewingMusic = false;
-            if (m_schfnMusicMvpPreviewEnd) {
-                $.CancelScheduled(m_schfnMusicMvpPreviewEnd);
-                m_schfnMusicMvpPreviewEnd = null;
+            elActionBar.Data().previewingMusic = false;
+            if (elActionBar.Data().schfnMusicMvpPreviewEnd) {
+                $.CancelScheduled(elActionBar.Data().schfnMusicMvpPreviewEnd);
+                elActionBar.Data().schfnMusicMvpPreviewEnd = null;
             }
         }
     }

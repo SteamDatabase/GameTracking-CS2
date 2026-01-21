@@ -818,6 +818,7 @@ var CollectionOffers;
             elModel.SetFocus();
         }
         m_elScreen.FindChildInLayoutFile('id-offer-preview-panel-container').SetHasClass('show', true);
+        elModel.SetCSMSplitPlane0DistanceOverride(85.0);
         _UpdateModelData(OfferItemData);
     }
     function _UpdateModelData(OfferItemData) {
@@ -858,9 +859,15 @@ var CollectionOffers;
             }
         }
         m_elScreen.FindChildInLayoutFile('id-offer-preview-inspect-btn').SetPanelEvent('onactivate', () => {
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + OfferItemData.itemId +
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + OfferItemData.itemId +
                 '&' + 'inspectonly=true' +
                 '&' + 'showallitemactions=false');
+            let oSettings = {
+                item_id: OfferItemData.itemId,
+                inspect_only: true,
+                hide_all_action_items: true
+            };
+            elPanel.Data().oSettings = oSettings;
         });
         switch (OfferItemData.rarity) {
             case 3:
@@ -1041,9 +1048,13 @@ var CollectionOffers;
                         return;
                     }
                     if (FriendsListAPI.GetFriendLevel(MyPersonaAPI.GetXuid()) >= InventoryAPI.GetMaxLevel()) {
-                        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
-                            '&' + 'asyncworkitemwarning=no' +
-                            '&' + 'asyncworktype=prestigecheck');
+                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
+                        let oSettings = {
+                            item_id: '0',
+                            show_work_type_warning: false,
+                            work_type: 'prestigecheck'
+                        };
+                        elPanel.Data().oSettings = oSettings;
                         return;
                     }
                     if (m_tmsExpectingXpGrantNotification && (Date.now() - m_tmsExpectingXpGrantNotification < 1500))

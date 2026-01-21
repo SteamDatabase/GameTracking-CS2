@@ -55,31 +55,41 @@
 %d of %d empty (%.3f %%)\n
 %d total.\n
 %d,'%s','%s',%d\n
-%d:  %s %s [ptr 0x%p] 0x%p (%s) (%s *->%s *) %s '%s'
+%d:  %s %s [ptr 0x%p] 0x%p (%s) (%s *) %s '%s'
 %d:  %s (%s) [ptr 0x%p] %s%s '%s'
 %gms
 %s %-32s : %s at '%s'\n
 %s %-32s : %s\n
+%s %d != %d
+%s %s != %s
 %s %s %s offset %u, temporarily adding to ignore list\n
 %s %s = %s\n
 %s %s preserve field %i %s at offset %u, removing from ignore list\n
 %s %s:  [%d] %s queue %s [type %s] %son 0x%p [alloc %u] [order %d] %s\n
 %s %s:  [%d] %s queue %s [type %s] 0x%p %s\n
+%s '%s %s' only in codegen
+%s '%s %s' only in schema
 %s '%s':  encoding mismatched %d vs. %d bits\n
 %s + % 4d classes
 %s - Argument expected (message ID or name).\n
 %s - Invalid net message index: %d\n
 %s - Unrecognized net message name: '%s'\n
-%s -> %s::%s is marked for networking but is not a CNetworkVar!\n
 %s : %s = '%s'
 %s Gathering field offsets in %s\n
+%s MNetworkNoBase schema %s != ncg %s
+%s OOPVSClassUpdates  differs schema %d != ncg %d
 %s SendMessages %s failed with EResult %d\n
 %s ambiguous, field exists in serializer '%s' field %d\n
+%s ambiguous, field exists in serializer '%s'\n
 %s depth %d\n
 %s had %d different permutations\n
 %s has MNetworkBitCount (or other float field tags) but is type cat '%s' (type %s)\n
 %s has tick %d, but this network network frame already set tick to %d\n
+%s proxy %d differs schema %s != ncg %s
+%s proxy count differs schema %d != ncg %d
 %s rebuild %s::%s at %u\n
+%s replay %d differs schema %s != ncg %s
+%s replay compat field count differs schema %d != ncg %d
 %s!fake
 %s%s %s::%s recursively\n
 %s%s found %s in path %s\n
@@ -99,6 +109,7 @@
 %s:  couldn't find serializer %s in %s\n
 %s:  encodeded data mismatched %d bits\n
 %s:  encoding mismatched %d vs. %d bits\n
+%s:  failed to find schema type for '%s'/'%s'\n
 %s:  in serializer '%s' couldn't find field %s::%s, possibly already marked MNetworkExclude\n
 %s:  metadata( %d: '% -10s' %s = %u )
 %s:  specified different usergroup proxy functions for '%s'\n
@@ -107,6 +118,7 @@
 %s: !CanPacket() - m_bSuppressingTransmit.\n
 %s: field %s has MNetworkSendProxyRecipientsFilter but is not declared using CNetworkVarEmbeddedNotFlattened\n
 %s: field %s has MNetworkSendProxyRecipientsFilter but type '%s' is not declared DECLARE_EMBEDDED_NETWORKVAR_NOTFLATTENED()\n
+%s: left %s right %s
 %s: max array count of %d, removing callback for invalid element %d\n
 %s: rebasing delegate [ 0x%p -> 0x%p ]\n
 %s: recreation removing deallocation\n
@@ -134,6 +146,10 @@
 %smarking %s::%s because it derives from or is a '%s'\n
 %u serializers with %u fields (approx memory %llu / %llu in fields ) bytes (field size %d, serializer size %d)\n
 %x (int:%d, float:%f)
+'%s %s' only in codegen
+'%s %s' only in schema
+'%s' only in codegen\n
+'%s' only in schema\n
 (%u %u %u %u)
 (.*)\[(\d+)\]$
 (Message Info)
@@ -143,6 +159,25 @@
 (stream: %s%s local: %s%s)
 *pEnd > *pStart
 + include
++++ %s %s differs
++++ %s %s only in other
++++ %s %s size %d != %d
++++ %s %s size %d!=%d
++++ %s %s: %s != %s
++++ %s %s: '%s' != '%s'
++++ %s %s: '%s' only in %s
++++ %s %s: delegates not equal
++++ %s %s: p1(%s) != p2(%s)
++++ %s %s[%d]: %s != %s
++++ callback %d: %s != %s
++++ callback %d: m_bInvokeChangeCallbackOnCreate %d != %d
++++ callback %d: m_bInvokeChangeCallbackOnUtlVectorSubfieldChanges %d != %d
++++ callback %d: m_nChangeCallbackType %d != %d
++++ callback %d: tag %u != %u
++++ for class %s GatherNetworkVarNames mismatched return values %s != %s\n
++++ for class %s varname counts mismatched, ncg %d schema %d\n
++++ for class %s varnames mismatched, ncg %s,%s schema %s,%s\n
++delegate,
 , now outside range
 - %d Scratch Buffers in use (%llu bytes)\n
 - Config: %s, %i connections\n
@@ -199,14 +234,12 @@
 21NetMessagePacketEnd_t
 22CDecodeSerializerStack
 22CEncodeSerializerStack
-23INetworkMessageInternal
 23NetMessagePacketStart_t
 25CConCommandMemberAccessorI16CNetworkMessagesE
 25CFieldShadowSpewCollector
 25CNETMsg_SplitScreenUser_t
 25IFieldShadowSpewCollector
 27CCLCMsg_RconServerDetails_t
-27CNetWhyFieldExcludedFunctor
 27vcon_NetworkEncodingStats_t
 28NetMessageConnectionClosed_t
 29NetMessageConnectionCrashed_t
@@ -219,7 +252,7 @@
 34NetMessageSplitscreenUserChanged_t
 41CFlattenedSerializerReadFieldListListener
 8CNetChan
-<classname> <fieldname>:  spew why field was excluded from networking for classname.
+::Storage_t
 ?33s?
 Accepting Steam Net connection %s\n
 Activates/deactivates net message validation
@@ -229,6 +262,7 @@ AddToTail
 Allowing IP connections without auth\n
 An old command that has been renamed to 'net_option'
 Applied simulated network conditions from gameinfo.\n
+ApplyOverridesToField encountered unknown directive NetworkOverrideType_t(%d)\n
 ApplyOverrides_R:  couldn't find field from schema %s::%s\n
 AssignSharedChangeCallbackIndex
 AssociateNetMessageGroupIdWithChannelCategory: Couldn't find or create group %s!\n
@@ -328,10 +362,16 @@ CSerializedEntities::CompareSerializedEntities to field %s '%s' not present in f
 CSerializedEntities::CompareSerializedEntities:  from serializer is '%s' and to serializer is '%s', comparison doesn't make sense!\n
 CSerializedEntities::CompareSerializedEntities:  to pointer is %s and from pointer is %s\n
 CStrongHandle
+CStrongHandle< InfoForResourceTypeCModel >
+CStrongHandle< InfoForResourceTypeCNmGraphDefinition >
+CStrongHandle< InfoForResourceTypeCPostProcessingResource >
+CStrongHandle< InfoForResourceTypeCTextureBase >
+CStrongHandle< InfoForResourceTypeCVDataResource >
+CStrongHandle< InfoForResourceTypeIMaterial2 >
+CStrongHandle< InfoForResourceTypeIParticleSystemDefinition >
 CTransform
 CTransformWS
 CUtlBinaryBlock
-CUtlString
 CacheableConnectionExpired
 CalcDelta
 Can't ConnectLoopback between socket %d and %d, not enough slots\n
@@ -455,6 +495,14 @@ GetPathData failed for read only CFieldPath
 Got ISteamNetworkingSockets user interfaces from standalone lib\n
 Got ISteamNetworkingSockets user interfaces from steam client\n
 Got message on poll group for socket %s, but cannot find connection in table?
+HMaterialStrong
+HModelStrong
+HNmGraphDefinitionStrong
+HParticleSystemDefinitionStrong
+HPostProcessingStrong
+HRenderTextureStrong
+HVDataResourceStrong
+HasNetworkVar wrong for %s::%s\n
 Host game server ip
 INetChannel::SetCategories: Network category wasn't registered!\n
 INetworkSystem::RegisterNetworkCategory: Attempted to register category %u twice (debug name: %s and %s)\n
@@ -486,6 +534,7 @@ MNetworkArraySerializer
 MNetworkBitCount
 MNetworkChangePointerCallback
 MNetworkChangeTag
+MNetworkEnable but not using CNetworkVar: struct %s, fields: %s (could be intentional)\n
 MNetworkEncodeFlags
 MNetworkEncoder
 MNetworkExcludeByName
@@ -502,6 +551,7 @@ MNetworkRemoveAll
 MNetworkReplayCompatField
 MNetworkSendProxyRecipientsFilter
 MNetworkSerializer
+MNetworkStructNotInNetworkUtlVectorEmbedded
 MNetworkTypeAlias
 MNetworkUserGroup
 MNetworkUserGroupProxy
@@ -522,7 +572,7 @@ Multi-dimensional fixed arrays not supported by networking:  %s::%s\n
 Multiple steam net connections from %s\n
 N13CNetMessagePBILi0E11CNETMsg_NOPL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi3E23CNETMsg_SplitScreenUserL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
-N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder12ComputeDepthEP30BuildFlattenedSerializerInfo_tiEUliE_EviiPKcOT0_ii13JobPriority_tQ14is_invocable_vIS8_JiEEEUliE_EE
+N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder12ComputeDepthEbP30BuildFlattenedSerializerInfo_tiEUliE_EviiPKcOT0_ii13JobPriority_tQ14is_invocable_vIS8_JiEEEUliE_EE
 N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder7ProcessEbEUliE_EviiPKcOT0_ii13JobPriority_tQ14is_invocable_vIS6_JiEEEUliE_EE
 NETWORK_FIELD_CHANGED_ARRAY_NO_VALUE
 NETWORK_FIELD_CHANGED_ARRAY_WITH_VALUE
@@ -574,6 +624,7 @@ NetworkReplayCompatField_t %s::%s on field '%s' is using possibly bogus this poi
 NetworkSystem
 NetworkSystem/CreateListenSocketP2P
 NetworkSystem/SkipRedundantChangeCallbacks
+NetworkSystem/UseSerializedEntityPool
 Networking Reliable
 No SteamNetworkingUtils?\n
 No active net channels.\n
@@ -742,6 +793,7 @@ WriteFieldList
 WriteFields
 WriteToBuffer Message %s is not initialized! Probably missing required fields!\n
 Writing %d bits for path %s of serializer %s entity %d, this will fail to parse\n
+YWB:  remember to remove this code, once we combine networking startup procedure back into a single API\n
 [ Net Message Info: %s ]\n
 [%s] Queued message count %d exceeds limit of %s=%d.  Allowing due to engine_frametime_warnings_enable=false\n
 [%s] high frame misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping, %.0fms peak jitter\n
@@ -762,6 +814,7 @@ Writing %d bits for path %s of serializer %s entity %d, this will fail to parse\
 \tID                       = %u\n
 \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t
 ^$\.*+?()[]{}|
+`cg_Z
 activated
 added
 aggegated
@@ -789,13 +842,17 @@ backspace
 bit %d - %d (%d bits/%d bytes):\n
 bitcount=%d, 
 both states
-buildhierarchystruct.cpp
 building fake field for %s %s\n
+callback_invalid
+callback_on_entity
+callback_on_struct
+callback_static
 cannot create std::deque larger than max_size()
 cannot create std::vector larger than max_size()
 carriage-return
 chained via %s
 change
+checking for missing network vars!\n
 circumflex
 class_and_field
 class_only
@@ -804,11 +861,14 @@ client_interpolation_amount
 client_update_rate
 closed by peer
 cmd_info
+codegen m_SortedByDepthkill[%i] mismatch, found %d instead of %d entries\n
+codegen tbd\n
 colon
 comma
 commercial-at
 context(0x%p) 
 create_poll_group
+data class type name
 data_bits
 databytes
 deactivated
@@ -820,7 +880,6 @@ delta >= 1u
 delta_error
 dollar-sign
 dropped
-dt_instrumentation.cpp
 dti_%02d%02d%02d-%02d%02d%02d_%s.csv
 dti_enabled
 due to MNetworkNoBase
@@ -830,6 +889,8 @@ encoding_stats
 equals-sign
 exclamation-mark
 exclude
+excludebygroup
+excludebyname
 excluding
 failed to construct fake field from metadata %s::%s (%s) in %s\n
 fake
@@ -846,11 +907,12 @@ fieldpath_%02d%02d%02d-%02d%02d%02d.csv
 filesystem
 five
 fixed array
+flags(
 flags=%d, 
 flattenedserializer.cpp
 flattenedserializers.cpp
-flattenedserializers_database.cpp
 form-feed
+found it %s is %s\n
 four
 fp_trace
 fs_spew_readfieldlist
@@ -870,7 +932,10 @@ hostip
 huge
 hyphen
 identified %d entity related c++ field shadowing issues:\n
+ignore field differs for %s::%s\n
 include
+includebygroup
+includebyname
 including
 incoming_data_bytespersecond
 incoming_sequence
@@ -889,8 +954,65 @@ left-parenthesis
 left-square-bracket
 less-than-sign
 libnetworksystem.so
+m_FieldArrayDataOffsets
+m_NetworkChangeTags
+m_SerializerDataOffsets
+m_UserDefinedChangeCallbacks
+m_UserGroups
+m_bBitCountPresent
 m_bCanStillRegisterCallbackPriorities
-m_nSharedChangeCallbackCount must be <= 32
+m_bFakeArray
+m_bFakeField
+m_bIsArrayOfPointers
+m_bIsEnum
+m_bIsEnumSigned
+m_bIsPolymorphicPointer
+m_bNetworkVarEmbeddedNotFlattened
+m_bRequiresPointerIndirection
+m_callbackType
+m_changeCallback
+m_delegate
+m_nArrayCount
+m_nArrayStride
+m_nBitCount
+m_nChangeCallbackOrder
+m_nEmbeddedFieldOffsetDelta
+m_nInheritanceDepth
+m_nMemoryOffset
+m_nNetworkDataType
+m_nNetworkEncodeFlags
+m_nOOPVSFieldUpdates
+m_nOutOfPVSUpdates
+m_nQueuedDataSize
+m_nResourceTypeForHandle
+m_nSharedChangeCallbackCount must be <= EncounteredSharedChangedCallbackBitVec_t::knFixedBitSize
+m_nUserGroupCount
+m_nUserGroups
+m_pArraySerialiers
+m_pChangeCallbacks
+m_pChangePointerCallback
+m_pCustomData
+m_pDescFunc
+m_pEncoderName
+m_pEncoders
+m_pFieldChangePointerCallback
+m_pFieldChangePointerCallback differs!
+m_pFuncName
+m_pNetworkAlias
+m_pNetworkTypeAlias
+m_pRecipientsFilter
+m_pSendProxyRecipientsFilter
+m_pSendProxyRecipientsFilter differs!
+m_pSerializerNameFunc
+m_pSerializers
+m_pStructSerializer
+m_pUserDefinedArraySerializer
+m_pUserDefinedSerializer
+m_priority
+m_symContainingType
+m_symFieldName
+m_symFieldType
+m_unEncoderDataOffset
 mark all recursively (%s)
 marked %s by user group %s
 marked MNetworkExcludeByName
@@ -901,6 +1023,10 @@ marked by user group
 matrix3x4_t
 matrix3x4a_t
 max_size
+mismatch:  schema '%s' %d chains codegen '%s' %d chains\n
+mismatch:  schema '%s' %d fields codegen '%s' %d fields\n
+mismatch:  schema '%s' codegen '%s'\n
+missing DECLARE_NETWORK_SERIALIZER_CODEGEN( %s ) for type.\n
 nIndex != m_priorityToOrderMap.InvalidIndex()
 nPriority != NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY
 net_captureculldata
@@ -956,12 +1082,10 @@ net_use_delta_property_fastpath
 net_use_packet_compression
 net_validatemessages
 net_validatemessages = %d\n
-net_why_field_excluded
 netchan.cpp
 netmessage
 networking/%04d_%02d_%02d_%02d_%02d_%02d
 networkmessages.cpp
-networkmessages.h
 networkserializer.cpp
 networksystem.cpp
 newline
@@ -975,6 +1099,7 @@ noscale
 nullptr != pFieldOwnerStruct
 number-sign
 org(%g,%g,%g) ang(%g,%g,%g)
+other
 out-of-order
 outgoing_data_bytespersecond
 outgoing_sequence
@@ -990,6 +1115,8 @@ plus-sign
 pmInfoDest.m_pFlattenedSerializer
 pmInfoDest.m_unPolymorphicTypeId == pmInfoSource.m_unPolymorphicTypeId
 pmInfoSource.m_pFlattenedSerializer
+pointer callback class name
+pointer callback name
 pointer field
 polymorphic
 polymorphic [forced]
@@ -998,7 +1125,7 @@ prediction_errors
 previous only
 pri(%u)
 problem detected locally
-p}?13ConCommandRef
+p}?23INetworkMessageInternal
 qangle_pitch_yaw
 question-mark
 quotation-mark
@@ -1118,12 +1245,11 @@ unreliable
 unreliable_bits
 usage: %s <client|server>\n
 usage: %s <name> <server>\n
-usage: %s classname fieldname\n
 usage: fs_spew_readfieldlist entindex <optional min change bytes>\n
 utlvector
 valid
 valid poly %s [%u]
-verbosespewbuilder.cpp
 vertical-line
 vertical-tab
 writing (in %s)
+~delegate,

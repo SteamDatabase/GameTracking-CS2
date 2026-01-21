@@ -18,7 +18,16 @@ var HudDemoController;
     const cp = $.GetContextPanel();
     cp.SetDialogVariableInt("timestep_value", timeStepSeconds);
     const slider = $("#Slider");
-    const speeds = $("#SpeedControls").Children().slice(1);
+    const timescale = $("#TimeScale");
+    const XRayToggleButton = $("#XRayToggleButton");
+    const TrueViewToggleButton = $("#TrueViewToggleButton");
+    const TrueViewDOACheckBox = $("#TrueViewDOACheckBox");
+    const TrueViewDOAToggleButton = $("#TrueViewDOAToggleButton");
+    const TrueViewWrongVersionCheckBox = $("#TrueViewWrongVersionCheckBox");
+    const TrueViewWrongVersionToggleButton = $("#TrueViewWrongVersionToggleButton");
+    const SettingsPanel = $("#Settings");
+    timescale.SetPanelEvent('onmouseover', () => UiToolkitAPI.ShowTextTooltip(timescale.id, "Playback speed"));
+    timescale.SetPanelEvent('onmouseout', () => UiToolkitAPI.HideTextTooltip());
     const hud = cp.GetParent();
     $.RegisterForUnhandledEvent("DemoToggleUI", () => {
         if (!cp.IsPlayingDemo())
@@ -94,7 +103,7 @@ var HudDemoController;
             let nSlashIndex = sFileName.lastIndexOf("/");
             if (nSlashIndex !== -1)
                 sFileName = sFileName.substring(nSlashIndex + 1);
-            cp.SetDialogVariable("total_time", TicksToTimeText(state.nTotalTicks, state.nSecondsPerTick));
+            cp.SetDialogVariable("total_time", TicksToTimeText(state.nTotalTicks, state.nSecondsPerTick, false));
             if (state?.bIsPlayingBroadcast) {
                 hud.SetHasClass("DemoControllerMinimal", false);
                 hud.SetHasClass("DemoControllerFull", false);
@@ -186,21 +195,35 @@ var HudDemoController;
         slider.max = state.nTotalTicks;
         if (!slider.mousedown) {
             slider.value = state.nTick;
-            cp.SetDialogVariable("current_time", TicksToTimeText(state.nTick, state.nSecondsPerTick));
+            cp.SetDialogVariable("current_time", TicksToTimeText(state.nTick, state.nSecondsPerTick, true));
             cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
         }
-        speeds[0].SetHasClass("selected", state.fTimeScale === .25);
-        speeds[1].SetHasClass("selected", state.fTimeScale === .5);
-        speeds[2].SetHasClass("selected", state.fTimeScale === 1);
-        speeds[3].SetHasClass("selected", state.fTimeScale === 2);
-        speeds[4].SetHasClass("selected", state.fTimeScale === 4);
-        speeds[5].SetHasClass("selected", state.fTimeScale === 8);
+        timescale.text = parseFloat(state.fTimeScale.toFixed(4)).toString() + "x";
+        const bSettingsVisible = cp.BHasClass("SettingsVisible");
+        if (bSettingsVisible) {
+            SettingsPanel.AddClass("Visible");
+            const spec_show_xray = parseInt(GameInterfaceAPI.GetSettingString("spec_show_xray"));
+            XRayToggleButton.SetSelected(spec_show_xray != 0);
+            const cl_demo_predict = parseInt(GameInterfaceAPI.GetSettingString("cl_demo_predict"));
+            const cl_trueview_show_doa_predictions = parseInt(GameInterfaceAPI.GetSettingString("cl_trueview_show_doa_predictions"));
+            TrueViewToggleButton.SetSelected(cl_demo_predict > 0);
+            TrueViewDOAToggleButton.SetSelected(cl_trueview_show_doa_predictions != 0);
+            TrueViewDOACheckBox.enabled = cl_demo_predict > 0;
+            TrueViewWrongVersionCheckBox.enabled = cl_demo_predict > 0;
+            if (cl_demo_predict > 0) {
+                TrueViewWrongVersionToggleButton.SetSelected(cl_demo_predict >= 2);
+            }
+        }
+        else {
+            SettingsPanel.RemoveClass("Visible");
+        }
+        const cl_demo_predict = parseInt(GameInterfaceAPI.GetSettingString("cl_demo_predict"));
     }
     $.Schedule(0, FrameUpdate);
     $.RegisterEventHandler("SliderReleased", slider, (_, fValue) => {
         if (lastState == null)
             return true;
-        cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick));
+        cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick, true));
         cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
         cp.GotoTick(Math.floor(fValue));
         return true;
@@ -208,7 +231,7 @@ var HudDemoController;
     $.RegisterEventHandler("SliderValueChanged", slider, (_, fValue) => {
         if (lastState == null)
             return true;
-        cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick));
+        cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick, true));
         cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
         return true;
     });
@@ -258,11 +281,11 @@ var HudDemoController;
         return true;
     }
     HudDemoController.OnStepInterval = OnStepInterval;
-    function OnTimeScale(fTimeScale) {
-        cp.SetTimeScale(fTimeScale);
+    function OnShowTimeScaleContextMenu() {
+        cp.OnShowTimeScaleContextMenu();
         return true;
     }
-    HudDemoController.OnTimeScale = OnTimeScale;
+    HudDemoController.OnShowTimeScaleContextMenu = OnShowTimeScaleContextMenu;
     function OnStopPlayback() {
         cp.StopPlayback();
         return true;
@@ -324,11 +347,21 @@ var HudDemoController;
         }
         return TicksToRound(lastState.nTick, lastState.RoundIntervals);
     }
-    function TicksToTimeText(nTick, nSecondsPerTick) {
-        const nTime = Math.floor(nSecondsPerTick * nTick);
-        const nSeconds = nTime % 60;
-        const nMinutes = Math.floor(nTime / 60);
-        const sSeconds = nSeconds < 10 ? "0" + nSeconds : nSeconds.toString();
+    function TicksToTimeText(nTick, nSecondsPerTick, bFractionalSeconds) {
+        const nTime = nSecondsPerTick * nTick;
+        const nMinutes = Math.floor(nTime / 60.0);
+        const nSeconds = nTime - nMinutes * 60.0;
+        let sSeconds = "";
+        if (bFractionalSeconds) {
+            sSeconds = (Math.floor(nSeconds * 10.0) / 10.0).toFixed(1);
+            if (sSeconds.length < 4)
+                sSeconds = "0" + sSeconds;
+        }
+        else {
+            sSeconds = nSeconds.toFixed(0);
+            if (sSeconds.length < 2)
+                sSeconds = "0" + sSeconds;
+        }
         return `${nMinutes}:${sSeconds}`;
     }
     function TicksToRound(nTick, rounds) {
@@ -345,4 +378,46 @@ var HudDemoController;
         return lastState?.nObserverMode == ObserverMode.OBS_MODE_CHASE ||
             lastState?.nObserverMode == ObserverMode.OBS_MODE_ROAMING;
     }
+    function ToggleSettingsVisible() {
+        cp.ToggleClass("SettingsVisible");
+        $.Schedule(0, FrameUpdate);
+    }
+    HudDemoController.ToggleSettingsVisible = ToggleSettingsVisible;
+    function ToggleXRay() {
+        let spec_show_xray = parseInt(GameInterfaceAPI.GetSettingString("spec_show_xray"));
+        spec_show_xray = spec_show_xray ? 0 : 1;
+        GameInterfaceAPI.ConsoleCommand(`spec_show_xray ${spec_show_xray}`);
+    }
+    HudDemoController.ToggleXRay = ToggleXRay;
+    function ToggleTrueView() {
+        const cl_demo_predict = parseInt(GameInterfaceAPI.GetSettingString("cl_demo_predict"));
+        if (cl_demo_predict) {
+            GameInterfaceAPI.ConsoleCommand("cl_demo_predict 0");
+        }
+        else {
+            if (!TrueViewWrongVersionToggleButton.IsSelected()) {
+                GameInterfaceAPI.ConsoleCommand("cl_demo_predict 1");
+            }
+            else {
+                GameInterfaceAPI.ConsoleCommand("cl_demo_predict 2");
+            }
+        }
+    }
+    HudDemoController.ToggleTrueView = ToggleTrueView;
+    function ToggleTrueViewDOACommands() {
+        let cl_trueview_show_doa_predictions = parseInt(GameInterfaceAPI.GetSettingString("cl_trueview_show_doa_predictions"));
+        cl_trueview_show_doa_predictions = cl_trueview_show_doa_predictions ? 0 : 1;
+        GameInterfaceAPI.ConsoleCommand(`cl_trueview_show_doa_predictions ${cl_trueview_show_doa_predictions}`);
+    }
+    HudDemoController.ToggleTrueViewDOACommands = ToggleTrueViewDOACommands;
+    function ToggleTrueViewWrongVersion() {
+        const cl_demo_predict = parseInt(GameInterfaceAPI.GetSettingString("cl_demo_predict"));
+        if (cl_demo_predict == 1) {
+            GameInterfaceAPI.ConsoleCommand("cl_demo_predict 2");
+        }
+        else if (cl_demo_predict == 2) {
+            GameInterfaceAPI.ConsoleCommand("cl_demo_predict 1");
+        }
+    }
+    HudDemoController.ToggleTrueViewWrongVersion = ToggleTrueViewWrongVersion;
 })(HudDemoController || (HudDemoController = {}));

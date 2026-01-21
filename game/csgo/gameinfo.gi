@@ -324,4 +324,9 @@
 		"UseOfficialAddons" "1"
 		"RestrictFlatFileAddonsToTools" "1"
 	}
+
+	MaterialEditor
+	{
+		"DetailPropsEnabled" "1"
+	}
 }

@@ -49,8 +49,9 @@ var SeasonProgress;
             elBar.SwitchClass('num-bars', nBars + '-bars');
             elBar.FindChildInLayoutFile('id-inner-medal').SwitchClass('tier', nWins >= rangeOfMatchesInBar.max ? 'rank-tier-' + color : 'rank-tier-none');
         }
+        const nSeasonNumberNow = LeaderboardsAPI.GetCurrentSeasonPremierLeaderboard().replace('official_leaderboard_premier_season', '');
         clampedRating = clampedRating < 1 ? 1 : clampedRating + 1;
-        let itemDef = InventoryAPI.GetItemDefinitionIndexFromDefinitionName('premier season coin s=3 c=' + clampedRating + ' b=' + nBars);
+        let itemDef = InventoryAPI.GetItemDefinitionIndexFromDefinitionName('premier season coin s=' + nSeasonNumberNow + ' c=' + clampedRating + ' b=' + nBars);
         let itemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(itemDef, 0);
         $.GetContextPanel().FindChildInLayoutFile('id-medal-end').itemid = itemId;
         $.GetContextPanel().SetDialogVariableInt('wins', nWins);

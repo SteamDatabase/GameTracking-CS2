@@ -1,4 +1,4 @@
-  C%d:I%d {ID=%-3d} 
+  C%d:I%-2d {F=%-10d,V=%-10d} 
   CallInfo%d: %s\n
   Cell%d - NULL\n
   Cell%d EditorID:%d [%s]: %s\n
@@ -19,8 +19,11 @@
  [*OBSERVABLE*]
  animtime[
  next: %p, parent: %p\n
+ pitch[
  radius[
  randseed[
+ rot[
+ yaw[
 "Position within sphere random" no longer supports the "randomly distribute to highest supplied Control Point" feature\n\t"Emit continuously" and "Emit noise" no longer support "scale emission to used control points".\n\t"Position from control points" had a max control point added to it.
 "Remap control point orientation to rotation" does something approaching sanity for the cases I looked at.  If we have cases where this isn't appropriate, we can split out the behavior.\n
 "Remap control point orientation to rotation" rewritten to make more sense.\n
@@ -56,7 +59,6 @@ $SPECULARWARP
 %d instruction(s)\n
 %d register(s) %d byte(s)\n
 %s '%s' (%s)
-%s (uid=%d)
 %s Be Batch Rendered
 %s is trying to get CP object %d but the function read limit is %d\n
 %s is trying to get CP renderable %d but the function read limit is %d\n
@@ -80,7 +82,8 @@ $SPECULARWARP
 *ZNK26C_OP_VelocityMatchingForce7OperateEP19CParticleCollectionfPvEUlPK25ObjectPairCollisionList_tE_
 ,m_nStride=%d m_pData=%p )
 -1 for all asleep, 1 for all awake
-../public/scenesystem/vertexformat.h
+../../_build_/particles/_vpc_particles/default/linuxsteamrt64/_schema_/release/../../../../../../../src/particles/pfunc_renderers.cpp
+../public/mathlib/object_tree_impl.h
 0=don't clear particle attrs at init 1=clear to zero 2=clear to 0xdb -1=clear to zero at first sim
 10C_OP_Decay
 10C_OP_Noise
@@ -238,6 +241,7 @@ $SPECULARWARP
 20IParticleSystemQuery
 20IResourceTypeManager
 20ISceneObjectDescBaseI20CSceneParticleObjectE
+20ISceneObjectListener
 21CPulseCell_LimitCount
 21C_INIT_PositionOffset
 21C_INIT_RandomLifeTime
@@ -285,7 +289,6 @@ $SPECULARWARP
 22C_OP_SetSimulationRate
 22C_OP_UpdateLightSource
 22IParticleEHandleHelper
-23CBasePulseGraphInstance
 23CKV3ResourceBlockHelper
 23CParticleTransformInput
 23CPulseCell_Inflow_Yield
@@ -766,6 +769,7 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI34C_INIT_CreateWithinSphereTransformE
 32CParticleFunctionDefinitionTypedI34C_INIT_InitFromVectorFieldSnapshotE
 32CParticleFunctionDefinitionTypedI34C_INIT_ScreenSpacePositionOfTargetE
+32CParticleFunctionDefinitionTypedI34C_OP_ModelSurfaceSnapshotGeneratorE
 32CParticleFunctionDefinitionTypedI34C_OP_RemapNamedModelBodyPartEndCapE
 32CParticleFunctionDefinitionTypedI34C_OP_RemapNamedModelSequenceEndCapE
 32CParticleFunctionDefinitionTypedI34C_OP_ScreenSpaceRotateTowardTargetE
@@ -861,13 +865,13 @@ $SPECULARWARP
 33C_OP_SetControlPointToImpactPoint
 33ParticleRendererCollectionCache_t
 34CKV3Transfer_ResourceLoadInterface
-34CParticleCollectionBindingInstance
 34CPulseCell_Inflow_EntOutputHandler
 34CPulseCell_PickBestOutflowSelector
 34CPulseCell_Step_CallExternalMethod
 34C_INIT_CreateWithinSphereTransform
 34C_INIT_InitFromVectorFieldSnapshot
 34C_INIT_ScreenSpacePositionOfTarget
+34C_OP_ModelSurfaceSnapshotGenerator
 34C_OP_RemapNamedModelBodyPartEndCap
 34C_OP_RemapNamedModelSequenceEndCap
 34C_OP_ScreenSpaceRotateTowardTarget
@@ -956,8 +960,6 @@ $SPECULARWARP
 :???;???;???3776>????/?/????7'7&>?????????
 <DEBUG-Only>
 <elt type not set>
-<map_key>
-<map_value>
 <none>\n
 <unimplemented>
 =2qg
@@ -985,6 +987,7 @@ ALPHA2
 AN?NbX?\f
 Abs Float
 Abs Int
+Abs Origin
 Absolute value (float)
 Absolute value (int)
 Activate
@@ -1035,6 +1038,7 @@ Avg Actual Traces
 Avg Intersection Tests
 Avg. Render (us)
 Avg. Sim (us)
+BBOX_RADIUS
 BONE_INDICES
 BONE_WEIGHTS
 BOX_ANGLES
@@ -1061,26 +1065,23 @@ Blobulator
 BlobulatorConstants
 Bone Indices
 Bone Weights
+Bounding Box Radius
 Box Angles
 Box Flags
 Box Maxs
 Box Mins
 BrickHeight
 C?DL
-CBasePulseGraphInstance::CBasePulseGraphInstance( %p )\n
-CBasePulseGraphInstance::EndGraphReload( %p ) %s\n
-CBasePulseGraphInstance::InitInstance_Internal( %s; %p ) %s\n
-CBasePulseGraphInstance::Shutdown( %s; %p ) %s\n
-CBasePulseGraphInstance::StartGraphReload( %p ) %s\n
-CBasePulseGraphInstance::~CBasePulseGraphInstance( %p )\n
 CBufferString
 CColorGradient
+CEntityNameString
 CGlobalSymbol
 CGlobalSymbolCaseSensitive
 CInstancedMeshSceneObjectDesc
 CKV3MemberNameSet
 CKV3MemberNameWithStorage
 CONTENT ERROR: Unable to find %s '%s' in model '%s' referenced in particle system '%s'\n
+CP %d
 CParticleCollection::GenerateSortedIndexList
 CParticleCollection::InitializeNewParticles
 CParticleCollection::Term [%p]: %s\n
@@ -1196,6 +1197,7 @@ CPulseMathlib::SplitWorldVector
 CPulseMathlib::SqrFloat
 CPulseMathlib::SqrInt
 CPulseMathlib::Sqrt
+CPulseMathlib::StringsAreEqualCaseSensitive
 CPulseMathlib::Tan
 CPulseMathlib::VectorToWorldVector
 CPulseMathlib::WorldVectorToVector
@@ -1204,14 +1206,13 @@ CPulseTestScriptLib::IndicateTestFailure
 CPulseTestScriptLib::IsInTestMode
 CPulseTestScriptLib::RegisterTestCheckpoint
 CPulseTestScriptLib::TestModeAssertTrue
+CPulse_InstructionDebug
 CREATION_TIME
 CStrongHandle
 CURVE_TANGENT_FREE
 CURVE_TANGENT_MIRROR
 CURVE_TANGENT_SINE
 CURVE_TANGENT_SPLINE
-CUtlOrderedMap
-CUtlString
 CUtlVectorFixedGrowable
 C_INIT_InitFromCPSnapshot: CP %d - No snapshot specified for %s!\n
 C_INIT_InitFromCPSnapshot: CP: %d - "%s" snapshot for %s has no data!\n
@@ -1220,6 +1221,7 @@ C_INIT_InitFromCPSnapshot: Unsupported attribute data type! (%d)\n
 C_INIT_InitFromCPSnapshot: cannot initialize PREV_XYZ - XYZ cannot be read!\n
 C_INIT_InitFromCPSnapshot: framerate unknown initializing PREV_XYZ! Defaulting to 30fps, but particle velocity may look wrong...\n
 C_INIT_InitFromParentKilled: Unsupported attribute data type! (%d)\n
+C_OP_ModelSurfaceSnapshotGenerator
 C_OP_SetFromCPSnapshot: cannot initialize PREV_XYZ - XYZ cannot be read!\n
 C_OP_SetFromCPSnapshot: framerate unknown initializing PREV_XYZ! Defaulting to 30fps, but particle velocity may look wrong...\n
 Calculate vector attribute
@@ -1252,6 +1254,7 @@ Color light from control point
 Color lit per particle
 Color random
 ColorMapParams
+Compare strings with case sensitivity, in contrast to normal string equality which is case-insensitive
 Computes 2 ( 2.71...) raised to a power
 Computes e ( 2.71...) raised to a power
 Constrain distance to control point
@@ -1288,7 +1291,6 @@ Cull relative to sphere
 Cull when crossing plane
 Cull when crossing sphere
 Cursor Has Tag
-Cursor[ ptr:%p | id:%d | graph:%p ]: CPulseExecCursor()\n
 Cycle Scalar
 D_COLOR_WARP
 D_COMPRESSED_NORMALS_AND_TANGENTS
@@ -1334,7 +1336,6 @@ Emit noise
 Emit to maintain count
 Enable children from parent particle count
 Enable input path in particle ops
-Enable/disable particle rendering
 EnableAlphaTint
 EnableParticleShaderFeatureBranching
 Enables/Disables Particle Simulation
@@ -1442,6 +1443,7 @@ Hit maximum implicit vertex buffer size of %u, desired %u\n
 Hitbox Index
 Hitbox Offset Position
 How aggressive the switch to fallbacks will be depending on how far over the cl_particle_sim_fallback_threshold_ms the sim time is.  Higher numbers are more aggressive.
+IKV3TransferInterface_ResourceSave
 IKV3TransferInterface_UtlSymbolLarge
 IS_EFFECTS_LAYER
 IS_EFFECTS_WATER_LAYER
@@ -1576,6 +1578,7 @@ MPropertyAutoExpandSelf
 MPropertyAutoRebuildOnChange
 MPropertyColorPlusAlpha
 MPropertyCustomEditor
+MPropertyCustomFGDType
 MPropertyEditContextOverrideKey
 MPropertyFlattenIntoParentRow
 MPropertySortPriority
@@ -1624,7 +1627,7 @@ Min Int
 Minimum of two values (float)
 Minimum of two values (int)
 Mirror
-Missing cell schema '%s', replacing with 'CPulseCell_Unknown'\n
+Missing cell class '%s', replacing with 'CPulseCell_Unknown'\n
 Missing data block
 Missing snapshot buffer block
 Mod R%d <- R%d %% R%d
@@ -1632,6 +1635,7 @@ Model Helper Pointer
 Model Helper Pointer 2
 Model Helper Pointer 3
 Model Helper Pointer 4
+Model Surface UV Snapshot Generator
 MotionVectorsTexture
 Move particles between 2 control points
 Movement Lerp to Initial Position relative to CP
@@ -1688,7 +1692,6 @@ Normalize Vector a
 Normalize vector
 Not R%d <- !R%d
 Not safe to 'new' this class due to alignment requirements
-NotReloading
 Offset of m_Children.m_pHead: [%i]\n
 OnInterval
 Only wrote %d (of %d) values when saving map!
@@ -1705,10 +1708,12 @@ OverrideShaderMode
 P8?2
 PARENT_PARTICLE_ID
 PARENT_PARTICLE_INDEX
+PARTICLE_ABS_ORIGIN
+PARTICLE_EYES
 PARTICLE_ID
+PARTICLE_WORLDSPACE_CENTER
 PET_SupportFadingOpaqueModels
 PITCH
-POISONED 
 PREV_XYZ
 PanelID
 Parent Map: %s\n
@@ -1727,8 +1732,8 @@ Particle needs recompiling: '%s'\nBrowse to the particle in asset browser, right
 Particle systems larger than this in every dimension skip culling to save CPU.  They will be drawn anyway.
 ParticleBuffer
 ParticleDiffuseModulation
-ParticleInstanceBuffer
-ParticleInstanceData
+ParticleEntityPos_t
+ParticleParamID_t
 ParticleSystem
 ParticleSystemRequiredResources
 Particlelib: Unsupported CPU or GPU for particle definition "%s"!\n
@@ -1783,8 +1788,6 @@ Prevent passing through a plane
 Prevent passing through static part of world
 Print debug message every time a particle collection is created
 Print out information on existing particle systems
-Probable infinite loop detected! Terminating pulse cursor after %d consecutive instructions (%s)
-Probable runaway cursor creation detected! Permanently disabling this graph instance (%s)
 Problem loading error.vpcf, please validate your game install\n
 Profile Point 1
 Profile Point 2
@@ -1825,7 +1828,6 @@ Ref Counted Pointer
 Register Test Checkpoint
 Reinitialize on endcap scalar random
 Reinterpret Instance %s R%d <- %s R%d
-Reloading
 Remap CP component to CP component
 Remap CP orientation to rotations
 Remap CP speed to CP
@@ -1983,8 +1985,8 @@ ScaleMatrix
 Scene Object Pointer
 SceneDepth
 SceneSystem/DrawParticleChildrenSeparateFromParents
-SceneSystem/MeshletMaxTriangleCount
-SceneSystem/MeshletMaxVertexCount
+SceneSystem/Particles/Debug Visualizer
+SceneSystem/Particles/Draw Particles
 SceneSystem/PerObjectLightingSetup
 SceneSystem/RenderMeshlets
 Scratch Float 1
@@ -2011,8 +2013,11 @@ Set Control Point to Random Active Control Point
 Set Control Point to Water Surface
 Set Event
 Set Float
+Set Gravity Direction (To Prev Position)
 Set Simulation Timescale
 Set System-Wide Float
+Set UV (To Hitbox Offset)
+Set UV Up Direction (To Box Angles)
 Set Variable
 Set Vector
 Set child control points from particle positions
@@ -2054,6 +2059,7 @@ SetBlackboardReference BR%d (%s) <- R%d
 SetControlPointOrientationFLU
 SetVar V%d (%s) <- R%d
 SetVarArrayElement1D V%d (%s) [ R%d ] <- R%d R%d
+Show all used controlpoints
 Show rope segments when debugging particle systems - specify a number to isolate to that segment id
 Show specific attribute when debugging particle systems
 Show the sorting position when debugging particle systems
@@ -2101,7 +2107,9 @@ Stop effect after duration
 Stops all particle systems currently playing
 Stops all particle systems that don't match specified name
 Stops all particle systems that match specified name
+Strings Are Equal Case Sensitive
 Sub R%d <- R%d - R%d
+Surface Offset
 System Name
 SystemOrigin
 SystemSize
@@ -2140,6 +2148,7 @@ Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference specific type.
 Turbulent force
 Twist around axis
+U Spacing
 UNUSED
 USER_EVENT_STATES
 Unable to find a valid model handle for m_bModelFromRenderer in '%s'\n
@@ -2151,6 +2160,7 @@ Use fixed seeds for easier debugging
 Use random seeds in debug
 Used to flag a test as having failed.
 User Event States
+V Spacing
 Value 0-1 how far along duration (always 0 if duration is -1)
 Variable '%s' is referenced but not declared in this system (%s). Adding a fallback now.\n
 Vector To World Vector
@@ -2178,6 +2188,7 @@ Wait, Resume=%s
 Warning: Missing fallback for particle system "%s"!\n
 When Steady State in %f Seconds
 World Vector To Vector
+Worldspace Center
 WriteDepthInTranslucent
 X to the Y power
 Y?Mi
@@ -2187,6 +2198,7 @@ ZN10MatrixMath11ScaleMatrixILb1E15CVariableMatrixEEvRT0_fEUliiE_
 ZNK10ObjectTree11CObjectTreeIiN19CParticleCollection27ParticleObjectTreeOptions_tEE24VisitAllOverlappingPairsIL26ObjectTreeTraversalFlags_t0EEEvRKSt8functionIFvPK25ObjectPairCollisionList_tEEEUliiE1_
 ZNK18C_OP_ClientPhysics8OnCreateEP19CParticleCollectionPvEUlP19IParticleCollectionS2_E_
 [ Chunk%d ]
+[ written at chunk start last-read I%d ]
 [ written by I%d last-read I%d ]
 [***INVALID INSTRUCTION %d (%s)***]\n
 [IMMEDIATE_HALT]
@@ -2203,7 +2215,6 @@ __State_Child_Condition__
 __State_Child_Subgraph__
 __TimelineParent__
 __procedural_colorgradient.vtex
-_cells
 _procedural_particle_snapshot.vsnap
 a:fulltype
 a:typeparam
@@ -2249,8 +2260,6 @@ cl_particle_log_creates
 cl_particle_newinit
 con_command
 creation_time
-current_value
-cursors
 data_offset
 data_size
 def min cpu=%d system cpu=%d def gpu=%d system gpu=%d\n
@@ -2263,7 +2272,6 @@ element
 endFrame
 endTile
 error.vpcf
-execution_history
 expected %s, got %s
 f>KZ}
 f?yu
@@ -2315,10 +2323,13 @@ implicit particles
 implicit vertices
 implicit/sweeprenderer.cpp
 inherit attribute from peer particle systems
+input volume maximum
+input volume minimum
 internal error in particle system MapParticleOrientationIndexToShaderCombo()
 itemgroups
 k>Mg
 k?C9
+kv3:ParticleParamID_t
 length2d
 length3d
 libparticles.so
@@ -2328,16 +2339,26 @@ lj?HP
 lookup tables
 lwK?
 m_Children.m_pHead: [%p]\n
+m_InstructionDebugInfos
+m_SequencePointName
 m_Stops
 m_TagValue
 m_bConditionValue
 m_bFirstEvaluate
+m_bSetGravity
+m_bSetUV
+m_bSetUp
 m_buffer=
 m_externalMethodTargetGraph
 m_flSlopeIncoming
 m_flSlopeOutgoing
-m_hDef
+m_flSurfaceOffset
+m_flUSpacing
+m_flVSpacing
+m_nBBoxType != BBOX_VOLUME && m_nBBoxType != BBOX_RADIUS
 m_nCurrentWakeIndex
+m_nPosition
+m_nValueNodeID
 m_szEffect
 manual_animation_frame
 materials/dev/implicit_surface.vmat
@@ -2359,14 +2380,12 @@ nKillPriority
 nMaxElements
 nNumerator
 nValue
-next_cursor_id
 nextafterf
 no_gpu_blobs
 non_homogenous_forward_layer_only
 not obeying particle system stencil of failure to parse stencil comparison string %s\n
 not rendering particle system because of failure ot parse stencil write string %s\n
 num_particles
-observable_listeners
 on_fire
 opacity
 operators
@@ -2386,6 +2405,7 @@ particle_profile
 particle_profile_filter
 particle_profile_spike
 particle_reset_assertions
+particle_sceneobject.cpp
 particle_snapshot_allow_combined_models
 particle_sort.cpp
 particle_stop_all
@@ -2404,7 +2424,7 @@ point_3
 point_4
 polymorphic_arg
 pos[
-previous_value
+position to get
 procedural_spritecard.vmat
 pulse_runtime_lib
 pvec_color_black
@@ -2419,12 +2439,14 @@ r_particle_cables_culling
 r_particle_cables_culling_bounds_scale
 r_particle_cables_dynamic_roundness
 r_particle_cables_dynamic_roundness_threshold
+r_particle_cables_render
 r_particle_cables_render_meshlets
 r_particle_cables_visualize_roundness
 r_particle_debug_filter
 r_particle_debug_force_simulation
 r_particle_debug_randomseeds
 r_particle_debug_show_attribute
+r_particle_debug_show_control_points
 r_particle_debug_show_rope_segments
 r_particle_debug_show_sort_position
 r_particle_enable_fastpath
@@ -2471,10 +2493,10 @@ rope_segment_id
 rotation_speed
 rsqrt
 saturate
+sc_particle_debug_visualizer
 scratch_float
 scratch_vec
 self
-self_handle
 sequence_number
 sequence_number1
 shader
@@ -2488,10 +2510,8 @@ spritecardparticles
 spritecardparticlesfast
 spritecardparticlesfasttrail
 spritecardparticlesnormal
-spritecardparticlesselfillum
 spritecardparticlestrail
 spritecardparticlestrailwithnormal
-spritecardparticlestrailwithselfillum
 spritecardtessvb
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
 std::_Sp_make_shared_tag::_S_ti()::__tag

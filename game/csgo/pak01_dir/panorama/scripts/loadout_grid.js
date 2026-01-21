@@ -506,8 +506,13 @@ var LoadoutGrid;
                 let itemId = elDragImage.itemid;
                 let bShuffle = elDragImage.Data().bShuffle;
                 if (ItemInfo.IsSpraySealed(itemId)) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
                         '&' + 'asyncworktype=decodeable');
+                    let oSettings = {
+                        item_id: itemId,
+                        work_type: 'decodeable'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else {
                     let category = InventoryAPI.GetLoadoutCategory(itemId);

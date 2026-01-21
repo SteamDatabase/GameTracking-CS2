@@ -6,37 +6,35 @@
 /// <reference path="popup_inspect_async-bar.ts" />
 var CapabilityCanPatch;
 (function (CapabilityCanPatch) {
-    let m_cP = $.GetContextPanel();
-    let m_elPreviewPanel = m_cP.FindChildInLayoutFile('CanApplyItemModel');
-    let m_prevCameraSlot = 0;
-    let m_firstCameraAnim = false;
-    let m_pos = 0;
     function ResetPos() {
-        m_pos = 0;
-        m_prevCameraSlot = 0;
-        m_firstCameraAnim = false;
+        $.GetContextPanel().Data().patchCharPos = 0;
+        $.GetContextPanel().Data().bFirstCameraAnim = false;
+        $.GetContextPanel().Data().prevCameraSlot = 0;
     }
     CapabilityCanPatch.ResetPos = ResetPos;
-    function PreviewPatchOnChar(toolId, activeIndex) {
+    function PreviewPatchOnChar(toolId, activeIndex, contextPanel) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
-        let elCharPanel = m_elPreviewPanel.FindChildInLayoutFile("CharPreviewPanel");
+        let elPreviewPanel = contextPanel.FindChildInLayoutFile('CanApplyItemModel');
+        let elCharPanel = elPreviewPanel.FindChildInLayoutFile("CharPreviewPanel");
         if (!elCharPanel || !elCharPanel.IsValid()) {
             return;
         }
         InventoryAPI.PreviewStickerInModelPanel(toolId, activeIndex, elCharPanel);
-        CameraAnim(activeIndex);
+        CameraAnim(activeIndex, contextPanel);
     }
     CapabilityCanPatch.PreviewPatchOnChar = PreviewPatchOnChar;
     ;
-    function CameraAnim(activeIndex) {
-        if ((m_prevCameraSlot === activeIndex || activeIndex == -1) && m_firstCameraAnim)
+    function CameraAnim(activeIndex, contextPanel) {
+        let prevCameraSlot = contextPanel.Data().prevCameraSlot;
+        if ((prevCameraSlot === activeIndex || activeIndex == -1) && prevCameraSlot)
             return;
-        if (!InventoryAPI.IsItemInfoValid(m_elPreviewPanel.Data().id))
+        let elPreviewPanel = contextPanel.FindChildInLayoutFile('CanApplyItemModel');
+        if (!InventoryAPI.IsItemInfoValid(elPreviewPanel.Data().id))
             return;
-        m_firstCameraAnim = true;
+        contextPanel.Data().bFirstCameraAnim = true;
         InventoryAPI.HighlightPatchBySlot(activeIndex);
-        _UpdatePreviewPanelSettingsForPatchPosition(m_elPreviewPanel.Data().id, activeIndex);
-        m_prevCameraSlot = activeIndex;
+        _UpdatePreviewPanelSettingsForPatchPosition(elPreviewPanel.Data().id, activeIndex, contextPanel);
+        prevCameraSlot = activeIndex;
     }
     CapabilityCanPatch.CameraAnim = CameraAnim;
     ;
@@ -50,39 +48,41 @@ var CapabilityCanPatch;
         { type: 'leftside', loadoutSlot: 'rifle1', pos: -1 },
         { type: 'leftleg', loadoutSlot: 'rifle1', pos: -1 },
     ];
-    function _UpdatePreviewPanelSettingsForPatchPosition(charItemId, activeIndex = 0) {
-        const charTeam = InventoryAPI.GetItemTeam(m_elPreviewPanel.Data().id);
+    function _UpdatePreviewPanelSettingsForPatchPosition(charItemId, activeIndex = 0, contextPanel) {
+        let elPreviewPanel = contextPanel.FindChildInLayoutFile('CanApplyItemModel');
+        const charTeam = InventoryAPI.GetItemTeam(elPreviewPanel.Data().id);
         let setting_team = charTeam.search('Team_CT') !== -1 ? 'ct' : 't';
         let patchPosition = InventoryAPI.GetCharacterPatchPosition(charItemId, activeIndex.toString());
         let oPositionData = m_positionData.filter(entry => entry.type === patchPosition)[0];
         if (!oPositionData) {
-            m_firstCameraAnim = false;
+            contextPanel.Data().bFirstCameraAnim = false;
             return;
         }
-        InspectModelImage.SetCharScene(m_elPreviewPanel.Data().id, LoadoutAPI.GetItemID(setting_team, oPositionData.loadoutSlot));
+        InspectModelImage.SetCharScene(elPreviewPanel.Data().id, LoadoutAPI.GetItemID(setting_team, oPositionData.loadoutSlot));
         let numTurns = 0;
-        if (m_pos !== oPositionData.pos) {
-            if (m_pos === 0 && oPositionData.pos === 1 ||
-                m_pos === 1 && oPositionData.pos === 2 ||
-                m_pos === 2 && oPositionData.pos === -1 ||
-                m_pos === -1 && oPositionData.pos === 0) {
+        let CharPos = contextPanel.Data().patchCharPos;
+        if (CharPos !== oPositionData.pos) {
+            if (CharPos === 0 && oPositionData.pos === 1 ||
+                CharPos === 1 && oPositionData.pos === 2 ||
+                CharPos === 2 && oPositionData.pos === -1 ||
+                CharPos === -1 && oPositionData.pos === 0) {
                 numTurns = 1;
             }
-            else if (m_pos === 2 && oPositionData.pos === 1 ||
-                m_pos === 1 && oPositionData.pos === 0 ||
-                m_pos === 0 && oPositionData.pos === -1 ||
-                m_pos === -1 && oPositionData.pos === 2) {
+            else if (CharPos === 2 && oPositionData.pos === 1 ||
+                CharPos === 1 && oPositionData.pos === 0 ||
+                CharPos === 0 && oPositionData.pos === -1 ||
+                CharPos === -1 && oPositionData.pos === 2) {
                 numTurns = -1;
             }
-            else if (m_pos === 2 && oPositionData.pos === 0 ||
-                m_pos === 1 && oPositionData.pos === -1 ||
-                m_pos === -1 && oPositionData.pos === 1 ||
-                m_pos === 0 && oPositionData.pos === 2) {
+            else if (CharPos === 2 && oPositionData.pos === 0 ||
+                CharPos === 1 && oPositionData.pos === -1 ||
+                CharPos === -1 && oPositionData.pos === 1 ||
+                CharPos === 0 && oPositionData.pos === 2) {
                 numTurns = 2;
             }
         }
-        m_pos = oPositionData.pos;
-        let elModelPanel = m_elPreviewPanel.FindChildInLayoutFile("CharPreviewPanel");
+        contextPanel.Data().patchCharPos = oPositionData.pos;
+        let elModelPanel = elPreviewPanel.FindChildInLayoutFile("CharPreviewPanel");
         if (numTurns < 0) {
             elModelPanel.TurnLeftCount(numTurns * -1);
         }

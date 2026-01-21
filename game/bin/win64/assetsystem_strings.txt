@@ -132,6 +132,8 @@
 !V_strcmp( hVTex->m_TestPayload.GetMemberString( "tga_payload" ), "updated_tga_content" )
 !V_strcmp( pAsset->GetCompileStateReason_Transient(), "Missing required special dependency 'TestResource_RequiredDependency'" )
 !V_strcmp( pAsset->GetCompileStateReason_Transient(), "No Game File" )
+!V_strcmp( pAssetA->GetCompileStateReason_Transient(), "No Game File" )
+!V_strcmp( pAssetB->GetCompileStateReason_Transient(), "No Game File" )
 !V_strcmp( pBaseWavThenLeafMP3->GetAbsolutePath_Transient( ASSET_LOCATION_CONTENT ), "t:/content/base/base_wav_then_leaf_mp3." WAV_FAKE )
 !V_strcmp( pBaseWavThenLeafMP3_Second->GetAbsolutePath_Transient( ASSET_LOCATION_CONTENT ), "t:/content/leaf/base_wav_then_leaf_mp3." MP3_FAKE )
 !V_strcmp( pMP3ThenWAV_First->GetAbsolutePath_Transient( ASSET_LOCATION_CONTENT ), "t:/content/base/base_mp3_then_leaf_wav." MP3_FAKE )
@@ -147,6 +149,8 @@
 !m_nPackFileNumber
 !name
 !pAsset->HasFileInLocation( ASSET_LOCATION_GAME )
+!pAssetA->HasFileInLocation( ASSET_LOCATION_GAME )
+!pAssetB->HasFileInLocation( ASSET_LOCATION_GAME )
 !pBaseWavThenLeafMP3->HasFileInLocation( ASSET_LOCATION_GAME )
 !pBaseWavThenLeafMP3_Second->HasFileInLocation( ASSET_LOCATION_GAME )
 !pContentOnlyMP3->HasFileInLocation( ASSET_LOCATION_GAME )
@@ -170,7 +174,6 @@
 "Predictor" value %d not supported
 "Wlw
 "YEu
-"\tV_fgets
 "`bB303
 "channels" attribute not found in the header.
 "compression" attribute not found in the header.
@@ -204,7 +207,6 @@ $HypYkf
 $J6"t
 $JXsZ
 $XI(6
-$\tV_fmodd
 $d`D-laM
 $f;Zv9l\r
 $g#8lu#
@@ -320,6 +322,7 @@ $prefix_element$
 %s------%s--%s%s
 %s--> NO ASSET FOUND: %s\n
 %s--> NO FILE(s): %s\n
+%s/%s.txt
 %s2-d encoding
 %s: %s at line %u of %s %u (got %u, expected %u)
 %s: (%d bit)\n
@@ -388,7 +391,6 @@ $prefix_element$
 'DAE
 'O6n
 'Z9t%
-'\tV_fopenUTF8
 'g0dW
 'id' or 'name' missing
 'pSN.F
@@ -409,7 +411,6 @@ $prefix_element$
 (Placeholder for unrecognized tag)
 (U1h
 (ZdOt\n&
-(\tV_fpclassifyd
 (d4t8
 (fS{ggRcjh
 (h`H1pqA
@@ -424,7 +425,6 @@ $prefix_element$
 )J9o
 )TpH
 )Urz
-)\tV_fprintf
 )fuG
 )haI
 * %d asset types:\n
@@ -548,6 +548,7 @@ $prefix_element$
 .?AU_Task_impl_base@details@Concurrency@@
 .?AUctype_base@std@@
 .?AUscheduler_interface@Concurrency@@
+.?AV<lambda_1>@?1??Init@CAssetSystem@@QEAAXPEAVIAssetFileSystemInterface@@@Z@
 .?AV<lambda_1>@?1??StartNewReadRequest@CAsyncLoadResourceHeaderPromise@@AEAAX_K_N@Z@
 .?AV<lambda_1>@?4??SubmitCacheRequest@CBitmapAsset@@AEAAX_N@Z@
 .?AV<lambda_1>@?8??SrgbLinearToGamma@CSOAContainer@@QEAAXH@Z@
@@ -790,6 +791,7 @@ $prefix_element$
 .?AV?$_Func_impl@V<lambda_f25c37099038263181b5186a3fa41b37>@@V?$allocator@H@std@@X$$V@std@@
 .?AV?$_Func_impl@V?$_Fake_no_copy_callable_adapter@P8Image@Etc@@EAAIIII@ZQEAV12@AEAIAEAHAEAI@std@@V?$allocator@H@2@I$$V@std@@
 .?AV?$_Func_impl@V?$_Fake_no_copy_callable_adapter@P8Image@Etc@@EAAXII@ZQEAV12@AEAHAEAI@std@@V?$allocator@H@2@X$$V@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_1>@?1??Init@CAssetSystem@@QEAAXPEAVIAssetFileSystemInterface@@@Z@X$$V@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?1??StartNewReadRequest@CAsyncLoadResourceHeaderPromise@@AEAAX_K_N@Z@XPEAVIAsyncReadRequest2@@W4AsyncRequestStatus_t@@@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?4??SubmitCacheRequest@CBitmapAsset@@AEAAX_N@Z@XPEAVIAsyncReadRequest2@@W4AsyncRequestStatus_t@@@std@@
 .?AV?$_Func_impl_no_alloc@V<lambda_1>@?8??SrgbLinearToGamma@CSOAContainer@@QEAAXH@Z@X$$V@std@@
@@ -835,12 +837,14 @@ $prefix_element$
 .?AVCAssetLocationFilter@@
 .?AVCAssetModFilter@@
 .?AVCAssetNameFilterDef@@
+.?AVCAssetReferencedByCountFilter@@
 .?AVCAssetReferencedByFilter@@
 .?AVCAssetReferencingFilter@@
 .?AVCAssetSystem@@
 .?AVCAssetSystemTest@@
 .?AVCAssetTagFilterDef@@
 .?AVCAssetTagVDataManager@@
+.?AVCAssetTagsManager@@
 .?AVCAssetType@@
 .?AVCAssetTypeFilter@@
 .?AVCAsyncLoadResourceHeaderPromise@@
@@ -960,6 +964,7 @@ $prefix_element$
 .?AVFindByTypeVisitor@@
 .?AVIAppSystem@@
 .?AVIAsset@@
+.?AVIAssetFileListener@@
 .?AVIAssetFileSystemInterface@@
 .?AVIAssetSystem@@
 .?AVIAssetSystemTest@@
@@ -1358,6 +1363,7 @@ $prefix_element$
 /usr/local/ssl/lib/engines
 /usr/local/ssl/private
 /zt1
+0$h7
 0.0 180.0
 0.001 1.0
 0.01 1.0
@@ -1423,7 +1429,8 @@ $prefix_element$
 2\nP!E
 2\rU2t
 2\rlhp
-2\vpt
+2\tV_isnand
+2\vp$h7
 2^pV
 2a"l
 2bT~
@@ -1545,7 +1552,6 @@ $prefix_element$
 8= zp
 8A6j
 8GZS
-8HeG
 8SIffK5W
 8TZvrv<
 8\v8!83858A8G8K8S8W8_8e8o8q8}8
@@ -1663,17 +1669,16 @@ $prefix_element$
 ??0CDirTreeWatchManager@@QEAA@I@Z
 ??0CTSListBase@@QEAA@XZ
 ??0CThreadCrossProcessMutex@@QEAA@PEBD_N@Z
-??0CThreadMutex@@QEAA@PEBD@Z
 ??0CThreadRWLock_FastRead@@QEAA@XZ
 ??0CUtlBuffer@@QEAA@HHW4BufferFlags_t@0@@Z
 ??0CUtlBuffer@@QEAA@PEBXHW4BufferFlags_t@0@@Z
 ??0CUtlMemoryPoolBase@@QEAA@HHHW4MemoryPoolGrowType_t@@PEBDW4MemAllocAttribute_t@@@Z
+??0CUtlString@@QEAA@AEBVCBufferString@@@Z
 ??0CUtlSymbolTable@@QEAA@HH_N@Z
 ??0KeyValues@@QEAA@PEBD00@Z
 ??0KeyValues@@QEAA@PEBDPEAVIKeyValuesSystem@@_N@Z
 ??1CDirTreeWatchManager@@QEAA@XZ
 ??1CThreadCrossProcessMutex@@QEAA@XZ
-??1CThreadMutex@@QEAA@XZ
 ??1CThreadSemaphore@@QEAA@XZ
 ??1CThreadSyncObject@@QEAA@XZ
 ??1CUtlMemoryPoolBase@@QEAA@XZ
@@ -1689,6 +1694,7 @@ $prefix_element$
 ??HCUtlString@@QEBA?AV0@PEBD@Z
 ??YCUtlString@@QEAAAEAV0@PEBD@Z
 ?Acquire@CUtlString@@QEAAXPEAVCBufferString@@_N@Z
+?AcquireLock@CAtomicMutex@@AEAAXI@Z
 ?AddNullTermination@CUtlBuffer@@IEAAXXZ
 ?AddString@CUtlSymbolTable@@QEAA?AVCUtlSymbol@@PEBDHPEA_N@Z
 ?AddString@CUtlSymbolTable@@QEAA?AVCUtlSymbol@@PEBDPEA_N@Z
@@ -1768,12 +1774,12 @@ $prefix_element$
 ?IsEqual_CaseSensitive@CUtlString@@QEBA_NPEBD@Z
 ?IsEqual_FastCaseInsensitive@CUtlString@@QEBA_NPEBD@Z
 ?LoadFromBuffer@KeyValues@@QEAA_NPEBDAEAVCUtlBuffer@@PEAVIFileSystem@@0P6A_N0PEAX@ZPEAVIKeyValuesErrorSpew@@30@Z
-?LoadKV3@@YA_NPEAVCKeyValues3Context@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z
+?LoadKV3@@YA_NPEAVCKV3Arena@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z
 ?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z
-?LoadKV3FromFile@@YA_NPEAVCKeyValues3Context@@PEAVCUtlString@@PEBD2AEBUKV3ID_t@@I@Z
+?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDAEBUKV3ID_t@@2I@Z
+?LoadKV3FromFile@@YA_NPEAVCKV3Arena@@PEAVCUtlString@@PEBD2AEBUKV3ID_t@@I@Z
 ?LoadKV3FromFile@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBD2AEBUKV3ID_t@@I@Z
 ?LoadKV3FromKV3OrKV1@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z
-?Lock@CThreadMutex@@QEAAXPEBDH@Z
 ?LoggingSystem_Log@@YA?AW4LoggingResponse_t@@HW4LoggingSeverity_t@@AEBULoggingRareOptions_t@@PEBDZZ
 ?LoggingSystem_Log@@YA?AW4LoggingResponse_t@@HW4LoggingSeverity_t@@VColor@@PEBDZZ
 ?MakeAbsolutePath@CBufferString@@QEAAPEBDPEBD0@Z
@@ -1830,6 +1836,7 @@ $prefix_element$
 ?StripExtension@CBufferString@@QEAAPEBD_N@Z
 ?StripTrailingSlash@CBufferString@@QEAAPEBDXZ
 ?StripTrailingSlash@CUtlString@@QEAAXXZ
+?ThreadAtomicNotifyOne@@YAXPEAI@Z
 ?ToLowerFast@CBufferString@@QEAAXH@Z
 ?ToLowerFast@CUtlString@@QEAAXXZ
 ?Trim@CUtlString@@QEAAXPEBD@Z
@@ -1855,6 +1862,7 @@ $prefix_element$
 ?srJO
 ?tya
 ?uWS
+?vtex
 ?x29
 ?ysB
 @!@%@+@1@?@C@E@]@a@g@m@
@@ -1868,7 +1876,6 @@ $prefix_element$
 @X!pf
 @Zs3
 @\f1OJ
-@\tV_isnand
 @^8U)zj
 @child_asset
 @dKb]
@@ -2152,6 +2159,7 @@ Asset System - %s\n
 Asset System - Updating dependency information...\n
 Asset System Reload Manifest
 Asset Tags
+Asset Tags file change notification without any changes. %d files checked in %.2fs.\n
 Asset Type: %s
 Asset Types
 Asset changed on disk: %s
@@ -2410,7 +2418,6 @@ C:\buildworker\csgo_rel_win64\build\src\assetsystem\utlcoveragetest.h
 C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp
 C:\buildworker\csgo_rel_win64\build\src\datamodel\dependencygraph.cpp
 C:\buildworker\csgo_rel_win64\build\src\mathlib\extended\generic_expr.g
-C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\check_cast.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\threadtoolstypes.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\tslist.h
@@ -2420,7 +2427,6 @@ C:\buildworker\csgo_rel_win64\build\src\public\tier0\utlrbtree.h
 C:\buildworker\csgo_rel_win64\build\src\public\tier0\utlsortvector.h
 C:\buildworker\csgo_rel_win64\build\src\public\vpklib\packedstore.h
 C:\buildworker\csgo_rel_win64\build\src\resourcefile\resourcefile.cpp
-C:\buildworker\csgo_rel_win64\build\src\tier0_perproject\vnotifyapi.cpp
 C:\buildworker\csgo_rel_win64\build\src\vpklib\packedstore.cpp
 CA Compromise
 CA Issuers
@@ -2471,7 +2477,7 @@ CAssetSystem::InitializeAssetSystem
 CAssetSystem::NotifyResourceStatusChange( %s ) - %s\n
 CAssetSystem::ProcessFileChanges unable to acquire the file change suspension cross-process mutex.
 CAssetSystem::Test_PreRecompileResourceAsset
-CAssetSystem::UpdateAllAssetFileCRCs(), C:\buildworker\csgo_rel_win64\build\src\assetsystem\assetsystem.cpp:4317
+CAssetSystem::UpdateAllAssetFileCRCs(), C:\buildworker\csgo_rel_win64\build\src\assetsystem\assetsystem.cpp:4318
 CAssetSystemTest::RunTests
 CAssetSystemTestSetup::DiscardInMemoryReplacement
 CAssetSystemTestSetup::EnsureAssetIsUpToDate
@@ -2553,10 +2559,10 @@ CInMemoryFilesystem::TouchFileModifiedTime
 CInMemoryLoadResourceHeaderPromise::CopyData
 CInMemoryLoadResourceHeaderPromise::GetHeader
 CKMeansClustering::AssignVectorsToClusters(), C:\buildworker\csgo_rel_win64\build\src\mathlib\kmeansclustering.cpp:159
+CKV3Arena::Root
 CKV3MemberNameWithStorage
 CKeyValues3Array::EnsureElementCapacity
 CKeyValues3Array::InsertMultipleBefore
-CKeyValues3Context::Root
 CKeyValues3Table::EnsureMemberCapacity
 CKh/Q
 CLIENT_CERTIFICATE
@@ -2745,6 +2751,7 @@ CSemiAutoRWLockT<class CThreadRWLock_FastRead>::LockForWrite
 CSemiAutoRWLockT<class CThreadRWLock_FastRead>::Unlock
 CSimpleAssetTypeInfo
 CStdAssetFileSystem::AssetFS_TraverseDirectoryAndWatchForChanges
+CSubassetTypeInfo
 CT Certificate SCTs
 CT Precertificate Poison
 CT Precertificate SCTs
@@ -2804,7 +2811,6 @@ CUtlRBTree<struct CUtlOrderedMapBase<int,class CUtlSymbolLarge,class CDefLess<in
 CUtlRBTreeBase
 CUtlSortVector<struct ChunkHashFraction_t,class CUtlSortVectorDefaultLess<struct ChunkHashFraction_t::SortKey_t>,class CUtlVector<struct ChunkHashFraction_t,int,class CUtlVectorMemory_Growable<struct ChunkHashFraction_t,int,0> > >::Find
 CUtlStreamBuffer does not support TEXT_BUFFER's use CUtlBuffer\n
-CUtlString
 CVDataAutoTagger
 CVMMDAssetTypeInfo
 CVcn
@@ -2823,6 +2829,7 @@ CameraCalibration1
 CameraCalibration2
 CameraSerialNumber
 Can not read scanlines from a tiled image
+Can't RegisterPathSymbols( %s, %s ) for %s\n
 Cannot allocate abstract class
 Cannot handle different per-sample values for field "%s"
 Cannot read TIFF header
@@ -2841,6 +2848,7 @@ Certificate:\n
 Cessation Of Operation
 ChGg
 Char=
+Checked tag files for changes, some changes found. %d files checked in %.2fs.\n
 Checking compile state for asset: %s\n
 Checking whether dependencies of asset %s are being written:\n
 CheekH
@@ -2855,6 +2863,7 @@ ClQ(|
 Class does not allow allocation from its schema binding
 CleanFaxData
 Cleanup
+Cleared all tags from assets in %.2fs.\n
 ClipBoard
 ClipPath
 Close the group automatically after a short wait (good for 'success' messages)
@@ -3194,6 +3203,7 @@ DYNAMIC_CTRL
 DYNAMIC_GET_DATA_CTX
 DYNAMIC_LOAD
 DYNAMIC_SET_DATA_CTX
+D\tV_log2f
 Da\">c]$8c^
 Dampen Movement Relative to Control Point
 Data Encipherment
@@ -3209,6 +3219,7 @@ DefaultCropSize
 DefaultScale
 Deflate
 DeleteCriticalSection
+Density Scale
 Depends on out-of-date '%s':\n -> reason: %s
 DeregisterEventSource
 Detail Prop Type
@@ -3598,6 +3609,7 @@ EXTENDED_KEY_USAGE
 EXTERNAL
 E[3M
 E\nQc
+E\tV_logd
 EdiPartyName
 EdiPartyName:<unsupported>
 EditGameClassProps
@@ -3746,6 +3758,7 @@ Fi:je
 Field Type: %s\n
 Field=
 FieldOfViewCotangent
+File change for %s, reloading tags\n
 File not open for reading
 File: %s\n
 FileTimeToSystemTime
@@ -3764,14 +3777,14 @@ Fingers_L
 Fingers_R
 FloatBitMap_t::ConvertGammaToLinear(320): Conversion not supported yet!\n
 FloatBitMap_t::InitializeDummyRow
-FloatBitMap_t::WriteToBuffer(986): Unsupported color format "%s", skipping!\n
-FloatBitMap_t::WriteToBufferBC7_bc7e(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1673
-FloatBitMap_t::WriteToBufferBC7_ispctexcomp(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1785
-FloatBitMap_t::WriteToBufferDXT_atitc(1044): Error! Temp texture is %d bytes when ATI's lib requires %d bytes!\n
-FloatBitMap_t::WriteToBufferDXT_atitc(1129): Unsupported output color format "%s"!\n
-FloatBitMap_t::WriteToBufferDXT_atitc(1138): Error! Allocated %llu bytes when ATI's lib requires %d bytes!\n
-FloatBitMap_t::WriteToBufferDXT_atitc(1146): Error %d returned from ATI_TC_ConvertTexture()!\n
-FloatBitMap_t::WriteToBufferETC(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1909
+FloatBitMap_t::WriteToBuffer(989): Unsupported color format "%s", skipping!\n
+FloatBitMap_t::WriteToBufferBC7_bc7e(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1676
+FloatBitMap_t::WriteToBufferBC7_ispctexcomp(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1788
+FloatBitMap_t::WriteToBufferDXT_atitc(1047): Error! Temp texture is %d bytes when ATI's lib requires %d bytes!\n
+FloatBitMap_t::WriteToBufferDXT_atitc(1132): Unsupported output color format "%s"!\n
+FloatBitMap_t::WriteToBufferDXT_atitc(1141): Error! Allocated %llu bytes when ATI's lib requires %d bytes!\n
+FloatBitMap_t::WriteToBufferDXT_atitc(1149): Error %d returned from ATI_TC_ConvertTexture()!\n
+FloatBitMap_t::WriteToBufferETC(), C:\buildworker\csgo_rel_win64\build\src\bitmap\floatbitmap.cpp:1912
 Floating point "Predictor" not supported with %d data format
 FlsAlloc
 FlsFree
@@ -4269,7 +4282,7 @@ LoadLibraryW
 Loaded
 Loaded %d tags for %d assets in %.2fs.\n
 Loaded Resources
-Loading Asset Tags...\n
+Loading Asset %d Tags...\n
 LocalFree
 LocalKeySet
 LocaleNameToLCID
@@ -4378,7 +4391,8 @@ Minimum blend weight value for which the model will be placed. If the blend weig
 Minimum random scale value to apply to the model.
 Minimum range of random offset to apply along the model's local up direction
 Minimum range of the random rotation to apply the model. Random rotation is applied in the local space of the model. Rotation values are ordered pitch, yaw, roll.
-Minimum scale to apply to the model based on the blend weight. Set this if you want the model to scale up as the material blend fades in. The smaller the value, the smaller the model will start as the material begins to fade in.
+Minimum scale to apply to the model based on the final material layer blend weight. The minimum of the detail and blend weight scale values is multiplied with the random scale value to determine the final scale. Set this if you want the model to scale up as the material blend fades in. The smaller the value, the smaller the model will start as the material begins to fade in.
+Minimum scale to apply to the model based the painted detail prop density. The minimum of the detail and blend weight scale values is multiplied with the random scale value to determine the final scale.
 Minimum slope on which the target will be placed. Slope is a [ 0, 180 ] value based on the surface normal where horizontal surface (floor) is 0, vertical surface (wall) is 90, and a horizontal upside down surface (ceiling) is 180.
 Missing required special dependency '%s'
 Missing required special dependency 'TestResource_RequiredDependency'
@@ -4917,6 +4931,7 @@ Proc-Type: 4,
 Procedural
 Process32First
 Process32Next
+Processed %d tags in %.2fs.\n
 Proxy Certificate Information
 Public Key
 Public-Key
@@ -4929,6 +4944,7 @@ Q4EX
 Q6p]
 QAngle
 QTk$
+Q\tV_powd
 Q`uV
 Qdsma
 Qjh/T
@@ -5092,9 +5108,8 @@ RSA_verify_PKCS1_PSS
 RSA_verify_PKCS1_PSS_mgf1
 RSDS
 R\r1>Vp
-R\tV_log2f
-R\vpT
-R\vpt
+R\tV_powf
+R\vp$h7
 R]Di
 Radius Random
 Random Cull
@@ -5133,7 +5148,6 @@ Remap Distance Between Two Control Points to Scalar
 Remap Distance to Control Point to Scalar
 Remap Noise to Scalar
 Remap Scalar
-Remember to check in the asset tag database!\n%s
 Remove From CRL
 ReportEventW
 Require Explicit Policy
@@ -5368,13 +5382,14 @@ SXNET_add_id_ulong
 SXNET_get_id_asc
 SXNET_get_id_ulong
 SXNetID
-S\tV_logd
+S\tV_qsort
 S\vQN
 Salt Length: 0x
 SampleFormat
 SamplesPerPixel
 SamplesPerPixel tag is missing, assuming correct SamplesPerPixel value is 1
 SamplesPerPixel tag is missing, assuming correct SamplesPerPixel value is 3
+Saved %d changed tags for %d assets in %.2fs.\n
 ScalpD
 Scanning for Asset Files (%d/%d): '%s' = %s, previously scanned %u directories and %u files\n
 Scanning for Asset Files (%d/%d): previously scanned %u directories and %u files
@@ -5541,6 +5556,7 @@ TS_VERIFY_CTX_new
 TUUUU
 TXJw^{
 TYPE=
+T\tV_qsort_s
 Tag 
 Tag %d
 Tag Update Failed
@@ -5564,6 +5580,10 @@ TestRequiredSpecialDependency
 TestSimpleVmatTga
 TestSimpleVmatTgaSearchPath
 TestSimpleVmatTxtAppearance
+TestSpecialInputDependencyAssetDBSerialization
+TestSpecialInputDependencyBasic
+TestSpecialInputDependencyCaching
+TestSpecialInputDependencyHotReload
 TestTgaChangeReloadCounts
 TestTgaChangeReloadCounts_OnlyVtexResident
 TestTwoContentFileResourceType
@@ -5661,6 +5681,8 @@ Ugi<
 Unable find required entry points in %s\n
 Unable to create unknown element %s!\n
 Unable to load %s, error %d\n
+Unable to load kv3 userdata
+Unable to save special input dependency userdata: %s\n
 Unable to set type unless you're creating untyped elements!\n
 Undo\n======\n
 Unexpected EOF in quoted string
@@ -5670,7 +5692,6 @@ UniqueCameraModel
 Unknown compression type.
 Unknown data format %d for LogLuv compression
 Unknown encoding %d for LogLuv compression
-Unknown exception
 Unknown version %d for vpk %s
 UnmapViewOfFile
 Unnamed
@@ -5695,7 +5716,9 @@ Unsuppressed auto-recompile
 Untagged
 Unused
 UokOP
-Updating Asset Tags...
+Updated auto tags %.2fs.\n
+Updated change times on tag files. %d files checked in %.2fs.\n
+Updated tags on assets in %.2fs.\n
 Updating asset dependency information...
 Updating dependencies: %d%% (%s/%s) - %s
 Usage: "assetsystem_dump_table <table_name>" where table_name is either * (for all) or one of:\n
@@ -5752,7 +5775,6 @@ VNotify Sent\n
 VNotify StartProcess failed!\n
 VNotify: %s\n
 VNotifyGroupID
-VNotify_Internal_PostOrLaunchIfNeeded
 VPK directory for '%s' corrupt
 VY5[;o
 V\rKk
@@ -5821,7 +5843,7 @@ WARNING: Failed on-demand recompile for asset %s\n
 WARNING: Failed to load %s: %s\n
 WARNING: Failed to load data for bitmap asset '%s'\n
 WARNING: Failed to read '%s': %s\n
-WARNING: Failed to write '%s': %s\n
+WARNING: Failed to write '%s'\n
 WARNING: ImmediatelyRefreshInformationAfterCompileAndReloadChildren failed to find asset for '%s' (abs='%s')\n
 WARNING: Include paths specified but no exclude paths specified! Ignoring includes.\n
 WARNING: ReadFile failed for asset database '%s', error %u.\n
@@ -6146,6 +6168,7 @@ Z~wl
 \fKS1
 \fW9c
 \fXu"L
+\f\tV_expd
 \f]ne3
 \fdhWTh
 \fiaR
@@ -6169,7 +6192,6 @@ Z~wl
 \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
 \n\tIPSec/IKE/Oakley curve #3 over a 155 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
 \n\tIPSec/IKE/Oakley curve #4 over a 185 bit binary field.\n\tNot suitable for ECDSA.\n\tQuestionable extension field!
-\n\tV_atof
 \ndummyfilename.tif
 \nqYu
 \ntM(ie-V
@@ -6178,7 +6200,6 @@ Z~wl
 \p{Xsp}
 \p{Xwd}
 \r!\r+\r-\r=\r?\rO\rU\ri\ry\r
-\r0jF
 \r@h!Aq8
 \rB6uZ
 \rKT8v
@@ -6186,14 +6207,13 @@ Z~wl
 \rMinghuaQu\f
 \rTxL
 \rUHz4Z}\r
+\rUnknown exception
 \rWhO
 \rY=QX
 \rYYHl
 \r\f\v\v\n\n\t\t\t\t\t
-\r\tV_atoi
 \r\vpL1
 \r^mX
-\rgame:tools/images/assettypes/generic_lg.png
 \ri1I
 \rjwB\t
 \roKK
@@ -6211,11 +6231,12 @@ Z~wl
 \tLa0+
 \tN1a
 \tNAN encountered in element '%s' guid %s attribute '%s'!\n
-\tV_atan2d
-\tV_atan2f
-\tV_expd
 \tV_fclose
-\tV_tanf
+\tV_fgets
+\tV_fmodd
+\tV_fopenUTF8
+\tV_fpclassifyd
+\tV_fprintf
 \tV_vsnprintf
 \tWarning
 \t\n\v\n\v\n\v\n\v\n\v\n\v\n\v\n\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\r\f\r\f\r\f\r\f\r\f\r\f\r\f\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r
@@ -6260,6 +6281,7 @@ Z~wl
 ^J_spY
 ^Nij
 ^RB!r
+^\tV_sincosf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 _Ek6b]
@@ -6270,7 +6292,6 @@ _TIFFSetupFieldInfo
 _TIFFVGetField
 _TIFFVSetField
 _YWL
-_\tV_powd
 __based(
 __cdecl
 __clrcall
@@ -6313,7 +6334,6 @@ _}eOk
 `ITS
 `RTTI
 `VX:H
-`\tV_powf
 `anonymous namespace'
 `copy constructor closure'
 `default constructor closure'
@@ -6385,7 +6405,6 @@ aRWZ5
 aRecord
 aSRP
 aXvC
-a\tV_qsort
 a]?xG
 aaControls
 abcdefghijklmnopqrstuvwxyz
@@ -6544,9 +6563,7 @@ asn1 lib
 asn1 parse error
 asn1 sig parse error
 asn1 unknown field
-asset
 asset_ext_versions
-asset_tag_assignments.txt
 asset_warnings
 assets
 assetsThatDependOnTheTGA.Count() == 1
@@ -6563,6 +6580,7 @@ assetsystem_count
 assetsystem_debug_substring
 assetsystem_dump_string_threshold
 assetsystem_dump_table
+assetsystem_fail_compile_on_dependants
 assetsystem_legacy_explicit_reload_child_resources
 assetsystem_legacy_process_file_changes_after_compile
 assetsystem_old_loop_algorithm
@@ -6619,7 +6637,6 @@ bPb:L7X)
 bSh&+
 bV}TS
 b\fzUkm
-b\tV_qsort_s
 b\vp\nP
 b]jY
 background
@@ -6843,6 +6860,7 @@ cNAMERecord
 cNUGK
 cRLSign
 c\r1m
+c\tV_snprintf
 c`FE%
 ca dn length mismatch
 ca dn too long
@@ -7702,6 +7720,7 @@ float log
 float_array
 floating point predictor 
 fluorescent_flicker
+fmod
 fog_lighting
 fogcontributionstrength
 fogshadows
@@ -7753,6 +7772,7 @@ g]i/H
 g_Cov_DetermineCompileState
 g_pAsyncFileSystem2
 g_pToolsSplashScreen->showMessage
+game:tools/images/assettypes/generic_lg.png
 game:tools/images/assettypes/generic_sm.png
 game_only.vtest
 gameitemclass
@@ -7819,6 +7839,7 @@ hShared.GetReloadCounter() == 1
 hTest.GetReloadCounter() == 1
 hTest.GetReloadCounter() == 2
 hTest.HasData()
+hTestStrong.GetReloadCounter() == 1
 hTestVMAT.GetReloadCounter() == 0
 hTestVMAT.GetReloadCounter() == 1
 hTestVMAT.GetReloadCounter() == 2
@@ -7917,6 +7938,7 @@ iILV]
 iSXc
 iU[&l
 iVY2L
+i\tV_sscanf
 ia5org
 ia7@\t H9
 iana
@@ -8165,6 +8187,7 @@ identifier removed
 idp mismatch
 if.F<h
 ifTK
+ignored_value
 ihD5
 ik.R
 ilRdV
@@ -8388,6 +8411,7 @@ jOJw"
 jTuf
 jV*d9O
 j[6Z
+j\tV_sscanf_s
 j\vIP{s
 janetMailbox
 jb:5
@@ -8507,7 +8531,6 @@ l7@J
 lC57
 lDcW
 lM2p
-l\tV_sincosf
 language
 last octet invalid
 lastModifiedBy
@@ -8648,13 +8671,17 @@ m_ResourceVersion
 m_Resources
 m_RestrictAutoTagToAssetType
 m_RestrictAutoTagToAssetType == ""
+m_RootRelativePath
 m_SearchPath
 m_SearchableUserData
 m_SourceFile
+m_Special
 m_SpecialDependencies
+m_SpecialInputDependencies
 m_String
 m_SubassetDefinitions
 m_SubassetReferences
+m_SubassetTypes
 m_SupportedExts
 m_SuppressSubstrings
 m_TagAliases
@@ -8665,6 +8692,7 @@ m_Test_InjectSearchable
 m_ThumbnailOverlayImage
 m_Title
 m_ToolIcon
+m_UserData
 m_WeakReferenceList
 m_WorkingDir
 m_bAllowedToCompileInTestMode
@@ -8677,6 +8705,7 @@ m_bContentFileIsText
 m_bDebugCommandline
 m_bDoNotWarnAboutLargeAssetBatches
 m_bFileExists
+m_bFollowReferences
 m_bHideTypeByDefault
 m_bIgnoreCompiledState
 m_bIsGameFile
@@ -8704,6 +8733,7 @@ m_flBlendWeightFullDenstity
 m_flBlendWeightMax
 m_flBlendWeightMin
 m_flBlendWeightMinScale
+m_flDensityMinScale
 m_flMaxSurfaceSlope
 m_flMinSurfaceSlope
 m_flOrientToSurface
@@ -8894,6 +8924,7 @@ nSRecord
 nStf,a
 nSw}Z\tu
 n\r2S
+n\tV_stricmp_fast
 n`3i
 name constraints minimum and maximum not supported
 name too long
@@ -9224,6 +9255,7 @@ ownerlog
 p is not prime
 p not prime
 p!PcA1|
+p$h7
 p)ou}
 p+"\tHr9
 p.char_two
@@ -9244,6 +9276,14 @@ pAsset->CompileState() == ASSET_FILE_COMPILED
 pAsset->CompileState() == ASSET_FILE_UNCOMPILED
 pAsset->HasFileInLocation( ASSET_LOCATION_GAME )
 pAsset->RecompileAsset()
+pAssetA->CompileState() == ASSET_FILE_COMPILED
+pAssetA->CompileState() == ASSET_FILE_UNCOMPILED
+pAssetA->HasFileInLocation( ASSET_LOCATION_GAME )
+pAssetA->RecompileAsset()
+pAssetB->CompileState() == ASSET_FILE_COMPILED
+pAssetB->CompileState() == ASSET_FILE_UNCOMPILED
+pAssetB->HasFileInLocation( ASSET_LOCATION_GAME )
+pAssetB->RecompileAsset()
 pBaseWavThenLeafMP3 != nullptr
 pBaseWavThenLeafMP3->HasFileInLocation( ASSET_LOCATION_CONTENT )
 pBaseWavThenLeafMP3_Second == pBaseWavThenLeafMP3
@@ -9293,6 +9333,7 @@ pWAVThenMP3_First != nullptr
 pWAVThenMP3_First->HasFileInLocation( ASSET_LOCATION_CONTENT )
 pWAVThenMP3_Second == pWAVThenMP3_First
 pWAVThenMP3_Second->HasFileInLocation( ASSET_LOCATION_CONTENT )
+p\tV_strlower_fast
 p^i9
 packet length too long
 padding check failed
@@ -9545,7 +9586,6 @@ qOy*o
 qPq2k
 qTm_fC=
 qUN1
-q\tV_snprintf
 qangle_array
 qcStatements
 qf`ny
@@ -9571,7 +9611,6 @@ rRfKR
 rX&O0
 rZ1VwGf5
 rZPM
-r\fpT
 r\tVr.>T
 r\vDi
 radiusScale
@@ -9622,6 +9661,7 @@ record too small
 ref:%s
 refOrientation
 refby
+refby_count
 referenced or depended-on by asset
 referenced or depended-on by asset (exact)
 referenced_soundevent_
@@ -10102,6 +10142,12 @@ source_column
 source_file_searchpath
 spawnFlags
 spawnflags
+special input dependency
+special_dependency_value
+special_dependency_valueA
+special_dependency_valueB
+special_input.vtest_special
+special_input_deps
 specificImpulse
 specific_impulse
 specular_direction_day
@@ -10283,6 +10329,7 @@ strips
 strlen(objstr) + 23 + 2 * enc->iv_len + 13 <= sizeof buf
 strong.vtest
 style
+subassettypes
 subgroup factor:
 subgroup order:
 subject
@@ -10364,7 +10411,6 @@ tNt5
 tag mismatch
 tag value too high
 tag=
-tag_ids
 tag_list
 tag_list_dynamic
 tangent$0
@@ -10527,6 +10573,7 @@ too many iterations
 too many links
 too many symbolic link levels
 too many temporary variables
+tools/assettags
 tools/images/assetbrowser/filter_tags_empty.png
 tools/images/common/document_sm.png
 tools/images/common/favorite_sm.png
@@ -10733,6 +10780,9 @@ userClass
 userId
 userNotice
 userPassword
+uses_special_input.vtest
+uses_special_inputA.vtest
+uses_special_inputB.vtest
 utf8only
 uxX/
 uzKs@>
@@ -10845,7 +10895,6 @@ wQ0"
 wR\fe3c
 wRlb.
 wY[K,
-w\tV_sscanf
 w_5&#R4
 waiting_group
 wap-wsg
@@ -10862,7 +10911,7 @@ wap-wsg-idm-ecid-wtls8
 wap-wsg-idm-ecid-wtls9
 wap}Q\n
 warn
-was:%u, now:%u
+was:%u, now:%s
 wav_content_1
 wav_content_2
 wav_content_3
@@ -10932,7 +10981,6 @@ xFKF
 xOu\vsF
 xQfF
 xUN'
-x\tV_sscanf_s
 x\v6V
 xg-9Ja
 xp$=S
@@ -10979,6 +11027,7 @@ zz2K
 {8w1
 {9d:c
 {H}yq
+{\tV_tanf
 {ghz6
 {ry\W
 {zFd
@@ -10986,10 +11035,8 @@ zz2K
 |11Jv
 |3ox
 |<C!FReQ
-|BH\nG
 |InzT
 |XYl
-|\tV_stricmp_fast
 |hdX)
 |sG2
 |}Eq1
@@ -11005,7 +11052,6 @@ zz2K
 ~If D
 ~P2T
 ~R65Fu
-~\tV_strlower_fast
 ~jLRG
 ~w]UG
 ~yhZ

@@ -2,6 +2,7 @@
 /// <reference path="../csgo.d.ts" />
 /// <reference path="popup_capability_header.ts" />
 /// <reference path="popup_inspect_action-bar.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 /// <reference path="../common/iteminfo.ts" />
 /// <reference path="../inspect.ts" />
 var SelectItemForCapability;
@@ -193,41 +194,86 @@ var SelectItemForCapability;
     ;
     function _CapabilityCanStickerAction(idsToUse, bWorkshopItemPreview) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=can_sticker' +
             '&' + 'workshopPreview=' + workshopPreview);
+        let oSettings = {
+            popup_panel: elPanel,
+            item_id: idsToUse.item,
+            tool_id: idsToUse.tool,
+            work_type: 'can_sticker',
+            is_workshop_preview: bWorkshopItemPreview
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityNameableAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + idsToUse.tool + ',' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=nameable');
+        let oSettings = {
+            item_id: idsToUse.item,
+            tool_id: idsToUse.tool,
+            work_type: 'nameable'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityCanKeychainAction(idsToUse, bWorkshopItemPreview) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=can_keychain' +
             '&' + 'workshopPreview=' + workshopPreview);
+        let oSettings = {
+            popup_panel: elPanel,
+            tool_id: idsToUse.tool,
+            item_id: idsToUse.item,
+            work_type: 'can_keychain',
+            is_workshop_preview: bWorkshopItemPreview
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityWrapStickerAsKeychainAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=can_wrap_sticker');
+        let oSettings = {
+            item_id: idsToUse.item,
+            tool_id: idsToUse.tool,
+            work_type: 'can_wrap_sticker'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityRemoveKeychainAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + idsToUse.item +
             '&' + 'asyncworktype=remove_keychain');
+        let oSettings = {
+            item_id: idsToUse.item,
+            work_type: 'remove_keychain'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityCanPatchAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=can_patch');
+        let oSettings = {
+            item_id: idsToUse.item,
+            tool_id: idsToUse.tool,
+            work_type: 'can_patch'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityDecodableAction(idsToUse) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + idsToUse.tool + ',' + idsToUse.item +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + idsToUse.tool + ',' + idsToUse.item +
             '&' + 'asyncworktype=decodeable');
+        let oSettings = {
+            item_id: idsToUse.item,
+            tool_id: idsToUse.tool,
+            work_type: 'decodeable'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     ;
     function _CapabilityStatTrakSwapAction(capInfo, id) {
@@ -238,9 +284,15 @@ var SelectItemForCapability;
             ClosePopUp();
         }
         else {
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_stattrack_swap.xml', 'swaptool=' + capInfo.secondaryItemId +
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_stattrack_swap.xml', 'swaptool=' + capInfo.secondaryItemId +
                 '&' + 'swapitem1=' + capInfo.initialItemId +
                 '&' + 'swapitem2=' + id);
+            let oSettings = {
+                tool_id: capInfo.secondaryItemId,
+                item_id: capInfo.initialItemId,
+                stattrak_swap_second_item_id: id
+            };
+            elPanel.Data().oSettings = oSettings;
         }
     }
     ;
@@ -259,10 +311,17 @@ var SelectItemForCapability;
                 '&subject_item_id=' + idItem);
         }
         else {
-            let fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + idCasket +
+            const fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + idCasket +
                 '&' + 'asyncworktype=nameable' +
                 '&' + 'asyncworkitemwarningtext=#popup_newcasket_warning');
+            let oSettings = {
+                item_id: idCasket,
+                tool_id: fauxNameTag,
+                work_type: 'nameable',
+                async_work_type_warning_text: '#popup_newcasket_warning'
+            };
+            elPanel.Data().oSettings = oSettings;
         }
     }
     ;

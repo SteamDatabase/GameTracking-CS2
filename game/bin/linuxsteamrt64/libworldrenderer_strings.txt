@@ -12,6 +12,7 @@
 (hide)
 (show)
 (spew)
+*ZN17CWorldRendererMgr15UnmountWorldVPKEPKcbEUlvE_
 *ZN17CWorldRendererMgr22HandleGrassLoadRequestEP18GrassLoadRequest_tEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
 ++%s is at refcount %d\n
 --%s is at refcount %d\n
@@ -59,6 +60,8 @@
 <no targetname>
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AggregateInstanceStream
+AggregateRTProxyDesc
+AggregateRTProxySceneObject_t
 AggregateSceneObjectDesc
 AggregateVertexColorStream
 AllocateAndLoad failed for '%s' (%s)\n
@@ -75,8 +78,6 @@ CStrongHandle
 CStrongHandleCopyable
 CUtlBinaryBlock
 CUtlLeanVectorFixedGrowable
-CUtlString
-CUtlStringToken
 CWorld::CacheNodes
 CWorldNode::GrassFileCreateManifest
 CWorldRendererMgr::CreateWorld
@@ -128,6 +129,7 @@ GrassTint.vtex
 HeightArray
 Hitbox indexing is incorrect for set %s, hitbox %s. Hitboxes will not be setup properly.\n
 IKV3TransferInterface_AllowRawStringTokenTransfer
+IKV3TransferInterface_ResourceSave
 Inconsistent treatment of '%s' (existing key is %s)!\n
 InitializeDummyRow
 KV3 load transfer failed for resource '%s': %s
@@ -147,7 +149,6 @@ N37CTypesafeIntrospectedToKV3TypeManagerILy495874631030E20PermEntityLumpData_tE2
 NeedsLightProbe
 No DATA block for resource '%s'\n
 No DATA block for resource\n
-No free conversion of %s variant to Vector right now\n
 Not safe to 'new' this class due to alignment requirements
 NumCols() <= V_ARRAYSIZE( s_DummyRow )
 Physics
@@ -156,6 +157,13 @@ RESOURCE_TYPE_ENTITY_LUMP
 RESOURCE_TYPE_WORLD
 RESOURCE_TYPE_WORLD_NODE
 RESOURCE_TYPE_WORLD_VIS
+RTPROXY_INSTANCE_FLAG_NONE
+RTPROXY_INSTANCE_UNIQUE_MESH
+RTProxyBLAS_t
+RTProxyGeometry
+RTProxyInstanceFlags_t
+RTProxyInstanceInfo_t
+RTProxyUniqueAlbedo
 ResourceCompiler/BakedLighting/Version
 ResourceCompiler/DefaultMapBuilders/bakedlighting
 ResourceCompiler/DefaultMapBuilders/dontrequirebakedlighting
@@ -171,9 +179,14 @@ Unsupported Grass File Version. Expected %d. Found %d\n
 Unsupported number of values found in grass tile. Expected %d. Found %d\n
 Usage: %s <world_name> <layer_name> <visible>\n
 Usage: %s <world_name> <lump_name>\n
+VERTEX_ALBEDO_565
+VERTEX_ALBEDO_8888
+VERTEX_ALBEDO_NONE
+VertexAlbedoFormat_t
 WARNING: Failed to convert introspected block for file: %s\n
 WARNING: Invalid resource version (%d): %s\n
 WARNING: Invalid worldnode version '%d' for file: %s\n
+WRy\t
 Warning: Error resource loaded for level %s\n
 WindDir
 WindOffset
@@ -199,8 +212,6 @@ an attr
 attributes
 background
 basic_ios::clear
-character
-cstring
 debug_chart_color
 default_ents
 direct_light_shadows
@@ -214,28 +225,27 @@ entity_lump_spew %s %s
 entitykeyvalues.cpp
 fast
 floatbitmap.cpp
-globalsymbol
 grasstilesceneobject.cpp
-hscript
-hscript_lightbinding
-integer
 irradiance
-js_array
-js_object
-js_raw_args
-js_value
 keyValues3Data
 kv 0x%p AddRef refcount == %d\n
 kv 0x%p Release refcount == %d\n
 libworldrenderer.so
 lightmaps
+m_BLASes
 m_Format
+m_IBData
+m_InstanceAlbedoData
 m_InstanceOrientations32
+m_Instances
+m_VBData
 m_VisClusterMemberBits
+m_albedoFormat
 m_attachments
 m_bBakedTwoSided
 m_bCanBatchWithDynamicShaderConstants
 m_bDrawLast
+m_bEnableEyeBulgeDeformation
 m_bHasBakedLightingFromLightMap
 m_bHasBakedLightingFromVertexStream
 m_bIsNotMatchedToMaterial
@@ -243,9 +253,25 @@ m_bNoShadow
 m_bOnlyShadow
 m_bUseCompressedNormalTangent
 m_bUseShadowFastPath
+m_boundLs
+m_drawDesc
 m_hitboxsets
 m_influenceFlags
+m_mWorldFromLocal
 m_morphSet
+m_nBLASCount
+m_nBLASIndex
+m_nFirstIndex
+m_nVBByteOffset
+m_nVertexAlbedoByteOffset
+m_nVertexAlbedoFormat
+m_nVertexAlbedoOffset
+m_nVertexAlbedoStride
+m_nVertexAlbedoVB
+m_rtProxies
+m_rtProxyDrawCalls
+m_vVertexExtentLs
+m_vVertexOriginLs
 mapUsageType
 maps/%s/world.vrman
 maps/%s/world.vwrld
@@ -255,7 +281,6 @@ materials/grass/grasstile.vmat
 matrix3x4_t
 medium
 modellib
-resourcehandle
 resourcesystem
 slow
 standard
@@ -263,20 +288,17 @@ std::__shared_count<(__gnu_cxx::_Lock_policy)2>::operator=(std::__shared_count<(
 std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&, char const*)
 std::vector<std::string, std::allocator<std::string>>::~vector()
-string_t
 targetname
 texcoord
-unknown_variant_type
-utlstringtoken
 values
-variant
-vectorws
 very_fast
 vmap
 void std::__detail::__to_chars_10_impl<unsigned int>(char*, unsigned int, unsigned int)
+vpk:%s:
 world renderer - 
 world_layer_base
 world_layer_set_visible %s %s false
 world_layer_set_visible %s %s true
+worldnode.cpp(350): 
 worldrenderermgr.cpp
 worldspawn

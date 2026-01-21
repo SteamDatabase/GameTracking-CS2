@@ -604,6 +604,50 @@
 			},
 		]
 	}
+	update_test_vsnd_simple_loop = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						soundevent_data = "false"
+						value = "sounds/diagnostics/click4_4sec_lp-01.vsnd"
+					}
+					restart_time = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "update_test_start_vsnd"
+				operator = "vmix_voice_start"
+				input_vsnd1 = "@public.vsnd_files"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "[ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ]"
+				input_pitch = "1.000000"
+				input_restart_time = "@public.restart_time"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
 	update_test_start_vsnd_rand_oneshot = 
 	{
 		operators = 
@@ -2363,6 +2407,22 @@
 					}
 				}
 			},
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					test_public_float1 = 
+					{
+						data_type = "float"
+						value = "666.000000"
+						interp_type = "decibel_atten"
+						interp_min = "-1.000000"
+						interp_max = "1.000000"
+					}
+				}
+			},
 		]
 		_system_properties = 
 		{
@@ -2507,15 +2567,10 @@
 					{
 						value = "999"
 					}
-					public.override_float = 
+					override_float = 
 					{
 						field_override = "public.override_float"
 						value = "888"
-					}
-					update_test_simple_public_OPER.input2 = 
-					{
-						field_override = "update_test_simple_public_OPER.input2"
-						value = "@public.serial_float"
 					}
 				}
 			},
@@ -4244,6 +4299,7 @@
 				input_priority = "@public.priority"
 				input_sync_track_name = "@public.sync_track"
 				input_sync_field_name = "@public.sync_field"
+				use_queue = "1"
 			},
 			
 			{
@@ -4410,6 +4466,105 @@
 				name = "stop_track"
 				operator = "track_stop"
 				input_track_name = "@public.track"
+				stop_queue = "1"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	test_vsnd_on_track2 = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					track = 
+					{
+						data_type = "string"
+						value = ""
+					}
+					sync_track = 
+					{
+						data_type = "string"
+						value = "none"
+					}
+					sync_field = 
+					{
+						data_type = "string"
+						value = "none"
+					}
+					wait_for_track = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					sync_points = 
+					{
+						soundevent_data = "true"
+						data_type = "float"
+						value = 
+						[
+							"10000.000000",
+						]
+					}
+					priority = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					priority_override = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					block_equal_priority = 
+					{
+						data_type = "float"
+						value = "0.000000"
+					}
+					pitch = 
+					{
+						data_type = "float"
+						value = "1.000000"
+					}
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						soundevent_data = "true"
+						value = "sounds/common/null.vsnd"
+					}
+				}
+			},
+			
+			{
+				name = "test_soundevent_start"
+				operator = "track_queue"
+				input_track_name = "@public.track"
+				priority_override = "@public.priority_override"
+				block_equal_priority = "@public.block_equal_priority"
+				input_priority = "@public.priority"
+				input_sync_track_name = "@public.sync_track"
+				input_sync_field_name = "@public.sync_field"
+				wait_for_track = "@public.wait_for_track"
+			},
+			
+			{
+				name = "update_test_start_vsnd_rand_oneshot"
+				operator = "sos_import_stack"
+				import_stack = "update_test_start_vsnd_rand_oneshot"
+				operator_variables = 
+				{
+					vsnd_files = 
+					{
+						value = "@public.vsnd_files"
+					}
+				}
 			},
 		]
 		_system_properties = 
@@ -5678,9 +5833,45 @@
 		[
 			
 			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "TIME:"
+				operator = "util_print_float"
+				input = "@get_event_info.output_elapsed_time"
+			},
+			
+			{
 				name = "add_dependent"
 				operator = "soundevent_control"
-				input_add_dependent = "1"
+				input_add_dependent = "@get_event_info.output_unstopped"
+			},
+		]
+	}
+	test_soundevent_group_simple_opvar = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "match_all"
+				execute_once = "true"
+				operator = "soundevent_group_join"
+				input_group_name = "match_all"
+				input_match_float = "@get_event_info.output_elapsed_time"
+			},
+			
+			{
+				name = "add_dependent"
+				operator = "soundevent_control"
+				input_add_dependent = "@get_event_info.output_unstopped"
 			},
 		]
 	}
@@ -6560,5 +6751,442 @@
 		{
 			display_game = "diagnostics"
 		}
+	}
+	test_soundevent_start_multi = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					soundevent_1 = 
+					{
+						data_type = "sndevt"
+						value = "default.null"
+					}
+					soundevent_2 = 
+					{
+						data_type = "sndevt"
+						value = "default.null"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "test_soundevent_start"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "@public.soundevent_1"
+			},
+			
+			{
+				name = "test_soundevent_start2"
+				operator = "soundevent_start"
+				input_start = "@get_event_info.output_unstopped"
+				soundevent_name = "@public.soundevent_2"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostics"
+		}
+	}
+	inner_1 = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					opvars = 
+					{
+						data_type = "string"
+						value = ""
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Opvars"
+						}
+					}
+					opvars_use_namespace = 
+					{
+						data_type = "bool"
+						value = "false"
+						_system_properties = 
+						{
+							display_group = "advanced"
+							property_group = "Opvars"
+							property_help = "Use when importing this stack using a multi-import namespace pattern"
+						}
+					}
+					public_namespace = 
+					{
+						data_type = "string"
+						value = ""
+					}
+				}
+			},
+			
+			{
+				name = "get_opvar_data_length"
+				operator = "opvar_get_info"
+				execute_once = "true"
+				check_event_data = "true"
+				input_operator_name = "public"
+				input_field_name = "@public.opvars"
+				input_use_namespace = "@public.opvars_use_namespace"
+			},
+			
+			{
+				name = "get_opvar_name"
+				operator = "opvar_get_string"
+				input_execute = "1.0"
+				check_event_data = "true"
+				input_operator_name = "public"
+				input_field_name = "@public.opvars"
+				input_use_namespace = "@public.opvars_use_namespace"
+				input_get_parent = "false"
+				array_selection_type = "index"
+				input_index = "0"
+			},
+		]
+	}
+	inner_2 = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					test_opvars = 
+					{
+						soundevent_data = "true"
+						data_type = "string"
+						value = ""
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Opvars"
+						}
+					}
+					public_namespace = 
+					{
+						data_type = "string"
+						value = ""
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Opvars"
+						}
+					}
+					opvars_use_namespace = 
+					{
+						data_type = "bool"
+						value = "false"
+						_system_properties = 
+						{
+							display_group = "advanced"
+							property_group = "Opvars"
+							property_help = "Use when importing this stack using a multi-import namespace pattern"
+						}
+					}
+				}
+			},
+			
+			{
+				name = "import_inner_1"
+				operator = "sos_import_stack"
+				import_stack = "inner_1"
+				operator_variables = 
+				{
+					opvars = 
+					{
+						data_type = "string"
+						value = "test_opvars"
+					}
+					opvars_use_namespace = 
+					{
+						value = "@public.opvars_use_namespace"
+					}
+				}
+			},
+		]
+	}
+	outer = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					import_public_opvars = 
+					[
+					]
+					test_opvars = 
+					{
+						soundevent_data = "true"
+						data_type = "string"
+						value = ""
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Opvars"
+						}
+					}
+				}
+			},
+			
+			{
+				name = "import_inner_2"
+				operator = "sos_import_stack"
+				import_stack = "inner_2"
+				auto_connect_public_fields = true
+				operator_variables = 
+				{
+					opvars_use_namespace = 
+					{
+						value = "false"
+					}
+				}
+			},
+		]
+	}
+	outer_multi = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					inner_2_1 = 
+					{
+						data_type = "public_opvar"
+						value = "inner_2"
+						use_public_opvar_scope = "true"
+					}
+					inner_2_2 = 
+					{
+						data_type = "public_opvar"
+						value = "inner_2"
+						use_public_opvar_scope = "true"
+					}
+				}
+			},
+			
+			{
+				name = "import_inner_2_1"
+				operator = "sos_import_stack"
+				import_stack = "inner_2"
+				auto_connect_public_fields = "true"
+				auto_connect_field_scope = "inner_2_1"
+				operator_variables = 
+				{
+					opvars_use_namespace = 
+					{
+						data_type = "bool"
+						value = "true"
+					}
+					public_namespace = 
+					{
+						data_type = "string"
+						value = "inner_2_1"
+					}
+				}
+			},
+			
+			{
+				name = "import_inner_2_2"
+				operator = "sos_import_stack"
+				import_stack = "inner_2"
+				auto_connect_public_fields = "true"
+				auto_connect_field_scope = "inner_2_2"
+				operator_variables = 
+				{
+					opvars_use_namespace = 
+					{
+						data_type = "bool"
+						value = "true"
+					}
+					public_namespace = 
+					{
+						data_type = "string"
+						value = "inner_2_2"
+					}
+				}
+			},
+		]
+	}
+	test_vsnd_loop_xfade = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					loop_start = 
+					{
+						data_type = "float"
+						value = 0.000000
+					}
+					loop_end = 
+					{
+						data_type = "float"
+						value = 3.000000
+					}
+					loop_on = 
+					{
+						data_type = "float"
+						value = 1.000000
+					}
+					play_head = 
+					{
+						data_type = "float"
+						value = 0.000000
+					}
+					stop_tail = 
+					{
+						data_type = "float"
+						value = 0.000000
+					}
+					xfade_in = 
+					{
+						data_type = "float"
+						value = 0.000000
+					}
+					xfade_out = 
+					{
+						data_type = "float"
+						value = 0.000000
+					}
+					in_vsnd = 
+					{
+						data_type = "vsnd"
+						value = "sounds/common/null.vsnd"
+						_system_properties = 
+						{
+							display_group = "basic"
+							property_group = "Vsnd"
+						}
+					}
+					in_vsnd2 = 
+					{
+						data_type = "vsnd"
+						value = "sounds/common/null.vsnd"
+						_system_properties = 
+						{
+							display_group = "basic"
+							property_group = "Vsnd"
+						}
+					}
+					playback_rate = 
+					{
+						data_type = "float"
+						value = 0.000000
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "test_step"
+				operator = "math_float"
+				apply = "greater_than"
+				input1 = "@get_event_info.output_elapsed_time"
+				input2 = "6"
+			},
+			
+			{
+				name = "switch_loop_time"
+				operator = "ctrl_switch_float"
+				input_switch = "@test_step.output"
+				input1 = "5"
+				input2 = "7"
+			},
+			
+			{
+				name = "start_vmix"
+				operator = "vmix_voice_start"
+				input_execute = "1"
+				input_track1 = "track_01"
+				input_start3 = "0.000000"
+				input_start4 = "0.000000"
+				input_start5 = "0.000000"
+				input_start6 = "0.000000"
+				input_start7 = "0.000000"
+				input_start8 = "0.000000"
+				input_vsnd1 = "@public.in_vsnd"
+				execute_once = "false"
+				input_should_pause = "1"
+				input_should_save = "1"
+				input_speaker_volumes = "[ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ]"
+				input_start = "@get_event_info.output_unstopped"
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1"
+				input = "1.0"
+				submix_name = "main"
+				send_type = "named"
+			},
+		]
+		_system_properties = 
+		{
+			display_game = "diagnostic"
+			display_group = "basic"
+		}
+	}
+	test_switch_case_12 = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+				}
+			},
+			
+			{
+				name = "switch"
+				operator = "logic_string_match_12"
+				input = "loose_brick_gravel"
+				input_default = 4
+				string0 = "true false etc"
+				string1 = "foo bar biz baz"
+				string3 = "gravel gravel_brick hard_gravel_brick loose_brick_gravel viscera"
+				string7 = "electricity forcefield futuretech_bs alientech_bs"
+			},
+		]
 	}
 }

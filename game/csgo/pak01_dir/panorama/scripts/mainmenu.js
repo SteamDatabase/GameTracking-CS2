@@ -232,6 +232,7 @@ var MainMenu;
             OnHomeButtonPressed();
             _m_bPreLoadedTabs = true;
         }
+        _ResetAnnotationsDropDown();
     }
     function _TournamentDraftUpdate() {
         if (!m_TournamentPickBanPopup || !m_TournamentPickBanPopup.IsValid()) {
@@ -372,6 +373,27 @@ var MainMenu;
         $('#MainMenuNavBarVote').SetHasClass('pausemenu-navbar__btn-small--hidden', (bGotvSpectating));
         $('#MainMenuNavBarReportServer').SetHasClass('pausemenu-navbar__btn-small--hidden', !bIsCommunityServer);
         OnHomeButtonPressed();
+        _SetupAnnotationOptions(false);
+    }
+    function _ResetAnnotationsDropDown() {
+        let elAnnotationDropDown = $('#id-play-menu-pausemenu-annotations-dropdown');
+        elAnnotationDropDown.SetSelectedIndex(0);
+    }
+    function _SetupAnnotationOptions(bForce) {
+        let elAnnotationParent = $("#id-play-menu-pausemenu-annotations");
+        if (GameInterfaceAPI.GetSettingString('sv_allow_annotations_access_level') !== '1') {
+            elAnnotationParent.AddClass('no-guides');
+            elAnnotationParent.Data().sv_allow_annotations_access_level = 0;
+            return;
+        }
+        elAnnotationParent.RemoveClass('no-guides');
+        let elAnnotationDropDown = $('#id-play-menu-pausemenu-annotations-dropdown');
+        if (elAnnotationDropDown.Data().m_mapBspName !== GameStateAPI.GetMapBSPName() ||
+            bForce) {
+            elAnnotationDropDown.RebuildOptions(GameStateAPI.GetMapBSPName(), true);
+            elAnnotationDropDown.Data().m_mapBspName = GameStateAPI.GetMapBSPName();
+            elAnnotationParent.Data().sv_allow_annotations_access_level = 1;
+        }
     }
     function _OnHidePauseMenu() {
         $.GetContextPanel().RemoveClass('MainMenuRootPanel--PauseMenuMode');
@@ -980,17 +1002,38 @@ var MainMenu;
     }
     function _OnInventoryInspect(id, contextmenuparam) {
         let inspectviewfunc = contextmenuparam ? contextmenuparam : 'primary';
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', `itemid=${id}&inspectonly=true&viewfunc=${inspectviewfunc}`);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', `itemid=${id}&inspectonly=true&viewfunc=${inspectviewfunc}`);
+        let oSettings = {
+            item_id: id,
+            inspect_only: true,
+            force_inspect_view_type: inspectviewfunc
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function _OnShowCustomLayoutPopupParametersAsEvent(dimstyle, xmlname, panelparams) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters(dimstyle, xmlname, panelparams);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup(dimstyle, xmlname);
+        const aParams = panelparams.split(',');
+        let oSettings = { item_id: '' };
+        aParams.forEach(entry => {
+            const settingPair = entry.split('=');
+            oSettings[settingPair[0]] = settingPair[1];
+        });
+        elPanel.Data().oSettings = oSettings;
     }
     function _OnShowXrayCasePopup(toolid, caseId, bShowPopupWarning = false) {
         const showpopup = bShowPopupWarning ? 'yes' : 'no';
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + caseId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + toolid + ',' + caseId +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + caseId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + toolid + ',' + caseId +
             '&' + 'asyncworktype=decodeable' +
             '&' + 'showXrayMachineUi=yes' +
             '&' + 'showxraypopup=' + showpopup);
+        let oSettings = {
+            item_id: caseId,
+            tool_id: toolid,
+            work_type: 'decodeable',
+            is_xray_machine: true,
+            show_xray_popup: bShowPopupWarning
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     let JsInspectCallback = -1;
     function _OnLootlistItemPreview(id, params) {
@@ -1006,13 +1049,8 @@ var MainMenu;
         const lootlistNameOverride = ParamsList[3] && ParamsList[3] !== '' ? ParamsList[3] : 'false';
         const showMarketLinkDefault = _m_bPerfectWorld ? 'false' : 'true';
         JsInspectCallback = UiToolkitAPI.RegisterJSCallback(() => {
-            let idtoUse = storeId ? storeId : caseId;
-            let elPanel = $.GetContextPanel().FindChildInLayoutFile('PopupManager').FindChildInLayoutFile('popup-inspect-' + idtoUse);
-            if (elPanel && elPanel.IsValid()) {
-                elPanel.SetHasClass('hide-for-lootlist', false);
-            }
         });
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-lootlist-item-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-lootlist-item-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'allowsave=false' +
             '&' + 'showallitemactions=false' +
@@ -1022,16 +1060,34 @@ var MainMenu;
             '&' + 'caseidforlootlist=' + caseId +
             '&' + 'showRentalItems=' + showRentalItems +
             '&' + 'lootlistNameOverride=' + lootlistNameOverride);
+        let oSettings = {
+            item_id: id,
+            inspect_only: true,
+            hide_all_action_items: true,
+            hide_item_cert: true,
+            show_market_link: _m_bPerfectWorld ? false : true,
+            callback_handle: JsInspectCallback,
+            case_id_for_lootlist: caseId,
+            lootlist_name_override: lootlistNameOverride
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function _WeaponPreviewRequest(id, bWorkshopItemPreview = false) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
         UiToolkitAPI.CloseAllVisiblePopups();
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-weapon-preview-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-weapon-preview-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'allowsave=false' +
             '&' + 'showallitemactions=false' +
             '&' + 'showitemcert=true' +
             '&' + 'workshopPreview=' + workshopPreview);
+        let oSettings = {
+            item_id: id,
+            inspect_only: true,
+            hide_all_action_items: true,
+            is_workshop_preview: bWorkshopItemPreview
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function _SelectItemForWorkshopPreviewCapability(capability, itemid, itemid2) {
         UiToolkitAPI.CloseAllVisiblePopups();
@@ -1531,7 +1587,7 @@ var MainMenu;
         _UpdateBackgroundMap();
     }
     {
-        $.LogChannel("CSGO_MainMenu", "LV_DEFAULT", "#aaff80");
+        $.LogChannel("p.mainmenu", "LV_DEFAULT", "#aaff80");
         $.RegisterForUnhandledEvent('HideContentPanel', _OnHideContentPanel);
         $.RegisterForUnhandledEvent('SidebarContextMenuActive', _OnSideBarElementContextMenuActive);
         $.RegisterForUnhandledEvent('OpenPlayMenu', _OpenPlayMenu);
@@ -1582,5 +1638,6 @@ var MainMenu;
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_NameChanged', _UpdateLocalPlayerVanity);
         $.RegisterForUnhandledEvent('ShowFullScreenOpaquePopup', _OnShowFullScreenOpaquePopup);
         $.RegisterForUnhandledEvent('CloseAllFullScreenOpaquePopups', _OnCloseAllFullScreenOpaquePopups);
+        $.RegisterForUnhandledEvent("CSGOWorkshopAnnotationSubscriptionsChanged", () => _SetupAnnotationOptions(true));
     }
 })(MainMenu || (MainMenu = {}));

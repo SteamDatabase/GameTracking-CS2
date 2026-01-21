@@ -4,8 +4,6 @@ import { Instance, BaseModelEntity } from "cs_script/point_script";
 // mdl 2 - models/de_overpass/overpass_bike/bike_01.vmdl
 // mdl 3 - models/generic/terrace_set_01/terrace_chair_01.vmdl
 
-let bGlowing = false;
-
 function GetProp() {
     const ent = Instance.FindEntityByName("mdlchange.prop_dyn");
     if (ent instanceof BaseModelEntity) return ent;
@@ -40,7 +38,6 @@ Instance.OnScriptInput("SetModelVar1", () => {
     const prop = GetProp();
     if (prop) {
         prop.SetModel("models/de_overpass/construction/ladder/ladder_stand_open_1.vmdl");
-        bGlowing = false;
         prop.Unglow();
     }
 });
@@ -49,7 +46,6 @@ Instance.OnScriptInput("SetModelVar2", () => {
     const prop = GetProp();
     if (prop) {
         prop.SetModel("models/de_overpass/overpass_bike/bike_01.vmdl");
-        bGlowing = false;
         prop.Unglow();
     }
 });
@@ -58,7 +54,6 @@ Instance.OnScriptInput("SetModelVar3", () => {
     const prop = GetProp();
     if (prop) {
         prop.SetModel("models/generic/terrace_set_01/terrace_chair_01.vmdl");
-        bGlowing = false;
         prop.Unglow();
     }
 });
@@ -66,8 +61,7 @@ Instance.OnScriptInput("SetModelVar3", () => {
 Instance.OnScriptInput("GlowToggle", () => {
     const prop = GetProp();
     if (prop) {
-        bGlowing = !bGlowing;
-        if (bGlowing) prop.Glow();
+        if (!prop.IsGlowing()) prop.Glow();
         else prop.Unglow();
     }
 });

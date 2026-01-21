@@ -258,7 +258,7 @@ var ItemTile;
                 UiToolkitAPI.UnregisterJSCallback(updateItemListCallback);
             }
             updateItemListCallback = UiToolkitAPI.RegisterJSCallback(SelectItemForCapability.UpdateSort);
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                 '&' + 'inspectonly=true' +
                 '&' + 'insidecasketid=' + oCapabilityInfo.initialItemId +
                 '&' + 'capability=' + oCapabilityInfo.capability +
@@ -266,6 +266,16 @@ var ItemTile;
                 '&' + 'allowsave=false' +
                 '&' + 'isselected=' + $.GetContextPanel().BHasClass('capability_multistatus_selected') +
                 '&' + 'callback=' + updateItemListCallback);
+            let oSettings = {
+                item_id: id,
+                inspect_only: true,
+                is_inside_casket: oCapabilityInfo.initialItemId ? true : false,
+                capability: oCapabilityInfo.capability,
+                hide_all_action_items: true,
+                is_selected: $.GetContextPanel().BHasClass('capability_multistatus_selected'),
+                callback_handle: updateItemListCallback
+            };
+            elPanel.Data().oSettings = oSettings;
         }
     }
     ItemTile.OnActivateInspectButtonFromTile = OnActivateInspectButtonFromTile;

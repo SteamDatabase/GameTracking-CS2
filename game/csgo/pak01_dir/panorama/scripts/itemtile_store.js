@@ -174,11 +174,11 @@ var ItemTileStore;
                 elPanel.SetPanelEvent('onactivate', ShowDecodePopup.bind(undefined, oItemData.id, oItemData.id, isNew));
             }
             else {
-                elPanel.SetPanelEvent('onactivate', ShowInpsectPopup.bind(undefined, oItemData.id));
+                elPanel.SetPanelEvent('onactivate', ShowInspectPopup.bind(undefined, oItemData.id));
             }
         }
         else
-            elPanel.SetPanelEvent('onactivate', ShowInpsectPopup.bind(undefined, oItemData.id));
+            elPanel.SetPanelEvent('onactivate', ShowInspectPopup.bind(undefined, oItemData.id));
     }
     function OpenOverlayToMarket(itemId) {
         let m_AppID = SteamOverlayAPI.GetAppID();
@@ -187,17 +187,24 @@ var ItemTileStore;
         SteamOverlayAPI.OpenURL(m_CommunityUrl + "/market/search?q=&appid=" + m_AppID + "&lock_appid=" + m_AppID + "&category_" + m_AppID + "_ItemSet%5B%5D=tag_" + strSetName);
     }
     function ShowVolatilePopup(id) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
             '&' + 'inspectonly=true' +
             '&' + 'asyncworktype=decodeable' +
             '&' + 'onlyclosepurchasebar=true');
+        let oSettings = {
+            item_id: id,
+            inspect_only: true,
+            work_type: 'decodeable',
+            only_close_btn: true
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function ShowDecodePopup(id, displayItemId, isNew) {
         var strExtraSettings = '';
         if (isNew) {
             strExtraSettings = '&overridepurchasemultiple=1';
         }
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + displayItemId
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + displayItemId
             + '&' +
             'asyncworkitemwarning=no'
             + '&' +
@@ -205,15 +212,30 @@ var ItemTileStore;
             + '&' +
             'storeitemid=' + id
             + strExtraSettings);
+        let oSettings = {
+            item_id: displayItemId,
+            store_item_id: id,
+            force_hide_async_bar: true,
+            show_work_type_warning: false,
+            override_purchase_limit: 1
+        };
+        elPanel.Data().oSettings = oSettings;
     }
-    function ShowInpsectPopup(id) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id
+    function ShowInspectPopup(id) {
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id
             + '&' +
             'inspectonly=false'
             + '&' +
             'asyncworkitemwarning=no'
             + '&' +
             'storeitemid=' + id);
+        let oSettings = {
+            item_id: id,
+            inspect_only: false,
+            show_work_type_warning: false,
+            store_item_id: id
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     let jsTooltipDelayHandle = null;
     function AddMouseOverEvents(elPanel, oItemData) {

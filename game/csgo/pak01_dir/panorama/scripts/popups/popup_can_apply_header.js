@@ -1,9 +1,9 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../common/iteminfo.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 var CanApplyHeader;
 (function (CanApplyHeader) {
-    let m_cP = $.GetContextPanel();
     function Init(oTitleSettings) {
         oTitleSettings.headerPanel.RemoveClass('hidden');
         _SetTitle(oTitleSettings);
@@ -13,35 +13,35 @@ var CanApplyHeader;
     CanApplyHeader.Init = Init;
     function _SetTitle(oTitleSettings) {
         if (oTitleSettings.type === 'sticker' && !oTitleSettings.isRemove) {
-            let listStickers = ItemInfo.GetitemStickerList(oTitleSettings.itemId);
-            m_cP.SetDialogVariableInt("sticker_count", listStickers.length + 1);
-            m_cP.SetDialogVariableInt("max_stickers", 5);
-            m_cP.SetDialogVariable("CanApplyTitle", $.Localize('#popup_can_sticker_button', m_cP));
+            const listStickers = ItemInfo.GetitemStickerList(oTitleSettings.itemId);
+            oTitleSettings.contextPanel.SetDialogVariableInt("sticker_count", listStickers.length + 1);
+            oTitleSettings.contextPanel.SetDialogVariableInt("max_stickers", 5);
+            oTitleSettings.contextPanel.SetDialogVariable("CanApplyTitle", $.Localize('#popup_can_sticker_button', oTitleSettings.contextPanel));
             return;
         }
         let title = oTitleSettings.isRemove ? '#SFUI_InvContextMenu_can_stick_Wear_full_' + oTitleSettings.type : '#SFUI_InvContextMenu_stick_use_' + oTitleSettings.type;
-        if (oTitleSettings.worktype === 'can_wrap_sticker')
+        if (InspectShared.GetPopupSetting('work_type') === 'can_wrap_sticker')
             title = oTitleSettings.toolId ? '#CSGO_Tool_WrapStickerInDisplayCase_Title' : '#CSGO_Tool_UnWrapStickerInDisplayCase_Title';
-        m_cP.SetDialogVariable("CanApplyTitle", $.Localize(title, m_cP));
+        oTitleSettings.contextPanel.SetDialogVariable("CanApplyTitle", $.Localize(title, oTitleSettings.contextPanel));
     }
     function _SetUpDesc(oTitleSettings) {
-        let currentName = InventoryAPI.GetItemNameUncustomized(oTitleSettings.itemId);
-        m_cP.SetDialogVariable('tool_target_name', currentName);
+        const currentName = InventoryAPI.GetItemNameUncustomized(oTitleSettings.itemId);
+        oTitleSettings.contextPanel.SetDialogVariable('tool_target_name', currentName);
         let desc = oTitleSettings.isRemove ? '#popup_can_stick_scrape_full_' + oTitleSettings.type : '#popup_can_stick_desc';
-        if (oTitleSettings.worktype === 'can_wrap_sticker')
+        if (InspectShared.GetPopupSetting('work_type') === 'can_wrap_sticker')
             desc = '';
-        m_cP.SetDialogVariable("CanApplyDesc", $.Localize(desc, m_cP));
+        oTitleSettings.contextPanel.SetDialogVariable("CanApplyDesc", $.Localize(desc, oTitleSettings.contextPanel));
     }
     function _SetUpWarning(oTitleSettings) {
-        let elLabel = m_cP.FindChildInLayoutFile('id-can-apply-warning');
-        if (oTitleSettings.worktype === 'can_wrap_sticker') {
+        const elLabel = oTitleSettings.headerPanel.FindChildTraverse('id-can-apply-warning');
+        if (InspectShared.GetPopupSetting('work_type') === 'can_wrap_sticker') {
             elLabel.visible = true;
             elLabel.FindChildInLayoutFile('id-can-apply-warning-text').SetLocString(oTitleSettings.toolId ? '#CSGO_Tool_WrapStickerInDisplayCase_Desc' : '#CSGO_Tool_UnWrapStickerInDisplayCase_Desc');
             return;
         }
-        if (oTitleSettings.isRemove && oTitleSettings.worktype == 'remove_keychain') {
+        if (oTitleSettings.isRemove && InspectShared.GetPopupSetting('work_type') == 'remove_keychain') {
             elLabel.visible = true;
-            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+            const numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
             elLabel.SetDialogVariableInt('item_count', numKeychainRemoveToolChargesRemaining);
             elLabel.FindChildInLayoutFile('id-can-apply-warning-text').SetLocString('#Notify_KeychainRemoveTool_ChargesUseToRemove');
             return;
@@ -50,54 +50,54 @@ var CanApplyHeader;
         if (oTitleSettings.isRemove) {
             return;
         }
-        let warningText = _GetWarningTradeRestricted(oTitleSettings.type, oTitleSettings.toolId, oTitleSettings.itemId);
+        let warningText = _GetWarningTradeRestricted(oTitleSettings);
         warningText = !warningText ? '#SFUI_InvUse_Warning_use_can_stick_' + oTitleSettings.type : warningText;
         if (ItemInfo.IsFauxOrRentalOrPreviewTool(oTitleSettings.toolId)) {
             warningText = '#SFUI_InvUse_Warning_use_can_stick_previewonly_' + oTitleSettings.type;
             let bPhantomDisplayItemCannotApply = true;
-            m_cP.GetParent().SetHasClass('can_apply_previewonly_phantom_display', bPhantomDisplayItemCannotApply);
+            oTitleSettings.contextPanel.SetHasClass('can_apply_previewonly_phantom_display', bPhantomDisplayItemCannotApply);
         }
         warningText = $.Localize(warningText, elLabel);
-        m_cP.SetDialogVariable("CanApplyWarning", warningText);
+        oTitleSettings.contextPanel.SetDialogVariable("CanApplyWarning", warningText);
     }
-    function _GetWarningTradeRestricted(type, toolId, itemId) {
+    function _GetWarningTradeRestricted(oTitleSettings) {
         let strSpecialWarning = '';
         let strSpecialParam = null;
-        let bIsPerfectWorld = MyPersonaAPI.GetLauncherType() === "perfectworld" ? true : false;
+        const bIsPerfectWorld = MyPersonaAPI.GetLauncherType() === "perfectworld" ? true : false;
         if (!bIsPerfectWorld) {
-            if (InventoryAPI.IsMarketable(itemId)) {
-                if (!InventoryAPI.IsPotentiallyMarketable(toolId)) {
-                    strSpecialParam = String(InventoryAPI.GetItemAttributeValue(toolId, "tradable after date"));
+            if (InventoryAPI.IsMarketable(oTitleSettings.itemId)) {
+                if (!InventoryAPI.IsPotentiallyMarketable(oTitleSettings.toolId)) {
+                    strSpecialParam = String(InventoryAPI.GetItemAttributeValue(oTitleSettings.toolId, "tradable after date"));
                     if (strSpecialParam !== undefined && strSpecialParam !== null) {
-                        strSpecialWarning = _GetSpecialWarningString(type, strSpecialParam, "marketrestricted");
+                        strSpecialWarning = _GetSpecialWarningString(oTitleSettings, strSpecialParam, "marketrestricted");
                     }
                 }
                 else {
-                    strSpecialWarning = _GetStickerMarketDateGreater(type, toolId, itemId);
+                    strSpecialWarning = _GetStickerMarketDateGreater(oTitleSettings);
                 }
             }
         }
         else {
-            strSpecialWarning = _GetStickerMarketDateGreater(type, toolId, itemId);
+            strSpecialWarning = _GetStickerMarketDateGreater(oTitleSettings);
         }
         return strSpecialWarning;
     }
-    function _GetStickerMarketDateGreater(type, toolId, itemId) {
-        let rtTradableAfterSticker = InventoryAPI.GetItemAttributeValue(toolId, "{uint32}tradable after date");
-        let rtTradableAfterWeapon = InventoryAPI.GetItemAttributeValue(itemId, "{uint32}tradable after date");
+    function _GetStickerMarketDateGreater(oTitleSettings) {
+        const rtTradableAfterSticker = InventoryAPI.GetItemAttributeValue(oTitleSettings.toolId, "{uint32}tradable after date");
+        const rtTradableAfterWeapon = InventoryAPI.GetItemAttributeValue(oTitleSettings.itemId, "{uint32}tradable after date");
         if (rtTradableAfterSticker != undefined && rtTradableAfterSticker != null &&
             (rtTradableAfterWeapon == undefined || rtTradableAfterWeapon == null || rtTradableAfterSticker > rtTradableAfterWeapon)) {
             let strSpecialParam = null;
-            strSpecialParam = String(InventoryAPI.GetItemAttributeValue(toolId, "tradable after date"));
+            strSpecialParam = String(InventoryAPI.GetItemAttributeValue(oTitleSettings.toolId, "tradable after date"));
             if (strSpecialParam != undefined && strSpecialParam != null) {
-                return _GetSpecialWarningString(type, strSpecialParam, "traderestricted");
+                return _GetSpecialWarningString(oTitleSettings, strSpecialParam, "traderestricted");
             }
         }
         return '';
     }
-    function _GetSpecialWarningString(type, strSpecialParam, warningText) {
-        let elLabel = m_cP.FindChildInLayoutFile('id-can-apply-warning');
+    function _GetSpecialWarningString(oTitleSettings, strSpecialParam, warningText) {
+        const elLabel = oTitleSettings.headerPanel.FindChildInLayoutFile('id-can-apply-warning');
         elLabel.SetDialogVariable('date', strSpecialParam);
-        return "#popup_can_stick_warning_" + warningText + "_" + type;
+        return "#popup_can_stick_warning_" + warningText + "_" + oTitleSettings.type;
     }
 })(CanApplyHeader || (CanApplyHeader = {}));

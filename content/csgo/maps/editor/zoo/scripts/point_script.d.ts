@@ -46,13 +46,13 @@ declare module "cs_script/point_script"
         /** Log a message to the console. */
         Msg(text: any): void;
         /** Print some text to the game window. Only works in dev environments. */
-        DebugScreenText(config: { text: any, x: number, y: number, duration?: number, color?: Color }): void;
+        DebugScreenText(config: { text: any, x: number, y: number, duration?: number, color?: ColorArg }): void;
         /** Draw a line in the world. Only works in dev environments. */
-        DebugLine(config: { start: Vector, end: Vector, duration?: number, color?: Color }): void;
+        DebugLine(config: { start: Vector, end: Vector, duration?: number, color?: ColorArg }): void;
         /** Draw a wire sphere in the world. Only works in dev environments. */
-        DebugSphere(config: { center: Vector, radius: number, duration?: number, color?: Color }): void;
+        DebugSphere(config: { center: Vector, radius: number, duration?: number, color?: ColorArg }): void;
         /** Draw an axis aligned box in the world. Only works in dev environments. */
-        DebugBox(config: { mins: Vector, maxs: Vector, duration?: number, color?: Color }): void;
+        DebugBox(config: { mins: Vector, maxs: Vector, duration?: number, color?: ColorArg }): void;
 
         /**
          * Called in Tools mode when the script is reloaded due to changes.
@@ -175,13 +175,13 @@ declare module "cs_script/point_script"
         /** @deprecated This method will be removed in a future update */
         OnReload(callback: (memory: any) => void): void;
         /** @deprecated This overload will be removed in a future update */
-        DebugScreenText(text: any, x: number, y: number, duration: number, color: Color): void;
+        DebugScreenText(text: any, x: number, y: number, duration: number, color: ColorArg): void;
         /** @deprecated This overload will be removed in a future update */
-        DebugLine(start: Vector, end: Vector, duration: number, color: Color): void;
+        DebugLine(start: Vector, end: Vector, duration: number, color: ColorArg): void;
         /** @deprecated This overload will be removed in a future update */
-        DebugBox(mins: Vector, maxs: Vector, duration: number, color: Color): void;
+        DebugBox(mins: Vector, maxs: Vector, duration: number, color: ColorArg): void;
         /** @deprecated This overload will be removed in a future update */
-        DebugSphere(center: Vector, radius: number, duration: number, color: Color): void;
+        DebugSphere(center: Vector, radius: number, duration: number, color: ColorArg): void;
         /** @deprecated This method will be removed in a future update */
         GetTraceHit(start: Vector, end: Vector, config?: { ignoreEntity?: Entity, ignorePlayers?: boolean }): TraceResult;
         /** @deprecated This overload will be removed in a future update */
@@ -192,7 +192,8 @@ declare module "cs_script/point_script"
 
     type Vector = { x: number, y: number, z: number };
     type QAngle = { pitch: number, yaw: number, roll: number };
-    type Color = { r: number, g: number, b: number, a?: number };
+    type ColorArg = { r: number, g: number, b: number, a?: number };
+    type Color = { r: number, g: number, b: number, a: number };
     type InputValue = boolean | number | string | Vector | Color | undefined;
 
     export enum CSRoundEndReason {
@@ -469,10 +470,14 @@ declare module "cs_script/point_script"
 
     export class BaseModelEntity extends Entity {
         SetModel(modelName: string): void;
+        GetModelName(): string;
         SetModelScale(scale: number): void;
-        SetColor(color: Color): void;
-        Glow(color?: Color): void;
+        GetModelScale(): number;
+        SetColor(color: ColorArg): void;
+        GetColor(): Color;
+        Glow(color?: ColorArg): void;
         Unglow(): void;
+        IsGlowing(): boolean;
     }
 
     export class CSWeaponBase extends BaseModelEntity {

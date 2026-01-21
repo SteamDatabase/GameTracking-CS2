@@ -642,7 +642,6 @@ var PopupSeasonStats;
     }
     function _AddYAxisRanks(lineGraph) {
         const guidelineYPositions = lineGraph.GetGuidelinePositions();
-        const graphY = lineGraph.actualyoffset / lineGraph.actualuiscale_y;
         guidelineYPositions.forEach((posData, index) => {
             let elParent = _m_cp.FindChildInLayoutFile('id-line-graph-y-axis');
             let elRating = $.CreatePanel('Panel', elParent, 'id-rating-y-' + posData.x);

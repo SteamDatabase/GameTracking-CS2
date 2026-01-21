@@ -315,6 +315,8 @@
 		{
 			PerDrawCullingData      "1"
 			EncodeVertexBuffer      "1"
+            EncodeVertexBufferVersion   "1"
+            EncodeVertexBufferLevel     "3"
 			EncodeIndexBuffer       "1"
 			UseMikkTSpace           "1"
 			MeshletConeWeight       ".15"
@@ -533,7 +535,7 @@
 
 	Physics
 	{
-		"BuildMeshWings" "0"
+		"BuildMeshWings" "1"
 	}
 	PostProcessingEditor
 	{

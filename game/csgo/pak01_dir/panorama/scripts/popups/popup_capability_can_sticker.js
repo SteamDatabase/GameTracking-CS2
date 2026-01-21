@@ -8,66 +8,54 @@
 /// <reference path="popup_can_apply_pick_slot.ts" />
 /// <reference path="popup_can_apply_header.ts" />
 /// <reference path="popup_acknowledge_item.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 var CapabilityCanApplyAction;
 (function (CapabilityCanApplyAction) {
-    const m_cP = $.GetContextPanel();
-    const m_elPreviewPanel = m_cP.FindChildInLayoutFile('CanApplyItemModel');
-    let m_isRemove = false;
-    let m_worktype = '';
-    let m_isWorkshopPreview = false;
-    let m_toolId = "(not found)";
-    let m_itemId = "(not found)";
-    let m_itemIdCreatedTemp = '';
-    let m_szRemoveKeychainToolChargesForPurchase = 'Remove Keychain Tool Pack';
+    const m_szRemoveKeychainToolChargesForPurchase = 'Remove Keychain Tool Pack';
     function Init() {
-        m_cP.SetAttributeString('stickerApplyRemove', 'true');
-        let itemId = '';
-        let toolId = '';
-        m_worktype = (m_cP.GetAttributeString("asyncworktype", ""));
-        m_isWorkshopPreview = (m_cP.GetAttributeString("workshopPreview", "false") === "true");
-        m_isRemove = (m_worktype === "remove_sticker" || m_worktype === "remove_patch" || m_worktype === "remove_keychain");
-        if (m_isRemove) {
-            m_itemId = itemId = m_cP.GetAttributeString("itemid", "(not found)");
+        InspectShared.SetPopupSetting('is_apply_remove_item', true);
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        const toolId = InspectShared.GetPopupSetting('tool_id');
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        const isRemove = _IsRemove(worktype);
+        if (isRemove) {
             if (!itemId) {
                 ClosePopUp();
                 return;
             }
         }
         else {
-            const strMsg = m_cP.GetAttributeString("toolid-and-itemid", "(not found)");
-            let idList = strMsg.split(',');
-            m_toolId = toolId = idList[0];
-            m_itemId = itemId = idList[1];
-            if (m_worktype === 'can_keychain' || m_worktype === 'can_sticker') {
-                m_itemIdCreatedTemp = itemId = InventoryAPI.CreateTempCombinedItemWithTool(m_itemId, m_toolId);
-                if (!itemId) {
+            if (worktype === 'can_keychain' || worktype === 'can_sticker') {
+                const tempCreatedItem = InventoryAPI.CreateTempCombinedItemWithTool(itemId, toolId);
+                if (!tempCreatedItem) {
                     ClosePopUp();
                     return;
                 }
+                InspectShared.SetPopupSetting('temp_display_item_id', tempCreatedItem);
             }
-            if ((m_worktype === 'can_wrap_sticker') && m_toolId) {
-                m_itemIdCreatedTemp = itemId = InventoryAPI.CreateTempCombinedItemWithTool(m_itemId, m_toolId);
-                if (!itemId) {
+            if ((worktype === 'can_wrap_sticker') && toolId) {
+                const tempCreatedItem = InventoryAPI.CreateTempCombinedItemWithTool(itemId, toolId);
+                if (!tempCreatedItem) {
                     ClosePopUp();
                     return;
                 }
+                InspectShared.SetPopupSetting('temp_display_item_id', tempCreatedItem);
             }
         }
         let oSettings = {
-            headerPanel: m_cP.FindChildInLayoutFile('PopUpCanApplyHeader'),
-            infoPanel: m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot'),
-            asyncbarPanel: m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar'),
-            itemId: itemId,
+            headerPanel: $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyHeader'),
+            infoPanel: $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot'),
+            asyncBarPanel: $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar'),
+            contextPanel: $.GetContextPanel(),
+            itemId: InspectShared.GetPopupSetting('temp_display_item_id') ? InspectShared.GetPopupSetting('temp_display_item_id') : itemId,
             toolId: toolId,
-            isRemove: (m_worktype === 'can_wrap_sticker') ? true
-                : m_isRemove,
-            worktype: m_worktype,
-            type: (m_worktype === 'can_wrap_sticker') ? 'keychain'
-                : (m_worktype.indexOf('sticker') !== -1) ? 'sticker'
-                    : (m_worktype.indexOf('patch') !== -1) ? 'patch'
-                        : (m_worktype.indexOf('keychain') !== -1) ? 'keychain'
+            isRemove: (worktype === 'can_wrap_sticker') ? true
+                : isRemove,
+            type: (worktype === 'can_wrap_sticker') ? 'keychain'
+                : (worktype.indexOf('sticker') !== -1) ? 'sticker'
+                    : (worktype.indexOf('patch') !== -1) ? 'patch'
+                        : (worktype.indexOf('keychain') !== -1) ? 'keychain'
                             : '',
-            isWorkshopPreview: m_isWorkshopPreview,
             funcOnConfirm: _OnConfirmPressed,
             funcOnNext: _OnNextPressed,
             funcOnCancel: _OnCancelPressed,
@@ -79,38 +67,39 @@ var CapabilityCanApplyAction;
         CapabilityCanKeychain.ResetPos();
         CanApplySlotInfo.UpdateEmptySlotList(itemId);
         CanApplyPickSlot.Init(oSettings);
-        _SetItemModel(toolId, itemId);
-        _SetUpAsyncActionBar(toolId, itemId);
-        _UpdateEnableDisableOkBtn(false);
+        $.GetContextPanel().Data().oApplySettings = oSettings;
+        _SetItemModel(toolId, itemId, isRemove);
+        _SetUpAsyncActionBar(toolId);
+        _UpdateEnableDisableOkBtn(false, oSettings);
         if (oSettings.isRemove && oSettings.type === 'keychain') {
-            _OnConfirmPressed();
+            _OnConfirmPressed(oSettings);
         }
-        if (m_worktype === "remove_sticker") {
+        if (worktype === "remove_sticker") {
             $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', CapabilityCanSticker.OnFinishedScratch);
         }
         $.DispatchEvent('CapabilityPopupIsOpen', true);
-        if (m_worktype === 'remove_keychain') {
-            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+        if (worktype === 'remove_keychain') {
+            const numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
             if (numKeychainRemoveToolChargesRemaining > 0) {
             }
             else {
                 let ownedKeychainRemoveChargesID = '';
-                let bAutoAcknowledge = true;
-                let unackItems = AcknowledgeItems.GetItemsByType([m_szRemoveKeychainToolChargesForPurchase], bAutoAcknowledge);
+                const bAutoAcknowledge = true;
+                const unackItems = AcknowledgeItems.GetItemsByType([m_szRemoveKeychainToolChargesForPurchase], bAutoAcknowledge);
                 if (unackItems && unackItems.length > 0) {
                     ownedKeychainRemoveChargesID = unackItems[0];
                 }
                 if (!ownedKeychainRemoveChargesID) {
                     InventoryAPI.SetInventorySortAndFilters('inv_sort_age', false, 'item_definition:' + m_szRemoveKeychainToolChargesForPurchase, '', '');
-                    let countOfChargeItemsOwned = InventoryAPI.GetInventoryCount();
+                    const countOfChargeItemsOwned = InventoryAPI.GetInventoryCount();
                     if (countOfChargeItemsOwned > 0) {
                         ownedKeychainRemoveChargesID = InventoryAPI.GetInventoryItemIDByIndex(0);
                     }
                 }
                 if (ownedKeychainRemoveChargesID) {
                     ClosePopUp();
-                    $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ownedKeychainRemoveChargesID +
-                        '&' + 'asyncworktype=useitem');
+                    const elPanel = $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'item_id=' + ownedKeychainRemoveChargesID +
+                        ',' + 'work_type=useitem');
                 }
                 else {
                 }
@@ -118,99 +107,108 @@ var CapabilityCanApplyAction;
         }
     }
     CapabilityCanApplyAction.Init = Init;
-    function _OnConfirmPressed() {
+    function _IsRemove(worktype) {
+        return (worktype === "remove_sticker" || worktype === "remove_patch" || worktype === "remove_keychain");
+    }
+    function _OnConfirmPressed(oSettings) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'generic_button_press', 'MOUSE');
-        _SetSelectedSlot(CanApplySlotInfo.GetSelectedEmptySlot());
-        _UpdateEnableDisableOkBtn(true);
-        InspectAsyncActionBar.EnableDisableChangeSceneryBtn(false);
+        _SetSelectedSlot(CanApplySlotInfo.GetSelectedEmptySlot(), oSettings);
+        _UpdateEnableDisableOkBtn(true, oSettings);
+        InspectAsyncActionBar.EnableDisableChangeSceneryBtn(false, oSettings.contextPanel.FindChildInLayoutFile('PopUpInspectAsyncBar'));
     }
-    function _OnNextPressed(itemToApplyId, activeSlot) {
-        _UpdateEnableDisableOkBtn(false);
-        if (m_worktype === 'can_sticker' || m_worktype === 'can_keychain') {
-            CapabilityCanSticker.NextStickerButtonPressed();
-            CapabilityCanSticker.ShowCancelBtn();
+    function _OnNextPressed(itemToApplyId, activeSlot, oSettings) {
+        const worktype = InspectShared.GetPopupSetting('work_type', oSettings.contextPanel);
+        _UpdateEnableDisableOkBtn(false, oSettings);
+        if (worktype === 'can_sticker' || worktype === 'can_keychain') {
+            CapabilityCanSticker.NextStickerButtonPressed(oSettings.contextPanel);
         }
-        else if (m_worktype === 'can_patch') {
-            $.Schedule(.25, () => CapabilityCanPatch.PreviewPatchOnChar(itemToApplyId, activeSlot));
+        else if (worktype === 'can_patch') {
+            $.Schedule(.25, () => CapabilityCanPatch.PreviewPatchOnChar(itemToApplyId, activeSlot, oSettings.contextPanel));
         }
     }
-    function _OnCancelPressed() {
-        _UpdateEnableDisableOkBtn(false);
-        InspectAsyncActionBar.EnableDisableChangeSceneryBtn(true);
+    function _OnCancelPressed(oSettings) {
+        _UpdateEnableDisableOkBtn(false, oSettings);
+        InspectAsyncActionBar.EnableDisableChangeSceneryBtn(true, oSettings.contextPanel.FindChildInLayoutFile('PopUpInspectAsyncBar'));
     }
     function _StickerPlacementUpdated() {
-        let elParent = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot');
-        let elCancelBtn = elParent.FindChildInLayoutFile('CanApplyCancel');
+        const elParent = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot');
+        const elCancelBtn = elParent.FindChildInLayoutFile('CanApplyCancel');
         if (elCancelBtn.visible)
             $.DispatchEvent("Activated", elParent.FindChildInLayoutFile('CanApplyCancel'), "mouse");
     }
-    function _OnSelectForRemove(slotIndex) {
-        if (m_worktype === 'remove_sticker') {
-            _SetSelectedSlot(slotIndex);
-            CanApplyPickSlot.UpdateSelectedRemoveForSticker(slotIndex);
-            _UpdateEnableDisableOkBtn(true);
+    function _OnSelectForRemove(slotIndex, oSettings) {
+        const worktype = InspectShared.GetPopupSetting('work_type', oSettings.contextPanel);
+        if (worktype === 'remove_sticker') {
+            _SetSelectedSlot(slotIndex, oSettings);
+            CanApplyPickSlot.UpdateSelectedRemoveForSticker(slotIndex, oSettings);
+            _UpdateEnableDisableOkBtn(true, oSettings);
         }
-        else if (m_worktype === 'remove_patch') {
-            _SetSelectedSlot(slotIndex);
-            _UpdateEnableDisableOkBtn(true);
-            CapabilityCanPatch.CameraAnim(slotIndex);
+        else if (worktype === 'remove_patch') {
+            _SetSelectedSlot(slotIndex, oSettings);
+            _UpdateEnableDisableOkBtn(true, oSettings);
+            CapabilityCanPatch.CameraAnim(slotIndex, oSettings.contextPanel);
         }
     }
-    function _UpdateEnableDisableOkBtn(bEnable) {
-        let elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
+    function _UpdateEnableDisableOkBtn(bEnable, oSettings) {
+        const elAsyncActionBarPanel = oSettings.contextPanel.FindChildInLayoutFile('PopUpInspectAsyncBar');
         InspectAsyncActionBar.EnableDisableOkBtn(elAsyncActionBarPanel, bEnable);
         return;
     }
-    function _SetSelectedSlot(slotIndex) {
-        m_cP.SetAttributeString('selectedItemToApplySlot', slotIndex.toString());
+    function _SetSelectedSlot(slotIndex, oSettings) {
+        oSettings.asyncBarPanel.SetAttributeString('selectedItemToApplySlot', slotIndex.toString());
     }
     function _UpdateInspectMap() {
-        InspectModelImage.SwitchMap(m_cP);
-        if (m_worktype === 'can_patch') {
+        InspectModelImage.SwitchMap($.GetContextPanel());
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        if (worktype === 'can_patch') {
             CapabilityCanPatch.ResetPos();
         }
-        InspectAsyncActionBar.ZoomCamera(true);
-        _UpdateItemToApplyPreview(m_toolId);
+        InspectAsyncActionBar.ZoomCamera(true, $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar'));
+        _UpdateItemToApplyPreview(InspectShared.GetPopupSetting('tool_id'), $.GetContextPanel());
     }
-    function _SetItemModel(toolId, itemId) {
+    function _SetItemModel(toolId, itemId, m_isRemove) {
         if (!InventoryAPI.IsItemInfoValid(itemId))
             return;
-        InspectModelImage.Init(m_elPreviewPanel, itemId, _GetSettingCallback);
-        m_elPreviewPanel.Data().id = itemId;
+        const elPreviewPanel = $.GetContextPanel().FindChildInLayoutFile('CanApplyItemModel');
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        const displayItemId = InspectShared.GetPopupSetting('temp_display_item_id');
+        InspectModelImage.Init(elPreviewPanel, displayItemId ? displayItemId : itemId, _GetSettingCallback);
+        elPreviewPanel.Data().id = itemId;
         if (m_isRemove) {
-            if (m_worktype === 'remove_patch') {
+            if (worktype === 'remove_patch') {
                 $.Schedule(.3, () => CanApplyPickSlot.SelectFirstRemoveItem());
             }
         }
         else {
-            _UpdateItemToApplyPreview(toolId);
+            _UpdateItemToApplyPreview(toolId, $.GetContextPanel());
         }
     }
-    function _UpdateItemToApplyPreview(toolId) {
-        if (m_worktype === 'can_sticker') {
+    function _UpdateItemToApplyPreview(toolId, contextPanel) {
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        if (worktype === 'can_sticker') {
             CapabilityCanSticker.PreviewStickerInSlot(toolId, CanApplySlotInfo.GetSelectedEmptySlot());
         }
-        if (m_worktype === 'can_patch') {
-            $.Schedule(.3, () => CapabilityCanPatch.PreviewPatchOnChar(toolId, CanApplySlotInfo.GetSelectedEmptySlot()));
+        if (worktype === 'can_patch') {
+            $.Schedule(.3, () => CapabilityCanPatch.PreviewPatchOnChar(toolId, CanApplySlotInfo.GetSelectedEmptySlot(), contextPanel));
         }
     }
-    function _SetUpAsyncActionBar(toolId, itemId) {
-        m_cP.SetAttributeString('toolid', toolId);
-        const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
-        InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback, _AsyncActionPerformedPositiveBind, (m_worktype === 'remove_sticker'
-            || (m_worktype === 'can_wrap_sticker' && !toolId)) ? _AsyncActionPerformedNegativeBind : undefined);
-        let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
+    function _SetUpAsyncActionBar(toolId) {
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        const elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
+        InspectAsyncActionBar.Init();
+        const elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
         let bConfigurePurchaseBar = false;
         let mustPurchaseItemID = '';
-        if (m_worktype === 'can_wrap_sticker' && InventoryAPI.IsFauxItemID(m_itemId)) {
+        if (worktype === 'can_wrap_sticker' && InventoryAPI.IsFauxItemID(itemId)) {
             bConfigurePurchaseBar = true;
-            mustPurchaseItemID = m_itemId;
+            mustPurchaseItemID = itemId;
         }
-        if (m_worktype === 'remove_keychain' || m_worktype === 'can_keychain') {
+        if (worktype === 'remove_keychain' || worktype === 'can_keychain') {
             bConfigurePurchaseBar = true;
-            if (m_worktype === 'remove_keychain') {
-                let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
-                let defidxForPurchase = (numKeychainRemoveToolChargesRemaining > 0) ? 0 : InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_szRemoveKeychainToolChargesForPurchase);
+            if (worktype === 'remove_keychain') {
+                const numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+                const defidxForPurchase = (numKeychainRemoveToolChargesRemaining > 0) ? 0 : InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_szRemoveKeychainToolChargesForPurchase);
                 if (defidxForPurchase) {
                     mustPurchaseItemID = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxForPurchase, 0);
                 }
@@ -218,12 +216,12 @@ var CapabilityCanApplyAction;
         }
         if (elPurchase && bConfigurePurchaseBar) {
             if (mustPurchaseItemID) {
-                $.GetContextPanel().SetAttributeString('purchaseItemId', mustPurchaseItemID);
-                m_cP.SetAttributeString('toolid', '');
+                InspectShared.SetPopupSetting('purchase_item_id', mustPurchaseItemID);
+                $.GetContextPanel().SetAttributeString('toolid', '');
             }
-            InspectPurchaseBar.Init(elPurchase, mustPurchaseItemID, _GetSettingCallback);
+            InspectPurchaseBar.Init();
             if (mustPurchaseItemID) {
-                m_cP.SetAttributeString('toolid', toolId);
+                $.GetContextPanel().SetAttributeString('toolid', toolId);
                 elAsyncActionBarPanel.AddClass('hidden');
             }
         }
@@ -231,67 +229,43 @@ var CapabilityCanApplyAction;
     function _OnStorePurchaseCompleted(ItemId) {
         if (InventoryAPI.DoesItemMatchDefinitionByName(ItemId, m_szRemoveKeychainToolChargesForPurchase)) {
             $.DispatchEvent('HideStoreStatusPanel');
-            let bAutoAcknowledge = true;
+            const bAutoAcknowledge = true;
             AcknowledgeItems.GetItemsByType([m_szRemoveKeychainToolChargesForPurchase], bAutoAcknowledge);
             ClosePopUp();
-            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + ItemId +
-                '&' + 'asyncworktype=useitem');
+            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'item_id=' + ItemId +
+                ',' + 'work_type=useitem');
         }
-        if (m_worktype === 'can_wrap_sticker' &&
-            InventoryAPI.IsFauxItemID(m_itemId) &&
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        const toolId = InspectShared.GetPopupSetting('tool_id');
+        if (worktype === 'can_wrap_sticker' &&
+            InventoryAPI.IsFauxItemID(itemId) &&
             InventoryAPI.DoesItemMatchDefinitionByName(ItemId, "sticker_display_case")) {
             $.DispatchEvent('HideStoreStatusPanel');
-            let bAutoAcknowledge = true;
+            const bAutoAcknowledge = true;
             AcknowledgeItems.GetItemsByType(["sticker_display_case"], bAutoAcknowledge);
             ClosePopUp();
-            $.DispatchEvent("ShowCustomLayoutPopupParametersAsEvent", '', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + m_toolId + ',' + ItemId
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + ItemId, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + toolId + ',' + ItemId
                 + '&' +
                 'asyncworktype=can_wrap_sticker');
+            let oSettings = {
+                popup_panel: elPanel,
+                tool_id: toolId,
+                item_id: ItemId,
+                work_type: 'can_wrap_sticker'
+            };
+            elPanel.Data().oSettings = oSettings;
         }
     }
     ;
     function _GetSettingCallback(settingname, defaultvalue) {
         if (settingname === 'overridepurchasemultiple')
             return '0';
-        return m_cP.GetAttributeString(settingname, defaultvalue);
-    }
-    function _AsyncActionPerformedPositiveBind(itemid, toolid, slot) {
-        _AsyncActionPerformedCallback(true, itemid, toolid, slot);
-    }
-    function _AsyncActionPerformedNegativeBind(itemid, toolid, slot) {
-        _AsyncActionPerformedCallback(false, itemid, toolid, slot);
-    }
-    function _AsyncActionPerformedCallback(bPositiveAction, itemid, toolid, slot) {
-        CanApplyPickSlot.DisableBtns(m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot'));
-        if (m_itemIdCreatedTemp !== '' && itemid === m_itemIdCreatedTemp) {
-            itemid = m_itemId;
-        }
-        if (m_worktype === 'remove_sticker') {
-            CapabilityCanSticker.OnScratchSticker(itemid, slot, !bPositiveAction);
-        }
-        else if (m_worktype === 'remove_patch') {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InventoryAPI.WearItemSticker(itemid, slot, 0);
-            InspectAsyncActionBar.SetCallbackTimeout();
-        }
-        else if (m_worktype === 'remove_keychain') {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InventoryAPI.RemoveKeychain(itemid, 0);
-            InspectAsyncActionBar.SetCallbackTimeout();
-        }
-        else if (m_worktype === 'can_wrap_sticker' && !toolid) {
-            InspectAsyncActionBar.ResetTimeouthandle();
-            InventoryAPI.RemoveKeychain(itemid, 0);
-            InspectAsyncActionBar.SetCallbackTimeout();
-        }
-        else {
-            InventoryAPI.SetStickerToolSlot(itemid, slot);
-            InventoryAPI.UseTool(toolid, itemid);
-        }
+        return $.GetContextPanel().GetAttributeString(settingname, defaultvalue);
     }
     function ClosePopUp() {
-        const elAsyncActionBarPanel = m_cP.FindChildInLayoutFile('PopUpInspectAsyncBar');
-        let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
+        const elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
+        const elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
         if (!elAsyncActionBarPanel.BHasClass('hidden')) {
             InspectAsyncActionBar.OnEventToClose();
         }
@@ -300,6 +274,9 @@ var CapabilityCanApplyAction;
         }
     }
     CapabilityCanApplyAction.ClosePopUp = ClosePopUp;
+    function StickerScrapeClickedStickerIndex(stickerIndex) {
+        _OnSelectForRemove(stickerIndex, $.GetContextPanel().Data().oApplySettings);
+    }
     {
         let _m_PanelRegisteredForEventsStickerApply;
         if (!_m_PanelRegisteredForEventsStickerApply) {
@@ -307,7 +284,7 @@ var CapabilityCanApplyAction;
             $.RegisterForUnhandledEvent('PanoramaComponent_Store_PurchaseCompleted', _OnStorePurchaseCompleted);
             $.RegisterForUnhandledEvent("CSGOInspectBackgroundMapChanged", _UpdateInspectMap);
             $.RegisterForUnhandledEvent("CS2StickerPreviewMoved", _StickerPlacementUpdated);
-            $.RegisterForUnhandledEvent("CS2StickerScrapeClickedStickerIndex", _OnSelectForRemove);
+            $.RegisterForUnhandledEvent("CS2StickerScrapeClickedStickerIndex", StickerScrapeClickedStickerIndex);
             $.RegisterForUnhandledEvent('PopulateLoadingScreen', ClosePopUp);
         }
     }
@@ -316,18 +293,18 @@ var CapabilityCanSticker;
 (function (CapabilityCanSticker) {
     let m_isFinalScratch = false;
     let m_firstCameraAnim = false;
-    const m_cP = $.GetContextPanel();
-    const m_elPreviewPanel = m_cP.FindChildInLayoutFile('CanApplyItemModel');
-    function NextStickerButtonPressed() {
-        let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
+    function NextStickerButtonPressed(contextPanel) {
+        const m_elPreviewPanel = contextPanel.FindChildInLayoutFile('CanApplyItemModel');
+        const elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
         if (elPanel != null) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
             InventoryAPI.OnNextStickerButtonPressed(elPanel);
         }
     }
     CapabilityCanSticker.NextStickerButtonPressed = NextStickerButtonPressed;
-    function SetStickerScrapeLevel(valScrapeLevel) {
-        let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
+    function SetStickerScrapeLevel(valScrapeLevel, contextPanel) {
+        const m_elPreviewPanel = contextPanel.FindChildInLayoutFile('CanApplyItemModel');
+        const elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
         if (elPanel != null) {
             InventoryAPI.SetStickerScrapeLevel(elPanel, valScrapeLevel);
         }
@@ -335,12 +312,14 @@ var CapabilityCanSticker;
     CapabilityCanSticker.SetStickerScrapeLevel = SetStickerScrapeLevel;
     function PreviewStickerInSlot(stickerId, slot) {
         $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_nextPosition', 'MOUSE');
-        let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
+        const m_elPreviewPanel = $.GetContextPanel().FindChildInLayoutFile('CanApplyItemModel');
+        const elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
         InventoryAPI.PreviewStickerInModelPanel(stickerId, slot, elPanel);
     }
     CapabilityCanSticker.PreviewStickerInSlot = PreviewStickerInSlot;
     function CameraAnim(slot) {
-        let elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
+        const m_elPreviewPanel = $.GetContextPanel().FindChildInLayoutFile('CanApplyItemModel');
+        const elPanel = m_elPreviewPanel.FindChildTraverse('ItemPreviewPanel') || null;
         if (!m_firstCameraAnim) {
             m_firstCameraAnim = true;
             return;
@@ -349,7 +328,7 @@ var CapabilityCanSticker;
         elPanel.SetRotation(0, 0, 1);
     }
     CapabilityCanSticker.CameraAnim = CameraAnim;
-    function OnScratchSticker(itemId, slotIndex, bRemoveCompletely) {
+    function OnScratchSticker(itemId, slotIndex, bRemoveCompletely, popup_panel) {
         if (bRemoveCompletely || InventoryAPI.IsItemStickerAtExtremeWear(itemId, slotIndex)) {
             $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
             m_isFinalScratch = true;
@@ -359,14 +338,15 @@ var CapabilityCanSticker;
         }
         else {
             let valTargetWear = 0;
-            let elStickerScrapeLevelContainer = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('StickerScrapeLevelContainer');
+            const elStickerScrapeLevelContainer = popup_panel.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('StickerScrapeLevelContainer');
             if (elStickerScrapeLevelContainer) {
-                let elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
+                const elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
                 if (elStickerScrapeLevelSlider) {
                     valTargetWear = elStickerScrapeLevelSlider.value;
                     if (valTargetWear <= elStickerScrapeLevelSlider.default) {
                         InspectAsyncActionBar.ResetTimeouthandle();
-                        InspectAsyncActionBar.OnCloseRemove();
+                        const elAsyncActionBarPanel = popup_panel.FindChildInLayoutFile('PopUpInspectAsyncBar');
+                        InspectAsyncActionBar.OnCloseRemove(elAsyncActionBarPanel);
                         return;
                     }
                 }
@@ -382,18 +362,20 @@ var CapabilityCanSticker;
     }
     CapabilityCanSticker.HighlightStickerBySlot = HighlightStickerBySlot;
     function OnFinishedScratch() {
-        if (m_isFinalScratch || !m_cP) {
+        if (m_isFinalScratch || !$.GetContextPanel()) {
             return;
         }
+        const m_elPreviewPanel = $.GetContextPanel().FindChildInLayoutFile('CanApplyItemModel');
+        const elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
         InspectAsyncActionBar.ResetTimeouthandle();
-        InspectAsyncActionBar.OnCloseRemove();
+        InspectAsyncActionBar.OnCloseRemove(elAsyncActionBarPanel);
         InspectModelImage.UpdateModelOnly(m_elPreviewPanel.Data().id);
-        const elStickersToRemove = m_cP.FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
-        if (elStickersToRemove && m_cP.GetAttributeString("asyncworktype", "") === "remove_patch") {
+        const elStickersToRemove = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
+        if (elStickersToRemove && InspectShared.GetPopupSetting('work_type') === "remove_patch") {
             const panelsList = elStickersToRemove.Children();
             panelsList.forEach(element => element.enabled = true);
         }
-        if (elStickersToRemove && m_cP.GetAttributeString("asyncworktype", "") === "remove_sticker") {
+        if (elStickersToRemove && InspectShared.GetPopupSetting('work_type') === "remove_sticker") {
             const panelsList = elStickersToRemove.Children();
             panelsList.forEach(element => { if (element.checked) {
                 $.DispatchEvent("Activated", element, "mouse");
@@ -401,7 +383,4 @@ var CapabilityCanSticker;
         }
     }
     CapabilityCanSticker.OnFinishedScratch = OnFinishedScratch;
-    function ShowCancelBtn() {
-    }
-    CapabilityCanSticker.ShowCancelBtn = ShowCancelBtn;
 })(CapabilityCanSticker || (CapabilityCanSticker = {}));

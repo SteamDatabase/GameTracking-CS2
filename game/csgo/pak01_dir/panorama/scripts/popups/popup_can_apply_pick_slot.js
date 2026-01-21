@@ -6,28 +6,20 @@
 /// <reference path="../popups/popup_can_apply_header.ts" />
 var CanApplyPickSlot;
 (function (CanApplyPickSlot) {
-    let m_elItemToApply;
-    let m_infoPanel;
-    let m_asyncbarPanel;
-    let m_worktype;
     function Init(oSettings) {
-        m_infoPanel = oSettings.infoPanel;
-        m_asyncbarPanel = oSettings.asyncbarPanel;
-        m_worktype = oSettings.worktype;
-        ShowHideInfoPanel(oSettings.isRemove && oSettings.type === 'keychain');
+        ShowHideInfoPanel(oSettings.isRemove && oSettings.type === 'keychain', oSettings.infoPanel);
         if (oSettings.isRemove) {
             _ShowItemIconsToRemove(oSettings);
         }
         else {
             _AddItemImage(oSettings, oSettings.toolId);
-            m_elItemToApply = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons').Children()[0];
         }
         _ShowHideApplyHints(oSettings);
         _BtnActions(oSettings);
     }
     CanApplyPickSlot.Init = Init;
-    function UpdateSelectedRemoveForSticker(slotIndex) {
-        let elContainer = m_infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
+    function UpdateSelectedRemoveForSticker(slotIndex, oSettings) {
+        const elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
         let itemId = '';
         elContainer.Children().forEach(element => {
             element.SetHasClass('is_sticker_remove_unselected', element.Data().slot !== slotIndex);
@@ -38,10 +30,10 @@ var CanApplyPickSlot;
                 element.TriggerClass('popup-can-apply-item-image--anim');
             }
         });
-        let elStickerScrapeLevelContainer = m_infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        const elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
         if (elStickerScrapeLevelContainer) {
             elStickerScrapeLevelContainer.SetHasClass('StickerScrapeLevelContainerHidden', itemId ? false : true);
-            let elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
+            const elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
             if (elStickerScrapeLevelSlider && itemId) {
                 let valWear = InventoryAPI.GetItemAttributeValue(itemId, "sticker slot " + slotIndex + " wear");
                 if (!valWear)
@@ -49,99 +41,71 @@ var CanApplyPickSlot;
                 valWear = Math.ceil(valWear * 100.0);
                 elStickerScrapeLevelSlider.default = valWear;
                 elStickerScrapeLevelSlider.SetValueNoEvents(valWear);
-                if (m_asyncbarPanel) {
-                    let elGreenButton = m_asyncbarPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
+                if (oSettings.asyncBarPanel) {
+                    const elGreenButton = oSettings.asyncBarPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
                     if (elGreenButton)
                         elGreenButton.SetHasClass('AsyncItemWorkAcceptConfirmDisabled', true);
                     InventoryAPI.HighlightStickerBySlot(slotIndex);
-                    CapabilityCanSticker.SetStickerScrapeLevel(0);
+                    CapabilityCanSticker.SetStickerScrapeLevel(0, oSettings.contextPanel);
                 }
             }
         }
     }
     CanApplyPickSlot.UpdateSelectedRemoveForSticker = UpdateSelectedRemoveForSticker;
     function _ShowHideApplyHints(oSettings) {
-        m_infoPanel.FindChildInLayoutFile('popup-capability-keychain-hints').SetHasClass('show-keychain-apply-hints', !oSettings.isRemove && oSettings.type === "keychain");
-        m_infoPanel.FindChildInLayoutFile('popup-capability-sticker-hints').SetHasClass('show-sticker-apply-hints', !oSettings.isRemove && oSettings.type === "sticker");
-        m_infoPanel.FindChildInLayoutFile('popup-capability-sticker-remove-hint').SetHasClass('show-sticker-remove-hints', oSettings.isRemove && oSettings.type === "sticker");
+        oSettings.infoPanel.FindChildInLayoutFile('popup-capability-keychain-hints').SetHasClass('show-keychain-apply-hints', !oSettings.isRemove && oSettings.type === "keychain");
+        oSettings.infoPanel.FindChildInLayoutFile('popup-capability-sticker-hints').SetHasClass('show-sticker-apply-hints', !oSettings.isRemove && oSettings.type === "sticker");
+        oSettings.infoPanel.FindChildInLayoutFile('popup-capability-sticker-remove-hint').SetHasClass('show-sticker-remove-hints', oSettings.isRemove && oSettings.type === "sticker");
     }
-    function ShowHideInfoPanel(bHide) {
-        m_infoPanel.SetHasClass('hidden', bHide);
+    function ShowHideInfoPanel(bHide, elInfoPanel) {
+        elInfoPanel.SetHasClass('hidden', bHide);
     }
     CanApplyPickSlot.ShowHideInfoPanel = ShowHideInfoPanel;
-    function IsContinueEnabled() {
-        if (m_infoPanel.FindChildInLayoutFile('CanApplyContinue')) {
-            return m_infoPanel.FindChildInLayoutFile('CanApplyContinue').enabled;
+    function IsContinueEnabled(elInfoPanel) {
+        if (elInfoPanel.FindChildInLayoutFile('CanApplyContinue')) {
+            return elInfoPanel.FindChildInLayoutFile('CanApplyContinue').enabled;
         }
         return false;
     }
     CanApplyPickSlot.IsContinueEnabled = IsContinueEnabled;
     function _ShowItemIconsToRemove(oSettings) {
-        let slotCount = InventoryAPI.GetItemStickerSlotCount(oSettings.itemId);
-        let elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
+        const slotCount = InventoryAPI.GetItemStickerSlotCount(oSettings.itemId);
+        const elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
         elContainer.RemoveAndDeleteChildren();
         for (let i = 0; i < slotCount; i++) {
-            let imagePath = InventoryAPI.GetItemStickerImageBySlot(oSettings.itemId, i);
+            const imagePath = InventoryAPI.GetItemStickerImageBySlot(oSettings.itemId, i);
             if (imagePath) {
-                let elPatch = $.CreatePanel('RadioButton', elContainer, imagePath, { group: "remove-btns" });
+                const elPatch = $.CreatePanel('RadioButton', elContainer, imagePath, { group: "remove-btns" });
                 elPatch.Data().slot = i;
                 elPatch.Data().itemId = oSettings.itemId;
                 elPatch.BLoadLayoutSnippet('RemoveBtn');
-                let elImage = elPatch.FindChildInLayoutFile('RemoveImage');
+                const elImage = elPatch.FindChildInLayoutFile('RemoveImage');
                 elImage.SetImage('file://{images}' + imagePath + '.png');
-                elPatch.SetPanelEvent('onactivate', () => oSettings.funcOnSelectForRemove(i));
+                elPatch.SetPanelEvent('onactivate', () => oSettings.funcOnSelectForRemove(i, oSettings));
             }
         }
     }
     function _AddItemImage(oSettings, itemid) {
-        let elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
+        const elContainer = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons');
         let aItems;
         aItems = itemid.split(',');
         for (let itemId of aItems) {
-            let elImage = elContainer.FindChildInLayoutFile(itemId);
+            const elImage = elContainer.FindChildInLayoutFile(itemId);
             if (!elImage) {
-                let elImage = $.CreatePanel('ItemImage', elContainer, itemId);
+                const elImage = $.CreatePanel('ItemImage', elContainer, itemId);
                 elImage.itemid = itemId;
                 elImage.AddClass('popup-can-apply-item-image');
             }
         }
     }
-    function _OnStickerScrapeLevelSliderValueChanged() {
-        let elStickerScrapeLevelSlider = m_infoPanel.FindChildInLayoutFile('StickerScrapeLevelSlider');
-        if (elStickerScrapeLevelSlider) {
-            let newvalue = elStickerScrapeLevelSlider.value;
-            if (m_worktype === 'can_sticker') {
-                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
-                CapabilityCanSticker.SetStickerScrapeLevel(newvalue);
-            }
-            else if (m_worktype === 'remove_sticker') {
-                let bCanScrapeStickerToTargetWear = false;
-                if (m_asyncbarPanel) {
-                    let elGreenButton = m_asyncbarPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
-                    if (elGreenButton) {
-                        bCanScrapeStickerToTargetWear = (newvalue > elStickerScrapeLevelSlider.default);
-                        elGreenButton.SetHasClass('AsyncItemWorkAcceptConfirmDisabled', !bCanScrapeStickerToTargetWear);
-                        if (bCanScrapeStickerToTargetWear) {
-                            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
-                            CapabilityCanSticker.SetStickerScrapeLevel(newvalue);
-                        }
-                    }
-                }
-                if (!bCanScrapeStickerToTargetWear) {
-                    elStickerScrapeLevelSlider.SetValueNoEvents(elStickerScrapeLevelSlider.default);
-                    CapabilityCanSticker.SetStickerScrapeLevel(0);
-                }
-            }
-        }
-    }
-    ;
     function _BtnActions(oSettings) {
-        let slotsCount = oSettings.isRemove ? InventoryAPI.GetItemStickerSlotCount(oSettings.itemId) : CanApplySlotInfo.GetEmptySlotList().length;
-        let elContinueBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyContinue');
-        let elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
-        let elCancelBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyCancel');
+        const slotsCount = oSettings.isRemove ? InventoryAPI.GetItemStickerSlotCount(oSettings.itemId) : CanApplySlotInfo.GetEmptySlotList().length;
+        const elContinueBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyContinue');
+        const elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
+        const elCancelBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyCancel');
+        const worktype = InspectShared.GetPopupSetting('work_type', oSettings.contextPanel);
         if (elContinueBtn)
-            elContinueBtn.SetHasClass('hidden', oSettings.isRemove || oSettings.isWorkshopPreview);
+            elContinueBtn.SetHasClass('hidden', oSettings.isRemove || InspectShared.GetPopupSetting('is_workshop_preview', oSettings.contextPanel));
         if (elNextSlotBtn) {
             elNextSlotBtn.enabled = !(oSettings.isRemove);
             elNextSlotBtn.SetHasClass('hidden', oSettings.isRemove);
@@ -150,26 +114,57 @@ var CanApplyPickSlot;
             elCancelBtn.SetHasClass('hidden', true);
             elCancelBtn.SetPanelEvent('onactivate', () => _OnCancel(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings));
         }
-        let elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        const elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
         if (elStickerScrapeLevelContainer) {
-            elStickerScrapeLevelContainer.visible = oSettings.worktype === 'can_sticker' || oSettings.worktype === 'remove_sticker';
-            if (oSettings.worktype === 'remove_sticker')
+            elStickerScrapeLevelContainer.visible = worktype === 'can_sticker' || worktype === 'remove_sticker';
+            if (worktype === 'remove_sticker')
                 elStickerScrapeLevelContainer.AddClass('StickerScrapeLevelContainerHidden');
-            let elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
+            const elStickerScrapeLevelSlider = elStickerScrapeLevelContainer.FindChildInLayoutFile('StickerScrapeLevelSlider');
             if (elStickerScrapeLevelSlider) {
                 elStickerScrapeLevelSlider.min = 0;
                 elStickerScrapeLevelSlider.increment = 1;
                 elStickerScrapeLevelSlider.max = 100;
                 elStickerScrapeLevelSlider.default = 0;
                 elStickerScrapeLevelSlider.SetValueNoEvents(0);
-                CapabilityCanSticker.SetStickerScrapeLevel(0);
-                elStickerScrapeLevelSlider.SetPanelEvent('onvaluechanged', _OnStickerScrapeLevelSliderValueChanged);
+                const contextPanel = $.GetContextPanel();
+                CapabilityCanSticker.SetStickerScrapeLevel(0, contextPanel);
+                elStickerScrapeLevelSlider.SetPanelEvent('onvaluechanged', () => {
+                    {
+                        const elStickerScrapeLevelSlider = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelSlider');
+                        if (elStickerScrapeLevelSlider) {
+                            const newvalue = elStickerScrapeLevelSlider.value;
+                            if (worktype === 'can_sticker') {
+                                $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
+                                CapabilityCanSticker.SetStickerScrapeLevel(newvalue, contextPanel);
+                            }
+                            else if (worktype === 'remove_sticker') {
+                                let bCanScrapeStickerToTargetWear = false;
+                                if (oSettings.asyncBarPanel) {
+                                    const elGreenButton = oSettings.asyncBarPanel.FindChildInLayoutFile('AsyncItemWorkAcceptConfirm');
+                                    if (elGreenButton) {
+                                        bCanScrapeStickerToTargetWear = (newvalue > elStickerScrapeLevelSlider.default);
+                                        elGreenButton.SetHasClass('AsyncItemWorkAcceptConfirmDisabled', !bCanScrapeStickerToTargetWear);
+                                        if (bCanScrapeStickerToTargetWear) {
+                                            $.DispatchEvent('CSGOPlaySoundEffect', 'UI.StickerScratch', 'MOUSE');
+                                            CapabilityCanSticker.SetStickerScrapeLevel(newvalue, contextPanel);
+                                        }
+                                    }
+                                }
+                                if (!bCanScrapeStickerToTargetWear) {
+                                    elStickerScrapeLevelSlider.SetValueNoEvents(elStickerScrapeLevelSlider.default);
+                                    CapabilityCanSticker.SetStickerScrapeLevel(0, contextPanel);
+                                }
+                            }
+                        }
+                    }
+                    ;
+                });
             }
         }
         if (oSettings.isRemove) {
             return;
         }
-        if (slotsCount >= 1 || oSettings.worktype === 'can_keychain') {
+        if (slotsCount >= 1 || worktype === 'can_keychain') {
             if (elContinueBtn)
                 elContinueBtn.SetPanelEvent('onactivate', () => _OnContinue(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings));
             if (elNextSlotBtn)
@@ -188,33 +183,34 @@ var CanApplyPickSlot;
     }
     CanApplyPickSlot.DisableBtns = DisableBtns;
     function _OnContinue(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings) {
-        oSettings.funcOnConfirm();
-        m_elItemToApply.ToggleClass('popup-can-apply-item-image--anim');
+        oSettings.funcOnConfirm(oSettings);
+        const elItemToApply = oSettings.infoPanel.FindChildInLayoutFile('CanStickerItemIcons').Children()[0];
+        elItemToApply.ToggleClass('popup-can-apply-item-image--anim');
         elCancelBtn.SetHasClass('hidden', false);
         elNextSlotBtn.SetHasClass('hidden', true);
         elContinueBtn.enabled = false;
-        InspectAsyncActionBar.ZoomCamera(true);
-        let elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        InspectAsyncActionBar.ZoomCamera(true, oSettings.contextPanel.FindChildInLayoutFile('PopUpInspectAsyncBar'));
+        const elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
         if (elStickerScrapeLevelContainer) {
             elStickerScrapeLevelContainer.enabled = false;
         }
     }
     function _OnCancel(elContinueBtn, elCancelBtn, elNextSlotBtn, oSettings) {
-        oSettings.funcOnCancel();
+        oSettings.funcOnCancel(oSettings);
         elContinueBtn.enabled = true;
         elNextSlotBtn.enabled = true;
         elNextSlotBtn.SetHasClass('hidden', false);
         elCancelBtn.SetHasClass('hidden', true);
-        let elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
+        const elStickerScrapeLevelContainer = oSettings.infoPanel.FindChildInLayoutFile('StickerScrapeLevelContainer');
         if (elStickerScrapeLevelContainer) {
             elStickerScrapeLevelContainer.enabled = true;
         }
     }
     function _NextSlot(elContinueBtn, oSettings) {
-        let delayTime = (oSettings.type === 'sticker' || oSettings.type === 'keychain') ? 0 : 1;
+        const delayTime = (oSettings.type === 'sticker' || oSettings.type === 'keychain') ? 0 : 1;
         CanApplySlotInfo.IncrementIndex();
-        oSettings.funcOnNext(oSettings.toolId, CanApplySlotInfo.GetSelectedEmptySlot());
-        let elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
+        oSettings.funcOnNext(oSettings.toolId, CanApplySlotInfo.GetSelectedEmptySlot(), oSettings);
+        const elNextSlotBtn = oSettings.infoPanel.FindChildInLayoutFile('CanApplyNextPos');
         elNextSlotBtn.enabled = false;
         $.Schedule(delayTime, () => {
             if (elNextSlotBtn && elNextSlotBtn.IsValid()) {
@@ -223,27 +219,8 @@ var CanApplyPickSlot;
         });
         elContinueBtn.enabled = true;
     }
-    function PanCamera(btnId) {
-        let btnPanLeft = m_infoPanel.FindChildInLayoutFile('InspectPanLeft');
-        let btnPanRight = m_infoPanel.FindChildInLayoutFile('InspectPanRight');
-        btnPanLeft.enabled = btnPanLeft.id === btnId ? false : true;
-        btnPanRight.enabled = btnPanRight.id === btnId ? false : true;
-        InspectModelImage.PanCamera(btnId === 'InspectPanLeft');
-    }
-    CanApplyPickSlot.PanCamera = PanCamera;
-    function ShowHidePanBtns(bShow) {
-        if (!m_infoPanel || !m_infoPanel.IsValid())
-            return;
-        let btnPanRight = m_infoPanel.FindChildInLayoutFile('InspectPanRight');
-        let btnPanLeft = m_infoPanel.FindChildInLayoutFile('InspectPanLeft');
-        btnPanRight.SetHasClass('hidden', !bShow);
-        btnPanLeft.SetHasClass('hidden', !bShow);
-        btnPanRight.enabled = bShow ? false : false;
-        btnPanLeft.enabled = bShow ? true : false;
-    }
-    CanApplyPickSlot.ShowHidePanBtns = ShowHidePanBtns;
     function SelectFirstRemoveItem() {
-        let elContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
+        const elContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
         if (elContainer.Children()[0] !== undefined && elContainer.Children()[0].IsValid()) {
             $.DispatchEvent("Activated", elContainer.Children()[0], "mouse");
         }
@@ -278,18 +255,18 @@ var CanApplySlotInfo;
         return slotInfoList.filter(slot => slot.path === 'empty');
     }
     function GetSelectedEmptySlot() {
-        let emptySlotCount = m_emptySlotList.length;
+        const emptySlotCount = m_emptySlotList.length;
         if (emptySlotCount === 0) {
             return 0;
         }
-        let activeIndex = (m_slotIndex % emptySlotCount);
+        const activeIndex = (m_slotIndex % emptySlotCount);
         return m_emptySlotList[activeIndex].index;
     }
     CanApplySlotInfo.GetSelectedEmptySlot = GetSelectedEmptySlot;
     function GetSelectedRemoveSlot() {
-        let elContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
+        const elContainer = $.GetContextPanel().FindChildInLayoutFile('PopUpCanApplyPickSlot').FindChildInLayoutFile('CanStickerItemIcons');
         if (elContainer.IsValid() && elContainer.Children().length > 0) {
-            let aSelected = elContainer.Children().filter(entry => (entry.checked === true));
+            const aSelected = elContainer.Children().filter(entry => (entry.checked === true));
             return aSelected.length > 0 ? aSelected[0].Data().slot : 0;
         }
     }

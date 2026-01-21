@@ -179,7 +179,7 @@
 @BaseClass 
 	metadata
 	{
-		input_output_cpp = [ "basemodelentity" ]
+		api_classes = [ "basemodelentity" ]
 	}
 = Studiomodel
 [
@@ -205,12 +205,16 @@
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
-	output OnDestructibleHitGroupDamageLevelChanged(cpp)
+	output OnDestructibleHitGroupDamageLevelChanged(api)
 
 	add_attribute(string) : "Add Attribute" : "" : "Will add an additional attribute that AI/player entities can query when checking props for information (ex: 'DogToy' or 'GrabbableResource')"
 	add_modifier(string) : "Add Modifier" : "" : "Will add this modifier when the entity spawns."
 ]
 
+@BaseClass base( Studiomodel ) = BaseAnimGraph2
+[
+	animgraph2_identifier(animgraph2_identifier) : "AnimGraph2 Identifier" : "" : "Which animgraph should we use when spawning the entity? Animgraph identifiers are authored in modeldoc, see the AnimGraph2 reference node."
+]
 
 @BaseClass = BasePlat
 [
@@ -809,6 +813,15 @@
 	input StopSound(void) : "Stop the sound event"
 ]
 
+@PointClass base(Targetname, Parentname, point_soundevent) arc_range{ is_local_axis = true align_pie_to_local_forward = true is_enabled_key = true radius = "50" fov_key = "emitterAngle"} arc_range{ is_local_axis = true align_pie_to_local_forward = true is_enabled_key = true radius = "60" fov_key = "sweetSpotAngle" draw_triangle = false} tags( Sound ) iconsprite("editor/snd_event.vmat") editormodel("models/editor/cone_helper.vmdl") = snd_event_cone :
+[
+	parameterName(string) : "Attenuation Parameter Name" : "volume_atten" : "Name of the parameter to set"
+	emitterAngle(float) [ min="0", max="359" ] : "Emitter Cone Angle" : "45" : "Angle of the emitter cone"
+	sweetSpotAngle(float) [ min="0", max="359" ] : "Emitter Cone Sweet Spot" : "5" : "Angle of the 'sweet spot' in the emitter cone"
+	attenMin(float) : "Minimum Attenuation Value" : "0.5" : "Attenuation Value when the player is outside of the cone"
+	attenMax(float) : "Maximum Attenuation Value" : "1.0" : "Attenuation Value when the player is inside the sweet spot"
+]
+
 @PointClass base(Targetname) tags( Sound ) iconsprite("editor/snd_event.vmat") = snd_stack_save :
 	"Save/Load the fields of a specific operator stack."
 [
@@ -898,6 +911,7 @@
 	disabledValue(float) : "Set to value on disable" : "0.0" : "Value to set the OpVar index to when disabled"
 	startDisabled(bool) : "Start Disabled" : 0
 	autoDisable(bool) : "Disable when out of range" : 0
+	entityUseFastRefreshRate(bool) : "Use Fast Refresh" : "0" : "Entity will run at a faster refresh rate when enabled.  Use sparingly."
 	
 	//Inputs
 	input SetSoundEventGUID(integer) : "Start the sound event using a snd_event_point and pass its guid output to this."
@@ -959,6 +973,7 @@
 @PointClass base( Targetname, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") = snd_opvar_set_path_corner:
 [
 	pathCornerEntityName(target_destination) : "Path Corner Starting Entity" : "" : "The name of the entity that is at the start of the path"
+	useParentedPath(bool) : "Enable Path Corner Parenting" : "false" : "Enables the path corner entities to be parented to another entity and update their position accordingly"
 ]
 
 @BaseClass = SndOpvarSetPointAutoRoomBase
@@ -1333,7 +1348,7 @@
 	metadata
 	{
 		model_archetypes = [  "animated_model" ]
-		input_output_cpp = [ "ai_base_actor" ]
+		api_classes = [ "ai_base_actor" ]
 	}
 = func_orator : 
 	"A very simple model entity that has animations and response rules."
@@ -1345,7 +1360,7 @@
 	
 	maxThenAnyDispatchDist(float) : "Max Followup Dist" : 0 : "A 'then ANY' followup on a response from this orator will dispatch to characters up to this many units away. Leave 0 to mean that even an infinitely distant character may respond."
 
-	input SpeakResponseConcept(cpp)
+	input SpeakResponseConcept(api)
 ]
 
 
@@ -3694,13 +3709,13 @@
 	PassthroughCaller(boolean) : "Pass through caller" : 0 : "If set, this logic_relay will be ignored by !caller in downstream IO connections. Instead, the previous caller in the IO chain will be found by !caller."
 	
 	// Inputs
-	input Trigger( cpp )
-	input Toggle( cpp )
-	input CancelPending( cpp )
+	input Trigger( api )
+	input Toggle( api )
+	input CancelPending( api )
 	
 	// Outputs
-	output OnSpawn( cpp )
-	output OnTrigger( cpp )
+	output OnSpawn( api )
+	output OnTrigger( api )
 ]
 
 
@@ -4134,11 +4149,11 @@
 	Template64(target_destination) : "Template 64"
 
 	// Inputs
-	input ForceSpawn(cpp)
-	input DeleteCreatedSpawnGroups(cpp)
+	input ForceSpawn(api)
+	input DeleteCreatedSpawnGroups(api)
 
 	// Outputs
-	output OnEntitySpawned(cpp)
+	output OnEntitySpawned(api)
 ]
 
 @PointClass base(Targetname,Parentname) = env_entity_maker : 
@@ -4223,8 +4238,8 @@
 	Filter09(filterclass) : "Filter 9" : : "Activator filter to test."
 	Filter10(filterclass) : "Filter 10" : : "Activator filter to test."
 
-	input AddFilter(cpp)
-	input RemoveFilter(cpp)
+	input AddFilter(api)
+	input RemoveFilter(api)
 ]
 
 @FilterClass base(BaseFilter) iconsprite("editor/filter_name.vmat") = filter_activator_name :
@@ -4445,11 +4460,11 @@
 	teleport_use_current_angle(boolean) : "Teleport Uses Current Rotation" : "0"
 
 	// Inputs
-	input Teleport(cpp)
-	input TeleportToCurrentPos(cpp)
+	input Teleport(api)
+	input TeleportToCurrentPos(api)
 
-	input TeleportEntity(cpp)
-	input TeleportEntityToCurrentPos(cpp)
+	input TeleportEntity(api)
+	input TeleportEntityToCurrentPos(api)
 
 ]
 
@@ -4541,7 +4556,8 @@
 	gamemass(integer) [ group = "Physics Properties" ] : "Mass Override" : 0 : "Override the mass of the object instead of calculating it based on the size / shape and material."
 	massScale(float) [ group = "Physics Properties" ] : "Mass Scale" : "0" : "A scale multiplier for the object's mass. 0 = use auto-calculated mass based on the object's size / shape and material"
 	masscenteroffset(vector) [ group = "Physics Properties" ] : "Center of Mass Offset" : "0 0 0" : "Offset in local space applied to the object's center of mass."
-	buoyancyscale(float) [ group = "Physics Properties" ] : "Buoyancy Scale" : "1" : "Scale on the buoyancy / fluid forces applied to this object"
+	buoyancyscale(float) [ group = "Physics Properties" ] : "Buoyancy Scale" : "1" : "Scale on the buoyancy forces applied to this object (not including fluid drag)"
+	fluiddragscale(float) [ group = "Physics Properties" ] : "Fluid Drag Scale" : "1" : "Scale on fluid forces applied to this object (not including buoyancy)"
 	
 	damagetoenablemotion(integer) : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
@@ -4828,7 +4844,6 @@
 	addlength(float) : "Additional Length" : "0" : "Add (or subtract) this amount to the rest length of the rope."
 	minlength(float) : "Minimum Length" : "0" : "If the constraint is not rigid, this is the minimum length it can be."
 	attachpoint(vecline) : "Attached object 2 point" : "0 0 0" : "The position the rope attaches to object 2"
-	enablecollision(boolean) : "Enable Collision" : "0" : "Constraints disable collision between the attached entities. In some rare cases we want to enable this collision."
 	spawnflags(flags) =
 	[
 		1: "No Collision until break" : 1
@@ -4856,7 +4871,7 @@
 	zfriction(float) : "Z axis friction" : "0"
 ]
 
-@PointClass base(TwoObjectPhysics) editormodel("models/editor/axis_helper.vmdl") tags( Physics ) = phys_genericconstraint : 
+@PointClass base(TwoObjectPhysics, Parentname) editormodel("models/editor/axis_helper.vmdl") tags( Physics ) = phys_genericconstraint : 
 	"A configurable constraint between two objects."
 [
 	linear_motion_x(choices) : "Linear Motion X" : "JOINT_MOTION_FREE" =
@@ -5062,10 +5077,10 @@
 
 	// Inputs
 	input SetSpeed(float) : "Sets target speed"
-	input SetSpinUpTime(cpp)
-	input SetSpinDownTime(cpp)
+	input SetSpinUpTime(api)
+	input SetSpinDownTime(api)
 	input SetFriction(float) : "Sets friction -- only applies when the motor is off"
-	input SetSystemInertiaScale(cpp)
+	input SetSystemInertiaScale(api)
 	input TurnOn(void) : "Turns motor on"
 	input TurnOff(void) : "Turns motor off"
 ]
@@ -5136,7 +5151,7 @@
 	]
 ]
 
-@BaseClass base(Parentname, CanBeClientOnly, Global, Studiomodel, BreakableProp, RenderFields, Glow) tags( PropDynamic ) = prop_dynamic_base
+@BaseClass base(Parentname, CanBeClientOnly, Global, BaseAnimGraph2, BreakableProp, RenderFields, Glow) tags( PropDynamic ) = prop_dynamic_base
 [
 	solid(choices) : "Collisions" : 6 =
 	[
@@ -5201,8 +5216,6 @@
 	input EnableCollision(void) : "Enable collision on the prop."
 	input DisableCollision(void) : "Disable collision on the prop."
 	input SetNavIgnore(boolean) : "Enable and disable NAVIgnore on the prop."
-	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
-	input SetRagdollProfile(string) : "Sets the active ragdoll profile."
 
 	// Outputs
 	output OnAnimationBegun(void) : "Fired whenever a new animation has begun playing."
@@ -5323,7 +5336,7 @@
 	health(integer) : "Health" : 0 : "Number of points of damage to take before breaking.  0 means don't break."	
 ]
 
-@BaseClass base(Parentname, Targetname, Global, CanBeClientOnly, Studiomodel, BreakableProp, Glow) tags( PropPhysics ) = BasePropPhysics
+@BaseClass base(Parentname, Targetname, Global, CanBeClientOnly, BaseAnimGraph2, BreakableProp, Glow) tags( PropPhysics ) = BasePropPhysics
 [ 
 	spawnflags(flags) [ group="Physics Properties" ] = 
 	[
@@ -5464,6 +5477,7 @@
 		0: "Auto Detect"
 		1: "Solid, Server-side"
 		2: "Non-Solid, Server-side"
+		3: "Non-Solid, Client-side"
 	]
 ]
 

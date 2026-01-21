@@ -10,7 +10,7 @@
    + WeightList[%d]  :: %s\n
   %i bytes : %s %f : (%s)\n
   %i bytes : %s : (%s)\n
-  C%d:I%d {ID=%-3d} 
+  C%d:I%-2d {F=%-10d,V=%-10d} 
   CallInfo%d: %s\n
   Cell%d - NULL\n
   Cell%d EditorID:%d [%s]: %s\n
@@ -86,6 +86,7 @@
 %s follows %s
 %s::%s (%u)
 %s::%s (Entity Output Handler)
+%s\n%2.f - Pos: %.2f, Orient: %.2f
 %s_color
 %s_matgrp
 'Play reversed' has no effect when used with time synchronization!
@@ -105,6 +106,7 @@
 *N34PulseBindingResourceHandleTraits_tI11CWeakHandleI25InfoForResourceTypeCModelEEUlvE_E
 *ZN11CBlendCurve22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE23CAttr_m_flControlPoint1
 *ZN11CBlendCurve22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE23CAttr_m_flControlPoint2
+*ZN11IThreadPool17QueueJobWithFlagsIZN25CAnimUpdateContextBuilder14RunGraphUpdateEPK19CAnimUpdateNodeBaseP20CPoseUpdateResourcesbbEUlvE_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorEPKc13JobPriority_tjOT_E10CLambdaJob
 *ZN12CAnimTagBase22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE12CAttr_m_name
 *ZN12CAnimTagBase22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE16CAttr_m_sComment
 *ZN13CAudioAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE16CAttr_m_clipName
@@ -176,6 +178,7 @@
 *ZN22CFootstepLandedAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE16CAttr_m_BoneName
 *ZN22CFootstepLandedAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE20CAttr_m_FootstepType
 *ZN22CFootstepLandedAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE25CAttr_m_OverrideSoundName
+*ZN22CFootstepLandedAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE25CAttr_m_footstepJumpPhase
 *ZN22CFootstepLandedAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE29CAttr_m_DebugAnimSourceString
 *ZN23IKDemoCaptureSettings_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE13CAttr_m_eMode
 *ZN23IKDemoCaptureSettings_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE18CAttr_m_oneBoneEnd
@@ -200,7 +203,6 @@
 *ZN24CQuaternionAnimParameter22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE20CAttr_m_bInterpolate
 *ZN24CSequenceFinishedAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE20CAttr_m_sequenceName
 *ZN25BoneDemoCaptureSettings_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE16CAttr_m_boneName
-*ZN25CAnimUpdateContextBuilder14RunGraphUpdateEPK19CAnimUpdateNodeBaseP20CPoseUpdateResourcesbbEUlvE_
 *ZN25CMaterialAttributeAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE13CAttr_m_Color
 *ZN25CMaterialAttributeAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE15CAttr_m_flValue
 *ZN25CMaterialAttributeAnimTag22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri25CUtlVectorMemory_GrowableIS2_iLm0EEEE21CAttr_m_AttributeName
@@ -318,6 +320,7 @@
 16CNmIDToFloatNode
 16CNmParticleEvent
 16CNmTwoBoneIKNode
+16CNmTwoBoneIKTask
 16CPPScriptContext
 16CParticleAnimTag
 16CPointConstraint
@@ -374,6 +377,7 @@
 17CConcreteToolAttrI17AnimParamButton_t22CConcreteAnimParametervE
 17CConcreteToolAttrI17CBodyGroupSetting17CBodyGroupAnimTagvE
 17CConcreteToolAttrI17FootFallTagFoot_t16CFootFallAnimTagvE
+17CConcreteToolAttrI19FootstepJumpPhase_t22CFootstepLandedAnimTagvE
 17CConcreteToolAttrI20DampingSpeedFunction17CAnimInputDampingvE
 17CConcreteToolAttrI20IKBoneNameAndIndex_t18IKTargetSettings_tvE
 17CConcreteToolAttrI20ParticleAttachment_t16CParticleAnimTagvE
@@ -502,7 +506,6 @@
 18IEnumAnimParameter
 18IParamLookupHelper
 19CAimCameraOperation
-19CAnimGraph2Instance
 19CAnimNetVarRegistry
 19CAnimUpdateNodeBase
 19CBindPoseUpdateNode
@@ -519,6 +522,7 @@
 19CNmCachedTargetNode
 19CNmCachedVectorNode
 19CNmClipSelectorNode
+19CNmExternalPoseNode
 19CNmGraphTypeManager
 19CNmIDComparisonNode
 19CNmIkRigTypeManager
@@ -538,7 +542,6 @@
 19CZeroPoseUpdateNode
 20CAimCameraUpdateNode
 20CAimMatrixUpdateNode
-20CAnimGraph2Parameter
 20CChoreoPoseOperation
 20CCompressedFullFloat
 20CCompressedFullShort
@@ -554,7 +557,6 @@
 20CNmBoneMaskValueNode
 20CNmClipReferenceNode
 20CNmDurationScaleNode
-20CNmExternalGraphNode
 20CNmFloatSelectorNode
 20CNmReferencePoseNode
 20CNmReferencePoseTask
@@ -580,6 +582,7 @@
 20IToolAttr_TypedValueI14IKTargetSourceE
 20IToolAttr_TypedValueI17AnimParamButton_tE
 20IToolAttr_TypedValueI17FootFallTagFoot_tE
+20IToolAttr_TypedValueI19FootstepJumpPhase_tE
 20IToolAttr_TypedValueI20DampingSpeedFunctionE
 20IToolAttr_TypedValueI20ParticleAttachment_tE
 20IToolAttr_TypedValueI21AnimParamVectorType_tE
@@ -633,6 +636,7 @@
 21CBaseConcreteToolAttrI17AnimParamButton_t22CConcreteAnimParameterE
 21CBaseConcreteToolAttrI17CBodyGroupSetting17CBodyGroupAnimTagE
 21CBaseConcreteToolAttrI17FootFallTagFoot_t16CFootFallAnimTagE
+21CBaseConcreteToolAttrI19FootstepJumpPhase_t22CFootstepLandedAnimTagE
 21CBaseConcreteToolAttrI20DampingSpeedFunction17CAnimInputDampingE
 21CBaseConcreteToolAttrI20IKBoneNameAndIndex_t18IKTargetSettings_tE
 21CBaseConcreteToolAttrI20ParticleAttachment_t16CParticleAnimTagE
@@ -682,9 +686,11 @@
 21CLeanMatrixUpdateNode
 21CLookComponentUpdater
 21CMotionMetricInstance
+21CNmBoneMaskSwitchNode
 21CNmCachedPoseReadTask
 21CNmFloatAngleMathNode
 21CNmSpeedScaleBaseNode
+21CNmTargetSelectorNode
 21CPathAnimMotorUpdater
 21CPathHelperUpdateNode
 21CPulseCell_LimitCount
@@ -711,7 +717,6 @@
 22CCompressedStaticShort
 22CConcreteAnimParameter
 22CFootLockPoseOperation
-22CFootPinningUpdateNode
 22CFootstepLandedAnimTag
 22CHitReactPoseOperation
 22CInputStreamUpdateNode
@@ -798,6 +803,7 @@
 24CFixedSizeCircularBufferI15CPoseCacheEntryLi12EiE
 24CJiggleBonePoseOperation
 24CModelDocAnimResourceSeq
+24CNmIsExternalPoseSetNode
 24CPPScriptPostLoadContext
 24CParticleRemapFloatInput
 24CPulseCell_IntervalTimer
@@ -829,6 +835,7 @@
 25CNmControlParameterIDNode
 25CNmCurrentSyncEventIDNode
 25CNmFootEventConditionNode
+25CNmGraphVariationUserData
 25CNmMaterialAttributeEvent
 25CNmParameterizedBlendNode
 25CNmRootMotionOverrideNode
@@ -878,6 +885,7 @@
 26CBaseConcreteToolAttrValueI14IKTargetSource18IKTargetSettings_tE
 26CBaseConcreteToolAttrValueI17AnimParamButton_t22CConcreteAnimParameterE
 26CBaseConcreteToolAttrValueI17FootFallTagFoot_t16CFootFallAnimTagE
+26CBaseConcreteToolAttrValueI19FootstepJumpPhase_t22CFootstepLandedAnimTagE
 26CBaseConcreteToolAttrValueI20DampingSpeedFunction17CAnimInputDampingE
 26CBaseConcreteToolAttrValueI20ParticleAttachment_t16CParticleAnimTagE
 26CBaseConcreteToolAttrValueI21AnimParamVectorType_t20CVectorAnimParameterE
@@ -978,6 +986,7 @@
 27CToolAttrDirectMemberAccessI14IKTargetSource18IKTargetSettings_tE
 27CToolAttrDirectMemberAccessI17AnimParamButton_t22CConcreteAnimParameterE
 27CToolAttrDirectMemberAccessI17FootFallTagFoot_t16CFootFallAnimTagE
+27CToolAttrDirectMemberAccessI19FootstepJumpPhase_t22CFootstepLandedAnimTagE
 27CToolAttrDirectMemberAccessI20DampingSpeedFunction17CAnimInputDampingE
 27CToolAttrDirectMemberAccessI20IKBoneNameAndIndex_t18IKTargetSettings_tE
 27CToolAttrDirectMemberAccessI20ParticleAttachment_t16CParticleAnimTagE
@@ -1026,6 +1035,7 @@
 27IToolAttrConcreteDataAccessI17AnimParamButton_tE
 27IToolAttrConcreteDataAccessI17CBodyGroupSettingE
 27IToolAttrConcreteDataAccessI17FootFallTagFoot_tE
+27IToolAttrConcreteDataAccessI19FootstepJumpPhase_tE
 27IToolAttrConcreteDataAccessI20DampingSpeedFunctionE
 27IToolAttrConcreteDataAccessI20IKBoneNameAndIndex_tE
 27IToolAttrConcreteDataAccessI20ParticleAttachment_tE
@@ -1108,6 +1118,7 @@
 29CConcreteToolAttrDirectMemberI14IKTargetSource18IKTargetSettings_tE
 29CConcreteToolAttrDirectMemberI17AnimParamButton_t22CConcreteAnimParameterE
 29CConcreteToolAttrDirectMemberI17FootFallTagFoot_t16CFootFallAnimTagE
+29CConcreteToolAttrDirectMemberI19FootstepJumpPhase_t22CFootstepLandedAnimTagE
 29CConcreteToolAttrDirectMemberI20DampingSpeedFunction17CAnimInputDampingE
 29CConcreteToolAttrDirectMemberI20IKBoneNameAndIndex_t18IKTargetSettings_tE
 29CConcreteToolAttrDirectMemberI20ParticleAttachment_t16CParticleAnimTagE
@@ -1202,6 +1213,7 @@
 30CDefaultToolAttrTableForStructI25BoneDemoCaptureSettings_tE
 30CDefaultToolAttrTableForStructI25CMaterialAttributeAnimTagE
 30CDefaultToolAttrTableForStructI25CMovementHandshakeAnimTagE
+30CDefaultToolAttrTableForStructI25CNmGraphVariationUserDataE
 30CDemoSettingsComponentInstance
 30CFollowAttachmentPoseOperation
 30CFutureVelocityMetricEvaluator
@@ -1230,6 +1242,7 @@
 31IMotionMatchingAnimNodeInstance
 31ITargetSelectorAnimNodeInstance
 32CModelConfigElement_SetBodygroup
+32CNmIsExternalGraphSlotFilledNode
 32CNmParameterizedClipSelectorNode
 32CPairedSequenceComponentInstance
 32CPulseCell_Outflow_CycleShuffled
@@ -1449,7 +1462,7 @@ Blend (Masked): %.2f%%
 Blend: %.2f%%
 BlendNode
 Block Selection
-BodyGroup: %s
+BodyGroup: %s => %d
 Bone %d to %d
 Bone Position
 Bone Velocity
@@ -1460,6 +1473,7 @@ BoneConstraintRbf :: Invalid input %d or output %d bone count :: %s\n
 BoneConstraintRbf :: input bone count %d != input pose count %d :: %s\n
 BoneConstraintRbf :: output bone count %d != output pose count %d :: %s\n
 BoneSetup
+C22CFootPinningUpdateNode
 CAnimUpdateContextBuilder
 CAnimValue
 CAnimVariant
@@ -1507,6 +1521,7 @@ CCycleClipInstanceData
 CDirectPlaybackInstanceData
 CDirectionalBlendInstanceData
 CEntityIndex
+CEntityNameString
 CFollowPathInstanceData
 CFollowPathUpdateNode::flPredictionScale
 CFootAdjustmentInstanceData
@@ -1518,23 +1533,28 @@ CKV3MemberNameSet
 CKV3MemberNameWithStorage
 CLIENT: Activity %d is %s\n
 CLeanMatrixInstanceData
+CModelAnimGraph2Identifier
 CModelAnimName
 CModelAnimNameWithDeltas
 CModelAttachmentName
 CModelBodyGroupName
+CModelBoneName
 CModelMaterialGroupName
 CMoverInstanceData
-CN10Reflection6Detail14CTypeInfoMakerI22CFootPinningUpdateNodeEE
 CNetworkedCycle
+CNmAdditiveBlendTask - Trying to blend additively, using a non-additive pose\n
+CNmBoneMaskSwitchNode::CDefinition
+CNmExternalPoseNode::CDefinition
+CNmGraphDefinition::ExternalPoseSlot_t
 CNmGraphDefinition::KV3TransferPostLoadFn failed to FindDeclaredClass( '%s' )
+CNmGraphInstance
 CNmGraphInstance::EvaluateGraph
-CNmGraphInstance::ExecutePostPhysicsPoseTasks
-CNmGraphInstance::ExecutePrePhysicsPoseTasks
 CNmGraphInstance::GetCurrentGraphTimingInfo
-CNmTaskSystem::DeserializeTasks
-CNmTaskSystem::SerializeTasks
-CNmTaskSystem::UpdatePostPhysics
-CNmTaskSystem::UpdatePrePhysics
+CNmGraphVariationUserData
+CNmIsExternalGraphSlotFilledNode::CDefinition
+CNmIsExternalPoseSetNode::CDefinition
+CNmTargetSelectorNode::CDefinition
+CNmTwoBoneIKTask
 CPPScript Component
 CPairedSequenceInstanceData
 CParentAttachmentName
@@ -1642,6 +1662,7 @@ CPulseMathlib::SplitWorldVector
 CPulseMathlib::SqrFloat
 CPulseMathlib::SqrInt
 CPulseMathlib::Sqrt
+CPulseMathlib::StringsAreEqualCaseSensitive
 CPulseMathlib::Tan
 CPulseMathlib::VectorToWorldVector
 CPulseMathlib::WorldVectorToVector
@@ -1650,9 +1671,11 @@ CPulseTestScriptLib::IndicateTestFailure
 CPulseTestScriptLib::IsInTestMode
 CPulseTestScriptLib::RegisterTestCheckpoint
 CPulseTestScriptLib::TestModeAssertTrue
+CPulse_InstructionDebug
 CResourceName
 CResourceNameTyped
 CRootMotion
+CSceneObjectData::RTProxyDrawDescriptor_t
 CSmartPtr
 CStateMachineInstanceData
 CStateNodeInstanceData
@@ -1668,9 +1691,6 @@ CURVE_TANGENT_SPLINE
 CUtlBinaryBlock
 CUtlHashtable
 CUtlLeanVectorFixedGrowable
-CUtlOrderedMap
-CUtlString
-CUtlStringToken
 CUtlVectorFixedGrowable
 CWayPointHelperInstanceData
 CWeakHandle
@@ -1711,7 +1731,7 @@ Clamp value to range (float)
 Clamp value to range (int)
 Class does not allow allocation from its schema binding
 Class does not allow construction from its schema binding
-Co-dependent physics tasks detected!
+Compare strings with case sensitivity, in contrast to normal string equality which is case-insensitive
 Computes 2 ( 2.71...) raised to a power
 Computes e ( 2.71...) raised to a power
 Considered Option
@@ -1747,7 +1767,6 @@ DampedPathAnimMotorInstance
 DampedPathMotorInstanceData_t
 Deg2 Rad
 Demo Settings Component
-DeserializeTasks
 Detach R%d
 Different skeleton for referenced graph detected, this is not allowed. Trying to use '%s' within '%s'\n
 DirBlend:m_flCycleZeroTime
@@ -1787,6 +1806,7 @@ Element.CHandshakeAnimTagBase
 Element.CIntAnimParameter
 Element.CMaterialAttributeAnimTag
 Element.CMovementHandshakeAnimTag
+Element.CNmGraphVariationUserData
 Element.CParticleAnimTag
 Element.CQuaternionAnimParameter
 Element.CRagdollAnimTag
@@ -1815,8 +1835,6 @@ Error: %s (%d) - %s\n
 Evaluate the curve at the specified input position
 Evaluate the gradient at a position between 0 and 1
 EvaluateGraph
-ExecutePostPhysicsPoseTasks
-ExecutePrePhysicsPoseTasks
 Exp2
 Expected an array with two elements when loading a std::pair.
 Expression
@@ -1850,7 +1868,9 @@ FeetSettings
 Final pivot orientation
 Find all the yielded cursors on this graph and cancel them.
 Find all the yielded cursors on this graph with the matching tag and cancel them.
-Float Curve
+Fixed Section
+FixedSection
+Float Curve (%s)
 Float To Game Time
 Floor - round float down to nearest integer
 Floor Float
@@ -1867,6 +1887,7 @@ FootAdjustmentNode
 FootLock:m_resetCount
 FootPinning:ResetCount
 Footstep Landed Tag
+FootstepJumpPhase_t
 Force Facing
 Frac
 Fractional component (ie. returns 0.34 for 12.34)
@@ -1903,15 +1924,18 @@ GraphNodes
 GridBlendNode
 HAC K  Unused Binding
 HELPER_BONE
+HandshakeTagState_t
 HasPath
 Hinge Axis
 HitReact:m_hitCount
 HitReact:m_resetCount
+IAnimationGraphInstance
 IK Target: %s
 IKChainDataPoleVectorForAxis::X
 IKChainDataPoleVectorForAxis::Y
 IKChainDataPoleVectorForAxis::Z
 IKV3TransferInterface_AllowRawStringTokenTransfer
+IKV3TransferInterface_ResourceSave
 If (R%d) Jump to Instr I%d
 If (R%d) Leap to Chunk C%d
 If -1 timer will continue forever
@@ -1924,6 +1948,7 @@ Indicates a test failure if Value is false.
 Indicates a test failure if value is false; only tested when running unit tests
 Initial tilt bone orientation.
 Insert 'element' in the given index in 'a', increasing its count by one and moving the elements after index.
+Instant Stop
 Integer Divide
 Integer division - unlike the divide (/) node, this will truncate any remainder (floor) and return an integer.
 Intercept point.
@@ -1931,10 +1956,12 @@ Invalid chain end bone ID ('%s') specified, there are not enough bones in the ch
 Invalid component specifier ".%s" used on variable "%s"
 Invalid effector bone ID ('%s') specified in input target
 Invalid effector bone ID ('%s') specified, there are not enough bones in the chain to solve the IK request
+Invalid input detected for target selector
 Invalid number of parameters.  Specify a flag you want to toggle.
 Invalid property specification
 Invalid string value %s -- pick another one!\n
 Invalid target detected for warp node!
+Invalid target provided to target selector!
 Invoke Cell%d [eid=%d] %s%s
 Invoke Lib %s
 Is In Test Mode
@@ -1945,8 +1972,10 @@ IsTagActive
 IsTagActiveThisFrame
 JIGGLE_BONE
 JiggleBone:m_resetCount
+Jump Phase
 Jump to Instr I%d
 JumpOrLeap( C%d:I%d )
+Jumping
 KV3 save transfer failed: %s
 KeyValues3
 Kill All Other Cursors
@@ -1957,6 +1986,7 @@ LOD %i
 LOD Component
 LOD Off
 LabelledDebugHelperDebug
+Landing
 LeanMatrixNode
 Leap to Chunk C%d
 Length (magnitude) of Vector
@@ -1977,8 +2007,17 @@ Look Component
 Look Heading (World)
 Look Pitch (World)
 LookData
+Low LOD
+MAlternateSemanticName
 MAtomicTransfersAsPlainString
 MCustomFGDMetadata
+MESH_BUFFER_USAGE_ADJACENCY
+MESH_BUFFER_USAGE_IB
+MESH_BUFFER_USAGE_MESHLET_TRIS
+MESH_BUFFER_USAGE_NONE
+MESH_BUFFER_USAGE_RT_PROXY
+MESH_BUFFER_USAGE_VB
+MESH_BUFFER_USAGE_VERTEX_ALBEDO
 MFgdHelper
 MIsStringAndTokenType
 MKV3TransferName
@@ -1991,6 +2030,7 @@ MPropertyAttributeEditor
 MPropertyAttributeRange
 MPropertyAutoRebuildOnChange
 MPropertyCustomEditor
+MPropertyCustomFGDType
 MPropertyElementNameFn
 MPropertyFlattenIntoParentRow
 MPropertyGroupName
@@ -2043,18 +2083,22 @@ Minimum of two values (int)
 Mirror
 Mismatch parameter type for referenced graph '%s', parent type: '%s', referenced type: '%s'
 Mismatched skeleton detected for specified pose (%s), this will be ignored.
-Missing cell schema '%s', replacing with 'CPulseCell_Unknown'\n
+Missing cell class '%s', replacing with 'CPulseCell_Unknown'\n
 Mod R%d <- R%d %% R%d
 Mod by zero in CNmFloatMathNode
 Model %s: group %s: missing referenced sequence "%s"\n
 Model %s: sequence/animation name collision found "%s"\n
 Model %s: unable to find bone reference "%s"\n
 Model to world
+ModelAnimGraph2Identifier()
+ModelAnimGraph2Ref_t
 ModelAnimName()
 ModelAnimNameWithDeltas()
 ModelAttachmentName()
 ModelBodyGroupName()
+ModelBoneName()
 ModelMaterialGroupName()
+ModelMeshBufferUsage_t
 MorphChannel
 MotionMatching:SelectionChangeCount
 MotionMatching:clipIndex.index
@@ -2074,6 +2118,7 @@ Move:m_vFacingPosition
 Move:m_vMoveDir
 MoveData
 Movement Component
+MovementCapability_t
 MovementData
 MoverNode
 Mul R%d <- R%d * R%d
@@ -2218,6 +2263,7 @@ N10Reflection6Detail14CTypeInfoMakerI22CBindPosePoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI22CBoneMaskPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI22CConcreteAnimParameterEE
 N10Reflection6Detail14CTypeInfoMakerI22CFootLockPoseOperationEE
+N10Reflection6Detail14CTypeInfoMakerI22CFootPinningUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI22CFootstepLandedAnimTagEE
 N10Reflection6Detail14CTypeInfoMakerI22CHitReactPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI22CInputStreamUpdateNodeEE
@@ -2496,6 +2542,7 @@ N18CNmVectorValueNode11CDefinitionE
 N19CNmCachedTargetNode11CDefinitionE
 N19CNmCachedVectorNode11CDefinitionE
 N19CNmClipSelectorNode11CDefinitionE
+N19CNmExternalPoseNode11CDefinitionE
 N19CNmIDComparisonNode11CDefinitionE
 N19CNmStateMachineNode11CDefinitionE
 N19CNmTargetOffsetNode11CDefinitionE
@@ -2506,13 +2553,14 @@ N20CNmBoneMaskBlendNode11CDefinitionE
 N20CNmBoneMaskValueNode11CDefinitionE
 N20CNmClipReferenceNode11CDefinitionE
 N20CNmDurationScaleNode11CDefinitionE
-N20CNmExternalGraphNode11CDefinitionE
 N20CNmFloatSelectorNode11CDefinitionE
 N20CNmReferencePoseNode11CDefinitionE
 N20CNmTimeConditionNode11CDefinitionE
 N20CNmVelocityBlendNode11CDefinitionE
+N21CNmBoneMaskSwitchNode11CDefinitionE
 N21CNmFloatAngleMathNode11CDefinitionE
 N21CNmSpeedScaleBaseNode11CDefinitionE
+N21CNmTargetSelectorNode11CDefinitionE
 N22CNmFloatComparisonNode11CDefinitionE
 N22CNmFloatCurveEventNode11CDefinitionE
 N22CNmFootstepEventIDNode11CDefinitionE
@@ -2534,6 +2582,7 @@ N24CAnimNodeInstanceFactory14CFactoryMakerTI31CDirectPlaybackAnimNodeInstanceEE
 N24CAnimNodeInstanceFactory14CFactoryMakerTI31CMotionGraphPreviewNodeInstanceEE
 N24CAnimNodeInstanceFactory14CFactoryMakerTI31CMotionMatchingAnimNodeInstanceEE
 N24CAnimNodeInstanceFactory14CFactoryMakerTI31CTargetSelectorAnimNodeInstanceEE
+N24CNmIsExternalPoseSetNode11CDefinitionE
 N25CNmControlParameterIDNode11CDefinitionE
 N25CNmCurrentSyncEventIDNode11CDefinitionE
 N25CNmFootEventConditionNode11CDefinitionE
@@ -2559,6 +2608,7 @@ N30CNmVelocityBasedSpeedScaleNode11CDefinitionE
 N31CNmIDEventPercentageThroughNode11CDefinitionE
 N31CNmTransitionEventConditionNode11CDefinitionE
 N31CNmVirtualParameterBoneMaskNode11CDefinitionE
+N32CNmIsExternalGraphSlotFilledNode11CDefinitionE
 N32CNmIsInactiveBranchConditionNode11CDefinitionE
 N32CNmParameterizedClipSelectorNode11CDefinitionE
 N33CBaseIntrospectedToKV3TypeManager18AsyncProcessResultE
@@ -2662,14 +2712,18 @@ Newly tilted bone.
 Next step normal
 No DATA block for resource '%s'\n
 No DATA block for resource\n
+No ID Set
 No Orientation Warp Event Found!
 No animation set for clip node!
 No effector bone ID specified in input target
+No valid warp events detected! Either no events present or start time is after warp events.
 NodeID %d port '%s' called from C%d:I%d
 Normalize Vector
 Normalize Vector a
 Not R%d <- !R%d
+Not Set
 Not safe to 'new' this class due to alignment requirements
+NotJumping
 ORIENT
 OnInterval
 Only wrote %d (of %d) values when saving map!
@@ -2705,12 +2759,13 @@ Parent Map: %s\n
 ParentAttachmentName()
 Particle Binding
 Particle Binding (Real)
-Particles
+ParticleParamID_t
 ParticlesLib
 PerTickSettings
 PerTickSettings_t
 Physics
 Plane normal
+Planted Turn
 Playback:m_SequenceCycleZeroTime
 Playback:m_currentSequence
 Playback:m_flForcedCycle
@@ -2786,11 +2841,11 @@ SelectorNode
 Sequence out of range: %d
 Sequence( %s, %.3f ) : %.3f
 SequenceData
-SerializeTasks
 Set the number of elements in the array.
 SetBlackboardReference BR%d (%s) <- R%d 
 SetVar V%d (%s) <- R%d
 SetVarArrayElement1D V%d (%s) [ R%d ] <- R%d R%d
+Shuffle
 Sign Float
 Sign Int
 Signature hook to fill out arguments for OnInterval
@@ -2807,6 +2862,7 @@ Solved Foot
 Solved Knee
 Solved Thigh
 Solved joint
+Sound (%s) (%s)
 Spline
 Split Angle
 Split Color
@@ -2950,6 +3006,8 @@ StateMachineNode
 Steps Remaining
 Stop Timer
 Stop any active timers - the completed outflow will still fire
+Strafe
+Strings Are Equal Case Sensitive
 Sub R%d <- R%d - R%d
 Symbol
 TAG_
@@ -2963,6 +3021,11 @@ Target Position ( Rotation Pivot )
 Target Selector Move Direction
 Target Selector Target
 Target Warp Node
+Target Warp: Feature preserving XY warp required scaling is lower than the minimum allowed threshold. Falling back to LERP!
+Target Warp: Trying to XY warp backwards, falling back to LERP!
+Target Warp: XY warp curve blowout detected! Falling back to LERP!
+Target Warp: trying to XY warp a section with no displacement, falling back to LERP!
+Target Warp: trying to XY warp to under the distance threshold, falling back to LERP!
 Target warp exceed accurate sampling error threshold! Switching to inaccurate sampling!
 TargetSelectorInstanceData_t
 TargetSelectorNode
@@ -2978,6 +3041,7 @@ ToPivot
 Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference specific type.
 Trying to set an offset on an unset node!
+Turn
 TurnHelperNode
 TypeManager
 Unable to parse AE_SV_DUSTTRAIL event "%s"\n
@@ -2993,15 +3057,17 @@ Unnamed Tag
 Unsupported use of property accessor "%s.%s", property accessors can only be used variables
 Unsupported version %d for resource '%s' (Expected %d)\n
 UpdateContext
-UpdatePostPhysics
-UpdatePrePhysics
 Used to flag a test as having failed.
+VERTEX_ALBEDO_565
+VERTEX_ALBEDO_8888
+VERTEX_ALBEDO_NONE
 Value 0-1 how far along duration (always 0 if duration is -1)
 Value Type
 Variable "%s" has %i components, a specific component must be specified, for example use: "%s.x"
 Variable '%s' is referenced but not declared in this system (%s). Adding a fallback now.\n
 Vector To World Vector
 VectorAligned
+VertexAlbedoFormat_t
 Virtual 2-bone
 Virtual Joint: %.2f degrees
 Virtual Parameter
@@ -3013,6 +3079,7 @@ Warp
 Warp XY
 Warp XYZ
 Warp Z
+Warp attempted for animation with invalid warp events!
 Warping orientation progress %f
 Weights
 World Vector To Vector
@@ -3054,8 +3121,10 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy469920276854E9CAnimDataE24Deallocate
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy482955714934E15CAnimationGroupE15AllocateAndLoadER23CKV3TransferLoadContextPK21ResourceBindingBase_tP29IRD_RegisterResourceDataUtilsE15CAllocatorUtils
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy482955714934E15CAnimationGroupE24DeallocateDestroyCleanupEPvP25IResourceDeallocatorUtilsE17CDeallocatorUtils
 Zero Pose Task
+Zero frame animations are not supported for warping!
 Zero input vector for info node!
 [ Chunk%d ]
+[ written at chunk start last-read I%d ]
 [ written by I%d last-read I%d ]
 [***INVALID INSTRUCTION %d (%s)***]\n
 [IMMEDIATE_HALT]
@@ -3081,6 +3150,7 @@ _autoreset
 a:fulltype
 a:typeparam
 always_run
+anim
 anim_data_block
 animgraphlib
 animlib
@@ -3410,6 +3480,16 @@ current_status
 cycle
 deg2rad
 detach_from_owner
+eActive
+eIdleTurn
+eInactive
+eInstantStop
+eMomentarilyInactive
+ePlantedTurn
+eShuffle
+eStart
+eStop
+eStrafe
 e_action_desired
 e_action_desired_shared
 e_movement_type_desired
@@ -3468,33 +3548,43 @@ game:tools/images/animgraph_editor/animgraph_parameter_base.png
 game:tools/images/animgraph_editor/animgraph_parameter_virtual_base.png
 game:tools/images/animgraph_editor/animgraph_tag_base.png
 graph/animgraph_instance.cpp
-ground_offset
 handshakeTypes
 hsequence
 idiv
 instantly
 kAnimGraphSaveRestoreVersion
 keyvalues
+keyvalues3.cpp
+kv3:ParticleParamID_t
 length2d
 length3d
 libanimationsystem.so
 m_AnimOverlay
+m_DetailLayerStrings
+m_DetailLayers
 m_EndEffectorFixedOffsetAttachment
 m_Format
 m_HingeAxis
+m_InstructionDebugInfos
+m_NodeStrayBoxes
 m_ParentJoint
 m_PoleVectorForAxis
 m_Rotation
+m_SelfCollisionLayers
 m_SequenceCycleZeroTime
+m_SequencePointName
 m_Stops
 m_TagValue
 m_TargetOrientation
+m_animGraph2Refs
 m_attachments
+m_bAlignWithTargetAtLastWarpEvent
 m_bAwaken
 m_bBakedTwoSided
 m_bCanBatchWithDynamicShaderConstants
 m_bConditionValue
 m_bDrawLast
+m_bEnableEyeBulgeDeformation
 m_bFirstEvaluate
 m_bForceFacing
 m_bGoalChanged
@@ -3509,13 +3599,16 @@ m_bOnGround
 m_bOnlyShadow
 m_bParentJointRequiresAlignment
 m_bResetPending
+m_bShouldSampleRootMotion
 m_bStopUpdatingWaypointPos
 m_bStopping
+m_bSwitchDynamically
 m_bTagDispatchDirty
 m_bTeleported
 m_bUseCompressedNormalTangent
 m_bUseNewPoleVectorForAxis
 m_bUseShadowFastPath
+m_bWarpTranslation
 m_choicePreviousCycle
 m_currentChoice
 m_currentIndex
@@ -3530,9 +3623,11 @@ m_dampedTurnValue
 m_dampedValue
 m_deltaTransform
 m_deltaTransform\t\t\t\t[%f] [%s]
+m_drawDesc
 m_eRbfType
 m_events
 m_externalMethodTargetGraph
+m_externalPoseSlots
 m_finalLocalToWorld
 m_flBoundaryRadius
 m_flClipStartTime
@@ -3551,9 +3646,13 @@ m_flLastTimeStep
 m_flMaxRadians
 m_flMinRadians
 m_flNextAnimTime
+m_flOrientationScoreWeight
+m_flParentReaction
+m_flPositionScoreWeight
 m_flPredictionScale
 m_flPrevAnimTime
 m_flPrevCycleUnclamped
+m_flReferencePoseTwistWeight
 m_flSlopeIncoming
 m_flSlopeOutgoing
 m_flStartHeadingWS
@@ -3563,19 +3662,35 @@ m_flTimeInState
 m_flTurnAmount
 m_flValueX
 m_flValueY
+m_footstepJumpPhase
 m_goalWayPointPos
+m_graphEvents
+m_hGraphDefinition->m_instanceRequiredMemory > 0
 m_hitboxsets
 m_influenceFlags
+m_mWorldFromLocal
 m_morphSet
 m_nActiveMotorIndex
+m_nBufferUsage
 m_nConfigIndex
 m_nCurrStackSize
 m_nCurrentWakeIndex
+m_nEndIdx
+m_nExternalGraphNodeIdx
+m_nExternalPoseNodeIdx
 m_nFacingMode
+m_nGroupValue
+m_nIncludeDetailLayerCount
 m_nOrder
 m_nSample
 m_nSequenceTagIndex
+m_nValueNodeID
+m_nVertexAlbedoFormat
+m_nVertexAlbedoOffset
+m_nVertexAlbedoStride
+m_nVertexAlbedoVB
 m_pIsHandshakeDisabled
+m_pUserData
 m_prevLocalToWorld
 m_prevStateIndex
 m_previousChoice
@@ -3584,6 +3699,8 @@ m_previousSelection
 m_qFixupRotation
 m_rbfParameters
 m_resetCount
+m_rtProxyDrawCalls
+m_sIdentifier
 m_sLastSequenceName
 m_sRole
 m_scheduledTransitionIndex
@@ -3612,6 +3729,7 @@ m_vVelocity
 m_vVelocityMS
 m_vVelocityWS
 m_vWaypointPosWS
+m_vecNmSkeletonRefs
 m_vecPairedSequences
 matrix3x4_t
 matrix3x4a_t
@@ -3671,7 +3789,6 @@ stop_on_seq_change_instantly
 struct 
 tagCount
 tagValue
-tasksystem/animtasksystem.cpp
 to constrain
 tools/images/pulse_editor/cursor_kill.png
 tools/images/pulse_editor/kill_cursor_with_tag.png
@@ -3688,6 +3805,8 @@ vJOnPlane2
 vJOnPlane3
 vJOnPlane4
 vLookTarget
+vMax
+vMin
 vMsTargetPosition\t\t\t[%f] [%s]
 vVOnPlane1
 vecValue

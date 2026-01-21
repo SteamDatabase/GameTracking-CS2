@@ -167,9 +167,15 @@ var PlayerCard;
         }
     }
     function _OnActivateGetPrestigeButtonClickable() {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
             '&' + 'asyncworkitemwarning=no' +
             '&' + 'asyncworktype=prestigecheck');
+        let oSettings = {
+            item_id: '0',
+            show_work_type_warning: false,
+            work_type: 'prestigecheck'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function SetAllSkillGroups() {
         let elSkillGroupContainer = $.GetContextPanel().FindChildInLayoutFile('JsPlayerCardSkillGroupContainer');

@@ -169,7 +169,7 @@ var ContextMenuGetSouvenir;
             const bPlayoffMatch = MatchInfoAPI.IsMatchTournamentStageIDPlayoff(nStageID);
             let idFaux = InventoryAPI.GetFauxItemIDFromDefAndPaintIndexUB1(g_ActiveTournamentInfo.souvenirs[rawMapName], 0, bPlayoffMatch ? 13 : 0);
             let attributes = `{ "tournament event id": ${nEventID}, "tournament event stage id": ${nStageID}, "tournament event team0 id": ${team0}, "tournament event team1 id": ${team1} }`;
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + idFaux
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + idFaux
                 + '&' +
                 'case-attributes=' + attributes
                 + '&' +
@@ -182,6 +182,16 @@ var ContextMenuGetSouvenir;
                 'asyncworktype=decodeable'
                 + '&' +
                 'onlyclosepurchasebar=true');
+            let oSettings = {
+                item_id: idFaux,
+                item_attributes: attributes,
+                show_work_type_warning: false,
+                force_hide_async_bar: true,
+                inspect_only: true,
+                work_type: 'decodeable',
+                only_close_btn: true
+            };
+            elPanel.Data().oSettings = oSettings;
         });
     }
     var _ItemCustomizationNotification = function (numericType, type, itemid) {

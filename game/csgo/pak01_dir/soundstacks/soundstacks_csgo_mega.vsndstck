@@ -69,6 +69,16 @@
 							display_group = "normal"
 						}
 					}
+					randomize_start_time = 
+					{
+						data_type = "bool"
+						value = "false"
+						_system_properties = 
+						{
+							display_group = "normal"
+							property_group = "Sound Events"
+						}
+					}
 					instance_limit = 
 					{
 						data_type = "float"
@@ -928,6 +938,16 @@
 				name = "mixer"
 				operator = "soundmixer_get_mixgroup"
 				mixgroup = "@public.mixgroup"
+			},
+			
+			{
+				name = "randomize_start_time"
+				operator = "math_random_float"
+				execute_once = "1"
+				input_execute = "@public.randomize_start_time"
+				output = "0"
+				input_min = "-1000"
+				input_max = "0"
 			},
 			
 			{
@@ -2213,6 +2233,15 @@
 			},
 			
 			{
+				name = "calc_delay"
+				operator = "math_float"
+				apply = "add"
+				input1 = "@public.delay"
+				input2 = "@randomize_start_time.output"
+				execute_once = "1"
+			},
+			
+			{
 				name = "switch_fade_time"
 				operator = "ctrl_switch_float"
 				input_switch = "@distance_volume_less_than_zero.output"
@@ -2237,10 +2266,10 @@
 				input_should_pause = "@public.vsnd_pause_with_game"
 				input_speaker_volumes = "@volume_fan_mix.output"
 				input_pitch = "@mult_pitch_doppler.output"
-				input_delay = "@public.delay"
 				input_fade_out = "@switch_fade_time.output"
 				input_track1 = "track_01"
 				input_vsnd1 = "@get_vsnd_track_01.output"
+				input_delay = "@calc_delay.output"
 			},
 			
 			{
@@ -3243,6 +3272,16 @@
 			{
 				x = -1001.487061
 				y = 744.399841
+			}
+			randomize_start_time = 
+			{
+				x = 15780.000000
+				y = 4880.000000
+			}
+			calc_delay = 
+			{
+				x = 16444.958984
+				y = 4752.226074
 			}
 		}
 	}

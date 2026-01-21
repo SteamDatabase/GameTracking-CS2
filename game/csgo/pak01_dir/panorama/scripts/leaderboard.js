@@ -27,6 +27,7 @@ var Leaderboard;
     let m_leaderboardName = '';
     let m_onlyAvailableSeasonLeaderboard = '';
     const IS_NEW_SEASON = false;
+    const IS_AROUND_PLAYER = true;
     function RegisterEventHandlers() {
         _msg('RegisterEventHandlers');
         if (!m_bEventsRegistered) {
@@ -96,6 +97,21 @@ var Leaderboard;
         let elSeason = $.GetContextPanel().FindChildTraverse('jsNavSeason');
         elSeason.text = $.Localize('#' + m_onlyAvailableSeasonLeaderboard + '_name');
     }
+    let _LastRegionList = '';
+    function _MaybeRefreshRegionsDropdown() {
+        if (m_lbType === 'party')
+            return;
+        let currentRegionList = '(friends)';
+        const arrLBsOfInterest = LeaderboardsAPI.GetPremierLeaderboardsOfInterest();
+        for (let i = 0; i < arrLBsOfInterest.length; i++) {
+            currentRegionList = currentRegionList + '(' + arrLBsOfInterest[i] + ')';
+        }
+        if (_LastRegionList === currentRegionList) {
+            return;
+        }
+        _LastRegionList = currentRegionList;
+        _InitLocationDropdown();
+    }
     function _InitLocationDropdown() {
         let elLocationDropdown = $('#jsNavLocation');
         elLocationDropdown.visible = true;
@@ -107,9 +123,11 @@ var Leaderboard;
         let defaultRegion = 'World';
         for (let i = 0; i < regions.length; i++) {
             const szRegion = regions[i];
-            const elEntry = $.CreatePanel('Label', elLocationDropdown, szRegion);
             const bCurrentRegion = _FindLocalPlayerInRegion(szRegion);
-            elEntry.SetHasClass('of-interest', bCurrentRegion && (szRegion != 'Friends') && !IS_NEW_SEASON);
+            if (IS_AROUND_PLAYER && !bCurrentRegion && (szRegion != 'Friends'))
+                continue;
+            const elEntry = $.CreatePanel('Label', elLocationDropdown, szRegion);
+            elEntry.SetHasClass('of-interest', bCurrentRegion && (szRegion != 'Friends') && !IS_NEW_SEASON && !IS_AROUND_PLAYER);
             switch (szRegion) {
                 case 'World':
                     elEntry.SetAttributeString('leaderboard-class', szRegion.toLowerCase());
@@ -168,7 +186,8 @@ var Leaderboard;
                     m_leaderboardName = m_onlyAvailableSeasonLeaderboard + '.friends';
                 }
                 else {
-                    m_leaderboardName = m_onlyAvailableSeasonLeaderboard + elregion.GetAttributeString('location-suffix', '');
+                    m_leaderboardName = m_onlyAvailableSeasonLeaderboard + elregion.GetAttributeString('location-suffix', '') +
+                        (IS_AROUND_PLAYER ? '.self' : '');
                 }
                 $.GetContextPanel().SwitchClass('region', elregion.GetAttributeString('leaderboard-class', ''));
             }
@@ -218,12 +237,12 @@ var Leaderboard;
     }
     function _InitNavPanels() {
         $('#jsNavLocation').visible = false;
-        $('#jsGoToTop').visible = m_lbType === 'general';
-        $('#jsGoToMe').visible = m_lbType === 'general';
+        $('#jsGoToTop').visible = (m_lbType === 'general') && !IS_AROUND_PLAYER;
+        $('#jsGoToMe').visible = (m_lbType === 'general') && !IS_AROUND_PLAYER;
         if (m_lbType === 'party')
             return;
         _InitSeason();
-        _InitLocationDropdown();
+        _MaybeRefreshRegionsDropdown();
     }
     function _ShowGlobalRank() {
         let showRank = $.GetContextPanel().GetAttributeString('showglobaloverride', 'true');
@@ -234,7 +253,7 @@ var Leaderboard;
         let arrLBsOfInterest = LeaderboardsAPI.GetPremierLeaderboardsOfInterest();
         let myIndex = LeaderboardsAPI.GetIndexByXuid(lb, m_myXuid);
         let bPresent = arrLBsOfInterest.includes(lb) && myIndex !== -1;
-        $.GetContextPanel().FindChildInLayoutFile('jsGoToMe').enabled = bPresent && !IS_NEW_SEASON;
+        $.GetContextPanel().FindChildInLayoutFile('jsGoToMe').enabled = bPresent && !IS_NEW_SEASON && !IS_AROUND_PLAYER;
     }
     function _ShowNoData() {
         $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = false;
@@ -255,6 +274,9 @@ var Leaderboard;
     function _ShowLeaderboards() {
         $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-list').visible = true;
         $.GetContextPanel().SwitchClass('leaderboard-status', 'lb-status-ready');
+        if (m_lbType === 'general' && IS_AROUND_PLAYER) {
+            GoToSelf();
+        }
     }
     function UpdateLeaderboardList() {
         _msg('-------------- UpdateLeaderboardList ' + m_leaderboardName);
@@ -285,7 +307,10 @@ var Leaderboard;
         }
         else {
             if (("none" == status) || ("ready" == status && count == 0)) {
-                _ShowNoData();
+                if (IS_AROUND_PLAYER)
+                    _ShowNewSeasonFriends();
+                else
+                    _ShowNoData();
             }
             else if ("loading" == status) {
                 _ShowLoading();
@@ -439,12 +464,14 @@ var Leaderboard;
     function OnLeaderboardDirty(type) {
         _msg('OnLeaderboardDirty');
         if (m_leaderboardName && m_leaderboardName === type) {
+            _MaybeRefreshRegionsDropdown();
             LeaderboardsAPI.Refresh(m_leaderboardName);
         }
     }
     function ReadyForDisplay() {
         _msg("ReadyForDisplay");
         RegisterEventHandlers();
+        _MaybeRefreshRegionsDropdown();
         if (m_leaderboardName) {
             LeaderboardsAPI.Refresh(m_leaderboardName);
         }
@@ -488,7 +515,10 @@ var Leaderboard;
             return reusePanel;
         });
         elList.UpdateListItems(nPlayers);
-        $.DispatchEvent('ScrollToDelayLoadListItem', elList, 0, 'topleft', true);
+        if (m_lbType === 'general' && IS_AROUND_PLAYER)
+            GoToSelf();
+        else
+            GoToTop();
     }
     function OnLeaderboardStateChange(type) {
         _msg('OnLeaderboardStateChange');
@@ -512,7 +542,7 @@ var Leaderboard;
     function GoToSelf() {
         let myIndex = LeaderboardsAPI.GetIndexByXuid(m_leaderboardName, m_myXuid);
         const elList = $.GetContextPanel().FindChildInLayoutFile('id-leaderboard-entries');
-        $.DispatchEvent('ScrollToDelayLoadListItem', elList, myIndex, 'topleft', true);
+        $.DispatchEvent('ScrollToDelayLoadListItem', elList, myIndex, 'center', true);
     }
     Leaderboard.GoToSelf = GoToSelf;
     function GoToTop() {

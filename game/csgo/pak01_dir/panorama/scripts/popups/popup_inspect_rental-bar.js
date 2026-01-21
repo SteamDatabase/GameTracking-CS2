@@ -3,175 +3,178 @@
 /// <reference path="../common/iteminfo.ts" />
 /// <reference path="popup_acknowledge_item.ts" />
 /// <reference path="popup_capability_decodable.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 var InspectRentalBar;
 (function (InspectRentalBar) {
-    let m_itemId = '';
-    let m_itemToUseId = '';
-    let m_worktype = '';
-    let m_elPanel = null;
-    let m_popupActionCallbackHandle = null;
-    let m_scheduleActionTimoutHandle = null;
-    let m_bPanelRegisteredForEvents = false;
-    let m_confirmPopUpOpen = false;
-    let m_onlyRentalItemIds = [];
-    let m_actionType = '';
-    let m_keyToSellId = '';
-    function Init(elPanel, itemId, ItemToUseId, keyToSellId, funcGetSettingCallback) {
-        m_itemId = itemId;
-        m_itemToUseId = ItemToUseId;
-        m_keyToSellId = keyToSellId;
-        m_elPanel = elPanel;
-        m_worktype = funcGetSettingCallback('asyncworktype', '');
-        let allowRental = (funcGetSettingCallback('allow-rent', 'no') === 'yes');
-        let sRestriction = (funcGetSettingCallback('restriction', ''));
-        let showXrayMachineUi = (funcGetSettingCallback('showXrayMachineUi', 'no') === 'yes');
+    function Init() {
+        const elRentalBar = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectRentalBar');
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        const toolId = InspectShared.GetPopupSetting('tool_id');
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        const contextPanel = $.GetContextPanel();
+        contextPanel.Data().rentalBarPanelRegisteredForEvents = false;
+        contextPanel.Data().onlyRentalItemIds = [];
+        const allowRental = InspectShared.GetPopupSetting('allow_rent');
+        const sRestriction = InspectShared.GetPopupSetting('store_item_id') ? '' : InventoryAPI.GetDecodeableRestriction(itemId);
+        const showXrayMachineUi = InspectShared.GetPopupSetting('is_xray_machine');
         let isXrayRestriction = sRestriction === 'xray';
-        if ((funcGetSettingCallback('inspectonly', 'false') === 'true') ||
-            m_worktype !== 'decodeable' ||
+        if (InspectShared.GetPopupSetting('inspect_only') ||
+            worktype !== 'decodeable' ||
             !allowRental ||
-            (keyToSellId && !sRestriction) ||
+            (InspectShared.GetPopupSetting('purchase_item_id') && !sRestriction) ||
             showXrayMachineUi ||
-            !InventoryAPI.IsValidItemID(m_itemId)) {
-            elPanel.AddClass('hidden');
+            !InventoryAPI.IsValidItemID(itemId)) {
+            elRentalBar.AddClass('hidden');
             return;
         }
-        elPanel.RemoveClass('hidden');
-        elPanel.SetHasClass('show-xray-buttons', sRestriction !== '');
-        _SetNumLootlistItems();
-        _SetuUpButtonsBasedOnRestrictions(sRestriction);
-        if (!isXrayRestriction && ItemToUseId) {
-            m_elPanel.FindChildInLayoutFile('UseItemImage').itemid = ItemToUseId;
-            _SetDescString();
+        elRentalBar.RemoveClass('hidden');
+        elRentalBar.SetHasClass('show-xray-buttons', sRestriction !== '');
+        _SetNumLootlistItems(elRentalBar, itemId);
+        _SetuUpButtonsBasedOnRestrictions(sRestriction, elRentalBar);
+        if (!isXrayRestriction && toolId) {
+            elRentalBar.FindChildInLayoutFile('UseItemImage').itemid = toolId;
+            _SetDescString(elRentalBar);
         }
-        if (!m_bPanelRegisteredForEvents) {
-            m_bPanelRegisteredForEvents = true;
-            $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', _OnMyPersonaInventoryUpdated);
+        if (!contextPanel.Data().rentalBarPanelRegisteredForEvents) {
+            contextPanel.Data().rentalBarPanelRegisteredForEvents = true;
+            $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', () => _OnMyPersonaInventoryUpdated(contextPanel));
         }
     }
     InspectRentalBar.Init = Init;
-    function _SetDescString() {
-        let elLabel = m_elPanel.FindChildInLayoutFile('UseItemName');
-        elLabel.SetDialogVariable('itemname', InventoryAPI.GetItemName(m_itemToUseId));
-        elLabel.text = $.Localize('#popup_' + m_worktype + '_async_desc', elLabel);
+    function _SetDescString(elRentalBar) {
+        const elLabel = elRentalBar.FindChildInLayoutFile('UseItemName');
+        const toolId = InspectShared.GetPopupSetting('tool_id');
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        elLabel.SetDialogVariable('itemname', InventoryAPI.GetItemName(toolId));
+        elLabel.text = $.Localize('#popup_' + worktype + '_async_desc', elLabel);
         elLabel.visible = true;
     }
-    function _SetuUpButtonsBasedOnRestrictions(sRestriction) {
+    function _SetuUpButtonsBasedOnRestrictions(sRestriction, elRentalBar) {
+        const contextPanel = $.GetContextPanel();
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        const keyToSellId = InspectShared.GetPopupSetting('purchase_item_id');
         if (sRestriction) {
-            let elPurchaseBtn = m_elPanel.FindChildInLayoutFile('PurchaseKeyBtn');
-            let elXrayRentBtn = m_elPanel.FindChildInLayoutFile('RentBtnXray');
-            if (m_keyToSellId) {
+            const elPurchaseBtn = elRentalBar.FindChildInLayoutFile('PurchaseKeyBtn');
+            const elXrayRentBtn = elRentalBar.FindChildInLayoutFile('RentBtnXray');
+            if (keyToSellId) {
                 elPurchaseBtn.SetHasClass('hide', false);
                 elXrayRentBtn.SetHasClass('hide', true);
-                elPurchaseBtn.FindChildInLayoutFile('SellItemImage').itemid = m_keyToSellId;
-                m_elPanel.SetDialogVariable('itemname', InventoryAPI.GetItemName(m_keyToSellId));
-                m_elPanel.SetDialogVariable("price", ItemInfo.GetStoreSalePrice(m_keyToSellId, 1));
+                elPurchaseBtn.FindChildInLayoutFile('SellItemImage').itemid = keyToSellId;
+                elRentalBar.SetDialogVariable('itemname', InventoryAPI.GetItemName(keyToSellId));
+                elRentalBar.SetDialogVariable("price", ItemInfo.GetStoreSalePrice(keyToSellId, 1));
                 elPurchaseBtn.SetPanelEvent('onactivate', () => {
-                    StoreAPI.StoreItemPurchase(m_keyToSellId);
-                    m_confirmPopUpOpen = true;
+                    StoreAPI.StoreItemPurchase(keyToSellId);
+                    contextPanel.Data().confirmPopUpOpen = true;
                 });
                 if (sRestriction === 'xray')
-                    _HoverEvents(elPurchaseBtn, null);
+                    _HoverEvents(elPurchaseBtn, null, contextPanel);
             }
             else {
                 elPurchaseBtn.SetHasClass('hide', true);
                 elXrayRentBtn.SetHasClass('hide', false);
                 elXrayRentBtn.SetPanelEvent('onactivate', () => {
-                    _SetUpRentActionBtn('rent');
+                    _SetUpRentActionBtn('rent', contextPanel);
                 });
                 if (sRestriction === 'xray')
-                    _HoverEvents(elXrayRentBtn, null);
+                    _HoverEvents(elXrayRentBtn, null, contextPanel);
             }
-            let xrayBtn = m_elPanel.FindChildInLayoutFile('OpenXray');
+            let xrayBtn = elRentalBar.FindChildInLayoutFile('OpenXray');
             xrayBtn.SetHasClass('hide', sRestriction === 'restricted');
             if (sRestriction !== 'restricted') {
                 xrayBtn.SetPanelEvent('onactivate', () => {
-                    $.DispatchEvent("ShowXrayCasePopup", '', m_itemId, false);
-                    ClosePopup();
+                    $.DispatchEvent("ShowXrayCasePopup", '', itemId, false);
+                    ClosePopup(contextPanel);
                 });
-                _HoverEvents(null, xrayBtn);
+                _HoverEvents(null, xrayBtn, contextPanel);
             }
             if (sRestriction === 'restricted') {
-                m_elPanel?.GetParent().GetParent().SetHasClass('rental-mode', true);
+                elRentalBar?.GetParent().GetParent().SetHasClass('rental-mode', true);
             }
         }
         else {
-            let RentBtn = m_elPanel.FindChildInLayoutFile('RentBtn');
-            let ActionBtn = m_elPanel.FindChildInLayoutFile('OpenBtn');
-            _HoverEvents(RentBtn, ActionBtn);
+            let RentBtn = elRentalBar.FindChildInLayoutFile('RentBtn');
+            let ActionBtn = elRentalBar.FindChildInLayoutFile('OpenBtn');
+            _HoverEvents(RentBtn, ActionBtn, contextPanel);
             RentBtn.SetPanelEvent('onactivate', () => {
-                _SetUpRentActionBtn('rent');
+                _SetUpRentActionBtn('rent', contextPanel);
             });
             ActionBtn.SetPanelEvent('onactivate', () => {
-                OpenConfirmPopup('open');
+                OpenConfirmPopup('open', itemId, contextPanel);
             });
         }
     }
-    function _SetNumLootlistItems() {
-        let count = InventoryAPI.GetLootListItemsCount(m_itemId);
-        count = InventoryAPI.GetLootListItemIdByIndex(m_itemId, (count - 1)) == '0' ? count - 1 : count;
-        m_elPanel?.SetDialogVariableInt('numlootlist', count);
+    function _SetNumLootlistItems(elRentalBar, itemId) {
+        let count = InventoryAPI.GetLootListItemsCount(itemId);
+        count = InventoryAPI.GetLootListItemIdByIndex(itemId, (count - 1)) == '0' ? count - 1 : count;
+        elRentalBar?.SetDialogVariableInt('numlootlist', count);
     }
-    function _SetUpRentActionBtn(type) {
-        let sTimeRemainingString = GetAlreadyRentedItemsExpirationTime();
-        m_confirmPopUpOpen = true;
+    function _SetUpRentActionBtn(type, contextPanel) {
+        let sTimeRemainingString = GetAlreadyRentedItemsExpirationTime(contextPanel);
+        const itemId = InspectShared.GetPopupSetting('item_id', contextPanel);
+        contextPanel.Data().confirmPopUpOpen = true;
         if (sTimeRemainingString) {
-            $.GetContextPanel().SetDialogVariable('time-remaining', sTimeRemainingString);
-            $.GetContextPanel().SetDialogVariable('name', InventoryAPI.GetItemName(m_itemId));
-            $.GetContextPanel().SetDialogVariable('expiration-time', $.Localize(sTimeRemainingString));
-            UiToolkitAPI.ShowGenericPopupOk('#popup_container_confirm_title_rent', $.Localize('#popup_container_confirm_already_rented', $.GetContextPanel()), '', () => $.DispatchEvent('UIPopupButtonClicked', ''));
+            contextPanel.SetDialogVariable('time-remaining', sTimeRemainingString);
+            contextPanel.SetDialogVariable('name', InventoryAPI.GetItemName(itemId));
+            contextPanel.SetDialogVariable('expiration-time', $.Localize(sTimeRemainingString));
+            UiToolkitAPI.ShowGenericPopupOk('#popup_container_confirm_title_rent', $.Localize('#popup_container_confirm_already_rented', contextPanel), '', () => $.DispatchEvent('UIPopupButtonClicked', ''));
         }
         else {
-            OpenConfirmPopup(type);
+            OpenConfirmPopup(type, itemId, contextPanel);
         }
     }
-    function OpenConfirmPopup(type) {
-        m_popupActionCallbackHandle = UiToolkitAPI.RegisterJSCallback(_OnPopupActionPressed);
+    function OpenConfirmPopup(type, itemId, contextPanel) {
+        contextPanel.Data().rentalBarPopupActionCallbackHandle = UiToolkitAPI.RegisterJSCallback(() => _OnPopupActionPressed(type, contextPanel));
         UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_container_open_confirm.xml', 'action-type=' + type
-            + '&' + 'case=' + m_itemId
-            + '&' + 'callback=' + m_popupActionCallbackHandle);
+            + '&' + 'case=' + itemId
+            + '&' + 'callback=' + contextPanel.Data().rentalBarPopupActionCallbackHandle);
     }
-    function _OnPopupActionPressed(actionType) {
-        _OpenActions();
-        m_actionType = actionType;
+    function _OnPopupActionPressed(actionType, contextPanel) {
+        _OpenActions(contextPanel);
+        contextPanel.Data().actionType = actionType;
+        const toolId = InspectShared.GetPopupSetting('tool_id', contextPanel);
+        const itemId = InspectShared.GetPopupSetting('item_id', contextPanel);
         if (actionType === 'open') {
-            InventoryAPI.UseTool(m_itemToUseId, m_itemId);
+            InventoryAPI.UseTool(toolId, itemId);
             $.DispatchEvent('StartDecodeableAnim');
             return;
         }
-        InventoryAPI.UseToolWithIntArg(m_itemToUseId, m_itemId, 5318008);
+        InventoryAPI.UseToolWithIntArg(toolId, itemId, 5318008);
         $.DispatchEvent('StartRentalAnim');
-        $.Schedule(2.75, ShowRentalInspect);
+        $.Schedule(2.75, () => ShowRentalInspect(contextPanel));
     }
-    function _OpenActions() {
-        if (m_popupActionCallbackHandle) {
-            UiToolkitAPI.UnregisterJSCallback(m_popupActionCallbackHandle);
+    function _OpenActions(contextPanel) {
+        if (contextPanel.Data().rentalBarPopupActionCallbackHandle) {
+            UiToolkitAPI.UnregisterJSCallback(contextPanel.Data().rentalBarPopupActionCallbackHandle);
         }
-        m_elPanel.FindChildInLayoutFile('OpenBtn').SetHasClass('is-active-action', true);
-        m_elPanel.FindChildInLayoutFile('OpenBtn').enabled = false;
-        m_elPanel.FindChildInLayoutFile('RentBtn').enabled = false;
-        _ResetTimeoutHandle();
-        m_scheduleActionTimoutHandle = $.Schedule(5, _ShowActionTimeOutPopup);
+        const elRentalBar = contextPanel.FindChildInLayoutFile('PopUpInspectRentalBar');
+        elRentalBar.FindChildInLayoutFile('OpenBtn').SetHasClass('is-active-action', true);
+        elRentalBar.FindChildInLayoutFile('OpenBtn').enabled = false;
+        elRentalBar.FindChildInLayoutFile('RentBtn').enabled = false;
+        _ResetTimeoutHandle(contextPanel);
+        contextPanel.Data().rentalBarScheduleActionTimoutHandle = $.Schedule(6, () => _ShowActionTimeOutPopup(contextPanel));
     }
-    function _HoverEvents(RentBtn, ActionBtn) {
+    function _HoverEvents(RentBtn, ActionBtn, contextPanel) {
+        const elRentalBar = contextPanel.FindChildInLayoutFile('PopUpInspectRentalBar');
         if (RentBtn) {
             RentBtn.SetPanelEvent('onmouseover', () => {
-                m_confirmPopUpOpen = false;
-                m_elPanel?.GetParent().GetParent().SetHasClass('rental-mode', true);
+                contextPanel.Data().confirmPopUpOpen = false;
+                elRentalBar?.GetParent().GetParent().SetHasClass('rental-mode', true);
             });
             RentBtn.SetPanelEvent('onmouseout', () => {
-                if (!m_confirmPopUpOpen) {
-                    m_elPanel?.GetParent().GetParent().SetHasClass('rental-mode', false);
+                if (!contextPanel.Data().confirmPopUpOpen) {
+                    elRentalBar?.GetParent().GetParent().SetHasClass('rental-mode', false);
                 }
             });
         }
         if (ActionBtn) {
             ActionBtn.SetPanelEvent('onmouseover', () => {
-                m_elPanel?.GetParent().GetParent().SetHasClass('rental-mode', false);
+                elRentalBar?.GetParent().GetParent().SetHasClass('rental-mode', false);
             });
         }
     }
-    function GetAlreadyRentedItemsExpirationTime() {
-        let defIndex = InventoryAPI.GetItemDefinitionIndex(m_itemId);
+    function GetAlreadyRentedItemsExpirationTime(contextPanel) {
+        const itemId = InspectShared.GetPopupSetting('item_id', contextPanel);
+        let defIndex = InventoryAPI.GetItemDefinitionIndex(itemId);
         const nRentalHistoryCount = InventoryAPI.GetCacheTypeElementsCount('RentalHistory');
         if (nRentalHistoryCount < 1) {
             return '';
@@ -186,56 +189,69 @@ var InspectRentalBar;
         let oLocData = FormatText.FormatRentalTime(nExpirationDate);
         return oLocData.time;
     }
-    function _ShowActionTimeOutPopup() {
-        m_scheduleActionTimoutHandle = null;
-        if (!m_elPanel || !m_elPanel?.IsValid()) {
+    function _ShowActionTimeOutPopup(contextPanel) {
+        contextPanel.Data().rentalBarScheduleActionTimoutHandle = null;
+        const elRentalBar = contextPanel.FindChildInLayoutFile('PopUpInspectRentalBar');
+        if (!elRentalBar || !elRentalBar?.IsValid()) {
             return;
         }
-        ClosePopup();
+        ClosePopup(contextPanel);
         UiToolkitAPI.ShowGenericPopupOk($.Localize('#SFUI_SteamConnectionErrorTitle'), $.Localize('#SFUI_InvError_Item_Not_Given'), '', () => { });
     }
     InspectRentalBar._ShowActionTimeOutPopup = _ShowActionTimeOutPopup;
-    function _ResetTimeoutHandle() {
-        if (m_scheduleActionTimoutHandle && typeof m_scheduleActionTimoutHandle === "number") {
-            $.CancelScheduled(m_scheduleActionTimoutHandle);
-            m_scheduleActionTimoutHandle = null;
+    function _ResetTimeoutHandle(contextPanel) {
+        if (contextPanel.Data().rentalBarScheduleActionTimoutHandle && typeof contextPanel.Data().rentalBarScheduleActionTimoutHandle === "number") {
+            $.CancelScheduled(contextPanel.Data().rentalBarScheduleActionTimoutHandle);
+            contextPanel.Data().rentalBarScheduleActionTimoutHandle = null;
         }
     }
-    function ClosePopup() {
-        _ResetTimeoutHandle();
+    function ClosePopup(contextPanel) {
+        _ResetTimeoutHandle(contextPanel);
         $.DispatchEvent('HideSelectItemForCapabilityPopup');
         $.DispatchEvent('UIPopupButtonClicked', '');
         $.DispatchEvent('CapabilityPopupIsOpen', false);
     }
     InspectRentalBar.ClosePopup = ClosePopup;
-    function _OnMyPersonaInventoryUpdated() {
-        if (m_worktype === 'decodeable') {
+    function _OnMyPersonaInventoryUpdated(contextPanel) {
+        const worktype = InspectShared.GetPopupSetting('work_type');
+        const actionType = $.GetContextPanel().Data().actionType;
+        if (worktype === 'decodeable') {
             const newItems = AcknowledgeItems.GetItems();
             if (newItems.length > 0 && newItems.filter(entry => entry.pickuptype === 'found_in_crate').length > 0) {
-                _ResetTimeoutHandle();
+                _ResetTimeoutHandle(contextPanel);
             }
-            if (m_actionType === 'rent') {
+            if (actionType === 'rent') {
                 newItems.filter(entry => InventoryAPI.IsRental(entry.id)).forEach(entry => {
-                    m_onlyRentalItemIds.push(entry.id);
+                    contextPanel.Data().onlyRentalItemIds.push(entry.id);
                     InventoryAPI.SetItemSessionPropertyValue(entry.id, 'recent', '1');
                     InventoryAPI.AcknowledgeNewItembyItemID(entry.id);
                 });
             }
         }
     }
-    function ShowRentalInspect() {
-        if (m_onlyRentalItemIds.length > 0) {
-            UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + m_onlyRentalItemIds[0] +
+    function ShowRentalInspect(contextPanel) {
+        if (contextPanel.Data().onlyRentalItemIds.length > 0) {
+            const itemId = InspectShared.GetPopupSetting('item_id', contextPanel);
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + contextPanel.Data().onlyRentalItemIds[0] +
                 '&' + 'inspectonly=true' +
                 '&' + 'allowsave=false' +
                 '&' + 'showallitemactions=false' +
                 '&' + 'showitemcert=true' +
-                '&' + 'rentalItems=' + m_onlyRentalItemIds.join(',') +
-                '&' + 'caseidforlootlist=' + m_itemId);
-            ClosePopup();
+                '&' + 'rentalItems=' + contextPanel.Data().onlyRentalItemIds.join(',') +
+                '&' + 'caseidforlootlist=' + itemId);
+            let oSettings = {
+                item_id: contextPanel.Data().onlyRentalItemIds[0],
+                inspect_only: true,
+                hide_all_action_items: true,
+                rental_item_ids: contextPanel.Data().onlyRentalItemIds.join(','),
+                case_id_for_lootlist: itemId,
+            };
+            elPanel.Data().oSettings = oSettings;
+            ClosePopup(contextPanel);
+            return;
         }
         else {
-            _ShowActionTimeOutPopup();
+            _ShowActionTimeOutPopup(contextPanel);
         }
     }
 })(InspectRentalBar || (InspectRentalBar = {}));

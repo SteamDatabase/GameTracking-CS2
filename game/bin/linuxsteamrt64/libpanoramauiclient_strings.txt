@@ -99,9 +99,11 @@
 'vertical' cue-setting already used
 'vertical' setting must have a value of either 'lr' or 'rl'
 (1 + n) * 3 <= vecsize
+(IImageSource)
 (memory)
 *.log
-*ZN17CPanoramaUIClient13SetupUIEngineEPKcP14PlatWindow_t__bbEUlvE_
+*ZN11IThreadPool17QueueJobWithFlagsIZN17CPanoramaUIClient13SetupUIEngineEPKcP14PlatWindow_t__bbEUlvE_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorES3_13JobPriority_tjOT_E10CLambdaJob
+*ZN8panorama11CSplitLabel16OnLayoutTraverseEffEUlPNS_11CImagePanelEiE_
 *ZN8panorama12CDebugLayout16UpdateSearchTextERK10CUtlStringEUlPNS_8CPanel2DEE_
 *ZN8panorama15CDelayLoadPanelC4EPNS_8CPanel2DEPKcEUlPS0_E_
 *ZN8panorama8CPanel2D12SortChildrenIZNS_14CDelayLoadList22EventLoadVisiblePanelsEjiiEUlPKS0_S4_E_EEvOT_EUlPNS_8IUIPanelES9_E_
@@ -177,6 +179,7 @@
 <span class="%s">%p</span>
 <span class="%s">%s</span>
 <span class="%s">0x%x</span>
+?N8panorama12CContextMenuE
 @keyframes 
 @keyframes '%s'\r\n{\r\n
 ABXY
@@ -219,7 +222,7 @@ AppendElementOpenTag
 AppendElementStyles
 AppendInheritedStyles
 AppendStyleInfoForProperty
-Applies an image as an opacity mask that stretches to the panel bounds and fades out it's content based on the alpha channel. The second float value is an optional opacity value for the mask itself, the image won't interpolate/cross-fade, but you can animate the opacity to fade the mask in/out. <b>Examples:</b><pre>opacity-mask: url( "file://{images}/upper_row_mask.tga" );\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) 0.5;\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) -1.0;\nopacity-mask-position: 5px 50%;\nopacity-mask-scale: 200%;\nopacity-mask-scale: 50% 100%;\n</pre>
+Applies an image as an opacity mask that stretches to the panel bounds and fades out it's content based on the alpha channel. The second float value is an optional opacity value for the mask itself, the image won't interpolate/cross-fade, but you can animate the opacity to fade the mask in/out. opacity-mask-threshold lets you specify a threshold and softness percentage of how the mask is applied. Below the threshold, pixels are fully transparent, and above the threshold pixels are fully opaque. The softness lets you apply a range during which the opacity is scaled by the alpha from the mask.<b>Examples:</b><pre>opacity-mask: url( "file://{images}/upper_row_mask.tga" );\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) 0.5;\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) -1.0;\nopacity-mask-position: 5px 50%;\nopacity-mask-scale: 200%;\nopacity-mask-scale: 50% 100%;\nopacity-mask-threshold: 0% 30%;\n</pre>
 ApplyStyles
 AsyncContainer
 AsyncDataPanel
@@ -633,6 +636,7 @@ HorizontalScrollBar
 HorizontalScrollThumb
 HorizontalSplitter
 HtmlUserAgent
+IImageSource
 IME_AddToList
 IME_ClearCompositionString
 IME_ClearList
@@ -672,6 +676,7 @@ IfNotHoverOtherEvent
 Image
 ImageFailedLoad
 ImageLoaded
+ImageSlices
 InMemoryFileUpdate
 InSettings
 IncrementButton
@@ -680,6 +685,7 @@ Initialize
 InlineImage
 InlineImage%d
 InlinePanel%d
+InnerLabel
 InputFocusLost
 InputFocusSet
 InputFocusTopLevelChanged
@@ -782,12 +788,12 @@ N8panorama11CDebugPanelE
 N8panorama11CImagePanelE
 N8panorama11CMovieDebugE
 N8panorama11CMoviePanelE
+N8panorama11CSplitLabelE
 N8panorama11CTextButtonE
 N8panorama11GamePadCodeE
 N8panorama11IUISettingsE
 N8panorama12CCarouselNavE
 N8panorama12CConsoleTextE
-N8panorama12CContextMenuE
 N8panorama12CCycleButtonE
 N8panorama12CDebugLayoutE
 N8panorama12CMoviePlayerE
@@ -989,6 +995,7 @@ N8panorama8CUIEventILb1EJPKcPbEEE
 N8panorama8CUIEventILb1EJPKcS2_EEE
 N8panorama8CUIEventILb1EJPKcbEEE
 N8panorama8CUIEventILb1EJPKcbbbS2_EEE
+N8panorama8CUIEventILb1EJPNS_12IImageSourceEEEE
 N8panorama8CUIEventILb1EJPNS_8IUIEventEEEE
 N8panorama8CUIEventILb1EJbEEE
 N8panorama8CUIEventILb1EJbPKcEEE
@@ -1073,6 +1080,7 @@ Panorama engine not set\n
 PanoramaDebuggerClosed
 PanoramaDebuggerOpened
 PanoramaEngineConsole
+PanoramaMovie.Default
 PanoramaUI
 PanoramaUIEngine interface not set up\n
 PanoramaUIEngine setup failed\n
@@ -1219,6 +1227,7 @@ SetDialogVariableInt
 SetDialogVariableLocString
 SetDialogVariableLocStringNested
 SetDialogVariablePluralLocStringInt
+SetDialogVariablePluralLocStringIntNested
 SetDialogVariableTime
 SetDirection
 SetDisableFocusOnMouseDown
@@ -1305,6 +1314,8 @@ ShowTitle
 ShowTooltip
 ShowingLanguage
 SimpleContextMenu
+SlicedContainer
+SlicedLabel
 Slider
 SliderDefault
 SliderFocusChanged
@@ -1379,6 +1390,7 @@ Specifies where to position the body of a tooltip relative to this panel. The fi
 Specifies which properties should transition smoothly to new values if a class/pseudo class changes the styles.  Also specifies duration, timing function, and delay.  Valid timing functions are: ease, ease-in, ease-out, ease-in-out, linear.<br><br><b>Example:</b><pre>transition: position 2.0s ease-in-out 0.0s, perspective-origin 1.2s ease-in-out 0.8s;</pre>
 Specifies which properties should transition smoothly to new values if a class/pseudo class changes the styles.<br><br><b>Examples:</b><pre>transition: position, transform, background-color;</pre>
 Spinner
+SplitLabel
 St8functionIFvvEE
 StartAnimating
 Start_txt
@@ -1481,6 +1493,7 @@ UpdatePanelInfo - update
 UpdatePanelPaintInfo
 UpdateSoundPosition
 UpdateStyleInMemory
+UseAttachedAudioStream
 UsingCompositionLayer
 V8ParamToPanoramaType expected IUIPanel object to convert, but got some other invalid object
 V8ParamToPanoramaType expected Number type to convert, but got something else (%s)
@@ -1521,6 +1534,7 @@ Wrapper
 WriteCompositionLayerPNG
 XInputPad
 Y_txt
+ZN8panorama20UpdateClassPanelListINS_11CImagePanelEEEvPNS_8CPanel2DEiRKSt8functionIFvPT_iEEEUliE_
 ZN8panorama8CPanel2D12SortChildrenIRFbPKS0_S3_EEEvOT_EUlPNS_8IUIPanelES9_E_
 ZN8panorama8CPanel2D12SortChildrenIZ17ReverseComparatorIRFbPKS0_S4_EEDaOT_EUlS8_OT0_E_EEvS8_EUlPNS_8IUIPanelESD_E_
 [object@%p]
@@ -2036,6 +2050,7 @@ opacity-brush
 opacity-mask
 opacity-mask-position
 opacity-mask-scale
+opacity-mask-threshold
 opacity-transform
 opaque
 orange
@@ -2381,6 +2396,7 @@ violet
 visibility
 visible
 vscroll
+vsnd_files
 vsvg
 w-resize
 wash-color

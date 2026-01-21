@@ -13,6 +13,7 @@ var PopupVideoClip;
         if (videoPlayer) {
             UiToolkitAPI.PlaySoundEvent('UIPanorama.OnStartPopupVideo');
             videoPlayer.SetMovie(reelSchemaDef["url_1080p"]);
+            videoPlayer.UseAttachedAudioStream(true);
             videoPlayer.Play();
         }
     }

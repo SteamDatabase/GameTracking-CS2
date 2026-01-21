@@ -108,24 +108,45 @@ var RankUpRedemptionStore;
             const isVolatile = !!InventoryAPI.GetItemAttributeValue(itemId, '{uint32}volatile container');
             elInspect.SetPanelEvent('onactivate', () => {
                 if (isVolatile) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + itemId +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + itemId +
                         '&' + 'inspectonly=true' +
                         '&' + 'asyncworktype=decodeable' +
                         '&' + 'onlyclosepurchasebar=true');
+                    let oSettings = {
+                        item_id: itemId,
+                        inspect_only: true,
+                        work_type: 'decodeable',
+                        only_close_btn: true
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !InventoryAPI.IsTool(itemId)) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + itemId +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + itemId +
                         '&' + 'asyncworkitemwarning=no' +
                         '&' + 'inspectonly=true' +
                         '&' + 'asyncworktype=decodeable' +
                         '&' + 'onlyclosepurchasebar=true');
+                    let oSettings = {
+                        item_id: itemId,
+                        show_work_type_warning: false,
+                        inspect_only: true,
+                        work_type: 'decodeable',
+                        only_close_btn: true
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
                         '&' + 'inspectonly=true' +
                         '&' + 'showallitemactions=false' +
                         '&' + 'allowsave=false' +
                         'none');
+                    let oSettings = {
+                        item_id: itemId,
+                        inspect_only: true,
+                        hide_all_action_items: true
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
             });
         }

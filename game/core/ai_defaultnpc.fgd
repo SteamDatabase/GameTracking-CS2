@@ -27,9 +27,6 @@
 	output OnHearPlayer(void) : "Fired when this NPC hears the player."
 	output OnHearCombat(void) : "Fired when this NPC hears combat sounds."
 	output OnUnragdollFinished(void) : "This NPC just finished getting up after being a ragdoll."
-	output OnForcedInteractionStarted(void) : "Fired when the NPC starts a forced interaction."
-	output OnForcedInteractionAborted(void) : "Fired when the NPC aborts a forced interaction for some reason (target NPC died, couldn't be pathed to, etc)"
-	output OnForcedInteractionFinished(void) : "NPCs in actbusies can no longer perform dynamic interactions."
 	output OnConditionAdded(string) : "A new condition was set on the NPC. Only a subset of conditions are sent through this to reduce the amount of entity IO happening."
 	output OnConditionRemoved(string) : "A condition was removed from the NPC. Only a subset of conditions are sent through this to reduce the amount of entity IO happening."
 	output OnAbilityUse(string) : "An ability has started, but may not complete."
@@ -40,7 +37,6 @@
 	input HolsterWeapon(void) : "Force the NPC to holster their weapon. Ignored if the NPC is scripting, if the NPC's weapon is already holstered, or if the NPC doesn't use weapons."
 	input HolsterAndDestroyWeapon(void) : "Identical to HolsterWeapon, except the weapon is destroyed once it has been holstered and concealed."
 	input UnholsterWeapon(void) : "Force the NPC to draw their weapon. Ignored if the NPC is scripting, if the NPC's weapon is already drawn, or if the NPC doesn't use weapons."
-	input ForceInteractionWithNPC(string) : "Force the NPC to use a dynamic interaction with another NPC. Parameter format: <target NPC name> <dynamic interaction name>"
 	input BecomeTemporaryRagdoll(float) : "Become a temporary ragdoll that then can be later unrgadolled."
 	input StopTemporaryRagdoll(void) : "Rise from your grave."
 	input StopTemporaryRagdollAndSetEnemy(string) : "Rise from your grave to attack an enemy. Animgraph NPCs will turn to face the enemy during their unragdoll. Parameter is the enemy, usually the !activator on the trigger that's firing this input."
@@ -82,7 +78,7 @@
 @BaseClass base(DefaultNPC) 
 	metadata
 	{
-		input_output_cpp = [ "ai_base_actor" ]
+		api_classes = [ "ai_base_actor" ]
 	}
 = TalkNPC
 [
@@ -95,7 +91,7 @@
 		1 : "Yes (Don't use speech semaphore)"
 	]
 
-	input SpeakResponseConcept(cpp) 
+	input SpeakResponseConcept(api) 
 	input CancelSpeech(void) : "Cancel any speech that the NPC is currently speaking."
 ]
 
@@ -486,6 +482,7 @@
 	start_on_spawn(boolean) : "Start on Spawn?" : 0 : "If checked, when this entity is spawned, it will start the scripted command on all eligible NPC(s)."
 	switchidletoalert(boolean) : "Switch To Alert State if Idle" : 0 : "If the commanded NPC(s) is in Idle state, switch them to Alert state."
 	shouldsetenemy(boolean) : "Set Enemy To Target" : 0 : "If the script target is an NPC or player, setting this to 'Yes' will also give commanded NPCs memory of the target, and cause them to set their enemy to it. Note that if there's another NPC that's a better enemy, commanded NPCs will flip to the better enemy on their next think."
+	only_apply_to_one_npc(boolean) : "Only Apply to 1 NPC" : 0 : "If the script would find multiple npcs on start, pick only one of them to run the command. Will only select NPCs who aren't currently scripted."
 
 	// Inputs
 	input StartScript(void) : "Starts all target NPC(s) performing the scripted command."

@@ -8,12 +8,12 @@
   %s agg [%s fragments (%s merged), %s meshlets (%s recull, %s recull visible)]\n
   %s base, %s animated\n
   %s clutter sceneobjects [%s tiles, %s instances]\n
-  %s instmesh [%s draw calls, %s instances LOD %s instances noLOD, %s drawn (shadow: %s instances, %s drawn)]\n
+  %s instmesh [%s draw calls, %s instances, %s drawn (shadow: %s instances, %s drawn), %s recull visible ]\n
   Cache: %.1f MB
   Verts: %.1fK
   Verts: %.1fM
   Verts: %d
-  [%i] %s %s %s\n
+  [%i] %s %s %s IndexCount: %d\n
   cpu culling: [vis %d] [vol %d] [dist %d] [size %d]\n
   gpu culling: [vis %d] [frust %d] [occ %d] [vol %d] [bface %d] [size %d] [density %d]
   w/ default threshold: %d,
@@ -21,19 +21,22 @@
   w/ large threshold: %d,
   w/ zero threshold: %d,
   w/ zero threshold: (%.1f, %.1f)
+ %i fog-only.
  %s [%.2f ms]
  (EXTERN)
  (Frozen)
+ (MAYBE DISABLED?!)
  (Owned)
  (auto)
  (hidden)
  (kakikukeko)
- (most recent)
  (nihongo)
+ (out %.2f)
  (viewmodel)
  (will sort)
  *CentralNode*
  *Inactive*
+ *Unused*
  ; contains 
  BreakOnDelete: 
  BreakOnDraw: 
@@ -42,12 +45,11 @@
  CentralNode=1
  DebugLevel:
  DockingEnable
- DpiEnableScaleFonts
- DpiEnableScaleViewports
  HasCentralNodeChild
  HasGamepad
  HasMouseCursors
  HasMouseHoveredViewport
+ HasParentViewport
  HasSetMousePos
  HiddenTabBar=%d%n
  HiddenTabBar=1
@@ -64,8 +66,6 @@
  Meshes: %d
  NavEnableGamepad
  NavEnableKeyboard
- NavEnableSetMousePos
- NavNoCaptureKeyboard
  NoAutoMerge
  NoCloseButton=%d%n
  NoCloseButton=1
@@ -73,6 +73,7 @@
  NoFocusOnAppearing
  NoFocusOnClick
  NoInputs
+ NoKeyboard
  NoMouse
  NoMouseCursorChange
  NoRendererClear
@@ -90,6 +91,7 @@
  PlatformHasViewports
  Pos=%d,%d Size=%d,%d
  Pos=%i,%i%n
+ RendererHasTextures
  RendererHasViewports
  RendererHasVtxOffset
  Selected=0x%08X
@@ -110,7 +112,9 @@
  Window=0x%08X
  Window=0x%08X%n
  [cur %i, targ %i %s, %.1fs]
+ [lod
  adding views while previous rendering is running. Someone needed to call WaitForRenderingToComplete()!!!!!\n
+ to break in item call-stack, or 
  trying to move layer %s after unfound layer %s
  trying to move non existent layer
 !pObj->HasFlags( SCENEOBJECTFLAG_DELETED )
@@ -119,8 +123,7 @@
 "Context" functions are simple helpers to associate a Popup to a given Item or Window identifier.
 "imgui"
 ###Name
-###NavUpdateWindowing
-###NavWindowingList
+###NoLabel
 ##%s_child_wrapper
 ##AngledHeaders
 ##Annotations
@@ -128,9 +131,11 @@
 ##AxisLinking
 ##Background
 ##Bars
+##Basket
 ##Bear
 ##Bezier
 ##Bins
+##BoxSelect
 ##Bull
 ##Centroid
 ##Child
@@ -151,9 +156,12 @@
 ##Display
 ##DockNode_%02X
 ##Down
+##DragDropCancelHandler
+##Editor
 ##EqualAxes
 ##ErrorBars
 ##Filled
+##Filter
 ##Foreground
 ##HeatScale
 ##Heatmap1
@@ -174,12 +182,14 @@
 ##Main
 ##MainMenuBar
 ##MarkerStyles
-##Menu_%02d
+##MenuBar
 ##MyColor##5
 ##MyColor##6
 ##MyStr
 ##NaNValues
 ##Name
+##NavUpdateWindowing
+##NavWindowingOverlay
 ##NotListed
 ##Open
 ##OuterSize
@@ -195,6 +205,7 @@
 ##Sample
 ##Scrolling
 ##ScrollingRegion
+##Split
 ##Splitter
 ##StyleEditor
 ##TabBar
@@ -204,7 +215,10 @@
 ##Ticks
 ##Time
 ##Tooltip_%02d
+##Tooltip_DragDrop_%02d
+##Tooltip_Error
 ##Tooltip_Hidden
+##Tree
 ##Value
 ##VerticalScrolling
 ##XContext
@@ -224,7 +238,7 @@
 ##dndxy
 ##edit
 ##float2
-##float5a
+##float6a
 ##frames
 ##gradient1
 ##gradient2
@@ -240,7 +254,6 @@
 ##listbox 2
 ##log
 ##max
-##menubar
 ##min
 ##off
 ##original
@@ -253,6 +266,7 @@
 ##preview
 ##previewing_picker
 ##previous
+##properties
 ##rect
 ##rgb
 ##right
@@ -263,11 +277,10 @@
 ##show_windows_rect_type
 ##source
 ##spark
-##split
 ##strideoffset
 ##table
 ##tabs
-##value
+##tree
 ##values
 #%02X%02X%02X
 #%02X%02X%02X%02X
@@ -275,6 +288,7 @@
 #%02X%02X%02X\nR: %d, G: %d, B: %d\n(%.3f, %.3f, %.3f)
 #%d: %s 0x%p @ (%g,%g,%g)
 #%s/AsyncComputeSemaphoreWait
+#8465
 #CLOSE
 #COLLAPSE
 #IMPLOT_DRAG_LINE_Y
@@ -290,11 +304,14 @@
 #TabBar
 #UNHIDE
 #WindowMenu
+$153
 $MonitorTexture
+$Rcvt 
 %*sHello, sailor! Making this line long enough for the example.
 %*sThis is line %d
 %.02f
 %.06f ns
+%.0f (Always)
 %.0f deg
 %.0fx%.0f
 %.10f
@@ -324,14 +341,16 @@ $MonitorTexture
 %04d: scrollable region
 %08X
 %08dx.geo
-%c [%02d] where %03d, insert %03d, delete %03d, char_storage %03d "%s"
+%c [%02d] where %03d, insert %03d, delete %03d, char_storage %03d "%.*s"
 %d (%d depth-only
+%d assets
 %d columns
 %d current allocations
 %d draw calls for particles\n
 %d material binds for particles\n
 %d meshlets dispatched for particles\n
 %d particle systems rendered\n
+%d past errors skipped.
 %d primary\n
 %d some text
 %d vertices, %d indices (%d triangles)
@@ -351,7 +370,7 @@ $MonitorTexture
 %i filtered textures
 %i object%s, %i draw call%s, %s tris
 %i resources used
-%i shadowmaps [%i dynamic, %i mixed], %i empty mixed shadows culled\n
+%i shadowmaps [%i dynamic, %i mixed, %i fog-only]\n
 %i textures
 %i tiles used, %i tiles rendered, %i tiles recycled, %i failed in %ix%i atlas
 %ix%i
@@ -360,13 +379,20 @@ $MonitorTexture
 %lu ms
 %s %.1f %.1f %.1f %s
 %s %04d: pos (%8.2f,%8.2f), uv (%.6f,%.6f), col %08X\n
+%s %d: DPI %.0f%%\n MainMin (%.0f,%.0f), MainMax (%.0f,%.0f), MainSize (%.0f,%.0f)\n WorkMin (%.0f,%.0f), WorkMax (%.0f,%.0f), WorkSize (%.0f,%.0f)
 %s (%-14s): FAIL %s\n
 %s (%-14s): pass\n
 %s 0x%04X%s: %d windows (vis: '%s')
 %s 0x%04X%s: %s (vis: '%s')
 %s 0x%08X (%d tabs)%s  {
+%s GetOnDiskTextureDesc failed!\n
+%s has no mip levels of size %dx%d\n
+%s is not a 2D texture!\n
+%s is wrong format %s - expected %s!\n
+%s###Menu_%02d
 %s%d.vtex
 %s, 0x%08x+%s -- Overlaps:
+%s, new
 %s.ini
 %s.log
 %s/%08X
@@ -384,7 +410,10 @@ $MonitorTexture
 %s_%d.vtex
 %s_%d_%d.vtex
 %u ms
+&A3\rk
+' Kj3
 '%c' (0x%04X)
+'CU\tA
 (%.1f,%.1f)
 (%.3ff, %.3ff, %.3ff, %.3ff)
 (%6.1f,%6.1f) (%6.1f,%6.1f) Size (%6.1f,%6.1f) %s
@@ -398,7 +427,10 @@ $MonitorTexture
 (Context Name: "%s")
 (Debug Log: Auto-disabled some ImGuiDebugLogFlags after 2 frames)\n
 (Dock node)
-(Hold SHIFT to display a dummy viewport)
+(Hold Ctrl to: 
+(Hold Ctrl to: use 
+(Hold Shift to display a dummy viewport)
+(Internal Buffer: TextA Size: %d, Capacity: %d)
 (Left) Using ImGui::PushClipRect():\nWill alter ImGui hit-testing logic + ImDrawList rendering.\n(use this if you want your clipping rectangle to affect interactions)\n\n(Center) Using ImDrawList::PushClipRect():\nWill alter ImDrawList rendering only.\n(use this as a shortcut if you are only using ImDrawList calls)\n\n(Right) Using ImDrawList::AddText() with a fine ClipRect:\nWill alter only this specific ImDrawList::AddText() rendering.\nThis is often used internally to avoid altering the clipping rectangle and minimize draw calls.
 (Main menu bar)
 (Popup)
@@ -406,6 +438,9 @@ $MonitorTexture
 (SceneWorld 3D Dump contains %d large objects - they are scaled down and will render red.)\n
 (Untitled)
 (Use ImGui::SameLine() to keep adding items to the right of the preceding item)
+(also access from 'Examples->Assets Browser' in menu)
+(and more errors)
+(c) 2014-2025 Omar Cornut
 (demo menu)
 (dump)
 (dump3d)
@@ -416,12 +451,15 @@ $MonitorTexture
 (in WindowA)
 (no material)
 (no model)
+(note: some platform backends may not reflect a change of this value for existing viewports, and may need the viewport to be recreated)
 (null)
+(see Demo->Configuration for details & more)
 (unnamed)
 (void*)0x%p
 ** %d instances of same table! Some data below will refer to last instance.
 **DebugBreak**
 *COPIED*
+*EXPERIMENTAL* Ctrl+C copy the contents of focused window into the clipboard.\n\nExperimental because:\n- (1) has known issues with nested Begin/End pairs.\n- (2) text output quality varies.\n- (3) text output is in submission order rather than spatial order.
 *Missing Text*
 *N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN25CAggregateSceneObjectDesc21OnBeginRenderingFrameEvEUliE_EviiPKcOT0_ii13JobPriority_tQ14is_invocable_vIS6_JiEEEUliE_EE
 *N24CParallelProcessLauncher18CParallelLambdaJobIZN12CSceneSystem15Thread_CullViewEP10CSceneViewP13CViewDrawListEUliE_EE
@@ -429,16 +467,18 @@ $MonitorTexture
 *St23_Sp_counted_ptr_inplaceIZN12CSceneSystem28Thread_RenderGpuCullingLayerESt10shared_ptrI13CViewDrawListEP11CSceneLayerE17GpuCullingState_tSaIvELN9__gnu_cxx12_Lock_policyE2EE
 *Unknown item*
 *ZN10CSceneView8AtFinishEvEUlvE_
+*ZN11IThreadPool17QueueJobWithFlagsIZN12CSceneSystem26Thread_RenderLayerDrawListESt10shared_ptrI13CViewDrawListEP11CSceneLayerP16CRenderBatchList18EBatchStartFlags_tRK10CUtlVectorIP14CSceneDrawListi25CUtlVectorMemory_GrowableISC_iLm0EEEEUlvE0_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorEPKc13JobPriority_tjOT_E10CLambdaJob
+*ZN11IThreadPool17QueueJobWithFlagsIZNK21CAggregateSceneObject26FindVisClustersForMeshletsERK10CUtlVectorI6AABB_ti25CUtlVectorMemory_GrowableIS3_iLm0EEERKNS1_18FragmentCullInfo_tERKS3_RK6Mat3x4IfEPK18CMeshletDescriptorjP16PerMeshletData_tEUlvE_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorEPKc13JobPriority_tjOT_E10CLambdaJob
 *ZN12CSceneSystem11RenderAViewEP10CSceneViewfP24ConstantBufferHandle_t__EUlvE0_
 *ZN12CSceneSystem11RenderAViewEP10CSceneViewfP24ConstantBufferHandle_t__EUlvE_
 *ZN12CSceneSystem17Thread_RenderViewEP10CSceneViewEUlvE0_
+*ZN12CSceneSystem17Thread_RenderViewEP10CSceneViewEUlvE1_
 *ZN12CSceneSystem17Thread_RenderViewEP10CSceneViewEUlvE_
-*ZN12CSceneSystem21SubmitAllDisplayListsEP19SwapChainHandle_t__EUlvE0_
-*ZN12CSceneSystem21SubmitAllDisplayListsEP19SwapChainHandle_t__EUlvE_
+*ZN12CSceneSystem21SubmitAllDisplayListsEP19SwapChainHandle_t__EUlvE1_
+*ZN12CSceneSystem21SubmitAllDisplayListsEP19SwapChainHandle_t__EUlvE2_
 *ZN12CSceneSystem22ReleaseLayerDependentsERKSt10shared_ptrI13CViewDrawListEP11CSceneLayerEUlvE0_
 *ZN12CSceneSystem22ReleaseLayerDependentsERKSt10shared_ptrI13CViewDrawListEP11CSceneLayerEUlvE1_
 *ZN12CSceneSystem22ReleaseLayerDependentsERKSt10shared_ptrI13CViewDrawListEP11CSceneLayerEUlvE_
-*ZN12CSceneSystem26Thread_RenderLayerDrawListESt10shared_ptrI13CViewDrawListEP11CSceneLayerP16CRenderBatchList18EBatchStartFlags_tRK10CUtlVectorIP14CSceneDrawListi25CUtlVectorMemory_GrowableISA_iLm0EEEEUlvE0_
 *ZN12CSceneSystem26Thread_RenderLayerDrawListESt10shared_ptrI13CViewDrawListEP11CSceneLayerP16CRenderBatchList18EBatchStartFlags_tRK10CUtlVectorIP14CSceneDrawListi25CUtlVectorMemory_GrowableISA_iLm0EEEEUlvE_
 *ZN12CSceneSystem28Thread_RenderGpuCullingLayerESt10shared_ptrI13CViewDrawListEP11CSceneLayerEUlvE_
 *ZN12CSceneSystem30GenerateVertexCacheUpdateTasksER10CUtlVectorI9CSmartPtrI13CThreadFutureIP12CDisplayListE17CRefCountAccessorEi25CUtlVectorMemory_GrowableIS7_iLm0EEEbbEUlvE0_
@@ -447,19 +487,26 @@ $MonitorTexture
 *ZN15CLightBinnerGPU25AddEnvironmentMapsForViewEP10CSceneViewEUlP18CEnvMapSceneObjectE_
 *ZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE0_
 *ZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE_
+*ZN15CLightBinnerGPU26GatherIndirectBounceLightsEvEUlP21CSceneBarnLightObjectE_
 *ZN15CLightBinnerGPU27AddLightProbeVolumesForViewEP10CSceneViewiEUlP28CSceneLightProbeVolumeObjectE_
 *ZN16CRenderBatchList21DrawCurrentPrimitivesEvEUlvE0_
 *ZN16CRenderBatchList21DrawCurrentPrimitivesEvEUlvE_
-*ZN25CAggregateSceneObjectDesc9DrawArrayEP14IRenderContextP20CMeshDrawPrimitive_tiPK10ISceneViewP11ISceneLayerR26SceneSystemPerFrameStats_tEUlvE_
 *ZN29CInstancedMeshSceneObjectDesc25OnBeginSubmitDisplayListsEP14IRenderContextE19ReadStatsCallback_t
 *ZN29CInstancedMeshSceneObjectDesc9DrawArrayEP14IRenderContextP20CMeshDrawPrimitive_tiPK10ISceneViewP11ISceneLayerR26SceneSystemPerFrameStats_tEUlvE_
 *ZZN12CSceneSystem22Thread_RenderViewLayerESt10shared_ptrI13CViewDrawListEP11CSceneLayerENKUlbE_clEbEUlvE_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE0_clES3_EUlvE0_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE0_clES3_EUlvE_
 *ZZN15CLightBinnerGPU25DebugLightProbeVolumeGridEP10CSceneViewENKUlP28CSceneLightProbeVolumeObjectE_clES3_EUlvE_
++Alts
 , %d depth-only alpha-tested
-- Load additional fonts with io.Fonts->AddFontFromFileTTF().\n- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n- Read FAQ and docs/FONTS.md for more details.\n- If you need to add/remove fonts at runtime (e.g. for DPI change), do it before calling NewFrame().
+, name%Y
+,Ncmap
+- First Input that contains the glyph is used.\n- Use ImFontConfig::GlyphExcludeRanges[] to specify ranges to ignore glyph in given Input.\n- Prefer using a small number of ranges as the list is scanned every time a new glyph is loaded,\n  - e.g. GlyphExcludeRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };\n- This tool doesn't cache results and is slow, don't keep it open!
+- Load additional fonts with io.Fonts->AddFontXXX() functions.\n- Read FAQ and docs/FONTS.md for more details.
+- Load additional fonts with io.Fonts->AddFontXXX() functions.\n- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n- Read FAQ and docs/FONTS.md for more details.\n- If you need to add/remove fonts at runtime (e.g. for DPI change), do it before calling NewFrame().
+- Path "%s"
 - Press 'Pause/Break' on keyboard.\n- or Click (may alter focus/active id).\n- or navigate using keyboard and press space.
+- This is scaling font only. General scaling will come later.
 -- %d Scene Worlds: --\n
 -- Dumping Scene World %d: 0x%p '%s': %d objects --\n
 --%02d-%02d
@@ -468,18 +515,19 @@ $MonitorTexture
 ->\n  [%s:%s] %s
 .%03d %03d
 ..-         -XXXXXXX-    X    -           X           -XXXXXXX          -          XXXXXXX-     XX          - XX       XX ..-         -X.....X-   X.X   -          X.X          -X.....X          -          X.....X-    X..X         -X..X     X..X---         -XXX.XXX-  X...X  -         X...X         -X....X           -           X....X-    X..X         -X...X   X...XX           -  X.X  - X.....X -        X.....X        -X...X            -            X...X-    X..X         - X...X X...X XX          -  X.X  -X.......X-       X.......X       -X..X.X           -           X.X..X-    X..X         -  X...X...X  X.X         -  X.X  -XXXX.XXXX-       XXXX.XXXX       -X.X X.X          -          X.X X.X-    X..XXX       -   X.....X   X..X        -  X.X  -   X.X   -          X.X          -XX   X.X         -         X.X   XX-    X..X..XXX    -    X...X    X...X       -  X.X  -   X.X   -    XX    X.X    XX    -      X.X        -        X.X      -    X..X..X..XX  -     X.X     X....X      -  X.X  -   X.X   -   X.X    X.X    X.X   -       X.X       -       X.X       -    X..X..X..X.X -    X...X    X.....X     -  X.X  -   X.X   -  X..X    X.X    X..X  -        X.X      -      X.X        -XXX X..X..X..X..X-   X.....X   X......X    -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -         X.X   XX-XX   X.X         -X..XX........X..X-  X...X...X  X.......X   -  X.X  -   X.X   -X.....................X-          X.X X.X-X.X X.X          -X...X...........X- X...X X...X X........X  -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -           X.X..X-X..X.X           - X..............X-X...X   X...XX.........X -XXX.XXX-   X.X   -  X..X    X.X    X..X  -            X...X-X...X            -  X.............X-X..X     X..XX..........X-X.....X-   X.X   -   X.X    X.X    X.X   -           X....X-X....X           -  X.............X- XX       XX X......XXXXX-XXXXXXX-   X.X   -    XX    X.X    XX    -          X.....X-X.....X          -   X............X--------------X...X..X    ---------   X.X   -          X.X          -          XXXXXXX-XXXXXXX          -   X...........X -             X..X X..X   -       -XXXX.XXXX-       XXXX.XXXX       -------------------------------------    X..........X -             X.X  X..X   -       -X.......X-       X.......X       -    XX           XX    -           -    X..........X -             XX    X..X  -       - X.....X -        X.....X        -   X.X           X.X   -           -     X........X  -                   X..X  -       -  X...X  -         X...X         -  X..X           X..X  -           -     X........X  -                    XX   -       -   X.X   -          X.X          - X...XXXXXXXXXXXXX...X -           -     XXXXXXXXXX  -             -------------       -    X    -           X           -X.....................X-           -------------------                                 ----------------------------------- X...XXXXXXXXXXXXX...X -                                                                                                 -  X..X           X..X  -                                                                                                 -   X.X           X.X   -                                                                                                 -    XX           XX    -                                           
+../../_build_/scenesystem/_vpc_scenesystem/default/linuxsteamrt64/_schema_/release/../../../../../../../src/scenesystem/lightbinner_gpu.cpp
 ../../src/thirdparty/tinybvh/inc_tiny_bvh.h
-../public/scenesystem/vertexformat.h
+.AY4I
 .vtex
 /*\n The Pentium F00F bug, shorthand for F0 0F C7 C8,\n the hexadecimal encoding of one offending instruction,\n more formally, the invalid operand with locked CMPXCHG8B\n instruction bug, is a design flaw in the majority of\n Intel Pentium, Pentium MMX, and Pentium OverDrive\n processors (all in the P5 microarchitecture).\n*/\n\nlabel:\n\tlock cmpxchg8b eax\n
 /path/one
 /path/three
+/path/to/some/folder/with/long/filename.cpp
 /path/two
 0 < %.10f < 1
 0..255
 0.00..1.00
-0.17
-0Dark
+0.18 WIP
 0x%02X
 0x%04X
 0x%08X
@@ -489,7 +537,7 @@ $MonitorTexture
 0x%08X/
 0xDDDDDDDD
 1. I am selectable
-1.90.9
+1.92.5
 10CSceneView
 10ISceneView
 11CDefaultPVS
@@ -535,6 +583,7 @@ $MonitorTexture
 15CTier3AppSystemI12ISceneSystemLx0EE
 15CWindController
 15IWindController
+16236_2179048632_0
 16CImNeoSeqWrapper
 16CLightBinnerNull
 16CLightObjectDesc
@@ -553,11 +602,11 @@ $MonitorTexture
 18IModelRenderHelper
 18IRenderingPipeline
 19CClutterSceneObject
-19CDebugLayerRenderer
 19CRenderGraphBuilder
 19CRenderingPipelines
 19CScalableAORenderer
 19CSceneMonitorObject
+19CSimpleQuadRenderer
 19ILightBinnerFactory
 19IReadBufferCallback
 19ISceneLightListener
@@ -582,6 +631,7 @@ $MonitorTexture
 21CResolveLayerRenderer
 21CSSTDepthCopyRenderer
 21CSceneBarnLightObject
+21CSceneBufferAllocator
 21CSceneDebugTextObject
 21CSceneLightObjectBase
 21CUtlMultiJobProcessor
@@ -623,8 +673,9 @@ $MonitorTexture
 27CDirectionalLightObjectDesc
 27CLightProbeVolumeObjectDesc
 27CMeshBuilderSceneObjectDesc
+28CAggregateRTProxySceneObject
 28CSceneLightProbeVolumeObject
-28CTextureBarrierLayerRenderer
+28CShardedSceneBufferAllocator
 28CTextureDisplayLayerRenderer
 28ISceneEnvironmentMapListener
 29CBaseNonPooledSceneObjectDescI18C6FaceSkyboxObjectE
@@ -641,6 +692,7 @@ $MonitorTexture
 31CBlitTextureToRenderTargetLayer
 31CResolveProceduralLayerRenderer
 31CSchemaRegistration_scenesystem
+32CAggregateRTProxySceneObjectDesc
 32CSparseShadowTreeComputeRenderer
 333?
 33CAmbientOcclusionProxySceneObject
@@ -651,6 +703,7 @@ $MonitorTexture
 37CAmbientOcclusionProxySceneObjectDesc
 37CDistanceFieldInstanceSceneObjectDesc
 38IMaxSwapChainDimensionsChangedListener
+3Z5\nNa
 3ways
 4 (tab skip)
 4-wide
@@ -659,9 +712,10 @@ $MonitorTexture
 43CSSTTileGenerationReadTexturePixelsCallback
 4CMDL
 50x50
+5by Tristan GrimmerRegularTTX ProggyCleanTT2004/
+6&6r6
 6IImGui
 7IImPlot
-7])#######hV0qs'/###[),##/l:$#Q6>##5[n42>c-TH`->>#/e>11NNV=Bv(*:.F?uu#(gRU.o0XGH`$vhLG1hxt9?W`#,5LsCp#-i>.r$<$6pD>Lb';9Crc6tgXmKVeU2cD4Eo3R/2*>]b(MC;$jPfY.;h^`IWM9<Lh2TlS+f-s$o6Q<BWH`YiU.xfLq$N;$0iR/GX:U(jcW2p/W*q?-qmnUCI;jHSAiFWM.R*kU@C=GH?a9wp8f$e.-4^Qg1)Q-GL(lf(r/7GrRgwV%MS=C#`8ND>Qo#t'X#(v#Y9w0#1D$CIf;W'#pWUPXOuxXuU(H9M(1<q-UE31#^-V'8IRUo7Qf./L>=Ke$$'5F%)]0^#0X@U.a<r:QLtFsLcL6##lOj)#.Y5<-R&KgLwqJfLgN&;Q?gI^#DY2uLi@^rMl9t=cWq6##weg>$FBjVQTSDgEKnIS7EM9>ZY9w0#L;>>#Mx&4Mvt//L[MkA#W@lK.N'[0#7RL_&#w+F%HtG9M#XL`N&.,GM4Pg;-<nLENhvx>-VsM.M0rJfLH2eTM`*oJMHRC`NkfimM2J,W-jXS:)r0wK#@Fge$U>`w'N7G#$#fB#$E^$#:9:hk+eOe--6x)F7*E%?76%^GMHePW-Z5l'&GiF#$956:rS?dA#fiK:)Yr+`&#0j@'DbG&#^$PG.Ll+DNa<XCMKEV*N)LN/N*b=%Q6pia-Xg8I$<MR&,VdJe$<(7G;Ckl'&hF;;$<_=X(b.RS%%)###MPBuuE1V:v&cX&#2m#(&cV]`k9OhLMbn%s$G2,B$BfD3X*sp5#l,$R#]x_X1xKX%b5U*[r5iMfUo9U`N99hG)tm+/Us9pG)XPu`<0s-)WTt(gCRxIg(%6sfh=ktMKn3j)<6<b5Sk_/0(^]AaN#(p/L>&VZ>1i%h1S9u5o@YaaW$e+b<TWFn/Z:Oh(Cx2$lNEoN^e)#CFY@@I;BOQ*sRwZtZxRcU7uW6CXow0i(?$Q[cjOd[P4d)]>ROPOpxTO7Stwi1::iB1q)C_=dV26J;2,]7op$]uQr@_V7$q^%lQwtuHY]=DX,n3L#0PHDO4f9>dC@O>HBuKPpP*E,N+b3L#lpR/MrTEH.IAQk.a>D[.e;mc.x]Ip.PH^'/aqUO/$1WxLoW0[iLA<QT;5HKD+@qQ'NQ(3_PLhE48R.qAPSwQ0/WK?Z,[x?-J;jQTWA0X@KJ(_Y8N-:/M74:/-ZpKrUss?d#dZq]DAbkU*JqkL+nwX@@47`5>w=4h(9.`GCRUxHPeR`5Mjol(dUWxZa(>STrPkrJiWx`5U7F#.g*jrohGg`cg:lSTvEY/EV_7H4Q9[Z%cnv;JQYZ5q.l7Zeas:HOIZOB?G<Nald$qs]@]L<J7bR*>gv:[7MI2k).'2($5FNP&EQ(,)U]W]+fh18.vsai00);D3@4ku5P?DP8aJt+;qUM]=+b'8@;mViBKx0DE[-auGl8:PJ&Dj+M6OC]O^((##]`0i)drT;-7X`=-H3[igUnPG-NZlo.#k@h#=Ork$m>a>$-?Tm$UV(?#P6YY#'/###xe7q.73rI3*pP/$1>s9)W,JrM7SN]'/4C#v$U`0#V.[0>xQsH$fEmPMgY2u7Kh(G%siIfLSoS+MK2eTM$=5,M8p`A.;_R%#u[K#$x4AG8.kK/HSB==-'Ie/QTtG?-.*^N-4B/ZM_3YlQC7(p7q)&](`6_c)$/*JL(L-^(]$wIM`dPtOdGA,U3:w2M-0<q-]L_?^)1vw'.,MRsqVr.L;aN&#/EgJ)PBc[-f>+WomX2u7lqM2iEumMTcsF?-aT=Z-97UEnXglEn1K-bnEO`guFt(c%=;Am_Qs@jLooI&NX;]0#j4#F14;gl8-GQpgwhrq8'=l_f-b49'UOqkLu7-##oDY2L(te+Mch&gLYtJ,MEtJfLh'x'M=$CS-ZZ%P]8bZ>#S?YY#%Q&q'3^Fw&?D)UDNrocM3A76//oL?#h7gl85[qW/NDOk%16ij;+:1a'iNIdb-ou8.P*w,v5#EI$TWS>Pot-R*H'-SEpA:g)f+O$%%`kA#G=8RMmG1&O`>to8bC]T&$,n.LoO>29sp3dt-52U%VM#q7'DHpg+#Z9%H[K<L%a2E-grWVM3@2=-k22tL]4$##6We'8UJCKE[d_=%wI;'6X-GsLX4j^SgJ$##R*w,vP3wK#iiW&#*h^D&R?jp7+/u&#(AP##XU8c$fSYW-J95_-Dp[g9wcO&#M-h1OcJlc-*vpw0xUX&#OQFKNX@QI'IoPp7nb,QU//MQ&ZDkKP)X<WSVL(68uVl&#c'[0#(s1X&xm$Y%B7*K:eDA323j998GXbA#pwMs-jgD$9QISB-A_(aN4xoFM^@C58D0+Q+q3n0#3U1InDjF682-SjMXJK)(h$hxua_K]ul92%'BOU&#BRRh-slg8KDlr:%L71Ka:.A;%YULjDPmL<LYs8i#XwJOYaKPKc1h:'9Ke,g)b),78=I39B;xiY$bgGw-&.Zi9InXDuYa%G*f2Bq7mn9^#p1vv%#(Wi-;/Z5ho;#2:;%d&#x9v68C5g?ntX0X)pT`;%pB3q7mgGN)3%(P8nTd5L7GeA-GL@+%J3u2:(Yf>et`e;)f#Km8&+DC$I46>#Kr]]u-[=99tts1.qb#q72g1WJO81q+eN'03'eM>&1XxY-caEnOj%2n8)),?ILR5^.Ibn<-X-Mq7[a82Lq:F&#ce+S9wsCK*x`569E8ew'He]h:sI[2LM$[guka3ZRd6:t%IG:;$%YiJ:Nq=?eAw;/:nnDq0(CYcMpG)qLN4$##&J<j$UpK<Q4a1]MupW^-sj_$%[HK%'F####QRZJ::Y3EGl4'@%FkiAOg#p[##O`gukTfBHagL<LHw%q&OV0##F=6/:chIm0@eCP8X]:kFI%hl8hgO@RcBhS-@Qb$%+m=hPDLg*%K8ln(wcf3/'DW-$.lR?n[nCH-eXOONTJlh:.RYF%3'p6sq:UIMA945&^HFS87@$EP2iG<-lCO$%c`uKGD3rC$x0BL8aFn--`ke%#HMP'vh1/R&O_J9'um,.<tx[@%wsJk&bUT2`0uMv7gg#qp/ij.L56'hl;.s5CUrxjOM7-##.l+Au'A&O:-T72L]P`&=;ctp'XScX*rU.>-XTt,%OVU4)S1+R-#dg0/Nn?Ku1^0f$B*P:Rowwm-`0PKjYDDM'3]d39VZHEl4,.j']Pk-M.h^&:0FACm$maq-&sgw0t7/6(^xtk%LuH88Fj-ekm>GA#_>568x6(OFRl-IZp`&b,_P'$M<Jnq79VsJW/mWS*PUiq76;]/NM_>hLbxfc$mj`,O;&%W2m`Zh:/)Uetw:aJ%]K9h:TcF]u_-Sj9,VK3M.*'&0D[Ca]J9gp8,kAW]%(?A%R$f<->Zts'^kn=-^@c4%-pY6qI%J%1IGxfLU9CP8cbPlXv);C=b),<2mOvP8up,UVf3839acAWAW-W?#ao/^#%KYo8fRULNd2.>%m]UK:n%r$'sw]J;5pAoO_#2mO3n,'=H5(etHg*`+RLgv>=4U8guD$I%D:W>-r5V*%j*W:Kvej.Lp$<M-SGZ':+Q_k+uvOSLiEo(<aD/K<CCc`'Lx>'?;++O'>()jLR-^u68PHm8ZFWe+ej8h:9r6L*0//c&iH&R8pRbA#Kjm%upV1g:a_#Ur7FuA#(tRh#.Y5K+@?3<-8m0$PEn;J:rh6?I6uG<-`wMU'ircp0LaE_OtlMb&1#6T.#FDKu#1Lw%u%+GM+X'e?YLfjM[VO0MbuFp7;>Q&#WIo)0@F%q7c#4XAXN-U&VB<HFF*qL($/V,;(kXZejWO`<[5??ewY(*9=%wDc;,u<'9t3W-(H1th3+G]ucQ]kLs7df($/*JL]@*t7Bu_G3_7mp7<iaQjO@.kLg;x3B0lqp7Hf,^Ze7-##@/c58Mo(3;knp0%)A7?-W+eI'o8)b<nKnw'Ho8C=Y>pqB>0ie&jhZ[?iLR@@_AvA-iQC(=ksRZRVp7`.=+NpBC%rh&3]R:8XDmE5^V8O(x<<aG/1N$#FX$0V5Y6x'aErI3I$7x%E`v<-BY,)%-?Psf*l?%C3.mM(=/M0:JxG'?7WhH%o'a<-80g0NBxoO(GH<dM]n.+%q@jH?f.UsJ2Ggs&4<-e47&Kl+f//9@`b+?.TeN_&B8Ss?v;^Trk;f#YvJkl&w$]>-+k?'(<S:68tq*WoDfZu';mM?8X[ma8W%*`-=;D.(nc7/;)g:T1=^J$&BRV(-lTmNB6xqB[@0*o.erM*<SWF]u2=st-*(6v>^](H.aREZSi,#1:[IXaZFOm<-ui#qUq2$##Ri;u75OK#(RtaW-K-F`S+cF]uN`-KMQ%rP/Xri.LRcB##=YL3BgM/3MD?@f&1'BW-)Ju<L25gl8uhVm1hL$##*8###'A3/LkKW+(^rWX?5W_8g)a(m&K8P>#bmmWCMkk&#TR`C,5d>g)F;t,4:@_l8G/5h4vUd%&%950:VXD'QdWoY-F$BtUwmfe$YqL'8(PWX(P?^@Po3$##`MSs?DWBZ/S>+4%>fX,VWv/w'KD`LP5IbH;rTV>n3cEK8U#bX]l-/V+^lj3;vlMb&[5YQ8#pekX9JP3XUC72L,,?+Ni&co7ApnO*5NK,((W-i:$,kp'UDAO(G0Sq7MVjJsbIu)'Z,*[>br5fX^:FPAWr-m2KgL<LUN098kTF&#lvo58=/vjDo;.;)Ka*hLR#/k=rKbxuV`>Q_nN6'8uTG&#1T5g)uLv:873UpTLgH+#FgpH'_o1780Ph8KmxQJ8#H72L4@768@Tm&Qh4CB/5OvmA&,Q&QbUoi$a_%3M01H)4x7I^&KQVgtFnV+;[Pc>[m4k//,]1?#`VY[Jr*3&&slRfLiVZJ:]?=K3Sw=[$=uRB?3xk48@aeg<Z'<$#4H)6,>e0jT6'N#(q%.O=?2S]u*(m<-V8J'(1)G][68hW$5'q[GC&5j`TE?m'esFGNRM)j,ffZ?-qx8;->g4t*:CIP/[Qap7/9'#(1sao7w-.qNUdkJ)tCF&#B^;xGvn2r9FEPFFFcL@.iFNkTve$m%#QvQS8U@)2Z+3K:AKM5isZ88+dKQ)W6>J%CL<KE>`.d*(B`-n8D9oK<Up]c$X$(,)M8Zt7/[rdkqTgl-0cuGMv'?>-XV1q['-5k'cAZ69e;D_?$ZPP&s^+7])$*$#@QYi9,5P&#9r+$%CE=68>K8r0=dSC%%(@p7.m7jilQ02'0-VWAg<a/''3u.=4L$Y)6k/K:_[3=&jvL<L0C/2'v:^;-DIBW,B4E68:kZ;%?8(Q8BH=kO65BW?xSG&#@uU,DS*,?.+(o(#1vCS8#CHF>TlGW'b)Tq7VT9q^*^$$.:&N@@$&)WHtPm*5_rO0&e%K&#-30j(E4#'Zb.o/(Tpm$>K'f@[PvFl,hfINTNU6u'0pao7%XUp9]5.>%h`8_=VYbxuel.NTSsJfLacFu3B'lQSu/m6-Oqem8T+oE--$0a/k]uj9EwsG>%veR*hv^BFpQj:K'#SJ,sB-'#](j.Lg92rTw-*n%@/;39rrJF,l#qV%OrtBeC6/,;qB3ebNW[?,Hqj2L.1NP&GjUR=1D8QaS3Up&@*9wP?+lo7b?@%'k4`p0Z$22%K3+iCZj?XJN4Nm&+YF]u@-W$U%VEQ/,,>>#)D<h#`)h0:<Q6909ua+&VU%n2:cG3FJ-%@Bj-DgLr`Hw&HAKjKjseK</xKT*)B,N9X3]krc12t'pgTV(Lv-tL[xg_%=M_q7a^x?7Ubd>#%8cY#YZ?=,`Wdxu/ae&#w6)R89tI#6@s'(6Bf7a&?S=^ZI_kS&ai`&=tE72L_D,;^R)7[$s<Eh#c&)q.MXI%#v9ROa5FZO%sF7q7Nwb&#ptUJ:aqJe$Sl68%.D###EC><?-aF&#RNQv>o8lKN%5/$(vdfq7+ebA#u1p]ovUKW&Y%q]'>$1@-[xfn$7ZTp7mM,G,Ko7a&Gu%G[RMxJs[0MM%wci.LFDK)(<c`Q8N)jEIF*+?P2a8g%)$q]o2aH8C&<SibC/q,(e:v;-b#6[$NtDZ84Je2KNvB#$P5?tQ3nt(0d=j.LQf./Ll33+(;q3L-w=8dX$#WF&uIJ@-bfI>%:_i2B5CsR8&9Z&#=mPEnm0f`<&c)QL5uJ#%u%lJj+D-r;BoF&#4DoS97h5g)E#o:&S4weDF,9^Hoe`h*L+_a*NrLW-1pG_&2UdB86e%B/:=>)N4xeW.*wft-;$'58-ESqr<b?UI(_%@[P46>#U`'6AQ]m&6/`Z>#S?YY#Vc;r7U2&326d=w&H####?TZ`*4?&.MK?LP8Vxg>$[QXc%QJv92.(Db*B)gb*BM9dM*hJMAo*c&#b0v=Pjer]$gG&JXDf->'StvU7505l9$AFvgYRI^&<^b68?j#q9QX4SM'RO#&sL1IM.rJfLUAj221]d##DW=m83u5;'bYx,*Sl0hL(W;;$doB&O/TQ:(Z^xBdLjL<Lni;''X.`$#8+1GD:k$YUWsbn8ogh6rxZ2Z9]%nd+>V#*8U_72Lh+2Q8Cj0i:6hp&$C/:p(HK>T8Y[gHQ4`4)'$Ab(Nof%V'8hL&#<NEdtg(n'=S1A(Q1/I&4([%dM`,Iu'1:_hL>SfD07&6D<fp8dHM7/g+tlPN9J*rKaPct&?'uBCem^jn%9_K)<,C5K3s=5g&GmJb*[SYq7K;TRLGCsM-$$;S%:Y@r7AK0pprpL<Lrh,q7e/%KWK:50I^+m'vi`3?%Zp+<-d+$L-Sv:@.o19n$s0&39;kn;S%BSq*$3WoJSCLweV[aZ'MQIjO<7;X-X;&+dMLvu#^UsGEC9WEc[X(wI7#2.(F0jV*eZf<-Qv3J-c+J5AlrB#$p(H68LvEA'q3n0#m,[`*8Ft)FcYgEud]CWfm68,(aLA$@EFTgLXoBq/UPlp7:d[/;r_ix=:TF`S5H-b<LI&HY(K=h#)]Lk$K14lVfm:x$H<3^Ql<M`$OhapBnkup'D#L$Pb_`N*g]2e;X/Dtg,bsj&K#2[-:iYr'_wgH)NUIR8a1n#S?Yej'h8^58UbZd+^FKD*T@;6A7aQC[K8d-(v6GI$x:T<&'Gp5Uf>@M.*J:;$-rv29'M]8qMv-tLp,'886iaC=Hb*YJoKJ,(j%K=H`K.v9HggqBIiZu'QvBT.#=)0ukruV&.)3=(^1`o*Pj4<-<aN((^7('#Z0wK#5GX@7u][`*S^43933A4rl][`*O4CgLEl]v$1Q3AeF37dbXk,.)vj#x'd`;qgbQR%FW,2(?LO=s%Sc68%NP'##Aotl8x=BE#j1UD([3$M(]UI2LX3RpKN@;/#f'f/&_mt&F)XdF<9t4)Qa.*kTLwQ'(TTB9.xH'>#MJ+gLq9-##@HuZPN0]u:h7.T..G:;$/Usj(T7`Q8tT72LnYl<-qx8;-HV7Q-&Xdx%1a,hC=0u+HlsV>nuIQL-5<N?)NBS)QN*_I,?&)2'IM%L3I)X((e/dl2&8'<M:^#M*Q+[T.Xri.LYS3v%fF`68h;b-X[/En'CR.q7E)p'/kle2HM,u;^%OKC-N+Ll%F9CF<Nf'^#t2L,;27W:0O@6##U6W7:$rJfLWHj$#)woqBefIZ.PK<b*t7ed;p*_m;4ExK#h@&]>_>@kXQtMacfD.m-VAb8;IReM3$wf0''hra*so568'Ip&vRs849'MRYSp%:t:h5qSgwpEr$B>Q,;s(C#$)`svQuF$##-D,##,g68@2[T;.XSdN9Qe)rpt._K-#5wF)sP'##p#C0c%-Gb%hd+<-j'Ai*x&&HMkT]C'OSl##5RG[JXaHN;d'uA#x._U;.`PU@(Z3dt4r152@:v,'R.Sj'w#0<-;kPI)FfJ&#AYJ&#//)>-k=m=*XnK$>=)72L]0I%>.G690a:$##<,);?;72#?x9+d;^V'9;jY@;)br#q^YQpx:X#Te$Z^'=-=bGhLf:D6&bNwZ9-ZD#n^9HhLMr5G;']d&6'wYmTFmL<LD)F^%[tC'8;+9E#C$g%#5Y>q9wI>P(9mI[>kC-ekLC/R&CH+s'B;K-M6$EB%is00:+A4[7xks.LrNk0&E)wILYF@2L'0Nb$+pv<(2.768/FrY&h$^3i&@+G%JT'<-,v`3;_)I9M^AE]CN?Cl2AZg+%4iTpT3<n-&%H%b<FDj2M<hH=&Eh<2Len$b*aTX=-8QxN)k11IM1c^j%9s<L<NFSo)B?+<-(GxsF,^-Eh@$4dXhN$+#rxK8'je'D7k`e;)2pYwPA'_p9&@^18ml1^[@g4t*[JOa*[=Qp7(qJ_oOL^('7fB&Hq-:sf,sNj8xq^>$U4O]GKx'm9)b@p7YsvK3w^YR-CdQ*:Ir<($u&)#(&?L9Rg3H)4fiEp^iI9O8KnTj,]H?D*r7'M;PwZ9K0E^k&-cpI;.p/6_vwoFMV<->#%Xi.LxVnrU(4&8/P+:hLSKj$#U%]49t'I:rgMi'FL@a:0Y-uA[39',(vbma*hU%<-SRF`Tt:542R_VV$p@[p8DV[A,?1839FWdF<TddF<9Ah-6&9tWoDlh]&1SpGMq>Ti1O*H&#(AL8[_P%.M>v^-))qOT*F5Cq0`Ye%+$B6i:7@0IX<N+T+0MlMBPQ*Vj>SsD<U4JHY8kD2)2fU/M#$e.)T4,_=8hLim[&);?UkK'-x?'(:siIfL<$pFM`i<?%W(mGDHM%>iWP,##P`%/L<eXi:@Z9C.7o=@(pXdAO/NLQ8lPl+HPOQa8wD8=^GlPa8TKI1CjhsCTSLJM'/Wl>-S(qw%sf/@%#B6;/U7K]uZbi^Oc^2n<bhPmUkMw>%t<)'mEVE''n`WnJra$^TKvX5B>;_aSEK',(hwa0:i4G?.Bci.(X[?b*($,=-n<.Q%`(X=?+@Am*Js0&=3bh8K]mL<LoNs'6,'85`0?t/'_U59@]ddF<#LdF<eWdF<OuN/45rY<-L@&#+fm>69=Lb,OcZV/);TTm8VI;?%OtJ<(b4mq7M6:u?KRdF<gR@2L=FNU-<b[(9c/ML3m;Z[$oF3g)GAWqpARc=<ROu7cL5l;-[A]%/+fsd;l#SafT/f*W]0=O'$(Tb<[)*@e775R-:Yob%g*>l*:xP?Yb.5)%w_I?7uk5JC+FS(m#i'k.'a0i)9<7b'fs'59hq$*5Uhv##pi^8+hIEBF`nvo`;'l0.^S1<-wUK2/Coh58KKhLjM=SO*rfO`+qC`W-On.=AJ56>>i2@2LH6A:&5q`?9I3@@'04&p2/LVa*T-4<-i3;M9UvZd+N7>b*eIwg:CC)c<>nO&#<IGe;__.thjZl<%w(Wk2xmp4Q@I#I9,DF]u7-P=.-_:YJ]aS@V?6*C()dOp7:WL,b&3Rg/.cmM9&r^>$(>.Z-I&J(Q0Hd5Q%7Co-b`-c<N(6r@ip+AurK<m86QIth*#v;-OBqi+L7wDE-Ir8K['m+DDSLwK&/.?-V%U_%3:qKNu$_b*B-kp7NaD'QdWQPKYq[@>P)hI;*_F]u`Rb[.j8_Q/<&>uu+VsH$sM9TA%?)(vmJ80),P7E>)tjD%2L=-t#fK[%`v=Q8<FfNkgg^oIbah*#8/Qt$F&:K*-(N/'+1vMB,u()-a.VUU*#[e%gAAO(S>WlA2);Sa>gXm8YB`1d@K#n]76-a$U,mF<fX]idqd)<3,]J7JmW4`6]uks=4-72L(jEk+:bJ0M^q-8Dm_Z?0olP1C9Sa&H[d&c$ooQUj]Exd*3ZM@-WGW2%s',B-_M%>%Ul:#/'xoFM9QX-$.QN'>[%$Z$uF6pA6Ki2O5:8w*vP1<-1`[G,)-m#>0`P&#eb#.3i)rtB61(o'$?X3B</R90;eZ]%Ncq;-Tl]#F>2Qft^ae_5tKL9MUe9b*sLEQ95C&`=G?@Mj=wh*'3E>=-<)Gt*Iw)'QG:`@IwOf7&]1i'S01B+Ev/Nac#9S;=;YQpg_6U`*kVY39xK,[/6Aj7:'1Bm-_1EYfa1+o&o4hp7KN_Q(OlIo@S%;jVdn0'1<Vc52=u`3^o-n1'g4v58Hj&6_t7$##?M)c<$bgQ_'SY((-xkA#Y(,p'H9rIVY-b,'%bCPF7.J<Up^,(dU1VY*5#WkTU>h19w,WQhLI)3S#f$2(eb,jr*b;3Vw]*7NH%$c4Vs,eD9>XW8?N]o+(*pgC%/72LV-u<Hp,3@e^9UB1J+ak9-TN/mhKPg+AJYd$MlvAF_jCK*.O-^(63adMT->W%iewS8W6m2rtCpo'RS1R84=@paTKt)>=%&1[)*vp'u+x,VrwN;&]kuO9JDbg=pO$J*.jVe;u'm0dr9l,<*wMK*Oe=g8lV_KEBFkO'oU]^=[-792#ok,)i]lR8qQ2oA8wcRCZ^7w/Njh;?.stX?Q1>S1q4Bn$)K1<-rGdO'$Wr.Lc.CG)$/*JL4tNR/,SVO3,aUw'DJN:)Ss;wGn9A32ijw%FL+Z0Fn.U9;reSq)bmI32U==5ALuG&#Vf1398/pVo1*c-(aY168o<`JsSbk-,1N;$>0:OUas(3:8Z972LSfF8eb=c-;>SPw7.6hn3m`9^Xkn(r.qS[0;T%&Qc=+STRxX'q1BNk3&*eu2;&8q$&x>Q#Q7^Tf+6<(d%ZVmj2bDi%.3L2n+4W'$PiDDG)g,r%+?,$@?uou5tSe2aN_AQU*<h`e-GI7)?OK2A.d7_c)?wQ5AS@DL3r#7fSkgl6-++D:'A,uq7SvlB$pcpH'q3n0#_%dY#xCpr-l<F0NR@-##FEV6NTF6##$l84N1w?AO>'IAOURQ##V^Fv-XFbGM7Fl(N<3DhLGF%q.1rC$#:T__&Pi68%0xi_&[qFJ(77j_&JWoF.V735&T,[R*:xFR*K5>>#`bW-?4Ne_&6Ne_&6Ne_&n`kr-#GJcM6X;uM6X;uM(.a..^2TkL%oR(#;u.T%fAr%4tJ8&><1=GHZ_+m9/#H1F^R#SC#*N=BA9(D?v[UiFY>>^8p,KKF.W]L29uLkLlu/+4T<XoIB&hx=T1PcDaB&;HH+-AFr?(m9HZV)FKS8JCw;SD=6[^/DZUL`EUDf]GGlG&>w$)F./^n3+rlo+DB;5sIYGNk+i1t-69Jg--0pao7Sm#K)pdHW&;LuDNH@H>#/X-TI(;P>#,Gc>#0Su>#4`1?#8lC?#<xU?#@.i?#D:%@#HF7@#LRI@#P_[@#Tkn@#Xw*A#]-=A#a9OA#d<F&#*;G##.GY##2Sl##6`($#:l:$#>xL$#B.`$#F:r$#JF.%#NR@%#R_R%#Vke%#Zww%#_-4&#3^Rh%Sflr-k'MS.o?.5/sWel/wpEM0%3'/1)K^f1-d>G21&v(35>V`39V7A4=onx4A1OY5EI0;6Ibgr6M$HS7Q<)58C5w,;WoA*#[%T*#`1g*#d=#+#hI5+#lUG+#pbY+#tnl+#x$),#&1;,#*=M,#.I`,#2Ur,#6b.-#;w[H#iQtA#m^0B#qjBB#uvTB##-hB#'9$C#+E6C#/QHC#3^ZC#7jmC#;v)D#?,<D#C8ND#GDaD#KPsD#O]/E#g1A5#KA*1#gC17#MGd;#8(02#L-d3#rWM4#Hga1#,<w0#T.j<#O#'2#CYN1#qa^:#_4m3#o@/=#eG8=#t8J5#`+78#4uI-#m3B2#SB[8#Q0@8#i[*9#iOn8#1Nm;#^sN9#qh<9#:=x-#P;K2#$%X9#bC+.#Rg;<#mN=.#MTF.#RZO.#2?)4#Y#(/#[)1/#b;L/#dAU/#0Sv;#lY$0#n`-0#sf60#(F24#wrH0#%/e0#TmD<#%JSMFove:CTBEXI:<eh2g)B,3h2^G3i;#d3jD>)4kMYD4lVu`4m`:&5niUA5@(A5BA1]PBB:xlBCC=2CDLXMCEUtiCf&0g2'tN?PGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CPGT4CP-qekC`.9kEg^+F$kwViFJTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5KTB&5o,^<-28ZI'O?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xpO?;xp;7q-#lLYI:xvD=#
 80x80
 8888
 9IImNeoSeq
@@ -672,6 +726,8 @@ $MonitorTexture
 :%02d.%03d
 :%02d.%03d %03d
 :%02d:%02d.%03d
+;$hmtx
+<- %d frames ago
 </table>
 <<PRESS SPACE TO DISABLE>>
 <Left click for details>
@@ -742,7 +798,7 @@ $MonitorTexture
 =n4X?e
 =uvz?
 =v?ke
->*ZNK21CAggregateSceneObject26FindVisClustersForMeshletsERK10CUtlVectorI6AABB_ti25CUtlVectorMemory_GrowableIS1_iLm0EEERKNS_18FragmentCullInfo_tERKS1_RK6Mat3x4IfEPK18CMeshletDescriptorjP16PerMeshletData_tEUlvE_
+>*ZN25CAggregateSceneObjectDesc9DrawArrayEP14IRenderContextP20CMeshDrawPrimitive_tiPK10ISceneViewP11ISceneLayerR26SceneSystemPerFrameStats_tEUlvE_
 >0G??Ou
 >333?
 >c<yXH?B
@@ -754,10 +810,11 @@ $MonitorTexture
 >qxs?{7
 >sh1?
 >uYL>
+?28CTextureBarrierLayerRenderer
 ?333333
 ?Bxt>
 ?JA7=
-@19CSimpleQuadRenderer
+@19CDebugLayerRenderer
 @33333
 @33333#
 @33333'
@@ -795,7 +852,7 @@ $MonitorTexture
 @33333y
 @33333{
 @33333}
-@None
+@OS/2
 @fffff
 @fffff"
 @fffff$
@@ -835,11 +892,12 @@ $MonitorTexture
 @fffffx
 @fffffz
 @fffff|
+A#4A\v
 A0 Row 0
 A0 Row 1
 A1 Row 0
 A1 Row 1
-A5^Z?
+A3" 7OK\t 3J
 A8_UNORM
 A:%0.3f
 A:%3d
@@ -847,13 +905,18 @@ AAAA
 AABB
 ABOUT THIS DEMO:
 ACTION
+AI\vE
 ALL_GRAPHICS
 ALPHA_TESTED 
 ALPHA_TEST_ZPREPASS 
 ALT 
 AN?NbX?\f
 AO Proxies: %d (%d drawcalls)\n
+AO*AG
 AOProxies
+ASSETS_BROWSER_ITEMS
+A\t A9
+Ab5 
 Abibliophobia
 About Dear ImGui
 Absquatulate
@@ -865,21 +928,28 @@ ActiveId: 0x%08X/0x%08X (%.2f sec), AllowOverlap: %d, Source: %s
 ActiveIdUsing: AllKeyboardKeys: %d, NavDirMask: %X
 ActiveIdWindow: '%s'
 Add 1000 lines
+Add 10000 items
+Add 20 items
 Add Debug Error
 Add Debug Text
 Add another modal..
 AddMultipleToTail
 AddToView
+Added features:
 Additional alpha multiplier for disabled items (multiply over current value of Alpha).
 AdvanceX: %.1f
 Advanced
 Advanced & Close Button
 Advanced, with Selectable nodes
 After reordering, contents of channel 0 appears below channel 1.
+Ag3l
 AgeList
+Aggregate Debugger
 AggregateDesc
+AggregateRTProxyDesc
 AggregateSceneObjectDesc
 AggregateSceneObjectManifest
+Ai1B
 Align label with current X position
 Align to right edge
 Align to right edge minus 100
@@ -894,12 +964,18 @@ All primitives
 All those beautiful files will be deleted.\nThis operation cannot be undone!
 AllocateRenderTarget: Does not work to pass pOtherView == this!\n
 Allocation
+Allow Sorting
+Allow box-selection
+Allow dragging an unselected item without altering selection.
+Allow dragging unselected item
 AllowThickHair
 AllowVoxelLod
 Alpha Bar
+Alpha8
 AlphaTest
 AlphaTestZPrepass
 Also see Style->Rendering for rendering options.
+Alt 
 Alt to jump to the menu layer of a window.
 Alt+
 Alt+F
@@ -907,7 +983,6 @@ Alt+F4
 Always On
 Always On (Advanced)
 Always On (Simple)
-Always clamp value to min/max bounds (if any) when input manually with CTRL+Click.
 AlwaysAutoResize
 AmbientLightingSHB
 AmbientLightingSHG
@@ -927,6 +1002,7 @@ AnimatableSceneObjectDesc
 Animate
 Animated title %c %d###AnimatedTitle
 AnimatedVertexCache
+Annotation() needs to be called between BeginPlot() and EndPlot()!
 AnnotationPadding
 Annotations
 Another bullet point
@@ -951,12 +1027,18 @@ Apply to regular windows: amount which we enforce to keep visible when moving ne
 ApplyHairAoLayer
 Apricot
 Aquarium
+Ar2!
 Arrow
-Arrow keys to navigate.
+Arrow keys or Home/End/PageUp/PageDown to navigate.
 Artichoke
-As with every widget in dear imgui, we never modify values unless there is a user interaction.\nYou can override the clamping limits by using CTRL+Click to input a value.
-Ascent: %f, Descent: %f, Height: %f
+Arugula
+As with every widget in dear imgui, we never modify values unless there is a user interaction.\nYou can override the clamping limits by using Ctrl+Click to input a value.
+Ascent: %f, Descent: %f, Ascent-Descent: %f
+Asparagus
 Aspect: %f
+Assert on error recovery
+Assets
+Assets Browser
 Asterisk
 At least 100x100
 Atlas
@@ -982,12 +1064,16 @@ Avocado
 Axes
 Axis Constraints
 Axis Linking
+Axis index out of bounds!
+Axis is not enabled! Did you forget to call SetupAxis()?
 AxisBg
 AxisBgActive
 AxisBgHovered
 AxisGrid
 AxisText
 AxisTick
+B+6F
+B,\vB8
 B0 Row 0
 B0 Row 1
 B1 Row 0
@@ -998,12 +1084,14 @@ B8G8R8A8_UNORM
 B8G8R8X8_UNORM
 B:%0.3f
 B:%3d
+B@BzB
 BAKED_LIGHTING_FROM_PROBE
 BAKED_LIGHTING_LIGHTMAP
 BAKED_LIGHTING_VERTEX_STREAM
 BAuto
 BBBB
 BBBBBBBB
+BC%N
 BC1_TYPELESS
 BC1_UNORM
 BC1_UNORM_SRGB
@@ -1020,18 +1108,24 @@ BC5_SNORM
 BC5_TYPELESS
 BC5_UNORM
 BG/FG draw lists
+BK!qg\tW
 BLAS %d
-BLAS builds: %u (%u triangles); Dynamic builds: %u (%u triangles); %u compactions; %s scratch mem\n
+BLAS builds: %u (%s triangles); Dynamic builds: %u (%s triangles); %u compactions; %s scratch mem\n
 BRDFLookup
-BVH::Build( void (*customGetAABB)( .. ), customCtx, instCount ), instCount == 0.
+BU\vS
+BVH::Build( void (*customGetAABB)( .. ), instCount ), instCount == 0.
 Bachman
 Backend Flags
+Backend does not support ImGuiBackendFlags_RendererHasTextures, and font atlas is not built! Update backend OR make sure you called ImGui_ImplXXXX_NewFrame() function for renderer backend, which should call io.Fonts->GetTexDataAsRGBA32() / GetTexDataAsAlpha8().
+Backend or app forgot to call DestroyPlatformWindows()?
 BackfaceCulling
 Background color
 BackgroundClipRect
 Backslash
 Backspace
+Baked at { %.2fpx, d.%.2f }: %d glyphs%s
 BakedLightingConstantBuffer_t
+Bamboo Shoots
 Banana
 Bar Group
 Bar Groups
@@ -1049,40 +1143,54 @@ Baseline of button will look misaligned with text..
 Basic
 Basic Horizontal Layout
 Basic trees
+Basket
 Batches
 Batches: %d
 Batchsort
 Be mindful that using right-alignment (e.g. size.x = -FLT_MIN) creates a feedback loop where contents width can feed into auto-column width can feed into contents width.
+Bean Sprouts
+Beans
 Beatrice
+Beet
 Beetroot
 Begin has already been called without an intervening render
 Begin to finish rendering views : %f\n
+BeginDragDropSourceItem() needs to be called within an itemized context!
 BeginGroup() basically locks the horizontal position for new line. EndGroup() bundles the whole group so that you can use "item" functions such as IsItemHovered()/IsItemActive() or SameLine() etc. on the whole group.
+BeginLegendPopup() needs to be called within an itemized context!
 BeginMarker
+BeginMultiSelect
+Belgian Endive
+Bell Pepper
 Below we are displaying the font texture (which is the only texture we have access to in this demo). Use the 'ImTextureID' type as storage to pass pointers or identifier to your own texture data. Hover the texture for a zoomed view!
 Below we are displaying the font texture, which is the only texture we have\naccess to in this demo.
 Below we are testing adding menu items to a regular window. It's rather unusual but should work!
 Bernard
 Betty
 Between 100x100 and 500x500
+Bg\vF\r
 Bibi
 Biden
 BindBakedLightingInfoInPerViewLightingConstants
 Bins
+Bitter Gourd
 Blah blah blah
 Blah blah\nBlah Blah
 Blaine
+BloodDefaultImpact
 Blue shape is drawn first, into channel 1: appears in front
 Blue shape is drawn first: appears in back
 BlueNoise
 Blueberry
 Bobby
+Bok Choy
 BoneIdxBits
 BoneIdxOffset
 BoneWeightOffset
 Border
 BorderShadow
 Borders
+Borders 
 Borders, background
 Both
 Both types:
@@ -1093,17 +1201,22 @@ Bound Last Frame
 BoundingBoxBloat
 Box Select
 Box select and left click mouse to create a new query rect.
+BoxSelect ID=0x%08X, Starting = %d, Active %d
+Bp\fE
 BrBG
 Bream
 Brianna
 Broccoli
+Brussels Sprouts
 Bryn
+Bs'Kk
 BudgetGroupName - FIXME
+BufCapacity: %d, LineCount: %d
 Buffer
 Buffer contents: %d lines, %d bytes
 BufferName - FIXME
 Build %i BLAS, %s.  %u remaining.\n
-Build Indirect Args and Light Info Buffer
+Build Indirect Args
 BuildBLAS
 Bullet point 1
 Bullet point 2\nOn multiple lines
@@ -1111,12 +1224,15 @@ Bullet point 3 (two calls)
 Bullet text
 Bullets
 Bumfuzzled
+Burdock Root
 Bust Item Cache
 Bust Plot Cache
 Button
 Button (w/ repeat)
 Button 1
 Button 2
+Button for Child 1
+Button for Child 2
 Button##1
 Button##2
 Button##3
@@ -1127,9 +1243,8 @@ ButtonActive
 ButtonHovered
 ButtonTextAlign
 Buzz
-By Omar Cornut and all Dear ImGui contributors.
 By default, Selectables uses style.SelectableTextAlign but it can be overridden on a per-item basis using PushStyleVar(). You'll probably want to always keep your default situation to left-align otherwise it becomes difficult to layout multiple items on a same line
-By default, colors are given to ColorEdit and ColorPicker in RGB, but ImGuiColorEditFlags_InputHSVallows you to store colors as HSV and pass them to ColorEdit and ColorPicker as HSV. This comes with theadded benefit that you can manipulate hue values with the picker even when saturation or value are zero.
+By default, colors are given to ColorEdit and ColorPicker in RGB, but ImGuiColorEditFlags_InputHSV allows you to store colors as HSV and pass them to ColorEdit and ColorPicker as HSV. This comes with the added benefit that you can manipulate hue values with the picker even when saturation or value are zero.
 By default, labels are in UTC time but can be set to use local time instead.
 By default, right-clicking over a TableHeadersRow()/TableHeader() line will open the default context-menu.\nUsing ImGuiTableFlags_ContextMenuInBody we also allow right-clicking over columns body.
 By display order
@@ -1138,7 +1253,6 @@ By submission order (begin stack)
 C++ lambdas can be passed as function pointers as well!
 C6FaceSkyboxObjectDesc
 C?DL
-CANNOT_BE_REFRACTED 
 CAN_RENDER_INTO_SST 
 CAST_SHADOWS_ENABLED 
 CAggregateSceneObject
@@ -1163,8 +1277,10 @@ CDistanceFieldInstanceSceneObjectDesc
 CEnvMapLightObjectDesc
 CEnvMapLightObjectDescGpu
 CFF 
+CG,T
 CInstancedMeshSceneObjectDesc
 CJK text will only appear if the font was loaded with the appropriate CJK character ranges. Call io.Fonts->AddFontFromFileTTF() manually to load extra character ranges. Read docs/FONTS.md for details.
+CK0U
 CLASSIFY
 CLEAR
 CLightObjectDesc
@@ -1185,6 +1301,7 @@ COMPRESSED_TANGENT_SPACE
 COMPUTE_SHADER
 CPU Cull
 CPU Render
+CPU Visible Instances
 CPU-Significant Layers
 CPointLightObjectDescGpu
 CProjectedDecalSceneObjectDesc
@@ -1211,50 +1328,62 @@ CSimpleQuadRenderer
 CSkyBoxObjectDesc
 CSpotLightObjectDescGpu
 CTRL 
-CTRL+A or double-click to select all.
-CTRL+C
-CTRL+Click on a slider or drag box to input value as text.
 CTRL+LMB to select more than one frame to compare them.
-CTRL+Left/Right to word jump.
-CTRL+M
-CTRL+Mouse Wheel to zoom window contents.
-CTRL+Tab to select a window.
-CTRL+V
-CTRL+X
-CTRL+X/C/V to use clipboard cut/copy/paste.
-CTRL+Y
-CTRL+Z
-CTRL+Z,CTRL+Y to undo/redo.
-CTRL+click to input value.
 CTextureDisplayer
 CURRENTLY APPENDING
 CUtlMultiList overflow! (exhausted index range)\n
 CUtlMultiList overflow! (exhausted memory allocator)\n
-CUtlString
+CW4"
+Cabbage
 Cached Fog
 Cached: %s, LRU %i
 CachedShadowDepthBuffer
 CachedShadowDepthBufferNoCmp
+Calabash
+Call should only be done while in BeginTable() scope!
 Callback %p, user_data %p
+Called ImFontAtlas::Build() before ImGuiBackendFlags_RendererHasTextures got set! With new backends: you don't need to call Build().
+Called TableSetupColumn() too many times!
+Calling End() too many times!
+Calling EndDisabled() too many times!
+Calling EndMainMenuBar() not from a menu-bar!
+Calling EndPopup() too many times or in wrong window!
+Calling PopFocusScope() too many times!
+Calling PopFont() too many times!
+Calling PopID() too many times!
+Calling PopItemFlag() too many times!
+Calling PopItemWidth() too many times!
+Calling PopStyleColor() too many times!
+Calling PopStyleVar() too many times!
+Calling PopTextWrapPos() too many times!
+Calling PushStyleVar() variant with wrong type!
 CameraDepth
 CameraDepthDimensions
 Can't read a rendertarget from a view with a higher priority.\n
 Cancel
+CancelPlotSelection() needs to be called between BeginPlot() and EndPlot()!
 Candlestick Chart
 Cannot add a resolve layer as the first layer in a view!\n
 Cannot drop here!
 Cannot generate primitives for InstancedMesh in layer %s/%s, no gpu culling enabled\n
+Cannot locate Time ticks on vertical axis!
 Cannot resolve to the same render targets as in the previous layer!\n
 Cannot set ComputeBinCullbits compute shader\n
 Canvas
+Capers
 CapsLock
 Capture/Logging
+Carrot
+Cassava
 CastHairShadows
 Category A
 Category B
 Category C
 Cattywampus
+Cauliflower
+Celcuce
 Celery
+Celery Root
 Cell %d,%d
 Cell contents:
 CellPadding
@@ -1267,13 +1396,14 @@ Changing MeshGroupMask when m_bPruneUnusedMeshGroups is set, after the sceneobje
 Changing sc_layer_batch_threshold from %d -> %d.\n
 Changing sc_layer_batch_threshold_fullsort from %d -> %d.\n
 CharacterDecal
-CharacterDecalMode
 CharacterDecalMonitorViewDS.vtex
 CharacterDecalMonitorViewRT.vtex
-CharacterDecalSystem
-CharacterDecalSystemManifest
-CharacterDecalUpdate
+CharacterDecalRenderer
+CharacterDecalRendererManifest
+CharacterDecalRtEncoding:Blood
+CharacterDecalRtEncoding:Cloak
 Chars queue:
+Chayote
 CheckMark
 Checkbox
 Checked
@@ -1287,6 +1417,7 @@ ChildBg
 ChildBorderSize
 ChildD
 ChildE
+ChildFlags: 0x%08X (%s%s%s%s..)
 ChildL
 ChildMenu 
 ChildR
@@ -1294,6 +1425,7 @@ ChildRounding
 ChildWindows
 Child[0]
 Child[1]
+Chinese Broccoli
 Choose one way that doesn't interfere with what you are trying to debug!\nYou need a debugger attached or this will crash!
 ChooseEnvironmentMap
 ChooseLightProbeVolume
@@ -1303,30 +1435,37 @@ Circle %d
 Circle Tessellation Max Error
 Circle segments override
 Clamp
+Clamp even if min==max==0.0f. Otherwise DragXXX functions don't clamp.
 Clamp integers to 0..50
+Clamp value to min/max bounds when input manually with Ctrl+Click. By default Ctrl+Click allows going out of bounds.
 ClassId=0x%08X\n
 ClassId=0x%X
 Classic
 Clear
 Clear %s
+Clear All
 Clear Queries
 Clear Vel Volume
+Clear bakes
+Clear items
 Clear nodes
 Clear settings
+Clear unused
 ClearTexture
 Click
 Click %s Button to break in debugger! (remap w/ Ctrl+Shift)
 Click and drag column headers to reorder columns.\n\nRight-click on a header to open a context menu.
 Click and drag each point.
-Click and drag on lower corner to resize window\n(double-click to auto fit window to its contents).
+Click and drag on lower corner or border to resize window.\n(double-click to auto fit window to its contents)
 Click and drag the edges, corners, and center of the rect.
 Click and drag the horizontal and vertical lines.
-Click and drag to edit value.\nHold SHIFT/ALT for faster/slower edit.\nDouble-click or CTRL+click to input value.
+Click and drag to box-select.
+Click and drag to edit value.\nHold Shift/Alt for faster/slower edit.\nDouble-Click or Ctrl+Click to input value.
 Click and drag to move or undock whole node.
 Click legend label icons to show/hide plot items.
 Click me
-Click on the color square to open a color picker.\nCTRL+click on individual component to input value.\n
-Click on the color square to open a color picker.\nClick and hold to use drag and drop.\nRight-click on the color square to show options.\nCTRL+click on individual component to input value.\n
+Click on the color square to open a color picker.\nClick and hold to use drag and drop.\nRight-Click on the color square to show options.\nCtrl+Click on individual component to input value.\n
+Click on the color square to open a color picker.\nCtrl+Click on individual component to input value.\n
 Clipper
 Clipper: Begin(%d,%.2f) in '%s'\n
 Clipper: End() in '%s'\n
@@ -1334,7 +1473,6 @@ Clipper: Step(): End.\n
 Clipper: Step(): computed ItemsHeight: %.2f.\n
 Clipper: Step(): display %d to %d.\n
 Clipper: Step(): inside frozen table row.\n
-Clipping
 Close
 Close All Documents
 Close Console
@@ -1350,7 +1488,10 @@ ClumpScale
 ClutterDesc
 ClutterSceneObjectDesc
 Coconut
+Code should use PushID()/PopID() in loops, or append "##xx" to same-label identifiers!
+Code uses SetCursorPos()/SetCursorScreenPos() to extend window/parent boundaries.\nPlease submit an item e.g. Dummy() afterwards in order to grow window/parent boundaries.
 Codepoint
+Codepoint U+%04X (%s)
 Codepoint: U+%04X
 Col Ratios
 Collapse all
@@ -1413,6 +1554,7 @@ ColumnsWorkRect
 Combo
 Comma
 Commands:
+Compact
 Completion
 Completion, History, Edit Callbacks
 CompositeMorphTextureAtlas
@@ -1431,6 +1573,7 @@ ConditionallySetBakedLightingFromLightmapCombo
 Config
 Config/Build Information
 Configuration##2
+Configure Outputs..
 Constants
 Constrained-resizing window
 ConstrainedChild
@@ -1448,6 +1591,7 @@ Copy
 Copy "Hello, world!" to clipboard
 Copy %s
 Copy %s->%s
+Copy Link###CopyLink
 Copy as..
 Copy of Image001 (Final2).png
 Copy of Image001.png
@@ -1455,12 +1599,15 @@ Copy to clipboard
 CopyRT
 CopySSTDepthToCSM_CopyTex
 CopySSTDepthToCSM_PS
+Corn
 Corniflower
 Coudn't read pixels for texture %s\n
 Could not find custom shadow rendering pipeline "CustomShadowPipeline"!\n
 Couldn't ReadTexturePixels for SST shadow map.\n
+Couldn't load textures/dev/scrambled_halton.vdata
 Courier New
 Course Grade
+Cq\fAI
 Create a docking node and tab-bar on single floating windows.
 CreateBLASForDrawCall
 CreateBLASForRigidPart
@@ -1469,15 +1616,32 @@ Creating ray trace scene world with %d instances...
 Cross
 Crosshairs
 Cruz
+Ctrl 
 Ctrl + click in the plot area to draw points.
+Ctrl modifier to preserve and toggle selection.
 Ctrl shows window dock info
 Ctrl+
 Ctrl+A
-Ctrl+C: copy path to clipboard
+Ctrl+A or double-click to select all.
+Ctrl+A to select all.
+Ctrl+C
+Ctrl+C: copy path
+Ctrl+Click on a slider or drag box to input value as text.
+Ctrl+Click to input value.
+Ctrl+Left/Right to word jump.
+Ctrl+M
+Ctrl+Mouse Wheel to zoom window contents.
 Ctrl+O
 Ctrl+R
 Ctrl+S
+Ctrl+Tab/Ctrl+Shift+Tab to focus windows.
+Ctrl+V
 Ctrl+W
+Ctrl+X
+Ctrl+X/C/V to use clipboard cut/copy/paste.
+Ctrl+Y
+Ctrl+Z
+Ctrl+Z to undo, Ctrl+Y/Ctrl+Shift+Z to redo.
 Cube
 CubeMapDebugColors
 Cucumber
@@ -1489,13 +1653,13 @@ CullPlanes
 CullRequests
 CullStats
 CullViewIsOrthographic
+CullViewIsShadow
 CullViewOrigin
 CullViewOrthoInvWidth
 CullViewSizeThreshold
 CullViewTanHalfFov
 Culling: %s objects pre-cull (%s tested), %s passing culling\n
 Cumulative
-CurLenW: %d, CurLenA: %d, Cursor: %d, Selection: %d..%d
 CurrFrameFromPrevFrame
 Current
 Current mouse cursor = %d: %s
@@ -1541,6 +1705,7 @@ D_BAKED_LIGHTING_FROM_PROBE
 D_BAKED_LIGHTING_FROM_VERTEX_STREAM
 D_BLEND_WEIGHT_COUNT
 D_CLAMPTEXTURECOORDS
+D_CLOAK_EMISSIVE
 D_COMPOSITETYPE
 D_COMPRESSED_NORMALS_AND_TANGENTS
 D_CS_VERTEX_ANIMATION
@@ -1549,9 +1714,9 @@ D_DEBUG_DRAW_MESHLETS
 D_DEBUG_OUTPUT_STATS
 D_DECALS_ENABLED
 D_DECAL_DECODE_MODE
+D_EIGHT_BONE_SKINNING
 D_ENABLE_INDIRECT
 D_ENABLE_VOLUMETRIC_FOG
-D_FAST_CONSERVATIVE_BOUNDS
 D_FLOAT_INTERMEDIATE_TEXTURES
 D_FOG_TYPE
 D_FULL_HAIR_PIPELINE
@@ -1563,12 +1728,15 @@ D_JITTER
 D_LATTICE_DEFORMER
 D_LODS
 D_LPV_INDIRECT
+D_MESH_SHADER_MESHLET32
 D_MIN_ANGULAR_FOG
 D_NO_ZTEST
 D_OCCLUSION_CULLING
 D_OPAQUE_FADE
 D_ORTHOGRAPHIC_VIEW
 D_OUTPUT_DEBUG_COLOR
+D_OUTPUT_MOTION_VECTORS_TRANSFORM
+D_OUTPUT_MOTION_VECTORS_VERTEX_ANIMATION
 D_OVERWRITE_DEPTH
 D_PASS
 D_ROUGHNESS_TEXTURE
@@ -1603,9 +1771,8 @@ Data_Branch1xy
 Data_Branch1zBranch2x
 Data_Branch2yz
 Days
-Dear ImGui %s
 Dear ImGui %s (%d)
-Dear ImGui 1.90.9 (19090)
+Dear ImGui 1.92.5 (19250)
 Dear ImGui Debug Log
 Dear ImGui Demo
 Dear ImGui ID Stack Tool
@@ -1616,6 +1783,7 @@ Dear ImGui uses monitor data:\n- to query DPI settings on a per monitor basis\n-
 Debug
 Debug Begin/BeginChild return value
 Debug Log
+Debug Options
 Debug breaks
 Debug details
 Debug draw the light shape
@@ -1624,12 +1792,14 @@ Debug##Default
 DebugDrawAllMeshlets
 DebugMeshletDrawArgs
 DebugText
+DebugVisualizeDispatchIndex
 Decal
 DecalBlendMask
 DecalNormals_%d.vtex
 DecalRenderTarget_Staging.vtex
 DecalRenderingLayer
 DecalRenderingView
+DecalRtEncoding_t
 Decals
 Declared shortcut routes automatically set key owner when mods matches.
 DecompressTextureBits
@@ -1640,27 +1810,32 @@ Default Depth
 Default Voxel LOD
 Default for column 0
 Default for column >0
+Default option for DrawLinesXXX is stored in style.TreeLinesFlags
 Default: Float + HDR + Hue Wheel
 Default: Uint8 + HSV + Hue Bar
 DelayLong
 DelayNone
 DelayShort
 Delete
+Delete %d item(s)###DeleteSelected
 Delete..
 Delete?
 DeleteObjectForReal
 DeleteSceneObject
 DeltaTime
-Demonstrate mixing table context menu (over header), item context button (over button) and custom per-colunm context menu (over column body).
-Demonstrate using BeginDisabled()/EndDisabled() across this section.
+Demonstrate mixing table context menu (over header), item context button (over button) and custom per-column context menu (over column body).
+Demonstrate using BeginDisabled()/EndDisabled() across other sections.
 Density
 DensityVolumeTexture
 Depth
 DepthPyramid
 DepthValue
 Description
+Destroy cache and custom rectangles.
+Destroyed
 Detail Depth
 Details
+Developed by Omar Cornut and all Dear ImGui contributors.
 Diamond
 DiffuseScatterAmount
 Digital Plots
@@ -1668,21 +1843,23 @@ Digital plots do not respond to Y drag and zoom, so that
 DigitalBitGap
 DigitalBitHeight
 Dilate vel volume
+Directional/tabbing navigation teleports the mouse cursor. May be useful on TV/console systems where moving a virtual mouse is difficult
 DirectionalLight
-Disable CTRL+Click or Enter key allowing to input text directly into the widget.
+Disable Blocks
+Disable Ctrl+Click or Enter key allowing to input text directly into the widget.
 Disable Menu
 Disable Mouse Wheel
-Disable block
 Disable clipping rectangle for every individual columns (reduce draw command count, items will be able to overflow into other columns). Generally incompatible with ScrollFreeze options.
 Disable distributing remainder width to stretched columns (width allocation on a 100-wide table with 3 columns: Without this flag: 33,33,34. With this flag: 33,33,33). With larger number of columns, resizing will appear to be less smooth.
 Disable entire section above
 Disable header contributing to column width
 Disable inner padding between columns (double inner padding if BordersOuterV is on, single inner padding if BordersOuterV is off)
+Disable keyboard modifiers altering tweak speed. Useful if you want to alter tweak speed yourself based on your own logic.
 Disable outer-most padding (default if ImGuiTableFlags_BordersOuterV is not set)
 Disable rounding underlying value to match precision of the format string (e.g. %.3f values are rounded to those 3 digits).
 Disable the indenting of tree nodes so demo tables can use the full window width.
 Disable tree indentation
-Disable vertical borders in columns Body (borders will always appear in Headers
+Disable vertical borders in columns Body (borders will always appear in Headers)
 Disable vertical borders in columns Body until hovered for resize (borders will always appear in Headers)
 Disabled Alpha
 Disabled item
@@ -1711,9 +1888,11 @@ DockSpace Demo
 DockSpace+Window
 DockedWindowsInFocusRoute
 Docking
+Docking Wiki page
 DockingEmptyBg
+DockingNodeHasCloseButton
 DockingPreview
-DockingSplitterSize
+DockingSeparatorSize
 Dockspace
 Document "%s"
 Documents
@@ -1748,12 +1927,18 @@ Drag/drop items from the left column.
 DragCoeff
 DragDrop: %d, SourceId = 0x%08X, Payload "%s" (%d bytes)
 DragDropTarget
+DragDropTargetBg
 DragFloat (-inf -> +inf)
 DragFloat (-inf -> 1)
 DragFloat (0 -> +inf)
 DragFloat (0 -> 1)
 DragInt (0 -> 100)
+DragLineX() needs to be called between BeginPlot() and EndPlot()!
+DragLineY() needs to be called between BeginPlot() and EndPlot()!
+DragPoint() needs to be called between BeginPlot() and EndPlot()!
+DragRect() needs to be called between BeginPlot() and EndPlot()!
 Dragging
+Dragging %d objects
 Drags
 Draw Calls
 Draw Channels
@@ -1765,12 +1950,18 @@ Draw only guide hairs
 DrawCmd:%5d tris, Tex %s, ClipRect (%4.0f,%4.0f)-(%4.0f,%4.0f)
 DrawDepth Fade
 DrawDepth%s
+DrawLinesFull
+DrawLinesNone
+DrawLinesToNodes
 DrawList
 DrawLists
 DrawLists (%d)
 DrawShadowMapsForLight
+Drawing instanced meshes without meshlets, please recompile the map!
 Dummy
 Dynamic Decals
+Dynamic Shadow %d
+Dynamic list with Delete key support.
 EARLY_FRAGMENT_TESTS
 EEEE
 EMG %d
@@ -1779,22 +1970,28 @@ ERROR! Cannot load GpuLightBinnerManifest
 ERROR! Cannot load HairRendererManifest resource manifest!\n
 ERROR! Cannot load SubsurfaceProfilesManifest
 ERROR: Docking is not enabled! See Demo > Configuration.
-ESCAPE to revert.
+ESilhouetteType_t
 Earth
 East
 Edit
 Edit Mode
 Edit name:
 Electrode
+Eliding, Alignment
 Ellipsis character: '%s' (U+%04X)
 Embed everything inside a child window for testing _RootWindow flag.
 EmissiveLightingBoost
 Empirical
+Empty label e.g. Button("") == same ID as parent widget/node. Use Button("##xx") instead!
 Enable AllowOverlap
 Enable AngledHeader on all columns. Best enabled on selected narrow columns (see "Angled headers" section of the demo).
+Enable Asserts
 Enable blinking cursor (optional as some users consider it to be distracting).
+Enable clipper
 Enable context menu
+Enable deletion
 Enable docking when holding Shift only (allow to drop in wider space, reduce visual noise)
+Enable drag & drop
 Enable gamepad controls. Require backend to set io.BackendFlags |= ImGuiBackendFlags_HasGamepad.\n\nRead instructions in imgui.cpp for details.
 Enable grid
 Enable hair sorting
@@ -1802,7 +1999,8 @@ Enable input queue trickling: some types of events submitted during the same fra
 Enable keyboard controls.
 Enable logarithmic editing (more precision for small values).
 Enable outer-most padding (default if ImGuiTableFlags_BordersOuterV is set)
-Enable resizing of windows from their edges and from the lower-left corner.\nThis requires (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors) because it needs mouse cursor feedback.
+Enable resizing of windows from their edges and from the lower-left corner.\nThis requires ImGuiBackendFlags_HasMouseCursors for better mouse cursor feedback.
+Enable scrolling page by page when clicking outside the scrollbar grab.\nWhen disabled, always scroll to clicked location.\nWhen enabled, Shift+Click scrolls to clicked location.
 Enable turning DragXXX widgets into text input with a simple mouse click-release (without moving).
 Enable various tools calling IM_DEBUG_BREAK().\n\nRequires a debugger being attached, otherwise IM_DEBUG_BREAK() options will appear to crash your application.
 Enable wrapping around from max to min and from min to max (only supported by DragXXX() functions)
@@ -1813,6 +2011,9 @@ EnableViewModelSunlight
 EncodeRGBM
 Encountered bad skin weights, summing to %g (1.0 expected) at position %.3f %.3f %.3f\n
 EndMarker
+EndMultiSelect
+EndMultiSelect() FocusScope mismatch!
+EndTable() call should only be done while in BeginTable() scope!
 EndViewTimestampQuery
 Engine2/RenderingPipeline
 Engine2/RenderingPipeline/AmbientOcclusionProxies
@@ -1826,6 +2027,7 @@ EnvironmentMaps have different textures, lightbinner requires everything to be a
 Equal Axes
 Equal constraint applies to axis pairs (e.g ImAxis_X1/Y1, ImAxis_X2/Y2)
 Error Bars
+Error Handling
 Error loading barn light: %s\n
 Error: View "%s", layer "%s", render target "%s": \nAttempted to bind the back buffers of two different swap chains in a single layer!\n
 Error: View "%s", layer "%s", render target "%s": \n\tAttempted to set up a render target output w/ MSAA %d where the color targets have different MSAA settings %d!\n
@@ -1838,10 +2040,16 @@ Error: View "%s", layer "%s": \n\tIt is illegal to indicate LAYERFLAGS_PRESERVE_
 ErrorBar
 ErrorBarSize
 ErrorBarWeight
+Errors
+Es\fB
 Escape
-Escape to deactivate a widget, close popup, exit child window.
+Escape to clear selection.
+Escape to deactivate a widget, close popup,\nexit a child window or the menu layer, clear focus.
+Escape to revert.
+Euro
 Even more contents
 Exact
+Example: Assets Browser
 Example: Auto-resizing window
 Example: Console
 Example: Constrained Resize
@@ -1864,7 +2072,9 @@ Expand all
 Explicit content size
 Export
 Extend hit area to all available width instead of allowing more items to be laid out after the node.
+Extensions
 FFFF
+FG%D
 FORCE_UINT
 FORWARD_LAYER_ONLY 
 FRAGMENT_SHADER
@@ -1873,13 +2083,13 @@ Failed to allocate scratch rendertarget for %s from pool. The following pool ent
 Failed to allocate space for morph!\n
 Failed to allocate vertex cache for model '%s' (%i verts)\n
 FakeInputTexture
+Fallback
 Fallback character: '%s' (U+%04X)
 Fancy
 FarPlaneOverride
 Faster lines using texture data. Require backend to render with bilinear filtering (not point/nearest filtering).
+Feature is currently in Beta. Please read comments in imgui.h
 Features:
-Field
-Field_%d
 File
 File1_a.wav
 File1_b.wav
@@ -1924,7 +2134,6 @@ Flag: NoResize
 Flag: NoUndocking
 Flag: PassthruCentralNode
 Flags Merged: 0x%04X, Local: 0x%04X, InWindows: 0x%04X, Shared: 0x%04X
-Flags above don't apply to this section.
 Flags: 0x%04X =%s%s%s%s%s%s%s%s%s%s%s%s%s
 Flags: 0x%08X
 Flags: 0x%08X (%s%s%s%s%s%s%s%s%s..)
@@ -1947,27 +2156,39 @@ FogMinStart
 FogTile
 FoliageAnimation
 Font Atlas
-Font Atlas (%dx%d pixels)
-Font scale
-Font: "%s"\n%.2f px, %d glyphs, %d file(s)
+Font List
+Font Size
+Font: "%s": %d sources(s)
+FontScaleDpi
+FontScaleMain
+FontSize = %.2f (== %.2f * global_scale)
+FontSize = %.2f (== style.FontSizeBase * %.2f * global_scale)
+FontSize = %0.2f
+FontSizeBase
 Fonts
-Fonts (%d)
+Fonts (%d), Textures (%d)
 Fonts##Selector
+For instructions, see:
 For use in Tables only.
 Force Draw Voxels
 Force thick hair
 ForceEnableShadowCasting
 ForceFullResolve
+Forgot to call ImGui::NewFrame()?
+Forgot to shutdown Platform backend?
+Forgot to shutdown Renderer backend?
 Format
 ForwardLightSetup
 Four
 FourFourFour
+Frag
 FragmentBounds
 FragmentDrawArgs
 FragmentDrawCount
+FragmentMeshletDataOffset
 FragmentRecullDrawArgs
 FragmentStats
-Frame %06d: %+3d ( %2d malloc, %2d free )%s
+Frame %06d: %+3d ( %2d alloc, %2d free )
 Frame Overlay
 Frame Times
 Frame: %d. Time: %.2f ms. FPS: %.2f
@@ -1981,6 +2202,7 @@ FrameHovered: %s
 FramePadding
 FrameRounding
 FrameUpdate
+FreeType
 Frequency
 Frogs
 Frozen columns
@@ -2000,6 +2222,7 @@ Fullscreen
 Fullscreen window
 Fullsort
 Functions
+Funding
 FvP12CSceneObjectE
 G8R8_G8B8_UNORM
 G:%0.3f
@@ -2011,17 +2234,21 @@ GENERAL
 GGGG
 GLOBAL
 GOOGL
+GO\fQ
 GPOS
 GPU Animated Vertex Cache allocation too large! Requested: %d, max allowed: %d\nUse smaller draw calls or increase cache buffer block size\n
 GPU Instance Mem  : %s allocated, %s written, %s used
 GPU Instance Mem  : %s written, %s used, %s allocated\n
 GPU Memory Size
 GPU Meshlet Mem   : %s written, %s used, %s allocated\n
+GPU Particle Mem   : %s written, %s used, %s allocated\n
 GPU Time: %.2f ms
 GPU Transform Mem : %s allocated, %s written, %s used
 GPU Transform Mem : %s written, %s used, %s allocated\n
 GPUProfiler
 GPUSort
+GW\fI
+G\v*D3
 Gamepad
 GamepadBack
 GamepadDpadDown
@@ -2055,17 +2282,23 @@ GenericOpaque
 GenericTransparent
 Geometry %d
 GetMouseDragDelta(0):
+GetPlotLimits() needs to be called between BeginPlot() and EndPlot()!
+GetPlotMousePos() needs to be called between BeginPlot() and EndPlot()!
+GetPlotPos() needs to be called between BeginPlot() and EndPlot()!
+GetPlotSelection() needs to be called between BeginPlot() and EndPlot()!
+GetPlotSize() needs to be called between BeginPlot() and EndPlot()!
 Gingrich
 Giving access to some ImGuiStyle value in this demo for convenience.
+Gk\rC
 Global Alpha
 GlobalHistBuffer
 GlobalStats
 Glyph
 Glyphs
-Glyphs (%d)
 Got request to send CSceneSystemStats to vconsole\n
 Gpu Mem
 GpuCull
+GpuCull-PrepareReculling
 GpuLightBinnerManifest
 GpuLightBinnerStartupManifest
 GpuRecull
@@ -2082,6 +2315,7 @@ Grid Lines
 GroomID
 GroomRenderingDescSet
 Groups
+Grow
 Guide Hair Visualization
 Guide Hair update
 GuideHairDensityBuffer
@@ -2099,13 +2333,14 @@ HAS_OVERLAY
 HELP
 HHHH
 HISTORY
+HO#Cq
 HOP##1
 HOP##2
-HSV Only
 HSV encoded colors
 HSV shown as HSV##1
 HSV shown as RGB##1
 HW Does not support occlusion queries!\n
+HW\nC
 Haddock
 Hair Cull and Compute Segment Depth For Sort
 Hair Debug Settings
@@ -2169,28 +2404,35 @@ Here we are sharing selection state between both boxes.
 Here we replace and select text each time Up/Down are pressed. See 'Examples>Console' for a more meaningful demonstration of using this callback.
 Here we toggle the casing of the first character on every edit + count edits.
 Here, all circle data is stored in a single interleaved buffer:
-Hex Only
+Hex-encode non-ASCII
 Hidden
 HiddenTabBar
 Hide
+Hide Filtered
 Hide tab bar###HideTabBar
+Hierarchy lines
 High:  $%.2f
 HighPrecisionLightingOffset
+Highlight ID Conflicts
+Highlight and show an error message when multiple items have conflicting identifiers.
 Highlight guide hairs
+Highlight hovered item in second listbox
 Hiragana: 
 Hist2D
 Histogram
 Histogram 2D
+Histogram##2
 History
 Hit-testing is by default performed in item submission order, which generally is perceived as 'back-to-front'.\n\nBy using SetNextItemAllowOverlap() you can notify that an item may be overlapped by another. Doing so alters the hovering logic: items using AllowOverlap mode requires an extra frame to accept hovered state.
 Hogs
 Hold Alt to expand box selection horizontally.
-Hold CTRL and click to select multiple items.
+Hold Ctrl and Click to select multiple items.
 Hold SHIFT to enable Docking window.
-Hold SHIFT when clicking to enable for 2 frames only (useful for spammy log entries)
 Hold Shift to expand box selection vertically.
+Hold Shift when clicking to enable for 2 frames only (useful for spammy log entries)
 Hold to repeat:
 Home
+Homepage
 Horizontal
 Horizontal Scrolling
 Horizontal contents size demo window
@@ -2213,11 +2455,12 @@ HoveredColumnBody: %d, HoveredColumnBorder: %d
 HoveredDockNode: 0x%08X
 HoveredId: 0x%08X
 HoveredId: 0x%08X (%.2f sec), AllowOverlap: %d
-HoveredId: 0x%08X, ActiveId:  0x%08X
 HoveredWindow->Root: '%s'
 HoveredWindow: '%s'
 HoveredWindowUnderMovingWindow: '%s'
 Hovering the colored canvas will override io.WantCaptureXXX fields.\nNotice how normally (when set to none), the value of io.WantCaptureKeyboard would be false when hovering and true when clicking.
+Hs\vH
+Hyperlink
 I am a a tooltip for a disabled item.
 I am a fancy tooltip
 I am a manually emitted tooltip.
@@ -2230,15 +2473,20 @@ I am a tooltip with no delay.
 I am an odd tab.
 I am following you around.
 I am the last one here.
+I37mM
 ID Stack Tool
 ID: 0123456789
 ID: 0x%08X, ActiveID: 0x%08X
+ID:%08X, used:%d, { w:%3d, h:%3d } { x:%4d, y:%4d }
 ID=0x%08X%n
 IIII
 IIIIIII
+IM_ASSERT() calls assert() by default. Compiling with NDEBUG will usually strip out assert() to nothing, which is NOT recommended because we use asserts to notify of programmer mistakes!
+IM_ASSERT: runs expression: %s. expand size: %s%s
 INDEX_READ_BIT
 INDIRECT_COMMAND_READ_BIT
 INPUT_ATTACHMENT_READ_BIT
+IOCDw\v
 ISO 8601
 ISSUES_QUERIES 
 IS_DISABLED 
@@ -2261,9 +2509,15 @@ ITEM: Text
 ITEM: TreeNode
 ITEM: TreeNode w/ ImGuiTreeNodeFlags_OpenOnDoubleClick
 ITEMS
+Ic\nG
 Icon
+Icon Hit Spacing
+Icon Size
+Icon Spacing
+Ie\rDU
 If ImPlotAxisFlags_RangeFit is disabled, the axis will fit ALL data.
 If scrolling is disabled (ScrollX and ScrollY not set):\n- The table is output directly in the parent window.\n- OuterSize.x < 0.0f will right-align the table.\n- OuterSize.x = 0.0f will narrow fit the table unless there are any Stretch columns.\n- OuterSize.y then becomes the minimum size for the table, which will extend vertically if there are more rows (unless NoHostExtendY is set).
+If we should draw normal silhouette or minkowski sum silhouette
 If you see visual artifacts, do one of the following:
 If your company uses this, please consider funding the project.
 IgnoreFaceNormalsForLighting
@@ -2277,13 +2531,30 @@ ImGui Demo
 ImGui Metrics
 ImGui Style
 ImGui Style Editor
+ImGui::PushFont(nullptr, custom_size);
+ImGui::PushFont(nullptr, style.FontSizeBase * custom_scale);
 ImGuiBackendFlags_RendererHasVtxOffset: %s
 ImGuiChildFlags_AlwaysUseWindowPadding
-ImGuiChildFlags_Border
+ImGuiChildFlags_Borders
 ImGuiChildFlags_FrameStyle
 ImGuiChildFlags_ResizeX
 ImGuiChildFlags_ResizeY
+ImGuiColorEditFlags_AlphaBar
+ImGuiColorEditFlags_AlphaNoBg
+ImGuiColorEditFlags_AlphaOpaque
+ImGuiColorEditFlags_AlphaPreviewHalf
+ImGuiColorEditFlags_DisplayHSV
+ImGuiColorEditFlags_DisplayHex
+ImGuiColorEditFlags_DisplayRGB
+ImGuiColorEditFlags_HDR
+ImGuiColorEditFlags_NoAlpha
 ImGuiColorEditFlags_NoBorder
+ImGuiColorEditFlags_NoDragDrop
+ImGuiColorEditFlags_NoInputs
+ImGuiColorEditFlags_NoOptions
+ImGuiColorEditFlags_NoSidePreview
+ImGuiColorEditFlags_PickerHueBar
+ImGuiColorEditFlags_PickerHueWheel
 ImGuiComboFlags_HeightLargest
 ImGuiComboFlags_HeightRegular
 ImGuiComboFlags_HeightSmall
@@ -2307,21 +2578,43 @@ ImGuiInputFlags_RouteUnlessBgFocused
 ImGuiInputTextFlags_AllowTabInput
 ImGuiInputTextFlags_CtrlEnterForNewLine
 ImGuiInputTextFlags_DisplayEmptyRefVal
+ImGuiInputTextFlags_ElideLeft
 ImGuiInputTextFlags_EscapeClearsAll
 ImGuiInputTextFlags_NoUndoRedo
 ImGuiInputTextFlags_ParseEmptyRefVal
 ImGuiInputTextFlags_ReadOnly
+ImGuiInputTextFlags_WordWrap
+ImGuiMultiSelectFlags_BoxSelect1d
+ImGuiMultiSelectFlags_BoxSelect2d
+ImGuiMultiSelectFlags_BoxSelectNoScroll
+ImGuiMultiSelectFlags_ClearOnClickVoid
+ImGuiMultiSelectFlags_ClearOnEscape
+ImGuiMultiSelectFlags_NoAutoClear
+ImGuiMultiSelectFlags_NoAutoClearOnReselect
+ImGuiMultiSelectFlags_NoAutoSelect
+ImGuiMultiSelectFlags_NoRangeSelect
+ImGuiMultiSelectFlags_NoSelectAll
+ImGuiMultiSelectFlags_NoSelectOnRightClick
+ImGuiMultiSelectFlags_ScopeRect
+ImGuiMultiSelectFlags_ScopeWindow
+ImGuiMultiSelectFlags_SelectOnClick
+ImGuiMultiSelectFlags_SelectOnClickRelease
+ImGuiMultiSelectFlags_SingleSelect
 ImGuiOrthoParams
 ImGuiRendererManifest
 ImGuiSliderFlags_AlwaysClamp
+ImGuiSliderFlags_ClampOnInput
+ImGuiSliderFlags_ClampZeroRange
 ImGuiSliderFlags_Logarithmic
 ImGuiSliderFlags_NoInput
 ImGuiSliderFlags_NoRoundToFormat
+ImGuiSliderFlags_NoSpeedTweaks
 ImGuiSliderFlags_WrapAround
 ImGuiTabBarFlags_AutoSelectNewTabs
 ImGuiTabBarFlags_DrawSelectedOverline
-ImGuiTabBarFlags_FittingPolicyResizeDown
+ImGuiTabBarFlags_FittingPolicyMixed
 ImGuiTabBarFlags_FittingPolicyScroll
+ImGuiTabBarFlags_FittingPolicyShrink
 ImGuiTabBarFlags_NoCloseWithMiddleMouseButton
 ImGuiTabBarFlags_Reorderable
 ImGuiTabBarFlags_TabListPopupButton
@@ -2335,7 +2628,7 @@ ImGuiTableFlags_BordersOuter
 ImGuiTableFlags_BordersOuterH
 ImGuiTableFlags_BordersOuterV
 ImGuiTableFlags_BordersV
-ImGuiTableFlags_Borders\n = ImGuiTableFlags_BordersInnerV\n | ImGuiTableFlags_BordersOuterV\n | ImGuiTableFlags_BordersInnerV\n | ImGuiTableFlags_BordersOuterH
+ImGuiTableFlags_Borders\n = ImGuiTableFlags_BordersInnerV\n | ImGuiTableFlags_BordersOuterV\n | ImGuiTableFlags_BordersInnerH\n | ImGuiTableFlags_BordersOuterH
 ImGuiTableFlags_ContextMenuInBody
 ImGuiTableFlags_Hideable
 ImGuiTableFlags_HighlightHoveredColumn
@@ -2364,24 +2657,29 @@ ImGuiTableFlags_SortMulti
 ImGuiTableFlags_SortTristate
 ImGuiTableFlags_Sortable
 ImGuiTreeNodeFlags_AllowOverlap
+ImGuiTreeNodeFlags_DrawLinesFull
+ImGuiTreeNodeFlags_DrawLinesNone
+ImGuiTreeNodeFlags_DrawLinesToNodes
 ImGuiTreeNodeFlags_Framed
+ImGuiTreeNodeFlags_LabelSpanAllColumns
+ImGuiTreeNodeFlags_NavLeftJumpsToParent
 ImGuiTreeNodeFlags_OpenOnArrow
 ImGuiTreeNodeFlags_OpenOnDoubleClick
 ImGuiTreeNodeFlags_SpanAllColumns
 ImGuiTreeNodeFlags_SpanAvailWidth
 ImGuiTreeNodeFlags_SpanFullWidth
-ImGuiTreeNodeFlags_SpanTextWidth
+ImGuiTreeNodeFlags_SpanLabelWidth
 ImGuiWindowFlags_NoBackground
 ImGuiWindowFlags_NoCollapse
 ImGuiWindowFlags_NoDecoration
 ImGuiWindowFlags_NoScrollbar
 ImGuiWindowFlags_NoTitleBar
-ImPlot 0.17
+ImPlot 0.18 WIP
 ImPlot Colormap
 ImPlot Demo
 ImPlot Metrics
 ImPlot Style
-ImPlot says hello. (%s)
+ImPlot says hello! (%s) (%d)
 ImPlotAxisFlags_AutoFit##X
 ImPlotAxisFlags_AutoFit##Y
 ImPlotAxisFlags_PanStretch
@@ -2393,7 +2691,9 @@ ImPlotColormapScaleFlags_Opposite
 ImPlotDemoTabs
 ImPlotLegendFlags_Horizontal
 ImPlotLegendFlags_Outside
+ImPlotLegendFlags_Reverse
 ImPlotLegendFlags_Sort
+ImPlotPieChartFlags_Exploding
 ImPlotPieChartFlags_IgnoreHidden
 ImPlotPieChartFlags_Normalize
 ImPlotStairsFlags_Shaded
@@ -2405,24 +2705,28 @@ ImPlotSubplotFlags_LinkRows
 ImPlotSubplotFlags_NoResize
 ImPlotSubplotFlags_NoTitle
 ImPlotSubplotFlags_ShareItems
-ImVec4* colors = ImGui::GetStyle().Colors;\n
+ImVec4* colors = GetStyle().Colors;\n
 ImVec4* colors = ImPlot::GetStyle().Colors;\n
 Image file
 Image001.png
+ImageBorderSize
 Images
 In Mem
 In SettingsNodes:
 In SettingsWindows:
-In columns
+In Tables
+In a list of checkboxes (not selectable):
 In the Advanced demo we override the policy of each column so those table-wide settings have less effect that typical.
 In the color list:\nLeft-click on color square to open color picker,\nRight-click to open edit options menu.
 In the color list:\nLeft-click on colored square to open color picker,\nRight-click to open edit options menu.
 In window "%s"
+In window '%s': %s
 InLightingTexture
 Include NaN
 IndentSpacing
 Indented
 Indeterminate
+Index
 Indirect Dispatch Args
 IndirectArgsBuffer
 IndirectDispatchArgs
@@ -2437,7 +2741,9 @@ InlayText
 Inline color editor
 InnerClipRect
 InnerRect
-Input %d: '%s', Oversample: (%d,%d), PixelSnapH: %d, Offset: (%.1f,%.1f)
+Input %d: '%s' [%d], Oversample: %d,%d, PixelSnapH: %d, Offset: (%.1f,%.1f)
+Input %d: '%s', Oversample: (%d=>%d,%d=>%d), PixelSnapH: %d, Offset: (%.1f,%.1f)
+Input Glyphs Overlap Detection Tool
 Input Map
 Input flags:
 InputFloat
@@ -2445,6 +2751,7 @@ InputFloat3
 InputIndices
 InputRouting
 InputText
+InputTextCursor
 InputTextMultiline
 InputTexture
 InputVertAliasInfo
@@ -2454,9 +2761,11 @@ Instance %d: HoveredRow: %d, LastOuterHeight: %.2f
 InstanceBuffer
 InstanceCount
 InstanceData
+Instanced Debugger
 InstancedMesh
 InstancedMesh %s has %i lods and %i meshes, there must be a 1:1 mapping (right now).\n
 InstancedMesh %s has %i meshgroups: only the default will be used.\n
+InstancedMesh %s, mesh %i has %d draws: only the first %d will be drawn.\n
 InstancedMesh %s, mesh %i has %i sceneobjects: only the first will be drawn.\n
 InstancedMesh: resizing cull request buffer from %u -> %u\n
 InstancedMesh: resizing indirect draw buffer %u -> %u\n
@@ -2466,7 +2775,6 @@ Instruct Dear ImGui to render a mouse cursor itself. Note that a mouse cursor re
 Instruct backend to not alter mouse cursor shape and visibility.
 Instruct dear imgui to disable keyboard inputs and interactions.
 Instruct dear imgui to disable mouse inputs and interactions.
-Instruct navigation to move the mouse cursor. See comment for ImGuiConfigFlags_NavEnableSetMousePos.
 Interactive Data
 Internal inconsistency between the layout format and attribute is detected.\nTry changing the number of bones per vertex or the skin weighting, and send Sergiy a repro mesh with this error description.\n
 Internal state
@@ -2474,10 +2782,15 @@ Interpolate sim guide hair verts
 InvDeltaTime
 InvDensityVolumeDim
 InvHairWorldTransform
+Invalid colormap index!
+Invalid flags for IsItemHovered()!
+Invalid flags for IsWindowHovered()!
 Invalid input layout field format %d for joint indices\n
+Invalid sizing arguments!
 Invalid subsurface profile index (or duplicate): %i %s\n
 Invalid width/height for ScratchTarget, Size=%i, Width=%i/Height=%i
 Invert
+Io%a
 IsBatchable
 IsChild=%d
 IsChild=1\n
@@ -2485,6 +2798,11 @@ IsFirstRender
 IsItemHovered() after begin = %d (== is title bar hovered)\nIsItemActive() after begin = %d (== is window being clicked/moved)\n
 IsItemHovered: %d
 IsMouseDragging(%d):
+IsPlotHovered() needs to be called between BeginPlot() and EndPlot()!
+IsPlotItemHighlight() needs to be called within an itemized context!
+IsPlotSelected() needs to be called between BeginPlot() and EndPlot()!
+IsPlotXAxisHovered() needs to be called between BeginPlot() and EndPlot()!
+IsSubplotsHovered() needs to be called between BeginSubplots() and EndSubplots()!
 IsWindowFocused() = %d\nIsWindowFocused(_ChildWindows) = %d\nIsWindowFocused(_ChildWindows|_NoPopupHierarchy) = %d\nIsWindowFocused(_ChildWindows|_DockHierarchy) = %d\nIsWindowFocused(_ChildWindows|_RootWindow) = %d\nIsWindowFocused(_ChildWindows|_RootWindow|_NoPopupHierarchy) = %d\nIsWindowFocused(_ChildWindows|_RootWindow|_DockHierarchy) = %d\nIsWindowFocused(_RootWindow) = %d\nIsWindowFocused(_RootWindow|_NoPopupHierarchy) = %d\nIsWindowFocused(_RootWindow|_DockHierarchy) = %d\nIsWindowFocused(_AnyWindow) = %d\n
 IsWindowFocused: %d
 IsWindowFocused: %d, Shortcut: %s
@@ -2519,11 +2837,16 @@ ItemSpacing
 Items
 Items (%d)
 J Bush
+JC&F
 JJJJ
+Jo%H
 Jobs
 Joint Indices (%d) Out Of Range for SINT16: Skinning will not work!\n
 Joint Indices (%d) Out Of Range for UINT10: Skinning will not work!\n
 Joint Indices (%d) Out Of Range for UINT8: Skinning will not work!\n
+K1\rA\f
+K3\vK
+K8\tT
 KEY OWNERS
 KEYBOARD/GAMEPAD/MOUSE KEYS
 KKKK
@@ -2535,6 +2858,8 @@ Kasich
 Key 0x%08X Value { i: %d }
 Key Count: %d
 Keyboard
+Keyboard navigation (arrows, page up/down, home/end, space).
+Keyboard/Gamepad Navigation
 Keypad0
 Keypad1
 Keypad2
@@ -2571,6 +2896,7 @@ LPV_SH2_B
 LPV_SH2_DC
 LPV_SH2_G
 LPV_SH2_R
+LU\fF
 Label
 Label1
 Label2
@@ -2580,8 +2906,10 @@ Label5
 Label: %s
 LabelPadding
 LastRequest = time: %.2f, frame: %d
+LastSelectionSize = %d
 Layer
 Layer Buffer Barriers
+Layout
 Layout & Scrolling
 Layout -> %s
 Leaked drawlists : %d!!!!!\n
@@ -2621,7 +2949,7 @@ LightSim_Opacity
 LightSim_Opacity_A
 LightmapUV
 LightmapUVW
-Lights in view (unshadowed+shadowed): %d+%d omni, %d+%d spot, %d+%d barn %d env %d lpv.\n
+Lights in view (unshadowed+shadowed): %d+%d omni, %d+%d spot, %d+%d barn %d env %d lpv.
 Like this one
 Limits
 Limits Constraints
@@ -2639,6 +2967,7 @@ Line Plots
 LineWeight
 Lines
 Lines Count
+Lines##2
 Link 1
 Link 2
 Link 3
@@ -2653,13 +2982,17 @@ LinkedMax: %p
 LinkedMin: %p
 Linking
 List
-List boxes
+List Boxes
 List root nodes
 ListBox
 Lists:
+Load a nice font for better results!
+Load all
 LoadKV3ObjectInPlace error: %s\n
 LoadTextureBits failed to read file %s\n
 Loaded
+Loader
+Loader: '%s'
 Loading %d resources... 
 Local Time
 LocalFlags
@@ -2686,6 +3019,7 @@ Ls?q
 M:0.000
 M:000
 MATERIAL_SUPPORTS_SHADOWS 
+MESSAGE FROM DEAR IMGUI
 MIXED
 MMMM
 MOD desires lightbinner GPU but is unsupported by HW (SupportsCompute=%i CubeMapArrays=%i)\n
@@ -2693,13 +3027,15 @@ MOUSE STATE
 MOUSE WHEELING
 MSAAResolve
 MSIndirectDispatchArgs
+MSIndirectDispatchArgsDebug
 MSIndirectDispatchArgsRecull
+MULTISELECT_DEMO_ITEMS
 MY CUSTOM COLOR PICKER WITH AN AMAZING PALETTE!
 MY_DND
 Mackerel
 Main
 Main Area = entire viewport,\nWork Area = entire viewport minus sections used by the main menu bars, task bars etc.\n\nEnable the main-menu bar in Examples menu to see the difference.
-Main Pos: (%.0f,%.0f), Size: (%.0f,%.0f)\nWorkArea Offset Left: %.0f Top: %.0f, Right: %.0f, Bottom: %.0f\nMonitor: %d, DpiScale: %.0f%%
+Main Pos: (%.0f,%.0f), Size: (%.0f,%.0f)\nFrameBufferScale: (%.2f,%.2f)\nWorkArea Inset Left: %.0f Top: %.0f, Right: %.0f, Bottom: %.0f\nMonitor: %d, DpiScale: %.0f%%
 Main menu bar
 MajorGridSize
 MajorTickLen
@@ -2734,6 +3070,7 @@ MaxSize: [%f,%f]
 MaxThreadGroups
 Maybe
 MbP?
+Mc'_A$Cm
 McCain
 MelaninParams
 Memory allocations
@@ -2759,6 +3096,7 @@ MeshName
 Meshbuilder2
 Meshbuilder2IndexData
 Meshbuilder2VertexData
+Meshlet
 MeshletData
 Metrics
 Metrics/Debugger
@@ -2781,10 +3119,31 @@ Misc items:
 Misc/Advanced
 Misc:%s%s%s%s%s%s%s
 Miscellaneous
+Mismatched BeginAlignedPlots()/EndAlignedPlots()!
+Mismatched BeginPlot()/EndPlot()!
+Mismatched BeginSubplots()/EndSubplots()!
+Mismatched BeginTabBar()/EndTabBar()!
+Mismatching PushID/PopID!
 Miss0
 Miss1
 Miss2
 Miss3
+Missing End()
+Missing EndChild()
+Missing EndDisabled()
+Missing EndGroup()
+Missing EndMenuBar()
+Missing EndMultiSelect()
+Missing EndTabBar()
+Missing EndTable()
+Missing PopFocusScope()
+Missing PopFont()
+Missing PopID()
+Missing PopItemFlag()
+Missing PopStyleColor()
+Missing PopStyleVar()
+Missing TreePop()
+Mixed Shadow %d
 Mixed items
 ModAlt
 ModCtrl
@@ -2796,12 +3155,12 @@ ModalWindowDimBg
 Modals
 Modify
 Monitor
-Monitor #%d: DPI %.0f%%\n MainMin (%.0f,%.0f), MainMax (%.0f,%.0f), MainSize (%.0f,%.0f)\n WorkMin (%.0f,%.0f), WorkMax (%.0f,%.0f), WorkSize (%.0f,%.0f)
 Monitor View
 MonitorSceneObjectDesc
 Monitors
 Monitors (%d)
 More content %d
+More details:
 More spacing: Hello
 More..
 Morph
@@ -2817,6 +3176,7 @@ Mouse Position: <invalid>
 Mouse Position: [%.0f,%.0f]
 Mouse X
 Mouse Y
+Mouse clicked count:
 Mouse clicked:
 Mouse cursor %d: %s
 Mouse delta: (%g, %g)
@@ -2840,16 +3200,32 @@ Move %s
 Move your mouse to change the data!
 MovingWindow: '%s'
 Multi-Axis Plot
+Multi-Select
+Multi-Select (advanced)
+Multi-Select (checkboxes)
+Multi-Select (dual list box)
+Multi-Select (in a table)
+Multi-Select (manual/simplified, without BeginMultiSelect)
+Multi-Select (multiple scopes)
+Multi-Select (tiled assets browser)
+Multi-Select (trees)
+Multi-Select (with clipper)
+Multi-Select (with deletion)
 Multi-component Widgets
 Multi-line Text Input
 Multi-line text:
 Multi-viewports
+MultiSelect
+MultiSelect (%d)
+MultiSelect 0x%08X in '%s'%s
 Multiple Axes
 Multiple calls to Text(), clipped
 Multiple calls to Text(), not clipped (slow)
 Multiple tables with the same identifier will share their settings, width, visibility, order etc.
 Music
+Must call EndChild() and not End()!
 My Subplots
+MyBool
 MyColor##1
 MyColor##2
 MyColor##2f
@@ -2860,13 +3236,17 @@ MyColor##4
 MyColormap
 MyDockSpace
 MyHelpMenu
+MyInt
+MyName
 MyObject %d
 MyObject: %d
 MyPopup
 MyTabBar
 MyTag
+MyVec2
 N Bins
 N-gon sides
+N/(AO
 N15CWindController9CRendererE
 N19CRenderGraphBuilder12NopGraphPassE
 N19CRenderGraphBuilder14LayerGraphPass13LayerPassImplE
@@ -2904,30 +3284,38 @@ NI>R
 NOT_BATCHABLE
 NO_MOTION_VECTORS 
 NO_Z_PREPASS 
+NSt6thread11_State_implINS_8_InvokerISt5tupleIJPFvjjPN7tinybvh3BVHEEijS5_EEEEEE
 NaN Values
 Name: %s
 NameOffset: %d
 NavActivateFlags: %04X
 NavActivateId/DownId/PressedId: %08X/%08X/%08X
 NavActive: %d, NavVisible: %d
-NavDisableHighlight: %d, NavDisableMouseHover: %d
+NavCursor
+NavCursorVisible: %d, NavHighlightItemUnderNav: %d
+NavFlattened 
 NavFocusRoute[] = 
 NavFocusScopeId = 0x%08X
-NavHighlight
 NavId: 0x%08X, NavLayer: %d
+NavIdItem = %lld (0x%llX), NavIdSelected = %d
 NavInputSource: %s
 NavLastIds[%d]: 0x%08X
 NavLastIds[%d]: 0x%08X at +(%.1f,%.1f)(%.1f,%.1f)
 NavLastValidSelectionUserData = %lld (0x%llX)
 NavLayersActiveMask: %X, NavLastChildNavWindow: %s
-NavPreferredScoringPosRel[%d] = {%.1f,%.1f)
+NavPreferredScoringPosRel[%d] = (%.1f,%.1f)
 NavWindow: '%s'
 NavWindowingDimBg
 NavWindowingHighlight
 NavWindowingTarget: '%s'
+Navigation cursor is always visible.
+Nc\tH
+Need better plotting and graphing? Consider using ImPlot:
+Needs to be called between BeginTabBar() and EndTabBar()!
 NeedsDynamic
 Nested tables
 NewFrame(): ClearActiveID() because it isn't marked alive anymore!\n
+NextColormapColor() needs to be called between BeginPlot() and EndPlot()!
 Nice try, but the number of rows and columns must be greater than 0!
 Nincompoop
 Nine
@@ -2937,6 +3325,7 @@ No background
 No bring to front
 No close
 No collapse
+No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?
 No docking
 No match for "%.*s"!\n
 No menu
@@ -2983,7 +3372,6 @@ Not Available
 Not Selected
 Not a widget per-se, but ImGuiTextFilter is a helper to perform simple filtering on text strings.
 NotAllowed
-Note that the default embedded font is NOT meant to be scaled.\n\nFont are currently rendered into bitmaps at a given size at the time of building the atlas. You may oversample them to get some flexibility with scaling. You can also render at multiple sizes and select which one to use at runtime.\n\n(Glimmer of hope: the atlas system will be rewritten in the future to make scaling more flexible.)
 Note: some memory buffers have been compacted/freed.
 Num Dummy Items (Demo Scrolling)
 NumAggregates
@@ -3008,16 +3396,21 @@ Number of targets (%d) exceeds maximum (%d).  List of targets:\n
 Number of unique materials in the frame: 
 Number of views allocated : %d\n
 Number of views rendered: %d (%d with world traversals)\n
+OBJs
 OCCLUSION_RECULLED 
 OK Blahblah
 OOOOOOO
+OS\td
 Obama
 Object
+Object %05d: %s
+Object %05u: %s
 Object %4d: 0x%p, class=%20s, origin=(%13g,%13g,%13g), bounds=(%13g,%13g,%13g):(%13g,%13g,%13g), desc=0x%p, flags=0x%016llX\n
 Object %d
 ObjectBrowser
 ObjectDesc
 OcclusionQueryIssueLayer
+Oem102
 Offset %.2f
 Offset X
 Offset and Stride
@@ -3027,6 +3420,7 @@ Oh dear
 OmniLight
 OnBeginRenderingFrame
 OnBeginSubmitDisplayLists
+OnResourceManifestLoaded_SceneSystemExtraInit_RayTracing
 One-liner variants
 OneOneOne
 OneSweep Global Histogram
@@ -3041,6 +3435,7 @@ Only using TableNextColumn(), which tends to be convenient for tables where ever
 OpacityScale
 Opaque
 Open
+Open '%s'
 Open Markers
 Open Popup
 Open Recent
@@ -3049,6 +3444,7 @@ Opened:
 Opposite
 Option to deactivate io.AddFocusEvent(false) handling. May facilitate interactions with a debugger when focus loss leads to clearing inputs data.
 Option to save .ini data with extra comments (particularly helpful for Docking, but makes saving slower).
+Options to configure how we handle recoverable errors.\n- Error recovery is not perfect nor guaranteed! It is a feature to ease development.\n- You not are not supposed to rely on it in the course of a normal application run.\n- Possible usage: facilitate recovery from errors triggered from a scripting language or after specific exceptions handlers.\n- Always ensure that on programmers seat you have at minimum Asserts or Tooltips enabled when making direct imgui API call! Otherwise it would severely hinder your ability to catch and correct mistakes!
 Or, enable 32-bit indices in imconfig.h.
 Orange
 Order=%d%n
@@ -3057,6 +3453,7 @@ OriginalColor
 OrthoAxis: 0x%08X
 OrthoLight
 OrthographicView
+Ot1T
 Other:
 Out Mem
 OutLightingFroxelTexture
@@ -3070,6 +3467,8 @@ Output flags:
 OutputCullBits
 OutputIndices
 OutputTexture
+OutputToTTY
+OutputToTestEngine
 OutputVB
 Outputdepth
 Outputs
@@ -3077,10 +3476,15 @@ Outside
 Overlap Mode
 Overlapping
 OverlayProjectionDirection
+Overline is only drawn over the selected tab when ImGuiTabBarFlags_DrawSelectedOverline is set.
 Override ChildBg color
 Override Streaming GPU Memory
 OverrideShaderMode
+P+\fGj
+P3\rA
+P8\nD
 PFvP12CSceneObjectE
+PG\f 3n
 PIPELINE_SPECIFIC_0 
 PIPELINE_SPECIFIC_1 
 PIPELINE_SPECIFIC_2 
@@ -3088,11 +3492,17 @@ PIPELINE_SPECIFIC_3
 PIPELINE_SPECIFIC_4 
 PIPELINE_SPECIFIC_5 
 PIPELINE_SPECIFIC_6 
+PK/G
+POSITION
 PRESSED
 PRE_RASTERIZATION_SHADERS
 PROGRAMMER GUIDE:
 PUNCTUAL
+P_02
 P_12
+PackId: 0x%X (%dx%d rect at %d,%d)
+Packed rects: %d, area: about %d px ~%dx%d px
+PackedBlobNormal
 Padding
 Padding:
 PageDown
@@ -3102,6 +3512,7 @@ Palette
 Palin
 Pants on Fire
 Parent
+Parent View%s: 
 ParentNode
 ParentWindow
 ParentWindowForFocusRoute
@@ -3110,7 +3521,7 @@ PartitionSize
 Pass
 PassHistBuffer
 PassIndexBuffer
-Passing ImGuiHoveredFlags_ForTooltip to IsItemHovered() is the preferred way to standardizetooltip activation details across your application. You may however decide to use customflags for a specific tooltip instance.
+Passing ImGuiHoveredFlags_ForTooltip to IsItemHovered() is the preferred way to standardize tooltip activation details across your application. You may however decide to use custom flags for a specific tooltip instance.
 Password Input
 Paste
 Pastel
@@ -3128,6 +3539,7 @@ Period
 Perry
 Physics
 PiYG
+Picker Mode
 Pie Charts
 Pineapple
 Pink
@@ -3140,8 +3552,10 @@ PixelVisibility_IssueQuery called with NULL queryHandle!\n
 Pixels visible: %d (qh:%p) (frame:%d)\n
 Pixels visible: %d (qh:%p) Pixels possible: %d (qh:%p) (frame:%d)\n
 Pixels: %f
+PixelsToPlot() needs to be called between BeginPlot() and EndPlot()!
 Plasma
 Player Overlay
+Please submit feedback:
 Plot
 Plot 1 Sources: Legend Item Labels
 Plot 1 Targets: Plot, Y-Axes, Legend
@@ -3162,6 +3576,10 @@ PlotLines
 PlotLinesHovered
 PlotMinSize
 PlotPadding
+PlotPieChart() needs to be called between BeginPlot() and EndPlot()!
+PlotText() needs to be called between BeginPlot() and EndPlot()!
+PlotToPixels() needs to be called between BeginPlot() and EndPlot()!
+PlotX() needs to be called between BeginPlot() and EndPlot()!
 Plots
 Plots (%d)
 Plots can be used inside of ImGui tables as another means of creating subplots.
@@ -3198,12 +3616,15 @@ PostDecalForwardDynamic
 PostDecalForwardNoDecals
 PostProcessVertexLayout
 Pre Step
-Press CTRL+A and see who receives it!
+Press Ctrl+A and see who receives it!
 Press ESC to abort picking.
 Pressed %d times.
 Pressed Down!
 Pressed Up!
 Pressing Enter will keep item active and select contents (single-line only).
+Pressing Escape clears focused item.
+Pressing Escape clears focused window.
+PrettyFont:%s:%d:%d
 PrevFrameAnimatedVertexCache
 PrevFrameNoise
 PrevFrameTransformBuffer
@@ -3215,7 +3636,9 @@ Primitives
 PrintScreen
 Printing unusually long amount of text.
 Processed
-ProggyClean.ttf, %dpx
+ProggyClean.ttf
+Programmer error: %d visible items with conflicting ID!
+Progress
 Progress Bar
 Progress Bars
 Project constraints
@@ -3224,8 +3647,11 @@ ProjectedSceneObjectDesc
 PropWorldOrigin
 Property editor
 PushID
+PushPlotClipRect() needs to be called between BeginPlot() and EndPlot()!
+P{6L
 QFullCurrFrameFromPrevFrame
 QUAD
+Qc\nE
 Quad-shaped light
 Qualitative
 Qualitative: %s
@@ -3297,11 +3723,14 @@ R?vlD>
 RAY_TRACING_SHADER
 REACTION
 REFLECTS 
-RGB Only
+RGBA32
+RTProxy Layout
+RTProxyBLAS
 RadixPasses
 Rand Paul
-Range Widgets
 Range: [%f,%f]
+RangeSrcItem = %lld (0x%llX), RangeSelected = %d
+Ranges
 Raw HSV values
 Ray trace shader material %s - has no default mode!\n
 Ray trace shader material %s has invalid RayTypeCount %d - must be between 1 and %d\n
@@ -3309,8 +3738,9 @@ RayGen
 RayTrace
 RaytraceLightBins
 RdBu
-Read FAQ and docs/FONTS.md for details on font loading.
-Read the FAQ at https://www.dearimgui.com/faq/
+Read FAQ for more details:
+Read comments in ShowExampleAppDockSpace()
+Read the FAQ at 
 ReadbackBuffer
 Realtime Plots
 Rebuild
@@ -3319,6 +3749,8 @@ ReceiveHairShadows
 Recent frames with allocations:
 Rect is %sclicked, %shovered, %sheld
 Rect of child window is: (%.0f,%.0f) (%.0f,%.0f)
+Rects Index
+Rects Index (%d)
 RecullDispatchArgs
 RecullRequestCount
 RecullRequests
@@ -3344,8 +3776,13 @@ RefractionClipPlaneAdjust
 RefractionMapTexture
 RefractionReflectionAlreadyRendered
 RefractionsFromFramebuffer
+Releases
+Reloaded %s into textureset\n
 Remaining
+Remaining contents
 Remap w/ Ctrl+Shift: click anywhere to select new mouse button.
+Remove
+Remove 20 items
 Remove all
 Remove one
 Rename
@@ -3363,6 +3800,7 @@ Render3DSphereOverlays
 Render3DVectorTextOverlays
 RenderGraph
 RenderLayerDrawListPart
+RenderOrder
 RenderPipelineAliases
 RenderReflections
 RenderStencilReflection
@@ -3373,7 +3811,8 @@ RenderingPipelines_001
 Reorderable Tabs
 Reorderable, hideable, with headers
 RepresentativeTexture
-Requires io.ConfigDebugIsDebuggerPresent=true to be set.\n\nWe otherwise disable the menu option to avoid casual users crashing the application.\n\nYou can however always access the Item Picker in Metrics->Tools.
+Requires #define IMGUI_ENABLE_FREETYPE + imgui_freetype.cpp.
+Requires io.ConfigDebugIsDebuggerPresent=true to be set.\n\nWe otherwise disable some extra features to avoid casual users crashing the application.
 Reset Data
 Reset Pos
 Reset order###ResetOrder
@@ -3394,6 +3833,8 @@ ResizeGripHovered
 ResizeNESW
 ResizeNS
 ResizeNWSE
+ResizeX 
+ResizeY 
 ResizedColumn: %d, ReorderColumn: %d, HeldHeaderColumn: %d
 Resizing lock-free scratch allocation pool to %s.\n
 Resolve vel volume
@@ -3437,6 +3878,7 @@ RightCtrl
 RightShift
 RightSuper
 Romney
+Root with Long Name
 RootLODLevel
 RootViewIsOrthographic
 RootViewOrigin
@@ -3456,6 +3898,7 @@ RowBg1
 Rows
 Rubio
 Run simulation
+Rw8N
 Ryan
 S:%0.3f
 S:%3d
@@ -3463,6 +3906,10 @@ SHADER_READ_ONLY_OPTIMAL
 SHADER_WRITE_BIT
 SHIFT 
 SHORTCUT ROUTING
+SILHOUETTE_ENVMAP
+SILHOUETTE_LIGHT
+SILHOUETTE_LPV
+SILHOUETTE_NONE
 SPHERE
 SSAO
 SSAOManifest
@@ -3528,6 +3975,8 @@ SceneLPVDebugGridObjectVB
 SceneObjects
 SceneObjects drawn: %s in %s draw calls and %s meshlet dispatches\n
 SceneSystem
+SceneSystem/Aggregates/Debug Visualizer
+SceneSystem/Aggregates/RT Proxy Debug Visualizer
 SceneSystem/AssertViewportWithinFramebuffer
 SceneSystem/CMTAtlasHeight
 SceneSystem/CMTAtlasWidth
@@ -3552,13 +4001,20 @@ SceneSystem/GpuLightBinnerBinLPVs
 SceneSystem/GpuLightBinnerSupportViewModelCascade
 SceneSystem/HDRFrameBuffer
 SceneSystem/HairShading
+SceneSystem/Instanced/Debug Visualizer
+SceneSystem/Instanced/Draw Instanced
+SceneSystem/Instanced/Show GPU Culled Meshlets
 SceneSystem/LayerBatchThreshold
 SceneSystem/LayerBatchThresholdFullsort
+SceneSystem/LightBinner/Debug Visualize Fog Shadowed Lights
+SceneSystem/LightBinner/Enable New Sum
 SceneSystem/LightCookieAllocGranularity
 SceneSystem/LightCookieMinAllocSize
+SceneSystem/MeshletBufferCPUSlotCount
 SceneSystem/MeshletBufferEntryCount
 SceneSystem/MinimumLateAllocatedVertexCacheBufferSizeMB
 SceneSystem/NonTexturedGradientFog
+SceneSystem/ParticleBufferSize
 SceneSystem/PointLightShadowsEnabled
 SceneSystem/PunctualContactShadows
 SceneSystem/RenderMeshlets
@@ -3568,15 +4024,18 @@ SceneSystem/SkipLoadingRenderingPipelines
 SceneSystem/SparseShadowTrees
 SceneSystem/SubsurfaceProfiles
 SceneSystem/SupportNeedsDynamicShadows
+SceneSystem/SupportsInstancedFade
 SceneSystem/Tonemapping
 SceneSystem/TransformTextureRowCount
 SceneSystem/TransformTextureRowCountToolsMode
+SceneSystem/Visualize SceneObject Mode
 SceneSystem/VolumetricFog
 SceneSystem/WellKnownLightCookies
 SceneSystem/WindController
 SceneSystemInit
 SceneSystemInitSM50
 SceneTLAS
+SceneView
 SceneViewDebugOverlays World
 SceneViewDebugOverlaysScreenTextFont
 SceneWorldDump
@@ -3595,20 +4054,23 @@ Scroll %.1f/%.1f %.1f/%.1f
 Scroll Offset
 Scroll To Pos
 Scroll from code
-Scroll in the plot area to zoom both X any Y axes.
+Scroll in the plot area to zoom both X and Y axes.
 Scroll on axis labels to zoom an individual axis.
 Scroll: (%.2f/%.2f,%.2f/%.2f) Scrollbar:%s%s
 ScrollLock
+Scrollbar
 ScrollbarBg
 ScrollbarGrab
 ScrollbarGrabActive
 ScrollbarGrabHovered
+ScrollbarPadding
 ScrollbarRounding
 ScrollbarSize
 Scrolling
 Scrolling Text %d
 Scrolling:
 ScrollingRegion
+Search
 SearchBuffer = "%s"
 Searching..
 SecondaryViewIndex
@@ -3622,6 +4084,7 @@ See the ShowDemoWindow() code in implot_demo.cpp. <- you are here!
 Seed
 SegmentIndexBuffer
 Select..
+SelectAll
 Selectable
 Selectable (span row)
 Selectable Leaf %d
@@ -3629,12 +4092,19 @@ Selectable Node %d
 SelectableTextAlign
 Selectables
 Selected
+Selected: %d/%d items
 Selected: %s
 SelectedTabID: 0x%08X, LastFocusedNodeID: 0x%08X
 Selecting: %s
 Selection
-Selection State: Multiple Selection
-Selection State: Single Selection
+Selection Behavior
+Selection State & Multi-Select
+Selection scope
+Selection size: %d
+Selection size: %d/%d
+Selection: %d items
+Selection: %d/%d
+Selections can be built using Selectable(), TreeNode() or other widgets. Selection state is owned by application code/data.
 Selectors/Pickers
 SelfShadowStrength
 Semicolon
@@ -3651,6 +4121,7 @@ Set 500x500
 Set 800x200
 Set as default
 Set defaults in code:
+Set io.ConfigDebugHighlightIdConflicts=false to disable this warning in non-programmers builds.
 Set io.ConfigFlags |= ImGuiConfigFlags_DockingEnable in your code, or 
 Set to PI
 Set to false
@@ -3659,15 +4130,21 @@ Set to true
 Set to zero
 SetActiveID() cancel MovingWindow\n
 SetActiveID() old:0x%08X (window "%s") -> new:0x%08X (window "%s")\n
-SetColorEditOptions() is designed to allow you to set boot-time default.\nWe don't have Push/Pop functions because you can force options on a per-widget basis if needed,and the user can change non-forced ones with the options menu.\nWe don't have a getter to avoidencouraging you to persistently save values that aren't forward-compatible.
+SetAxes() needs to be called between BeginPlot() and EndPlot()!
+SetAxis() needs to be called between BeginPlot() and EndPlot()!
+SetColorEditOptions() is designed to allow you to set boot-time default.\nWe don't have Push/Pop functions because you can force options on a per-widget basis if needed, and the user can change non-forced ones with the options menu.\nWe don't have a getter to avoid encouraging you to persistently save values that aren't forward-compatible.
 SetContents %s
 SetKeyboardFocusHere(%d) in window "%s"\n
 SetKeyboardFocusHere() ignored while DragDropActive!\n
+SetNextAxisLimits() needs to be called before BeginPlot()!
+SetNextAxisLinks() needs to be called before BeginPlot()!
+SetNextAxisToFit() needs to be called before BeginPlot()!
 SetNextFrameWantCaptureKeyboard() on hover
 SetNextFrameWantCaptureMouse() on hover
 SetNextItemWidth/PushItemWidth(-100)
 SetNextItemWidth/PushItemWidth(-FLT_MIN)
 SetNextItemWidth/PushItemWidth(-GetContentRegionAvail().x * 0.5f)
+SetNextItemWidth/PushItemWidth(-Min(GetContentRegionAvail().x * 0.40f, GetFontSize() * 12))
 SetNextItemWidth/PushItemWidth(100)
 SetNextItemWidth/PushItemWidth(GetContentRegionAvail().x * 0.5f)
 SetShortcutRouting(%s, flags=%04X, owner_id=0x%08X) -> always, no register\n
@@ -3686,6 +4163,9 @@ SettingsHandlers
 SettingsIniData
 SettingsTables
 SettingsWindows
+Setup needs to be called after BeginPlot and before any setup locking functions (e.g. PlotX)!
+Setup needs to be called after BeginPlot or BeginSubplots and before any setup locking functions (e.g. PlotX)!
+SetupFinish needs to be called after BeginPlot!
 SetupView
 Seven
 Shaded
@@ -3704,6 +4184,7 @@ ShadowDepthBuffer
 ShadowDepthBufferNoCmp
 ShadowMapMaxSize
 ShadowMapSizeQuantization
+ShadowStrength
 ShadowTile Atlas Debugger
 ShadowTiles: %02i%% lights used, %s conservative, %s final\n
 ShadowTiles: %02i%% tiles used, %s all lit, %s all shadow, %s penumbra\n
@@ -3711,7 +4192,11 @@ Shape %i\nSpeed Multiplier %.2f
 Shape %i\nStrength %.2f\nExponent %.2f
 Share Items
 SharedFlags
+Shift 
+Shift modifier for range selection.
 Shift+
+Shift+Click to check multiple boxes.
+Shift+Keyboard to copy current value to other boxes.
 Short Text
 Shortcuts
 Show
@@ -3741,11 +4226,16 @@ Show Subplot Grid Rects
 Show Tags
 Show Tooltip
 Show Trailing TabItemButton()
+Show Type Overlay
 Show Vis
+Show color button
+Show font preview
 Show groups rectangles
+Show in a table
 Show indented items
 Show step buttons
 Show tables rectangles
+Show used rect
 Show width
 Show windows begin order
 Show windows rectangles
@@ -3763,9 +4253,11 @@ Simple layout
 Simple overlay
 Simple overlay\n(right-click to change position)
 SimplePostProcessingLayer
+Simplified docking mode: disable window merging into a same tab-bar, so docking is limited to splitting windows.
 Simplified docking mode: disable window splitting, so docking is limited to merging multiple windows together into tab-bars.
 Sin(time) = %f
 Single call to TextUnformatted()
+Single-Select
 SingleCharMode = %d, Size = %d, Lock = %d
 Size all columns to default###SizeAll
 Size all columns to fit###SizeAll
@@ -3813,6 +4305,7 @@ Some calls to Begin()/BeginChild() will return false.\n\nWill cycle through wind
 Some content %d
 Some contents
 Some framed item
+Some framed item##2
 Some menu item
 Some other contents
 Some test %d
@@ -3826,6 +4319,7 @@ SortedDrawIB
 Sorting
 Sorting:
 SourceBufferOffset
+SourceIdx: %d
 SourceMorphAtlas
 South
 Space
@@ -3844,6 +4338,7 @@ St23_Sp_counted_ptr_inplaceI10CUtlVectorI20CMeshDrawPrimitive_ti25CUtlVectorMemo
 St23_Sp_counted_ptr_inplaceI13CViewDrawListSaIvELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceI14CTonemapSystemSaIvELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceI19CRenderGraphBuilderSaIvELN9__gnu_cxx12_Lock_policyE2EE
+St23_Sp_counted_ptr_inplaceI21ImGuiViewportDrawDataSaIvELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceI23CSceneViewDebugOverlaysSaIvELN9__gnu_cxx12_Lock_policyE2EE
 St23enable_shared_from_thisI19CRenderGraphBuilderE
 Stacked
@@ -3856,6 +4351,7 @@ Stairstep Plots
 Static World Overlays
 StaticOverlayLayer
 Stationary
+Status = %s (%d), Format = %s (%d), UseColors = %d
 Stem Plots
 Stem Plots##
 Stems
@@ -3882,17 +4378,19 @@ Streamed Out: %0.2f MB:
 Streaming Activity
 Stretch
 Stretch + ScrollX
+Stretch Spacing
 StretchProp
 StretchSame
 Striding is useful for interleaved data (e.g. audio) or plotting structs.
 Student
 Sturges
-Style
 Style Editor
 Style Editor (ImGui)
 Style Editor (ImPlot)
 Style settings
 Style the child window like a framed item: use FrameBg, FrameRounding, FrameBorderSize, FramePadding instead of ChildBg, ChildRounding, ChildBorderSize, WindowPadding.
+Style, Fonts
+Sub-child %d
 Sub-menu
 Subplot
 Subplot [0x%08X]
@@ -3904,8 +4402,9 @@ SubsurfaceProfilesManifest
 Suggested
 Summary
 SunLightMinBrightness
+Super 
 Super+
-SupportsCubeMapArrays
+Supported features:
 SupportsLineRendering
 SurfaceVertexCacheBuffer
 Swap %s
@@ -3915,14 +4414,14 @@ Symmetric Log Scale
 Synced Table %d
 Synced instances
 System file
+Syu\tWY
 T>gaW?:]f?AHV>'
-TAB/SHIFT+TAB to cycle through keyboard editable fields.
 TEST
 TEST##1
 TEST##2
+TLAS: %s instances, %s geometries, %s instances size culled\n
 TOOLSCENE_OVERLAY_LAYER 
 TOOLS_UNLIT_LAYER 
-TRACK_LAST_DRAW_FRAME 
 TRANSFER_DST_OPTIMAL
 TRANSFER_READ_BIT
 TRANSFER_SRC_OPTIMAL
@@ -3931,16 +4430,22 @@ TUBE
 TUBE_WITH_END_CAPS
 Tab Bars (%d)
 Tab bar
+Tab/Shift+Tab to cycle through keyboard editable fields.
 TabBar
 TabBar+Tabs
 TabBarBorderSize
+TabBarOverlineSize
 TabBars
 TabBorderSize
+TabCloseButtonMinWidthSelected
+TabCloseButtonMinWidthUnselected
 TabDimmed
 TabDimmedSelected
 TabDimmedSelectedOverline
 TabHovered
 TabItemButton & Leading/Trailing flags
+TabMinWidthBase
+TabMinWidthShrink
 TabRounding
 TabSelected
 TabSelectedOverline
@@ -3956,12 +4461,15 @@ TableBorderStrong
 TableHeaderBg
 TableRowBg
 TableRowBgAlt
+TableSetColumnIndex() invalid column index!
 Tables
 Tables & Columns
 Tables (%d)
 Tables:
 Tabs
 Tag: %d
+TagX() needs to be called between BeginPlot() and EndPlot()!
+TagY() needs to be called between BeginPlot() and EndPlot()!
 Tailor
 TanFrameQuat
 TangentSpaceOffset
@@ -3974,8 +4482,11 @@ Test tree node as drag source
 Test type
 Testing how various types of items are interacting with the IsItemXXX functions. Note that the bool return value of most ImGui function is generally equivalent to calling ImGui::IsItemHovered().
 Tex Mem
+Tex: %dx%d
+TexID = %s, BackendUserData = %p
 Text
 Text Baseline Alignment
+Text Clipping
 Text Filter
 Text Input
 Text aligned to framed item
@@ -3984,7 +4495,10 @@ Text wrapped
 Text() elements don't have stable identifiers so we need to provide one.
 TextDisabled
 TextInput
+TextLen: %d, Cursor: %d%s, Selection: %d..%d
+TextLink
 TextSelectedBg
+Texture #%03d (%dx%d pixels)
 Texture Area: about %d px ~%dx%d px
 Texture Memory
 Texture Visualizer
@@ -3993,9 +4507,15 @@ The "Examples" menu above leads to more demo contents.
 The "Tools" menu above gives access to: About Box, Style Editor,\nand Metrics/Debugger (general purpose Dear ImGui debugging tool).
 The "Tools" menu above gives access to: Style Editors (ImPlot/ImGui)\nand Metrics (general purpose Dear ImGui debugging tool).
 The Background draw list will be rendered below every Dear ImGui windows.
+The Combo() function is not greatly useful apart from cases were you want to embed all options in a single strings.\nFlags above don't apply to this section.
 The Foreground draw list will be rendered over every Dear ImGui windows.
 The TextDisabled color is stored in ImGuiStyle.
 The Y-axis has been configured to auto-fit to only the data visible in X-axis range.
+The colormap index is invalid!
+The colormap name has already be used!
+The colormap name has already been used!
+The colormap name is invalid!
+The colormap size must be greater than 1!
 The lazy dog is a good dog. This paragraph should fit within %.0f pixels. Testing a 1 character word. The quick brown fox jumps over the lazy dog.
 The logging API redirects all text output so you can easily capture the content of a window or a block. Tree nodes can be automatically expanded.\nTry opening any of the contents below in this window and then click one of the "Log To" button.
 The offset value indicates which circle point index is considered the first.
@@ -4005,18 +4525,18 @@ The same contents can be accessed in 'Tools->Style Editor' or by calling the Sho
 The value of io.WantCaptureMouse and io.WantCaptureKeyboard are normally set by Dear ImGui to instruct your application of how to route inputs. Typically, when a value is true, it means Dear ImGui wants the corresponding inputs and we expect the underlying application to ignore them.\n\nThe most typical case is: when hovering a window, Dear ImGui set io.WantCaptureMouse to true, and underlying application should ignore mouse inputs (in practice there are many and more subtle rules leading to how those flags are set).
 Theoretical
 ThicknessTexture
-This a popup for "%s"!
+This demo has nothing to do with enabling docking!\nThis demo only demonstrate the use of ImGui::DockSpace() which allows you to manually\ncreate a docking node _within_ another window.\nMost application can simply call ImGui::DockSpaceOverViewport() and be done with it.
 This demonstrates embedding a table into another table cell.
-This example assumes 60 FPS. Higher FPS requires larger buffer size.
 This example implements a console with basic coloring, completion (TAB key) and history (Up/Down keys). A more elaborate implementation may want to store entries along with extra data such as timestamp, emitter, etc.
-This example shows how you may implement a property editor using two columns.\nAll objects/fields data are dummies here.\n
 This is a custom popup for Column %d
 This is a custom popup for unused space after the last column.
 This is a drag and drop source
 This is a dummy button..
-This is a more typical looking tree with selectable nodes.\nClick to select, CTRL+Click to toggle, click on arrows or double-click to open.
+This is a more typical looking tree with selectable nodes.\nClick to select, Ctrl+Click to toggle, click on arrows or double-click to open.
+This is a popup for "%s"!
 This is a simplified view. See more detailed input state:\n- in 'Tools->Metrics/Debugger->Inputs'.\n- in 'Tools->Debug Log->IO'.
 This is another child window for testing the _ChildWindows flag.
+This is rather advanced and experimental. If you are getting started with multi-select, please don't start by looking at how to use it for a tree!\n\nFuture versions will try to simplify and formalize some of this.
 This is testing the vertical alignment that gets applied on text to keep it aligned with widgets. Lines only composed of text or "small" widgets use less vertical space than lines with framed widgets.
 This is the %s tab!
 This is the Avocado tab!\nblah blah blah blah blah
@@ -4030,10 +4550,10 @@ This text should automatically wrap on the edge of the window. The current imple
 This text should automatically wrap on the edge of the work rectangle.
 This widget is only here to be able to tab-out of the widgets above and see e.g. Deactivated() status.
 This window has a changing title.
-Those are old settings provided for convenience.\nHowever, the _correct_ way of scaling your UI is currently to reload your font at the designed size, rebuild the font atlas, and call style.ScaleAllSizes() on a reference ImGuiStyle structure.\nUsing those settings here will give you poor quality results.
 Those flags are set by the backends (imgui_impl_xxx files) to specify their capabilities.\nHere we expose them as read-only fields to avoid breaking interactions with your backend.
 Thread_ProcessProceduralLayer
 Thread_RenderGpuCullingLayer
+Thread_RenderLightSetupLayer
 Thread_RenderSceneDrawList
 Thread_RenderViewLayer
 Three
@@ -4049,11 +4569,11 @@ TimeSlicedShadow
 TimeSlicedShadowMapRendering
 Timer took %.4f
 Tint
-Tint with Text Color
 TinyBVH Fatal Error: %s at %s:%d
 TinyBVHFatalError
 TinyBVHFatalError(char const*, char const*, int)
 TinyBVHFatalError(char const*, char const*, int)::_assertionConstants
+Tip: Use 'Demo->Tools->Debug Log->Selection' to see selection requests as they happen.
 Title
 Title bar Hovered/Active tests
 Title: %s
@@ -4068,13 +4588,12 @@ To Ref
 To TTY
 To call IM_DEBUG_BREAK() %s:
 Toggle..
-Toggling this at runtime is normally unsupported (most platform backends won't refresh the decoration right away).
-Toggling this at runtime is normally unsupported (most platform backends won't refresh the parenting right away).
-Toggling this at runtime is normally unsupported (most platform backends won't refresh the task bar icon state right away).
+Toggles mesh shader rendering for instanced meshes
 ToneMapping
 TonemapManifest
 Tonemapping_DefaultAutoExposureMax
 Tonemapping_DefaultAutoExposureMin
+Too many PopItemWidth!
 Too many cached shadows needed per frame, maximum is %i, failed to allocate %i this frame\n
 Too many non-culled draws (alloc %u, need %u), resizing!\n
 ToolsAmbientLighting
@@ -4099,6 +4618,7 @@ TouchScreen
 TraceRays
 Track
 Track %d
+Transient
 Translucent
 TranslucentScreenSpace
 Transparency
@@ -4108,9 +4628,16 @@ Tree in column
 Tree node
 Tree nodes
 Tree view
+TreeLines
+TreeLinesFlags
+TreeLinesRounding
+TreeLinesSize
 TreeNode
 TreeNode (w/ double-click)
+TreeNode() is technically supported but... using this correctly is more complicated (you need some sort of linear/random access to your tree, which is suited to advanced trees setups already implementing filters and clipper. We will work toward simplifying and demoing this.\n\nFor now the tree demo is actually a little bit meaningless because it is an empty tree with only root nodes.
+Trees
 Triangles rendered: %s\n
+Tris
 Trump
 Tube light with end caps
 Tube light without end caps
@@ -4120,13 +4647,17 @@ TwoTwoTwo
 TypingSelect
 TypingSelect (%d)
 U+%04X
+U+%04X-U+%04X: %d codepoints in %d inputs
 U+%04X..U+%04X (%d %s)
+UG\vHs\vI@
+UID: 0x%08X
 UNDEFINED
 UNIFORM_READ_BIT
 UNIQUE_BATCH_GROUP
 UNUSED
+UQ\vL
 USER GUIDE:
-USER:\nHold SHIFT or use mouse to select text.\nCTRL+Left/Right to word jump.\nCTRL+A or Double-Click to select all.\nCTRL+X,CTRL+C,CTRL+V clipboard.\nCTRL+Z,CTRL+Y undo/redo.\nESCAPE to revert.\n\nPROGRAMMER:\nYou can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputText() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example (this is not demonstrated in imgui_demo.cpp).
+USER:\nHold Shift or use mouse to select text.\nCtrl+Left/Right to word jump.\nCtrl+A or Double-Click to select all.\nCtrl+X,Ctrl+C,Ctrl+V for clipboard.\nCtrl+Z to undo, Ctrl+Y/Ctrl+Shift+Z to redo.\nEscape to revert.\n\nPROGRAMMER:\nYou can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputText() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example (this is not demonstrated in imgui_demo.cpp).
 USES_PAYLOAD
 USES_SHADOW_FAST_PATH
 UTF-8 Encoding viewer
@@ -4134,6 +4665,8 @@ UTF-8 Text
 UTF-8 input
 UV: (%.3f,%.3f)->(%.3f,%.3f)
 UVTestLayout
+Unable to reload texture %s into textureset: %s\n
+Unable to reload texture %s into textureset: couldn't load from disk\n
 Unbatchable material draws: 
 Uncertain Data
 Underlying float value: %f
@@ -4148,26 +4681,29 @@ Unnamed
 Unnormalized joint weights encountered (%f): Skinning may not work! (At position %.3f %.3f %.3f)\n
 Unrecognized command %d in scene system debugger command\n
 Unsaved document
+UnsavedMarker
 UpArrow
 UpdateAOProxySceneObject
 UpdateBuffers
 UpdateDirtyObjects
 UpdateGroomDensityAndAo
 Use 24 Hour Clock
+Use Ctrl+Wheel to zoom
 Use ISO 8601
 Use Local Time
 Use SetScrollHereX() or SetScrollFromPosX() to scroll to a given horizontal position.\n\nBecause the clipping rectangle of most window hides half worth of WindowPadding on the left/right, using SetScrollFromPosX(+1) will usually result in clipped text whereas the equivalent SetScrollFromPosY(+1) wouldn't.
 Use SetScrollHereY() or SetScrollFromPosY() to scroll to a given vertical position.
-Use TAB/SHIFT+TAB to cycle through keyboard editable fields.
-Use Text Color for Tint
+Use Tab/Shift+Tab to cycle through keyboard editable fields.
 Use child windows to begin into a self-contained independent scrolling/clipping regions within a host window.
 Use default sizing policy:\n- ImGuiTableFlags_SizingFixedFit if ScrollX is on or if host window has ImGuiWindowFlags_AlwaysAutoResize.\n- ImGuiTableFlags_SizingStretchSame otherwise.
 Use the 'ImTextureID' type as storage to pass pointers or identifiers to your\nown texture data.
 Use work area instead of main area
 Used by %i passes: 
+Useful if you know that you aren't displaying contents in other columns
 UserID=0x%08X%n
 Using 16-bit blend indices\n
 Using ImGuiInputTextFlags_CallbackResize to wire your custom string type to InputText().\n\nSee misc/cpp/imgui_stdlib.h for an implementation of this for std::string.
+Using ImGuiListClipper.
 Using NoHostExtendX and NoHostExtendY:
 Using SetNextItemShortcut()
 Using Shortcut()
@@ -4176,7 +4712,9 @@ Using TableNextRow() + calling TableSetColumnIndex() _before_ each cell, in a lo
 Using TableSetupColumn() to alter resizing policy on a per-column basis.\n\nWhen combining Fixed and Stretch columns, generally you only want one, maybe two trailing columns to use _WidthStretch.
 Using TableSetupColumn() to setup default width.
 Using TableSetupColumn() to setup explicit width.\n\nUnless _NoKeepColumnsVisible is set, fixed columns with set width may still be shrunk down if there's not enough space in the host.
+Using _NoAutoSelect + _NoAutoClear flags.
 Using _Resizable + _SizingFixedFit flags.\nFixed-width columns generally makes more sense if you want to use horizontal scrolling.\n\nDouble-click a column border to auto-fit the column to its contents.
+Using directional navigation key makes the cursor visible. Mouse click hides the cursor.
 Using explicit size:
 Using the _Resizable flag automatically enables the _BordersInnerV flag as well, this is why the resize borders are still showing when unchecking this.
 Using the format string parameter to display a name instead of the underlying integer.
@@ -4189,6 +4727,7 @@ VERTEX_INPUT
 VIEWMODEL_LAYER 
 Validate
 Value = %.3f <-- (1) right-click this text
+Ve\fK
 Vector2f
 VelocityAccumVolume
 Vert:
@@ -4260,13 +4799,17 @@ VrForward
 WANTS_FRAMEBUFFER_COPY_TEXTURE 
 WANTS_PROBE_LIGHTING 
 WARNING: Encountered %d total problems with vertex data (first %d shown above)\n
-WARNING: ImDrawIdx is 16-bit and ImGuiBackendFlags_RendererHasVtxOffset is false. Expect visual glitches and artifacts! See README for more information.
 WINDOWING
 WS hair verts
 WaitForRenderingToComplete
 Walker
 WantCapture override
+WantCreate
+WantDestroy
+WantUpdates
+Warning: Font scaling will NOT be smooth, because\nImGuiBackendFlags_RendererHasTextures is not set!
 Warning: Sizing Constraints won't work if the window is docked!
+Warning: failed to split large node (%i tris).\n
 Warning: owning Window is inactive. This DrawList is not being rendered!
 Watermelon
 Waves
@@ -4284,14 +4827,15 @@ WheelingWindowReleaseTimer: %.2f
 When ImPlotAxisFlags_Time is enabled on the X-Axis, values are interpreted as\nUNIX timestamps in seconds and axis labels are formated as date/time.
 When ScrollX is enabled, the default sizing policy becomes ImGuiTableFlags_SizingFixedFit, as automatically stretching columns doesn't make much sense with horizontal scrolling.\n\nAlso note that as of the current version, you will almost always want to enable ScrollY along with ScrollX, because the container window won't automatically extend vertically to fix contents (this may be improved in future versions).
 When _AllowTabInput is set, passing through the widget with Tabbing doesn't automatically activate it, in order to also cycling through subsequent widgets.
+When a platform window is focused (e.g. using Alt+Tab, clicking Platform Title Bar), apply corresponding focus on imgui windows (may clear focus/active id from imgui windows location in other platform windows). In principle this is better enabled but we provide an opt-out, because some Linux window managers tend to eagerly focus windows (e.g. on mouse hover, or even a simple window pos/size change).
 When a popup is active, it inhibits interacting with windows that are behind the popup. Clicking outside the popup closes it.
 When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.
-When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!\n- Drag from window title bar or their tab to dock/undock.\n- Drag from window menu button (upper-left button) to undock an entire node (all windows).\n- Hold SHIFT to disable docking (if io.ConfigDockingWithShift == false, default)\n- Hold SHIFT to enable docking (if io.ConfigDockingWithShift == true)\nThis demo app has nothing to do with enabling docking!\n\nThis demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window.\n\nRead comments in ShowExampleAppDockSpace() for more details.
-When drawing circle primitives with "num_segments == 0" tesselation will be calculated automatically.
-When not specified explicitly (Auto/Current mode), user can right-click the picker to change mode.
+When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!\n- Drag from window title bar or their tab to dock/undock.\n- Drag from window menu button (upper-left button) to undock an entire node (all windows).\n- Hold SHIFT to disable docking (if io.ConfigDockingWithShift == false, default)\n- Hold SHIFT to enable docking (if io.ConfigDockingWithShift == true)
+When drawing circle primitives with "num_segments == 0" tessellation will be calculated automatically.
+When not specified explicitly, user can right-click the picker to change mode.
 When sorting is enabled: allow no sorting, disable default sorting. TableGetSortSpecs() may return specs where (SpecsCount == 0).
 When sorting is enabled: hold shift when clicking headers to sort on multiple column. TableGetSortSpecs() may return specs where (SpecsCount > 1).
-While inputing text:\n
+While inputting text:\n
 Widgets
 Widgets Width
 Width 
@@ -4301,6 +4845,8 @@ Width: %.1f (MinX: %.1f, MaxX: %.1f)
 Width=%d%n
 WidthFixed 
 WidthStretch 
+Wiki
+Wiki page:
 Will call the IM_DEBUG_BREAK() macro to break in debugger.\nWarning: If you don't have a debugger attached, this will probably crash.
 Wind
 WindControllerConstantBuffer_t
@@ -4314,6 +4860,7 @@ Window will resize every-frame to the size of its content.\nNote that you probab
 WindowA
 WindowBg
 WindowBorder
+WindowBorderHoverPadding
 WindowBorderSize
 WindowClass: %08X\n
 WindowClassId: 0x%08X
@@ -4326,15 +4873,7 @@ Windows (%d)
 Windows Minimap
 Wireframe2DLayout
 Wireframe3DLayout
-With Alpha
-With Alpha Bar
-With Alpha Preview
-With Drag and Drop
-With HDR
-With Half Alpha Preview
-With Options Menu
 With Ref Color
-With Side Preview
 With a menu..
 With border:
 With keyboard navigation enabled:
@@ -4356,15 +4895,21 @@ X-Axis %d
 X-Axis %d [0x%08X]
 X-Axis 1
 X-Axis 2
+X-Axis index out of bounds!
+X/0B5\f 
 X/Y = %.0f px
 X24_TYPELESS_G8_UINT
 X32_TYPELESS_G8X24_UINT
+XK+G
+Xo1 WB
+Y 3A
 Y-Axis
 Y-Axis %d
 Y-Axis %d [0x%08X]
 Y-Axis 1
 Y-Axis 2
 Y-Axis 3
+Y-Axis index out of bounds!
 YSN[RUZP>8c7NXNZdPE4\HNKLY_
 Yellow
 Yes, you can\ndrag this!
@@ -4382,10 +4927,12 @@ You can pass a 'min_row_height' to TableNextRow().\n\nRows are padded with 'styl
 You can plot custom structs using the stride feature.
 You can use ImGui::GetMouseDragDelta(0) to query for the dragged amount on any widget.
 You can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputTextMultiline() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example. (This is not demonstrated in imgui_demo.cpp because we don't want to include <string> in here)
+You can't pop more modifiers than have been pushed!
 Your application can render a different mouse cursor based on what ImGui::GetMouseCursor() returns. If software cursor rendering (io.MouseDrawCursor) is set ImGui will draw the right cursor for you, otherwise your backend needs to handle it.
 Your current configuration is:
 Z>wg}?0
 Zero-area light
+Zo\fn
 Zoom %f\n
 Zoom Constraints
 Zoom and pan the X-axis. Disable Stems to see a difference in fit.
@@ -4396,6 +4943,7 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 [%s][Data]\n
 [DUMP: Scene World %d: 0x%p '%s': %d objects]\n
 [Debug] Add 5 entries
+[Experimental] Tree lines may not work in all situations (e.g. using a clipper) and may incurs slight traversal overhead.\n\nImGuiTreeNodeFlags_DrawLinesFull is faster than ImGuiTreeNodeFlags_DrawLinesToNode.
 [beta] Enable beta multi-viewports support. See ImGuiPlatformIO for details.
 [c0.x0 c0.y0 ... cn.x0 cn.y0 c0.x1 c0.y1 ... cn.x1 cn.y1 ... cn.xm cn.ym]
 [docking] - Tab 0x%08X '%s' Order %d\n
@@ -4404,10 +4952,12 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 [docking] DockBuilderRemoveNode 0x%08X\n
 [docking] DockBuilderSplitNode: node 0x%08X, split_dir %d\n
 [docking] DockContextAddNode 0x%08X\n
+[docking] DockContextBuildNodesFromSettings: skip duplicate node 0x%08X\n
 [docking] DockContextProcessDock node 0x%08X target '%s' dock window '%s', split_dir %d\n
 [docking] DockContextProcessDock node 0x%08X, split_dir %d\n
 [docking] DockContextProcessUndockNode node %08X\n
 [docking] DockContextProcessUndockWindow window '%s', clear_persistent_docking_ref = %d\n
+[docking] DockContextPruneUnusedSettingsNodes: Merge 0x%08X->0X%08X\n
 [docking] DockContextPruneUnusedSettingsNodes: Prune 0x%08X\n
 [docking] DockContextRebuildNodes\n
 [docking] DockContextRemoveNode 0x%08X\n
@@ -4429,7 +4979,13 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 [focus] NavMoveRequest: SetNavWindow("%s")\n
 [focus] NavRestoreLayer: from "%s" to SetNavWindow("%s")\n
 [focus] SetNavWindow("%s")\n
-[invalid]
+[font] Created baked %.2fpx\n
+[font] Discard baked %.2f for "%s"\n
+[font] Failed packing %dx%d rectangle. Returning fallback.\n
+[font] Texture #%03d: resize failed. Will grow.\n
+[font] Texture #%03d: resize+repack %dx%d => Texture #%03d: %dx%d\n
+[imgui-error] (current settings: Assert=%d, Log=%d, Tooltip=%d)\n
+[imgui-error] In window '%s': %s\n
 [io] %s: AppFocused %d\n
 [io] %s: Key "%s" %s\n
 [io] %s: MouseButton %d %s (%s)\n
@@ -4438,7 +4994,7 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 [io] %s: MouseViewport (0x%08X)\n
 [io] %s: MouseWheel (%.3f, %.3f) (%s)\n
 [io] %s: Text: %c (U+%08X)\n
-[io] Calling io.SetPlatformImeDataFn(): WantVisible: %d, InputPos (%.2f,%.2f)\n
+[io] Calling Platform_SetImeDataFn(): WantVisible: %d, InputPos (%.2f,%.2f) for Viewport 0x%08X\n
 [io] LockWheelingWindow() "%s"\n
 [missing]
 [nav] NavInitRequest: ApplyResult: NavID 0x%08X in Layer %d Window "%s"\n
@@ -4450,19 +5006,29 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 [nav] NavMoveSubmitted but not led to a result!\n
 [nav] NavUpdateCancelRequest()\n
 [none]
+[popup] - Closing PopupID 0x%08X Window "%s"\n
 [popup] CloseCurrentPopup %d -> %d\n
 [popup] ClosePopupToLevel(%d), restore_under=%d\n
 [popup] ClosePopupsOverWindow("%s")\n
 [popup] OpenPopup("%s" -> 0x%08X)\n
 [popup] OpenPopupEx(0x%08X)\n
+[selection] %s: Request: SetAll %d (= %s)\n
+[selection] %s: Request: SetRange %lld..%lld (0x%llX..0x%llX) = %d (dir %d)\n
+[selection] BeginBoxSelect() 0X%08X: Activate\n
+[selection] BeginBoxSelect() 0X%08X: Deactivate\n
+[selection] EndMultiSelect: Reset NavIdItem.\n
+[selection] EndMultiSelect: Reset RangeSrcItem.\n
 [viewport] Add Viewport %08X '%s'\n
 [viewport] Create Platform Window %08X '%s'\n
 [viewport] Delete Viewport %08X '%s'\n
 [viewport] Destroy Platform Window %08X '%s'\n
-[viewport] Focused viewport changed %08X -> %08X, attempting to apply our focus.\n
+[viewport] Focused viewport changed %08X -> %08X '%s', attempting to apply our focus.\n
 [viewport] Node %08X transfer Viewport %08X->%08X to Window '%s'\n
 [viewport] Window '%s' closed by PlatformRequestClose\n
 [viewport] Window '%s' steal Viewport %08X from Window '%s'\n
+\fBK L
+\fG7+B
+\fPy\vE
 \fT>M-+?#gy?
 \n Render %d specific objects
 \n Render world : %s\n
@@ -4470,6 +5036,8 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 \n<i>Not using PerViewConstantBuffer_t</i>
 \n<i>PerViewConstantBuffer_t</i>
 \n<i>Procedural Layer</i>
+\nAM\nA
+\naI1 
 \tLayer %d "%s": %d inputs, %d outputs\n
 \tLayer %d "%s"\n
 \tRT %dx%d %s %dx MSAA used by %s\n
@@ -4484,6 +5052,9 @@ Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 \t\t\tDepth Target: HRT = %llX, MSAA = %s, Resolve = %llX, Width = %d, Height = %d\n
 \t\t\tHRT = %llX, MSAA = %s\n
 \t\tviewport TopLeftX: %d TopLeftY: %d Width: %d Height: %d\n
+\v 3ZK
+\vDC\vL
+\vMn1Y?
 _AngledHeader
 _COL3F
 _COL4F
@@ -4491,6 +5062,7 @@ _DefaultHide
 _DefaultSort
 _Disabled
 _Dup
+_H\fY1
 _HighlightHoveredColumn
 _IMWINDOW
 _IndentDisable
@@ -4514,6 +5086,7 @@ _PreferSortDescending
 _Resizable
 _ScrollX
 _ScrollY
+_Sortable
 _TREENODE
 _TX%d_TY%d
 _TexBarrierRT0
@@ -4535,6 +5108,7 @@ _TexBarrierRT9
 _WidthFixed
 _WidthStretch
 _atlas
+aJ!\vA
 aaa1.c
 aaa2.cpp
 aaaa
@@ -4544,27 +5118,25 @@ abc.h
 active resources
 active sceneobject: %i clusters
 additionalExcludedFlags
-additionalRenderAttributes
 additionalRequiredFlags
 aggregate.fragmentCount
 aggregate.material_name
 aggregate.meshletCount
 aggregate.model_name
 aggregatedesc.cpp
-aggregatedesc.cpp:2016
+aggregatedesc.cpp:2039
+aggregates
+albedoOnly
 aliasing
 alphatest
-altcolor
 ambientocclusionproxy.cpp
 analog_%d
 analog_0
 analog_1
-animatable.cpp
 another one of those tree node...
 another popup
 ao_proxy_box_list
 ao_proxy_capsule_list
-asbounce
 asinh
 avg %f
 b%d (%.02f secs)
@@ -4581,7 +5153,6 @@ bUseFullsort
 bUseSST
 baked_shadow_index
 baked_shadow_light_id
-bakedshadowindex
 barn
 barnlightconstants
 bars
@@ -4592,6 +5163,7 @@ batchlist.flags_uint
 bbb1.c
 bbb2.cpp
 bbbb
+benb_32028_2897001788_0
 bentnormal
 blah blah
 blendindices
@@ -4613,7 +5185,6 @@ can fit within a text block.
 canvas
 cascade %d%s
 casing swap
-castshadowmode
 cbrt
 ccc1.c
 ccc2.cpp
@@ -4621,6 +5192,7 @@ cccc
 cell bg type
 cfg/imgui_%s
 cfg_infos
+char*
 checkbox
 clap
 click here
@@ -4638,15 +5210,15 @@ colors[ImPlotCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);\n
 columns
 combo
 combo 1
-combo 2 (one-liner)
-combo 3 (array)
-combo 4 (function)
+combo 2 (w/ filter)
+combo 3 (one-liner)
+combo 4 (array)
+combo 5 (function)
 compacted draw count
 compacted drawindirectargs
 compaction requests
 compressedtangentframe
 concave
-contactshadow
 context
 copy_rt
 created by %s
@@ -4667,20 +5239,24 @@ cullplanesbuffer
 cullrequests
 cullstats
 curvature
+custom_scale
+custom_size
 data%d
 dddd
 dear imgui says hello! (%s) (%d)
+dearimgui.com/faq
 debugmeshletdrawargs
 debugui
 decimal
 define: IMGUI_DISABLE_OBSOLETE_FUNCTIONS
-define: IMGUI_DISABLE_OBSOLETE_KEYIO
 define: IMGUI_HAS_DOCK
 define: IMGUI_HAS_VIEWPORT
+define: NDEBUG
 define: __GNUC__=%d
 define: __cplusplus=%d
 define: __linux__
 degenerate
+deleted by %s
 depth pass
 desktop.ini
 digital_%d
@@ -4690,6 +5266,7 @@ dimensions
 directlight
 display very important message here!
 distancefieldscene.cpp
+docs/BACKENDS.md
 drag double
 drag double log
 drag float
@@ -4726,12 +5303,14 @@ dual_lobe_roughness_0
 dual_lobe_roughness_1
 dual_lobe_roughness_mix
 dummybuffer
+dynamicbounce
 eeee
 emissive_lighting_boost
 enter text here
 environmentmappeddynamic
 envmaparray.vtex
 excludeStatic
+execvp
 extract.cpp
 f(x) = 10^x
 f(x) = a*x+b
@@ -4762,24 +5341,23 @@ float (indented)##2b
 float (indented)##3b
 float (indented)##4b
 float (indented)##5b
+float (indented)##6b
 float##1b
 float##2a
 float##3a
 float##4a
+float##5a
 float0
 float1
 fog volumes
 fog_cached_shadow_atlas
-fogmixedshadows
-fogscale
-fogshadowmode
-forceshadowsenabled
+for_sort_specs_only
+frag %i
 fragmentbounds
 freeze_cols
 freeze_rows
 fresnel_exponent
 frustum
-frustumcount
 fullscreenquad
 func
 g?Q1
@@ -4794,9 +5372,11 @@ g_lightBinnerGpuSet
 g_tFogIndirect
 g_tHeightfield
 g_tLastFrameFogVolume
+g_tMonitorColor
 g_tNoise
+g_tPreviousRT
 generatecullrequests
-global scale
+global_scale = ~%0.2f
 glyf
 glyph
 glyphs
@@ -4833,6 +5413,20 @@ hl?S
 hmtx
 horizontal
 horizontal split
+https://github.com/epezent/implot
+https://github.com/ocornut/imgui
+https://github.com/ocornut/imgui/blob/master/docs/BACKENDS.md
+https://github.com/ocornut/imgui/blob/master/docs/FAQ.md
+https://github.com/ocornut/imgui/blob/master/docs/FAQ.md#qa-usage
+https://github.com/ocornut/imgui/issues/8465
+https://github.com/ocornut/imgui/releases
+https://github.com/ocornut/imgui/wiki
+https://github.com/ocornut/imgui/wiki/Docking
+https://github.com/ocornut/imgui/wiki/Error-Handling
+https://github.com/ocornut/imgui/wiki/Funding
+https://github.com/ocornut/imgui/wiki/Multi-Select
+https://github.com/ocornut/imgui/wiki/Useful-Extensions
+https://www.dearimgui.com/faq/
 h}?fN
 i < V_ARRAYSIZE( s_szMissShaderNames )
 id_unused
@@ -4843,15 +5437,19 @@ illumination_volume
 imGUI detached window
 imgui
 imgui.ini
-imgui_atlas_%f
+imgui/wiki/Multi-Select
 imgui_log.txt
 imgui_render.cpp
+imgui_texture
 in Begin()
 in BeginTable()
 in ItemAdd()
 in SetShortcutRouting() for this KeyChord
+incl,-excl
+incl. Discarded rects: %d, area: about %d px ~%dx%d px
 index
 indexbuffer
+indirectBounceLightRadius
 inner_width
 inner_width (when ScrollX active)
 input double
@@ -4880,7 +5478,12 @@ inputTexture
 instance buffer
 instance cull stats
 instance cull stats shadow
+instanced
 instanced mesh data
+instanced meshlet data
+instanced meshlet indirect dispatch
+instanced meshlet indirect dispatch debug
+instanced meshlet indirect dispatch recull
 instancedmesh.material_name
 instancedmesh.max_instances
 instancedmesh.model_name
@@ -4893,27 +5496,36 @@ io.BackendFlags: 0x%08X
 io.BackendFlags: HasGamepad
 io.BackendFlags: HasMouseCursors
 io.BackendFlags: HasMouseHoveredViewport
+io.BackendFlags: HasParentViewport
 io.BackendFlags: HasSetMousePos
 io.BackendFlags: PlatformHasViewports
+io.BackendFlags: RendererHasTextures
 io.BackendFlags: RendererHasViewports
 io.BackendFlags: RendererHasVtxOffset
 io.BackendPlatformName: %s
 io.BackendRendererName: %s
 io.ConfigDebugBeginReturnValueLoop
 io.ConfigDebugBeginReturnValueOnce
+io.ConfigDebugHighlightIdConflicts
 io.ConfigDebugIgnoreFocusLoss
 io.ConfigDebugIniSettings
 io.ConfigDebugIsDebuggerPresent
 io.ConfigDockingAlwaysTabBar
+io.ConfigDockingNoDockingOver
 io.ConfigDockingNoSplit
 io.ConfigDockingTransparentPayload
 io.ConfigDockingWithShift
+io.ConfigDpiScaleFonts
+io.ConfigDpiScaleViewports
 io.ConfigDragClickToInputText
+io.ConfigErrorRecovery
+io.ConfigErrorRecoveryEnableAssert
+io.ConfigErrorRecoveryEnableDebugLog
+io.ConfigErrorRecoveryEnableTooltip
 io.ConfigFlags: 0x%08X
 io.ConfigFlags: DockingEnable
 io.ConfigFlags: NavEnableGamepad
 io.ConfigFlags: NavEnableKeyboard
-io.ConfigFlags: NavEnableSetMousePos
 io.ConfigFlags: NoKeyboard
 io.ConfigFlags: NoMouse
 io.ConfigFlags: NoMouseCursorChange
@@ -4923,14 +5535,25 @@ io.ConfigInputTextEnterKeepActive
 io.ConfigInputTrickleEventQueue
 io.ConfigMacOSXBehaviors
 io.ConfigMemoryCompactTimer = %.1f
+io.ConfigNavCaptureKeyboard
+io.ConfigNavCursorVisibleAlways
+io.ConfigNavCursorVisibleAuto
+io.ConfigNavEscapeClearFocusItem
+io.ConfigNavEscapeClearFocusWindow
+io.ConfigNavMoveSetMousePos
+io.ConfigNavSwapGamepadButtons
+io.ConfigScrollbarScrollByPage
 io.ConfigViewportsNoAutoMerge
 io.ConfigViewportsNoDecoration
 io.ConfigViewportsNoDefaultParent
 io.ConfigViewportsNoTaskBarIcon
+io.ConfigViewportsPlatformFocusSetsImGuiFocus
+io.ConfigWindowsCopyContentsWithCtrlC
 io.ConfigWindowsMoveFromTitleBarOnly
 io.ConfigWindowsResizeFromEdges
 io.DisplayFramebufferScale: %.2f,%.2f
 io.DisplaySize: %.2f,%.2f
+io.Fonts->FontLoaderName: %s
 io.Fonts: %d fonts, Flags: 0x%08X, TexSize: %d,%d
 io.MouseDelta: (%.1f, %.1f)
 io.MouseDrawCursor
@@ -4944,11 +5567,19 @@ isCSM
 item view
 items_count
 items_type (first column)
+jasonm_433ce42d
 k>Mg
 k?C9
+kDecalMin
 kern
+ko\tB
 label
 last used by %s
+lb_debug_silhouette_sum
+lb_debug_visualize_fog_shadowed_lights
+lb_enable_newsum
+lb_precomputed_shadowmap_depth_bias
+lb_precomputed_shadowmap_enable
 left pane
 libscenesystem.so
 light AABB: %i clusters
@@ -4958,7 +5589,7 @@ light illum bounds: %i clusters
 lightSetupPass
 light_cookie
 lightbinner
-lightbinner_gpu.cpp
+lightbinner_test_computespheresilhouette
 lighting_array_fog_RT1.vtex
 lighting_array_fog_RT2.vtex
 lightmapuv
@@ -4972,6 +5603,7 @@ loca
 longeeer
 lowprecisionuv
 lowprecisionuv1
+mL\tfm\t 
 m_Endpoints
 m_Luminaire
 m_Positions
@@ -5045,6 +5677,7 @@ materials/dev/sst_depth_copy.vmat
 materials/dev/sum_aggregate_cull_stats.vmat
 materials/dev/visualize_aggregate.vmat
 materials/dev/visualize_depth.vmat
+materials/dev/visualize_instanced.vmat
 materials/dev/wind_noise_cs.vmat
 materials/dev/wind_update_cs.vmat
 materials/rendertargetops/copydepth.vmat
@@ -5059,6 +5692,7 @@ maxtime
 medium
 mergedindices
 meshlet buffer
+meshlet input layouts
 meshletdata
 min_row_height = %.2f
 mindate
@@ -5070,7 +5704,6 @@ msindirectdispatchargs
 msindirectdispatchargsrecull
 my image
 my popup
-my sailor is rich
 my_file_popup
 my_select_popup
 my_toggle_popup
@@ -5081,18 +5714,22 @@ nCascade
 nCompressedSize == nUncompressedSize
 nDepthBias
 nIndex < m_RenderTargets.Count()
+nPrevTransformBufferIndex < V_ARRAYSIZE( m_transformBufferSlotsForIndex )
 near_blue
 near_green
 near_red
 near_weight
+new sum
 nextafterf
 no blank
 no verts
 not 
 nxnstripped
+obj %d
 occlusionproxyvb
 offset_angles
 offset_origin
+old sum
 optionallycompressedtangentframe
 original
 outer_child
@@ -5100,12 +5737,14 @@ outer_size
 outputNonDepth
 overlay_deferred
 parallel
+particle data buffer
 passes
 password (clear)
 password (w/ hint)
 password123
 path_trace_light_flags
 pathtracesceneworld.cpp
+pc\nAG\vI
 per instance data
 permutations
 pervertexlighting
@@ -5113,14 +5752,15 @@ picker
 plots
 pos2Dtex2D
 posix_memalign
+post
 posxyz
+prepi
 prev layer not found
-previewbaked
-previewindexed
 projScale
 pxs?
 pxs?{7
 quadLayout
+r_character_decal_monitor_emissive
 radio a
 radio b
 radio c
@@ -5129,6 +5769,7 @@ range float
 range int
 range int (no bounds)
 ratio = %.3f
+read FAQ "About ID Stack System"
 recullcounter
 reculldispatchargs
 recullrequests
@@ -5140,7 +5781,6 @@ refraction_outputcolor
 renderOpaque
 renderToCubemap
 renderbackfaces
-renderbatchlist.cpp
 renderingpipelineforward.cpp
 rendertarget_
 rendertarget_dscratch_%d_%d_%d.vtex
@@ -5152,22 +5792,32 @@ requireStatic
 resolved_rt
 ride
 right-align
+rk\vA
 rot, inv
 rotated
 row bg target
 row bg type
 row_min_height
 rtx_random_samples.vtex
+s_hScrambledHalton != GENERIC_DATA_HANDLE_INVALID
+sc_aggregate_debug_visualizer
+sc_aggregate_rtproxy_debug_visualizer
+sc_aggregate_rtproxy_instanced_geo
+sc_aggregate_rtproxy_unique_geo
 sc_dumpworld %d
 sc_dumpworld3d %d
 sc_gpu_profiler
+sc_instanced_debug_visualizer
+sc_instanced_gpu_culling_show_culled
+sc_instanced_mesh_mesh_shader
 sc_setclassflags %s %d
 scene_quadindexbuffer
 scenegfxresources
 scenegfxresources.cpp
 sceneinfo_gpu - Load Materials
-scenelayer.cpp
+scenelight.cpp
 scenelpvdebuggrid.cpp
+scenemonitor.cpp
 sceneobject_h
 sceneobject_methods.cpp
 scenesimpleidx
@@ -5177,19 +5827,20 @@ scenesysCone
 scenesysDodecahedron
 scenesysPyramid
 scenesystem.cpp
-scenesystem.cpp(5335): Expecting 1 renderable pass for material "%s" but found %d!\n
-scenesystem.cpp:3211
+scenesystem.cpp(5447): Expecting 1 renderable pass for material "%s" but found %d!\n
+scenesystem.cpp:3301
 scenesystemdebug
 scenesystemperframedata
 scenetextureset_%d
-sceneview.h
 sceneviewdebugoverlays.cpp
+scottd_e24c1c6d
 scratch_rt_result_%d_%d
 scratchrendertarget_%d_%dx%d_%d_%d.vtex
 scratchrendertargetsystem.cpp
 screenHeight
 screenWidth
 screenquad
+script_b94a0343
 scroll
 scrolling
 seaborn style
@@ -5200,8 +5851,6 @@ shaded pass
 shadow
 shadowFarZ
 shadow_atlas
-shadowmapsize
-shadowpriority
 shadowtile_hairvolumeinfo
 show_headers
 show_widget_frame_bg
@@ -5261,15 +5910,20 @@ sparse_shadow_tree_depth
 sparse_shadow_tree_depth_%d_%d_%d.vtex
 sparse_shadow_tree_output_depth_%d.vtex
 sparseshadowtree.cpp
-sparseshadowtree.cpp(783): 
+sparseshadowtree.cpp(784): 
 split1
 split2
 srand
 srgb
 sstdebugcolor%d
 static const ImU32 %s_Data[%d] = {\n
+stb_truetype
+stbtt_GetFontOffsetForIndex(): FontData is incorrect, or FontNo cannot be found.
+stbtt_InitFont(): failed to parse FontData. It is correct and complete? Check FontDataSize.
 std::__shared_count<(__gnu_cxx::_Lock_policy)2>::operator=(std::__shared_count<(__gnu_cxx::_Lock_policy)2> const&)
 std::piecewise_construct
+style.FontScaleDpi = %0.2f
+style.FontScaleMain = %0.2f
 style.FrameBorderSize: %.2f
 style.FramePadding: %.2f,%.2f
 style.FrameRounding: %.2f
@@ -5281,6 +5935,7 @@ style.WindowBorderSize: %.2f
 style.WindowPadding: %.2f,%.2f
 summedstats
 sun_light_min_brightness
+t/2 Wjc\tt1
 t>vTU>
 tabbar
 table1
@@ -5329,6 +5984,7 @@ tiny_bvh.h
 tom-hi
 tom-low
 tom-mid
+tomb_1bb480ad
 too few verts
 tools.toolsmaterial
 transform buffer a
@@ -5337,14 +5993,16 @@ translucent
 transmissive_color
 transmissive_saturation
 tree
+typeinfo name for std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (*)(unsigned int, unsigned int, tinybvh::BVH*), int, unsigned int, tinybvh::BVH*>>>
 undo_point: %d, redo_point: %d, undo_char_point: %d, redo_char_point: %d
 undopoints
+unicode#0x0001
 uniform_color
 uppercase
 utils/characterdecalrenderer.cpp
 utils/hairrenderer.cpp
-utils/modelutils.cpp
 utils/scalable_ambient_obscurance.cpp
+utils/sceneutils.cpp
 utils/sceneutils.h(68): Material %s cannot render in mode %s but is being asked to\n
 utils/volumetricfog.cpp
 utils/windcontroller.cpp
@@ -5386,17 +6044,19 @@ wind_noise_0.vtex
 wind_noise_1.vtex
 wind_state_0.vtex
 wind_state_1.vtex
-window scale
 window_context
-with Hovering Delay or Stationary test:\nIsItemHovered() = = %d\nIsItemHovered(_Stationary) = %d\nIsItemHovered(_DelayShort) = %d\nIsItemHovered(_DelayNormal) = %d\nIsItemHovered(_Tooltip) = %d
+with Hovering Delay or Stationary test:\nIsItemHovered() = %d\nIsItemHovered(_Stationary) = %d\nIsItemHovered(_DelayShort) = %d\nIsItemHovered(_DelayNormal) = %d\nIsItemHovered(_Tooltip) = %d
 word-wrapping
 x%ixAA
 x-axis
 x=150
 x=300
+xF%\nD
+xdg-open
 xn>8
 y-axis
 y?U0
 you can drag analog plots over the rising/falling digital edge.
 zW>w
 };\nImPlotColormap %s = ImPlot::AddColormap("%s", %s_Data, %d);
+~wZ\tBu

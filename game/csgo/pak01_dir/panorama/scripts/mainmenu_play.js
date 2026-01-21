@@ -1356,7 +1356,7 @@ var PlayMenu;
         let bAnnotationAvailable = GameInterfaceAPI.IsMapAnnotationAvailable(m_selectedPracticeMap);
         let bAnnotationSelected = GameInterfaceAPI.GetSettingString('ui_playsettings_listen_annotations') === '1';
         let elAnnotationDropDown = $('#id-play-menu-practicesettings-annotations-dropdown');
-        elAnnotationDropDown.RebuildOptions(m_selectedPracticeMap);
+        elAnnotationDropDown.RebuildOptions(m_selectedPracticeMap, false);
         let elAnnotationsDropDown = elPracticeSettingsContainer.FindChildTraverse('id-play-menu-practicesettings-annotations-dropdown');
         for (let elChild of elPracticeSettingsContainer.Children()) {
             if (!elChild.id.startsWith('id-play-menu-practicesettings-'))
@@ -1369,7 +1369,7 @@ var PlayMenu;
             if (strFeatureName === "annotations") {
                 elAnnotationsDropDown.enabled = bAnnotationAvailable && bAnnotationSelected;
             }
-            if (bForceHidden || (sessionSettings.game.type !== 'classic' || sessionSettings.game.mode === 'retakes')) {
+            if (bForceHidden || (sessionSettings.game.type !== 'classic')) {
                 elChild.visible = false;
                 continue;
             }

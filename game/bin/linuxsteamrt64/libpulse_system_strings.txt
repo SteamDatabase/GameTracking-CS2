@@ -1,4 +1,4 @@
-  C%d:I%d {ID=%-3d} 
+  C%d:I%-2d {F=%-10d,V=%-10d} 
   CallInfo%d: %s\n
   Cell%d - NULL\n
   Cell%d EditorID:%d [%s]: %s\n
@@ -29,6 +29,7 @@
 %s [%u] - %s\n
 %s::%s (%u)
 %s::%s (Entity Output Handler)
+(debug)
 (null)
 *** Test failure: "%s"
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumColor_tEUlvE1_E
@@ -197,6 +198,7 @@ CBasePulseGraphInstance::StartGraphReload( %p ) %s\n
 CBasePulseGraphInstance::~CBasePulseGraphInstance( %p )\n
 CBufferString
 CColorGradient
+CEntityNameString
 CGlobalSymbol
 CGlobalSymbolCaseSensitive
 CKV3MemberNameSet
@@ -339,6 +341,7 @@ CPulseMathlib::SplitWorldVector
 CPulseMathlib::SqrFloat
 CPulseMathlib::SqrInt
 CPulseMathlib::Sqrt
+CPulseMathlib::StringsAreEqualCaseSensitive
 CPulseMathlib::Tan
 CPulseMathlib::VectorToWorldVector
 CPulseMathlib::WorldVectorToVector
@@ -395,6 +398,7 @@ CPulseTurtleGraphicsCursor::Turn
 CPulseTypeManager::Allocate( %s )\n
 CPulseTypeManager::Deallocate( %s, %p )\n
 CPulseTypeManager::DeallocateResource( %s, %s, dealloc=%p live=%p )\n
+CPulse_InstructionDebug
 CStrongHandle
 CTestDomainDerived_Cursor::GetCursorValueA
 CTestDomainDerived_Cursor::GetCursorValueB
@@ -404,8 +408,6 @@ CURVE_TANGENT_FREE
 CURVE_TANGENT_MIRROR
 CURVE_TANGENT_SINE
 CURVE_TANGENT_SPLINE
-CUtlOrderedMap
-CUtlString
 CUtlVectorFixedGrowable
 Call C%d:I%d (%s)
 Called to invoke the graph
@@ -422,6 +424,7 @@ Clamp Int
 Clamp value to range (float)
 Clamp value to range (int)
 Class does not allow allocation from its schema binding
+Compare strings with case sensitivity, in contrast to normal string equality which is case-insensitive
 Computes 2 ( 2.71...) raised to a power
 Computes e ( 2.71...) raised to a power
 Convert %s R%d <- %s R%d
@@ -540,6 +543,7 @@ GetVar R%d <- V%d (%s)
 GetVar R%d <=MOVE*V%d (%s)
 HandleInt
 HandleIntDerived
+IKV3TransferInterface_ResourceSave
 If (R%d) Jump to Instr I%d
 If (R%d) Leap to Chunk C%d
 If -1 timer will continue forever
@@ -626,7 +630,7 @@ Min Int
 Minimum of two values (float)
 Minimum of two values (int)
 Mirror
-Missing cell schema '%s', replacing with 'CPulseCell_Unknown'\n
+Missing cell class '%s', replacing with 'CPulseCell_Unknown'\n
 Mod R%d <- R%d %% R%d
 Move forward in the facing direction
 Mul R%d <- R%d * R%d
@@ -669,6 +673,7 @@ PrintStringWithEditorSuggestions: %s\n
 PrintStringWithLeafSuggestions: %s\n
 Probable infinite loop detected! Terminating pulse cursor after %d consecutive instructions (%s)
 Probable runaway cursor creation detected! Permanently disabling this graph instance (%s)
+Pulse system: minimal vpulse definition loading enabled - graphs may be incomplete!\n
 PulseSystemEventCursorResult_t
 PulseSystemEventObservableVariableListenerNotify_t
 PulseSystemEventObservableVariableSourceChanged_t
@@ -770,6 +775,7 @@ Square root
 Start a timer with the specified duration, fire the OnInterval output 
 Stop Timer
 Stop any active timers - the completed outflow will still fire
+Strings Are Equal Case Sensitive
 Sub R%d <- R%d - R%d
 Tag Cursor
 Tangent of angle. Input in radians, output in radians
@@ -821,6 +827,7 @@ World Vector To Vector
 X to the Y power
 Yield, Resume=%s
 [ Chunk%d ]
+[ written at chunk start last-read I%d ]
 [ written by I%d last-read I%d ]
 [***INVALID INSTRUCTION %d (%s)***]\n
 [IMMEDIATE_HALT]
@@ -828,6 +835,7 @@ Yield, Resume=%s
 [NOP]
 [RETURN R%d]
 [RETURN]
+[test]
 __CursorQueue__
 __FireCursorsParent__
 __State_Child_Condition__
@@ -900,10 +908,12 @@ listeners
 m_BlackboardResourceName
 m_ClockScopeID
 m_Inargs
+m_InstructionDebugInfos
 m_MissingRetvalDefault
 m_ParamType
 m_PreparedHook
 m_ResumePoint
+m_SequencePointName
 m_Stops
 m_TagValue
 m_bConditionValue
@@ -922,6 +932,7 @@ m_hListenerInstance
 m_hObserver
 m_nCurrentWakeIndex
 m_nSubject
+m_nValueNodeID
 m_nVarDocNodeID
 m_prevValue
 nAsyncRet1

@@ -7,15 +7,16 @@
 /// <reference path="popup_inspect_header.ts" />
 /// <reference path="popup_capability_header.ts" />
 /// <reference path="popup_inspect_purchase-bar.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 var InventoryInspect;
 (function (InventoryInspect) {
     let _m_PanelRegisteredForEvents;
     function Init() {
-        let itemId = $.GetContextPanel().GetAttributeString("itemid", '');
+        const itemId = InspectShared.GetPopupSetting('item_id');
         $.GetContextPanel().SetAttributeString('popup-id', $.GetContextPanel().id);
         if (InventoryAPI.IsRental(itemId)) {
-            $.GetContextPanel().SetAttributeString('showallitemactions', 'false');
-            $.GetContextPanel().SetAttributeString('inspectonly', 'true');
+            InspectShared.SetPopupSetting('hide_all_action_items', true);
+            InspectShared.SetPopupSetting('inspect_only', true);
         }
         if (!_m_PanelRegisteredForEvents) {
             _m_PanelRegisteredForEvents = $.RegisterForUnhandledEvent('PanoramaComponent_Loadout_EquipSlotChanged', _ShowNotification);
@@ -29,31 +30,25 @@ var InventoryInspect;
     }
     InventoryInspect.Init = Init;
     function _UpdatePanelData(itemId) {
-        let elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectModelOrImage');
-        const strInspectAttributes = $.GetContextPanel().GetAttributeString('inspect-attributes', '');
-        InspectModelImage.Init(elItemModelImagePanel, itemId, _GetSettingCallback, strInspectAttributes);
-        let elActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectActionBar');
-        InspectActionBar.Init(elActionBarPanel, itemId, _GetSettingCallback, _GetSettingCallbackInt, elItemModelImagePanel);
-        let elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
-        InspectAsyncActionBar.Init(elAsyncActionBarPanel, itemId, _GetSettingCallback);
-        let elHeaderPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectHeader');
-        InspectHeader.Init(elHeaderPanel, itemId, _GetSettingCallback);
-        let elCapabilityPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpCapabilityHeader');
-        CapabilityHeader.Init(elCapabilityPanel, itemId, _GetSettingCallback);
-        let elPurchasePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
-        InspectPurchaseBar.Init(elPurchasePanel, itemId, _GetSettingCallback);
+        InspectShared.SetPopupSetting('item_id', itemId);
+        const elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectModelOrImage');
+        InspectModelImage.Init(elItemModelImagePanel, itemId, _GetSettingCallback);
+        InspectActionBar.Init();
+        InspectAsyncActionBar.Init();
+        InspectHeader.Init();
+        CapabilityHeader.Init();
+        InspectPurchaseBar.Init();
         _SetDescription(itemId);
     }
-    let m_Inspectpanel = $.GetContextPanel();
     function _GetSettingCallback(settingname, defaultvalue) {
-        return m_Inspectpanel.GetAttributeString(settingname, defaultvalue);
+        return $.GetContextPanel().GetAttributeString(settingname, defaultvalue);
     }
     function _GetSettingCallbackInt(settingname, defaultvalue) {
-        return m_Inspectpanel.GetAttributeInt(settingname, defaultvalue);
+        return $.GetContextPanel().GetAttributeInt(settingname, defaultvalue);
     }
     function _PlayShowPanelSound(itemId) {
-        let category = InventoryAPI.GetLoadoutCategory(itemId);
-        let slot = InventoryAPI.GetDefaultSlot(itemId);
+        const category = InventoryAPI.GetLoadoutCategory(itemId);
+        const slot = InventoryAPI.GetDefaultSlot(itemId);
         let inspectSound = "";
         if (category == "heavy" || category == "rifle" || category == "smg" || category == "secondary") {
             inspectSound = "inventory_inspect_weapon";
@@ -86,19 +81,19 @@ var InventoryInspect;
         if (!InventoryAPI.IsValidItemID(id)) {
             return;
         }
-        let descText = InventoryAPI.GetItemDescription(id, '');
-        let shortString = descText.substring(0, descText.indexOf("</font></b><br><font color='#9da1a9'>"));
+        const descText = InventoryAPI.GetItemDescription(id, '');
+        const shortString = descText.substring(0, descText.indexOf("</font></b><br><font color='#9da1a9'>"));
         $.GetContextPanel().SetDialogVariable('item_description', shortString === '' ? descText : shortString);
     }
     function _LoadEquipNotification() {
-        let elParent = $.GetContextPanel();
-        let elNotification = $.CreatePanel('Panel', elParent, 'InspectNotificationEquip');
+        const elParent = $.GetContextPanel();
+        const elNotification = $.CreatePanel('Panel', elParent, 'InspectNotificationEquip');
         elNotification.BLoadLayout('file://{resources}/layout/notification/notification_equip.xml', false, false);
     }
     function _ShowNotification(team, slot, oldItemId, newItemId, bNew) {
         if (!bNew)
             return;
-        let elNotification = $.GetContextPanel().FindChildInLayoutFile('InspectNotificationEquip');
+        const elNotification = $.GetContextPanel().FindChildInLayoutFile('InspectNotificationEquip');
         if (elNotification && elNotification.IsValid()) {
             EquipNotification.ShowEquipNotification(elNotification, slot, newItemId);
         }
@@ -111,7 +106,7 @@ var InventoryInspect;
         m_lootlistItemIndex = 0;
         let aLootlistIds = _GetLootlistItems();
         if (aLootlistIds.length < 1) {
-            let rentalItemIds = $.GetContextPanel().GetAttributeString("rentalItems", '');
+            const rentalItemIds = InspectShared.GetPopupSetting('rental_item_ids');
             if (!rentalItemIds) {
                 $.GetContextPanel().FindChildInLayoutFile('id-lootlist-btns-container').visible = false;
                 $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container').visible = false;
@@ -119,13 +114,13 @@ var InventoryInspect;
             }
             aLootlistIds = rentalItemIds.split(',');
         }
-        m_Inspectpanel.SetAttributeString('isItemInLootlist', 'true');
+        InspectShared.SetPopupSetting('is_item_in_lootlist', true);
         $.GetContextPanel().FindChildInLayoutFile('id-lootlist-btns-container').visible = true;
         $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container').visible = true;
         m_lootlistItemIndex = aLootlistIds.indexOf(itemId);
-        let btnNext = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-next');
-        let btnPrev = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-prev');
-        let count = aLootlistIds.length;
+        const btnNext = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-next');
+        const btnPrev = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-prev');
+        const count = aLootlistIds.length;
         _EnableNextPrevBtns(aLootlistIds);
         _UpdateLootlistTitleBar(count);
         btnNext.SetPanelEvent('onactivate', () => {
@@ -145,12 +140,12 @@ var InventoryInspect;
         if (!(ItemInfo.IsWeapon(itemId) || ItemInfo.IsMelee(itemId))) {
             return;
         }
-        let elActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectActionBar');
+        const elActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectActionBar');
         InspectActionBar.OnUpdateCharModel(elActionBarPanel.FindChildInLayoutFile('InspectDropdownCharModels'), itemId);
     }
     function _EnableNextPrevBtns(aLootlistIds) {
-        let btnNext = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-next');
-        let btnPrev = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-prev');
+        const btnNext = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-next');
+        const btnPrev = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-prev');
         btnNext.enabled = (m_lootlistItemIndex < aLootlistIds.length - 1) && (aLootlistIds[m_lootlistItemIndex + 1] !== '0');
         btnPrev.enabled = m_lootlistItemIndex > 0;
         _SetBtnLabel(btnNext, btnPrev, aLootlistIds);
@@ -158,17 +153,17 @@ var InventoryInspect;
     }
     function _SetBtnLabel(btnNext, btnPrev, aLootlistIds) {
         if (btnNext.enabled) {
-            let elNextLabel = btnNext.FindChildInLayoutFile('id-lootlist-label');
+            const elNextLabel = btnNext.FindChildInLayoutFile('id-lootlist-label');
             elNextLabel.text = InventoryAPI.GetItemName(aLootlistIds[m_lootlistItemIndex + 1]);
-            let rarityColor = InventoryAPI.GetItemRarityColor(aLootlistIds[m_lootlistItemIndex + 1]);
+            const rarityColor = InventoryAPI.GetItemRarityColor(aLootlistIds[m_lootlistItemIndex + 1]);
             if (rarityColor) {
                 btnNext.FindChildInLayoutFile('id-lootlist-rarity').style.washColor = rarityColor;
             }
         }
         if (btnPrev.enabled) {
-            let elPrevLabel = btnPrev.FindChildInLayoutFile('id-lootlist-label');
+            const elPrevLabel = btnPrev.FindChildInLayoutFile('id-lootlist-label');
             elPrevLabel.text = InventoryAPI.GetItemName(aLootlistIds[m_lootlistItemIndex - 1]);
-            let rarityColor = InventoryAPI.GetItemRarityColor(aLootlistIds[m_lootlistItemIndex - 1]);
+            const rarityColor = InventoryAPI.GetItemRarityColor(aLootlistIds[m_lootlistItemIndex - 1]);
             if (rarityColor) {
                 btnPrev.FindChildInLayoutFile('id-lootlist-rarity').style.washColor = rarityColor;
             }
@@ -176,56 +171,56 @@ var InventoryInspect;
     }
     function _GetLootlistItems() {
         m_lootlistItemIndex = 0;
-        let aLootlistIds = [];
-        let caseId = $.GetContextPanel().GetAttributeString("caseidforlootlist", "");
+        const aLootlistIds = [];
+        const caseId = InspectShared.GetPopupSetting('case_id_for_lootlist');
         if (!caseId) {
             return aLootlistIds;
         }
-        let count = InventoryAPI.GetLootListItemsCount(caseId);
+        const count = InventoryAPI.GetLootListItemsCount(caseId);
         for (let i = 0; i < count; i++) {
             aLootlistIds.push(InventoryAPI.GetLootListItemIdByIndex(caseId, i));
         }
         return aLootlistIds;
     }
     function _UpdateLootlistTitleBar(count) {
-        let elPanel = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container');
-        let lootlistOverride = $.GetContextPanel().GetAttributeString("lootlistNameOverride", "");
+        const elPanel = $.GetContextPanel().FindChildInLayoutFile('id-lootlist-title-container');
+        const lootlistOverride = InspectShared.GetPopupSetting('lootlist_name_override');
         let caseName;
         if (lootlistOverride !== 'false' && lootlistOverride !== '') {
             caseName = $.Localize(lootlistOverride, $.GetContextPanel());
         }
         else {
-            let caseId = $.GetContextPanel().GetAttributeString("caseidforlootlist", "");
+            const caseId = InspectShared.GetPopupSetting('case_id_for_lootlist');
             caseName = InventoryAPI.GetItemName(caseId);
         }
         elPanel.SetDialogVariable('container', caseName);
         elPanel.SetDialogVariableInt('index', m_lootlistItemIndex + 1);
         elPanel.SetDialogVariableInt('total', count);
-        let rentalItemIds = $.GetContextPanel().GetAttributeString("rentalItems", '');
-        let text = !rentalItemIds ? $.Localize('#popup_inv_lootlist_header', elPanel) : $.Localize('#popup_inv_lootlist_rental_header', elPanel);
+        const rentalItemIds = InspectShared.GetPopupSetting('rental_item_ids');
+        const text = !rentalItemIds ? $.Localize('#popup_inv_lootlist_header', elPanel) : $.Localize('#popup_inv_lootlist_rental_header', elPanel);
         elPanel.SetDialogVariable('lootlist-header', text);
     }
     function _ItemAcquired(ItemId) {
-        let storeItemId = $.GetContextPanel().GetAttributeString("storeitemid", "");
+        const storeItemId = InspectShared.GetPopupSetting('store_item_id');
         if (storeItemId) {
-            let storeItemSeasonAccess = InventoryAPI.GetItemAttributeValue(storeItemId, 'season access');
-            let acquiredItemSeasonAccess = InventoryAPI.GetItemAttributeValue(ItemId, 'season access');
+            const storeItemSeasonAccess = InventoryAPI.GetItemAttributeValue(storeItemId, 'season access');
+            const acquiredItemSeasonAccess = InventoryAPI.GetItemAttributeValue(ItemId, 'season access');
             if (acquiredItemSeasonAccess && (storeItemSeasonAccess === acquiredItemSeasonAccess)) {
-                let nSeasonAccess = GameTypesAPI.GetActiveSeasionIndexValue();
-                let nCoinRank = MyPersonaAPI.GetMyMedalRankByType((nSeasonAccess + 1) + "Operation$OperationCoin");
+                const nSeasonAccess = GameTypesAPI.GetActiveSeasionIndexValue();
+                const nCoinRank = MyPersonaAPI.GetMyMedalRankByType((nSeasonAccess + 1) + "Operation$OperationCoin");
                 if (nCoinRank === 1 && nSeasonAccess === acquiredItemSeasonAccess) {
                     ShowActiveItemPopup(ItemId);
                     return;
                 }
             }
-            let storeItemToolType = InventoryAPI.GetToolType(storeItemId);
-            let acquiredItemToolType = InventoryAPI.GetToolType(ItemId);
+            const storeItemToolType = InventoryAPI.GetToolType(storeItemId);
+            const acquiredItemToolType = InventoryAPI.GetToolType(ItemId);
             if (storeItemToolType === 'xp_shop_ticket' && acquiredItemToolType === 'xp_shop_ticket') {
                 InventoryAPI.AcknowledgeNewItembyItemID(ItemId);
                 ClosePopup();
                 $.DispatchEvent('HideStoreStatusPanel');
             }
-            let defName = InventoryAPI.GetItemDefinitionName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_charge, 0));
+            const defName = InventoryAPI.GetItemDefinitionName(InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(g_ActiveTournamentInfo.itemid_charge, 0));
             if (InventoryAPI.DoesItemMatchDefinitionByName(storeItemId, defName) && InventoryAPI.DoesItemMatchDefinitionByName(ItemId, defName)) {
                 ClosePopup();
                 $.DispatchEvent('ShowAcknowledgePopup', '', '');
@@ -241,13 +236,19 @@ var InventoryInspect;
         InventoryAPI.AcknowledgeNewItembyItemID(itemId);
         ClosePopup();
         $.DispatchEvent('HideStoreStatusPanel');
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
             '&' + 'asyncworktype=useitem' +
             '&' + 'seasonpass=true');
+        const oSettings = {
+            item_id: itemId,
+            work_type: 'useitem',
+            is_season_pass: true
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function ClosePopup() {
-        let elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
-        let elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
+        const elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
+        const elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
         if (!elAsyncActionBarPanel.BHasClass('hidden')) {
             InspectAsyncActionBar.OnEventToClose();
         }
@@ -255,14 +256,16 @@ var InventoryInspect;
             InspectPurchaseBar.ClosePopup();
         }
         else {
-            if (m_Inspectpanel.IsValid()) {
-                InspectActionBar.CloseBtnAction(m_Inspectpanel.GetAttributeInt('callback', -1));
+            if ($.GetContextPanel().IsValid()) {
+                let callbackFromPopup = InspectShared.GetPopupSetting('callback_handle');
+                callbackFromPopup = !callbackFromPopup ? -1 : callbackFromPopup;
+                InspectActionBar.CloseBtnAction(callbackFromPopup, elAsyncActionBarPanel);
             }
         }
     }
     InventoryInspect.ClosePopup = ClosePopup;
     function _Refresh() {
-        let itemId = $.GetContextPanel().GetAttributeString("itemid", '');
+        const itemId = InspectShared.GetPopupSetting('item_id');
         if (!itemId || !InventoryAPI.IsValidItemID(itemId)) {
             ClosePopup();
             return;

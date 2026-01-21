@@ -22,7 +22,7 @@ var g_ActiveTournamentInfo = {
     },
     num_global_offerings: 1,
     num_stages_with_swiss: 3,
-    active: true,
+    active: false,
 };
 var g_ActiveTournamentTeams = [
     {

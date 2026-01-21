@@ -2,23 +2,26 @@
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../common/icon.ts" />
 /// <reference path="../common/iteminfo.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 var InspectHeader;
 (function (InspectHeader) {
-    let m_showXrayMachineUi = false;
-    function Init(elPanel, itemId, funcGetSettingCallback) {
-        m_showXrayMachineUi = (funcGetSettingCallback("showXrayMachineUi", "no") === 'yes') ? true : false;
-        if (funcGetSettingCallback('inspectonly', 'false') === 'false' && !m_showXrayMachineUi)
+    function Init() {
+        const elHeaderPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectHeader');
+        const showXRayMachineUi = InspectShared.GetPopupSetting('is_xray_machine');
+        const isInspectOnly = InspectShared.GetPopupSetting('inspect_only');
+        if (isInspectOnly === false && !showXRayMachineUi)
             return;
-        elPanel.RemoveClass('hidden');
-        _SetName(elPanel, itemId, funcGetSettingCallback);
-        _SetRarity(elPanel, itemId);
-        _SetCollectionInfo(elPanel, itemId);
-        _SetRentalTime(elPanel, itemId);
-        _SetOriginalOwner(elPanel, itemId);
+        const itemId = InspectShared.GetPopupSetting('item_id');
+        elHeaderPanel.RemoveClass('hidden');
+        _SetName(elHeaderPanel, itemId);
+        _SetRarity(elHeaderPanel, itemId);
+        _SetCollectionInfo(elHeaderPanel, itemId);
+        _SetRentalTime(elHeaderPanel, itemId);
+        _SetOriginalOwner(elHeaderPanel, itemId);
     }
     InspectHeader.Init = Init;
-    function _SetName(elPanel, ItemId, funcGetSettingCallback) {
-        let strViewFunc = funcGetSettingCallback ? funcGetSettingCallback('viewfunc', '') : '';
+    function _SetName(elPanel, ItemId) {
+        const strViewFunc = InspectShared.GetPopupSetting('force_inspect_view_type');
         if (ItemInfo.ItemDefinitionNameSubstrMatch(ItemId, 'tournament_journal_'))
             ItemId = (strViewFunc === 'primary') ? ItemId : ItemInfo.GetFauxReplacementItemID(ItemId, 'graffiti');
         elPanel.SetDialogVariable('item_name', InventoryAPI.GetItemNameUncustomized(ItemId));
@@ -28,11 +31,11 @@ var InspectHeader;
         elPanel.FindChildInLayoutFile('InspectName').SetHasClass('text-align-left', ItemInfo.GetSet(ItemId) !== '');
     }
     function _SetRentalTime(elPanel, ItemId) {
-        let elLabel = elPanel.FindChildInLayoutFile('ItemRentalTime');
+        const elLabel = elPanel.FindChildInLayoutFile('ItemRentalTime');
         const expirationDate = InventoryAPI.IsRental(ItemId) ? InventoryAPI.GetExpirationDate(ItemId) : 0;
         const bHasExpirationDate = (expirationDate > 0);
         if (bHasExpirationDate) {
-            let oLocData = FormatText.FormatRentalTime(expirationDate);
+            const oLocData = FormatText.FormatRentalTime(expirationDate);
             elPanel.SetDialogVariable('time-remaining', oLocData.time);
             elLabel.RemoveClass('hide');
         }
@@ -42,19 +45,19 @@ var InspectHeader;
         elPanel.FindChildInLayoutFile('InspectOriginalOwner').visible = (InventoryAPI.GetItemAttributeValue(itemId, '{uint32}purchaser account id') != undefined);
     }
     function _SetRarity(elPanel, itemId) {
-        let rarityColor = InventoryAPI.GetItemRarityColor(itemId);
+        const rarityColor = InventoryAPI.GetItemRarityColor(itemId);
         if (rarityColor) {
             elPanel.FindChildInLayoutFile('InspectBar').style.washColor = rarityColor;
         }
     }
     function _SetCollectionInfo(elPanel, itemId) {
-        let setName = ItemInfo.GetSet(itemId);
-        let elImage = elPanel.FindChildInLayoutFile('InspectSetImage');
-        let elLabel = elPanel.FindChildInLayoutFile('InspectCollection');
+        const setName = ItemInfo.GetSet(itemId);
+        const elImage = elPanel.FindChildInLayoutFile('InspectSetImage');
+        const elLabel = elPanel.FindChildInLayoutFile('InspectCollection');
         if (InventoryAPI.DoesItemMatchDefinitionByName(itemId, "Remove Keychain Tool")) {
             elImage.SetImage('file://{images}/icons/ui/keychain_removal.svg');
             elImage.visible = true;
-            let numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
+            const numKeychainRemoveToolChargesRemaining = InventoryAPI.GetCacheTypeElementFieldByIndex('KeychainRemoveToolCharges', 0, 'charges');
             elLabel.SetDialogVariableInt('item_count', numKeychainRemoveToolChargesRemaining);
             elLabel.text = $.Localize('#Attrib_KeychainRemoveTool_Charges', elLabel);
             elLabel.visible = true;

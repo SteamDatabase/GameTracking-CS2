@@ -532,8 +532,13 @@ var PopupMajorHub;
         });
     }
     function OpenPassActivate(itemId) {
-        UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
             '&' + 'asyncworktype=decodeable');
+        let oSettings = {
+            item_id: itemId,
+            work_type: 'decodeable'
+        };
+        elPanel.Data().oSettings = oSettings;
     }
     function DeleteDragItem() {
         if (PopupMajorHub.m_elDragImage && PopupMajorHub.m_elDragImage.IsValid()) {

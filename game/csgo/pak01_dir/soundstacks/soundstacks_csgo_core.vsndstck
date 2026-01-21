@@ -1,5 +1,72 @@
 <!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
 {
+	csgo_movie = 
+	{
+		operators = 
+		[
+			
+			{
+				name = "public"
+				operator = "util_null"
+				operator_variables = 
+				{
+					volume = 
+					{
+						data_type = "float"
+						value = "1.0"
+					}
+					vsnd_files = 
+					{
+						data_type = "vsnd"
+						value = "sounds/misc/null.vsnd"
+					}
+					memory_type = 
+					{
+						data_type = "float"
+						value = "0"
+					}
+				}
+			},
+			
+			{
+				name = "get_event_info"
+				operator = "soundevent_get_info"
+			},
+			
+			{
+				name = "set_builtins"
+				operator = "sos_set_builtins"
+				input_voicegraph = "csgo.movie"
+			},
+			
+			{
+				name = "submix_send"
+				operator = "vmix_mixgraph_send"
+				input_execute = "1.0"
+				submix_name = "movie"
+				input = "1.0"
+				send_type = "named"
+			},
+			
+			{
+				name = "volume_fan"
+				operator = "util_float_to_speakers"
+				input = "1.0"
+			},
+			
+			{
+				name = "start_vsnd"
+				operator = "vmix_voice_start"
+				input_vsnd1 = "@public.vsnd_files"
+				execute_once = "false"
+				input_execute = "1.0"
+				input_start = "@get_event_info.output_unstopped"
+				input_speaker_volumes = "@volume_fan.output"
+				input_pitch = "1.0"
+				input_memory_type = "@public.memory_type"
+			},
+		]
+	}
 	csgo_voip = 
 	{
 		operators = 

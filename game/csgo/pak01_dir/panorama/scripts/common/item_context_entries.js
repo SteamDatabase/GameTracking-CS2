@@ -231,9 +231,15 @@ var ItemContextEntries;
                     (FriendsListAPI.GetFriendLevel(MyPersonaAPI.GetXuid()) >= InventoryAPI.GetMaxLevel()));
             },
             OnSelected: (id) => {
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
                     '&' + 'asyncworkitemwarning=no' +
                     '&' + 'asyncworktype=prestigecheck');
+                let oSettings = {
+                    item_id: '0',
+                    show_work_type_warning: false,
+                    work_type: 'prestigecheck'
+                };
+                elPanel.Data().oSettings = oSettings;
                 $.DispatchEvent('ContextMenuEvent', '');
             }
         },
@@ -259,16 +265,31 @@ var ItemContextEntries;
             },
             OnSelected: (id) => {
                 if (InventoryAPI.IsRental(id)) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                         '&' + 'inspectonly=true');
+                    let oSettings = {
+                        item_id: id,
+                        inspect_only: true
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_')) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
                         '&' + 'asyncworktype=decodeable');
+                    let oSettings = {
+                        item_id: id,
+                        work_type: 'decodeable'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                         '&' + 'asyncworktype=useitem');
+                    let oSettings = {
+                        item_id: id,
+                        work_type: 'useitem'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 $.DispatchEvent('ContextMenuEvent', '');
             }
@@ -278,8 +299,13 @@ var ItemContextEntries;
             populateFilter: ['inspect'],
             AvailableForItem: (id) => ItemInfo.IsSpraySealed(id),
             OnSelected: (id) => {
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
                     '&' + 'asyncworktype=decodeable');
+                let oSettings = {
+                    item_id: id,
+                    work_type: 'decodeable'
+                };
+                elPanel.Data().oSettings = oSettings;
                 $.DispatchEvent('ContextMenuEvent', '');
             }
         },
@@ -294,7 +320,12 @@ var ItemContextEntries;
             bActionIsRentalAware: true,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id);
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id);
+                let oSettings = {
+                    item_id: id,
+                    work_type: 'decodeable',
+                };
+                elPanel.Data().oSettings = oSettings;
             }
         },
         {
@@ -325,13 +356,23 @@ var ItemContextEntries;
                         $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'decodable');
                     }
                     else if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container')) {
-                        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
+                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
                             '&' + 'asyncworktype=decodeable');
+                        let oSettings = {
+                            item_id: id,
+                            work_type: 'decodeable',
+                        };
+                        elPanel.Data().oSettings = oSettings;
                         return;
                     }
                     else {
-                        UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
+                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
                             '&' + 'asyncworktype=decodeable');
+                        let oSettings = {
+                            item_id: id,
+                            work_type: 'decodeable'
+                        };
+                        elPanel.Data().oSettings = oSettings;
                     }
                     $.DispatchEvent('ContextMenuEvent', '');
                     return;
@@ -361,21 +402,39 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 if (InventoryAPI.IsRental(id)) {
                     $.DispatchEvent('ContextMenuEvent', '');
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                         '&' + 'inspectonly=true');
+                    let oSettings = {
+                        item_id: id,
+                        inspect_only: true
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else if (InventoryAPI.GetItemDefinitionName(id) === 'casket') {
                     const fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
                     const noteText = InventoryAPI.GetItemAttributeValue(id, 'modification date') ? 'yourcasket' : 'newcasket';
                     $.DispatchEvent('ContextMenuEvent', '');
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + id +
                         '&' + 'asyncworktype=nameable' +
                         '&' + 'asyncworkitemwarningtext=#popup_' + noteText + '_warning');
+                    let oSettings = {
+                        item_id: id,
+                        tool_id: fauxNameTag,
+                        work_type: 'nameable',
+                        async_work_type_warning_text: '#popup_' + noteText + '_warning'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else if (DoesNotHaveChosenActionItems(id, 'nameable')) {
                     const nameTagId = '', itemToNameId = id;
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + nameTagId + ',' + itemToNameId +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + nameTagId + ',' + itemToNameId +
                         '&' + 'asyncworktype=nameable');
+                    let oSettings = {
+                        item_id: itemToNameId,
+                        tool_id: nameTagId,
+                        work_type: 'nameable'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else {
                     $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'nameable');
@@ -403,8 +462,14 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=,' + id +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=,' + id +
                     '&' + 'asyncworktype=can_wrap_sticker');
+                let oSettings = {
+                    popup_panel: elPanel,
+                    item_id: id,
+                    work_type: 'can_wrap_sticker'
+                };
+                elPanel.Data().oSettings = oSettings;
             }
         },
         {
@@ -434,8 +499,14 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_keychain') && InventoryAPI.GetItemKeychainCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + id +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + id +
                     '&' + 'asyncworktype=remove_keychain');
+                let oSettings = {
+                    popup_panel: elPanel,
+                    item_id: id,
+                    work_type: 'remove_keychain'
+                };
+                elPanel.Data().oSettings = oSettings;
             }
         },
         {
@@ -490,9 +561,16 @@ var ItemContextEntries;
                 else {
                     const defidxWrapper = InventoryAPI.GetItemDefinitionIndexFromDefinitionName("sticker_display_case");
                     const fauxCasket = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxWrapper, 0);
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + id + ',' + fauxCasket
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + id + ',' + fauxCasket
                         + '&' +
                         'asyncworktype=can_wrap_sticker');
+                    let oSettings = {
+                        popup_panel: elPanel,
+                        tool_id: id,
+                        item_id: fauxCasket,
+                        work_type: 'can_wrap_sticker'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
             }
         },
@@ -502,8 +580,14 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'itemid=' + id +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'itemid=' + id +
                     '&' + 'asyncworktype=remove_sticker');
+                let oSettings = {
+                    popup_panel: elPanel,
+                    item_id: id,
+                    work_type: 'remove_sticker'
+                };
+                elPanel.Data().oSettings = oSettings;
             }
         },
         {
@@ -535,8 +619,13 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_patch') && InventoryAPI.GetItemStickerCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'itemid=' + id +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'itemid=' + id +
                     '&' + 'asyncworktype=remove_patch');
+                let oSettings = {
+                    item_id: id,
+                    work_type: 'remove_patch'
+                };
+                elPanel.Data().oSettings = oSettings;
             }
         },
         {
@@ -550,8 +639,13 @@ var ItemContextEntries;
             bActionIsRentalAware: true,
             OnSelected: (id) => {
                 if (InventoryAPI.IsRental(id)) {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                         '&' + 'inspectonly=true');
+                    let oSettings = {
+                        item_id: id,
+                        inspect_only: true
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else {
                     $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'can_stattrack_swap');
@@ -599,9 +693,15 @@ var ItemContextEntries;
                 $.DispatchEvent('ContextMenuEvent', '');
                 const CapDisabledMessage = InventoryAPI.GetItemCapabilityDisabledMessageByIndex(id, 0);
                 if (CapDisabledMessage === "") {
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                         '&' + 'asyncworkitemwarning=no' +
                         '&' + 'asyncworktype=usegift');
+                    let oSettings = {
+                        item_id: id,
+                        show_work_type_warning: false,
+                        work_type: 'usegift'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
                 else {
                     const capDisabledMessage = InventoryAPI.GetItemCapabilityDisabledMessageByIndex(id, 0);
@@ -834,13 +934,20 @@ var ItemContextEntries;
                 }
                 else {
                     const fauxCasket = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1201, 0);
-                    UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + fauxCasket
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + fauxCasket
                         + '&' +
                         'inspectonly=false'
                         + '&' +
                         'asyncworkitemwarning=no'
                         + '&' +
                         'storeitemid=' + fauxCasket);
+                    let oSettings = {
+                        item_id: fauxCasket,
+                        inspect_only: true,
+                        show_work_type_warning: false,
+                        store_item_id: 'fauxCasket'
+                    };
+                    elPanel.Data().oSettings = oSettings;
                 }
             }
         },
@@ -859,9 +966,15 @@ var ItemContextEntries;
             AvailableForItem: (id) => InventoryAPI.IsDeletable(id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
                     '&' + 'asyncworktype=delete' +
                     '&' + 'asyncworkbtnstyle=Negative');
+                let oSettings = {
+                    item_id: id,
+                    override_async_btn_style: 'Negative',
+                    store_item_id: 'delete'
+                };
+                elPanel.Data().oSettings = oSettings;
             }
         },
         {

@@ -81,8 +81,6 @@ $.Schedule() - run JS func
 **** Panel %s has both height-percentage and width-percentage\n
 **** Panel %s has fill-parent-flow for height, but isn't in a flowing down or up layout\n
 **** Panel %s has fill-parent-flow for width, but isn't in a flowing right layout\n
-**** Unable to localize '%s' on panel '%s'\n
-**** Unable to localize '%s' on panel descendant of '%s'\n
 ***** OUT OF MEMORY! /+/. Sized_CChunkAllocator failed to allocated a new blob of size: %llu ****\n
 ***** Parsing %s on %s%s:  %s\n
 *ZN8panorama14ILayoutContent20LoadFromResourceFileEPK21ResourceBindingBase_tPK20ResourceFileHeader_tPviEUlPKcRKSt8functionIFvS9_EESA_IFvS9_bEEE_
@@ -246,7 +244,7 @@ AnimationEnd
 AnimationStart
 Any Extended Key Usage
 Any language
-Applies an image as an opacity mask that stretches to the panel bounds and fades out it's content based on the alpha channel. The second float value is an optional opacity value for the mask itself, the image won't interpolate/cross-fade, but you can animate the opacity to fade the mask in/out. <b>Examples:</b><pre>opacity-mask: url( "file://{images}/upper_row_mask.tga" );\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) 0.5;\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) -1.0;\nopacity-mask-position: 5px 50%;\nopacity-mask-scale: 200%;\nopacity-mask-scale: 50% 100%;\n</pre>
+Applies an image as an opacity mask that stretches to the panel bounds and fades out it's content based on the alpha channel. The second float value is an optional opacity value for the mask itself, the image won't interpolate/cross-fade, but you can animate the opacity to fade the mask in/out. opacity-mask-threshold lets you specify a threshold and softness percentage of how the mask is applied. Below the threshold, pixels are fully transparent, and above the threshold pixels are fully opaque. The softness lets you apply a range during which the opacity is scaled by the alpha from the mask.<b>Examples:</b><pre>opacity-mask: url( "file://{images}/upper_row_mask.tga" );\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) 0.5;\nopacity-mask: url( "file://{images}/upper_row_mask.tga" ) -1.0;\nopacity-mask-position: 5px 50%;\nopacity-mask-scale: 200%;\nopacity-mask-scale: 50% 100%;\nopacity-mask-threshold: 0% 30%;\n</pre>
 ApplyMippedGaussianBlur
 ApplyTextTransform
 Argument %i to %s for event %s could not be converted to a string for parsing
@@ -279,6 +277,7 @@ BReloadLoadFromBuffer
 BResizeImageInternal
 BResizeImageRGBA
 BSetProperty
+BSetTextureData
 BUF lib
 Basic OCSP Response
 BeginDebuggerInspect
@@ -318,6 +317,7 @@ CGamepadController::RunFrame
 CHECK failed: *ptr: 
 CImageData::SetImageDataFromSvg - A8 conversion
 CImageData::SetImageDataFromSvg - texture creation
+CImageData::SetImageDataFromSvg - texture update
 CImageData::SetImageDataR8G8B8A8
 CImageData::SetImageDataR8G8B8A8 - A8 conversion
 CImageData::SetImageDataR8G8B8A8 - Jpeg
@@ -327,6 +327,7 @@ CImageData::SetImageDataR8G8B8A8 - SVG
 CImageData::SetImageDataR8G8B8A8 - WebP
 CImageData::SetImageDataR8G8B8A8 - resize
 CImageData::SetImageDataR8G8B8A8 - texture creation
+CImageData::SetImageDataR8G8B8A8 - texture update
 CImageDecodeThread::Run - run item
 CImageDecodeWorkItem::DispatchResult
 CImageDecodeWorkItem::RunWorkItem
@@ -761,7 +762,7 @@ JS Assert (%s): %s
 JS Exception! *** Skipping rest of script *** \n\n%s\nline:%d, col:%d
 JS Exception!!\n\n(undefined:0) - %s
 JS stack trace begin.\n
-JS stack trace end.
+JS stack trace end.\n
 JSConsoleOutput
 JSON
 JSScheduledFunction
@@ -1065,7 +1066,6 @@ No document element found
 No error
 Nonce
 Not enough arguments to %s
-Nq\nc
 OBJ lib
 OCSP
 OCSP Archive Cutoff
@@ -1151,6 +1151,7 @@ PanoramaBlurOutputTexture%dx%d
 PanoramaContent
 PanoramaDebuggerHotkey
 PanoramaFancyQuad
+PanoramaMovie.Default
 PanoramaScript
 PanoramaUI
 PanoramaVideoPlayer
@@ -1190,8 +1191,6 @@ RC5-CFB
 RC5-ECB
 RC5-OFB
 RESOURCE_TYPE_PANORAMA_DYNAMIC_IMAGES
-RESOURCE_TYPE_PANORAMA_LAYOUT
-RESOURCE_TYPE_PANORAMA_STYLE
 RESOURCE_TYPE_VECTOR_GRAPHIC
 RIPEMD160
 RSA Data Security, Inc.
@@ -3157,6 +3156,7 @@ opacity-brush
 opacity-mask
 opacity-mask-position
 opacity-mask-scale
+opacity-mask-threshold
 opacity-transform
 opaque
 orange
@@ -3173,6 +3173,7 @@ owner
 pChild
 pEngine
 pSpecified
+pTexture
 pad_a
 pad_b
 pad_back
@@ -3864,6 +3865,7 @@ visible
 vjs_c
 volume_atten
 vscroll
+vsnd_files
 vsvg
 vsvg_c
 vts_c

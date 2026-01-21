@@ -1,69 +1,70 @@
 "use strict";
 /// <reference path="../csgo.d.ts" />
 /// <reference path="../inspect.ts" />
+/// <reference path="popup_inspect_shared.ts" />
 var CapabilityCanStatTrackSwap;
 (function (CapabilityCanStatTrackSwap) {
-    let m_scheduleHandle = null;
-    let m_toolId = '';
-    let m_itemids = ['', ''];
-    let m_statNumbersOriginal = [0, 0];
-    let m_distanceLerped = 9999999;
-    let m_flLerpProgress = 0.0;
     function Init() {
-        m_toolId = $.GetContextPanel().GetAttributeString("swaptool", "");
-        m_itemids = [
-            $.GetContextPanel().GetAttributeString("swapitem1", ""),
-            $.GetContextPanel().GetAttributeString("swapitem2", "")
+        const itemids = [
+            InspectShared.GetPopupSetting('item_id'),
+            InspectShared.GetPopupSetting('stattrak_swap_second_item_id')
         ];
-        m_itemids.forEach((item, idx) => {
-            m_statNumbersOriginal[idx] = parseInt(String(InventoryAPI.GetItemAttributeValue(item, "kill eater")));
-            _SetItemModel(idx);
+        const contextPanel = $.GetContextPanel();
+        contextPanel.Data().statNumbersOriginal = [0, 0];
+        contextPanel.Data().distanceLerped = 9999999;
+        contextPanel.Data().flLerpProgress = 0.0;
+        contextPanel.Data().scheduleHandle = null;
+        itemids.forEach((item, idx) => {
+            contextPanel.Data().statNumbersOriginal[idx] = parseInt(String(InventoryAPI.GetItemAttributeValue(item, "kill eater")));
+            _SetItemModel(itemids[idx], idx);
         });
         _SetUpButtonStates();
         $.DispatchEvent('CapabilityPopupIsOpen', true);
-        m_scheduleHandle = $.Schedule(0.01, _LerpTimer);
+        contextPanel.Data().scheduleHandle = $.Schedule(0.01, () => _LerpTimer(contextPanel));
     }
     CapabilityCanStatTrackSwap.Init = Init;
-    function _SetItemModel(idx) {
+    function _SetItemModel(itemId, idx) {
         let elPanel = $.GetContextPanel().FindChildInLayoutFile('StatTrackSwapItemModel' + idx);
-        InspectModelImage.Init(elPanel, m_itemids[idx]);
+        InspectModelImage.Init(elPanel, itemId);
         elPanel.AddClass('darken');
         elPanel.RemoveClass('full-width');
         elPanel.RemoveClass('full-height');
     }
     function _SetUpButtonStates() {
-        $.GetContextPanel().FindChildInLayoutFile('StatTrackSwapAcceptConfirm').SetPanelEvent('onactivate', _OnAccept);
-        $.GetContextPanel().FindChildInLayoutFile('StatTrackSwapCancelBtn').SetPanelEvent('onactivate', ClosePopup);
+        const contextPanel = $.GetContextPanel();
+        contextPanel.FindChildInLayoutFile('StatTrackSwapAcceptConfirm').SetPanelEvent('onactivate', () => _OnAccept(contextPanel));
+        contextPanel.FindChildInLayoutFile('StatTrackSwapCancelBtn').SetPanelEvent('onactivate', ClosePopup);
     }
-    function _LerpTimer() {
-        m_scheduleHandle = null;
-        let originalLen = m_statNumbersOriginal[1] - m_statNumbersOriginal[0];
-        let newDistanceLerped = (m_flLerpProgress < 1.0) ? Math.round(m_flLerpProgress * originalLen) : originalLen;
-        if (newDistanceLerped != m_distanceLerped) {
-            m_distanceLerped = newDistanceLerped;
+    function _LerpTimer(contextPanel) {
+        contextPanel.Data().scheduleHandle = null;
+        let originalLen = contextPanel.Data().statNumbersOriginal[1] - contextPanel.Data().statNumbersOriginal[0];
+        let newDistanceLerped = (contextPanel.Data().flLerpProgress < 1.0) ? Math.round(contextPanel.Data().flLerpProgress * originalLen) : originalLen;
+        if (newDistanceLerped != contextPanel.Data().distanceLerped) {
+            contextPanel.Data().distanceLerped = newDistanceLerped;
             $.DispatchEvent('CSGOPlaySoundEffectMuteBypass', 'popup_accept_match_waitquiet', 'MOUSE', 1.0);
-            let elSwapNumber0 = $.GetContextPanel().FindChildInLayoutFile('StatTrackSwapNumber0');
-            let elSwapNumber1 = $.GetContextPanel().FindChildInLayoutFile('StatTrackSwapNumber1');
-            elSwapNumber0.text = (m_statNumbersOriginal[0] + m_distanceLerped).toString().padStart(6, "0");
-            elSwapNumber1.text = (m_statNumbersOriginal[1] - m_distanceLerped).toString().padStart(6, "0");
+            let elSwapNumber0 = contextPanel.FindChildInLayoutFile('StatTrackSwapNumber0');
+            let elSwapNumber1 = contextPanel.FindChildInLayoutFile('StatTrackSwapNumber1');
+            elSwapNumber0.text = (contextPanel.Data().statNumbersOriginal[0] + contextPanel.Data().distanceLerped).toString().padStart(6, "0");
+            elSwapNumber1.text = (contextPanel.Data().statNumbersOriginal[1] - contextPanel.Data().distanceLerped).toString().padStart(6, "0");
         }
-        if (m_flLerpProgress < 1.0) {
-            m_flLerpProgress += 0.01;
-            m_scheduleHandle = $.Schedule(0.04, _LerpTimer);
+        if (contextPanel.Data().flLerpProgress < 1.0) {
+            contextPanel.Data().flLerpProgress += 0.01;
+            contextPanel.Data().scheduleHandle = $.Schedule(0.04, () => _LerpTimer(contextPanel));
         }
         else {
         }
     }
-    function _OnAccept() {
-        if (m_scheduleHandle) {
-            $.CancelScheduled(m_scheduleHandle);
-            m_flLerpProgress = 1.0;
-            _LerpTimer();
+    function _OnAccept(contextPanel) {
+        if (contextPanel.Data().scheduleHandle) {
+            $.CancelScheduled(contextPanel.Data().scheduleHandle);
+            contextPanel.Data().flLerpProgress = 1.0;
+            _LerpTimer(contextPanel);
         }
-        $.GetContextPanel().FindChildInLayoutFile('NameableSpinner').RemoveClass('hidden');
-        m_scheduleHandle = $.Schedule(5, _CancelWaitforCallBack);
-        InventoryAPI.SetStatTrakSwapToolItems(m_itemids[0], m_itemids[1]);
-        InventoryAPI.UseTool(m_toolId, '');
+        contextPanel.FindChildInLayoutFile('NameableSpinner').RemoveClass('hidden');
+        contextPanel.Data().scheduleHandle = $.Schedule(5, () => _CancelWaitforCallBack(contextPanel));
+        InventoryAPI.SetStatTrakSwapToolItems(InspectShared.GetPopupSetting('item_id', contextPanel), InspectShared.GetPopupSetting('stattrak_swap_second_item_id', contextPanel));
+        const toolId = InspectShared.GetPopupSetting('tool_id', contextPanel);
+        InventoryAPI.UseTool(toolId, '');
     }
     function ClosePopup() {
         $.DispatchEvent('HideSelectItemForCapabilityPopup');
@@ -71,16 +72,17 @@ var CapabilityCanStatTrackSwap;
         $.DispatchEvent('CapabilityPopupIsOpen', false);
     }
     CapabilityCanStatTrackSwap.ClosePopup = ClosePopup;
-    function _CancelWaitforCallBack() {
-        let elSpinner = $.GetContextPanel().FindChildInLayoutFile('NameableSpinner');
+    function _CancelWaitforCallBack(contextPanel) {
+        let elSpinner = contextPanel.FindChildInLayoutFile('NameableSpinner');
         elSpinner.AddClass('hidden');
         ClosePopup();
         UiToolkitAPI.ShowGenericPopupOk($.Localize('#SFUI_SteamConnectionErrorTitle'), $.Localize('#SFUI_InvError_Item_Not_Given'), '', () => { });
     }
     function _OnItemCustomization(numericType, type, itemid) {
-        if (m_scheduleHandle) {
-            $.CancelScheduled(m_scheduleHandle);
-            m_scheduleHandle = null;
+        const contextPanel = $.GetContextPanel();
+        if (contextPanel.Data().scheduleHandle) {
+            $.CancelScheduled(contextPanel.Data().scheduleHandle);
+            contextPanel.Data().scheduleHandle = null;
         }
         ClosePopup();
         $.DispatchEvent('ShowAcknowledgePopup', type, itemid);
