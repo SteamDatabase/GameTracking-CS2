@@ -217,7 +217,7 @@ var ItemTileStore;
             store_item_id: id,
             force_hide_async_bar: true,
             show_work_type_warning: false,
-            override_purchase_limit: 1
+            override_purchase_limit: true
         };
         elPanel.Data().oSettings = oSettings;
     }

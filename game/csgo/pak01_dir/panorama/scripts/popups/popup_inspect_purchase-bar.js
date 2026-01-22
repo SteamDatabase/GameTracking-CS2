@@ -82,10 +82,10 @@ var InspectPurchaseBar;
         _UpdateSalePrice(elPurchaseBar, qty, contextPanel);
     }
     function _isAllowedToPurchaseMultiple(contextPanel) {
-        const nOverridePurchaseMultiple = InspectShared.GetPopupSetting("override_purchase_limit", contextPanel) ? InspectShared.GetPopupSetting("override_purchase_limit", contextPanel) : 0;
+        const OverridePurchaseMultiple = InspectShared.GetPopupSetting("override_purchase_limit", contextPanel);
         const purchaseItemId = InspectShared.GetPopupSetting('purchase_item_id', contextPanel);
-        if (nOverridePurchaseMultiple >= 0)
-            return (nOverridePurchaseMultiple === 1);
+        if (OverridePurchaseMultiple)
+            return (OverridePurchaseMultiple);
         const attValue = InventoryAPI.GetItemAttributeValue(purchaseItemId, 'season access');
         if (attValue)
             return false;
