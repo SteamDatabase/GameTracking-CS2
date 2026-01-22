@@ -21,7 +21,7 @@ var CapabilityDecodable;
         let elCaseModelImagePanel = null;
         $.GetContextPanel().Data().elCaseModelImagePanel = elCaseModelImagePanel;
         $.GetContextPanel().Data().scrollListsPanelIds = ['ScrollList', 'ScrollListMagnified'];
-        const showXrayMachineUi = InspectShared.GetPopupSetting('show_xray_popup');
+        const showXrayMachineUi = InspectShared.GetPopupSetting('is_xray_machine');
         if (showXrayMachineUi) {
             $.GetContextPanel().SetHasClass('popup-in-xray', showXrayMachineUi);
             let oData = ItemInfo.GetItemsInXray();
@@ -35,7 +35,7 @@ var CapabilityDecodable;
                         elPopup.SetDialogVariable('itemname', InventoryAPI.GetItemName(oData.reward));
                         elMessageLabel.text = $.Localize('#popup_xray_first_use_desc', elPopup);
                     }
-                    else if ($.GetContextPanel().GetAttributeString("showxraypopup", "no") === 'yes') {
+                    else if (InspectShared.GetPopupSetting('show_xray_warning')) {
                         UiToolkitAPI.ShowGenericPopupOk('#popup_xray_in_use_title', '#popup_xray_in_use_desc', '', () => { });
                     }
                 }
@@ -113,7 +113,7 @@ var CapabilityDecodable;
         InspectRentalBar.Init();
         CapabilityHeader.Init();
         _SetupDescription(caseId);
-        if (InspectShared.GetPopupSetting('show_xray_popup')) {
+        if (InspectShared.GetPopupSetting('is_xray_machine')) {
             _SetUpXrayPanel();
         }
         else {
@@ -544,7 +544,7 @@ var CapabilityDecodable;
             type === 'graffity_unseal' ||
             type === 'xray_item_reveal' ||
             type === "xray_item_claim") {
-            if (InspectShared.GetPopupSetting('show_xray_popup')) {
+            if (InspectShared.GetPopupSetting('is_xray_machine')) {
                 let oData = ItemInfo.GetItemsInXray();
                 if (oData.reward && type === 'xray_item_reveal') {
                     _UpdateXrayRewardTile(itemId);

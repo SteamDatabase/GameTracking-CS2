@@ -190,6 +190,7 @@ var MainMenuStore;
                 text: '#store_tab_xpshop'
             });
             if (nNewItemCount > 0) {
+                elButton.SetDialogVariableInt('new-count', nNewItemCount);
                 $.CreatePanel('Label', elButton, '', {
                     class: 'content-navbar__tabs__btn-new', text: '#xpshop_new_items'
                 });

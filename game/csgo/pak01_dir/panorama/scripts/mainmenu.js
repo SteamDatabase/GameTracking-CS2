@@ -1031,7 +1031,7 @@ var MainMenu;
             tool_id: toolid,
             work_type: 'decodeable',
             is_xray_machine: true,
-            show_xray_popup: bShowPopupWarning
+            show_xray_warning: bShowPopupWarning
         };
         elPanel.Data().oSettings = oSettings;
     }
