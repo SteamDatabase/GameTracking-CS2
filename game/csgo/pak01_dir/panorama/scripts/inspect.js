@@ -37,9 +37,9 @@ var InspectModelImage;
         { type: 'weapon_c4', camera: '3' },
         { type: 'weapon_taser', camera: '0' },
     ];
-    function Init(elContainer, itemId, funcGetSettingCallback) {
+    function Init(elContainer, itemId) {
         const strViewFunc = InspectShared.GetPopupSetting('force_inspect_view_type');
-        m_isLaptopOpening = funcGetSettingCallback ? funcGetSettingCallback('isLapTopOpening', 'false') === 'true' : false;
+        m_isLaptopOpening = (elContainer.Data().isLapTopOpening === true) ? true : false;
         if (!InventoryAPI.IsValidItemID(itemId)) {
             return '';
         }

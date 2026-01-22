@@ -83,12 +83,10 @@ var OffersLaptop;
         _SetCaseModelImage(m_itemid, 'PopUpInspectModelOrImage');
         _SetLootListItems(m_itemid);
     }
-    function _GetSettingCallback(settingname, defaultvalue) {
-        return m_InspectPanel.GetAttributeString(settingname, defaultvalue);
-    }
     function _SetCaseModelImage(caseId, PanelId) {
         let elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile(PanelId);
-        InspectModelImage.Init(elItemModelImagePanel, caseId, _GetCameraSettingCallback);
+        elItemModelImagePanel.Data().isLapTopOpening = m_isOpen;
+        InspectModelImage.Init(elItemModelImagePanel, caseId);
         m_elCaseModelImagePanel = InspectModelImage.GetModelPanel();
     }
     function _SetLootListItems(itemId) {
@@ -264,11 +262,6 @@ var OffersLaptop;
             LaptopSoundPlayOnce('UI.Laptop.Open');
             $.GetContextPanel().FindChildInLayoutFile('id-laptop-screen').SetHasClass('show', true);
         });
-    }
-    function _GetCameraSettingCallback(settingname, defaultvalue) {
-        if (settingname === 'isLapTopOpening' && m_isOpen)
-            return 'true';
-        return 'false';
     }
     function _ItemAcquired(ItemId) {
         LaptopSoundPlayOnce("rename_purchaseSuccess");

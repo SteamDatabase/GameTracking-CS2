@@ -172,7 +172,7 @@ var CapabilityCanApplyAction;
         const elPreviewPanel = $.GetContextPanel().FindChildInLayoutFile('CanApplyItemModel');
         const worktype = InspectShared.GetPopupSetting('work_type');
         const displayItemId = InspectShared.GetPopupSetting('temp_display_item_id');
-        InspectModelImage.Init(elPreviewPanel, displayItemId ? displayItemId : itemId, _GetSettingCallback);
+        InspectModelImage.Init(elPreviewPanel, displayItemId ? displayItemId : itemId);
         elPreviewPanel.Data().id = itemId;
         if (m_isRemove) {
             if (worktype === 'remove_patch') {

@@ -32,19 +32,13 @@ var InventoryInspect;
     function _UpdatePanelData(itemId) {
         InspectShared.SetPopupSetting('item_id', itemId);
         const elItemModelImagePanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectModelOrImage');
-        InspectModelImage.Init(elItemModelImagePanel, itemId, _GetSettingCallback);
+        InspectModelImage.Init(elItemModelImagePanel, itemId);
         InspectActionBar.Init();
         InspectAsyncActionBar.Init();
         InspectHeader.Init();
         CapabilityHeader.Init();
         InspectPurchaseBar.Init();
         _SetDescription(itemId);
-    }
-    function _GetSettingCallback(settingname, defaultvalue) {
-        return $.GetContextPanel().GetAttributeString(settingname, defaultvalue);
-    }
-    function _GetSettingCallbackInt(settingname, defaultvalue) {
-        return $.GetContextPanel().GetAttributeInt(settingname, defaultvalue);
     }
     function _PlayShowPanelSound(itemId) {
         const category = InventoryAPI.GetLoadoutCategory(itemId);
