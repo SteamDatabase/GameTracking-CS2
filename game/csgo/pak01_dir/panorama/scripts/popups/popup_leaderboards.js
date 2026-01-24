@@ -174,7 +174,7 @@ var PopupLeaderboards;
         var elParent = $.GetContextPanel().FindChildInLayoutFile('id-popup-leaderboard-entries');
         var elEntry = elParent.FindChildInLayoutFile(xuid);
         if (elEntry) {
-            elEntry.FindChildInLayoutFile('popup-leaderboard-entry-name').text = FriendsListAPI.GetFriendName(xuid);
+            elEntry.SetDialogVariable('player-name', FriendsListAPI.GetFriendName(xuid));
         }
     }
     PopupLeaderboards.UpdateName = UpdateName;
