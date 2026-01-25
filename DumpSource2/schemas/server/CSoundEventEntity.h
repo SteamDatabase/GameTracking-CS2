@@ -8,7 +8,7 @@ class CSoundEventEntity : public CBaseEntity
 	float32 m_flSavedElapsedTime;
 	CUtlSymbolLarge m_iszSourceEntityName;
 	CUtlSymbolLarge m_iszAttachmentName;
-	CEntityOutputTemplate< uint64 > m_onGUIDChanged;
+	CEntityOutputTemplate< uint64, uint64 > m_onGUIDChanged;
 	CEntityIOOutput m_onSoundFinished;
 	float32 m_flClientCullRadius;
 	CUtlSymbolLarge m_iszSoundName;

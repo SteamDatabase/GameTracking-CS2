@@ -17,40 +17,58 @@
 // MNetworkVarNames = "uint32 m_iDesiredFOV"
 class CBasePlayerController : public CBaseEntity
 {
+	// MNotSaved
 	uint64 m_nInButtonsWhichAreToggles;
 	// MNetworkEnable
 	// MNetworkPriority = 1
 	// MNetworkUserGroup = "LocalPlayerExclusive"
+	// MNotSaved
 	uint32 m_nTickBase;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnPawnChanged"
 	CHandle< CBasePlayerPawn > m_hPawn;
 	// MNetworkEnable
 	bool m_bKnownTeamMismatch;
+	// MNotSaved
 	CSplitScreenSlot m_nSplitScreenSlot;
+	// MNotSaved
 	CHandle< CBasePlayerController > m_hSplitOwner;
+	// MNotSaved
 	CUtlVector< CHandle< CBasePlayerController > > m_hSplitScreenPlayers;
 	bool m_bIsHLTV;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnConnectionStateChanged"
+	// MNotSaved
 	PlayerConnectedState m_iConnected;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnPlayerControllerNameChanged"
+	// MNotSaved
 	char[128] m_iszPlayerName;
+	// MNotSaved
 	CUtlString m_szNetworkIDString;
+	// MNotSaved
 	float32 m_fLerpTime;
+	// MNotSaved
 	bool m_bLagCompensation;
+	// MNotSaved
 	bool m_bPredict;
+	// MNotSaved
 	bool m_bIsLowViolence;
+	// MNotSaved
 	bool m_bGamePaused;
+	// MNotSaved
 	ChatIgnoreType_t m_iIgnoreGlobalChat;
 	float32 m_flLastPlayerTalkTime;
+	// MNotSaved
 	float32 m_flLastEntitySteadyState;
+	// MNotSaved
 	int32 m_nAvailableEntitySteadyState;
+	// MNotSaved
 	bool m_bHasAnySteadyStateEnts;
 	// MNetworkEnable
 	// MNetworkEncoder = "fixed64"
 	// MNetworkChangeCallback = "OnSteamIDChanged"
+	// MNotSaved
 	uint64 m_steamID;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnNoClipEnableChanged"

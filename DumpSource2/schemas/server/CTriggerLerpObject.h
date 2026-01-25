@@ -5,6 +5,7 @@ class CTriggerLerpObject : public CBaseTrigger
 	CUtlSymbolLarge m_iszLerpTargetAttachment;
 	AttachmentHandle_t m_hLerpTargetAttachment;
 	float32 m_flLerpDuration;
+	bool m_bAttachedEntityWasParented;
 	bool m_bLerpRestoreMoveType;
 	bool m_bSingleLerpObject;
 	CUtlVector< lerpdata_t > m_vecLerpingObjects;

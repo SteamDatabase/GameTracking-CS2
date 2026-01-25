@@ -16,37 +16,56 @@
 // MNetworkVarNames = "PointWorldTextReorientMode_t m_nReorientMode"
 class C_PointWorldText : public C_ModelPointEntity
 {
+	// MNotSaved
 	bool m_bForceRecreateNextUpdate;
+	int32 m_nTextWidthPx;
+	int32 m_nTextHeightPx;
 	// MNetworkEnable
+	// MNotSaved
 	char[512] m_messageText;
 	// MNetworkEnable
+	// MNotSaved
 	char[64] m_FontName;
 	// MNetworkEnable
+	// MNotSaved
 	char[64] m_BackgroundMaterialName;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bEnabled;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bFullbright;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flWorldUnitsPerPx;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFontSize;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flDepthOffset;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bDrawBackground;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flBackgroundBorderWidth;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flBackgroundBorderHeight;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flBackgroundWorldToUV;
 	// MNetworkEnable
+	// MNotSaved
 	Color m_Color;
 	// MNetworkEnable
+	// MNotSaved
 	PointWorldTextJustifyHorizontal_t m_nJustifyHorizontal;
 	// MNetworkEnable
+	// MNotSaved
 	PointWorldTextJustifyVertical_t m_nJustifyVertical;
 	// MNetworkEnable
+	// MNotSaved
 	PointWorldTextReorientMode_t m_nReorientMode;
 };

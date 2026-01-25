@@ -1,3 +1,4 @@
-class EventServerBeginAsyncPostTickWork_t : public EventPostAdvanceTick_t
+class EventServerBeginAsyncPostTickWork_t
 {
+	bool m_bIsOncePerFrameAsyncWorkPhase;
 };

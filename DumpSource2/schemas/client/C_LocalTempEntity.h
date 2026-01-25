@@ -1,28 +1,53 @@
 class C_LocalTempEntity : public CBaseAnimGraph
 {
+	// MNotSaved
 	int32 flags;
+	// MNotSaved
 	GameTime_t die;
+	// MNotSaved
 	float32 m_flFrameMax;
+	// MNotSaved
 	float32 x;
+	// MNotSaved
 	float32 y;
+	// MNotSaved
 	float32 fadeSpeed;
+	// MNotSaved
 	float32 bounceFactor;
+	// MNotSaved
 	int32 hitSound;
+	// MNotSaved
 	int32 priority;
+	// MNotSaved
 	Vector tentOffset;
+	// MNotSaved
 	QAngle m_vecTempEntAngVelocity;
+	// MNotSaved
 	int32 tempent_renderamt;
+	// MNotSaved
 	Vector m_vecNormal;
+	// MNotSaved
 	float32 m_flSpriteScale;
+	// MNotSaved
 	int32 m_nFlickerFrame;
+	// MNotSaved
 	float32 m_flFrameRate;
+	// MNotSaved
 	float32 m_flFrame;
+	// MNotSaved
 	char* m_pszImpactEffect;
+	// MNotSaved
 	char* m_pszParticleEffect;
+	// MNotSaved
 	bool m_bParticleCollision;
+	// MNotSaved
 	int32 m_iLastCollisionFrame;
+	// MNotSaved
 	Vector m_vLastCollisionOrigin;
+	// MNotSaved
 	Vector m_vecTempEntVelocity;
+	// MNotSaved
 	Vector m_vecPrevAbsOrigin;
+	// MNotSaved
 	Vector m_vecTempEntAcceleration;
 };

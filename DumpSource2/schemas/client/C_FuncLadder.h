@@ -8,6 +8,7 @@ class C_FuncLadder : public C_BaseModelEntity
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
 	Vector m_vecLadderDir;
+	// MNotSaved
 	CUtlVector< CHandle< C_InfoLadderDismount > > m_Dismounts;
 	Vector m_vecLocalTop;
 	// MNetworkEnable

@@ -53,11 +53,15 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkPriority = 48
 	CBodyComponent* m_CBodyComponent;
 	CNetworkTransmitComponent m_NetworkTransmitComponent;
+	// MSaveOpsForField (UNKNOWN FOR PARSER)
 	CUtlVector< thinkfunc_t > m_aThinkFunctions;
+	// MNotSaved
 	int32 m_iCurrentThinkContext;
 	GameTick_t m_nLastThinkTick;
 	bool m_bDisabledContextThinks;
+	// MNotSaved
 	CTypedBitVec< 64 > m_isSteadyState;
+	// MNotSaved
 	float32 m_lastNetworkChange;
 	CUtlVector< ResponseContext_t > m_ResponseContexts;
 	CUtlSymbolLarge m_iszResponseContext;
@@ -84,7 +88,9 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkEnable
 	MoveType_t m_MoveType;
 	MoveType_t m_nActualMoveType;
+	// MNotSaved
 	uint8 m_nWaterTouch;
+	// MNotSaved
 	uint8 m_nSlimeTouch;
 	bool m_bRestoreInHierarchy;
 	CUtlSymbolLarge m_target;
@@ -114,6 +120,7 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkEnable
 	uint8 m_iTeamNum;
 	CUtlSymbolLarge m_iGlobalname;
+	// MNotSaved
 	int32 m_iSentToClients;
 	// MNetworkEnable
 	float32 m_flSpeed;
@@ -137,7 +144,9 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	Vector m_vecBaseVelocity;
+	// MNotSaved
 	int32 m_nPushEnumCount;
+	// MNotSaved
 	CCollisionProperty* m_pCollision;
 	// MNetworkEnable
 	CHandle< CBaseEntity > m_hEffectEntity;
@@ -201,5 +210,6 @@ class CBaseEntity : public CEntityInstance
 	float32 m_flVPhysicsUpdateLocalTime;
 	// MNetworkEnable
 	BloodType m_nBloodType;
+	// MSaveOpsForField (UNKNOWN FOR PARSER)
 	CPulseGraphInstance_ServerEntity* m_pPulseGraphInstance;
 };

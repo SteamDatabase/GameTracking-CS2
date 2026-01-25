@@ -6,11 +6,11 @@
 // MNetworkVarNames = "bool m_bCannotBeDefused"
 // MNetworkVarNames = "EntitySpottedState_t m_entitySpottedState"
 // MNetworkVarNames = "bool m_bHasExploded"
+// MNetworkVarNames = "bool m_bBombDefused"
 // MNetworkVarNames = "float m_flTimerLength"
 // MNetworkVarNames = "bool m_bBeingDefused"
 // MNetworkVarNames = "float m_flDefuseLength"
 // MNetworkVarNames = "GameTime_t m_flDefuseCountDown"
-// MNetworkVarNames = "bool m_bBombDefused"
 // MNetworkVarNames = "CHandle< CCSPlayerPawn> m_hBombDefuser"
 class CPlantedC4 : public CBaseAnimGraph, public IHasAttributes
 {
@@ -33,9 +33,11 @@ class CPlantedC4 : public CBaseAnimGraph, public IHasAttributes
 	// MNetworkEnable
 	EntitySpottedState_t m_entitySpottedState;
 	int32 m_nSpotRules;
-	bool m_bTrainingPlacedByPlayer;
 	// MNetworkEnable
 	bool m_bHasExploded;
+	// MNetworkEnable
+	bool m_bBombDefused;
+	bool m_bTrainingPlacedByPlayer;
 	// MNetworkEnable
 	float32 m_flTimerLength;
 	// MNetworkEnable
@@ -45,8 +47,6 @@ class CPlantedC4 : public CBaseAnimGraph, public IHasAttributes
 	float32 m_flDefuseLength;
 	// MNetworkEnable
 	GameTime_t m_flDefuseCountDown;
-	// MNetworkEnable
-	bool m_bBombDefused;
 	// MNetworkEnable
 	CHandle< CCSPlayerPawn > m_hBombDefuser;
 	int32 m_iProgressBarTime;

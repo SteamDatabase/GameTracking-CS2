@@ -25,7 +25,7 @@
 //}
 // MPropertyFriendlyName = "TESTBED: FM Synth Container"
 // MPropertyDescription = "Real time FM Synthesis"
-class CVoiceContainerRealtimeFMSineWave : public CVoiceContainerBase
+class CVoiceContainerRealtimeFMSineWave : public CVoiceContainerGenerator
 {
 	// MPropertyFriendlyName = "Frequency (Hz)"
 	// MPropertyDescription = "The frequency of this sine tone."

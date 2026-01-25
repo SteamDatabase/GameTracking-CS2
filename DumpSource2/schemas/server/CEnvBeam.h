@@ -12,6 +12,7 @@ class CEnvBeam : public CBeam
 	CUtlSymbolLarge m_iszSpriteName;
 	int32 m_frameStart;
 	VectorWS m_vEndPointWorld;
+	// MNotSaved
 	Vector m_vEndPointRelative;
 	float32 m_radius;
 	Touch_t m_TouchType;

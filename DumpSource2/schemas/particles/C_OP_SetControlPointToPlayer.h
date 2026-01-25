@@ -98,7 +98,8 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_bOrientToEyes": false
+//	"m_bOrientToEyes": false,
+//	"m_nPosition": "PARTICLE_WORLDSPACE_CENTER"
 //}
 class C_OP_SetControlPointToPlayer : public CParticleFunctionPreEmission
 {
@@ -109,4 +110,6 @@ class C_OP_SetControlPointToPlayer : public CParticleFunctionPreEmission
 	Vector m_vecCP1Pos;
 	// MPropertyFriendlyName = "use eye orientation"
 	bool m_bOrientToEyes;
+	// MPropertyFriendlyName = "position to get"
+	ParticleEntityPos_t m_nPosition;
 };

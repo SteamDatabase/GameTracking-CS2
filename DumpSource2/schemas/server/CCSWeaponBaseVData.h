@@ -11,8 +11,12 @@
 //	"m_nMuzzleSmokeShotThreshold": 4,
 //	"m_flMuzzleSmokeTimeout": 0.250000,
 //	"m_flMuzzleSmokeDecrementRate": 1.000000,
+//	"m_bGenerateMuzzleLight": true,
 //	"m_bLinkedCooldowns": false,
 //	"m_iFlags": "",
+//	"m_iWeight": 0,
+//	"m_bAutoSwitchTo": true,
+//	"m_bAutoSwitchFrom": true,
 //	"m_nPrimaryAmmoType": "",
 //	"m_nSecondaryAmmoType": "",
 //	"m_iMaxClip1": 0,
@@ -22,9 +26,6 @@
 //	"m_bReserveAmmoAsClips": false,
 //	"m_bTreatAsSingleClip": false,
 //	"m_bKeepLoadedAmmo": false,
-//	"m_iWeight": 0,
-//	"m_bAutoSwitchTo": true,
-//	"m_bAutoSwitchFrom": true,
 //	"m_iRumbleEffect": "RUMBLE_INVALID",
 //	"m_flDropSpeed": 300.000000,
 //	"m_iSlot": 0,
@@ -34,7 +35,6 @@
 //	},
 //	"m_WeaponType": "WEAPONTYPE_UNKNOWN",
 //	"m_WeaponCategory": "WEAPONCATEGORY_OTHER",
-//	"m_szModel_AG2": "",
 //	"m_szAnimSkeleton": "",
 //	"m_vecMuzzlePos0":
 //	[
@@ -138,7 +138,6 @@ class CCSWeaponBaseVData : public CBasePlayerWeaponVData
 	CSWeaponType m_WeaponType;
 	CSWeaponCategory m_WeaponCategory;
 	// MPropertyStartGroup = "Visuals"
-	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_szModel_AG2;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCNmSkeleton > > m_szAnimSkeleton;
 	Vector m_vecMuzzlePos0;
 	Vector m_vecMuzzlePos1;

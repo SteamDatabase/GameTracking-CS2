@@ -6,5 +6,6 @@ class CFishPool : public CBaseEntity
 	float32 m_waterLevel;
 	bool m_isDormant;
 	CUtlVector< CHandle< CFish > > m_fishes;
+	// MNotSaved
 	CountdownTimer m_visTimer;
 };

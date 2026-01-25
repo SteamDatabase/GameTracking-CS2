@@ -5,6 +5,7 @@ class CTriggerPush : public CBaseTrigger
 	bool m_bTriggerOnStartTouch;
 	bool m_bUsePathSimple;
 	CUtlSymbolLarge m_iszPathSimpleName;
+	// MClassPtr
 	CPathSimple* m_PathSimple;
 	uint32 m_splinePushType;
 };

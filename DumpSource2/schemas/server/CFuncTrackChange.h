@@ -1,7 +1,10 @@
 class CFuncTrackChange : public CFuncPlatRot
 {
+	// MClassPtr
 	CPathTrack* m_trackTop;
+	// MClassPtr
 	CPathTrack* m_trackBottom;
+	// MClassPtr
 	CFuncTrackTrain* m_train;
 	CUtlSymbolLarge m_trackTopName;
 	CUtlSymbolLarge m_trackBottomName;

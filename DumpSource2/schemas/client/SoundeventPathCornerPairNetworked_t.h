@@ -1,3 +1,4 @@
+// MNetworkStructNotInNetworkUtlVectorEmbedded
 class SoundeventPathCornerPairNetworked_t
 {
 	// MNetworkEnable

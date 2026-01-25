@@ -6,7 +6,9 @@ class CFuncTrackTrain : public CBaseModelEntity
 	QAngle m_angPrev;
 	Vector m_controlMins;
 	Vector m_controlMaxs;
+	// MNotSaved
 	Vector m_lastBlockPos;
+	// MNotSaved
 	int32 m_lastBlockTick;
 	float32 m_flVolume;
 	float32 m_flBank;
@@ -31,10 +33,14 @@ class CFuncTrackTrain : public CBaseModelEntity
 	CEntityIOOutput m_OnNext;
 	CEntityIOOutput m_OnArrivedAtDestinationNode;
 	bool m_bManualSpeedChanges;
+	// MNotSaved
 	float32 m_flDesiredSpeed;
+	// MNotSaved
 	GameTime_t m_flSpeedChangeTime;
 	float32 m_flAccelSpeed;
 	float32 m_flDecelSpeed;
+	// MNotSaved
 	bool m_bAccelToSpeed;
+	// MNotSaved
 	GameTime_t m_flNextMPSoundTime;
 };

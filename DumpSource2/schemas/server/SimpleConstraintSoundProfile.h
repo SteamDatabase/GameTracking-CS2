@@ -1,6 +1,8 @@
 class SimpleConstraintSoundProfile
 {
-	SimpleConstraintSoundProfile::SimpleConstraintsSoundProfileKeypoints_t eKeypoints;
-	float32[2] m_keyPoints;
-	float32[3] m_reversalSoundThresholds;
+	float32 m_flKeyPointMinSoundThreshold;
+	float32 m_flKeyPointMaxSoundThreshold;
+	float32 m_reversalSoundThresholdSmall;
+	float32 m_reversalSoundThresholdMedium;
+	float32 m_reversalSoundThresholdLarge;
 };

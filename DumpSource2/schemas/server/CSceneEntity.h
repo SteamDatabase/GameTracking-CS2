@@ -8,7 +8,6 @@
 class CSceneEntity : public CPointEntity
 {
 	CUtlSymbolLarge m_iszSceneFile;
-	CUtlSymbolLarge m_iszResumeSceneFile;
 	CUtlSymbolLarge m_iszTarget1;
 	CUtlSymbolLarge m_iszTarget2;
 	CUtlSymbolLarge m_iszTarget3;
@@ -45,8 +44,6 @@ class CSceneEntity : public CPointEntity
 	float32 m_flAutomationDelay;
 	float32 m_flAutomationTime;
 	int32 m_nSpeechPriority;
-	CHandle< CBaseEntity > m_hWaitingForThisResumeScene;
-	bool m_bWaitingForResumeScene;
 	bool m_bPausedViaInput;
 	bool m_bPauseAtNextInterrupt;
 	bool m_bWaitingForActor;
@@ -57,21 +54,22 @@ class CSceneEntity : public CPointEntity
 	// MNetworkEnable
 	CNetworkUtlVectorBase< CHandle< CBaseFlex > > m_hActorList;
 	CUtlVector< CHandle< CBaseEntity > > m_hRemoveActorList;
-	int32 m_nSceneFlushCounter;
 	// MNetworkEnable
+	// MNotSaved
 	uint16 m_nSceneStringIndex;
 	CEntityIOOutput m_OnStart;
 	CEntityIOOutput m_OnCompletion;
 	CEntityIOOutput m_OnCanceled;
 	CEntityIOOutput m_OnPaused;
 	CEntityIOOutput m_OnResumed;
-	CEntityIOOutput[16] m_OnTrigger;
 	CHandle< CSceneEntity > m_hInterruptScene;
 	int32 m_nInterruptCount;
+	// MNotSaved
 	bool m_bSceneMissing;
 	bool m_bInterrupted;
 	bool m_bCompletedEarly;
 	bool m_bInterruptSceneFinished;
+	// MNotSaved
 	bool m_bRestoring;
 	CUtlVector< CHandle< CSceneEntity > > m_hNotifySceneCompletion;
 	CUtlVector< CHandle< CSceneListManager > > m_hListManagers;

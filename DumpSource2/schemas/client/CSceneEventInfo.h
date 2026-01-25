@@ -4,6 +4,9 @@ class CSceneEventInfo
 	int32 m_iPriority;
 	HSequence m_hSequence;
 	float32 m_flWeight;
+	CStrongHandle< InfoForResourceTypeCNmClip > m_hAnimClip;
+	CGlobalSymbol m_sAnimClipSlot;
+	CGlobalSymbol m_sAnimClipSlotWeight;
 	bool m_bHasArrived;
 	int32 m_nType;
 	GameTime_t m_flNext;

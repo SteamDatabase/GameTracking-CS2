@@ -30,7 +30,10 @@ class C_PointCommentaryNode : public CBaseAnimGraph
 	int32 m_iNodeNumberMax;
 	// MNetworkEnable
 	bool m_bListenedTo;
+	// MSaveOpsForField (UNKNOWN FOR PARSER)
+	CSoundPatch* m_sndCommentary;
 	// MNetworkEnable
 	CHandle< C_BaseEntity > m_hViewPosition;
+	// MNotSaved
 	bool m_bRestartAfterRestore;
 };

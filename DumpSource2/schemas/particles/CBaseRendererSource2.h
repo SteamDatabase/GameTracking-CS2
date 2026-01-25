@@ -80,11 +80,6 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	// MPropertyFriendlyName = "diffuse lighting origin Control Point"
 	// MPropertySortPriority = 400
 	int32 m_nLightingControlPoint;
-	// MPropertyFriendlyName = "self illum per-particle"
-	// MPropertyAttributeChoiceName = "particlefield_scalar"
-	// MPropertySortPriority = 400
-	// MPropertySuppressExpr = "m_nOrientationType == PARTICLE_ORIENTATION_ALIGN_TO_PARTICLE_NORMAL || m_nOrientationType == PARTICLE_ORIENTATION_SCREENALIGN_TO_PARTICLE_NORMAL"
-	ParticleAttributeIndex_t m_nSelfIllumPerParticle;
 	// MPropertyStartGroup = "+Color and alpha adjustments"
 	// MPropertyFriendlyName = "output blend mode"
 	// MPropertySortPriority = 300

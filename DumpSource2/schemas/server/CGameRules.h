@@ -3,6 +3,7 @@
 // MNetworkVarNames = "bool m_bGamePaused"
 class CGameRules
 {
+	// MNotSaved
 	CNetworkVarChainer __m_pChainEntity;
 	char[128] m_szQuestName;
 	int32 m_nQuestPhase;

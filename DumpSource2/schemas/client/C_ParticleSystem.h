@@ -31,10 +31,12 @@ class C_ParticleSystem : public C_BaseModelEntity
 	// MNetworkEnable
 	float32 m_flFreezeTransitionDuration;
 	// MNetworkEnable
+	// MNotSaved
 	int32 m_nStopType;
 	// MNetworkEnable
 	bool m_bAnimateDuringGameplayPause;
 	// MNetworkEnable
+	// MNotSaved
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_iEffectIndex;
 	// MNetworkEnable
 	GameTime_t m_flStartTime;
@@ -59,6 +61,8 @@ class C_ParticleSystem : public C_BaseModelEntity
 	Vector m_vecDataCPValue;
 	int32 m_nTintCP;
 	Color m_clrTint;
+	// MNotSaved
 	bool m_bOldActive;
+	// MNotSaved
 	bool m_bOldFrozen;
 };

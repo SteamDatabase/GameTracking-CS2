@@ -32,9 +32,11 @@ class fogparams_t
 	Color colorSecondary;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	Color colorPrimaryLerpTo;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	Color colorSecondaryLerpTo;
 	// MNetworkEnable
 	float32 start;
@@ -51,21 +53,27 @@ class fogparams_t
 	float32 HDRColorScale;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	float32 skyboxFogFactor;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	float32 skyboxFogFactorLerpTo;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	float32 startLerpTo;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	float32 endLerpTo;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	float32 maxdensityLerpTo;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
+	// MNotSaved
 	GameTime_t lerptime;
 	// MNetworkEnable
 	// MNetworkUserGroup = "FogController"
@@ -83,6 +91,8 @@ class fogparams_t
 	bool enable;
 	// MNetworkEnable
 	bool blend;
+	// MNotSaved
 	bool m_bPadding2;
+	// MNotSaved
 	bool m_bPadding;
 };

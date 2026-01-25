@@ -11,7 +11,8 @@
 //	"m_FootstepType": "FOOTSOUND_Left",
 //	"m_OverrideSoundName": "",
 //	"m_DebugAnimSourceString": "",
-//	"m_BoneName": ""
+//	"m_BoneName": "",
+//	"m_footstepJumpPhase": "Unknown"
 //}
 // MPropertyFriendlyName = "FootstepLanded Tag"
 class CFootstepLandedAnimTag : public CAnimTagBase
@@ -26,4 +27,6 @@ class CFootstepLandedAnimTag : public CAnimTagBase
 	// MPropertyFriendlyName = "Bone Name"
 	// MPropertyAttributeChoiceName = "Bone"
 	CUtlString m_BoneName;
+	// MPropertyFriendlyName = "Jump Phase"
+	FootstepJumpPhase_t m_footstepJumpPhase;
 };

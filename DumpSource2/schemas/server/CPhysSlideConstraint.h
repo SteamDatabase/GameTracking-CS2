@@ -9,5 +9,6 @@ class CPhysSlideConstraint : public CPhysConstraint
 	float32 m_flMotorFrequency;
 	float32 m_flMotorDampingRatio;
 	bool m_bUseEntityPivot;
+	// MNotSaved
 	ConstraintSoundInfo m_soundInfo;
 };

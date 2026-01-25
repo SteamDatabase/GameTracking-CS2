@@ -24,7 +24,7 @@
 //}
 // MPropertyFriendlyName = "Envelope VSND"
 // MPropertyDescription = "Plays sound with envelope."
-class CVoiceContainerEnvelope : public CVoiceContainerBase
+class CVoiceContainerEnvelope : public CVoiceContainerDefault
 {
 	// MPropertyFriendlyName = "Vsnd File"
 	CStrongHandle< InfoForResourceTypeCVoiceContainerBase > m_sound;

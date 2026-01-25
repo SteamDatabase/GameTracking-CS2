@@ -5,6 +5,7 @@
 //	"m_nTargetValueNodeIdx": -1,
 //	"m_samplingMode": "Delta",
 //	"m_bAllowTargetUpdate": false,
+//	"m_bAlignWithTargetAtLastWarpEvent": false,
 //	"m_flSamplingPositionErrorThresholdSq": 0.000000,
 //	"m_flMaxTangentLength": 1.250000,
 //	"m_flLerpFallbackDistanceThreshold": 0.100000,
@@ -17,6 +18,7 @@ class CNmTargetWarpNode::CDefinition : public CNmPoseNode::CDefinition
 	int16 m_nTargetValueNodeIdx;
 	CNmRootMotionData::SamplingMode_t m_samplingMode;
 	bool m_bAllowTargetUpdate;
+	bool m_bAlignWithTargetAtLastWarpEvent;
 	float32 m_flSamplingPositionErrorThresholdSq;
 	float32 m_flMaxTangentLength;
 	float32 m_flLerpFallbackDistanceThreshold;

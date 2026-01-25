@@ -1,6 +1,8 @@
+// MEntityAllowsPortraitWorldSpawn
 // MNetworkVarNames = "bool m_bDisabled"
 // MNetworkVarNames = "int m_nResolutionX"
 // MNetworkVarNames = "int m_nResolutionY"
+// MNetworkVarNames = "string_t m_szPanelType"
 // MNetworkVarNames = "string_t m_szLayoutFileName"
 // MNetworkVarNames = "string_t m_RenderAttrName"
 // MNetworkVarNames = "CHandle< CBaseModelEntity > m_TargetEntities"
@@ -14,6 +16,8 @@ class CInfoOffscreenPanoramaTexture : public CPointEntity
 	int32 m_nResolutionX;
 	// MNetworkEnable
 	int32 m_nResolutionY;
+	// MNetworkEnable
+	CUtlSymbolLarge m_szPanelType;
 	// MNetworkEnable
 	CUtlSymbolLarge m_szLayoutFileName;
 	// MNetworkEnable

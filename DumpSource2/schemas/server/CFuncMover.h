@@ -7,7 +7,6 @@ class CFuncMover : public CBaseModelEntity
 	CUtlSymbolLarge m_iszPathNodeEnd;
 	CFuncMover::Move_t m_eMoveType;
 	bool m_bIsReversing;
-	Vector m_vTarget;
 	float32 m_flStartSpeed;
 	float32 m_flPathLocation;
 	float32 m_flT;
@@ -18,11 +17,17 @@ class CFuncMover : public CBaseModelEntity
 	float32 m_flTimeToReachMaxSpeed;
 	float32 m_flDistanceToReachMaxSpeed;
 	float32 m_flTimeToReachZeroSpeed;
+	float32 m_flComputedDistanceToReachMaxSpeed;
+	float32 m_flComputedDistanceToReachZeroSpeed;
+	float32 m_flStartCurveScale;
+	float32 m_flStopCurveScale;
 	float32 m_flDistanceToReachZeroSpeed;
 	GameTime_t m_flTimeMovementStart;
 	GameTime_t m_flTimeMovementStop;
 	CHandle< CMoverPathNode > m_hStopAtNode;
 	float32 m_flPathLocationToBeginStop;
+	float32 m_flPathLocationStart;
+	float32 m_flBeginStopT;
 	CUtlSymbolLarge m_iszStartForwardSound;
 	CUtlSymbolLarge m_iszLoopForwardSound;
 	CUtlSymbolLarge m_iszStopForwardSound;
@@ -33,6 +38,7 @@ class CFuncMover : public CBaseModelEntity
 	CEntityIOOutput m_OnMovementEnd;
 	bool m_bStartAtClosestPoint;
 	bool m_bStartAtEnd;
+	bool m_bStartFollowingClosestMover;
 	CFuncMover::OrientationUpdate_t m_eOrientationUpdate;
 	GameTime_t m_flTimeStartOrientationChange;
 	float32 m_flTimeToBlendToNewOrientation;
@@ -40,7 +46,7 @@ class CFuncMover : public CBaseModelEntity
 	int32 m_nOriginalOrientationIndex;
 	bool m_bCreateMovableNavMesh;
 	bool m_bAllowMovableNavMeshDockingOnEntireEntity;
-	CEntityIOOutput m_OnNodePassed;
+	CEntityOutputTemplate< CUtlString, char* > m_OnNodePassed;
 	CUtlSymbolLarge m_iszOrientationMatchEntityName;
 	CHandle< CBaseEntity > m_hOrientationMatchEntity;
 	float32 m_flTimeToTraverseToNextNode;
@@ -68,4 +74,14 @@ class CFuncMover : public CBaseModelEntity
 	bool m_bNextNodeReturnsCurrent;
 	bool m_bStartedMoving;
 	CFuncMover::FollowEntityDirection_t m_eFollowEntityDirection;
+	CHandle< CFuncMover > m_hFollowMover;
+	CUtlSymbolLarge m_iszFollowMoverEntityName;
+	float32 m_flFollowMoverDistance;
+	float32 m_flFollowMoverCalculatedDistance;
+	float32 m_flFollowMoverSpringStrength;
+	bool m_bFollowConstraintsInitialized;
+	CFuncMover::FollowConstraint_t m_eFollowConstraint;
+	float32 m_flFollowMoverSpeed;
+	float32 m_flFollowMoverVelocity;
+	GameTick_t m_nTickMovementRan;
 };

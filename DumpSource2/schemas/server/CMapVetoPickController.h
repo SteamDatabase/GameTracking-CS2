@@ -49,9 +49,9 @@ class CMapVetoPickController : public CBaseEntity
 	int32 m_nPhaseStartTick;
 	// MNetworkEnable
 	int32 m_nPhaseDurationTicks;
-	CEntityOutputTemplate< CUtlSymbolLarge > m_OnMapVetoed;
-	CEntityOutputTemplate< CUtlSymbolLarge > m_OnMapPicked;
-	CEntityOutputTemplate< int32 > m_OnSidesPicked;
-	CEntityOutputTemplate< int32 > m_OnNewPhaseStarted;
-	CEntityOutputTemplate< int32 > m_OnLevelTransition;
+	CEntityOutputTemplate< CUtlSymbolLarge, CUtlSymbolLarge > m_OnMapVetoed;
+	CEntityOutputTemplate< CUtlSymbolLarge, CUtlSymbolLarge > m_OnMapPicked;
+	CEntityOutputTemplate< int32, int32 > m_OnSidesPicked;
+	CEntityOutputTemplate< int32, int32 > m_OnNewPhaseStarted;
+	CEntityOutputTemplate< int32, int32 > m_OnLevelTransition;
 };

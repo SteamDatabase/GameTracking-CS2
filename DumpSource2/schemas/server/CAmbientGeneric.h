@@ -8,6 +8,8 @@ class CAmbientGeneric : public CPointEntity
 	bool m_fLooping;
 	CUtlSymbolLarge m_iszSound;
 	CUtlSymbolLarge m_sSourceEntName;
+	// MNotSaved
 	CHandle< CBaseEntity > m_hSoundSource;
+	// MNotSaved
 	CEntityIndex m_nSoundSourceEntIndex;
 };

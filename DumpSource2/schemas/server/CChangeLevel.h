@@ -6,5 +6,6 @@ class CChangeLevel : public CBaseTrigger
 	bool m_bTouched;
 	bool m_bNoTouch;
 	bool m_bNewChapter;
+	// MNotSaved
 	bool m_bOnChangeLevelFired;
 };

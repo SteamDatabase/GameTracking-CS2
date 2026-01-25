@@ -2,20 +2,20 @@ class CLogicNPCCounter : public CBaseEntity
 {
 	CEntityIOOutput m_OnMinCountAll;
 	CEntityIOOutput m_OnMaxCountAll;
-	CEntityOutputTemplate< float32 > m_OnFactorAll;
-	CEntityOutputTemplate< float32 > m_OnMinPlayerDistAll;
+	CEntityOutputTemplate< float32, float32 > m_OnFactorAll;
+	CEntityOutputTemplate< float32, float32 > m_OnMinPlayerDistAll;
 	CEntityIOOutput m_OnMinCount_1;
 	CEntityIOOutput m_OnMaxCount_1;
-	CEntityOutputTemplate< float32 > m_OnFactor_1;
-	CEntityOutputTemplate< float32 > m_OnMinPlayerDist_1;
+	CEntityOutputTemplate< float32, float32 > m_OnFactor_1;
+	CEntityOutputTemplate< float32, float32 > m_OnMinPlayerDist_1;
 	CEntityIOOutput m_OnMinCount_2;
 	CEntityIOOutput m_OnMaxCount_2;
-	CEntityOutputTemplate< float32 > m_OnFactor_2;
-	CEntityOutputTemplate< float32 > m_OnMinPlayerDist_2;
+	CEntityOutputTemplate< float32, float32 > m_OnFactor_2;
+	CEntityOutputTemplate< float32, float32 > m_OnMinPlayerDist_2;
 	CEntityIOOutput m_OnMinCount_3;
 	CEntityIOOutput m_OnMaxCount_3;
-	CEntityOutputTemplate< float32 > m_OnFactor_3;
-	CEntityOutputTemplate< float32 > m_OnMinPlayerDist_3;
+	CEntityOutputTemplate< float32, float32 > m_OnFactor_3;
+	CEntityOutputTemplate< float32, float32 > m_OnMinPlayerDist_3;
 	CEntityHandle m_hSource;
 	CUtlSymbolLarge m_iszSourceEntityName;
 	float32 m_flDistanceMax;

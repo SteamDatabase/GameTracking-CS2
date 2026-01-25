@@ -10,5 +10,6 @@ class CAI_Expresser
 	bool m_bConsiderSceneInvolvementAsSpeech;
 	bool m_bSceneEntityDisabled;
 	int32 m_nLastSpokenPriority;
+	// MNotSaved
 	CBaseFlex* m_pOuter;
 };

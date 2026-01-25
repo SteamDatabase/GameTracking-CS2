@@ -1,5 +1,4 @@
 // MNetworkVarNames = "float32 m_flexWeight"
-// MNetworkVarNames = "bool m_blinktoggle"
 class C_BaseFlex : public CBaseAnimGraph
 {
 	// MNetworkEnable
@@ -12,22 +11,23 @@ class C_BaseFlex : public CBaseAnimGraph
 	// MNetworkEncoder = "coord"
 	// MNetworkChangeCallback = "OnViewTargetChanged"
 	VectorWS m_vLookTargetPosition;
-	// MNetworkEnable
-	bool m_blinktoggle;
+	// MNotSaved
 	int32 m_nLastFlexUpdateFrameCount;
+	// MNotSaved
 	Vector m_CachedViewTarget;
 	SceneEventId_t m_nNextSceneEventId;
-	int32 m_iBlink;
-	float32 m_blinktime;
-	bool m_prevblinktoggle;
-	int32 m_iJawOpen;
-	float32 m_flJawOpenAmount;
-	float32 m_flBlinkAmount;
+	// MNotSaved
 	AttachmentHandle_t m_iMouthAttachment;
+	// MNotSaved
 	AttachmentHandle_t m_iEyeAttachment;
+	// MNotSaved
 	bool m_bResetFlexWeightsOnModelChange;
+	// MNotSaved
 	int32 m_nEyeOcclusionRendererBone;
+	// MNotSaved
 	matrix3x4_t m_mEyeOcclusionRendererCameraToBoneTransform;
+	// MNotSaved
 	Vector m_vEyeOcclusionRendererHalfExtent;
+	// MNotSaved
 	C_BaseFlex::Emphasized_Phoneme[3] m_PhonemeClasses;
 };

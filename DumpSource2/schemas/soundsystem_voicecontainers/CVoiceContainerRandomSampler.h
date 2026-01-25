@@ -30,7 +30,7 @@
 //}
 // MPropertyFriendlyName = "Random Smapler Container"
 // MPropertyDescription = "Trash Synth"
-class CVoiceContainerRandomSampler : public CVoiceContainerBase
+class CVoiceContainerRandomSampler : public CVoiceContainerAsyncGenerator
 {
 	float32 m_flAmplitude;
 	float32 m_flAmplitudeJitter;

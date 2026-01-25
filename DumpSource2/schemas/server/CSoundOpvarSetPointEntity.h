@@ -12,6 +12,7 @@ class CSoundOpvarSetPointEntity : public CSoundOpvarSetPointBase
 	float32 m_flOcclusionMax;
 	float32 m_flValSetOnDisable;
 	bool m_bSetValueOnDisable;
+	// MNotSaved
 	bool m_bReloading;
 	int32 m_nSimulationMode;
 	int32 m_nVisibilitySamples;
@@ -19,9 +20,14 @@ class CSoundOpvarSetPointEntity : public CSoundOpvarSetPointBase
 	float32 m_flDynamicMaximumOcclusion;
 	CEntityHandle m_hDynamicEntity;
 	CUtlSymbolLarge m_iszDynamicEntityName;
+	// MNotSaved
 	float32 m_flPathingDistanceNormFactor;
+	// MNotSaved
 	Vector m_vPathingSourcePos;
+	// MNotSaved
 	Vector m_vPathingListenerPos;
+	// MNotSaved
 	Vector m_vPathingDirection;
+	// MNotSaved
 	int32 m_nPathingSourceIndex;
 };

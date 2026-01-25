@@ -15,8 +15,10 @@
 class C_EnvWindShared
 {
 	// MNetworkEnable
+	// MNotSaved
 	GameTime_t m_flStartTime;
 	// MNetworkEnable
+	// MNotSaved
 	uint32 m_iWindSeed;
 	// MNetworkEnable
 	uint16 m_iMinWind;
@@ -37,11 +39,15 @@ class C_EnvWindShared
 	// MNetworkEnable
 	uint16 m_iGustDirChange;
 	// MNetworkEnable
+	// MNotSaved
 	uint16 m_iInitialWindDir;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flInitialWindSpeed;
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
+	// MNotSaved
 	Vector m_location;
+	// MNotSaved
 	CHandle< C_BaseEntity > m_hEntOwner;
 };

@@ -11,8 +11,12 @@
 //	"m_nMuzzleSmokeShotThreshold": 4,
 //	"m_flMuzzleSmokeTimeout": 0.250000,
 //	"m_flMuzzleSmokeDecrementRate": 1.000000,
+//	"m_bGenerateMuzzleLight": true,
 //	"m_bLinkedCooldowns": false,
 //	"m_iFlags": "",
+//	"m_iWeight": 0,
+//	"m_bAutoSwitchTo": true,
+//	"m_bAutoSwitchFrom": true,
 //	"m_nPrimaryAmmoType": "",
 //	"m_nSecondaryAmmoType": "",
 //	"m_iMaxClip1": 0,
@@ -22,9 +26,6 @@
 //	"m_bReserveAmmoAsClips": false,
 //	"m_bTreatAsSingleClip": false,
 //	"m_bKeepLoadedAmmo": false,
-//	"m_iWeight": 0,
-//	"m_bAutoSwitchTo": true,
-//	"m_bAutoSwitchFrom": true,
 //	"m_iRumbleEffect": "RUMBLE_INVALID",
 //	"m_flDropSpeed": 300.000000,
 //	"m_iSlot": 0,
@@ -61,10 +62,18 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	float32 m_flMuzzleSmokeTimeout;
 	// MPropertyDescription = "Barrel smoke decrement rate when not firing"
 	float32 m_flMuzzleSmokeDecrementRate;
+	bool m_bGenerateMuzzleLight;
 	// MPropertyStartGroup = "Behavior"
 	// MPropertyDescription = "Should both primary and secondary attacks be cooled down together (so cooling down primary attack would cooldown both primary + secondary attacks)?"
 	bool m_bLinkedCooldowns;
 	ItemFlagTypes_t m_iFlags;
+	// MPropertyDescription = "This value used to determine this weapon's importance in autoselection"
+	int32 m_iWeight;
+	// MPropertyFriendlyName = "Safe To Auto-Switch To"
+	// MPropertyDescription = "Whether this weapon is safe to automatically switch to (should be false for eg. explosives that can the player may accidentally hurt themselves with)"
+	bool m_bAutoSwitchTo;
+	// MPropertyFriendlyName = "Safe To Auto-Switch Away From"
+	bool m_bAutoSwitchFrom;
 	// MPropertyStartGroup = "Ammo"
 	// MPropertyAttributeEditor = "VDataChoice( scripts/ammo.vdata )"
 	// MPropertyCustomFGDType = "string"
@@ -93,13 +102,6 @@ class CBasePlayerWeaponVData : public CEntitySubclassVDataBase
 	// MPropertyDescription = "Indicates whether to keep any loaded ammo in the weapon on reload"
 	bool m_bKeepLoadedAmmo;
 	// MPropertyStartGroup = "UI"
-	// MPropertyDescription = "This value used to determine this weapon's importance in autoselection"
-	int32 m_iWeight;
-	// MPropertyFriendlyName = "Safe To Auto-Switch To"
-	// MPropertyDescription = "Whether this weapon is safe to automatically switch to (should be false for eg. explosives that can the player may accidentally hurt themselves with)"
-	bool m_bAutoSwitchTo;
-	// MPropertyFriendlyName = "Safe To Auto-Switch Away From"
-	bool m_bAutoSwitchFrom;
 	RumbleEffect_t m_iRumbleEffect;
 	float32 m_flDropSpeed;
 	// MPropertyFriendlyName = "HUD Bucket"

@@ -25,7 +25,6 @@
 //	"m_bBoneMergeFlex": false,
 //	"m_bUserSpecifiedColor": false,
 //	"m_bUserSpecifiedMaterialGroup": false,
-//	"m_bAcceptParentMaterialDrivenDecals": false,
 //	"m_BodygroupOnOtherModels": "",
 //	"m_MaterialGroupOnOtherModels": ""
 //}
@@ -42,7 +41,6 @@ class CModelConfigElement_AttachedModel : public CModelConfigElement
 	bool m_bBoneMergeFlex;
 	bool m_bUserSpecifiedColor;
 	bool m_bUserSpecifiedMaterialGroup;
-	bool m_bAcceptParentMaterialDrivenDecals;
 	CUtlString m_BodygroupOnOtherModels;
 	CUtlString m_MaterialGroupOnOtherModels;
 };

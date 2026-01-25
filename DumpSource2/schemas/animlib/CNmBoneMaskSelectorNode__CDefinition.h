@@ -3,7 +3,7 @@
 //	"m_nNodeIdx": -1,
 //	"m_defaultMaskNodeIdx": -1,
 //	"m_parameterValueNodeIdx": -1,
-//	"m_switchDynamically": false,
+//	"m_bSwitchDynamically": false,
 //	"m_maskNodeIndices":
 //	[
 //	],
@@ -16,7 +16,7 @@ class CNmBoneMaskSelectorNode::CDefinition : public CNmBoneMaskValueNode::CDefin
 {
 	int16 m_defaultMaskNodeIdx;
 	int16 m_parameterValueNodeIdx;
-	bool m_switchDynamically;
+	bool m_bSwitchDynamically;
 	CUtlVectorFixedGrowable< int16, 7 > m_maskNodeIndices;
 	CUtlVectorFixedGrowable< CGlobalSymbol, 7 > m_parameterValues;
 	float32 m_flBlendTimeSeconds;

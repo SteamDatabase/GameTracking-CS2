@@ -6,4 +6,5 @@ enum NmFootPhaseCondition_t : uint8_t
 	RightFootDown = 2,
 	RightFootPassing = 3,
 	RightPhase = 5,
+	None = 6,
 };

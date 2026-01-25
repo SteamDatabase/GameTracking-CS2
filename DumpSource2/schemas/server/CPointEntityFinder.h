@@ -1,5 +1,6 @@
 class CPointEntityFinder : public CBaseEntity
 {
+	// MNotSaved
 	CHandle< CBaseEntity > m_hEntity;
 	CUtlSymbolLarge m_iFilterName;
 	CHandle< CBaseFilter > m_hFilter;

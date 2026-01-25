@@ -4,6 +4,8 @@ class CLogicDistanceAutosave : public CLogicalEntity
 	float32 m_flDistanceToPlayer;
 	bool m_bForceNewLevelUnit;
 	bool m_bCheckCough;
+	// MNotSaved
 	bool m_bThinkDangerous;
+	// MNotSaved
 	float32 m_flDangerousTime;
 };

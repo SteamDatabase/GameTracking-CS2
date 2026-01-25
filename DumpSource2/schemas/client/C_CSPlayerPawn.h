@@ -120,7 +120,6 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	GameTick_t m_aimPunchTickBase;
 	// MNetworkEnable
 	float32 m_aimPunchTickFraction;
-	CUtlVector< QAngle > m_aimPunchCache;
 	bool m_bInLanding;
 	float32 m_flLandingStartTime;
 	// MNetworkEnable

@@ -16,7 +16,7 @@
 //}
 class CDestructiblePart_DamageLevel
 {
-	// MPropertyDescription = "Name for this damage level."
+	// MPropertyDescription = "Name for this damage level.  Presently only used for debugging/display - one day may be used in code to allow destroying by name."
 	CUtlString m_sName;
 	// MPropertyStartGroup = "+Model Setup"
 	// MPropertyDescription = "Name of the breakable to trigger breaking on when health reaches zero."

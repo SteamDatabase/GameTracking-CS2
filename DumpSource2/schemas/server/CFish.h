@@ -12,12 +12,15 @@ class CFish : public CBaseAnimGraph
 	uint32 m_id;
 	// MNetworkEnable
 	// MNetworkSerializer = "fish_pos_x"
+	// MNotSaved
 	float32 m_x;
 	// MNetworkEnable
 	// MNetworkSerializer = "fish_pos_y"
+	// MNotSaved
 	float32 m_y;
 	// MNetworkEnable
 	// MNetworkSerializer = "fish_pos_z"
+	// MNotSaved
 	float32 m_z;
 	// MNetworkEnable
 	// MNetworkSerializer = "angle_normalize_positive"
@@ -39,12 +42,19 @@ class CFish : public CBaseAnimGraph
 	float32 m_calmSpeed;
 	float32 m_panicSpeed;
 	float32 m_avoidRange;
+	// MNotSaved
 	CountdownTimer m_turnTimer;
 	bool m_turnClockwise;
+	// MNotSaved
 	CountdownTimer m_goTimer;
+	// MNotSaved
 	CountdownTimer m_moveTimer;
+	// MNotSaved
 	CountdownTimer m_panicTimer;
+	// MNotSaved
 	CountdownTimer m_disperseTimer;
+	// MNotSaved
 	CountdownTimer m_proximityTimer;
+	// MNotSaved
 	CUtlVector< CFish* > m_visible;
 };

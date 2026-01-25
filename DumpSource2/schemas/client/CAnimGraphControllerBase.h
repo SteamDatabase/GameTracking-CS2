@@ -1,4 +1,5 @@
+// MGetKV3ClassDefaults = Could not parse KV3 Defaults
 class CAnimGraphControllerBase
 {
-	CUtlVectorFixedGrowable< CGlobalSymbol, 8 > m_vecParamsToResetInPostGraphUpdate;
+	ExternalAnimGraphHandle_t m_hExternalGraph;
 };

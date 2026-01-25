@@ -12,10 +12,13 @@ class sky3dparams_t
 	// MNetworkEncoder = "coord"
 	Vector origin;
 	// MNetworkEnable
+	// MNotSaved
 	bool bClip3DSkyBoxNearToWorldFar;
 	// MNetworkEnable
+	// MNotSaved
 	float32 flClip3DSkyBoxNearToWorldFarOffset;
 	// MNetworkEnable
+	// MNotSaved
 	fogparams_t fog;
 	// MNetworkEnable
 	WorldGroupId_t m_nWorldGroupID;

@@ -55,10 +55,10 @@
 //	"m_flInertiaScaleInv": 1.000000,
 //	"m_flLinearDamping": 0.000000,
 //	"m_flAngularDamping": 0.000000,
-//	"m_flLinearDrag": 1.000000,
-//	"m_flAngularDrag": 1.000000,
-//	"m_flLinearBuoyancyDrag": 1.000000,
-//	"m_flAngularBuoyancyDrag": 1.000000,
+//	"m_flLinearDragScale": 1.000000,
+//	"m_flAngularDragScale": 1.000000,
+//	"m_flLinearFluidDragScale": 1.000000,
+//	"m_flAngularFluidDragScale": 1.000000,
 //	"m_vLastAwakeForceAccum":
 //	[
 //		0.000000,
@@ -71,7 +71,7 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_flBuoyancyFactor": 1.000000,
+//	"m_flBuoyancyScale": 1.000000,
 //	"m_flGravityScale": 1.000000,
 //	"m_flTimeScale": 1.000000,
 //	"m_nBodyType": 0,
@@ -84,7 +84,6 @@
 //	"m_bSleeping": false,
 //	"m_bIsContinuousEnabled": true,
 //	"m_bDragEnabled": true,
-//	"m_bBuoyancyDragEnabled": true,
 //	"m_vGravity":
 //	[
 //		0.000000,

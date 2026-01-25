@@ -8,11 +8,12 @@ class C_SoundEventEntity : public C_BaseEntity
 	float32 m_flSavedElapsedTime;
 	CUtlSymbolLarge m_iszSourceEntityName;
 	CUtlSymbolLarge m_iszAttachmentName;
-	CEntityOutputTemplate< uint64 > m_onGUIDChanged;
+	CEntityOutputTemplate< uint64, uint64 > m_onGUIDChanged;
 	CEntityIOOutput m_onSoundFinished;
 	float32 m_flClientCullRadius;
 	CUtlSymbolLarge m_iszSoundName;
 	CEntityHandle m_hSource;
 	int32 m_nEntityIndexSelection;
+	// MNotSaved
 	bitfield:1 m_bClientSideOnly;
 };

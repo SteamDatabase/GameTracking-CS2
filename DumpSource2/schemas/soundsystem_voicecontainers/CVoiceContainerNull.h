@@ -22,6 +22,6 @@
 //}
 // MPropertyFriendlyName = "Null Container"
 // MPropertyDescription = "Plays a single channel of silence."
-class CVoiceContainerNull : public CVoiceContainerBase
+class CVoiceContainerNull : public CVoiceContainerGenerator
 {
 };

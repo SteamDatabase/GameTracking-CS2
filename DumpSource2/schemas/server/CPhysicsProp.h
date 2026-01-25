@@ -1,5 +1,4 @@
 // MNetworkExcludeByName = "m_flexWeight"
-// MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"
 // MNetworkExcludeByName = "m_animationController.m_flPlaybackRate"
 // MNetworkExcludeByUserGroup = "overlay_vars"
@@ -26,10 +25,13 @@ class CPhysicsProp : public CBreakableProp
 	bool m_bDroppedByPlayer;
 	bool m_bTouchedByPlayer;
 	bool m_bFirstCollisionAfterLaunch;
+	// MNotSaved
 	bool m_bHasBeenAwakened;
+	// MNotSaved
 	bool m_bIsOverrideProp;
 	GameTime_t m_flLastBurn;
 	DynamicContinuousContactBehavior_t m_nDynamicContinuousContactBehavior;
+	// MNotSaved
 	GameTime_t m_fNextCheckDisableMotionContactsTime;
 	int32 m_iInitialGlowState;
 	int32 m_nGlowRange;
@@ -37,6 +39,9 @@ class CPhysicsProp : public CBreakableProp
 	Color m_glowColor;
 	bool m_bShouldAutoConvertBackFromDebris;
 	bool m_bMuteImpactEffects;
+	bool m_bUpdateNavWhenMoving;
+	bool m_bForceNavObstacleCut;
+	bool m_bAllowObstacleConvexHullMerging;
 	bool m_bAcceptDamageFromHeldObjects;
 	bool m_bEnableUseOutput;
 	CPhysicsProp::CrateType_t m_CrateType;

@@ -6,4 +6,6 @@ enum BBoxVolumeType_t : uint32_t
 	BBOX_DIMENSIONS = 1,
 	// MPropertyFriendlyName = "Bounding Box Mins/Maxs"
 	BBOX_MINS_MAXS = 2,
+	// MPropertyFriendlyName = "Bounding Box Radius"
+	BBOX_RADIUS = 3,
 };

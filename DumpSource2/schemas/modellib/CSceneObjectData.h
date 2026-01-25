@@ -20,6 +20,9 @@
 //	"m_meshlets":
 //	[
 //	],
+//	"m_rtProxyDrawCalls":
+//	[
+//	],
 //	"m_vTintColor":
 //	[
 //		0.000000,
@@ -35,5 +38,6 @@ class CSceneObjectData
 	CUtlLeanVector< CMaterialDrawDescriptor > m_drawCalls;
 	CUtlLeanVector< AABB_t > m_drawBounds;
 	CUtlLeanVector< CMeshletDescriptor > m_meshlets;
+	CUtlLeanVector< CSceneObjectData::RTProxyDrawDescriptor_t > m_rtProxyDrawCalls;
 	Vector4D m_vTintColor;
 };

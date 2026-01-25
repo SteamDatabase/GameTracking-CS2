@@ -1,3 +1,0 @@
-class CEnvCombinedLightProbeVolumeAlias_func_combined_light_probe_volume : public CEnvCombinedLightProbeVolume
-{
-};

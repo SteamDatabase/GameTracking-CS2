@@ -16,10 +16,11 @@ class CTakeDamageInfo
 	bool m_bShouldBleed;
 	bool m_bShouldSpark;
 	TakeDamageFlags_t m_nDamageFlags;
-	CGlobalSymbol m_sDamageSourceName;
 	HitGroup_t m_iHitGroupId;
 	int32 m_nNumObjectsPenetrated;
 	float32 m_flFriendlyFireDamageReductionRatio;
+	bool m_bStoppedBullet;
 	CUtlVector< DestructibleHitGroupToDestroy_t > m_nDestructibleHitGroupsToForceDestroy;
+	// MNotSaved
 	bool m_bInTakeDamageFlow;
 };

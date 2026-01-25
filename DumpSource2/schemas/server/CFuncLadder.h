@@ -8,6 +8,7 @@ class CFuncLadder : public CBaseModelEntity
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
 	Vector m_vecLadderDir;
+	// MNotSaved
 	CUtlVector< CHandle< CInfoLadderDismount > > m_Dismounts;
 	Vector m_vecLocalTop;
 	// MNetworkEnable

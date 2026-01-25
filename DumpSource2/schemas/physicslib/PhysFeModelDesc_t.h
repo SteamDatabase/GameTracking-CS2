@@ -70,6 +70,9 @@
 //	"m_AntiTunnelTargetNodes":
 //	[
 //	],
+//	"m_NodeStrayBoxes":
+//	[
+//	],
 //	"m_AxialEdges":
 //	[
 //	],
@@ -220,6 +223,9 @@
 //	"m_DynNodeWindBases":
 //	[
 //	],
+//	"m_SelfCollisionLayers":
+//	[
+//	],
 //	"m_flInternalPressure": 0.000000,
 //	"m_flDefaultTimeDilation": 0.000000,
 //	"m_flWindage": 0.000000,
@@ -277,6 +283,7 @@ class PhysFeModelDesc_t
 	CUtlVector< FeDynKinLink_t > m_DynKinLinks;
 	CUtlVector< FeAntiTunnelProbe_t > m_AntiTunnelProbes;
 	CUtlVector< uint16 > m_AntiTunnelTargetNodes;
+	CUtlVector< FeNodeStrayBox_t > m_NodeStrayBoxes;
 	CUtlVector< FeAxialEdgeBend_t > m_AxialEdges;
 	CUtlVector< float32 > m_NodeInvMasses;
 	CUtlVector< FeCtrlOffset_t > m_CtrlOffsets;
@@ -331,6 +338,7 @@ class PhysFeModelDesc_t
 	CUtlVector< uint16 > m_LockToGoal;
 	CUtlVector< int16 > m_SkelParents;
 	CUtlVector< FeNodeWindBase_t > m_DynNodeWindBases;
+	CUtlVector< FeModelSelfCollisionLayer_t > m_SelfCollisionLayers;
 	float32 m_flInternalPressure;
 	float32 m_flDefaultTimeDilation;
 	float32 m_flWindage;

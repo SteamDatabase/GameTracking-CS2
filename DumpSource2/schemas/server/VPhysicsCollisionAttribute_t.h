@@ -4,6 +4,9 @@
 // MNetworkVarNames = "uint32 m_nEntityId"
 // MNetworkVarNames = "uint32 m_nOwnerId"
 // MNetworkVarNames = "uint16 m_nHierarchyId"
+// MNetworkVarNames = "uint16 m_nDetailLayerMask"
+// MNetworkVarNames = "uint8 m_nDetailLayerMaskType"
+// MNetworkVarNames = "uint8 m_nTargetDetailLayer"
 // MNetworkVarNames = "uint8 m_nCollisionGroup"
 // MNetworkVarNames = "uint8 m_nCollisionFunctionMask"
 class VPhysicsCollisionAttribute_t
@@ -20,6 +23,12 @@ class VPhysicsCollisionAttribute_t
 	uint32 m_nOwnerId;
 	// MNetworkEnable
 	uint16 m_nHierarchyId;
+	// MNetworkEnable
+	uint16 m_nDetailLayerMask;
+	// MNetworkEnable
+	uint8 m_nDetailLayerMaskType;
+	// MNetworkEnable
+	uint8 m_nTargetDetailLayer;
 	// MNetworkEnable
 	uint8 m_nCollisionGroup;
 	// MNetworkEnable

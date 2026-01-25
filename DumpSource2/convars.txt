@@ -52,6 +52,9 @@ adsp_tunnel_min 114 (developmentonly defensive)
 adsp_wall_height 128 (developmentonly defensive)
 	<no description>
 
+ag2_preserve_params_on_reload false (developmentonly gamedll clientdll replicated)
+	When an animgraph is reloaded, should the underlying system restore all params?
+
 ag2_use_networked_serialization_context_demo true (developmentonly gamedll clientdll replicated dontrecord)
 	Use networked compatibility serialization context in demo playback.
 
@@ -250,9 +253,6 @@ animated_material_attributes true (clientdll cheat)
 animgraph2_enable_parallel_update true (developmentonly gamedll clientdll replicated defensive)
 	<no description>
 
-animgraph2_force_tick_all_graphs false (developmentonly gamedll clientdll replicated)
-	<no description>
-
 animgraph_debug false (gamedll clientdll replicated cheat)
 	Debug animation graph
 
@@ -355,9 +355,6 @@ animgraph_footstep_node_supresses_events false (developmentonly gamedll clientdl
 animgraph_force_full_network_updates false (developmentonly replicated defensive)
 	<no description>
 
-animgraph_force_tick_all_graphs false (developmentonly gamedll clientdll replicated defensive)
-	<no description>
-
 animgraph_ik_debug false (developmentonly replicated defensive)
 	<no description>
 
@@ -366,6 +363,9 @@ animgraph_motionmatching_print_compressionstats false (developmentonly replicate
 
 animgraph_network_enable true (developmentonly gamedll clientdll replicated)
 	Enable animation graph networking. The setting is only read at graph creation time; to use please set on the command line.
+
+animgraph_parallel_postdataupdate true (developmentonly clientdll defensive)
+	<no description>
 
 animgraph_record_all false (gamedll clientdll replicated cheat)
 	Automatically start recording AnimGraphs when they get created, and save them to disk when they are destroyed
@@ -397,6 +397,9 @@ attached_output_stall_ms 250 (developmentonly defensive)
 audio_input_test_signal false (developmentonly)
 	For testing the audio input pathway with a sine tone instead of SDL3.
 
+audio_input_use_sdl_roles false (developmentonly)
+	<no description>
+
 automatically_open_saved_animgraph_recording false (gamedll clientdll archive replicated)
 	<no description>
 
@@ -405,9 +408,6 @@ autosave_fully_async true (developmentonly gamedll defensive)
 
 battery_saver false (archive)
 	OBSOLETE replaced by mobile_fps_* - Battery saver mode. 0=off, 1=on
-
-blink_duration 0.5 (developmentonly clientdll defensive)
-	How many seconds an eye blink will last.
 
 bot_allow_grenades true (gamedll release)
 	If nonzero, bots may use grenades.
@@ -835,6 +835,9 @@ cl_ShowBoneSetupEnts false (developmentonly clientdll defensive)
 cl_access_all_missions false (developmentonly clientdll)
 	<no description>
 
+cl_ag2_record_entity_graph "" (developmentonly clientdll)
+	Automatically start AG2 recording when an entity with this name (wildcard) or id is created.
+
 cl_aggregate_particles false (reference)
 	<no description>
 
@@ -1081,9 +1084,6 @@ cl_debounce_zoom true (clientdll archive userinfo per_user)
 cl_debug_build_recvmargin_min 2 (developmentonly defensive)
 	Min size of the recv margin queue when in tools/debug mode
 
-cl_debug_client_gamestats true (developmentonly clientdll defensive)
-	<no description>
-
 cl_debug_force_push_to_talk false (developmentonly clientdll defensive)
 	<no description>
 
@@ -1276,7 +1276,7 @@ cl_flushentitypacket 0 (cheat)
 cl_force_next_signon_to_reset false (developmentonly)
 	<no description>
 
-cl_force_spec_hud_color_to_team false (clientdll archive)
+cl_force_spec_hud_color_to_team true (clientdll archive)
 	Spec hud color setting is always team/teammate
 
 cl_frametime_summary_report_detailed true (clientdll release)
@@ -2062,6 +2062,9 @@ cl_showerror 0 (clientdll release)
 cl_showfps 0 (clientdll release)
 	Draw fps meter at top of screen (1 = fps, 2 = smooth fps, 3 = server MS, 4 = Show FPS and Log to file )
 
+cl_showframenumber false (clientdll release)
+	Show current framenumber
+
 cl_showloadout true (clientdll archive per_user)
 	Toggles display of current loadout.
 
@@ -2286,6 +2289,9 @@ cl_track_aim_head_threshold 0 (developmentonly clientdll)
 
 cl_track_render_eye_angles false (clientdll cheat)
 	Spew render eye angles
+
+cl_trueview_show_doa_predictions true (clientdll release)
+	If true, trueview will recreate the original player experience, including commands that were predicted clientside but never executed on the server because the player was dead when they arrived.
 
 cl_trueview_show_status 2 (clientdll release)
 	0=Never; 1=Only if there is a problem; 2=always
@@ -2971,14 +2977,8 @@ display_game_events false (gamedll cheat)
 dota_enable_spatial_audio false (release)
 	Flag to enable spatial audio in Dota 2.
 
-dota_overhead_on_received_item true (developmentonly gamedll clientdll replicated defensive)
-	Emit an overhead particle effect on receiving an item from an ally.
-
 dota_spatial_audio_mix 1 (release)
 	Mix value to blend spatial and non-spatial audio in Dota 2.
-
-dota_toast_manager_override_duration -1 (developmentonly clientdll)
-	<no description>
 
 dsp_automatic 0 (developmentonly demo defensive)
 	<no description>
@@ -3084,6 +3084,12 @@ engine_render_only false (developmentonly defensive)
 
 engine_rendersystem_init "" (developmentonly defensive)
 	Rendersystem option requested (changing this does not change the rendersystem).
+
+engine_rendersystem_meets_min_dx_110 "Unknown" (developmentonly defensive)
+	Rendersystem meets min DX110 feature level (changing this does not change the shader model).
+
+engine_rendersystem_meets_min_dx_110_simple "Unknown" (developmentonly defensive)
+	Rendersystem meets min DX110 feature level (changing this does not change the shader model).
 
 engine_rendersystem_shader_model 0 (developmentonly defensive)
 	Rendersystem shader model in use (changing this does not change the shader model).
@@ -3404,6 +3410,9 @@ func_mover_async_movable_navmesh_updates true (developmentonly gamedll defensive
 	<no description>
 
 func_mover_debug false (developmentonly gamedll defensive)
+	<no description>
+
+func_mover_debug_extra_text false (developmentonly gamedll defensive)
 	<no description>
 
 func_mover_debug_follower false (developmentonly gamedll defensive)
@@ -4105,11 +4114,17 @@ lb_debug_shadow_atlas false (developmentonly cheat menubar_item)
 lb_debug_shadowtile_atlas false (developmentonly cheat menubar_item)
 	SceneSystem/LightBinner/Debug ShadowTile Atlas
 
-lb_debug_silhouette 0 (developmentonly cheat menubar_item)
+lb_debug_silhouette "" (developmentonly cheat menubar_item)
 	SceneSystem/LightBinner/Debug Silhouettes
 
-lb_debug_tiles 0 (developmentonly cheat menubar_item)
+lb_debug_silhouette_sum 1 (min: 1, max: 3, developmentonly cheat)
+	If we should draw normal silhouette or minkowski sum silhouette
+
+lb_debug_tiles "" (developmentonly cheat menubar_item)
 	SceneSystem/LightBinner/Debug Tiles
+
+lb_debug_visualize_fog_shadowed_lights 0 (developmentonly cheat menubar_item)
+	SceneSystem/LightBinner/Debug Visualize Fog Shadowed Lights
 
 lb_debug_visualize_lights 0 (developmentonly cheat menubar_item)
 	SceneSystem/LightBinner/Debug Visualize Lights
@@ -4159,6 +4174,9 @@ lb_enable_fog_mixed_shadows true (developmentonly cheat menubar_item)
 lb_enable_lights true (developmentonly cheat menubar_item)
 	SceneSystem/LightBinner/Enable Lights
 
+lb_enable_newsum true (developmentonly cheat menubar_item)
+	SceneSystem/LightBinner/Enable New Sum
+
 lb_enable_shadow_casting true (developmentonly defensive)
 	Allow stationary/dynamic lights to cast shadows.
 
@@ -4187,6 +4205,12 @@ lb_override_barn_light_fade_sizes_enable false (developmentonly cheat)
 	<no description>
 
 lb_override_barn_light_shadow_fade_sizes [0.1, 0.05] (developmentonly cheat)
+	<no description>
+
+lb_precomputed_shadowmap_depth_bias 0.0001 (developmentonly)
+	<no description>
+
+lb_precomputed_shadowmap_enable true (developmentonly)
 	<no description>
 
 lb_shadow_map_cull_empty_mixed false (cheat)
@@ -4274,6 +4298,9 @@ markup_volume_ref_cone_angle 135 (developmentonly gamedll defensive)
 	<no description>
 
 mat_assert_on_error_shader_use false (developmentonly)
+	<no description>
+
+mat_async_shader_load false (release)
 	<no description>
 
 mat_cache_and_skip_commandbuffers true (developmentonly)
@@ -5469,28 +5496,28 @@ nav_draw_mesh_grid false (gamedll cheat)
 nav_draw_mesh_offset 1 (gamedll cheat)
 	Vertical offset for drawing the mesh (useful for flat planes where the mesh is often a fixed offset from the physical ground
 
-nav_draw_space_boundary false (gamedll cheat)
+nav_draw_space_boundary 0 (developmentonly gamedll)
+	Draw the boundaries of the 3d nav space. 1 = draw flying space, 2 = draw swimming space
+
+nav_draw_space_cells false (developmentonly gamedll)
 	<no description>
 
-nav_draw_space_cells false (gamedll cheat)
+nav_draw_space_fly false (developmentonly gamedll)
 	<no description>
 
-nav_draw_space_fly false (gamedll cheat)
+nav_draw_space_neighbors 0 (developmentonly gamedll)
 	<no description>
 
-nav_draw_space_neighbors 0 (gamedll cheat)
+nav_draw_space_portals false (developmentonly gamedll)
 	<no description>
 
-nav_draw_space_portals false (gamedll cheat)
+nav_draw_space_radius 0 (developmentonly gamedll)
 	<no description>
 
-nav_draw_space_radius 0 (gamedll cheat)
+nav_draw_space_swim false (developmentonly gamedll)
 	<no description>
 
-nav_draw_space_swim false (gamedll cheat)
-	<no description>
-
-nav_draw_space_transitions true (gamedll cheat)
+nav_draw_space_transitions true (developmentonly gamedll)
 	<no description>
 
 nav_edit 0 (gamedll cheat)
@@ -5642,15 +5669,6 @@ nav_ignore_vpk_navdata false (developmentonly gamedll)
 
 nav_max_view_distance 0 (gamedll cheat)
 	Maximum range for precomputed nav mesh visibility (0 = default 1500 units)
-
-nav_navlink_enable_splits true (gamedll cheat)
-	Split wide nav links into narrower ones to increase lanes and alleviate 'crossing' effect.
-
-nav_navlink_split_max_width 144 (gamedll cheat)
-	The maximum desired width of a nav link split.
-
-nav_navlink_split_scale_with_length true (gamedll cheat)
-	Nav link splits' widths are proportional to the nav link's length.
 
 nav_obstacle_validate false (gamedll cheat)
 	<no description>
@@ -5805,7 +5823,7 @@ nav_smooth_draw_accel 0 (gamedll cheat)
 nav_smooth_draw_boundary 0 (gamedll cheat)
 	<no description>
 
-nav_smooth_draw_calc false (gamedll cheat)
+nav_smooth_draw_calc 0 (gamedll cheat)
 	<no description>
 
 nav_smooth_draw_constraint_spline false (gamedll cheat)
@@ -5869,9 +5887,6 @@ nav_smooth_spring_yaw_rotation_speed 50 (gamedll cheat)
 	<no description>
 
 nav_smooth_spring_yaw_threshold 20 (gamedll cheat)
-	<no description>
-
-nav_smooth_use_opt true (gamedll cheat)
 	<no description>
 
 nav_space_select_dist 1000 (gamedll cheat)
@@ -6666,6 +6681,9 @@ phys_visualize_awake_unattached_only false (developmentonly gamedll clientdll re
 phys_visualize_traces false (gamedll clientdll replicated cheat)
 	<no description>
 
+phys_wind_force_scale 1 (developmentonly gamedll clientdll replicated)
+	Scale on the force wind applies to physics bodies
+
 pickup_check_period 0.25 (developmentonly gamedll defensive)
 	<no description>
 
@@ -6675,10 +6693,10 @@ player0_using_joystick false (archive)
 player_botdifflast_s "2" (clientdll archive release)
 	<no description>
 
-player_competitive_maplist_2v2_10_0_BCB8668D "mg_de_inferno,mg_de_nuke,mg_de_vertigo,mg_de_rooftop,mg_de_overpass" (clientdll archive)
+player_competitive_maplist_2v2_10_0_630B8B7C "mg_de_inferno,mg_de_nuke,mg_de_vertigo,mg_de_poseidon,mg_de_sanctum,mg_de_overpass" (clientdll archive)
 	<no description>
 
-player_competitive_maplist_8_10_0_C951FF02 "mg_de_dust2,mg_de_train,mg_de_ancient,mg_de_inferno,mg_de_nuke,mg_de_vertigo,mg_de_mirage,mg_cs_office,mg_cs_italy,mg_de_golden,mg_de_anubis,mg_lobby_mapveto,mg_de_palacio,mg_cs_agency,mg_de_overpass" (clientdll archive)
+player_competitive_maplist_8_10_0_C512DEBE "mg_de_warden,mg_de_dust2,mg_de_train,mg_de_ancient,mg_de_inferno,mg_de_nuke,mg_de_vertigo,mg_de_mirage,mg_cs_office,mg_cs_italy,mg_cs_alpine,mg_de_stronghold,mg_de_anubis,mg_lobby_mapveto,mg_de_overpass" (clientdll archive)
 	<no description>
 
 player_debug_off_nav false (gamedll cheat)
@@ -6867,6 +6885,9 @@ r_cache_pool_allocations true (developmentonly)
 r_character_decal_monitor_draw_frustum false (developmentonly)
 	<no description>
 
+r_character_decal_monitor_emissive false (developmentonly)
+	<no description>
+
 r_character_decal_monitor_render_res 512 (developmentonly)
 	<no description>
 
@@ -6925,6 +6946,15 @@ r_csgo_depth_prepass_cull_threshold 60 (clientdll cheat)
 	<no description>
 
 r_csgo_depth_prepass_skybox_alpha_tested true (clientdll cheat)
+	<no description>
+
+r_csgo_depth_prepass_skybox_large false (clientdll cheat)
+	<no description>
+
+r_csgo_depth_prepass_skybox_small false (clientdll cheat)
+	<no description>
+
+r_csgo_depth_prepass_skybox_small_cull_threshold 5 (clientdll cheat)
 	<no description>
 
 r_csgo_depth_prepass_small_cull_threshold 10 (clientdll cheat)
@@ -7261,6 +7291,9 @@ r_decals_default_fade_duration 3 (developmentonly gamedll clientdll replicated d
 	<no description>
 
 r_decals_default_start_fade 30 (developmentonly gamedll clientdll replicated defensive)
+	<no description>
+
+r_decals_max_on_deformables 512 (developmentonly gamedll clientdll replicated defensive)
 	<no description>
 
 r_decals_overide_fadestarttime_params -1 (developmentonly gamedll clientdll replicated commandline_enforced defensive)
@@ -7661,9 +7694,6 @@ r_muzzleflashlinear 0.05 (clientdll replicated cheat)
 
 r_nearz -1 (clientdll cheat)
 	Override the near clipping plane. -1 means use the default.
-
-r_new_character_decals false (gamedll clientdll replicated cheat)
-	<no description>
 
 r_particle_max_detail_level 0 (reference)
 	<no description>
@@ -8172,7 +8202,7 @@ save_history_count 1 (developmentonly gamedll defensive)
 save_maxarray_spew 10 (gamedll release)
 	Max number of array entries to spew when using SaveRestoreIO spewing.
 
-save_parallel true (developmentonly gamedll clientdll replicated defensive)
+save_parallel false (developmentonly gamedll clientdll replicated defensive)
 	<no description>
 
 save_screenshot 2 (developmentonly gamedll defensive)
@@ -8182,10 +8212,13 @@ save_spew false (developmentonly gamedll clientdll replicated defensive)
 	<no description>
 
 save_version 1 (developmentonly gamedll clientdll replicated defensive)
-	0: (V0) Legacy save format, 1: (V1) KeyValues3 save format
+	0: (V0) Legacy save format, 1: (V1) KeyValues3 save format, 2: (V2) KV3Transfer saves
 
 save_write_kv3 false (developmentonly gamedll clientdll replicated defensive)
 	Write the KV3 entity data as a text file in the save directory
+
+saving_enabled true (developmentonly gamedll clientdll replicated)
+	<no description>
 
 sc_aggregate_bvh true (developmentonly)
 	<no description>
@@ -8198,6 +8231,9 @@ sc_aggregate_debug_draw_meshlets 0 (developmentonly menubar_item)
 
 sc_aggregate_debug_draw_meshlets_bounds false (developmentonly)
 	Visualize meshlet bounds and cone axis. Mesh shader only.
+
+sc_aggregate_debug_visualizer false (developmentonly cheat menubar_item)
+	SceneSystem/Aggregates/Debug Visualizer
 
 sc_aggregate_fragment_merging true (developmentonly)
 	<no description>
@@ -8231,6 +8267,15 @@ sc_aggregate_material_solo "" (developmentonly cheat)
 
 sc_aggregate_render_mesh_shader true (developmentonly)
 	Using mesh shaders if available instead of drawcalls
+
+sc_aggregate_rtproxy_debug_visualizer false (developmentonly cheat menubar_item)
+	SceneSystem/Aggregates/RT Proxy Debug Visualizer
+
+sc_aggregate_rtproxy_instanced_geo true (developmentonly cheat)
+	<no description>
+
+sc_aggregate_rtproxy_unique_geo true (developmentonly cheat)
+	<no description>
 
 sc_aggregate_show_outside_vis false (developmentonly)
 	<no description>
@@ -8295,7 +8340,7 @@ sc_dithered_lod_transition_amt 0.075 (min: 0, max: 0.2, developmentonly defensiv
 sc_draw_aggregate_meshes true (developmentonly menubar_item)
 	SceneSystem/Aggregates/Draw Aggregates
 
-sc_dump_lists false (cheat)
+sc_dump_lists "" (cheat)
 	<no description>
 
 sc_enable_discard true (developmentonly defensive)
@@ -8331,11 +8376,17 @@ sc_imgui_show_id_stack false (developmentonly cheat menubar_item)
 sc_imgui_show_metrics false (developmentonly cheat menubar_item)
 	SceneSystem/Imgui/Show Metrics
 
+sc_instanced_debug_visualizer false (developmentonly cheat menubar_item)
+	SceneSystem/Instanced/Debug Visualizer
+
+sc_instanced_gpu_culling_show_culled false (developmentonly menubar_item)
+	SceneSystem/Instanced/Show GPU Culled Meshlets
+
 sc_instanced_material_solo "" (developmentonly cheat)
 	<no description>
 
-sc_instanced_mesh_enable true (developmentonly cheat)
-	Toggles rendering instanced meshes
+sc_instanced_mesh_enable true (developmentonly cheat menubar_item)
+	SceneSystem/Instanced/Draw Instanced
 
 sc_instanced_mesh_gpu_culling true (developmentonly defensive)
 	Toggles GPU culling of instanced meshes
@@ -8354,6 +8405,9 @@ sc_instanced_mesh_lod_bias 1.25 (developmentonly defensive)
 
 sc_instanced_mesh_lod_bias_shadow 1.75 (developmentonly defensive)
 	Bias for LOD selection of instanced meshes in shadowmaps
+
+sc_instanced_mesh_mesh_shader true (developmentonly defensive)
+	Toggles mesh shader rendering for instanced meshes
 
 sc_instanced_mesh_motion_vectors true (developmentonly defensive)
 	Toggles motion vector support for instanced meshes
@@ -8451,8 +8505,8 @@ sc_view_profiler_frame_averaging 10 (developmentonly defensive)
 sc_visualize_batches 0 (developmentonly defensive)
 	color per batch
 
-sc_visualize_sceneobjects "SCENEOBJECT_VIS_NONE" (developmentonly defensive)
-	1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 5 = LOD, 6 == LPV Binding, 7 == instancing
+sc_visualize_sceneobjects "SCENEOBJECT_VIS_NONE" (developmentonly menubar_item defensive)
+	SceneSystem/Visualize SceneObject Mode
 
 scene_clientflex true (developmentonly gamedll clientdll replicated defensive)
 	Do client side flex animation.
@@ -8577,13 +8631,10 @@ slope_drop_max_offset 16 (developmentonly gamedll clientdll replicated defensive
 slope_drop_off_ground_blend_speed 160 (developmentonly gamedll clientdll replicated defensive)
 	The speed with which the slope drop is blended out when the entity leaves the ground
 
-smoke_grenade_ct_color [75, 127, 75] (developmentonly gamedll defensive)
+smoke_grenade_ct_color [75, 127, 75] (developmentonly gamedll cheat)
 	<no description>
 
-smoke_grenade_custom_color -1 (developmentonly gamedll defensive)
-	0 = Gray (classic), 1 = Red, 2 = Orange, 3 = Skyblue, 4 = Yellow, 5 = Green, , 6 = Blue, 7 = Purple, 8 = pink 
-
-smoke_grenade_t_color [180, 129, 180] (developmentonly gamedll defensive)
+smoke_grenade_t_color [180, 129, 180] (developmentonly gamedll cheat)
 	<no description>
 
 smoke_param1 6.26 (developmentonly gamedll clientdll replicated defensive)
@@ -8697,6 +8748,9 @@ snd_eq_spectator -1 (developmentonly clientdll archive)
 snd_eq_warmup -1 (developmentonly clientdll archive)
 	<no description>
 
+snd_event_cone_debug false (developmentonly gamedll clientdll replicated cheat)
+	<no description>
+
 snd_event_oriented_box_debug false (developmentonly gamedll clientdll replicated cheat)
 	<no description>
 
@@ -8772,6 +8826,9 @@ snd_menumusic_volume 0.04 (min: 0, max: 1, clientdll archive release)
 snd_mergemethod 1 (developmentonly defensive)
 	Sound merge method (0 == sum and clip, 1 == max, 2 == avg).
 
+snd_min_latency false (developmentonly cheat)
+	<no description>
+
 snd_mix_async true (developmentonly cheat)
 	<no description>
 
@@ -8839,6 +8896,9 @@ snd_opvar_set_point_debug false (gamedll clientdll replicated cheat)
 	<no description>
 
 snd_opvar_set_point_update_interval 0.2 (developmentonly gamedll clientdll replicated defensive)
+	<no description>
+
+snd_opvar_set_point_update_interval_fast 0.0333 (developmentonly gamedll clientdll replicated defensive)
 	<no description>
 
 snd_rear_stereo_scale 1 (replicated cheat)
@@ -8976,6 +9036,9 @@ snd_sos_show_operator_stop_entry false (cheat)
 snd_sos_show_operator_updates false (cheat)
 	<no description>
 
+snd_sos_show_opfield_cache_updates false (cheat)
+	<no description>
+
 snd_sos_show_opvar_updates false (cheat)
 	<no description>
 
@@ -9004,6 +9067,12 @@ snd_sos_show_track_list false (developmentonly defensive)
 	<no description>
 
 snd_sos_show_voice_elapsed_time false (developmentonly defensive)
+	<no description>
+
+snd_sos_soundevent_constellation_debug false (developmentonly replicated cheat)
+	<no description>
+
+snd_sos_soundevent_constellation_replenish_max_fraction 0.3 (developmentonly replicated cheat)
 	<no description>
 
 snd_sos_soundevent_deferred_interval_time 0.1 (developmentonly defensive)
@@ -9387,9 +9456,6 @@ steam_controller_haptics true (clientdll release)
 steamworks_sessionid_client "0" (clientdll hidden userinfo)
 	The client session ID for the new steamworks gamestats.
 
-steamworks_sessionid_lifetime_client "0" (developmentonly clientdll hidden defensive)
-	The full client session ID for the new steamworks gamestats.
-
 steamworks_sessionid_server "0" (developmentonly gamedll clientdll hidden replicated defensive)
 	The server session ID for the new steamworks gamestats.
 
@@ -9426,6 +9492,9 @@ sv_accelerate_use_weapon_speed true (gamedll clientdll notify replicated release
 sv_ag2_low_skel_lod false (developmentonly gamedll defensive)
 	<no description>
 
+sv_ag2_record_entity_graph "" (developmentonly gamedll)
+	Automatically start AG2 recording when an entity with this name (wildcard) or id is created.
+
 sv_air_max_wishspeed 30 (gamedll clientdll replicated release)
 	<no description>
 
@@ -9435,8 +9504,8 @@ sv_airaccelerate 12 (gamedll clientdll notify replicated release)
 sv_allchat true (gamedll notify release)
 	Players can receive all other players' text chat, no death restrictions
 
-sv_allow_annotations false (gamedll clientdll replicated release commandline_enforced)
-	Allow clients to use the annotation system on the server.
+sv_allow_annotations_access_level 0 (gamedll clientdll replicated release commandline_enforced)
+	0:off | 1: view-only | 2: edit.
 
 sv_allow_ground_weapon_pickup true (developmentonly gamedll clientdll replicated)
 	<no description>
@@ -9497,6 +9566,9 @@ sv_backspeed 0.6 (developmentonly gamedll clientdll replicated)
 
 sv_banid_enabled true (release)
 	Whether server supports banid command
+
+sv_bhop_time_window 0.0078125 (min: 0, gamedll clientdll replicated release)
+	sv_legacy_jump disabled only: The time window (in seconds) around landing where a jump press is considered a bhop attempt.
 
 sv_bot_buy_decoy_weight 1 (min: 0, gamedll release)
 	Given a bot will buy a grenade, controls the odds of the grenade type. Proportional to all other sv_bot_buy_*_weight convars.
@@ -9721,7 +9793,7 @@ sv_enable_removearrayelementsoutsidemetadatabounds false (release)
 	<no description>
 
 sv_enablebunnyhopping false (gamedll clientdll replicated release commandline_enforced)
-	Allow player speed to exceed maximum running speed
+	Allow jump speed to exceed 1.1x max speed
 
 sv_endmatch_item_drop_interval 1 (developmentonly gamedll clientdll replicated)
 	The time between drops on the end match scoreboard 
@@ -9892,7 +9964,7 @@ sv_jump_precision_enable true (gamedll clientdll replicated release)
 	Enable jump precision. Some game modes benefit from being able to turn this off.
 
 sv_jump_spam_penalty_time 0.015625 (gamedll clientdll replicated release)
-	For subtick jumps, if this much time has elapsed since the last time the user has pressed the jump key, pretend they hadn't. Lowering this makes bunnyhopping easier.
+	For subtick jumps, if this much time or less has elapsed since the last time the user has pressed the jump key, pretend they hadn't. Lowering this makes bunnyhopping easier.
 
 sv_kick_ban_duration 15 (gamedll clientdll notify replicated release)
 	How long should a kick ban from the server should last (in minutes)
@@ -9926,6 +9998,9 @@ sv_lan false (release)
 
 sv_late_commands_allowed 5 (gamedll release)
 	Allow N late commands to run at 0 timescale prior to running an on-time command. Negative values for network round trip based calculation with a hard cap of the of absolute value
+
+sv_legacy_jump false (gamedll clientdll replicated release)
+	Whether or not to use the pre-2026 jump code.
 
 sv_lightquery_debug false (gamedll cheat)
 	<no description>
@@ -9966,7 +10041,7 @@ sv_logsdir "logs" (archive release)
 sv_long_frame_ms 0 (developmentonly defensive)
 	If a server frame takes longer than N ms, complain about it.  (Dedicated server only.)  See also engine_frametime_warnings_enable.
 
-sv_mapvetopickvote_maps "de_inferno,de_mirage,de_train,de_dust2,de_nuke,de_ancient,de_overpass" (gamedll release)
+sv_mapvetopickvote_maps "de_anubis,de_overpass,de_inferno,de_mirage,de_dust2,de_nuke,de_ancient" (gamedll release)
 	Which maps are used for map veto pick sequence
 
 sv_mapvetopickvote_phase_duration "[1:5][2:15][3:20][4:10][5:10][6:5]" (gamedll release)
@@ -10116,6 +10191,9 @@ sv_parallel_checktransmit 0 (gamedll release)
 sv_parallel_packentities 2 (release)
 	Set to 1 to use threaded snapshot sending on listen servers, 2 for dedicated servers.
 
+sv_parallel_prepare_client_updates false (developmentonly)
+	<no description>
+
 sv_parallel_sendsnapshot 2 (release)
 	0: run all send jobs on main thread; 1: send jobs run asynchronously (except on dedicated server); 2: send jobs asynchronously; 3: send jobs run in parallel but block to not overlap the next tick; 4: main server clients' send jobs run in parallel, then HLTV server jobs; this approximately matches pre-async profile for a single HLTV server configuration
 
@@ -10162,9 +10240,6 @@ sv_phys_stop_at_collision "" (gamedll cheat)
 	<no description>
 
 sv_phys_visualize_awake false (developmentonly gamedll defensive)
-	<no description>
-
-sv_player_parallel_physicsrelinkchildren false (developmentonly gamedll)
 	<no description>
 
 sv_player_search_range 64 (developmentonly gamedll clientdll replicated defensive)
@@ -10417,10 +10492,10 @@ sv_specspeed 1200 (gamedll clientdll archive notify replicated)
 	<no description>
 
 sv_staminajumpcost 0.08 (min: 0, gamedll clientdll replicated release commandline_enforced)
-	Stamina penalty for jumping
+	sv_legacy_jump only: Stamina penalty for jumping
 
 sv_staminalandcost 0.05 (min: 0, gamedll clientdll replicated release commandline_enforced)
-	Stamina penalty for landing
+	sv_legacy_jump only: Stamina penalty for landing
 
 sv_staminamax 80 (min: 0, max: 100, gamedll clientdll replicated release)
 	Maximum stamina penalty
@@ -10508,6 +10583,12 @@ sv_teamid_overhead_maxdist_spec 0 (gamedll clientdll replicated release commandl
 
 sv_temp_baseline_string_table_buffer_size 524288 (developmentonly defensive)
 	Buffer size for writing string table baselines
+
+sv_tick_parallel_with_client false (developmentonly)
+	Runs the final server tick of the frame in parallel with client work
+
+sv_tick_snapshot_sort_entities true (developmentonly)
+	<no description>
 
 sv_timebetweenducks 0.4 (min: 0, max: 2, gamedll clientdll replicated release)
 	Minimum time before recognizing consecutive duck key
@@ -10710,9 +10791,6 @@ target_scan_use_query_cache true (developmentonly gamedll defensive)
 teleport_trigger_debug false (developmentonly gamedll)
 	<no description>
 
-test_restoreonnewmodel 0 (developmentonly gamedll clientdll replicated defensive)
-	<no description>
-
 testscript_debug false (developmentonly defensive)
 	Debug test scripts.
 
@@ -10730,6 +10808,9 @@ timedemo_end "-1" (developmentonly defensive)
 
 timedemo_start "-1" (developmentonly defensive)
 	Starts timedemo on given tick.
+
+toast_manager_override_duration -1 (developmentonly clientdll)
+	<no description>
 
 tool_spawned_model_scales [1, 1, 1] (developmentonly gamedll replicated)
 	<no description>
@@ -10937,6 +11018,9 @@ tv_playcast_retry_timeout 25 (release)
 
 tv_playcast_showerrors "" (hidden release)
 	Set to display headers upon error (e.g. "CF-Ray,CF-Cache-Status,Body" )
+
+tv_playcast_slow_playback_when_fragment_requests_fail true (hidden release)
+	Whether or not we slow playback rate if we start running out of buffered stream fragments.
 
 tv_port 27020 (release)
 	Host SourceTV[0] port

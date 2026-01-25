@@ -85,7 +85,7 @@
 //}
 // MPropertyFriendlyName = "Wind Generator Container"
 // MPropertyDescription = "This is a synth meant to generate whoosh noises."
-class CVoiceContainerShapedNoise : public CVoiceContainerBase
+class CVoiceContainerShapedNoise : public CVoiceContainerGenerator
 {
 	bool m_bUseCurveForFrequency;
 	// MPropertySuppressExpr = "m_bUseCurveForFrequency == 1"

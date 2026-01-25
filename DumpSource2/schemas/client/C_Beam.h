@@ -39,6 +39,7 @@ class C_Beam : public C_BaseModelEntity
 	float32 m_flDamage;
 	// MNetworkEnable
 	uint8 m_nNumBeamEnts;
+	// MNotSaved
 	int32 m_queryHandleHalo;
 	// MNetworkEnable
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hBaseMaterial;

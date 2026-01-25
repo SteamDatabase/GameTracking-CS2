@@ -1,6 +1,6 @@
-class CPathMover : public CPathSimple
+class CPathMover : public CPathWithDynamicNodes
 {
-	CUtlVector< CHandle< CMoverPathNode > > m_vecPathNodes;
 	CUtlVector< CHandle< CFuncMover > > m_vecMovers;
-	CTransform m_xInitialPathWorldToLocal;
+	CHandle< CPathMoverEntitySpawner > m_hMoverSpawner;
+	CUtlSymbolLarge m_iszMoverSpawnerName;
 };

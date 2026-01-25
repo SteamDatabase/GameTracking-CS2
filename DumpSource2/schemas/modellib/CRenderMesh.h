@@ -24,7 +24,8 @@
 //		"m_flTensionStretchScale": 0.000000,
 //		"m_bRecomputeSmoothNormalsAfterAnimation": false,
 //		"m_bComputeDynamicMeshTensionAfterAnimation": false,
-//		"m_bSmoothNormalsAcrossUvSeams": false
+//		"m_bSmoothNormalsAcrossUvSeams": false,
+//		"m_bEnableEyeBulgeDeformation": false
 //	},
 //	"m_pGroomData": null,
 //	"m_attachments":

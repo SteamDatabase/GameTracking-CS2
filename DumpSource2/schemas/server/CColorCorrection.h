@@ -26,8 +26,10 @@ class CColorCorrection : public CBaseEntity
 	// MNetworkEnable
 	bool m_bEnabled;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bMaster;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bClientSide;
 	// MNetworkEnable
 	bool m_bExclusive;
@@ -38,6 +40,7 @@ class CColorCorrection : public CBaseEntity
 	// MNetworkEnable
 	float32 m_flCurWeight;
 	// MNetworkEnable
+	// MNotSaved
 	char[512] m_netlookupFilename;
 	CUtlSymbolLarge m_lookupFilename;
 };

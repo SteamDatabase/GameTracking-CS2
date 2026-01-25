@@ -15,20 +15,11 @@
 // MNetworkVarNames = "float32 m_flFadeScale"
 // MNetworkVarNames = "float32 m_flShadowStrength"
 // MNetworkVarNames = "uint8 m_nObjectCulling"
-// MNetworkVarNames = "int m_nAddDecal"
-// MNetworkVarNames = "Vector m_vDecalPosition"
-// MNetworkVarNames = "Vector m_vDecalForwardAxis"
-// MNetworkVarNames = "DecalMode_t m_nDecalMode"
-// MNetworkVarNames = "DecalMode_t m_nRequiredDecalMode"
-// MNetworkVarNames = "CHandle< CBaseModelEntity > m_ConfigEntitiesToPropagateMaterialDecalsTo"
 // MNetworkVarNames = "CNetworkViewOffsetVector m_vecViewOffset"
 // MNetworkVarNames = "uint32 m_bvDisabledHitGroups"
 class CBaseModelEntity : public CBaseEntity
 {
-	// MNetworkEnable
-	// MNetworkUserGroup = "CRenderComponent"
-	// MNetworkAlias = "CRenderComponent"
-	// MNetworkTypeAlias = "CRenderComponent"
+	// MNotSaved
 	CRenderComponent* m_CRenderComponent;
 	// MNetworkEnable
 	// MNetworkUserGroup = "CHitboxComponent"
@@ -46,11 +37,9 @@ class CBaseModelEntity : public CBaseEntity
 	int32 m_nDestructiblePartInitialStateDestructed3_PartIndex;
 	int32 m_nDestructiblePartInitialStateDestructed4_PartIndex;
 	// MNetworkEnable
+	// MPtrAutoallocate
 	// MNetworkTypeAlias = "CDestructiblePartsSystemComponent*"
 	CDestructiblePartsComponent* m_pDestructiblePartsSystemComponent;
-	HitGroup_t m_LastHitGroup;
-	CGlobalSymbol m_sLastDamageSourceName;
-	VectorWS m_vLastDamagePosition;
 	GameTime_t m_flDissolveStartTime;
 	CEntityIOOutput m_OnIgnite;
 	// MNetworkEnable
@@ -85,22 +74,11 @@ class CBaseModelEntity : public CBaseEntity
 	// MNetworkEnable
 	uint8 m_nObjectCulling;
 	// MNetworkEnable
-	int32 m_nAddDecal;
-	// MNetworkEnable
-	Vector m_vDecalPosition;
-	// MNetworkEnable
-	Vector m_vDecalForwardAxis;
-	// MNetworkEnable
-	DecalMode_t m_nDecalMode;
-	// MNetworkEnable
-	DecalMode_t m_nRequiredDecalMode;
-	// MNetworkEnable
-	CNetworkUtlVectorBase< CHandle< CBaseModelEntity > > m_ConfigEntitiesToPropagateMaterialDecalsTo;
-	// MNetworkEnable
 	// MNetworkPriority = 32
 	// MNetworkUserGroup = "Player"
 	CNetworkViewOffsetVector m_vecViewOffset;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnDisabledHitgroupsChanged"
+	// MSaveOpsForField (UNKNOWN FOR PARSER)
 	uint32[1] m_bvDisabledHitGroups;
 };

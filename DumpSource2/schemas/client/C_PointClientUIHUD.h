@@ -12,6 +12,7 @@
 // MNetworkVarNames = "string_t m_vecCSSClasses"
 class C_PointClientUIHUD : public C_BaseClientUIEntity
 {
+	// MNotSaved
 	bool m_bCheckCSSClasses;
 	// MNetworkEnable
 	bool m_bIgnoreInput;

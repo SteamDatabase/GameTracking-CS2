@@ -46,12 +46,12 @@
 // MNetworkVarNames = "bool m_bIsDroppingItems"
 // MNetworkVarNames = "bool m_bIsQuestEligible"
 // MNetworkVarNames = "bool m_bIsHltvActive"
+// MNetworkVarNames = "bool m_bBombPlanted"
 // MNetworkVarNames = "uint16 m_arrProhibitedItemIndices"
 // MNetworkVarNames = "uint32 m_arrTournamentActiveCasterAccounts"
 // MNetworkVarNames = "int m_numBestOfMaps"
 // MNetworkVarNames = "int m_nHalloweenMaskListSeed"
 // MNetworkVarNames = "bool m_bBombDropped"
-// MNetworkVarNames = "bool m_bBombPlanted"
 // MNetworkVarNames = "int m_iRoundWinStatus"
 // MNetworkVarNames = "int m_eRoundWinReason"
 // MNetworkVarNames = "bool m_bTCantBuy"
@@ -192,6 +192,8 @@ class CCSGameRules : public CTeamplayRules
 	// MNetworkEnable
 	bool m_bIsHltvActive;
 	// MNetworkEnable
+	bool m_bBombPlanted;
+	// MNetworkEnable
 	uint16[100] m_arrProhibitedItemIndices;
 	// MNetworkEnable
 	uint32[4] m_arrTournamentActiveCasterAccounts;
@@ -201,8 +203,6 @@ class CCSGameRules : public CTeamplayRules
 	int32 m_nHalloweenMaskListSeed;
 	// MNetworkEnable
 	bool m_bBombDropped;
-	// MNetworkEnable
-	bool m_bBombPlanted;
 	// MNetworkEnable
 	int32 m_iRoundWinStatus;
 	// MNetworkEnable
@@ -305,15 +305,15 @@ class CCSGameRules : public CTeamplayRules
 	bool m_bBombDefused;
 	bool m_bMapHasBombZone;
 	Vector m_vecMainCTSpawnPos;
-	CUtlVector< SpawnPoint* > m_CTSpawnPointsMasterList;
-	CUtlVector< SpawnPoint* > m_TerroristSpawnPointsMasterList;
+	CUtlVector< CHandle< SpawnPoint > > m_CTSpawnPointsMasterList;
+	CUtlVector< CHandle< SpawnPoint > > m_TerroristSpawnPointsMasterList;
 	bool m_bRespawningAllRespawnablePlayers;
 	int32 m_iNextCTSpawnPoint;
 	float32 m_flCTSpawnPointUsedTime;
 	int32 m_iNextTerroristSpawnPoint;
 	float32 m_flTerroristSpawnPointUsedTime;
-	CUtlVector< SpawnPoint* > m_CTSpawnPoints;
-	CUtlVector< SpawnPoint* > m_TerroristSpawnPoints;
+	CUtlVector< CHandle< SpawnPoint > > m_CTSpawnPoints;
+	CUtlVector< CHandle< SpawnPoint > > m_TerroristSpawnPoints;
 	bool m_bIsUnreservedGameServer;
 	float32 m_fAutobalanceDisplayTime;
 	bool m_bAllowWeaponSwitch;

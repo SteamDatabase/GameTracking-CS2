@@ -4,5 +4,5 @@ class CTriggerProximity : public CBaseTrigger
 	CUtlSymbolLarge m_iszMeasureTarget;
 	float32 m_fRadius;
 	int32 m_nTouchers;
-	CEntityOutputTemplate< float32 > m_NearestEntityDistance;
+	CEntityOutputTemplate< float32, float32 > m_NearestEntityDistance;
 };

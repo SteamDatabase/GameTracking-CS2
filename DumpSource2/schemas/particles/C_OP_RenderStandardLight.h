@@ -1121,7 +1121,7 @@ class C_OP_RenderStandardLight : public CParticleFunctionRenderer
 	// MPropertyFriendlyName = "color blend type"
 	ParticleColorBlendType_t m_nColorBlendType;
 	// MPropertyFriendlyName = "intensity"
-	CParticleCollectionFloatInput m_flIntensity;
+	CPerParticleFloatInput m_flIntensity;
 	// MPropertyFriendlyName = "cast shadows"
 	// MPropertySuppressExpr = "m_nLightType == PARTICLE_LIGHT_TYPE_FX"
 	bool m_bCastShadows;

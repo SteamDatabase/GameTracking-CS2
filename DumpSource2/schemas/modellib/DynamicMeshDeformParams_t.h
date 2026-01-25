@@ -3,7 +3,8 @@
 //	"m_flTensionStretchScale": 0.000000,
 //	"m_bRecomputeSmoothNormalsAfterAnimation": false,
 //	"m_bComputeDynamicMeshTensionAfterAnimation": false,
-//	"m_bSmoothNormalsAcrossUvSeams": false
+//	"m_bSmoothNormalsAcrossUvSeams": false,
+//	"m_bEnableEyeBulgeDeformation": false
 //}
 class DynamicMeshDeformParams_t
 {
@@ -12,4 +13,5 @@ class DynamicMeshDeformParams_t
 	bool m_bRecomputeSmoothNormalsAfterAnimation;
 	bool m_bComputeDynamicMeshTensionAfterAnimation;
 	bool m_bSmoothNormalsAcrossUvSeams;
+	bool m_bEnableEyeBulgeDeformation;
 };

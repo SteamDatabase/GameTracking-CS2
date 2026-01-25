@@ -19,8 +19,11 @@ class CDynamicProp : public CBreakableProp
 	bool m_bRandomizeCycle;
 	bool m_bStartDisabled;
 	bool m_bFiredStartEndOutput;
+	// MNotSaved
 	bool m_bForceNpcExclude;
+	// MNotSaved
 	bool m_bCreateNonSolid;
+	// MNotSaved
 	bool m_bIsOverrideProp;
 	int32 m_iInitialGlowState;
 	int32 m_nGlowRange;

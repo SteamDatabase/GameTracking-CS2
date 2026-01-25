@@ -18,7 +18,7 @@
 //}
 class ParticleControlPointDriver_t
 {
-	int32 m_iControlPoint;
+	ParticleParamID_t m_iControlPoint;
 	ParticleAttachment_t m_iAttachType;
 	CUtlString m_attachmentName;
 	Vector m_vecOffset;

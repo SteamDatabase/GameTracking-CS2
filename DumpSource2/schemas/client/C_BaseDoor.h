@@ -2,5 +2,6 @@
 class C_BaseDoor : public C_BaseToggle
 {
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bIsUsable;
 };

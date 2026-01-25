@@ -1,5 +1,4 @@
 // MNetworkExcludeByName = "m_flexWeight"
-// MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"
 // MNetworkExcludeByName = "m_animationController.m_flPlaybackRate"
 // MNetworkExcludeByUserGroup = "overlay_vars"
@@ -13,6 +12,7 @@
 class CBasePropDoor : public CDynamicProp
 {
 	float32 m_flAutoReturnDelay;
+	// MNotSaved
 	CUtlVector< CHandle< CBasePropDoor > > m_hDoorList;
 	int32 m_nHardwareType;
 	bool m_bNeedsHardware;
@@ -38,10 +38,13 @@ class CBasePropDoor : public CDynamicProp
 	CUtlSymbolLarge m_SoundLock;
 	CUtlSymbolLarge m_SoundUnlock;
 	CUtlSymbolLarge m_SoundLatch;
+	// MNotSaved
 	CUtlSymbolLarge m_SoundPound;
 	CUtlSymbolLarge m_SoundJiggle;
 	CUtlSymbolLarge m_SoundLockedAnim;
+	// MNotSaved
 	int32 m_numCloseAttempts;
+	// MNotSaved
 	CUtlStringToken m_nPhysicsMaterial;
 	CUtlSymbolLarge m_SlaveName;
 	// MNetworkEnable

@@ -10,7 +10,7 @@ class CPointAngularVelocitySensor : public CPointEntity
 	QAngle m_lastOrientation;
 	VectorWS m_vecAxis;
 	bool m_bUseHelper;
-	CEntityOutputTemplate< float32 > m_AngularVelocity;
+	CEntityOutputTemplate< float32, float32 > m_AngularVelocity;
 	CEntityIOOutput m_OnLessThan;
 	CEntityIOOutput m_OnLessThanOrEqualTo;
 	CEntityIOOutput m_OnGreaterThan;

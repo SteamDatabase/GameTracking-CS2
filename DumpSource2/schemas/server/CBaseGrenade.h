@@ -1,7 +1,6 @@
 // MNetworkIncludeByName = "m_fFlags"
 // MNetworkIncludeByName = "m_vecVelocity"
 // MNetworkExcludeByName = "m_flexWeight"
-// MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"
 // MNetworkExcludeByName = "m_nResetEventsParity"
 // MNetworkExcludeByUserGroup = "overlay_vars"

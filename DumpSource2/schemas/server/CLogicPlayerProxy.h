@@ -1,8 +1,8 @@
 class CLogicPlayerProxy : public CLogicalEntity
 {
-	CHandle< CBaseEntity > m_hPlayer;
 	CEntityIOOutput m_PlayerHasAmmo;
 	CEntityIOOutput m_PlayerHasNoAmmo;
 	CEntityIOOutput m_PlayerDied;
-	CEntityOutputTemplate< int32 > m_RequestedPlayerHealth;
+	CEntityOutputTemplate< int32, int32 > m_RequestedPlayerHealth;
+	CHandle< CBaseEntity > m_hPlayer;
 };

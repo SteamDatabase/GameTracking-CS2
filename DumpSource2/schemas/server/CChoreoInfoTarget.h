@@ -1,0 +1,3 @@
+class CChoreoInfoTarget : public CPointEntity
+{
+};

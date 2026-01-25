@@ -16,6 +16,7 @@
 // MNetworkVarNames = "bool m_bIsHauledBack"
 // MNetworkVarNames = "bool m_bSilencerOn"
 // MNetworkVarNames = "GameTime_t m_flTimeSilencerSwitchComplete"
+// MNetworkVarNames = "float m_flWeaponActionPlaybackRate"
 // MNetworkVarNames = "int m_iOriginalTeamNumber"
 // MNetworkVarNames = "int m_iMostRecentTeamNumber"
 // MNetworkVarNames = "bool m_bDroppedNearBuyZone"
@@ -76,6 +77,8 @@ class CCSWeaponBase : public CBasePlayerWeapon
 	bool m_bSilencerOn;
 	// MNetworkEnable
 	GameTime_t m_flTimeSilencerSwitchComplete;
+	// MNetworkEnable
+	float32 m_flWeaponActionPlaybackRate;
 	// MNetworkEnable
 	int32 m_iOriginalTeamNumber;
 	// MNetworkEnable

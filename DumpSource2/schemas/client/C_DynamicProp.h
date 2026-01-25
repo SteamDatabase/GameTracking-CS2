@@ -17,15 +17,21 @@ class C_DynamicProp : public C_BreakableProp
 	bool m_bRandomizeCycle;
 	bool m_bStartDisabled;
 	bool m_bFiredStartEndOutput;
+	// MNotSaved
 	bool m_bForceNpcExclude;
+	// MNotSaved
 	bool m_bCreateNonSolid;
+	// MNotSaved
 	bool m_bIsOverrideProp;
 	int32 m_iInitialGlowState;
 	int32 m_nGlowRange;
 	int32 m_nGlowRangeMin;
 	Color m_glowColor;
 	int32 m_nGlowTeam;
+	// MNotSaved
 	int32 m_iCachedFrameCount;
+	// MNotSaved
 	Vector m_vecCachedRenderMins;
+	// MNotSaved
 	Vector m_vecCachedRenderMaxs;
 };

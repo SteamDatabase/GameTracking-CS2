@@ -4,4 +4,6 @@ enum NmTargetWarpRule_t : uint8_t
 	WarpZ = 1,
 	WarpXYZ = 2,
 	RotationOnly = 3,
+	// MPropertySuppressEnumerator
+	FixedSection = 4,
 };

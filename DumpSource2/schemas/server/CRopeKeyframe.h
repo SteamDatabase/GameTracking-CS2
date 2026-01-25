@@ -45,6 +45,7 @@ class CRopeKeyframe : public CBaseModelEntity
 	// MNetworkEnable
 	uint8 m_Subdiv;
 	// MNetworkEnable
+	// MNotSaved
 	uint8 m_nChangeCount;
 	// MNetworkEnable
 	int16 m_RopeLength;

@@ -27,7 +27,7 @@
 //	"m_sourceAudio": ""
 //}
 // MPropertyFriendlyName = "Granulator Container"
-class CVoiceContainerGranulator : public CVoiceContainerBase
+class CVoiceContainerGranulator : public CVoiceContainerAsyncGenerator
 {
 	float32 m_flGrainLength;
 	float32 m_flGrainCrossfadeAmount;

@@ -18,6 +18,8 @@ class CFuncRotating : public CBaseModelEntity
 	QAngle m_prevLocalAngles;
 	QAngle m_angStart;
 	bool m_bStopAtStartPos;
+	// MNotSaved
 	Vector m_vecClientOrigin;
+	// MNotSaved
 	QAngle m_vecClientAngles;
 };

@@ -15,5 +15,6 @@ class CRagdollPropAttached : public CRagdollProp
 	// MNetworkEncoder = "coord"
 	Vector m_attachmentPointRagdollSpace;
 	bool m_bShouldDetach;
+	// MNotSaved
 	bool m_bShouldDeleteAttachedActivationRecord;
 };

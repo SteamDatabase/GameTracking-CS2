@@ -11,6 +11,9 @@
 //	"m_clutterSceneObjects":
 //	[
 //	],
+//	"m_rtProxies":
+//	[
+//	],
 //	"m_extraVertexStreamOverrides":
 //	[
 //	],
@@ -63,6 +66,7 @@ class WorldNode_t
 	CUtlVector< uint16 > m_visClusterMembership;
 	CUtlVector< AggregateSceneObject_t > m_aggregateSceneObjects;
 	CUtlVector< ClutterSceneObject_t > m_clutterSceneObjects;
+	CUtlVector< AggregateRTProxySceneObject_t > m_rtProxies;
 	CUtlVector< ExtraVertexStreamOverride_t > m_extraVertexStreamOverrides;
 	CUtlVector< MaterialOverride_t > m_materialOverrides;
 	CUtlVector< WorldNodeOnDiskBufferData_t > m_extraVertexStreams;

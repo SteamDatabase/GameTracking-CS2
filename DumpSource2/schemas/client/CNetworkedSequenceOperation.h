@@ -1,6 +1,7 @@
 // MNetworkVarNames = "HSequence m_hSequence"
 // MNetworkVarNames = "float32 m_flPrevCycle"
 // MNetworkVarNames = "float32 m_flCycle"
+// MNetworkVarNames = "CNetworkedQuantizedFloat m_flWeight"
 class CNetworkedSequenceOperation
 {
 	// MNetworkEnable

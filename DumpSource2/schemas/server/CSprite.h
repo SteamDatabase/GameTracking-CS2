@@ -58,6 +58,8 @@ class CSprite : public CBaseModelEntity
 	int32 m_nStartBrightness;
 	int32 m_nDestBrightness;
 	GameTime_t m_flBrightnessTimeStart;
+	// MNotSaved
 	int32 m_nSpriteWidth;
+	// MNotSaved
 	int32 m_nSpriteHeight;
 };

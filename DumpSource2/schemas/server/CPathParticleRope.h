@@ -31,6 +31,7 @@ class CPathParticleRope : public CBaseEntity
 	// MNetworkChangeCallback = "effectStateChanged"
 	int32 m_nEffectState;
 	// MNetworkEnable
+	// MNotSaved
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_iEffectIndex;
 	// MNetworkEnable
 	CNetworkUtlVectorBase< Vector > m_PathNodes_Position;

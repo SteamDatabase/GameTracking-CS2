@@ -46,12 +46,12 @@
 // MNetworkVarNames = "bool m_bIsDroppingItems"
 // MNetworkVarNames = "bool m_bIsQuestEligible"
 // MNetworkVarNames = "bool m_bIsHltvActive"
+// MNetworkVarNames = "bool m_bBombPlanted"
 // MNetworkVarNames = "uint16 m_arrProhibitedItemIndices"
 // MNetworkVarNames = "uint32 m_arrTournamentActiveCasterAccounts"
 // MNetworkVarNames = "int m_numBestOfMaps"
 // MNetworkVarNames = "int m_nHalloweenMaskListSeed"
 // MNetworkVarNames = "bool m_bBombDropped"
-// MNetworkVarNames = "bool m_bBombPlanted"
 // MNetworkVarNames = "int m_iRoundWinStatus"
 // MNetworkVarNames = "int m_eRoundWinReason"
 // MNetworkVarNames = "bool m_bTCantBuy"
@@ -192,6 +192,8 @@ class C_CSGameRules : public C_TeamplayRules
 	// MNetworkEnable
 	bool m_bIsHltvActive;
 	// MNetworkEnable
+	bool m_bBombPlanted;
+	// MNetworkEnable
 	uint16[100] m_arrProhibitedItemIndices;
 	// MNetworkEnable
 	uint32[4] m_arrTournamentActiveCasterAccounts;
@@ -201,8 +203,6 @@ class C_CSGameRules : public C_TeamplayRules
 	int32 m_nHalloweenMaskListSeed;
 	// MNetworkEnable
 	bool m_bBombDropped;
-	// MNetworkEnable
-	bool m_bBombPlanted;
 	// MNetworkEnable
 	int32 m_iRoundWinStatus;
 	// MNetworkEnable

@@ -35,6 +35,7 @@
 // MNetworkVarNames = "bool m_bForceShadowsEnabled"
 // MNetworkVarNames = "int m_nBounceLight"
 // MNetworkVarNames = "float m_flBounceScale"
+// MNetworkVarNames = "bool m_bDynamicBounce"
 // MNetworkVarNames = "float m_flMinRoughness"
 // MNetworkVarNames = "Vector m_vAlternateColor"
 // MNetworkVarNames = "float m_fAlternateColorBrightness"
@@ -181,7 +182,11 @@ class C_BarnLight : public C_BaseModelEntity
 	// MNetworkEnable
 	int32 m_nBounceLight;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "RenderingChanged"
 	float32 m_flBounceScale;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "RenderingChanged"
+	bool m_bDynamicBounce;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "RenderingChanged"
 	float32 m_flMinRoughness;
@@ -293,6 +298,7 @@ class C_BarnLight : public C_BaseModelEntity
 	// MNetworkEnable
 	// MNetworkChangeCallback = "RenderingChanged"
 	Vector m_vPrecomputedOBBExtent5;
+	// MNotSaved
 	bool m_bInitialBoneSetup;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "RenderingChanged"

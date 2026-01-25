@@ -1254,7 +1254,6 @@
 //		}
 //	},
 //	"m_nLightingControlPoint": -1,
-//	"m_nSelfIllumPerParticle": 19,
 //	"m_nOutputBlendMode": "PARTICLE_OUTPUT_BLEND_MODE_ALPHA",
 //	"m_bGammaCorrectVertexColors": true,
 //	"m_bSaturateColorPreAlphaBlend": true,

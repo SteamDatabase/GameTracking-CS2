@@ -34,26 +34,36 @@
 class CBasePlayerPawn : public CBaseCombatCharacter
 {
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_WeaponServices* m_pWeaponServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_ItemServices* m_pItemServices;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
+	// MNotSaved
 	CPlayer_AutoaimServices* m_pAutoaimServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_ObserverServices* m_pObserverServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_WaterServices* m_pWaterServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_UseServices* m_pUseServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_FlashlightServices* m_pFlashlightServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_CameraServices* m_pCameraServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_MovementServices* m_pMovementServices;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
+	// MNotSaved
 	CUtlVectorEmbeddedNetworkVar< ViewAngleServerChange_t > m_ServerViewAngleChanges;
 	QAngle v_angle;
 	QAngle v_anglePrevious;
@@ -66,15 +76,20 @@ class CBasePlayerPawn : public CBaseCombatCharacter
 	GameTime_t m_fTimeLastHurt;
 	// MNetworkEnable
 	GameTime_t m_flDeathTime;
+	// MNotSaved
 	GameTime_t m_fNextSuicideTime;
 	bool m_fInitHUD;
+	// MNotSaved
 	CAI_Expresser* m_pExpresser;
 	// MNetworkEnable
 	CHandle< CBasePlayerController > m_hController;
 	// MNetworkEnable
 	CHandle< CBasePlayerController > m_hDefaultController;
+	// MNotSaved
 	float32 m_fHltvReplayDelay;
+	// MNotSaved
 	float32 m_fHltvReplayEnd;
+	// MNotSaved
 	CEntityIndex m_iHltvReplayEntity;
 	CUtlVector< sndopvarlatchdata_t > m_sndOpvarLatchData;
 };

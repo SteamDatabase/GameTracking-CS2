@@ -3,6 +3,7 @@
 // MNetworkVarNames = "string_t m_iszOpvarName"
 // MNetworkVarNames = "int m_iOpvarIndex"
 // MNetworkVarNames = "bool m_bUseAutoCompare"
+// MNetworkVarNames = "bool m_bFastRefresh"
 class C_SoundOpvarSetPointBase : public C_BaseEntity
 {
 	// MNetworkEnable
@@ -15,4 +16,6 @@ class C_SoundOpvarSetPointBase : public C_BaseEntity
 	int32 m_iOpvarIndex;
 	// MNetworkEnable
 	bool m_bUseAutoCompare;
+	// MNetworkEnable
+	bool m_bFastRefresh;
 };

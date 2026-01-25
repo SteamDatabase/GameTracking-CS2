@@ -3,6 +3,7 @@ class CBaseDoor : public CBaseToggle
 {
 	QAngle m_angMoveEntitySpace;
 	Vector m_vecMoveDirParentSpace;
+	// MNotSaved
 	locksound_t m_ls;
 	bool m_bForceClosed;
 	bool m_bDoorGroup;
@@ -27,7 +28,9 @@ class CBaseDoor : public CBaseToggle
 	CEntityIOOutput m_OnLockedUse;
 	bool m_bLoopMoveSound;
 	bool m_bCreateNavObstacle;
+	// MNotSaved
 	bool m_isChaining;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bIsUsable;
 };

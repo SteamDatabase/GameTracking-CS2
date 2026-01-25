@@ -1,7 +1,7 @@
 class CSAdditionalMatchStats_t : public CSAdditionalPerRoundStats_t
 {
-	int32 m_numRoundsSurvived;
-	int32 m_maxNumRoundsSurvived;
+	int32 m_numRoundsSurvivedStreak;
+	int32 m_maxNumRoundsSurvivedStreak;
 	int32 m_numRoundsSurvivedTotal;
 	int32 m_iRoundsWonWithoutPurchase;
 	int32 m_iRoundsWonWithoutPurchaseTotal;

@@ -56,17 +56,7 @@
 //		"m_type": "ANIMPARAM_UNKNOWN",
 //		"m_index": 255
 //	},
-//	"m_hParameterSpineRotationWeight":
-//	{
-//		"m_type": "ANIMPARAM_UNKNOWN",
-//		"m_index": 255
-//	},
 //	"m_hParameterPelvisOffset":
-//	{
-//		"m_type": "ANIMPARAM_UNKNOWN",
-//		"m_index": 255
-//	},
-//	"m_hParameterUseIK":
 //	{
 //		"m_type": "ANIMPARAM_UNKNOWN",
 //		"m_index": 255
@@ -108,9 +98,7 @@ class CAimCameraUpdateNode : public CUnaryUpdateNode
 {
 	CAnimParamHandle m_hParameterPosition;
 	CAnimParamHandle m_hParameterOrientation;
-	CAnimParamHandle m_hParameterSpineRotationWeight;
 	CAnimParamHandle m_hParameterPelvisOffset;
-	CAnimParamHandle m_hParameterUseIK;
 	CAnimParamHandle m_hParameterCameraOnly;
 	CAnimParamHandle m_hParameterWeaponDepenetrationDistance;
 	CAnimParamHandle m_hParameterWeaponDepenetrationDelta;

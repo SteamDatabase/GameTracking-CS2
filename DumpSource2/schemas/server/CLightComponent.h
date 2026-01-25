@@ -42,6 +42,7 @@
 // MNetworkVarNames = "bool m_bAllowSSTGeneration"
 // MNetworkVarNames = "int m_nDirectLight"
 // MNetworkVarNames = "int m_nIndirectLight"
+// MNetworkVarNames = "bool m_bDynamicBounce"
 // MNetworkVarNames = "float m_flFadeMinDist"
 // MNetworkVarNames = "float m_flFadeMaxDist"
 // MNetworkVarNames = "float m_flShadowFadeMinDist"
@@ -68,6 +69,7 @@
 // MNetworkVarNames = "float m_flMinRoughness"
 class CLightComponent : public CEntityComponent
 {
+	// MNotSaved
 	CNetworkVarChainer __m_pChainEntity;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"
@@ -200,6 +202,8 @@ class CLightComponent : public CEntityComponent
 	// MNetworkEnable
 	int32 m_nIndirectLight;
 	// MNetworkEnable
+	bool m_bDynamicBounce;
+	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"
 	float32 m_flFadeMinDist;
 	// MNetworkEnable
@@ -247,6 +251,7 @@ class CLightComponent : public CEntityComponent
 	bool m_bUseSecondaryColor;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "MixedShadowsChanged"
+	// MNotSaved
 	bool m_bMixedShadows;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"

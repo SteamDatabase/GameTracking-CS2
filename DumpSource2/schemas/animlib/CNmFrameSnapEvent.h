@@ -1,7 +1,13 @@
 // MGetKV3ClassDefaults = {
 //	"_class": "CNmFrameSnapEvent",
-//	"m_flStartTimeSeconds": 0.000000,
-//	"m_flDurationSeconds": 0.000000,
+//	"m_flStartTime":
+//	{
+//		"m_flValue": 0.000000
+//	},
+//	"m_flDuration":
+//	{
+//		"m_flValue": 0.000000
+//	},
 //	"m_syncID": "",
 //	"m_bClientOnly": false,
 //	"m_frameSnapMode": "Floor"

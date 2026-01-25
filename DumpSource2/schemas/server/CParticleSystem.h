@@ -31,10 +31,12 @@ class CParticleSystem : public CBaseModelEntity
 	// MNetworkEnable
 	float32 m_flFreezeTransitionDuration;
 	// MNetworkEnable
+	// MNotSaved
 	int32 m_nStopType;
 	// MNetworkEnable
 	bool m_bAnimateDuringGameplayPause;
 	// MNetworkEnable
+	// MNotSaved
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_iEffectIndex;
 	// MNetworkEnable
 	GameTime_t m_flStartTime;

@@ -70,5 +70,6 @@ class C_PointCamera : public C_BaseEntity
 	float32 m_TargetFOV;
 	float32 m_DegreesPerSecond;
 	bool m_bIsOn;
+	// MNotSaved
 	C_PointCamera* m_pNext;
 };

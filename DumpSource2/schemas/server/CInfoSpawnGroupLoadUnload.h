@@ -10,7 +10,10 @@ class CInfoSpawnGroupLoadUnload : public CLogicalEntity
 	CUtlString m_sFixedSpawnGroupName;
 	float32 m_flTimeoutInterval;
 	bool m_bAutoActivate;
+	// MNotSaved
 	bool m_bUnloadingStarted;
+	// MNotSaved
 	bool m_bQueueActiveSpawnGroupChange;
+	// MNotSaved
 	bool m_bQueueFinishLoading;
 };

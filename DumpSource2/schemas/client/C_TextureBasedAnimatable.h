@@ -21,6 +21,7 @@ class C_TextureBasedAnimatable : public C_BaseModelEntity
 	// MNetworkEnable
 	Vector m_vAnimationBoundsMax;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flStartTime;
 	// MNetworkEnable
 	float32 m_flStartFrame;

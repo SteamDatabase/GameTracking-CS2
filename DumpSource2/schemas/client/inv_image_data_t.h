@@ -110,6 +110,15 @@
 //		],
 //		"brightness": 0.000000,
 //		"orbit_distance": 1.000000
+//	},
+//	"clearcolor":
+//	{
+//		"color":
+//		[
+//			0.200000,
+//			0.200000,
+//			0.200000
+//		]
 //	}
 //}
 class inv_image_data_t
@@ -139,4 +148,8 @@ class inv_image_data_t
 	// MPropertyDescription = "Shadowed."
 	// MPropertyAutoExpandSelf
 	inv_image_light_barn_t light1;
+	// MPropertyFriendlyName = "Clear Color"
+	// MPropertyDescription = ""
+	// MPropertyAutoExpandSelf
+	inv_image_clearcolor_t clearcolor;
 };

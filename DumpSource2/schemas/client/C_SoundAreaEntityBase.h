@@ -5,6 +5,7 @@ class C_SoundAreaEntityBase : public C_BaseEntity
 {
 	// MNetworkEnable
 	bool m_bDisabled;
+	// MNotSaved
 	bool m_bWasEnabled;
 	// MNetworkEnable
 	CUtlSymbolLarge m_iszSoundAreaType;

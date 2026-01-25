@@ -39,6 +39,7 @@ class C_PointValueRemapper : public C_BaseEntity
 	// MNetworkEnable
 	ValueRemapperOutputType_t m_nOutputType;
 	// MNetworkEnable
+	// MNotSaved
 	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_hOutputEntities;
 	// MNetworkEnable
 	ValueRemapperHapticsType_t m_nHapticsType;

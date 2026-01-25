@@ -8,7 +8,7 @@ class CBreakableProp : public CBaseProp
 	CPropDataComponent m_CPropDataComponent;
 	CEntityIOOutput m_OnStartDeath;
 	CEntityIOOutput m_OnBreak;
-	CEntityOutputTemplate< float32 > m_OnHealthChanged;
+	CEntityOutputTemplate< float32, float32 > m_OnHealthChanged;
 	CEntityIOOutput m_OnTakeDamage;
 	float32 m_impactEnergyScale;
 	int32 m_iMinHealthDmg;
@@ -25,6 +25,7 @@ class CBreakableProp : public CBaseProp
 	bool m_bHasBreakPiecesOrCommands;
 	float32 m_explodeDamage;
 	float32 m_explodeRadius;
+	BaseExplosionTypes_t m_nExplosionType;
 	float32 m_explosionDelay;
 	CUtlSymbolLarge m_explosionBuildupSound;
 	CUtlSymbolLarge m_explosionCustomEffect;

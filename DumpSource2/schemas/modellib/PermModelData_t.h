@@ -117,6 +117,12 @@
 //	],
 //	"m_AnimatedMaterialAttributes":
 //	[
+//	],
+//	"m_animGraph2Refs":
+//	[
+//	],
+//	"m_vecNmSkeletonRefs":
+//	[
 //	]
 //}
 class PermModelData_t
@@ -144,4 +150,6 @@ class PermModelData_t
 	CUtlVector< CUtlString > m_BodyGroupsHiddenInTools;
 	CUtlVector< CStrongHandle< InfoForResourceTypeCModel > > m_refAnimIncludeModels;
 	CUtlVector< PermModelDataAnimatedMaterialAttribute_t > m_AnimatedMaterialAttributes;
+	CUtlVector< ModelAnimGraph2Ref_t > m_animGraph2Refs;
+	CUtlVector< CStrongHandle< InfoForResourceTypeCNmSkeleton > > m_vecNmSkeletonRefs;
 };

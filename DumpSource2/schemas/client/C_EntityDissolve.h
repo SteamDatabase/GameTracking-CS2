@@ -11,26 +11,39 @@
 class C_EntityDissolve : public C_BaseModelEntity
 {
 	// MNetworkEnable
+	// MNotSaved
 	GameTime_t m_flStartTime;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFadeInStart;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFadeInLength;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFadeOutModelStart;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFadeOutModelLength;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFadeOutStart;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flFadeOutLength;
+	// MNotSaved
 	GameTime_t m_flNextSparkTime;
 	// MNetworkEnable
+	// MNotSaved
 	EntityDisolveType_t m_nDissolveType;
 	// MNetworkEnable
+	// MNotSaved
 	Vector m_vDissolverOrigin;
 	// MNetworkEnable
+	// MNotSaved
 	uint32 m_nMagnitude;
+	// MNotSaved
 	bool m_bCoreExplode;
+	// MNotSaved
 	bool m_bLinkedToServerEnt;
 };

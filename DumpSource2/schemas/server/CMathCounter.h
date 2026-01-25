@@ -5,8 +5,8 @@ class CMathCounter : public CLogicalEntity
 	bool m_bHitMin;
 	bool m_bHitMax;
 	bool m_bDisabled;
-	CEntityOutputTemplate< float32 > m_OutValue;
-	CEntityOutputTemplate< float32 > m_OnGetValue;
+	CEntityOutputTemplate< float32, float32 > m_OutValue;
+	CEntityOutputTemplate< float32, float32 > m_OnGetValue;
 	CEntityIOOutput m_OnHitMin;
 	CEntityIOOutput m_OnHitMax;
 	CEntityIOOutput m_OnChangedFromMin;

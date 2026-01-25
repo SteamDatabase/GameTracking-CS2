@@ -44,6 +44,7 @@ class CPointValueRemapper : public CBaseEntity
 	CUtlSymbolLarge m_iszOutputEntity3Name;
 	CUtlSymbolLarge m_iszOutputEntity4Name;
 	// MNetworkEnable
+	// MNotSaved
 	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_hOutputEntities;
 	// MNetworkEnable
 	ValueRemapperHapticsType_t m_nHapticsType;
@@ -71,8 +72,8 @@ class CPointValueRemapper : public CBaseEntity
 	CUtlSymbolLarge m_iszSoundReachedValueZero;
 	CUtlSymbolLarge m_iszSoundReachedValueOne;
 	CUtlSymbolLarge m_iszSoundMovingLoop;
-	CEntityOutputTemplate< float32 > m_Position;
-	CEntityOutputTemplate< float32 > m_PositionDelta;
+	CEntityOutputTemplate< float32, float32 > m_Position;
+	CEntityOutputTemplate< float32, float32 > m_PositionDelta;
 	CEntityIOOutput m_OnReachedValueZero;
 	CEntityIOOutput m_OnReachedValueOne;
 	CEntityIOOutput m_OnReachedValueCustom;

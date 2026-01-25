@@ -1,6 +1,8 @@
 class CEnvEntityMaker : public CPointEntity
 {
+	// MNotSaved
 	Vector m_vecEntityMins;
+	// MNotSaved
 	Vector m_vecEntityMaxs;
 	CHandle< CBaseEntity > m_hCurrentInstance;
 	CHandle< CBaseEntity > m_hCurrentBlocker;

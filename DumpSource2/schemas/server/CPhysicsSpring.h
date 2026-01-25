@@ -7,5 +7,6 @@ class CPhysicsSpring : public CBaseEntity
 	CUtlSymbolLarge m_nameAttachEnd;
 	VectorWS m_start;
 	VectorWS m_end;
+	// MNotSaved
 	uint32 m_teleportTick;
 };

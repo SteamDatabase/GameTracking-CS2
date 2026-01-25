@@ -33,26 +33,36 @@
 class C_BasePlayerPawn : public C_BaseCombatCharacter
 {
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_WeaponServices* m_pWeaponServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_ItemServices* m_pItemServices;
 	// MNetworkEnable
+	// MNotSaved
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	CPlayer_AutoaimServices* m_pAutoaimServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_ObserverServices* m_pObserverServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_WaterServices* m_pWaterServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_UseServices* m_pUseServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_FlashlightServices* m_pFlashlightServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_CameraServices* m_pCameraServices;
 	// MNetworkEnable
+	// MNotSaved
 	CPlayer_MovementServices* m_pMovementServices;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
+	// MNotSaved
 	C_UtlVectorEmbeddedNetworkVar< ViewAngleServerChange_t > m_ServerViewAngleChanges;
 	QAngle v_angle;
 	QAngle v_anglePrevious;
@@ -64,20 +74,31 @@ class C_BasePlayerPawn : public C_BaseCombatCharacter
 	sky3dparams_t m_skybox3d;
 	// MNetworkEnable
 	GameTime_t m_flDeathTime;
+	// MNotSaved
 	Vector m_vecPredictionError;
+	// MNotSaved
 	GameTime_t m_flPredictionErrorTime;
+	// MNotSaved
 	Vector m_vecLastCameraSetupLocalOrigin;
+	// MNotSaved
 	GameTime_t m_flLastCameraSetupTime;
+	// MNotSaved
 	float32 m_flFOVSensitivityAdjust;
+	// MNotSaved
 	float32 m_flMouseSensitivity;
+	// MNotSaved
 	Vector m_vOldOrigin;
+	// MNotSaved
 	float32 m_flOldSimulationTime;
+	// MNotSaved
 	int32 m_nLastExecutedCommandNumber;
+	// MNotSaved
 	int32 m_nLastExecutedCommandTick;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnControllerChanged"
 	CHandle< CBasePlayerController > m_hController;
 	// MNetworkEnable
 	CHandle< CBasePlayerController > m_hDefaultController;
+	// MNotSaved
 	bool m_bIsSwappingToPredictableController;
 };

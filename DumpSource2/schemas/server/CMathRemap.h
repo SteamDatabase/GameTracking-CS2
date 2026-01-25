@@ -6,7 +6,7 @@ class CMathRemap : public CLogicalEntity
 	float32 m_flOut2;
 	float32 m_flOldInValue;
 	bool m_bEnabled;
-	CEntityOutputTemplate< float32 > m_OutValue;
+	CEntityOutputTemplate< float32, float32 > m_OutValue;
 	CEntityIOOutput m_OnRoseAboveMin;
 	CEntityIOOutput m_OnRoseAboveMax;
 	CEntityIOOutput m_OnFellBelowMin;

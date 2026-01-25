@@ -4,6 +4,7 @@
 // MNetworkVarNames = "float32 m_flBlendWeight"
 class CRagdollProp : public CBaseAnimGraph
 {
+	// MNotSaved
 	ragdoll_t m_ragdoll;
 	bool m_bStartDisabled;
 	// MNetworkEnable
@@ -30,6 +31,7 @@ class CRagdollProp : public CBaseAnimGraph
 	CUtlSymbolLarge m_strOriginClassName;
 	CUtlSymbolLarge m_strSourceClassName;
 	bool m_bHasBeenPhysgunned;
+	// MNotSaved
 	bool m_bAllowStretch;
 	// MNetworkEnable
 	// MNetworkBitCount = 8
@@ -38,7 +40,10 @@ class CRagdollProp : public CBaseAnimGraph
 	// MNetworkEncodeFlags = 1
 	float32 m_flBlendWeight;
 	float32 m_flDefaultFadeScale;
+	// MNotSaved
 	CUtlVector< Vector > m_ragdollMins;
+	// MNotSaved
 	CUtlVector< Vector > m_ragdollMaxs;
+	// MNotSaved
 	bool m_bShouldDeleteActivationRecord;
 };

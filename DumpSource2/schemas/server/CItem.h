@@ -7,5 +7,6 @@ class CItem : public CBaseAnimGraph
 	CEntityIOOutput m_OnGlovePulled;
 	VectorWS m_vOriginalSpawnOrigin;
 	QAngle m_vOriginalSpawnAngles;
+	// MNotSaved
 	bool m_bPhysStartAsleep;
 };

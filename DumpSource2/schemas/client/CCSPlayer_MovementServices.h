@@ -1,30 +1,36 @@
-// MNetworkVarNames = "Vector m_vecLadderNormal"
 // MNetworkVarNames = "int m_nLadderSurfacePropIndex"
+// MNetworkVarNames = "bool m_bDucked"
 // MNetworkVarNames = "float m_flDuckAmount"
 // MNetworkVarNames = "float m_flDuckSpeed"
 // MNetworkVarNames = "bool m_bDuckOverride"
 // MNetworkVarNames = "bool m_bDesiresDuck"
+// MNetworkVarNames = "bool m_bDucking"
 // MNetworkVarNames = "float m_flDuckOffset"
 // MNetworkVarNames = "uint32 m_nDuckTimeMsecs"
 // MNetworkVarNames = "uint32 m_nDuckJumpTimeMsecs"
 // MNetworkVarNames = "uint32 m_nJumpTimeMsecs"
 // MNetworkVarNames = "float m_flLastDuckTime"
 // MNetworkVarNames = "int m_nGameCodeHasMovedPlayerAfterCommand"
-// MNetworkVarNames = "bool m_bOldJumpPressed"
 // MNetworkVarNames = "GameTime_t m_fStashGrenadeParameterWhen"
 // MNetworkVarNames = "ButtonBitMask_t m_nButtonDownMaskPrev"
 // MNetworkVarNames = "float m_flOffsetTickCompleteTime"
 // MNetworkVarNames = "float m_flOffsetTickStashedSpeed"
 // MNetworkVarNames = "float m_flStamina"
-// MNetworkVarNames = "bool m_bWasSurfing"
+// MNetworkVarNames = "CCSPlayerLegacyJump m_LegacyJump"
+// MNetworkVarNames = "CCSPlayerModernJump m_ModernJump"
+// MNetworkVarNames = "GameTick_t m_nLastJumpTick"
+// MNetworkVarNames = "float m_flLastJumpFrac"
+// MNetworkVarNames = "float m_flLastJumpVelocityZ"
 // MNetworkVarNames = "bool m_bJumpApexPending"
+// MNetworkVarNames = "bool m_bWasSurfing"
 class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 {
-	// MNetworkEnable
-	// MNetworkEncoder = "normal"
 	Vector m_vecLadderNormal;
 	// MNetworkEnable
 	int32 m_nLadderSurfacePropIndex;
+	// MNetworkEnable
+	// MNetworkUserGroup = "LocalPlayerExclusive"
+	bool m_bDucked;
 	// MNetworkEnable
 	float32 m_flDuckAmount;
 	// MNetworkEnable
@@ -33,6 +39,9 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	bool m_bDuckOverride;
 	// MNetworkEnable
 	bool m_bDesiresDuck;
+	// MNetworkEnable
+	// MNetworkUserGroup = "LocalPlayerExclusive"
+	bool m_bDucking;
 	// MNetworkEnable
 	float32 m_flDuckOffset;
 	// MNetworkEnable
@@ -64,9 +73,6 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	int32 m_nGameCodeHasMovedPlayerAfterCommand;
 	// MNetworkEnable
-	bool m_bOldJumpPressed;
-	float32 m_flJumpPressedTime;
-	// MNetworkEnable
 	GameTime_t m_fStashGrenadeParameterWhen;
 	// MNetworkEnable
 	uint64 m_nButtonDownMaskPrev;
@@ -80,11 +86,26 @@ class CCSPlayer_MovementServices : public CPlayer_MovementServices_Humanoid
 	float32 m_flMaxJumpHeightThisJump;
 	float32 m_flMaxJumpHeightLastJump;
 	float32 m_flStaminaAtJumpStart;
+	float32 m_flVelMulAtJumpStart;
 	float32 m_flAccumulatedJumpError;
+	// MNetworkEnable
+	CCSPlayerLegacyJump m_LegacyJump;
+	// MNetworkEnable
+	CCSPlayerModernJump m_ModernJump;
+	// MNetworkEnable
+	GameTick_t m_nLastJumpTick;
+	// MNetworkEnable
+	// MNetworkBitCount = 6
+	// MNetworkMinValue = 0.000000
+	// MNetworkMaxValue = 1.000000
+	// MNetworkEncodeFlags = 4
+	float32 m_flLastJumpFrac;
+	// MNetworkEnable
+	float32 m_flLastJumpVelocityZ;
+	// MNetworkEnable
+	bool m_bJumpApexPending;
 	float32 m_flTicksSinceLastSurfingDetected;
 	// MNetworkEnable
 	bool m_bWasSurfing;
 	Vector m_vecInputRotated;
-	// MNetworkEnable
-	bool m_bJumpApexPending;
 };

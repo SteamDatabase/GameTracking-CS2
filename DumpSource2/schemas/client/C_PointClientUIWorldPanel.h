@@ -25,10 +25,15 @@
 // MNetworkVarNames = "int32 m_nExplicitImageLayout"
 class C_PointClientUIWorldPanel : public C_BaseClientUIEntity
 {
+	// MNotSaved
 	bool m_bForceRecreateNextUpdate;
+	// MNotSaved
 	bool m_bMoveViewToPlayerNextThink;
+	// MNotSaved
 	bool m_bCheckCSSClasses;
+	// MNotSaved
 	CTransform m_anchorDeltaTransform;
+	// MNotSaved
 	CPointOffScreenIndicatorUi* m_pOffScreenIndicator;
 	// MNetworkEnable
 	bool m_bIgnoreInput;

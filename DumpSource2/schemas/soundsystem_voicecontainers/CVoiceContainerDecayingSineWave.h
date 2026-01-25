@@ -24,7 +24,7 @@
 //}
 // MPropertyFriendlyName = "TESTBED: Decaying Sine Wave Container"
 // MPropertyDescription = "Only text params, renders in real time"
-class CVoiceContainerDecayingSineWave : public CVoiceContainerBase
+class CVoiceContainerDecayingSineWave : public CVoiceContainerGenerator
 {
 	// MPropertyFriendlyName = "Frequency (Hz)"
 	// MPropertyDescription = "The frequency of this sine tone."

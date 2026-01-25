@@ -1,6 +1,6 @@
 class CMomentaryRotButton : public CRotButton
 {
-	CEntityOutputTemplate< float32 > m_Position;
+	CEntityOutputTemplate< float32, float32 > m_Position;
 	CEntityIOOutput m_OnUnpressed;
 	CEntityIOOutput m_OnFullyOpen;
 	CEntityIOOutput m_OnFullyClosed;

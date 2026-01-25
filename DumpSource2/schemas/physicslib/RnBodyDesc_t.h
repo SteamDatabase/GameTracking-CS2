@@ -55,10 +55,10 @@
 //	"m_flInertiaScaleInv": 1.000000,
 //	"m_flLinearDamping": 0.000000,
 //	"m_flAngularDamping": 0.000000,
-//	"m_flLinearDrag": 1.000000,
-//	"m_flAngularDrag": 1.000000,
-//	"m_flLinearBuoyancyDrag": 1.000000,
-//	"m_flAngularBuoyancyDrag": 1.000000,
+//	"m_flLinearDragScale": 1.000000,
+//	"m_flAngularDragScale": 1.000000,
+//	"m_flLinearFluidDragScale": 1.000000,
+//	"m_flAngularFluidDragScale": 1.000000,
 //	"m_vLastAwakeForceAccum":
 //	[
 //		0.000000,
@@ -71,7 +71,7 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_flBuoyancyFactor": 1.000000,
+//	"m_flBuoyancyScale": 1.000000,
 //	"m_flGravityScale": 1.000000,
 //	"m_flTimeScale": 1.000000,
 //	"m_nBodyType": 0,
@@ -84,7 +84,6 @@
 //	"m_bSleeping": false,
 //	"m_bIsContinuousEnabled": true,
 //	"m_bDragEnabled": true,
-//	"m_bBuoyancyDragEnabled": true,
 //	"m_vGravity":
 //	[
 //		0.000000,
@@ -110,13 +109,13 @@ class RnBodyDesc_t
 	float32 m_flInertiaScaleInv;
 	float32 m_flLinearDamping;
 	float32 m_flAngularDamping;
-	float32 m_flLinearDrag;
-	float32 m_flAngularDrag;
-	float32 m_flLinearBuoyancyDrag;
-	float32 m_flAngularBuoyancyDrag;
+	float32 m_flLinearDragScale;
+	float32 m_flAngularDragScale;
+	float32 m_flLinearFluidDragScale;
+	float32 m_flAngularFluidDragScale;
 	Vector m_vLastAwakeForceAccum;
 	Vector m_vLastAwakeTorqueAccum;
-	float32 m_flBuoyancyFactor;
+	float32 m_flBuoyancyScale;
 	float32 m_flGravityScale;
 	float32 m_flTimeScale;
 	int32 m_nBodyType;
@@ -129,7 +128,6 @@ class RnBodyDesc_t
 	bool m_bSleeping;
 	bool m_bIsContinuousEnabled;
 	bool m_bDragEnabled;
-	bool m_bBuoyancyDragEnabled;
 	Vector m_vGravity;
 	bool m_bSpeculativeEnabled;
 	bool m_bHasShadowController;
