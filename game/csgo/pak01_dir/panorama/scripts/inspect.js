@@ -113,7 +113,7 @@ var InspectModelImage;
         }
         return m_elPanel;
     }
-    function _InitCharScene(itemId, bHide = false, weaponItemId = '') {
+    function _InitCharScene(itemId, bHide = false, weaponItemId = '', contextPanel = $.GetContextPanel()) {
         let elPanel = GetExistingItemPanel('CharPreviewPanel');
         let active_item_idx = 5;
         let mapName = _GetBackGroundMap();
@@ -140,7 +140,7 @@ var InspectModelImage;
         settings.panel = elPanel;
         settings.weaponItemId = weaponItemId ? weaponItemId : settings.weaponItemId ? settings.weaponItemId : '';
         CharacterAnims.PlayAnimsOnPanel(settings);
-        const worktype = InspectShared.GetPopupSetting('work_type');
+        const worktype = InspectShared.GetPopupSetting('work_type', contextPanel);
         if (worktype !== 'can_patch' && worktype !== 'remove_patch') {
             _TransitionCamera(elPanel, 'char_inspect_wide');
         }
@@ -480,7 +480,7 @@ var InspectModelImage;
         let mapName = oSettings.map_override ? oSettings.map_override : _GetBackGroundMap(bUseMainMenuMap);
         let elPanel = GetExistingItemPanel('ItemPreviewPanel');
         if (!elPanel) {
-            let strAsyncWorkType = $.GetContextPanel().GetAttributeString("asyncworktype", "");
+            let strAsyncWorkType = InspectShared.GetPopupSetting('work_type');
             elPanel = $.CreatePanel(oSettings.panel_type, m_elContainer, 'ItemPreviewPanel', {
                 "require-composition-layer": "true",
                 'transparent-background': 'false',
@@ -678,9 +678,9 @@ var InspectModelImage;
     function _TintSprayImage(id, elImage) {
         TintSprayIcon.CheckIsSprayAndTint(id, elImage);
     }
-    function SetCharScene(characterItemId, weaponItemId) {
+    function SetCharScene(characterItemId, weaponItemId, contextPanel = $.GetContextPanel()) {
         ItemInfo.GetOrUpdateVanityCharacterSettings(characterItemId);
-        _InitCharScene(characterItemId, true, weaponItemId);
+        _InitCharScene(characterItemId, true, weaponItemId, contextPanel);
     }
     InspectModelImage.SetCharScene = SetCharScene;
     function ShowHideItemPanel(bshow) {
