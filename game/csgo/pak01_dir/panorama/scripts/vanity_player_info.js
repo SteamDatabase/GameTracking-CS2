@@ -154,9 +154,7 @@ var VanityPlayerInfo;
         }
     }
     function _OnActivateGetPrestigeButtonClickable() {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
-            '&' + 'asyncworkitemwarning=no' +
-            '&' + 'asyncworktype=prestigecheck');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
         let oSettings = {
             item_id: '0',
             show_work_type_warning: false,

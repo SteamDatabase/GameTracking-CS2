@@ -232,13 +232,7 @@ var InspectRentalBar;
     function ShowRentalInspect(contextPanel) {
         if (contextPanel.Data().onlyRentalItemIds.length > 0) {
             const itemId = InspectShared.GetPopupSetting('item_id', contextPanel);
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + contextPanel.Data().onlyRentalItemIds[0] +
-                '&' + 'inspectonly=true' +
-                '&' + 'allowsave=false' +
-                '&' + 'showallitemactions=false' +
-                '&' + 'showitemcert=true' +
-                '&' + 'rentalItems=' + contextPanel.Data().onlyRentalItemIds.join(',') +
-                '&' + 'caseidforlootlist=' + itemId);
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
             let oSettings = {
                 item_id: contextPanel.Data().onlyRentalItemIds[0],
                 inspect_only: true,

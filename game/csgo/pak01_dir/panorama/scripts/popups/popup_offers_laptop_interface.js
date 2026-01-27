@@ -859,9 +859,7 @@ var CollectionOffers;
             }
         }
         m_elScreen.FindChildInLayoutFile('id-offer-preview-inspect-btn').SetPanelEvent('onactivate', () => {
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + OfferItemData.itemId +
-                '&' + 'inspectonly=true' +
-                '&' + 'showallitemactions=false');
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
             let oSettings = {
                 item_id: OfferItemData.itemId,
                 inspect_only: true,

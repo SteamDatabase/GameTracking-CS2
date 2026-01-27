@@ -258,14 +258,7 @@ var ItemTile;
                 UiToolkitAPI.UnregisterJSCallback(updateItemListCallback);
             }
             updateItemListCallback = UiToolkitAPI.RegisterJSCallback(SelectItemForCapability.UpdateSort);
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                '&' + 'inspectonly=true' +
-                '&' + 'insidecasketid=' + oCapabilityInfo.initialItemId +
-                '&' + 'capability=' + oCapabilityInfo.capability +
-                '&' + 'showallitemactions=false' +
-                '&' + 'allowsave=false' +
-                '&' + 'isselected=' + $.GetContextPanel().BHasClass('capability_multistatus_selected') +
-                '&' + 'callback=' + updateItemListCallback);
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
             let oSettings = {
                 item_id: id,
                 inspect_only: true,

@@ -108,10 +108,7 @@ var RankUpRedemptionStore;
             const isVolatile = !!InventoryAPI.GetItemAttributeValue(itemId, '{uint32}volatile container');
             elInspect.SetPanelEvent('onactivate', () => {
                 if (isVolatile) {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + itemId +
-                        '&' + 'inspectonly=true' +
-                        '&' + 'asyncworktype=decodeable' +
-                        '&' + 'onlyclosepurchasebar=true');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_offers_laptop.xml');
                     let oSettings = {
                         item_id: itemId,
                         inspect_only: true,
@@ -121,11 +118,7 @@ var RankUpRedemptionStore;
                     elPanel.Data().oSettings = oSettings;
                 }
                 else if (ItemInfo.ItemHasCapability(itemId, 'decodable') && !InventoryAPI.IsTool(itemId)) {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + itemId +
-                        '&' + 'asyncworkitemwarning=no' +
-                        '&' + 'inspectonly=true' +
-                        '&' + 'asyncworktype=decodeable' +
-                        '&' + 'onlyclosepurchasebar=true');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + itemId, 'file://{resources}/layout/popups/popup_capability_decodable.xml');
                     let oSettings = {
                         item_id: itemId,
                         show_work_type_warning: false,
@@ -136,11 +129,7 @@ var RankUpRedemptionStore;
                     elPanel.Data().oSettings = oSettings;
                 }
                 else {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemId +
-                        '&' + 'inspectonly=true' +
-                        '&' + 'showallitemactions=false' +
-                        '&' + 'allowsave=false' +
-                        'none');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: itemId,
                         inspect_only: true,

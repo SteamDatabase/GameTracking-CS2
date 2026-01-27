@@ -169,19 +169,7 @@ var ContextMenuGetSouvenir;
             const bPlayoffMatch = MatchInfoAPI.IsMatchTournamentStageIDPlayoff(nStageID);
             let idFaux = InventoryAPI.GetFauxItemIDFromDefAndPaintIndexUB1(g_ActiveTournamentInfo.souvenirs[rawMapName], 0, bPlayoffMatch ? 13 : 0);
             let attributes = `{ "tournament event id": ${nEventID}, "tournament event stage id": ${nStageID}, "tournament event team0 id": ${team0}, "tournament event team1 id": ${team1} }`;
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + idFaux
-                + '&' +
-                'case-attributes=' + attributes
-                + '&' +
-                'asyncworkitemwarning=no'
-                + '&' +
-                'asyncforcehide=true'
-                + '&' +
-                'inspectonly=true'
-                + '&' +
-                'asyncworktype=decodeable'
-                + '&' +
-                'onlyclosepurchasebar=true');
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idFaux, 'file://{resources}/layout/popups/popup_capability_decodable.xml');
             let oSettings = {
                 item_id: idFaux,
                 item_attributes: attributes,

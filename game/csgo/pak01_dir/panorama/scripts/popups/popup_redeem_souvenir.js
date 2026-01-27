@@ -75,13 +75,7 @@ var PopupRedeemSouvenir;
         _ResetTimeouthandle();
         if (type === 'souvenir_generated') {
             InventoryAPI.AcknowledgeNewItembyItemID(itemid);
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + itemid +
-                '&' + 'inspectonly=true' +
-                '&' + 'showcharselect=false' +
-                '&' + 'showallitemactions=false' +
-                '&' + 'showmarketlink=false' +
-                '&' + 'showitemcert=false' +
-                'none');
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
             let oSettings = {
                 item_id: itemid,
                 inspect_only: true,

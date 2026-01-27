@@ -242,7 +242,7 @@ var InspectAsyncActionBar;
                 elOK.text = '#popup_xray_button_goto';
                 elOK.AddClass(btnStyle);
                 elOK.SetPanelEvent('onactivate', () => {
-                    $.DispatchEvent("ShowXrayCasePopup", toolId, itemId, true);
+                    $.DispatchEvent("ShowXrayCasePopup", !toolId ? '' : toolId, itemId, true);
                     _ClosePopup();
                 });
                 elDescLabel.visible = true;

@@ -200,13 +200,7 @@ var XpShop;
         }
     }
     function _OpenPurchasePassPopup() {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + m_passId
-            + '&' +
-            'inspectonly=false'
-            + '&' +
-            'asyncworkitemwarning=no'
-            + '&' +
-            'storeitemid=' + m_passId);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
         let oSettings = {
             item_id: m_passId,
             inspect_only: false,
@@ -920,12 +914,7 @@ var XpShop;
     function OpenFullscreenInspect(ShopEntry) {
         let nDefinitionIndex = InventoryAPI.GetItemDefinitionIndexFromDefinitionName(ShopEntry.item_name);
         let id = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(nDefinitionIndex, 0);
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + '' + ',' + id +
-            '&' + 'asyncworkitemwarning=no' +
-            '&' + 'asyncforcehide=true' +
-            '&' + 'inspectonly=true' +
-            '&' + 'asyncworktype=decodeable' +
-            '&' + 'onlyclosepurchasebar=true');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml');
         let oSettings = {
             item_id: id,
             show_work_type_warning: false,

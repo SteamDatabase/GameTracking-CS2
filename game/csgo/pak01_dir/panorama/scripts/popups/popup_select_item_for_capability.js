@@ -194,9 +194,7 @@ var SelectItemForCapability;
     ;
     function _CapabilityCanStickerAction(idsToUse, bWorkshopItemPreview) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_sticker' +
-            '&' + 'workshopPreview=' + workshopPreview);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_sticker.xml');
         let oSettings = {
             popup_panel: elPanel,
             item_id: idsToUse.item,
@@ -208,8 +206,7 @@ var SelectItemForCapability;
     }
     ;
     function _CapabilityNameableAction(idsToUse) {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=nameable');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_nameable.xml');
         let oSettings = {
             item_id: idsToUse.item,
             tool_id: idsToUse.tool,
@@ -220,9 +217,7 @@ var SelectItemForCapability;
     ;
     function _CapabilityCanKeychainAction(idsToUse, bWorkshopItemPreview) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_keychain' +
-            '&' + 'workshopPreview=' + workshopPreview);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
         let oSettings = {
             popup_panel: elPanel,
             tool_id: idsToUse.tool,
@@ -234,8 +229,7 @@ var SelectItemForCapability;
     }
     ;
     function _CapabilityWrapStickerAsKeychainAction(idsToUse) {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_wrap_sticker');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
         let oSettings = {
             item_id: idsToUse.item,
             tool_id: idsToUse.tool,
@@ -245,8 +239,7 @@ var SelectItemForCapability;
     }
     ;
     function _CapabilityRemoveKeychainAction(idsToUse) {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + idsToUse.item +
-            '&' + 'asyncworktype=remove_keychain');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
         let oSettings = {
             item_id: idsToUse.item,
             work_type: 'remove_keychain'
@@ -255,8 +248,7 @@ var SelectItemForCapability;
     }
     ;
     function _CapabilityCanPatchAction(idsToUse) {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'toolid-and-itemid=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=can_patch');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_can_patch.xml');
         let oSettings = {
             item_id: idsToUse.item,
             tool_id: idsToUse.tool,
@@ -266,8 +258,7 @@ var SelectItemForCapability;
     }
     ;
     function _CapabilityDecodableAction(idsToUse) {
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + idsToUse.tool + ',' + idsToUse.item +
-            '&' + 'asyncworktype=decodeable');
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + idsToUse.item, 'file://{resources}/layout/popups/popup_capability_decodable.xml');
         let oSettings = {
             item_id: idsToUse.item,
             tool_id: idsToUse.tool,
@@ -284,9 +275,7 @@ var SelectItemForCapability;
             ClosePopUp();
         }
         else {
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_stattrack_swap.xml', 'swaptool=' + capInfo.secondaryItemId +
-                '&' + 'swapitem1=' + capInfo.initialItemId +
-                '&' + 'swapitem2=' + id);
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_can_stattrack_swap.xml');
             let oSettings = {
                 tool_id: capInfo.secondaryItemId,
                 item_id: capInfo.initialItemId,
@@ -312,9 +301,7 @@ var SelectItemForCapability;
         }
         else {
             const fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + idCasket +
-                '&' + 'asyncworktype=nameable' +
-                '&' + 'asyncworkitemwarningtext=#popup_newcasket_warning');
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_nameable.xml');
             let oSettings = {
                 item_id: idCasket,
                 tool_id: fauxNameTag,

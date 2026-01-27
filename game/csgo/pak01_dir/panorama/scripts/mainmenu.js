@@ -1002,7 +1002,7 @@ var MainMenu;
     }
     function _OnInventoryInspect(id, contextmenuparam) {
         let inspectviewfunc = contextmenuparam ? contextmenuparam : 'primary';
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', `itemid=${id}&inspectonly=true&viewfunc=${inspectviewfunc}`);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
         let oSettings = {
             item_id: id,
             inspect_only: true,
@@ -1022,10 +1022,7 @@ var MainMenu;
     }
     function _OnShowXrayCasePopup(toolid, caseId, bShowPopupWarning = false) {
         const showpopup = bShowPopupWarning ? 'yes' : 'no';
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + caseId, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=' + toolid + ',' + caseId +
-            '&' + 'asyncworktype=decodeable' +
-            '&' + 'showXrayMachineUi=yes' +
-            '&' + 'showxraypopup=' + showpopup);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + caseId, 'file://{resources}/layout/popups/popup_capability_decodable.xml');
         let oSettings = {
             item_id: caseId,
             tool_id: toolid,
@@ -1050,16 +1047,7 @@ var MainMenu;
         const showMarketLinkDefault = _m_bPerfectWorld ? 'false' : 'true';
         JsInspectCallback = UiToolkitAPI.RegisterJSCallback(() => {
         });
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-lootlist-item-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-            '&' + 'inspectonly=true' +
-            '&' + 'allowsave=false' +
-            '&' + 'showallitemactions=false' +
-            '&' + 'showitemcert=false' +
-            '&' + 'showmarketlink=' + showMarketLinkDefault +
-            '&' + 'callback=' + JsInspectCallback +
-            '&' + 'caseidforlootlist=' + caseId +
-            '&' + 'showRentalItems=' + showRentalItems +
-            '&' + 'lootlistNameOverride=' + lootlistNameOverride);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-lootlist-item-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
         let oSettings = {
             item_id: id,
             inspect_only: true,
@@ -1075,12 +1063,7 @@ var MainMenu;
     function _WeaponPreviewRequest(id, bWorkshopItemPreview = false) {
         const workshopPreview = bWorkshopItemPreview ? 'true' : 'false';
         UiToolkitAPI.CloseAllVisiblePopups();
-        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-weapon-preview-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-            '&' + 'inspectonly=true' +
-            '&' + 'allowsave=false' +
-            '&' + 'showallitemactions=false' +
-            '&' + 'showitemcert=true' +
-            '&' + 'workshopPreview=' + workshopPreview);
+        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-weapon-preview-inspect-' + id, 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
         let oSettings = {
             item_id: id,
             inspect_only: true,

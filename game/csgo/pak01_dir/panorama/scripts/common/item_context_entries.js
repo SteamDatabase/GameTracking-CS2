@@ -231,9 +231,7 @@ var ItemContextEntries;
                     (FriendsListAPI.GetFriendLevel(MyPersonaAPI.GetXuid()) >= InventoryAPI.GetMaxLevel()));
             },
             OnSelected: (id) => {
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + '0' +
-                    '&' + 'asyncworkitemwarning=no' +
-                    '&' + 'asyncworktype=prestigecheck');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                 let oSettings = {
                     item_id: '0',
                     show_work_type_warning: false,
@@ -265,8 +263,7 @@ var ItemContextEntries;
             },
             OnSelected: (id) => {
                 if (InventoryAPI.IsRental(id)) {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                        '&' + 'inspectonly=true');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: id,
                         inspect_only: true
@@ -274,8 +271,7 @@ var ItemContextEntries;
                     elPanel.Data().oSettings = oSettings;
                 }
                 else if (ItemInfo.ItemDefinitionNameSubstrMatch(id, 'tournament_pass_')) {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
-                        '&' + 'asyncworktype=decodeable');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_decodable.xml');
                     let oSettings = {
                         item_id: id,
                         work_type: 'decodeable'
@@ -283,8 +279,7 @@ var ItemContextEntries;
                     elPanel.Data().oSettings = oSettings;
                 }
                 else {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                        '&' + 'asyncworktype=useitem');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: id,
                         work_type: 'useitem'
@@ -299,8 +294,7 @@ var ItemContextEntries;
             populateFilter: ['inspect'],
             AvailableForItem: (id) => ItemInfo.IsSpraySealed(id),
             OnSelected: (id) => {
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
-                    '&' + 'asyncworktype=decodeable');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_decodable.xml');
                 let oSettings = {
                     item_id: id,
                     work_type: 'decodeable'
@@ -320,7 +314,7 @@ var ItemContextEntries;
             bActionIsRentalAware: true,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id);
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml');
                 let oSettings = {
                     item_id: id,
                     work_type: 'decodeable',
@@ -356,8 +350,7 @@ var ItemContextEntries;
                         $.DispatchEvent('ShowSelectItemForCapabilityPopup', id, '', 'decodable');
                     }
                     else if (InventoryAPI.GetItemAttributeValue(id, '{uint32}volatile container')) {
-                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml', 'id=' + id +
-                            '&' + 'asyncworktype=decodeable');
+                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_offers_laptop.xml');
                         let oSettings = {
                             item_id: id,
                             work_type: 'decodeable',
@@ -366,8 +359,7 @@ var ItemContextEntries;
                         return;
                     }
                     else {
-                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + id +
-                            '&' + 'asyncworktype=decodeable');
+                        const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_decodable.xml');
                         let oSettings = {
                             item_id: id,
                             work_type: 'decodeable'
@@ -402,8 +394,7 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 if (InventoryAPI.IsRental(id)) {
                     $.DispatchEvent('ContextMenuEvent', '');
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                        '&' + 'inspectonly=true');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: id,
                         inspect_only: true
@@ -414,9 +405,7 @@ var ItemContextEntries;
                     const fauxNameTag = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1200, 0);
                     const noteText = InventoryAPI.GetItemAttributeValue(id, 'modification date') ? 'yourcasket' : 'newcasket';
                     $.DispatchEvent('ContextMenuEvent', '');
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + fauxNameTag + ',' + id +
-                        '&' + 'asyncworktype=nameable' +
-                        '&' + 'asyncworkitemwarningtext=#popup_' + noteText + '_warning');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_nameable.xml');
                     let oSettings = {
                         item_id: id,
                         tool_id: fauxNameTag,
@@ -427,8 +416,7 @@ var ItemContextEntries;
                 }
                 else if (DoesNotHaveChosenActionItems(id, 'nameable')) {
                     const nameTagId = '', itemToNameId = id;
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_nameable.xml', 'nametag-and-itemtoname=' + nameTagId + ',' + itemToNameId +
-                        '&' + 'asyncworktype=nameable');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_nameable.xml');
                     let oSettings = {
                         item_id: itemToNameId,
                         tool_id: nameTagId,
@@ -462,8 +450,7 @@ var ItemContextEntries;
             OnSelected: (id) => {
                 $.DispatchEvent('CSGOPlaySoundEffect', 'sticker_applySticker', 'MOUSE');
                 $.DispatchEvent('ContextMenuEvent', '');
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=,' + id +
-                    '&' + 'asyncworktype=can_wrap_sticker');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
                 let oSettings = {
                     popup_panel: elPanel,
                     item_id: id,
@@ -499,8 +486,7 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_keychain') && InventoryAPI.GetItemKeychainCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'itemid=' + id +
-                    '&' + 'asyncworktype=remove_keychain');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
                 let oSettings = {
                     popup_panel: elPanel,
                     item_id: id,
@@ -561,9 +547,7 @@ var ItemContextEntries;
                 else {
                     const defidxWrapper = InventoryAPI.GetItemDefinitionIndexFromDefinitionName("sticker_display_case");
                     const fauxCasket = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxWrapper, 0);
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + id + ',' + fauxCasket
-                        + '&' +
-                        'asyncworktype=can_wrap_sticker');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + id, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
                     let oSettings = {
                         popup_panel: elPanel,
                         tool_id: id,
@@ -580,8 +564,7 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_sticker') && InventoryAPI.GetItemStickerCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_sticker.xml', 'itemid=' + id +
-                    '&' + 'asyncworktype=remove_sticker');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_can_sticker.xml');
                 let oSettings = {
                     popup_panel: elPanel,
                     item_id: id,
@@ -619,8 +602,7 @@ var ItemContextEntries;
             AvailableForItem: (id) => ItemInfo.ItemHasCapability(id, 'can_patch') && InventoryAPI.GetItemStickerCount(id) > 0,
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_can_patch.xml', 'itemid=' + id +
-                    '&' + 'asyncworktype=remove_patch');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_can_patch.xml');
                 let oSettings = {
                     item_id: id,
                     work_type: 'remove_patch'
@@ -639,8 +621,7 @@ var ItemContextEntries;
             bActionIsRentalAware: true,
             OnSelected: (id) => {
                 if (InventoryAPI.IsRental(id)) {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                        '&' + 'inspectonly=true');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: id,
                         inspect_only: true
@@ -693,9 +674,7 @@ var ItemContextEntries;
                 $.DispatchEvent('ContextMenuEvent', '');
                 const CapDisabledMessage = InventoryAPI.GetItemCapabilityDisabledMessageByIndex(id, 0);
                 if (CapDisabledMessage === "") {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                        '&' + 'asyncworkitemwarning=no' +
-                        '&' + 'asyncworktype=usegift');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: id,
                         show_work_type_warning: false,
@@ -934,13 +913,7 @@ var ItemContextEntries;
                 }
                 else {
                     const fauxCasket = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(1201, 0);
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + fauxCasket
-                        + '&' +
-                        'inspectonly=false'
-                        + '&' +
-                        'asyncworkitemwarning=no'
-                        + '&' +
-                        'storeitemid=' + fauxCasket);
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: fauxCasket,
                         inspect_only: true,
@@ -966,9 +939,7 @@ var ItemContextEntries;
             AvailableForItem: (id) => InventoryAPI.IsDeletable(id),
             OnSelected: (id) => {
                 $.DispatchEvent('ContextMenuEvent', '');
-                const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml', 'itemid=' + id +
-                    '&' + 'asyncworktype=delete' +
-                    '&' + 'asyncworkbtnstyle=Negative');
+                const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                 let oSettings = {
                     item_id: id,
                     override_async_btn_style: 'Negative',

@@ -506,8 +506,7 @@ var LoadoutGrid;
                 let itemId = elDragImage.itemid;
                 let bShuffle = elDragImage.Data().bShuffle;
                 if (ItemInfo.IsSpraySealed(itemId)) {
-                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('', 'file://{resources}/layout/popups/popup_capability_decodable.xml', 'key-and-case=,' + itemId +
-                        '&' + 'asyncworktype=decodeable');
+                    const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_capability_decodable.xml');
                     let oSettings = {
                         item_id: itemId,
                         work_type: 'decodeable'

@@ -245,9 +245,7 @@ var CapabilityCanApplyAction;
             const bAutoAcknowledge = true;
             AcknowledgeItems.GetItemsByType(["sticker_display_case"], bAutoAcknowledge);
             ClosePopUp();
-            const elPanel = UiToolkitAPI.ShowCustomLayoutPopupParameters('popup-inspect-' + ItemId, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml', 'toolid-and-itemid=' + toolId + ',' + ItemId
-                + '&' +
-                'asyncworktype=can_wrap_sticker');
+            const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('popup-inspect-' + ItemId, 'file://{resources}/layout/popups/popup_capability_can_keychain.xml');
             let oSettings = {
                 popup_panel: elPanel,
                 tool_id: toolId,
@@ -258,11 +256,6 @@ var CapabilityCanApplyAction;
         }
     }
     ;
-    function _GetSettingCallback(settingname, defaultvalue) {
-        if (settingname === 'overridepurchasemultiple')
-            return '0';
-        return $.GetContextPanel().GetAttributeString(settingname, defaultvalue);
-    }
     function ClosePopUp() {
         const elAsyncActionBarPanel = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectAsyncBar');
         const elPurchase = $.GetContextPanel().FindChildInLayoutFile('PopUpInspectPurchaseBar');
