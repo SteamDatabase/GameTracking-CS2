@@ -1194,7 +1194,7 @@ var PlayMenu;
                 mapImage.style.backgroundImage = 'url("file://{images}/map_icons/screenshots/720p/' + keysList[i] + '.png")';
             }
             mapImage.style.backgroundPosition = '50% 0%';
-            mapImage.style.backgroundSize = 'clip_then_cover';
+            mapImage.style.backgroundSize = 'auto 100%';
             if (keysList.length > 1) {
                 const mapIconsContainer = p.FindChildInLayoutFile('MapGroupCollectionMultiIcons');
                 mapIconsContainer.SetHasClass('left-right-flow-wrap', numTiles === 1);
