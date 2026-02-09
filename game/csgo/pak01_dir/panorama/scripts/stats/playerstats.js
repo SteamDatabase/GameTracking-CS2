@@ -554,7 +554,7 @@ var playerstats = ( function()
 	
 					                                                                                                                                   
 					labelDesc.SetDialogVariableInt( "days", daysLeft );
-					var daysString = numSecondsTillNextBillingCycle <= ( 24*3600 ) ? $.Localize( '#SFUI_Store_Timer_Day' ) : $.Localize( '#SFUI_Store_Timer_Days' );
+					var daysString = $.ConstructString( '#SFUI_Store_Timer_Day:f', { value: daysLeft } );
 					labelDesc.SetDialogVariable( "daystext", daysString );
 					labelDesc.text = $.Localize( decString, labelDesc );
 				}

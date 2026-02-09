@@ -114,7 +114,7 @@ var RatingEmblem;
                     if (bFullDetails) {
                         ratingDesc = $.Localize('#skillgroup_0' + locTypeModifer);
                         root_panel.SetDialogVariableInt("winsneeded", winsneeded);
-                        tooltipText = $.Localize('#tooltip_skill_group_none' + imagePath, root_panel);
+                        tooltipText = $.Localize('#tooltip_skill_group_none' + imagePath + ':f', root_panel);
                     }
                 }
             }
@@ -191,11 +191,11 @@ var RatingEmblem;
                     else if (bTooFewWins) {
                         let winsneeded = (winsNeededForRank - wins);
                         root_panel.SetDialogVariableInt("winsneeded", winsneeded);
-                        tooltipText = $.Localize('#tooltip_cs_rating_none', root_panel);
-                        eomDescText = $.Localize('#cs_rating_wins_needed_verbose', root_panel);
-                        introText = $.Localize('#cs_rating_wins_needed_verbose_intro', root_panel);
+                        tooltipText = $.Localize('#tooltip_cs_rating_none:f', root_panel);
+                        eomDescText = $.Localize('#cs_rating_wins_needed_verbose:f', root_panel);
+                        introText = $.Localize('#cs_rating_wins_needed_verbose_intro:f', root_panel);
                         if (options.local_player) {
-                            ratingDesc = $.Localize('#cs_rating_wins_needed', root_panel);
+                            ratingDesc = $.Localize('#cs_rating_wins_needed:f', root_panel);
                         }
                         else {
                             ratingDesc = $.Localize('#cs_rating_none');
@@ -218,9 +218,9 @@ var RatingEmblem;
             }
             if (wins) {
                 root_panel.SetDialogVariableInt('wins', wins);
-                let winText = $.Localize('#tooltip_skill_group_wins', root_panel);
+                let winText = $.Localize('#tooltip_skill_group_wins:f', root_panel);
                 tooltipText = (tooltipText !== '') ? tooltipText + '<br><br>' + winText : winText;
-                winCountText = $.Localize('#wins_count', root_panel);
+                winCountText = $.Localize('#wins_count:f', root_panel);
             }
             root_panel.Data().ratingDesc = ratingDesc;
             root_panel.Data().tooltipText = tooltipText;

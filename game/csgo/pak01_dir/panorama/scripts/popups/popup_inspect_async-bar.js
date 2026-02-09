@@ -268,7 +268,7 @@ var InspectAsyncActionBar;
         if (worktype === 'useitem') {
             if (itemDefName && itemDefName.startsWith('Remove Keychain Tool')) {
                 elOK.SetDialogVariableInt('item_count', Number(InventoryAPI.GetItemAttributeValue(itemId, '{uint32}items count')));
-                sOkButtonText = '#popup_useitem_button_getkeychaincharges';
+                sOkButtonText = '#popup_useitem_button_getkeychaincharges:f';
             }
             if (itemDefName && itemDefName.startsWith('XpShopTicket')) {
                 const bHasPrime = FriendsListAPI.GetFriendPrimeEligible(MyPersonaAPI.GetXuid());

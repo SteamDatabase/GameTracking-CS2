@@ -133,8 +133,8 @@ var XpShop;
                             elActivateBtn.SwitchClass('type', 'clear-pass-btn');
                             elActivateBtn.SetDialogVariable('action-text', $.Localize('#xpshop_popup_clear_track_title', elActivateBtn));
                             elActivateBtn.SetDialogVariableInt('completed_tracks_count', numPassesFullyCompleted);
-                            const strMessageTitle = $.Localize('#xpshop_popup_clear_n_tracks', elActivateBtn);
-                            const strMessageText = $.Localize('#xpshop_popup_clear_n_tracks_text', elActivateBtn);
+                            const strMessageTitle = $.Localize('#xpshop_popup_clear_n_tracks:f', elActivateBtn);
+                            const strMessageText = $.Localize('#xpshop_popup_clear_n_tracks_text:f', elActivateBtn);
                             elActivateBtn.SetPanelEvent('onactivate', () => {
                                 UiToolkitAPI.ShowGenericPopupOkCancel(strMessageTitle, strMessageText, '', () => {
                                     StoreAPI.AckXpShopCompletedTracks();
@@ -355,7 +355,7 @@ var XpShop;
                 elPanelLimitedTimer.SetDialogVariableInt('daysremaining', numDaysRemaining);
                 let strTimer = '#SFUI_Store_Offer_Days_Remaining' +
                     ((numDaysRemaining > 0) ? '' : '_last') +
-                    (ShopEntry.bidding_cycle ? '_bid' : '_claim');
+                    (ShopEntry.bidding_cycle ? '_bid:f' : '_claim:f');
                 strTimer = $.Localize(strTimer, elPanelLimitedTimer);
                 elPanelLimitedTimer.SetDialogVariable('limitedtimeleft', strTimer);
             }
@@ -573,7 +573,7 @@ var XpShop;
             let nStarsNeeded = m_activeTracks > 0 ? ((ShopEntry.bidding_cycle ? 1 : parseInt(ShopEntry.points)) - elBalance.Data().balance) : 0;
             RedeemBtn.SetDialogVariableInt('stars_needed', nStarsNeeded);
             let strToolTip = (m_activeTracks < 1) ? '#xpshop_redeem_need_pass_tooltip' :
-                nStarsNeeded > 0 ? $.Localize('#xpshop_redeem_not_enough_stars', RedeemBtn) : '';
+                nStarsNeeded > 0 ? $.Localize('#xpshop_redeem_not_enough_stars:f', RedeemBtn) : '';
             if (strToolTip === '') {
                 return;
             }
@@ -608,7 +608,7 @@ var XpShop;
                         ? 0 : numSecondsSincePrevious);
                     const numHours = Math.floor(numSecondsUntilNextBidOpens / 3600) + 1;
                     RedeemBtn.SetDialogVariableInt('hours_until_bid_batch', numHours);
-                    UiToolkitAPI.ShowGenericPopupOneOptionBgStyle(ShopEntry.callout, $.Localize("#xpshop_redeem_bid_batchover", numHours, RedeemBtn), "", "#UI_OK", () => { }, "dim");
+                    UiToolkitAPI.ShowGenericPopupOneOptionBgStyle(ShopEntry.callout, $.Localize("#xpshop_redeem_bid_batchover:f", RedeemBtn), "", "#UI_OK", () => { }, "dim");
                     return;
                 }
                 if (ShopEntry.flags && ((ShopEntry.flags & 4) === 4)) {

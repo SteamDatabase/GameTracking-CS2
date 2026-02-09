@@ -39,7 +39,7 @@ var ContextMenuGetSouvenir;
         if (_m_redeemsAvailable > 0) {
             elRedeemHeader.visible = true;
             elRedeemHeader.SetDialogVariableInt('redeems', _m_redeemsAvailable);
-            elRedeemHeader.SetDialogVariable('redeems-text', $.Localize('#popup_redeem_souvenir_desc', elRedeemHeader));
+            elRedeemHeader.SetDialogVariable('redeems-text', $.Localize('#popup_redeem_souvenir_desc:f', elRedeemHeader));
         }
         else {
             elRedeemHeader.GetParent().visible = false;

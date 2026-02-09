@@ -14,6 +14,24 @@ var HudDemoController;
         ObserverMode[ObserverMode["OBS_MODE_CHASE"] = 3] = "OBS_MODE_CHASE";
         ObserverMode[ObserverMode["OBS_MODE_ROAMING"] = 4] = "OBS_MODE_ROAMING";
     })(ObserverMode || (ObserverMode = {}));
+    let DemoTimelineEvent;
+    (function (DemoTimelineEvent) {
+        DemoTimelineEvent[DemoTimelineEvent["EDemoTimelineEvent_Kill"] = 0] = "EDemoTimelineEvent_Kill";
+        DemoTimelineEvent[DemoTimelineEvent["EDemoTimelineEvent_Death"] = 1] = "EDemoTimelineEvent_Death";
+        DemoTimelineEvent[DemoTimelineEvent["EDemoTimelineEvent_DamageInflicted"] = 2] = "EDemoTimelineEvent_DamageInflicted";
+        DemoTimelineEvent[DemoTimelineEvent["EDemoTimelineEvent_DamageReceived"] = 3] = "EDemoTimelineEvent_DamageReceived";
+        DemoTimelineEvent[DemoTimelineEvent["EDemoTimelineEvent_TickMarker"] = 4] = "EDemoTimelineEvent_TickMarker";
+    })(DemoTimelineEvent || (DemoTimelineEvent = {}));
+    function TimelineEventToLabel(timelineEvent) {
+        const labels = [
+            "kill",
+            "death",
+            "dealt_damage",
+            "received_damage",
+            "tick"
+        ];
+        return labels[timelineEvent];
+    }
     const timeStepSeconds = 15;
     const cp = $.GetContextPanel();
     cp.SetDialogVariableInt("timestep_value", timeStepSeconds);
@@ -78,7 +96,7 @@ var HudDemoController;
             return;
         }
         const nFinalTick = state.bIsPlayingHighlights && state.HighlightIntervals ?
-            state.HighlightIntervals.at(-1)?.interval.nTickEnd :
+            state.HighlightIntervals.at(-1)?.nTickEnd :
             state.RoundIntervals.at(-1)?.nTickEnd;
         const bStateAtEndOfPlayback = nFinalTick != undefined && state.nTick >= nFinalTick;
         if (bStateAtEndOfPlayback != bAtEndOfPlayback) {
@@ -90,7 +108,7 @@ var HudDemoController;
             }
             bAtEndOfPlayback = bStateAtEndOfPlayback;
         }
-        if (!cp.visible) {
+        if (!cp.visible || !cp.BReadyForDisplay() || !cp.IsSizeValid()) {
             $.Schedule(1, FrameUpdate);
             return;
         }
@@ -152,35 +170,9 @@ var HudDemoController;
                 pMarker.style.width = nWidth + "px";
             }
         }
-        const pHighlightIcons = $("#HighlightIcons");
-        if (nSpectatingPlayerId != state.nSpectatingPlayerId && pHighlightIcons.actuallayoutwidth > 0) {
-            pHighlightIcons.RemoveAndDeleteChildren();
-            DestroyHighlightIntervals();
-            if (state.HighlightIntervals) {
-                const pThumb = $("#SliderThumb");
-                const nThumbWidth = pThumb.actuallayoutwidth / pThumb.actualuiscale_x;
-                const nMarkersWidth = (pHighlightIcons.actuallayoutwidth / pHighlightIcons.actualuiscale_x) - nThumbWidth;
-                for (let iInterval = state.HighlightIntervals.length - 1; iInterval >= 0; --iInterval) {
-                    const highlightInterval = state.HighlightIntervals[iInterval];
-                    for (let iEvent = highlightInterval.events.length - 1; iEvent >= 0; --iEvent) {
-                        const highlightEvent = highlightInterval.events[iEvent];
-                        let nIconTick = highlightEvent.nTick;
-                        if (highlightInterval.events.length == 1 || state.bHighlightsCanBeTagged) {
-                            nIconTick = (highlightInterval.interval.nTickStart + highlightInterval.interval.nTickEnd) / 2;
-                        }
-                        const nHalfIconWidth = 11;
-                        const nLeft = (nIconTick / state.nTotalTicks * nMarkersWidth + nThumbWidth / 2) - nHalfIconWidth;
-                        const sClass = state.bHighlightsCanBeTagged ? "untagged" : highlightEvent.sLabel;
-                        const pIcon = $.CreatePanel("Panel", pHighlightIcons, "", { class: `highlight-icon ${sClass}` });
-                        pIcon.style.marginLeft = nLeft + "px";
-                        pIcon.SetPanelEvent('onactivate', () => OnHighlightButtonToggled(pIcon, iInterval));
-                        if (state.bHighlightsCanBeTagged) {
-                            break;
-                        }
-                    }
-                }
-            }
+        if (nSpectatingPlayerId != state.nSpectatingPlayerId) {
             CreateHighlightIntervals();
+            CreateTimelineEvents();
             nSpectatingPlayerId = state.nSpectatingPlayerId;
             $("#HighlightsButton")?.SetHasClass("hide", !ShouldShowHighlightsButton());
         }
@@ -196,7 +188,7 @@ var HudDemoController;
         if (!slider.mousedown) {
             slider.value = state.nTick;
             cp.SetDialogVariable("current_time", TicksToTimeText(state.nTick, state.nSecondsPerTick, true));
-            cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
+            SetRoundNumberLabel();
         }
         timescale.text = parseFloat(state.fTimeScale.toFixed(4)).toString() + "x";
         const bSettingsVisible = cp.BHasClass("SettingsVisible");
@@ -224,7 +216,7 @@ var HudDemoController;
         if (lastState == null)
             return true;
         cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick, true));
-        cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
+        SetRoundNumberLabel();
         cp.GotoTick(Math.floor(fValue));
         return true;
     });
@@ -232,7 +224,7 @@ var HudDemoController;
         if (lastState == null)
             return true;
         cp.SetDialogVariable("current_time", TicksToTimeText(fValue, lastState.nSecondsPerTick, true));
-        cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
+        SetRoundNumberLabel();
         return true;
     });
     function OnPlayClicked() {
@@ -259,17 +251,17 @@ var HudDemoController;
             return false;
         }
         if (lastState.bIsPlayingHighlights) {
-            if (lastState.HighlightIntervals.length > 0) {
-                const nIntervalIndex = lastState.HighlightIntervals.findIndex(r => r.interval.nTickStart > lastState.nTick) - 1;
+            if (lastState.HighlightIntervals?.length > 0) {
+                const nIntervalIndex = lastState.HighlightIntervals.findIndex(r => r.nTickStart > lastState.nTick) - 1;
                 let nNewInterval = nIntervalIndex + nStep;
                 if (nNewInterval < 0)
                     nNewInterval = 0;
                 else if (nNewInterval > lastState.HighlightIntervals.length - 1)
                     nNewInterval = lastState.HighlightIntervals.length - 1;
-                cp.GotoTick(lastState.HighlightIntervals[nNewInterval].interval.nTickStart);
+                cp.GotoTick(lastState.HighlightIntervals[nNewInterval].nTickStart);
             }
         }
-        else if (lastState.RoundIntervals.length > 0) {
+        else if (lastState.RoundIntervals?.length > 0) {
             const nIntervalIndex = lastState.RoundIntervals.findIndex(r => r.nTickStart > lastState.nTick) - 1;
             let nNewInterval = nIntervalIndex + nStep;
             if (nNewInterval < 0)
@@ -292,46 +284,62 @@ var HudDemoController;
     }
     HudDemoController.OnStopPlayback = OnStopPlayback;
     function OnHighlightsToggle() {
-        let bIsEnabled = !lastState?.bIsPlayingHighlights &&
-            lastState?.HighlightIntervals &&
-            lastState.HighlightIntervals.length > 0;
+        let bIsEnabled = !lastState?.bIsPlayingHighlights;
         cp.SetHighlightsModeEnabled(!!bIsEnabled);
     }
     HudDemoController.OnHighlightsToggle = OnHighlightsToggle;
-    function OnHighlightButtonToggled(pIcon, nIndex) {
-        let bTagged = false;
-        if (lastState?.bHighlightsCanBeTagged) {
-            bTagged = pIcon.BHasClass("untagged");
-            pIcon.SetHasClass("tagged", bTagged);
-            pIcon.SetHasClass("untagged", !bTagged);
-        }
-        cp.OnHighlightSelected(nIndex, bTagged);
-    }
     function ShouldShowHighlightsButton() {
         if (lastState?.bIsOverwatch)
             return false;
-        if (!lastState?.HighlightIntervals)
-            return false;
-        return lastState.HighlightIntervals.length > 0;
+        return true;
     }
     function OnHighlightsModeChanged(bEnabled) {
         cp.SetHasClass("highlightsActive", bEnabled);
         $("#IntervalLabel").text = bEnabled ? $.Localize('#CSGO_Demo_Highlight') : $.Localize('#CSGO_Demo_Round');
+        CreateHighlightIntervals();
+        CreateTimelineEvents();
+        SetRoundNumberLabel();
         return true;
+    }
+    function DestroyTimelineEvents() {
+        const pHighlightIcons = $("#HighlightIcons");
+        pHighlightIcons.RemoveAndDeleteChildren();
+    }
+    function CreateTimelineEvents() {
+        DestroyTimelineEvents();
+        if (!lastState || !lastState.TimelineEvents)
+            return;
+        const pThumb = $("#SliderThumb");
+        const pHighlightIcons = $("#HighlightIcons");
+        const nThumbWidth = pThumb.actuallayoutwidth / pThumb.actualuiscale_x;
+        const nMarkersWidth = (pHighlightIcons.actuallayoutwidth / pHighlightIcons.actualuiscale_x) - nThumbWidth;
+        for (let iEvent = lastState.TimelineEvents.length - 1; iEvent >= 0; --iEvent) {
+            const timelineEvent = lastState.TimelineEvents[iEvent];
+            const nHalfIconWidth = 11;
+            const nLeft = (timelineEvent.nTick / lastState.nTotalTicks * nMarkersWidth + nThumbWidth / 2) - nHalfIconWidth;
+            const sClass = TimelineEventToLabel(timelineEvent.eEventType);
+            const pIcon = $.CreatePanel("Panel", pHighlightIcons, "", { class: `highlight-icon ${sClass}` });
+            pIcon.style.marginLeft = nLeft + "px";
+            const flSkipToTicksBefore = 64 * 2;
+            pIcon.SetPanelEvent('onactivate', () => cp.GotoTick(timelineEvent.nTick - flSkipToTicksBefore));
+        }
     }
     function DestroyHighlightIntervals() {
         const pMarkers = $("#HighlightMarkers");
         pMarkers.RemoveAndDeleteChildren();
     }
     function CreateHighlightIntervals() {
+        DestroyHighlightIntervals();
+        if (!lastState || !lastState.HighlightIntervals)
+            return;
         const pMarkers = $("#HighlightMarkers");
         const pThumb = $("#SliderThumb");
         const nThumbWidth = pThumb.actuallayoutwidth / pThumb.actualuiscale_x;
         const nMarkersWidth = (pMarkers.actuallayoutwidth / pThumb.actualuiscale_x) - nThumbWidth;
         for (let i = 0; i < lastState.HighlightIntervals.length; i++) {
             const highlight = lastState.HighlightIntervals[i];
-            const nStartTick = highlight.interval.nTickStart;
-            const nEndTick = highlight.interval.nTickEnd;
+            const nStartTick = highlight.nTickStart;
+            const nEndTick = highlight.nTickEnd;
             let nLeft = nStartTick / lastState.nTotalTicks * nMarkersWidth + nThumbWidth / 2;
             let nWidth = (nEndTick - nStartTick) / lastState.nTotalTicks * nMarkersWidth;
             const pMarker = $.CreatePanel("Panel", pMarkers, "");
@@ -343,7 +351,7 @@ var HudDemoController;
         if (!lastState)
             return 0;
         if (lastState.bIsPlayingHighlights) {
-            return lastState.nCurrentHighlightInterval + 1;
+            return 0;
         }
         return TicksToRound(lastState.nTick, lastState.RoundIntervals);
     }
@@ -420,4 +428,19 @@ var HudDemoController;
         }
     }
     HudDemoController.ToggleTrueViewWrongVersion = ToggleTrueViewWrongVersion;
+    function SetRoundNumberLabel() {
+        if (lastState && lastState.bIsPlayingHighlights) {
+            var roundNumber = $("#RoundNumber");
+            if (roundNumber) {
+                roundNumber.visible = false;
+            }
+        }
+        else {
+            var roundNumber = $("#RoundNumber");
+            if (roundNumber) {
+                roundNumber.visible = true;
+            }
+            cp.SetDialogVariableInt("round_number", GetCurrentIntervalNumber());
+        }
+    }
 })(HudDemoController || (HudDemoController = {}));

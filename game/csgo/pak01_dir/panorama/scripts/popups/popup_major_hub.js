@@ -350,7 +350,7 @@ var PopupMajorHub;
         _m_cp.SetDialogVariableInt('redeems', m_redeemAvailable);
         let elPanel = _m_cp.FindChildInLayoutFile('id-coin-status-charges');
         elPanel.visible = m_redeemAvailable > 0;
-        let sTooltip = $.Localize('#popup_redeem_souvenir_desc', _m_cp);
+        let sTooltip = $.Localize('#popup_redeem_souvenir_desc:f', _m_cp);
         elPanel.SetPanelEvent('onmouseover', () => { UiToolkitAPI.ShowTextTooltip('id-coin-status-charges', sTooltip); });
         elPanel.SetPanelEvent('onmouseout', () => { UiToolkitAPI.HideTextTooltip(); });
     };

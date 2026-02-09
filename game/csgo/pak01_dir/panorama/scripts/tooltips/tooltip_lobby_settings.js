@@ -59,7 +59,7 @@ var TooltipLobby;
                 totalPlayers *= 2;
                 p.SetDialogVariableInt('total_stat', totalPlayers);
             }
-            p.FindChildInLayoutFile('SettingText').text = $.Localize('#matchmaking_stat_' + statType, p);
+            p.FindChildInLayoutFile('SettingText').text = $.Localize('#matchmaking_stat_' + statType + ':f', p);
             p.FindChildInLayoutFile('SettingImage').SetImage('file://{images}/icons/ui/' + iconName + '.svg');
             p.FindChildInLayoutFile('SettingImage').AddClass('tint');
         }

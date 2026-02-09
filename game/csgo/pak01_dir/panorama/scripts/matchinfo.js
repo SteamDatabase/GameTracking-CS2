@@ -689,7 +689,7 @@ var matchInfo;
         }
         let matchDuration = MatchInfoAPI.GetMatchDuration(elParentPanel.Data().matchId);
         matchDuration = Math.max(Math.floor(matchDuration / 60), 1);
-        elParentPanel.SetDialogVariable('duration', FormatText.FormatPluralLoc('#CSGO_Watch_Minute:p', matchDuration));
+        elParentPanel.SetDialogVariable('duration', $.ConstructString('#CSGO_Watch_Minute:f', { value: matchDuration }));
         if (elParentPanel.Data().matchListDescriptor === 'live') {
             let round = 1 + MatchInfoAPI.GetMatchRoundScoreForTeam(elParentPanel.Data().matchId, 0) + MatchInfoAPI.GetMatchRoundScoreForTeam(elParentPanel.Data().matchId, 1);
             let progressionStateString = '#WatchMenu_FirstHalf';

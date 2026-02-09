@@ -41,7 +41,7 @@ var PopupCommendPlayer;
             else {
                 if (m_elStatus && m_elStatus.IsValid()) {
                     m_elStatus.SetDialogVariableInt("num_token", numTokens);
-                    m_elStatus.text = $.Localize("#Panorama_PlayerDetails_Commendations_Left", numTokens, m_elStatus);
+                    m_elStatus.text = $.Localize("#Panorama_PlayerDetails_Commendations_Left:f", m_elStatus);
                 }
                 m_elCommend.visible = true;
             }

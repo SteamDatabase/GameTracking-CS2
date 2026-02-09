@@ -41,6 +41,11 @@
 		"UserSettingsFileEx"	"cs2_"
 	}
 
+	Localize
+	{
+		DisallowTokenContexts	1
+	}
+
 	Engine2
 	{
 		"DepotBuildDateTimeInTitleBar" "1"

@@ -63,7 +63,7 @@ var EOM_Skillgroup;
                 case 'Wingman':
                 case 'Competitive':
                     let modePrefix = (oData.mode === 'Wingman') ? 'wingman' : 'skillgroup';
-                    oData.old_rating_info = $.Localize('#eom-skillgroup-needed-wins', _m_cP);
+                    oData.old_rating_info = $.Localize('#eom-skillgroup-needed-wins:f', _m_cP);
                     oData.old_image = 'file://{images}/icons/skillgroups/' + modePrefix + '0.svg';
                     break;
                 case 'Premier':
@@ -301,11 +301,11 @@ var EOM_Skillgroup;
         elLabel.SetDialogVariableInt("matcheswon", oData.num_wins);
         switch (oData.mode) {
             case 'Competitive':
-                elLabel.text = $.Localize('#eom-skillgroup-map-win', elLabel);
+                elLabel.text = $.Localize('#eom-skillgroup-map-win:f', elLabel);
                 break;
             case 'Wingman':
             case 'Premier':
-                elLabel.text = $.Localize('#eom-skillgroup-win', elLabel);
+                elLabel.text = $.Localize('#eom-skillgroup-win:f', elLabel);
                 break;
         }
     }

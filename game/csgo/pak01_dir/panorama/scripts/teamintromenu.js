@@ -148,7 +148,7 @@ var TeamIntroMenu;
         const elTeamLabel = $("#TeamIntroTeamLabel");
         if (nOvertime > 0) {
             elHalfLabel.SetDialogVariableInt("overtime_num", nOvertime);
-            elHalfLabel.SetLocString(bFirstHalf ? "#team-intro-overtime-1st-half" : "#team-intro-overtime-2nd-half");
+            elHalfLabel.SetLocString(bFirstHalf ? "#team-intro-overtime-1st-half:f" : "#team-intro-overtime-2nd-half:f");
         }
         else {
             elHalfLabel.SetLocString(bFirstHalf ? "#team-intro-1st-half" : "#team-intro-2nd-half");

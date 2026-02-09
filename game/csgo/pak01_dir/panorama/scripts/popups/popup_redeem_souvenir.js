@@ -47,7 +47,7 @@ var PopupRedeemSouvenir;
         m_redeemsAvailable = redeemsAvailable;
         elLabel.SetDialogVariableInt('redeems', redeemsAvailable);
         elLabel.text = (redeemsAvailable > 1) ?
-            $.Localize('#popup_redeem_souvenir_desc', elLabel) :
+            $.Localize('#popup_redeem_souvenir_desc:f', elLabel) :
             $.Localize('#popup_redeem_souvenir_desc_single', elLabel);
         elLabel.visible = true;
     }

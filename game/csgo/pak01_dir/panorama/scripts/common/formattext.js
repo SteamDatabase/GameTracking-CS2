@@ -13,11 +13,6 @@ var CFormattedText = class {
 };
 var FormatText;
 (function (FormatText) {
-    function FormatPluralLoc(sLocToken, nQuantity, nPrecision = 0) {
-        let sText = $.Localize(sLocToken, nQuantity, nPrecision);
-        return sText.replace(/%s1/g, nQuantity.toFixed(nPrecision));
-    }
-    FormatText.FormatPluralLoc = FormatPluralLoc;
     function SetFormattedTextOnLabel(elLabel, fmtText) {
         if (!elLabel || !elLabel.IsValid()) {
             return;
@@ -59,7 +54,7 @@ var FormatText;
     function SecondsToSignificantTimeString(rawSeconds) {
         rawSeconds = Math.floor(Number(rawSeconds));
         if (rawSeconds < 60)
-            return FormatPluralLoc('#SFUI_Store_Timer_Min:p', 1);
+            return $.ConstructString('#SFUI_Store_Timer_Min:f', { value: 1 });
         const time = ConvertSecondsToDaysHoursMinSec(rawSeconds);
         let timecomponents = ['days', 'hours', 'minutes', 'seconds'];
         for (const idx in timecomponents) {
@@ -69,24 +64,24 @@ var FormatText;
                 break;
             if (value <= 0)
                 continue;
-            let lockey = '#SFUI_Store_Timer_Day:p';
+            let lockey = '#SFUI_Store_Timer_Day:f';
             if (key == 'days') {
                 if (time['hours'] > 16)
                     ++value;
             }
             else if (key == 'hours') {
-                lockey = '#SFUI_Store_Timer_Hour:p';
+                lockey = '#SFUI_Store_Timer_Hour:f';
                 if (time['minutes'] > 40)
                     ++value;
             }
             else if (key == 'minutes') {
-                lockey = '#SFUI_Store_Timer_Min:p';
+                lockey = '#SFUI_Store_Timer_Min:f';
                 if (time['seconds'] > 40)
                     ++value;
             }
-            return FormatPluralLoc(lockey, value);
+            return $.ConstructString(lockey, { value: value });
         }
-        return FormatPluralLoc('#SFUI_Store_Timer_Min:p', 1);
+        return $.ConstructString('#SFUI_Store_Timer_Min:f', { value: 1 });
     }
     FormatText.SecondsToSignificantTimeString = SecondsToSignificantTimeString;
     function ConvertSecondsToDaysHoursMinSec(rawSeconds) {

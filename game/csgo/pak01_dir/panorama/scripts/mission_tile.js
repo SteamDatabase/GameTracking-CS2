@@ -156,7 +156,7 @@ var MissionTile;
         elPanel.SetDialogVariable("mission-xp", totalXp);
         const elDirective = elPanel.FindChildTraverse('mission-main-label');
         if (elDirective) {
-            const token = progress > 0 ? '#mission_directive_progress' : '#mission_directive';
+            const token = progress > 0 ? '#mission_directive_progress:f' : '#mission_directive:f';
             elDirective.SetLocString(token);
         }
         const timeRemaining = FormatText.SecondsToSignificantTimeString(missionData.seconds_remaining);

@@ -84,7 +84,7 @@ var PremierMapWinRecord;
     }
     function _SetTitle(totalWins) {
         const pLabel = $('#jsMapWinsLabel');
-        pLabel.text = FormatText.FormatPluralLoc("#mapwinrecord_graph_title:p", totalWins);
+        pLabel.text = $.ConstructString("#mapwinrecord_graph_title:f", { wins: totalWins });
     }
     function _DrawParty(highlightedPlayerXuid = '') {
         if (LobbyAPI.IsSessionActive()) {

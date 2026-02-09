@@ -145,7 +145,7 @@ var AcknowledgeItems;
                 let defidxForPurchase = InventoryAPI.GetItemDefinitionIndexFromDefinitionName(m_szRemoveKeychainToolChargesForPurchase);
                 let fauxPurchaseItemID = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxForPurchase, 0);
                 elLabel.SetDialogVariableInt('item_count', Number(InventoryAPI.GetItemAttributeValue(fauxPurchaseItemID, '{uint32}items count')));
-                elLabel.text = $.Localize('#CSGO_RemoveKeychainToolCharges_Reward', elLabel);
+                elLabel.text = $.Localize('#CSGO_RemoveKeychainToolCharges_Reward:f', elLabel);
                 elImage.SetImage('file://{images}/icons/ui/keychain_removal.svg');
                 elImage.SetHasClass('popup-acknowledge__subtitle_seticon_tiny', true);
                 elPanel.SetHasClass('hide', false);

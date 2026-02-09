@@ -49,7 +49,7 @@ var Crafting;
                 elLabel.SetDialogVariableInt('count', elItemList.count);
                 if (nRecipeCount >= 0) {
                     elLabel.SetDialogVariableInt('recipecount', nRecipeCount);
-                    elLabel.text = $.Localize((nRecipeCount > 0) ? '#CSGO_Recipe_TradeUp_Items_XofY' : '#CSGO_Recipe_TradeUp_Items_NoSelection', elLabel);
+                    elLabel.text = $.Localize((nRecipeCount > 0) ? '#CSGO_Recipe_TradeUp_Items_XofY:f' : '#CSGO_Recipe_TradeUp_Items_NoSelection', elLabel);
                 }
             }
             _UpdateItemCount('Crafting-Items', 'CraftingItemsText', -1);
