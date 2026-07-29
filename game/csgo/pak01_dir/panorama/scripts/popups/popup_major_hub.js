@@ -213,9 +213,7 @@ var PopupMajorHub;
         const defidxStickerItem = InventoryAPI.GetItemDefinitionIndexFromDefinitionName('sticker');
         const numStickers = 10;
         for (let i = 0; i < numStickers; i++) {
-            const stickerIndex = (i == 4 || i == 5 || i == 8) ?
-                g_ActiveTournamentTeams.filter(team => team.champions.length > 1)[0].champions[getRandomInt(0, 4)].stickerids[getRandomInt(0, 3)] :
-                g_ActiveTournamentTeams[getRandomInt(0, g_ActiveTournamentTeams.length - 1)].players[getRandomInt(0, 4)].stickerids[getRandomInt(0, 3)];
+            const stickerIndex = g_ActiveTournamentTeams[getRandomInt(0, g_ActiveTournamentTeams.length - 1)].players[getRandomInt(0, 4)].rankingids[getRandomInt(0, 2)];
             const itemId = InventoryAPI.GetFauxItemIDFromDefAndPaintIndex(defidxStickerItem, stickerIndex);
             let elDisplay;
             if (i == 2 || i == 8) {

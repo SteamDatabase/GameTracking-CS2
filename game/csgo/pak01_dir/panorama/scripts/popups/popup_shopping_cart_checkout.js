@@ -282,6 +282,9 @@ var PopUpShoppingCartCheckout;
                 itemImage.SetPanelEvent('onactivate', () => {
                     if (getCart(cp) !== ShoppingCart.cart)
                         return;
+                    if (cp.Data().isFromInspect) {
+                        return;
+                    }
                     const elPanel = UiToolkitAPI.ShowCustomLayoutPopup('', 'file://{resources}/layout/popups/popup_inventory_inspect.xml');
                     let oSettings = {
                         item_id: item.id,

@@ -17,7 +17,7 @@ var MainMenuMajorTile;
         _m_cp.SetHasClass('hidden', !bVisible);
         if (!bVisible)
             return;
-        StoreAPI.VolatileShopSubscribe(g_ActiveTournamentInfo.itemid_dynamic_stickers, false);
+        StoreAPI.VolatileShopSubscribe(g_ActiveTournamentInfo.itemid_rankings_stickers, false);
         _m_cp.FindChildInLayoutFile('id-img-open-major-hub').SetPanelEvent('onactivate', OpenMajorHub);
         _m_cp.SetHasClass('major-' + g_ActiveTournamentInfo.eventid.toString(), true);
         _m_cp.FindChildInLayoutFile('id-major-promo-image').SetImage('file://{images}/tournaments/backgrounds/pickem_mainmenu_promo_' + g_ActiveTournamentInfo.eventid + '.psd');
@@ -35,15 +35,14 @@ var MainMenuMajorTile;
                 arrSorted.push({ discount: weeklyPctReductionFromHigh, price: cPrice, fauxid: fauxId });
             };
             g_ActiveTournamentTeams.forEach((tt) => {
-                tt.players.forEach((tp) => tp.stickerids.forEach(fnStickerKit));
-                tt.stickerids.forEach(fnStickerKit);
+                tt.players.forEach((tp) => tp.rankingids.forEach(fnStickerKit));
             });
-            g_ActiveTournamentInfo.stickerids.forEach(fnStickerKit);
+            g_ActiveTournamentInfo.rankingids.forEach(fnStickerKit);
             for (let i = arrSorted.length; i-- > 0;) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [arrSorted[i], arrSorted[j]] = [arrSorted[j], arrSorted[i]];
             }
-            arrSorted.sort((a, b) => b.discount - a.discount);
+            arrSorted.sort((a, b) => b.price - a.price);
             const nBaseIndex = Math.floor(Math.random() * (arrSorted.length / 10));
             let elParent = $.GetContextPanel().FindChildInLayoutFile('id-major-mini-store-carousel');
             const _m_numMiniStoreItemsToShow = 10;
