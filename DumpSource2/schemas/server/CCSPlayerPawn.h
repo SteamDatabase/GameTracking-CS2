@@ -97,6 +97,7 @@ class CCSPlayerPawn : public CCSPlayerPawnBase
 	bool m_bGrenadeParametersStashed;
 	QAngle m_angStashedShootAngles;
 	VectorWS m_vecStashedGrenadeThrowPosition;
+	VectorWS m_vecStashedGrenadeThrowPawnCenter;
 	Vector m_vecStashedVelocity;
 	bool m_bCommittingSuicideOnTeamChange;
 	bool m_wasNotKilledNaturally;

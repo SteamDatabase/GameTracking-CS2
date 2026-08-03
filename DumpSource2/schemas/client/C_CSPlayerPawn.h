@@ -85,6 +85,7 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	bool m_bGrenadeParametersStashed;
 	QAngle m_angStashedShootAngles;
 	VectorWS m_vecStashedGrenadeThrowPosition;
+	VectorWS m_vecStashedGrenadeThrowPawnCenter;
 	Vector m_vecStashedVelocity;
 	bool m_bShouldAutobuyDMWeapons;
 	GameTime_t m_fImmuneToGunGameDamageTime;

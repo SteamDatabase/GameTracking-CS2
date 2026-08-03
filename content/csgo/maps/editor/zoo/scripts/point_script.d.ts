@@ -112,9 +112,11 @@ declare module "cs_script/point_script"
          */
         OnBeginRoundRestart(callback: () => void): void;
         /** Called when a player plants the c4 */
-        OnBombPlant(callback: (event: { plantedC4: Entity, planter: CSPlayerPawn }) => void): void;
+        OnBombPlant(callback: (event: { plantedC4: CSPlantedC4, planter: CSPlayerPawn }) => void): void;
         /** Called when a player defuses the c4 */
-        OnBombDefuse(callback: (event: { plantedC4: Entity, defuser: CSPlayerPawn }) => void): void;
+        OnBombDefuse(callback: (event: { plantedC4: CSPlantedC4, defuser: CSPlayerPawn }) => void): void;
+        /** Called when a c4 explodes */
+        OnBombExplode(callback: (event: { plantedC4: CSPlantedC4 }) => void): void;
         /**
          * Called immediately before a CSPlayerPawn takes damage to armor and health.
          * Called after hitgroup modifications are applied such as headshot multiplier.
@@ -150,11 +152,13 @@ declare module "cs_script/point_script"
          */
         OnBulletImpact(callback: (event: { weapon: CSWeaponBase, position: Vector, hitEntity: Entity }) => void): void;
         /** Called when a weapon is dropped. */
-        OnWeaponDrop(callback: (event: { weapon: CSWeaponBase }) => void): void;
+        OnWeaponDrop(callback: (event: { weapon: CSWeaponBase, dropper: CSPlayerPawn }) => void): void;
+        /** Called when a weapon is picked up. */
+        OnWeaponPickup(callback: (event: { weapon: CSWeaponBase }) => void): void;
         /** Called when a grenade is thrown. `projectile` is the newly created grenade projectile. */
-        OnGrenadeThrow(callback: (event: { weapon: CSWeaponBase, projectile: Entity }) => void): void;
-        /** Called when a grenade bounces off a surface. `bounces` is the number of bounces so far. */
-        OnGrenadeBounce(callback: (event: { projectile: Entity, bounces: number }) => void): void;
+        OnGrenadeThrow(callback: (event: { weapon: CSWeaponBase, projectile: CSGrenadeProjectileBase }) => void): void;
+        /** Called when a grenade bounces. */
+        OnGrenadeBounce(callback: (event: GrenadeBounceEvent) => void): void;
         /** Called when a knife attacks, even if it misses. */
         OnKnifeAttack(callback: (event: { weapon: CSWeaponBase, attackType: CSWeaponAttackType }) => void): void;
 
@@ -186,6 +190,8 @@ declare module "cs_script/point_script"
         TraceSphere(trace: { radius: number } & BaseTraceConfig): TraceResult;
         /** Trace an axis aligned bounding box along a line and detect collisions */
         TraceBox(trace: { mins: Vector, maxs: Vector } & BaseTraceConfig): TraceResult;
+        /** Trace as a player would collide */
+        TracePlayer(trace: PlayerTrace): PlayerTraceResult;
         /** Trace as a bullet and detect hits and damage */
         TraceBullet(trace: BulletTrace): BulletTraceResult[];
 
@@ -208,15 +214,14 @@ declare module "cs_script/point_script"
         /** Set the time remaining in the current round in seconds. */
         SetRoundRemainingTime(time: number): void;
 
+        /** Spawns a live grenade projectile. */
+        SpawnGrenadeProjectile(config: SpawnGrenadeProjectileConfig): CSGrenadeProjectileBase;
+
         /** Issue the specified command to the specified client. */
         ClientCommand(playerSlot: number, command: string): void;
         /** Issue a command. */
         ServerCommand(command: string): void;
-        /**
-         * Creates a console command that will run the specified callback. The command will only work when sv_cheats is true.
-         * @experimental This method is experimental and may experience breaking changes.
-         * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
-         */
+        /** Creates a console command that will run the specified callback. The command will only work when sv_cheats is true. */
         RegisterCheatCommand(name: string, callback: (args: string) => void): void;
 
         /** @deprecated This method will be removed in a future update */
@@ -278,6 +283,15 @@ declare module "cs_script/point_script"
         EQUIPMENT,
         STACKABLEITEM, // Healthshot
         UNKNOWN,
+    }
+
+    export enum CSGrenadeType {
+        HE,
+        FLASHBANG,
+        MOLOTOV,
+        INCENDIARY,
+        DECOY,
+        SMOKE
     }
 
     export enum CSWeaponAttackType {
@@ -428,6 +442,31 @@ declare module "cs_script/point_script"
         hitGroup: CSHitGroup;
     }
 
+    /**
+     * Configuration object for `Instance.TracePlayer`
+     */
+    interface PlayerTrace {
+        start: Vector;
+        /** Leave undefined to just test if `start` is a valid position for the player. */
+        end?: Vector;
+        /** The player moving. Effects hull size and player collision. */
+        player: CSPlayerPawn;
+        /** Configure tracing as a ducked player, effecting the size of the traced Box. Defaults to the player's IsDucked() value. */
+        isDucked?: boolean;
+    }
+
+    /**
+     * Result entry for `Instance.TracePlayer`
+     */
+    interface PlayerTraceResult {
+        fraction: number;
+        end: Vector;
+        didHit: boolean;
+        startedInSolid: boolean;
+        normal: Vector;
+        hitEntity?: Entity;
+    }
+
     interface ModifyPlayerDamageEvent {
         /** The victim that is taking damage */
         player: CSPlayerPawn;
@@ -475,6 +514,43 @@ declare module "cs_script/point_script"
         attacker?: Entity;
         /** The weapon used. For grenades this will not be present because the weapon is often removed before the projectile explodes. */
         weapon?: CSWeaponBase;
+    }
+
+    interface GrenadeBounceEvent {
+        projectile: CSGrenadeProjectileBase;
+        hitEntity: Entity;
+        normal: Vector;
+        /** @deprecated this field will be removed in a future update */
+        bounces: number
+    }
+
+    type SpawnGrenadeProjectileConfig = SpawnGrenadeProjectileConfigWithOwner | SpawnGrenadeProjectileConfigWithoutOwner;
+
+    interface SpawnGrenadeProjectileConfigWithOwner {
+        type: CSGrenadeType;
+        thrower: CSPlayerPawn;
+        /* defaults to 1, full strength. */
+        throwStrength?: number;
+        /* defaults to thrower's throw position */
+        position?: Vector;
+        /* defaults to {0,0,0} */
+        angles?: QAngle;
+        /* defaults to thrower's throw velocity */
+        velocity?: Vector;
+        /* defaults to a {600,rand(-1200,1200),0} */
+        angularVelocity?: RotationVector;
+    }
+
+    interface SpawnGrenadeProjectileConfigWithoutOwner {
+        type: CSGrenadeType;
+        /* position is required if no thrower is specified */
+        position: Vector;
+        /* defaults to {0,0,0} */
+        angles?: QAngle;
+        /* defaults to {0,0,0} */
+        velocity?: Vector;
+        /* defaults to {0,0,0} */
+        angularVelocity?: RotationVector;
     }
 
     /**
@@ -587,6 +663,26 @@ declare module "cs_script/point_script"
         GetPenetration(): number;
     }
 
+    export class CSGrenadeProjectileBase extends BaseModelEntity {
+        GetThrower(): CSPlayerPawn;
+        GetGrenadeType(): CSGrenadeType;
+        Detonate(): void;
+    }
+
+    export class CSPlantedC4 extends BaseModelEntity {
+        IsBombsiteA(): boolean;
+        IsBombsiteB(): boolean;
+        GetPlanter(): CSPlayerPawn | undefined;
+        GetDefuser(): CSPlayerPawn | undefined;
+        IsActive(): boolean;
+        IsExploded(): boolean;        
+        IsDefused(): boolean;
+        GetPlantTime(): number;
+        GetExplodeTime(): number | undefined; // undefined if not active
+        GetDefuseStartTime(): number | undefined; // undefined if not defusing
+        GetDefuseFinishTime(): number | undefined; // undefined if not defusing
+    }
+
     export class CSPlayerController extends Entity {
         GetPlayerSlot(): number;
         GetPlayerName(): string;
@@ -640,6 +736,8 @@ declare module "cs_script/point_script"
         SetArmor(value: number): void;
         HasHelmet(): boolean;
         SetHasHelmet(hasHelmet: boolean): void;
+        HasDefuser(): boolean;
+        SetHasDefuser(hasDefuser: boolean): void;
         IsDucking(): boolean;
         IsDucked(): boolean;
         IsScoped(): boolean;
