@@ -1496,6 +1496,10 @@ var MainMenu;
     function _OnGcHelloReceived() {
         _CheckPopupNotificationsAtLogon();
         _UpdateUnlockCompAlert();
+        VacNetAPI.UpdateReviewerInfo();
+    }
+    function _OnReviewInfoRecieved(bHasAccess) {
+        $.GetContextPanel().SetHasClass('show-vacnet-link', bHasAccess);
     }
     function _UpdateUnlockCompAlert() {
         const btn = $.GetContextPanel().FindChildInLayoutFile('MainMenuNavBarPlay');
@@ -1667,5 +1671,6 @@ var MainMenu;
         $.RegisterForUnhandledEvent('ShowFullScreenOpaquePopup', _OnShowFullScreenOpaquePopup);
         $.RegisterForUnhandledEvent('CloseAllFullScreenOpaquePopups', _OnCloseAllFullScreenOpaquePopups);
         $.RegisterForUnhandledEvent("CSGOWorkshopAnnotationSubscriptionsChanged", () => _SetupAnnotationOptions(true));
+        $.RegisterForUnhandledEvent('VacNet_OnReviewerInfoReceived', _OnReviewInfoRecieved);
     }
 })(MainMenu || (MainMenu = {}));
