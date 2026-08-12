@@ -17,7 +17,7 @@
 //	"pitch": 0,
 //	"spinupsav": 0,
 //	"spindownsav": 0,
-//	"pitchfrac": 679370730,
+//	"pitchfrac": -1710399414,
 //	"vol": 32763,
 //	"fadeinsav": 0,
 //	"fadeoutsav": 0,
