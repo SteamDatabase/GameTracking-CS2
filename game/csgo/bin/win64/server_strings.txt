@@ -101,10 +101,8 @@
  ' ) - 3 G M Q _ c e i w } 
  (%ld unused bits)\n
  (08@HPX`j
- (08@HPXbP/
+ (08@HPXb`<
  (08@HPZ
- (08@HRP/
- (0X`hpzP/
  (Dirty Animation)
  (Disabled on Server)
  (INVALID PSS PARAMETERS)\n
@@ -1901,6 +1899,7 @@ $tH@T\tI
 (\v2\v.CMsgVector*B\n
 (ammo:number)
 (amount:number)
+(anonymous)
 (callback: function)
 (className: string)
 (color)
@@ -1914,12 +1913,14 @@ $tH@T\tI
 (config:{target: Entity, input: string, value:any, caller:Entity, activator:Entity, delay:number})
 (config:{text: string, x: number, y: number, duration: number, color: Color})
 (connectionId:number)
+(controlling: boolean)
 (d4t8
 (damage: number, info?: Object)
 (data: string)
 (debug)
 (default)
-(f 7Y
+(delay: number)
+(enabled: boolean)
 (fS{ggRcjh
 (from angle, to angle, time) - Spherical lerp of angle from->to based on time
 (hInflictor, hAttacker, flDamage) - Allocate a damageinfo object, used as an argument to TakeDamage(). Call DestroyDamageInfo( hInfo ) to free the object.
@@ -1936,6 +1937,7 @@ $tH@T\tI
 (jvg;
 (mode: number)
 (modelName:string)
+(moveType: CSMoveType)
 (name: string)
 (name: string, autoDeploy?: boolean )
 (name: string, callback: function)
@@ -1945,9 +1947,15 @@ $tH@T\tI
 (newValues:object)
 (null entity)
 (owner:Entity)
+(panelId: string, className: string, hasClass?: boolean )
+(panelId: string, variableName: string, value?: string )
 (parent %d)
 (parent:Entity)
 (partial match ok)
+(playerSlot: number)
+(playerSlot: number, enabled: boolean)
+(playerSlot: number, panelId: string, className: string, hasClass?: boolean )
+(playerSlot: number, panelId: string, variableName: string, value?: string )
 (quaternion,quaternion,float) very basic interpolation of v0 to v1 over t on [0,1]
 (quaternion,vector,float) rotates a quaternion by the specified angle around the specified vector axis
 (scale:number)
@@ -2004,7 +2012,6 @@ $tH@T\tI
 *** COMPILE ERROR ***
 *** PANIC ***\n
 *** Test failure: "%s"
-***** TOO MANY NODES ADDED. SKIPPING. *****
 ******************************************************************\n
 ******************************************************************\nGRAPH PARAMETERS FOR: %s \n
 *,vJEd
@@ -2240,7 +2247,6 @@ $tH@T\tI
 ... and no start position
 ....................
 ..uR5&m
-.0AY
 .4bb
 .97yY
 .?AU?$default_delete@VCNavGenPolyProcessorStageBase@@@std@@
@@ -2438,6 +2444,8 @@ $tH@T\tI
 .?AUDebugSnapshotBaseStructuredData_t@@
 .?AUEntityRenderAttribute_t@@
 .?AUGameAmmoTypeInfo_t@@
+.?AUHUDPanelDialogVariableString_t@@
+.?AUHUDPanelHasClass_t@@
 .?AUIVTableIndexCalculator@@
 .?AUMapStructedDataByEntity_t@CDebugSnapshotFrame_t@@
 .?AUPhysicsRagdollPose_t@@
@@ -3048,6 +3056,7 @@ $tH@T\tI
 .?AV?$CEntitySpawner@VCBaseModelEntity@@@@
 .?AV?$CEntitySpawner@VCBeam@@@@
 .?AV?$CEntitySpawner@VCCSObserverPawn@@@@
+.?AV?$CEntitySpawner@VCCSPlayerCamera@@@@
 .?AV?$CEntitySpawner@VCCSPlayerController@@@@
 .?AV?$CEntitySpawner@VCCSPlayerPawn@@@@
 .?AV?$CEntitySpawner@VCCashStack@@@@
@@ -3087,6 +3096,7 @@ $tH@T\tI
 .?AV?$CEntitySpawnerBase@VCBaseModelEntity@@@@
 .?AV?$CEntitySpawnerBase@VCBeam@@@@
 .?AV?$CEntitySpawnerBase@VCCSObserverPawn@@@@
+.?AV?$CEntitySpawnerBase@VCCSPlayerCamera@@@@
 .?AV?$CEntitySpawnerBase@VCCSPlayerController@@@@
 .?AV?$CEntitySpawnerBase@VCCSPlayerPawn@@@@
 .?AV?$CEntitySpawnerBase@VCCashStack@@@@
@@ -3252,6 +3262,7 @@ $tH@T\tI
 .?AV?$CHandle@VCCSObserverPawn@@@@
 .?AV?$CHandle@VCCSPlayerController@@@@
 .?AV?$CHandle@VCCSPlayerPawn@@@@
+.?AV?$CHandle@VCCSPlayerPawnBase@@@@
 .?AV?$CHandle@VCCSWeaponBase@@@@
 .?AV?$CHandle@VCColorCorrection@@@@
 .?AV?$CHandle@VCEconWearable@@@@
@@ -3323,6 +3334,7 @@ $tH@T\tI
 .?AV?$CNetMessagePB@$0BID@VCCSUsrMsg_RecurringMissionSchema@@$0N@$00$00@@
 .?AV?$CNetMessagePB@$0BIE@VCCSUsrMsg_SendPlayerLoadout@@$0N@$00$00@@
 .?AV?$CNetMessagePB@$0BIF@VCCSUsrMsg_WeaponMagDrop@@$0N@$00$00@@
+.?AV?$CNetMessagePB@$0BIG@VCCSUsrMsg_CustomHudClicked@@$0N@$00$00@@
 .?AV?$CNetMessagePB@$0BJA@VCMsgTEEffectDispatch@@$04$0A@$00@@
 .?AV?$CNetMessagePB@$0BJB@VCMsgTEArmorRicochet@@$04$0A@$00@@
 .?AV?$CNetMessagePB@$0BJC@VCMsgTEBeamEntPoint@@$04$0A@$00@@
@@ -3503,6 +3515,7 @@ $tH@T\tI
 .?AV?$CNetworkHandleBase@VCCSPlayerPawn@@VNetworkVar_m_hPlayerPawn@CCSPlayerController@@@@
 .?AV?$CNetworkHandleBase@VCCSPlayerPawn@@VNetworkVar_m_hPrevOwner@CCSWeaponBase@@@@
 .?AV?$CNetworkHandleBase@VCCSPlayerPawn@@VNetworkVar_m_leader@CChicken@@@@
+.?AV?$CNetworkHandleBase@VCCSPlayerPawnBase@@VNetworkVar_m_hPawn@CCSPlayerCamera@@@@
 .?AV?$CNetworkHandleBase@VCCSWeaponBase@@VNetworkVar_m_hSwitchToWeaponAfterThrow@CBaseCSGrenade@@@@
 .?AV?$CNetworkHandleBase@VCColorCorrection@@VNetworkVar_m_hColorCorrectionCtrl@CPlayer_CameraServices@@@@
 .?AV?$CNetworkHandleBase@VCFogController@@VNetworkVar_m_hCtrl@fogplayerparams_t@@@@
@@ -3536,6 +3549,8 @@ $tH@T\tI
 .?AV?$CNetworkUtlVectorBase@GVNetworkVar_m_VisClusters@CBarnLight@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@HVNetworkVar_m_nBodyGroupChoices@CModelState@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@MVNetworkVar_m_PathNodes_RadiusScale@CPathParticleRope@@$0?0H@@
+.?AV?$CNetworkUtlVectorBase@UHUDPanelDialogVariableString_t@@VNetworkVar_m_vecDialogVariableStrings@CCSCustomHudLayoutState@@$0?0H@@
+.?AV?$CNetworkUtlVectorBase@UHUDPanelHasClass_t@@VNetworkVar_m_vecHasClasses@CCSCustomHudLayoutState@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@USoundeventPathCornerPairNetworked_t@@VNetworkVar_m_vecCornerPairsNetworked@CSoundEventPathCornerEntity@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@V?$CHandle@VCBaseAnimGraph@@@@VNetworkVar_m_vecSecondarySkeletons@CBaseAnimGraphController@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@V?$CHandle@VCBaseEntity@@@@VNetworkVar_m_hConveyorModels@CFuncConveyor@@$0?0H@@
@@ -3562,6 +3577,9 @@ $tH@T\tI
 .?AV?$CNetworkUtlVectorBase@VCUtlString@@VNetworkVar_m_LightStyleEvents@CBarnLight@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@VCUtlString@@VNetworkVar_m_QueuedLightStyleStrings@CBarnLight@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@VCUtlString@@VNetworkVar_m_WeaponSequence@CCSGameModeRules_ArmsRace@@$0?0H@@
+.?AV?$CNetworkUtlVectorBase@VCUtlString@@VNetworkVar_m_vecClassNames@CCSCustomHudLayout@@$0?0H@@
+.?AV?$CNetworkUtlVectorBase@VCUtlString@@VNetworkVar_m_vecDialogVariableNames@CCSCustomHudLayout@@$0?0H@@
+.?AV?$CNetworkUtlVectorBase@VCUtlString@@VNetworkVar_m_vecPanelIds@CCSCustomHudLayout@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@VCUtlSymbolLarge@@VNetworkVar_m_AssociatedEntityNames@ActiveModelConfig_t@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@VCUtlSymbolLarge@@VNetworkVar_m_vecCSSClasses@CInfoOffscreenPanoramaTexture@@$0?0H@@
 .?AV?$CNetworkUtlVectorBase@VCUtlSymbolLarge@@VNetworkVar_m_vecCSSClasses@CPointClientUIWorldPanel@@$0?0H@@
@@ -4456,6 +4474,7 @@ $tH@T\tI
 .?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_iszTitle@CPointCommentaryNode@@@@
 .?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_layerName@CInfoWorldLayer@@@@
 .?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_source@CFootstepControl@@@@
+.?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_strLayout@CCSCustomHudLayout@@@@
 .?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_szClan@CCSPlayerController@@@@
 .?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_szCrosshairCodes@CCSPlayerController@@@@
 .?AV?$CNetworkVarBase@VCUtlSymbolLarge@@VNetworkVar_m_szDisplayText@CBaseButton@@@@
@@ -4680,6 +4699,7 @@ $tH@T\tI
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnableIndirect@CEnvVolumetricFogController@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnabled@CBarnLight@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnabled@CBaseClientUIEntity@@@@
+.?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnabled@CCSPlayerCamera@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnabled@CColorCorrection@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnabled@CEnvSky@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bEnabled@CFuncMonitor@@@@
@@ -4736,9 +4756,11 @@ $tH@T\tI
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bIndirectUseLPVs@CEnvVolumetricFogVolume@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bInitialized@CEconItemView@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bInitiallyPopulateInterpHistory@CBaseAnimGraph@@@@
+.?AV?$CNetworkVarBase@_NVNetworkVar_m_bInputCaptureEnabled@CCSCustomHudLayoutState@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bInspectPending@CCSWeaponBase@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bInspectShouldLoop@CCSWeaponBase@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bIsBuyMenuOpen@CCSPlayerPawn@@@@
+.?AV?$CNetworkVarBase@_NVNetworkVar_m_bIsControllingAngles@CCSPlayerCamera@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bIsDefusing@CCSPlayerPawn@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bIsDroppingItems@CCSGameRules@@@@
 .?AV?$CNetworkVarBase@_NVNetworkVar_m_bIsEnabled@CGradientFog@@@@
@@ -5117,6 +5139,7 @@ $tH@T\tI
 .?AV?$CUserMessagePB@$0BIB@VCCSUsrMsg_CounterStrafe@@$00@@
 .?AV?$CUserMessagePB@$0BIE@VCCSUsrMsg_SendPlayerLoadout@@$00@@
 .?AV?$CUserMessagePB@$0BIF@VCCSUsrMsg_WeaponMagDrop@@$00@@
+.?AV?$CUserMessagePB@$0BIG@VCCSUsrMsg_CustomHudClicked@@$00@@
 .?AV?$CUserMessagePB@$0GF@VCUserMessageAchievementEvent@@$00@@
 .?AV?$CUserMessagePB@$0GI@VCUserMessageCurrentTimescale@@$00@@
 .?AV?$CUserMessagePB@$0GJ@VCUserMessageDesiredTimescale@@$00@@
@@ -5156,6 +5179,8 @@ $tH@T\tI
 .?AV?$CUtlVector@GHV?$CNetworkUtlVector_MemoryType@G$0?0@@@@
 .?AV?$CUtlVector@HHV?$CNetworkUtlVector_MemoryType@H$0?0@@@@
 .?AV?$CUtlVector@MHV?$CNetworkUtlVector_MemoryType@M$0?0@@@@
+.?AV?$CUtlVector@UHUDPanelDialogVariableString_t@@HV?$CNetworkUtlVector_MemoryType@UHUDPanelDialogVariableString_t@@$0?0@@@@
+.?AV?$CUtlVector@UHUDPanelHasClass_t@@HV?$CNetworkUtlVector_MemoryType@UHUDPanelHasClass_t@@$0?0@@@@
 .?AV?$CUtlVector@USoundeventPathCornerPairNetworked_t@@HV?$CNetworkUtlVector_MemoryType@USoundeventPathCornerPairNetworked_t@@$0?0@@@@
 .?AV?$CUtlVector@V?$CHandle@VCBaseAnimGraph@@@@HV?$CNetworkUtlVector_MemoryType@V?$CHandle@VCBaseAnimGraph@@@@$0?0@@@@
 .?AV?$CUtlVector@V?$CHandle@VCBaseEntity@@@@HV?$CNetworkUtlVector_MemoryType@V?$CHandle@VCBaseEntity@@@@$0?0@@@@
@@ -5183,6 +5208,7 @@ $tH@T\tI
 .?AV?$CUtlVectorEmbeddedNetworkVar@UServerAuthoritativeWeaponSlot_t@@VNetworkVar_m_vecServerAuthoritativeWeaponSlots@CCSPlayerController_InventoryServices@@$0?0H@@
 .?AV?$CUtlVectorEmbeddedNetworkVar@UViewAngleServerChange_t@@VNetworkVar_m_ServerViewAngleChanges@CBasePlayerPawn@@$0?0H@@
 .?AV?$CUtlVectorEmbeddedNetworkVar@UWeaponPurchaseCount_t@@VNetworkVar_m_weaponPurchases@WeaponPurchaseTracker_t@@$0?0H@@
+.?AV?$CUtlVectorEmbeddedNetworkVar@VCCSCustomHudLayoutState@@VNetworkVar_m_vecPlayerLayoutStates@CCSCustomHudLayout@@$0?0H@@
 .?AV?$CUtlVectorEmbeddedNetworkVar@VCDamageRecord@@VNetworkVar_m_DamageList@CCSPlayerController_DamageServices@@$0?0H@@
 .?AV?$CUtlVectorEmbeddedNetworkVar@VCEconItemAttribute@@VNetworkVar_m_Attributes@CAttributeList@@$0?0H@@
 .?AV?$CVDataFileManager@VCDecalGroupVData@@@@
@@ -5841,6 +5867,8 @@ $tH@T\tI
 .?AVCCSBot@@
 .?AVCCSBotManager@@
 .?AVCCSChickenManager@@
+.?AVCCSCustomHudLayout@@
+.?AVCCSCustomHudLayoutState@@
 .?AVCCSEntitySpotting@@
 .?AVCCSEventLog@@
 .?AVCCSFatDemoRecorder@@
@@ -5887,6 +5915,7 @@ $tH@T\tI
 .?AVCCSPlace@@
 .?AVCCSPlayerAnimationState@@
 .?AVCCSPlayerBase_CameraServices@@
+.?AVCCSPlayerCamera@@
 .?AVCCSPlayerController@@
 .?AVCCSPlayerController_ActionTrackingServices@@
 .?AVCCSPlayerController_DamageServices@@
@@ -5948,6 +5977,8 @@ $tH@T\tI
 .?AVCCSUsrMsg_CurrentRoundOdds@@
 .?AVCCSUsrMsg_CurrentRoundOdds_t@@
 .?AVCCSUsrMsg_CurrentTimescale@@
+.?AVCCSUsrMsg_CustomHudClicked@@
+.?AVCCSUsrMsg_CustomHudClicked_t@@
 .?AVCCSUsrMsg_Damage@@
 .?AVCCSUsrMsg_DamagePrediction@@
 .?AVCCSUsrMsg_Damage_t@@
@@ -7321,6 +7352,7 @@ $tH@T\tI
 .?AVCProtobufBinding@?$CNetMessagePB@$0BID@VCCSUsrMsg_RecurringMissionSchema@@$0N@$00$00@@
 .?AVCProtobufBinding@?$CNetMessagePB@$0BIE@VCCSUsrMsg_SendPlayerLoadout@@$0N@$00$00@@
 .?AVCProtobufBinding@?$CNetMessagePB@$0BIF@VCCSUsrMsg_WeaponMagDrop@@$0N@$00$00@@
+.?AVCProtobufBinding@?$CNetMessagePB@$0BIG@VCCSUsrMsg_CustomHudClicked@@$0N@$00$00@@
 .?AVCProtobufBinding@?$CNetMessagePB@$0BJA@VCMsgTEEffectDispatch@@$04$0A@$00@@
 .?AVCProtobufBinding@?$CNetMessagePB@$0BJB@VCMsgTEArmorRicochet@@$04$0A@$00@@
 .?AVCProtobufBinding@?$CNetMessagePB@$0BJC@VCMsgTEBeamEntPoint@@$04$0A@$00@@
@@ -8262,6 +8294,7 @@ $tH@T\tI
 .?AVNetworkVar_m_entitySpottedState@CHostage@@
 .?AVNetworkVar_m_entitySpottedState@CPlantedC4@@
 .?AVNetworkVar_m_fog@CFogController@@
+.?AVNetworkVar_m_globalLayoutState@CCSCustomHudLayout@@
 .?AVNetworkVar_m_glovesItem@CCSGO_TeamPreviewCharacterPosition@@
 .?AVNetworkVar_m_hParent@CGameSceneNode@@
 .?AVNetworkVar_m_matchStats@CCSPlayerController_ActionTrackingServices@@
@@ -8367,6 +8400,7 @@ $tH@T\tI
 .?AW4CSPlayerState@@
 .?AW4CSWeaponMode@@
 .?AW4DoorState_t@@
+.?AW4EHudPanelClassStatus_t@@
 .?AW4EKillTypes_t@@
 .?AW4EntityDissolveType_t@@
 .?AW4EntityPlatformTypes_t@@
@@ -8836,7 +8870,6 @@ $tH@T\tI
 02V8[
 05=k
 08@HR
-08@JP/
 08bX
 09,h
 0;Q5[
@@ -8846,6 +8879,7 @@ $tH@T\tI
 0M2~@p
 0Mc\t\n
 0W/5
+0XyU
 0Z@q
 0\n+k_EGCItemCustomizationNotification_NameItem
 0\n+k_EMsgGCCStrike15_v2_AccountPrivacySettings
@@ -8866,6 +8900,7 @@ $tH@T\tI
 0\r%0h
 0\r0#0)070;0U0Y0[0g0q0y0}0
 0e\r8
+0l%Z
 0pp@5tqE?|sO541
 0tU+xc:
 0x%s
@@ -8873,7 +8908,6 @@ $tH@T\tI
 0|2;#GameUI_Retake_Card_BlindFire,1,0,weapon_elite,grenade0|2;#GameUI_Retake_Card_QueOta,0,0,weapon_deagle|1;#GameUI_Retake_Card_SmokeScreen,0,0,weapon_p250,grenade1|1;#GameUI_Retake_Card_TecTecBoom,0,0,weapon_tec9,grenade2
 0|2;#GameUI_Retake_Card_OlReliable,1,1,rifle1,grenade0|1;#GameUI_Retake_Card_SmokeShow,1,1,rifle1,grenade1|1;#GameUI_Retake_Card_HotShot,1,1,rifle1,grenade3|1;#GameUI_Retake_Card_EyeSpy,1,1,weapon_sg556,grenade2
 0|3;#GameUI_Retake_Card_4BadGuysLeft,1,0,secondary0|1;#GameUI_Retake_Card_LookAway,0,0,secondary0,grenade0;#GameUI_Retake_Card_WhenThereIsSmoke,0,0,secondary0,grenade1
-0|kS
 0}dV
 1!1'1-191C1E1K1]1a1g1m1s1
 1,1,2
@@ -8952,8 +8986,9 @@ $tH@T\tI
 2\n.eRollType
 2\n\nline_items
 2\rlhp
-2\vpt
+2\vpl%Z
 2^pV
+2`GU
 2a"l
 2bT~
 2cb:RO
@@ -9030,8 +9065,9 @@ $tH@T\tI
 4\n0GAME_PARTICLE_MANAGER_EVENT_SET_SHOULD_CHECK_FOW
 4\re4h#
 4\vU44
+4a\v6;
 4f h
-4t\n7
+4t\nG
 4tpD
 4zj@1;IJ
 4|2;#GameUI_Retake_Card_LightEmUp,1,1,rifle1,grenade0|2;#GameUI_Retake_Card_Kobe,1,1,rifle1,grenade2|1;#GameUI_Retake_Card_1g,1,1,rifle1,grenade3|1;#GameUI_Retake_Card_DisappearingAct,1,1,rifle1,grenade1|1;#GameUI_Retake_Card_EyesOnTarget,1,1,weapon_aug
@@ -9075,24 +9111,24 @@ $tH@T\tI
 5s\nl
 5t?F
 5~EW
-6 3Y
-6 EY
 6#6165676;6M6O6S6Y6a6k6m6
 6#RDP#
 6%vi
 6,2K
 6-zeZ
-60'Y
-60)Y
+606[
+60H[
+60R[
+60V[
 62$|S)6f
 64CK\vH
-6666666666666666
 666666666666666666666666666666666666666666666666\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.\ssl\s3_enc.c
+6666666666666666P
 67-s
-6@HY
-6@NY
 6H,N
 6O|T%
+6P0[
+6PD[
 6Qd=
 6\n1k_EGCItemCustomizationNotification_CasketContents
 6\n1k_EGCItemCustomizationNotification_ExtractSticker
@@ -9115,7 +9151,6 @@ $tH@T\tI
 6l13
 6lkc
 6myY;
-6pNY
 6qo~
 6r-m_v
 6r1ij
@@ -9133,7 +9168,6 @@ $tH@T\tI
 7GNW^c-<ER]c"09IYc
 7HOX_c.5AQ[c#(4FWc
 7OsR
-7Set Light Enabled
 7W}2
 7XRJ
 7\n2k_EGCItemCustomizationNotification_XpShopAckTracks
@@ -9162,7 +9196,9 @@ $tH@T\tI
 8<pl
 8= zp
 8??SetInternalFieldCount@ObjectTemplate@v8@@QEAAXH@Z
+8?PerformMicrotaskCheckpoint@Isolate@v8@@QEAAXXZ
 8A6j
+8F 8[
 8GZS
 8SIffK5W
 8TZvrv<
@@ -9357,7 +9393,6 @@ $tH@T\tI
 >fN46R^
 >l\rur
 >p00<
->p2Y
 >yhP
 >ztq
 ?33s?
@@ -9365,10 +9400,12 @@ $tH@T\tI
 ??0CFunctionInfo@v8@@QEAA@AEBVCTypeInfo@1@IPEBV21@W4Int64Representation@01@@Z
 ??0HandleScope@v8@@QEAA@PEAVIsolate@1@@Z
 ??0TryCatch@v8@@QEAA@PEAVIsolate@1@@Z
+??0Utf8Value@String@v8@@QEAA@PEAVIsolate@2@V?$Local@VValue@v8@@@2@@Z
 ??1CachedData@ScriptCompiler@v8@@QEAA@XZ
 ??1ConsumeCodeCacheTask@ScriptCompiler@v8@@QEAA@XZ
 ??1HandleScope@v8@@QEAA@XZ
 ??1TryCatch@v8@@QEAA@XZ
+??1Utf8Value@String@v8@@QEAA@XZ
 ??SetSyntheticModuleExport@Module@v8@@QEAA?AV?$Maybe@_N@2@PEAVIsolate@2@V?$Local@VString@v8@@@2@V?$Local@VValue@v8@@@2@@Z
 ?BooleanValue@Value@v8@@QEBA_NPEAVIsolate@2@@Z
 ?CEntityIOOutput
@@ -9387,15 +9424,26 @@ $tH@T\tI
 ?Get@Object@v8@@QEAA?AV?$MaybeLocal@VValue@v8@@@2@V?$Local@VContext@v8@@@2@V?$Local@VValue@v8@@@2@@Z
 ?GetCurrent@Isolate@v8@@SAPEAV12@XZ
 ?GetCurrentContext@Isolate@v8@@QEAA?AV?$Local@VContext@v8@@@2@XZ
+?GetFrame@StackTrace@v8@@QEBA?AV?$Local@VStackFrame@v8@@@2@PEAVIsolate@2@I@Z
+?GetFrameCount@StackTrace@v8@@QEBAHXZ
 ?GetFunction@FunctionTemplate@v8@@QEAA?AV?$MaybeLocal@VFunction@v8@@@2@V?$Local@VContext@v8@@@2@@Z
+?GetFunctionName@StackFrame@v8@@QEBA?AV?$Local@VString@v8@@@2@XZ
 ?GetIsolate@Context@v8@@QEAAPEAVIsolate@2@XZ
 ?GetLineNumber@Message@v8@@QEBA?AV?$Maybe@H@2@V?$Local@VContext@v8@@@2@@Z
+?GetLocation@StackFrame@v8@@QEBA?AVLocation@2@XZ
+?GetMicrotaskQueue@Context@v8@@QEAAPEAVMicrotaskQueue@2@XZ
 ?GetPromise@Resolver@Promise@v8@@QEAA?AV?$Local@VPromise@v8@@@3@XZ
+?GetScriptName@StackFrame@v8@@QEBA?AV?$Local@VString@v8@@@2@XZ
+?GetStackTrace@Exception@v8@@SA?AV?$Local@VStackTrace@v8@@@2@V?$Local@VValue@v8@@@2@@Z
+?GetStackTrace@Message@v8@@QEBA?AV?$Local@VStackTrace@v8@@@2@XZ
+?GetStartColumn@Message@v8@@QEBA?AV?$Maybe@H@2@V?$Local@VContext@v8@@@2@@Z
 ?GlobalizeReference@api_internal@v8@@YAPEA_KPEAVIsolate@internal@2@_K@Z
 ?HAI\t81\t9dcG'
 ?HP4
 ?HasCaught@TryCatch@v8@@QEBA_NXZ
+?How much we scale physics impacts against the ragdoll.
 ?No data
+?SaveRestoreIO
 ?VBH;
 ?\n:k_EMsgGCCStrike15_v2_Client2GCEconPreviewDataBlockResponse
 ?\n:k_EMsgGCCStrike15_v2_MatchListRequestTournamentPredictions
@@ -9410,21 +9458,23 @@ $tH@T\tI
 ?gwL
 ?jOb
 ?m_Stops
-?phys_wheelconstraint
 ?srJO
 ?tya
 ?uWS
 ?x29
 @!@%@+@1@?@C@E@]@a@g@m@
+@08N4
 @0pp
 @333
 @333?
 @33s@
+@60J[
+@6pI[
 @?SlowGetAlignedPointerFromInternalField@Object@v8@@AEAAPEAXH@Z
 @Aff
 @BH]f
 @BoneSetup
-@HVp%Y
+@HPX`hv`
 @MfKZ
 @Pgl
 @Pu\rm
@@ -9440,8 +9490,7 @@ $tH@T\tI
 @dKb]
 @fff>fff>fff>fff>
 @i1V
-@m_hListManagers
-@m_pPingServices
+@m_bIsPlayingPreIdle
 @n2w
 @player_start_teleport_destination
 @workshop
@@ -9453,6 +9502,7 @@ A string associated with this Cursor, to use later for remote Kill or Wait reque
 A uniform random number generator.
 A!A3A5A;A?AYAeAkAwA{A
 A%N_A
+A***** TOO MANY NODES ADDED. SKIPPING. *****
 A,uw"
 A.00h
 A2VPD
@@ -9462,7 +9512,7 @@ A<fP
 A>x8
 A@d0I
 AA Compromise
-AA: 6
+AA:0C
 AABB
 AABBDirection
 AACompromise
@@ -9581,6 +9631,7 @@ AMMO_TYPE_HEGRENADE
 AMMO_TYPE_MOLOTOV
 AMMO_TYPE_SMOKEGRENADE
 AMMO_TYPE_TASERCHARGE
+AMoveMountingAmount_t
 ANSI X9.62
 ANY PRIVATE KEY
 APPEND_EXP
@@ -9705,6 +9756,7 @@ A\n\vdescriptors
 A\n\vdiagnostics
 A\rjW
 AbW_
+AbortPlant
 Abs Float
 Abs Int
 Absolute value (float)
@@ -9818,7 +9870,6 @@ Alternate icon definition index '%s' (%llu) must be greater than zero
 AmbientCubes
 AmmoCount/%s
 AmmoCount/current
-Amp_only_cts_rescue_hostages
 Amplitude
 An RR_Concept couldn't find its string in the symbol table!\n
 Anchor
@@ -10022,14 +10073,13 @@ BAddToMessage
 BAsyncSend
 BAsyncSendProto
 BC (default)
-BDraw the hiding spot the bot will check next.
+BCBtActionMoveTo
 BEOS_BIND_FUNC
 BEOS_BIND_VAR
 BEOS_LOAD
 BEOS_NAME_CONVERTER
 BEOS_UNLOAD
 BEST
-BEnter a team's shorthand image name to display their logo. Images can be found here: 'resource/flash/econ/tournaments/teams'
 BF-CBC
 BF-CFB
 BF-ECB
@@ -10135,7 +10185,6 @@ BOOSTS
 BOUNDARY
 BREAKABLE
 BRouteMsgToJob
-BShows extra data when bullets penetrate. (use sv_showimpacts_time to increase time shown)
 BT5f
 BT_ACTION_MOVETO_FASTEST_ROUTE
 BT_ACTION_MOVETO_RUN
@@ -10171,7 +10220,6 @@ BULLET_PLAYER_762MM
 BULLET_PLAYER_9MM
 BULLET_PLAYER_BUCKSHOT
 BURN
-BWeaponPurchaseCount_t
 BY_FILE_CTRL
 BY_Lq)
 BYield
@@ -10244,6 +10292,7 @@ Begin_Bomb_Defuse_With_Kit
 Begin_Bomb_Defuse_Without_Kit
 BendLineOfSight
 Bh;+j
+BhEntityParent
 Big Number part of OpenSSL 1.0.2j  26 Sep 2016
 BigShot
 Bindings for CBaseAnimGraphDestructibleParts_GraphController\n
@@ -10271,6 +10320,7 @@ Bloodlvl3
 Bloodlvl4
 Bloodlvl5
 Bloodlvl6
+Bm_nCashStackValue
 BoX5
 Body Component Scriptdesc
 BodyGameSystem
@@ -10327,6 +10377,7 @@ BreakableContentsType
 Breakables
 Breaks in the debugger
 Bs'n
+Bsv_runcmds
 Bu 5
 Buffer too small
 BuildCacheSubscribed(CEconAccountSeasonalOperationGS)
@@ -10861,6 +10912,7 @@ CCSUsrMsg_CounterStrafe
 CCSUsrMsg_CurrentRoundOdds
 CCSUsrMsg_CurrentRoundOdds_t
 CCSUsrMsg_CurrentTimescale
+CCSUsrMsg_CustomHudClicked
 CCSUsrMsg_Damage
 CCSUsrMsg_DamagePrediction
 CCSUsrMsg_Damage_t
@@ -11120,6 +11172,7 @@ CEntitySpawner<class CBaseEntity>::Spawn
 CEntitySpawner<class CBaseModelEntity>::Spawn
 CEntitySpawner<class CBeam>::Spawn
 CEntitySpawner<class CCSObserverPawn>::Spawn
+CEntitySpawner<class CCSPlayerCamera>::Spawn
 CEntitySpawner<class CCSPlayerController>::Spawn
 CEntitySpawner<class CCSPlayerPawn>::Spawn
 CEntitySpawner<class CCashStack>::Spawn
@@ -11371,6 +11424,8 @@ CHandle< CCSPlayerController >
 CHandle< CCSPlayerController>
 CHandle< CCSPlayerPawn >
 CHandle< CCSPlayerPawn>
+CHandle< CCSPlayerPawnBase >
+CHandle< CCSPlayerPawnBase>
 CHandle< CCSWeaponBase >
 CHandle< CCSWeaponBase>
 CHandle< CColorCorrection >
@@ -11801,7 +11856,12 @@ CNetworkUtlVectorBase< CTransform, NetworkVar_m_Transforms , -1, int >
 CNetworkUtlVectorBase< CUtlString, NetworkVar_m_LightStyleEvents , -1, int >
 CNetworkUtlVectorBase< CUtlString, NetworkVar_m_QueuedLightStyleStrings , -1, int >
 CNetworkUtlVectorBase< CUtlString, NetworkVar_m_WeaponSequence , -1, int >
+CNetworkUtlVectorBase< CUtlString, NetworkVar_m_vecClassNames , -1, int >
+CNetworkUtlVectorBase< CUtlString, NetworkVar_m_vecDialogVariableNames , -1, int >
+CNetworkUtlVectorBase< CUtlString, NetworkVar_m_vecPanelIds , -1, int >
 CNetworkUtlVectorBase< EHANDLE, NetworkVar_m_hConveyorModels , -1, int >
+CNetworkUtlVectorBase< HUDPanelDialogVariableString_t, NetworkVar_m_vecDialogVariableStrings , -1, int >
+CNetworkUtlVectorBase< HUDPanelHasClass_t, NetworkVar_m_vecHasClasses , -1, int >
 CNetworkUtlVectorBase< QAngle, NetworkVar_m_ragAngles , -1, int >
 CNetworkUtlVectorBase< ResourceId_t, NetworkVar_m_vecExternalClipIds , -1, int >
 CNetworkUtlVectorBase< ResourceId_t, NetworkVar_m_vecExternalGraphIds , -1, int >
@@ -12287,6 +12347,7 @@ CSGrenadeType
 CSHitGroup
 CSInputs
 CSLoadoutSlot
+CSMoveType
 CSMovementVelocityQuantizer_t
 CSOAccountItemPersonalStore
 CSOAccountRecurringMission
@@ -12315,6 +12376,7 @@ CSOVolatileItemOffer
 CSObserverPawn
 CSPName
 CSPlantedC4
+CSPlayerCamera
 CSPlayerController
 CSPlayerController_SwitchTeam
 CSPlayerPawn
@@ -12485,6 +12547,7 @@ CURVE_TANGENT_FREE
 CURVE_TANGENT_MIRROR
 CURVE_TANGENT_SINE
 CURVE_TANGENT_SPLINE
+CUSTOM
 CUserCmdBasePB
 CUserInfoConvarList
 CUserMessageAchievementEvent
@@ -12678,8 +12741,10 @@ CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CHandle<cla
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CHandle<class CBaseEntity>,struct CSPerGrenadeStats_t *,class CDefEquals<class CHandle<class CBaseEntity> >,struct DefaultHashFunctor<class CHandle<class CBaseEntity> >,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<class CHandle<class CBaseEntity>,struct CSPerGrenadeStats_t *,class CDefEquals<class CHandle<class CBaseEntity> >,struct DefaultHashFunctor<class CHandle<class CBaseEntity> >,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CHandle<class CBaseEntity>,struct CSPerWeaponStats_t *,class CDefEquals<class CHandle<class CBaseEntity> >,struct DefaultHashFunctor<class CHandle<class CBaseEntity> >,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<class CHandle<class CBaseEntity>,struct CSPerWeaponStats_t *,class CDefEquals<class CHandle<class CBaseEntity> >,struct DefaultHashFunctor<class CHandle<class CBaseEntity> >,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CHandle<class CBaseEntity>,struct empty_t,class CDefEquals<class CHandle<class CBaseEntity> >,struct DefaultHashFunctor<class CHandle<class CBaseEntity> >,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<class CHandle<class CBaseEntity>,struct empty_t,class CDefEquals<class CHandle<class CBaseEntity> >,struct DefaultHashFunctor<class CHandle<class CBaseEntity> >,int>::HashBucket_t,int>::AddMultipleToTail
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<class CUtlString,unsigned short,class CDefEquals<class CUtlString>,struct DefaultHashFunctor<class CUtlString>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<class CUtlString,unsigned short,class CDefEquals<class CUtlString>,struct DefaultHashFunctor<class CUtlString>,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<int,class CUtlString,class CDefEquals<int>,struct DefaultHashFunctor<int>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<int,class CUtlString,class CDefEquals<int>,struct DefaultHashFunctor<int>,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<int,struct GCSDK::CSharedObjectTypeCache::SharedObjectAndIndex_t,class CDefEquals<int>,struct DefaultHashFunctor<int>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<int,struct GCSDK::CSharedObjectTypeCache::SharedObjectAndIndex_t,class CDefEquals<int>,struct DefaultHashFunctor<int>,int>::HashBucket_t,int>::AddMultipleToTail
+CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<struct std::pair<unsigned short,unsigned short>,int,class CDefEquals<struct std::pair<unsigned short,unsigned short> >,struct DefaultHashFunctor<struct std::pair<unsigned short,unsigned short> >,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<struct std::pair<unsigned short,unsigned short>,int,class CDefEquals<struct std::pair<unsigned short,unsigned short> >,struct DefaultHashFunctor<struct std::pair<unsigned short,unsigned short> >,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<unsigned int,bool,class CDefEquals<unsigned int>,struct DefaultHashFunctor<unsigned int>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<unsigned int,bool,class CDefEquals<unsigned int>,struct DefaultHashFunctor<unsigned int>,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<unsigned int,class CUtlIntString<int,6>,class CDefEquals<unsigned int>,struct DefaultHashFunctor<unsigned int>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<unsigned int,class CUtlIntString<int,6>,class CDefEquals<unsigned int>,struct DefaultHashFunctor<unsigned int>,int>::HashBucket_t,int>::AddMultipleToTail
 CUtlLeanVectorImpl<class CUtlLeanVectorBase<struct CUtlHashMap<unsigned int,int,class CDefEquals<unsigned int>,struct DefaultHashFunctor<unsigned int>,int>::HashBucket_t,int,class CMemAllocAllocator>,struct CUtlHashMap<unsigned int,int,class CDefEquals<unsigned int>,struct DefaultHashFunctor<unsigned int>,int>::HashBucket_t,int>::AddMultipleToTail
@@ -12739,6 +12804,7 @@ CUtlStringToken hash collision between the two fields %s and %s!\n\tRename one o
 CUtlSymbol
 CUtlVector< CEconItemAttribute >
 CUtlVectorEmbeddedNetworkVar< AnimGraph2SerializedPoseRecipeSlot_t, NetworkVar_m_SerializePoseRecipeAG2Slots , -1, int >
+CUtlVectorEmbeddedNetworkVar< CCSCustomHudLayoutState, NetworkVar_m_vecPlayerLayoutStates , -1, int >
 CUtlVectorEmbeddedNetworkVar< CDamageRecord, NetworkVar_m_DamageList , -1, int >
 CUtlVectorEmbeddedNetworkVar< CEconItemAttribute, NetworkVar_m_Attributes , -1, int >
 CUtlVectorEmbeddedNetworkVar< CSPerRoundStats_t, NetworkVar_m_perRoundStats , -1, int >
@@ -13029,7 +13095,6 @@ Close the group automatically after a short wait (good for 'success' messages)
 Close the group automatically when the associated parent process exits (good for sticky 'error' messages)
 CloseCaptionNoAttenuate
 CloseToolhelp32Snapshot
-Cnavspace_debug_pathfind
 Co-dependent physics tasks detected!
 Coaches/%u
 Code Signing
@@ -13190,6 +13255,7 @@ Counter
 Counter-Strike 2
 Courier New
 CoveringFriend
+Cpopulation_distribution_debug
 CrateType
 Create Effect
 Create Explosion
@@ -13282,6 +13348,7 @@ Custom time span %d
 CustomBuy
 CustomCharacter
 CustomGameEventManager
+CustomHudLayout
 CustomOutput0
 CustomOutput1
 CustomOutput2
@@ -14445,10 +14512,9 @@ EventLog
 EventName
 EventQueue
 Ew`)9Q
-Exception during CompileModule (%s:%d)\n%s\n
+Exception during CompileModule\n%s\n    at (%s:%d:%d)\n
 Exception during Evaluate\n%s\n
 Exception during InstantiateModule\n%s\n
-Exception during cs_script callback "%s"\n%s\n
 Excluded
 Execute a script (internal)
 ExecutePostPhysicsPoseTasks
@@ -14534,6 +14600,7 @@ FIRE
 FLASH
 FLASHBANG
 FLASHBANG: %0.2f \n
+FLYGRAVITY
 FN|p
 FOLLOW
 FORCE_DEATH
@@ -15190,6 +15257,8 @@ GetBool(name) : returns the convar as a boolean flag.
 GetBoundingMaxs
 GetBoundingMins
 GetBounds
+GetC4
+GetCamera
 GetCenter
 GetChildren
 GetClassName
@@ -15216,6 +15285,7 @@ GetData
 GetDateFormatA
 GetDefuseFinishTime
 GetDefuseStartTime
+GetDefuseTarget
 GetDefuser
 GetDesignerNameForScriptClass
 GetDomainValue R%d <- DV%d (%s)
@@ -15268,6 +15338,7 @@ GetModelScale
 GetMoneyEarnedForNextRound
 GetMoneySpendableNow
 GetMoveParent
+GetMoveType
 GetNativeClassForScriptClass
 GetNavAreaOverlapping
 GetNavAreaOverlapping: Failed to find nav area.
@@ -15314,6 +15385,8 @@ GetPawn() : Returns the pawn for this controller
 GetPenetration
 GetPhysAngularVelocity
 GetPhysVelocity
+GetPlantFinishTime
+GetPlantStartTime
 GetPlantTime
 GetPlanter
 GetPlayerController
@@ -15475,9 +15548,9 @@ H@H9xqI
 HAC K  Unused Binding
 HARD
 HAS_LADDERS
+HB0>
 HB@T\tJ
 HBJ\nTRF
-HBnavspace_debug_trace
 HDR Color Scale: %0.3f
 HEAD
 HEAD 
@@ -16473,6 +16546,7 @@ IsBeingCarried
 IsBombsiteA
 IsBombsiteB
 IsBot
+IsBuyMenuOpen
 IsClient
 IsConnected
 IsCrouched
@@ -16488,6 +16562,7 @@ IsFreezePeriod
 IsGlowing
 IsGrabbable
 IsInToolsMode
+IsInputCaptureEnabled
 IsInputPressed
 IsLineBlockedBySmoke
 IsMarkedForDeletion
@@ -16625,6 +16700,7 @@ KSV<
 KV3Transfer_DefaultKeys_Impl
 KV;-W
 KWjI
+KZI*5
 K[C7W+
 K\n\rdata_per_week
 K\n\tdrop_info
@@ -16671,6 +16747,7 @@ L4uGv~;6
 L5^x|S
 L?fff?H
 L@4T
+LADDER
 LADDER 
 LAM\rhaI)|pL<
 LARGE_CENTERED_HULL
@@ -17096,7 +17173,10 @@ Method %s.%s invoked with bad %s value. (parameter #%d)\n
 Method %s.%s invoked with incorrect 'this' value.
 Method %s.%s invoked with unrecognized 'this' value.
 Method %s.%s requires %d argument(s), %s.
+Method CSPlayerPawn.GetCamera failed to spawn a cs_player_camera.\n
 Method CSPlayerPawn.SetHasHelmet cannot be called with `true` while armor value is 0.\n
+Method Entity.Move invoked with bad newValues value.\n
+Method Entity.SetMoveType cannot be called with CSMoveType.INVALID. It is invalid...\n
 Method Entity.TakeDamage invoked with bad damage value.\n
 Method Instance.DebugBox invoked with bad config value.\n
 Method Instance.DebugBox invoked with bad maxs value.\n
@@ -17300,6 +17380,7 @@ NISTP224_PRE_COMP_NEW
 NISTP256_PRE_COMP_NEW
 NISTP521_PRE_COMP_NEW
 NO X509_NAME
+NOCLIP
 NOISE
 NONAV
 NONAVNONSOLID
@@ -17546,6 +17627,7 @@ OBJ_dup
 OBJ_nid2ln
 OBJ_nid2obj
 OBJ_nid2sn
+OBSERVER
 OBSTACLE_TOP
 OCSP
 OCSP Archive Cutoff
@@ -17662,10 +17744,14 @@ OnBlockedClosing
 OnBlockedOpening
 OnBombBeginDefuse
 OnBombDefuse
+OnBombDefuseAbort
 OnBombDefuseAborted
+OnBombDefuseStart
 OnBombDefused
 OnBombExplode
 OnBombPlant
+OnBombPlantAbort
+OnBombPlantStart
 OnBombPlanted
 OnBreak
 OnBroken
@@ -17681,6 +17767,7 @@ OnChangeLevel
 OnChangedFromMax
 OnChangedFromMin
 OnChoreoComponentPointerChanged
+OnClassNamesChanged
 OnClientRagdollChanged
 OnClientRagdollEnabledChanged
 OnClose
@@ -17695,6 +17782,7 @@ OnCompletion
 OnComponentTestFunc
 OnConnectionStateChanged
 OnCreditsDone
+OnCustomHudClicked
 OnDamageChangedCompat
 OnDamageListUpdate
 OnDamaged
@@ -17708,6 +17796,7 @@ OnDetached
 OnDetectedBulletFire
 OnDetectedExplosion
 OnDialogActivatorChanged
+OnDialogVariableChanged
 OnDisabledHitgroupsChanged
 OnDisengage
 OnDroppedNotRescued
@@ -17755,6 +17844,7 @@ OnGunFire
 OnGunReload
 OnGustEnd
 OnGustStart
+OnHasClassesChanged
 OnHealthChanged
 OnHitMax
 OnHitMin
@@ -17763,6 +17853,7 @@ OnHurt
 OnHurtPlayer
 OnIgnite
 OnIn
+OnInputCaptureEnabledChanged
 OnInternalTestBool
 OnInternalTestColor
 OnInternalTestEntityHandle
@@ -17839,6 +17930,7 @@ OnOscillateStartArrive
 OnOscillateStartDepart
 OnOut
 OnOutOfWorld
+OnPanelIdsChanged
 OnPass
 OnPassThrough
 OnPassThroughForward
@@ -18063,10 +18155,11 @@ P-224
 P-256
 P-384
 P-521
-P08@JP/
+P08@J`<
+P08N4
 P1\t98"
-P2P/
 P5[1
+P6 R[
 P@33
 PAGN_4
 PANIC
@@ -18301,6 +18394,7 @@ PUX\`cIPTY_cBJNS\c8=DLWc*38>Mc
 PVSManagerGameSystem
 PVSModifier
 PVY]acJOTY`cCGLT]c9<AJVc+-19Ic
+PXyU
 P\n\nattributes
 Pack item "%s" included in more than one pack bundle - not allowed!
 Pain
@@ -18665,7 +18759,6 @@ Pushing rotation hard!\n
 PutClientInServer: no info_player_logo on level\n
 PutClientInServer: no info_player_start on level\n
 P|iC\r
-P|kS
 Q*hd
 Q/xtJ2
 Q4EX
@@ -18868,11 +18961,10 @@ RSA_verify
 RSA_verify_ASN1_OCTET_STRING
 RSA_verify_PKCS1_PSS
 RSA_verify_PKCS1_PSS_mgf1
-RSDS}
 RTime32
 R\r1>Vp
 R\vp!y
-R\vpt
+R\vpl%Z
 R]Di
 Rad2 Deg
 Radial using: %s\n
@@ -19479,7 +19571,6 @@ SaveImportant
 SaveJob
 SaveRestore
 SaveRestoreDataVersion001
-SaveRestoreIO
 SaveRestoreIOFiltered
 SaveRestoreSyncIO
 Saved to '%s' steam cloud\n
@@ -19883,6 +19974,7 @@ Set Joint Limit Enabled
 Set Kinematic
 Set Light Brightness
 Set Light Color
+Set Light Enabled
 Set Local Angles
 Set Local Origin
 Set Local Scale
@@ -20056,6 +20148,9 @@ SetDampingRatio
 SetDefaultAnimation
 SetDefaultAnimationLooping
 SetDefaultAnimationNotLooping
+SetDialogVariableString
+SetDialogVariableStringForPlayer
+SetDialogVariableStringorPlayer
 SetDisabledValue
 SetDistanceMapMax
 SetDistanceMapMin
@@ -20065,6 +20160,7 @@ SetDragEnabled
 SetDrawDistance
 SetEnableBreaking
 SetEnableCollisions
+SetEnabled
 SetEndDist
 SetEndDistLerpTo
 SetEndTouchEvent
@@ -20103,6 +20199,8 @@ SetGravity
 SetGravityEnabled
 SetGravityScale
 SetHUDVisibility
+SetHasClass
+SetHasClassForPlayer
 SetHasDefuser
 SetHasHelmet
 SetHealth
@@ -20111,10 +20209,12 @@ SetHitMax
 SetHitMin
 SetIdleAnimationLooping
 SetIdleAnimationNotLooping
+SetInputCaptureEnabled
 SetInt
 SetInt(name, val) : sets the value of the convar to the int.
 SetIntMessage
 SetInvert
+SetIsControllingAngles
 SetLightsBrightnessMultiplier
 SetLinearDampingRatio
 SetLinearDampingRatioX
@@ -20167,6 +20267,7 @@ SetMotorTorqueFactor
 SetMove [move=%s]
 SetMoveDistanceFromEnd
 SetMoveDistanceFromStart
+SetMoveType
 SetMoverIndex
 SetName
 SetNavIgnore
@@ -20364,6 +20465,7 @@ Simulated GC communications failure is not active.\n
 Sine of angle. Input in radians, output in radians
 SingleItemDescription
 SinglePlayerSharedMemory001
+SingleSlotOnlyRecipientsFilter
 Skill
 Skill: %d%%
 Skin
@@ -20902,7 +21004,10 @@ The entity instance is too large for type %s! Make more components referenced!\n
 The entity origin (absolute).
 The entity origin (local)
 The entity team number
+The maximum number of class names has been reached, no more can be referenced.\n
+The maximum number of dialog variables has been reached, no more can be referenced.\n
 The maximum number of hostages (%i) has been exceeded.
+The maximum number of panel ids has been reached, no more can be referenced.\n
 The nav mesh needs a full nav_analyze\n
 The player controller entity.
 The player pawn entity.
@@ -21163,9 +21268,12 @@ Unable to load manifest file '%s'\n
 Unable to queue speech that is lower priority than current speech\n
 Unassigned
 UnblockNav
+Uncaught Exception during callback "%s"\n%s%s\n
 Unexpected end of file expanding save game\n
 Unexpected module request.
 Unglow
+Unhandled Promise Rejection\n
+Unhandled Promise Rejection\n%s%s\n
 Unhandled loadout slot (%i) in AddToRebuy\n
 Unique Aggregates: %u\n
 Unknown MsgType (%d) - Not Found
@@ -21313,7 +21421,6 @@ V3 s
 V3_ADDR_VALIDATE_PATH_INTERNAL
 V3_GENERIC_EXTENSION
 V5u f
-V@BY
 VALV
 VALVw
 VDPr
@@ -21344,6 +21451,7 @@ VNotify Abandoned (Not enabled)\n
 VNotify Sent\n
 VNotify StartProcess failed!\n
 VNotify: %s\n
+VPHYSICS
 VSCRIPT: Started VScript virtual machine using script language '%s'\n
 VScript error: A script attempted to create a scene entity mid-game. Entity creation from scripts is only allowed during map init.\n
 VScript error: DoEntFireByInstanceHandle was passed an invalid entity instance.\n
@@ -21809,9 +21917,7 @@ X\n\vLoadoutItem
 X\tQo
 X`hr
 Xd3h
-Xf0-Y
 XfJ7
-XfP.Y
 XjfR
 XpProgressData
 XqgA+
@@ -22171,11 +22277,14 @@ Z~wl
 \f]ne3
 \fdhWTh
 \fiaR
+\fp\vPXyU
+\fp\v`XyU
 \ful2
 \fy&3Gl
 \l:ArR
 \n            Not After : 
 \n        Public key OCSP hash: 
+\n    at %s (%s:%d:%d)
 \n CMsgItemAcknowledged__DEPRECATED
 \n CUserMessage_Diagnostic_Response
 \n CUserMessage_NotifyResponseFound
@@ -22591,6 +22700,7 @@ Z~wl
 \n\tbase_name
 \n\tbase_time
 \n\tboneindex
+\n\tbutton_id
 \n\tcheck_fow
 \n\tcmd_flags
 \n\tcode_type
@@ -22870,7 +22980,6 @@ Z~wl
 \tNone\n
 \tPrivate script scope:
 \tPublic script scope:
-\tP|kS
 \tRead %s\t%s%s%s,\tOffs 0x%04x\n
 \tRule %d/%d: %s\n
 \tText
@@ -22912,12 +23021,12 @@ Z~wl
 \vGt5
 \vHCK/
 \vNCE\v
-\vP|kS
 \vUY6[E
 \v\n\tRemoveFan
 \v\vTSG
 \vj0k
 \vjC7
+\vpXyU
 ] Done (%.2f seconds)
 ]1h=bfz
 ]FhSD}
@@ -22930,12 +23039,10 @@ Z~wl
 ^DqPt
 ^J_spY
 ^Nij
-^P3Y
 ^RB!r
 ^\n\ffloat_values
 ^`bbccX^`bccPW[_bc@IOW_c.7;ETc
 ^accccY]`bccQUZ_ccAFMV_c/-2=Pc
-^pHY
 _CustomCommand
 _CustomCommand%d
 _DisableUpdateTarget
@@ -22995,8 +23102,11 @@ _tools_event_desc
 _var
 _xU`u
 _}eOk
+`20C
 `28)fk
 `3?New@Array@v8@@SA?AV?$Local@VArray@v8@@@2@PEAVIsolate@2@H@Z
+`60K[
+`6PM[
 `:zQF
 `D$daM-l
 `DZG
@@ -23004,6 +23114,7 @@ _}eOk
 `H(hqA1p
 `ITS
 `VX:H
+`XyU
 `\n\rvector_values
 `\tV_log2f
 `fPw.\vM
@@ -23026,6 +23137,7 @@ a:typeparam
 a;Tg
 a@XZ
 aA0k
+aBv4
 aD/x
 aDSS
 aECDH
@@ -24038,6 +24150,7 @@ burst_params_cp
 businessCategory
 busyactor
 button
+buttonId
 buy %s
 buy %s\n
 buy shield
@@ -24525,6 +24638,7 @@ control_points
 control_storage
 controller
 controller->PhysicsRunThink()
+controlling
 convar
 converts delta QAngle to an angular velocity Vector
 conveyor_models
@@ -24615,6 +24729,7 @@ cs_minimap_boundary
 cs_motel
 cs_office
 cs_pet_placement
+cs_player_camera
 cs_player_controller
 cs_player_manager
 cs_pre_restart
@@ -24721,6 +24836,8 @@ custom name attr
 custom name: %s\n
 customOutputValue
 custom_game_state_1
+custom_hud
+custom_hud_layout
 custom_sound
 custom_type
 customcubemaptexture
@@ -26606,7 +26723,6 @@ hEntity to follow, string BoneOrAttachName
 hEntityA
 hEntityB
 hEntityCharacter
-hEntityParent
 hF\rDz
 hFaceEntity
 hFcg
@@ -26647,6 +26763,7 @@ hard
 hardstopspeakevent
 hardware
 hardware%d
+hasClass
 hasDefuser
 hasHelmet
 hasbomb
@@ -26830,7 +26947,7 @@ houseIdentifier
 hoverposeangles
 hoverposeflags
 hoverposeposition
-hpzP/
+hpz`<
 hr_H
 http request
 http$
@@ -27860,6 +27977,7 @@ latitude
 launcher
 launcher_mismatch_sessions
 layerName
+layout
 layout_file
 lcO/<1\r=,!\r-@@@
 leaderboard_name
@@ -28625,6 +28743,7 @@ mousedx
 mousedy
 movable_mesh_gravity_follows_rotation
 move
+moveType
 move_crc
 move_crouch_amount
 move_direction_id
@@ -28725,7 +28844,6 @@ n1Z
 n5cM
 n6j/
 n:2C[
-n@LY
 n@PK
 nAlpha
 nAnimEvent
@@ -28746,6 +28864,7 @@ nKillPriority
 nMaxElements
 nMeshGroupMask
 nMode
+nP8[
 nPitch
 nPriority != NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY
 nReason
@@ -29306,14 +29425,15 @@ p.other
 p.ppBasis
 p.prime
 p.tpBasis
-p0j@K
+p08@H^4
+p0jPX
 p250
-p2P/
 p2{l
 p4Z3
 p5Z3
 p5\nL,
 p618
+p6p/[
 p>?Set@Template@v8@@QEAAXV?$Local@VName@v8@@@2@V?$Local@VData@v8@@@2@W4PropertyAttribute@2@@Z
 p@0pqE5tsO?|1
 pActivator
@@ -29376,6 +29496,7 @@ pTargetAttachmentName
 pText
 pU>\AL
 pValue
+pXyU
 p\r0\fP!E
 p\rP\f0!h
 p^i9
@@ -29395,6 +29516,7 @@ paintable_team_colors
 paintable_unusual
 paintcan_index
 paintkit
+panelId
 panel_class_name
 panel_dpi
 panel_id
@@ -29638,6 +29760,7 @@ phys_spring
 phys_start_asleep
 phys_thruster
 phys_torque
+phys_wheelconstraint
 physdamagescale
 physicalDeliveryOfficeName
 physics_entity_solver
@@ -29708,6 +29831,7 @@ pkey
 pkeyalg
 pkix
 pkparameters2group failure
+pl%Z
 place
 place_anchors_at_constraint_transform
 place_name
@@ -30125,7 +30249,6 @@ pvk too short
 pvs_modify_entity
 pvsplayer
 pzKD)
-p|kS
 q not prime
 q&A\nn
 q/\rg2
@@ -32277,6 +32400,7 @@ tournament_team_id
 tournament_teams
 tournamentinfo
 tpBasis
+tp\n0
 tq}a
 trace
 traceHitboxes
@@ -32668,7 +32792,6 @@ utility
 utility_success
 utilitydamage
 uxX/
-v JY
 v'A>M6
 v)56
 v0o/5
@@ -32751,6 +32874,7 @@ value_is_replace
 value_name_hash
 values
 variable has no value
+variableName
 vban
 vcd error, gesture %s of model %s is marked as STUDIO_LOOPING!\n
 vcd_keys
@@ -33276,7 +33400,6 @@ z(ov
 z/B,9d
 z<d2
 z>Hz
-z>hf
 zF):O4
 zFar
 zG2m8
@@ -33331,6 +33454,5 @@ zz2K
 ~P2T
 ~R65Fu
 ~jLRG
-~pBY
 ~w]UG
 ~yhZ

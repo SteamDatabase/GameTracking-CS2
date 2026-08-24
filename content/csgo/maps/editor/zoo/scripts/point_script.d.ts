@@ -77,6 +77,8 @@ declare module "cs_script/point_script"
         SetThink(callback: () => void): void;
         /** Set when the OnThink callback should next be run. The exact time will be on the tick nearest to the specified time, which may be earlier or later. */
         SetNextThink(time: number): void;
+        /** Returns a promise that resolves after `delay` number of seconds. The exact time will be on the tick nearest to the specified delay, which may be earlier or later. */
+        Delay(delay: number): Promise<void>;
 
         /**
          * Queue up a callback to be invoked once, after all entities have executed their think functions this tick (eg. player input has been handled, projectiles have moved).
@@ -111,10 +113,18 @@ declare module "cs_script/point_script"
          * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
          */
         OnBeginRoundRestart(callback: () => void): void;
-        /** Called when a player plants the c4 */
-        OnBombPlant(callback: (event: { plantedC4: CSPlantedC4, planter: CSPlayerPawn }) => void): void;
-        /** Called when a player defuses the c4 */
-        OnBombDefuse(callback: (event: { plantedC4: CSPlantedC4, defuser: CSPlayerPawn }) => void): void;
+        /** Called when a player starts planting their c4 */
+        OnBombPlantStart(callback: (event: { planter: CSPlayerPawn }) => void): void;
+        /** Called when a player aborts planting their c4 */
+        OnBombPlantAbort(callback: (event: { planter: CSPlayerPawn }) => void): void;
+        /** Called when a player plants their c4 */
+        OnBombPlant(callback: (event: BombPlantEvent) => void): void;
+        /** Called when a player starts defusing a c4 */
+        OnBombDefuseStart(callback: (event: { plantedC4: CSPlantedC4 }) => void): void;
+        /** Called when a player aborts defusing a c4 */
+        OnBombDefuseAbort(callback: (event: { plantedC4: CSPlantedC4 }) => void): void;
+        /** Called when a player defuses a c4 */
+        OnBombDefuse(callback: (event: BombDefuseEvent) => void): void;
         /** Called when a c4 explodes */
         OnBombExplode(callback: (event: { plantedC4: CSPlantedC4 }) => void): void;
         /**
@@ -138,7 +148,7 @@ declare module "cs_script/point_script"
         /** Called when a player hits the ground while falling. */
         OnPlayerLand(callback: (event: { player: CSPlayerPawn }) => void): void;
         /** Called when a player sends a chat message. `team` will match they player's team if the message was sent to team chat. */
-        OnPlayerChat(callback: (event: { player: CSPlayerController | undefined, text: string, team: number }) => void): void;
+        OnPlayerChat(callback: (event: { player?: CSPlayerController, text: string, team: number }) => void): void;
         /** Called when a player pings a location. */
         OnPlayerPing(callback: (event: { player: CSPlayerController, position: Vector }) => void): void;
         /** Called when a gun is reloaded. */
@@ -150,7 +160,7 @@ declare module "cs_script/point_script"
          * Penetrations can cause a single bullet to trigger multiple impacts.
          * This will be called for all impacts of a bullet before any player damage events are called.
          */
-        OnBulletImpact(callback: (event: { weapon: CSWeaponBase, position: Vector, hitEntity: Entity }) => void): void;
+        OnBulletImpact(callback: (event: { weapon: CSWeaponBase, position: Vector, hitEntity?: Entity }) => void): void;
         /** Called when a weapon is dropped. */
         OnWeaponDrop(callback: (event: { weapon: CSWeaponBase, dropper: CSPlayerPawn }) => void): void;
         /** Called when a weapon is picked up. */
@@ -161,6 +171,8 @@ declare module "cs_script/point_script"
         OnGrenadeBounce(callback: (event: GrenadeBounceEvent) => void): void;
         /** Called when a knife attacks, even if it misses. */
         OnKnifeAttack(callback: (event: { weapon: CSWeaponBase, attackType: CSWeaponAttackType }) => void): void;
+        /** Called when a button in a CustomHudLayout is clicked. */
+        OnCustomHudClicked( callback: (event: {player: CSPlayerController, layout: CustomHudLayout, buttonId: string}) => void ): void;
 
         /** Fire the input on all targets matching the specified names. */
         EntFireAtName(config: { name: string, input: string, value?: InputValue, caller?: Entity, activator?: Entity, delay?: number }): void;
@@ -195,6 +207,8 @@ declare module "cs_script/point_script"
         /** Trace as a bullet and detect hits and damage */
         TraceBullet(trace: BulletTrace): BulletTraceResult[];
 
+        /** Get if the server is a dedicated server. */
+        IsDedicatedServer(): boolean;
         /** Get the game time in seconds. */
         GetGameTime(): number;
         /** Get if the game is currently in a Warmup period. */
@@ -252,6 +266,20 @@ declare module "cs_script/point_script"
     type ColorArg = { r: number, g: number, b: number, a?: number };
     type Color = { r: number, g: number, b: number, a: number };
     type InputValue = boolean | number | string | Vector | Color | undefined;
+
+    export enum CSMoveType {
+        INVALID = -1,
+        NONE,
+        WALK,
+        FLY,
+        FLYGRAVITY,
+        VPHYSICS,
+        PUSH,
+        NOCLIP,
+        OBSERVER,
+        LADDER,
+        CUSTOM,
+    }
 
     export enum CSRoundEndReason {
         UNKNOWN = -1,
@@ -467,6 +495,18 @@ declare module "cs_script/point_script"
         hitEntity?: Entity;
     }
 
+    interface BombPlantEvent {
+        plantedC4: CSPlantedC4;
+        /** @deprecated this field will be removed in a future update */
+        planter?: CSPlayerPawn
+    }
+
+    interface BombDefuseEvent {
+        plantedC4: CSPlantedC4;
+        /** @deprecated this field will be removed in a future update */
+        defuser: CSPlayerPawn
+    }
+
     interface ModifyPlayerDamageEvent {
         /** The victim that is taking damage */
         player: CSPlayerPawn;
@@ -479,7 +519,7 @@ declare module "cs_script/point_script"
         /** The hit group where the damage occured. */
         hitGroup: CSHitGroup;
         /** The entity applying the damage. For bullets this is the owner of the gun. For grenades this is the exploding projectile. */
-        inflictor: Entity;
+        inflictor?: Entity;
         /** The entity credited with causing the damage. For bullets this is the shooter. For grenades this is the thrower. */
         attacker?: Entity;
         /** The weapon used. For grenades this will not be present because the weapon is often removed before the projectile explodes. */
@@ -509,7 +549,7 @@ declare module "cs_script/point_script"
         /** The hit group where the damage occured. */
         hitGroup: CSHitGroup;
         /** The entity applying the damage. For bullets this is the owner of the gun. For grenades this is the exploding projectile. */
-        inflictor: Entity;
+        inflictor?: Entity;
         /** The entity credited with causing the damage. For bullets this is the shooter. For grenades this is the thrower. */
         attacker?: Entity;
         /** The weapon used. For grenades this will not be present because the weapon is often removed before the projectile explodes. */
@@ -581,6 +621,10 @@ declare module "cs_script/point_script"
         GetEyePosition(): Vector;
         /** Update the physics state of this entity. */
         Teleport(newValues: { position?: Vector, angles?: QAngle, velocity?: Vector, angularVelocity?: RotationVector }): void;
+        /** Move this entity without resetting the client's interpolation history. */
+        Move(newValues: { position?: Vector, angles?: QAngle, velocity?: Vector, angularVelocity?: RotationVector }): void;
+        GetMoveType(): CSMoveType;
+        SetMoveType(moveType: CSMoveType): void;
         GetClassName(): string;
         GetEntityName(): string;
         SetEntityName(name: string): void;
@@ -647,6 +691,12 @@ declare module "cs_script/point_script"
         IsSilencerOn(): boolean;
     }
 
+    export class C4 extends CSWeaponBase {
+        GetPlantStartTime(): number | undefined;
+        GetPlantFinishTime(): number | undefined;
+        AbortPlant(): void;
+    }
+
     export class CSWeaponData {
         GetName(): string;
         GetType(): CSWeaponType;
@@ -679,8 +729,8 @@ declare module "cs_script/point_script"
         IsDefused(): boolean;
         GetPlantTime(): number;
         GetExplodeTime(): number | undefined; // undefined if not active
-        GetDefuseStartTime(): number | undefined; // undefined if not defusing
-        GetDefuseFinishTime(): number | undefined; // undefined if not defusing
+        GetDefuseStartTime(): number | undefined;
+        GetDefuseFinishTime(): number | undefined;
     }
 
     export class CSPlayerController extends Entity {
@@ -727,6 +777,7 @@ declare module "cs_script/point_script"
         FindWeapon(name: string): CSWeaponBase | undefined;
         FindWeaponBySlot(slot: CSGearSlot): CSWeaponBase | undefined;
         GetActiveWeapon(): CSWeaponBase | undefined;
+        GetC4(): C4 | undefined;
         DestroyWeapon(target: CSWeaponBase): void;
         DestroyWeapons(): void;
         DropWeapon(target: CSWeaponBase): void;
@@ -738,10 +789,13 @@ declare module "cs_script/point_script"
         SetHasHelmet(hasHelmet: boolean): void;
         HasDefuser(): boolean;
         SetHasDefuser(hasDefuser: boolean): void;
+        GetDefuseTarget(): CSPlantedC4 | undefined;
         IsDucking(): boolean;
         IsDucked(): boolean;
         IsScoped(): boolean;
         IsNoclipping(): boolean;
+        IsBuyMenuOpen(): boolean;
+        GetCamera(): CSPlayerCamera;
 
         /** @deprecated This method will be removed in a future update */
         IsCrouching(): boolean;
@@ -749,8 +803,65 @@ declare module "cs_script/point_script"
         IsCrouched(): boolean;
     }
 
+    /**
+     * CustomHudLayouts (custom_hud_layout) are the entry point for scripted maps to provide custom UI.
+     * Supported panel types and attributes are:
+     * * <Panel> with attributes id, class and hittest
+     * * <Label> with attributes id, class, hittest, and text
+     * * <Image> with attributes id, class, hittest, src, texturewidth, and textureheight
+     * * <Button> with attributes id and class
+     * Styling with css is supported.
+     * Events and client side scripting are not supported.
+     * @experimental This feature is experimental and may experience breaking changes.
+     * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
+     */
+    export class CustomHudLayout extends Entity {
+        /**
+         * Set if a panel has a class. Applies to all players.
+         * Omit `hasClass` to revert to the original value.
+         */
+        SetHasClass(panelId: string, className: string, hasClass?: boolean): void;
+        /**
+         * Set if a panel has a class for a single player. Will override the all player value.
+         * Omit `hasClass` to defer to the all player value.
+         */
+        SetHasClassForPlayer(playerSlot: number, panelId: string, className: string, hasClass?: boolean): void;
+        /**
+         * Set the value of a dialog variable. Applies to all players.
+         */
+        SetDialogVariableString(panelId: string, variableName: string, value: string): void;
+        /**
+         * Set the value of a dialog variable for a single player. Will override the all player value.
+         * Omit `value` to defer to the all player value. If no all player value has been set, the value will be an empty string.
+         */
+        SetDialogVariableStringForPlayer(playerSlot: number, panelId: string, variableName: string, value?: string): void;
+        /**
+         * Set to true to force a player into cursor mode and enable click detection on the panels of this layout.
+         * Set a callback with Instance.OnCustomHudClicked to listen for clicks.
+         * Multiple CustomHudLayouts can have input captured at a time.
+         * Players will get movement control back once all CustomHudLayouts have disabled input capture.
+         */
+        SetInputCaptureEnabled(playerSlot: number, enabled: boolean): void;
+        /**
+         * Get if this CustomHudLayout is capturing input for a player
+         */
+        IsInputCaptureEnabled(playerSlot: number): boolean;
+    }
+
     export class PointTemplate extends Entity {
         ForceSpawn(origin?: Vector, angle?: QAngle): Entity[] | undefined;
+    }
+
+    /**
+     * Move this to control a player's view without moving their pawn.
+     * @experimental This feature is experimental and may experience breaking changes.
+     * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
+     */
+    export class CSPlayerCamera extends Entity {
+        IsEnabled(): boolean;
+        SetEnabled(enabled: boolean): void;
+        /** Set to false let a player look around from the camera's position. */
+        SetIsControllingAngles(controlling: boolean): void;
     }
 
     /** @deprecated This enum will be removed in a future update */

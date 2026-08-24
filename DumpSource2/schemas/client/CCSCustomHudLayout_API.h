@@ -1,0 +1,3 @@
+class CCSCustomHudLayout_API
+{
+};

@@ -3496,7 +3496,7 @@ async function RunChess() {
     RenderPieces();
 
     while (!chess.isGameOver()) {
-        await Delay(0);
+        await Instance.Delay(0);
         const move = await AIMove();
         await AnimateMove(move);
     }
@@ -3596,7 +3596,7 @@ async function SlidePiece(piece, from, to) {
         } else {
             const midPos = { x: startPos.x + dx * t, y: startPos.y + dy * t, z: startPos.z + dz * t };
             piece.Teleport({ position: midPos });
-            await Delay(0);
+            await Instance.Delay(0);
         }
     }
 }
@@ -3617,7 +3617,7 @@ async function DiePiece(piece) {
             return;
         } else {
             piece.Teleport({ position: { ...startPos, z: startPos.z + dieZ * t } });
-            await Delay(0);
+            await Instance.Delay(0);
         }
     }
 }
@@ -3669,7 +3669,7 @@ async function Minimax(depth, color, maximize) {
     if (depth === 0 || chess.isGameOver()) {
         fitnessQuota--;
         if (fitnessQuota <= 0) {
-            await Delay(0);
+            await Instance.Delay(0);
             fitnessQuota = fullFitnessQuota;
         }
         return GetFitness(color);
@@ -3747,24 +3747,6 @@ function Init(oldChess) {
     Instance.SetNextThink(Instance.GetGameTime());
 }
 
-/** @type {{ time: number, callback: () => void }[]} */
-const thinkQueue = [];
-/** @param {number} time @param {() => void} callback  */
-function QueueThink(time, callback) {
-    const indexAfter = thinkQueue.findIndex((t) => t.time > time);
-    if (indexAfter === -1) thinkQueue.push({ time, callback });
-    else thinkQueue.splice(indexAfter, 0, { time, callback });
-    if (indexAfter === 0 || indexAfter === -1) Instance.SetNextThink(time);
-}
-function RunThinkQueue() {
-    const upperThinkTime = Instance.GetGameTime() + 1 / 128;
-    while (thinkQueue.length > 0 && thinkQueue[0].time <= upperThinkTime) thinkQueue.shift().callback();
-    if (thinkQueue.length > 0) Instance.SetNextThink(thinkQueue[0].time);
-}
-function Delay(delay) {
-    return new Promise((resolve) => QueueThink(Instance.GetGameTime() + delay, resolve));
-}
-
 Instance.OnActivate(Init);
 
 Instance.OnScriptReload({
@@ -3778,7 +3760,6 @@ Instance.OnScriptReload({
 });
 
 Instance.SetThink(() => {
-    RunThinkQueue();
     RunChess();
 });
 
