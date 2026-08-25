@@ -326,6 +326,8 @@
 			"include"       "models"
 			"include"       "panorama/images/overheadmaps"
 			"include"       "panorama/images/map_icons"
+			"include"       "panorama/layout/custom_game"
+			"include"       "panorama/styles/custom_game"
 			"include"       "particles"
 			"include"       "resource/overviews"
 			"include"       "scripts"

@@ -806,7 +806,7 @@ declare module "cs_script/point_script"
      * Supported panel types and attributes are:
      * * <Panel> with attributes id, class and hittest
      * * <Label> with attributes id, class, hittest, and text
-     * * <Image> with attributes id, class, hittest, src, texturewidth, and textureheight
+     * * <Image> with attributes id, class, hittest, and src
      * * <Button> with attributes id and class
      * Styling with css is supported.
      * Events and client side scripting are not supported.

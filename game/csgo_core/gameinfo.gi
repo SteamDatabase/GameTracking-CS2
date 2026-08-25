@@ -102,7 +102,7 @@
 	{
 		"AllowGlobalPanelContext" "1"
 		"HtmlUserAgent" "CSGO Client"
-		"AllowCustomGameUI" 0
+		"AllowCustomGameUI" 1
 	}
 
 	Engine2
