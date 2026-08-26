@@ -15,7 +15,7 @@
  * - Create a JavaScript file (.js) that imports this module.
  *      - See `hello.js` for an example.
  * - Create a point_script entity in your map and set its cs_script field to reference your JavaScript file as a vjs asset.
- *      - See `script_zoo.vmap`. There is a point_script entity in there named "hello_cs_script" that runs `hello.js`. There are a handful of other examples as well.
+ *      - See example addon cs_script_demo. There is a point_script entity in the cs_script_demo.vmap named "hello_cs_script" that runs `hello.js`. There are a handful of other examples as well.
  * 
  * # Execution:
  * - The compiled version of your script (.vjs_c) will be loaded during map load.
@@ -803,13 +803,21 @@ declare module "cs_script/point_script"
 
     /**
      * CustomHudLayouts (custom_hud_layout) are the entry point for scripted maps to provide custom UI.
-     * Supported panel types and attributes are:
-     * * <Panel> with attributes id, class and hittest
-     * * <Label> with attributes id, class, hittest, and text
-     * * <Image> with attributes id, class, hittest, and src
-     * * <Button> with attributes id and class
-     * Styling with css is supported.
-     * Events and client side scripting are not supported.
+     * * Supported panel types and attributes are:
+     *   * <Panel> with attributes id, class and hittest
+     *   * <Label> with attributes id, class, hittest, and text
+     *   * <Image> with attributes id, class, hittest, and src
+     *   * <Button> with attributes id and class
+     * * Styling with css is supported.
+     * * Events and client side scripting are not supported.
+     * 
+     * To use
+     * * Add a panorama layout .xml file under "panorama/layout/custom_game" in your addon
+     * * Add a custom_hud_layout point entity to your map and point its `layout` property at your .vxml asset.
+     * * See example addon cs_script_demo
+     *   * There is a custom_hud_layout entity in the cs_script_demo.vmap named "welcome_layout" that displays "panorama/layouts/custom_game/welcome.vxml".
+     *   * It also references css file `panorama/styles/custom_game/welcome.css`. (vcss is the asset extension)
+     *   * The layout begins with a "Dismissed" class on the Panel with id "dialog" which is then removed in cs_script file "maps/scripts/setup.js".
      * @experimental This feature is experimental and may experience breaking changes.
      * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
      */
@@ -852,6 +860,7 @@ declare module "cs_script/point_script"
 
     /**
      * Move this to control a player's view without moving their pawn.
+     * There is at most one of these per CSPlayerPawn, created on demand when CSPlayerPawn.GetCamera is called.
      * @experimental This feature is experimental and may experience breaking changes.
      * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
      */
