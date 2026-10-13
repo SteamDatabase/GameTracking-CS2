@@ -76,7 +76,7 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
+	    float3 vPositionOs : POSITION0;
 	    uint gl_InstanceIndex : SV_InstanceID;
 	};
 	

@@ -50,7 +50,7 @@ CS
 	};
 	
 	Texture2D<float4> g_tSrc : register(t30, space0);
-	RWTexture2D<uint4> _5094 : register(u158, space0);
+	RWTexture2D<uint4> OutputDXT5Texture : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	struct SPIRV_Cross_Input
@@ -737,7 +737,7 @@ CS
 	        _3314 = _14744;
 	        _4273 ^= 1431655765u;
 	    }
-	    _5094[gl_WorkGroupID.xy] = uint4(4294967295u, 4294967295u, (_5908 << uint(16)) | _3314, _4273);
+	    OutputDXT5Texture[gl_WorkGroupID.xy] = uint4(4294967295u, 4294967295u, (_5908 << uint(16)) | _3314, _4273);
 	}
 	
 	[numthreads(1, 1, 1)]

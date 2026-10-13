@@ -8,7 +8,7 @@ HEADER
 	Version = 1;
 	
 	// Platform: VULKAN_SM_50
-	// Programs: ps, psrs, vs
+	// Programs: ps, vs, psrs
 }
 
 MODES
@@ -49,8 +49,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float2 vPositionSs : TEXCOORD0;
-	    float2 vTexCoord : TEXCOORD1;
+	    float2 vPositionSs : POSITION0;
+	    float2 vTexCoord : TEXCOORD0;
 	};
 	
 	struct PS_INPUT

@@ -90,7 +90,7 @@ VS
 	struct VS_INPUT
 	{
 	    float4 input_TEXCOORD0 : TEXCOORD0;
-	    uint input_TEXCOORD13 : TEXCOORD1;
+	    uint input_TEXCOORD13 : TEXCOORD13;
 	};
 	
 	struct PS_INPUT
@@ -106,7 +106,7 @@ VS
 	
 	void MainVs_inner()
 	{
-	    float4 _23812 = float4(uint4(g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 0) & 255u, (g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 0) & 65280u) >> uint(8), (g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 0) & 16711680u) >> uint(16), (g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 0) & 4278190080u) >> uint(24))) * 0.0039215688593685626983642578125f.xxxx;
+	    float4 _23812 = float4(uint4(g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 0) & 255u, (g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 0) & 65280u) >> uint(8), (g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 0) & 16711680u) >> uint(16), (g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 0) & 4278190080u) >> uint(24))) * 0.0039215688593685626983642578125f.xxxx;
 	    float3 _6253 = _23812.xyz;
 	    float3 _17828 = _6253 * 0.077399380505084991455078125f.xxx;
 	    float3 _7676 = pow((_6253 * 0.947867333889007568359375f.xxx) + 0.052132703363895416259765625f.xxx, 2.400000095367431640625f.xxx);
@@ -141,13 +141,13 @@ VS
 	    _16668.x = _21354;
 	    _16668.y = _21355;
 	    _16668.z = _19167;
-	    float3x4 _8600 = asfloat(uint3x4(g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) - 1u) * 48 + 0), g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) - 1u) * 48 + 16), g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) - 1u) * 48 + 32)));
-	    float3x4 _16772 = asfloat(uint3x4(g_transformBuffer.Load4(g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) * 48 + 0), g_transformBuffer.Load4(g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) * 48 + 16), g_transformBuffer.Load4(g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) * 48 + 32)));
-	    float3x4 _16773 = asfloat(uint3x4(g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) + 1u) * 48 + 0), g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) + 1u) * 48 + 16), g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) + 1u) * 48 + 32)));
-	    float3x4 _9292 = asfloat(uint3x4(g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) + 2u) * 48 + 0), g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) + 2u) * 48 + 16), g_transformBuffer.Load4((g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 16) + 2u) * 48 + 32)));
-	    float _23034 = float(g_instanceBuffer.Load(input_TEXCOORD13 * 32 + 12));
+	    float3x4 _8600 = float3x4(g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) - 1u) * 48 + 0), g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) - 1u) * 48 + 16), g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) - 1u) * 48 + 32));
+	    float3x4 _16772 = float3x4(g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) * 48 + 0), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) * 48 + 16), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) * 48 + 32));
+	    float3x4 _16773 = float3x4(g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) + 1u) * 48 + 0), g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) + 1u) * 48 + 16), g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) + 1u) * 48 + 32));
+	    float3x4 _9292 = float3x4(g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) + 2u) * 48 + 0), g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) + 2u) * 48 + 16), g_transformBuffer.Load<float4>((g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 16) + 2u) * 48 + 32));
+	    float _23034 = float(g_instanceBuffer.Load<uint>(input_TEXCOORD13 * 32 + 12));
 	    uint _21048 = input_TEXCOORD13 + 1u;
-	    float4 _23813 = float4(uint4(g_instanceBuffer.Load(_21048 * 32 + 0) & 255u, (g_instanceBuffer.Load(_21048 * 32 + 0) & 65280u) >> uint(8), (g_instanceBuffer.Load(_21048 * 32 + 0) & 16711680u) >> uint(16), (g_instanceBuffer.Load(_21048 * 32 + 0) & 4278190080u) >> uint(24))) * 0.0039215688593685626983642578125f.xxxx;
+	    float4 _23813 = float4(uint4(g_instanceBuffer.Load<uint>(_21048 * 32 + 0) & 255u, (g_instanceBuffer.Load<uint>(_21048 * 32 + 0) & 65280u) >> uint(8), (g_instanceBuffer.Load<uint>(_21048 * 32 + 0) & 16711680u) >> uint(16), (g_instanceBuffer.Load<uint>(_21048 * 32 + 0) & 4278190080u) >> uint(24))) * 0.0039215688593685626983642578125f.xxxx;
 	    float3 _6254 = _23813.xyz;
 	    float3 _17829 = _6254 * 0.077399380505084991455078125f.xxx;
 	    float3 _7677 = pow((_6254 * 0.947867333889007568359375f.xxx) + 0.052132703363895416259765625f.xxx, 2.400000095367431640625f.xxx);

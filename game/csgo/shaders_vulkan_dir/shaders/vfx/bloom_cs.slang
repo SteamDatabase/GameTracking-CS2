@@ -90,7 +90,7 @@ CS
 	
 	layout(set = 0, binding = 30) uniform texture2D g_tInputDownSample;
 	layout(set = 0, binding = 15) uniform sampler g_sBilinearClamp;
-	layout(set = 0, binding = 158) uniform writeonly image2D _5853;
+	layout(set = 0, binding = 158) uniform writeonly image2D g_tOutput;
 	
 	void main()
 	{
@@ -118,7 +118,7 @@ CS
 	        vec2 _4190 = saturate(((vec2(_13756) + vec2(0.5)) * 2.0) * _3161) * _5745;
 	        vec2 _7867 = _5745 - (_Globals_.g_vInvInputDownSampleDim.xy * 1.5);
 	        vec3 _17136 = clamp((((((textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(-2.0, 2.0) / _21281), _7867), 0.0).xyz + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(2.0) / _21281), _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(-2.0) / _21281), _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(2.0, -2.0) / _21281), _7867), 0.0).xyz) * 0.03125) + ((((textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(0.0, 2.0) / _21281), _7867), 0.0).xyz + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(-2.0, 0.0) / _21281), _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(2.0, 0.0) / _21281), _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(0.0, -2.0) / _21281), _7867), 0.0).xyz) * 0.0625)) + (((((textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190, _7867), 0.0).xyz + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(-1.0, 1.0) / _21281), _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + _3161, _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(-1.0) / _21281), _7867), 0.0).xyz) + textureLod(sampler2D(g_tInputDownSample, g_sBilinearClamp), min(_4190 + (vec2(1.0, -1.0) / _21281), _7867), 0.0).xyz) * 0.125), vec3(0.0), vec3(65504.0));
-	        imageStore(_5853, ivec2(_13756), vec4(_17136, 0.0));
+	        imageStore(g_tOutput, ivec2(_13756), vec4(_17136, 0.0));
 	        break;
 	    } while(false);
 	}

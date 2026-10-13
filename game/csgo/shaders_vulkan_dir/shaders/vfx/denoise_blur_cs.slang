@@ -42,7 +42,7 @@ CS
 	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
 	Texture2D<float4> g_tRawInput0 : register(t30, space0);
-	RWTexture2D<unorm float4> _3407 : register(u158, space0);
+	RWTexture2D<unorm float4> OutputTexture : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -52,7 +52,7 @@ CS
 	
 	void MainCs_inner()
 	{
-	    _3407[gl_GlobalInvocationID.xy] = g_tRawInput0.Load(int3(int3(int2(gl_GlobalInvocationID.xy), 0).xy, 0)).xyzw;
+	    OutputTexture[gl_GlobalInvocationID.xy] = g_tRawInput0.Load(int3(int3(int2(gl_GlobalInvocationID.xy), 0).xy, 0)).xyzw;
 	}
 	
 	[numthreads(8, 8, 1)]

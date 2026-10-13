@@ -44,16 +44,16 @@ CS
 	    uint _m0;
 	};
 	
-	globallycoherent RWByteAddressBuffer undetermined : register(u158, space3);
-	cbuffer _990_5474
+	globallycoherent RWByteAddressBuffer g_spdGlobalAtomic : register(u158, space3);
+	cbuffer DownsamplePushConstants_t
 	{
-	    uint _5474_m0 : packoffset(c0);
-	    uint _5474_m1 : packoffset(c0.y);
+	    uint DownsamplePushConstants_t_1_m0 : packoffset(c0);
+	    uint DownsamplePushConstants_t_1_m1 : packoffset(c0.y);
 	};
 	
 	Texture2D<float4> g_tInputDepth : register(t30, space3);
-	globallycoherent RWTexture2D<float4> _4300 : register(u159, space3);
-	RWTexture2D<float4> _5785[13] : register(u160, space3);
+	globallycoherent RWTexture2D<float4> g_tImgDst6 : register(u159, space3);
+	RWTexture2D<float4> g_tImgDst[13] : register(u160, space3);
 	
 	static uint3 gl_WorkGroupID;
 	static uint gl_LocalInvocationIndex;
@@ -98,27 +98,27 @@ CS
 	            uint2 _19109 = uint2(_16450);
 	            float4 _13482 = max(max(g_tInputDepth.Load(int3(int3(_16450, 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19109 + uint2(0u, 1u)), 0).xy, 0)).x.xxxx), max(g_tInputDepth.Load(int3(int3(int2(_19109 + uint2(1u, 0u)), 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19109 + uint2(1u, 1u)), 0).xy, 0)).x.xxxx));
 	            _20274[0] = _13482;
-	            _5785[1u][uint2(_20613 + _16009)] = _13482.x.xxxx;
+	            g_tImgDst[1u][uint2(_20613 + _16009)] = _13482.x.xxxx;
 	            int _15894 = int(_11495 + 32u);
 	            int2 _17142 = _15224 + int2(_15894, _12461);
 	            int _16683 = int(_18055 + 16u);
 	            uint2 _19110 = uint2(_17142);
 	            float4 _14603 = max(max(g_tInputDepth.Load(int3(int3(_17142, 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19110 + uint2(0u, 1u)), 0).xy, 0)).x.xxxx), max(g_tInputDepth.Load(int3(int3(int2(_19110 + uint2(1u, 0u)), 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19110 + uint2(1u, 1u)), 0).xy, 0)).x.xxxx));
 	            _20274[1] = _14603;
-	            _5785[1u][uint2(_20613 + int2(_16683, _8296))] = _14603.x.xxxx;
+	            g_tImgDst[1u][uint2(_20613 + int2(_16683, _8296))] = _14603.x.xxxx;
 	            int _15895 = int(_10507 + 32u);
 	            int2 _17143 = _15224 + int2(_22460, _15895);
 	            int _16684 = int(_21604 + 16u);
 	            uint2 _19111 = uint2(_17143);
 	            float4 _14604 = max(max(g_tInputDepth.Load(int3(int3(_17143, 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19111 + uint2(0u, 1u)), 0).xy, 0)).x.xxxx), max(g_tInputDepth.Load(int3(int3(int2(_19111 + uint2(1u, 0u)), 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19111 + uint2(1u, 1u)), 0).xy, 0)).x.xxxx));
 	            _20274[2] = _14604;
-	            _5785[1u][uint2(_20613 + int2(_18838, _16684))] = _14604.x.xxxx;
+	            g_tImgDst[1u][uint2(_20613 + int2(_18838, _16684))] = _14604.x.xxxx;
 	            int2 _21502 = _15224 + int2(_15894, _15895);
 	            uint2 _19112 = uint2(_21502);
 	            float4 _14605 = max(max(g_tInputDepth.Load(int3(int3(_21502, 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19112 + uint2(0u, 1u)), 0).xy, 0)).x.xxxx), max(g_tInputDepth.Load(int3(int3(int2(_19112 + uint2(1u, 0u)), 0).xy, 0)).x.xxxx, g_tInputDepth.Load(int3(int3(int2(_19112 + uint2(1u, 1u)), 0).xy, 0)).x.xxxx));
 	            _20274[3] = _14605;
-	            _5785[1u][uint2(_20613 + int2(_16683, _16684))] = _14605.x.xxxx;
-	            if (_5474_m0 <= 1u)
+	            g_tImgDst[1u][uint2(_20613 + int2(_16683, _16684))] = _14605.x.xxxx;
+	            if (DownsamplePushConstants_t_1_m0 <= 1u)
 	            {
 	                break;
 	            }
@@ -139,7 +139,7 @@ CS
 	                    uint _12552 = 16u * (_10507 + 1u);
 	                    float4 _14755 = max(max(_3286[_11495 + _17922].xxxx, _3286[_21225 + _17922].xxxx), max(_3286[_11495 + _12552].xxxx, _3286[_21225 + _12552].xxxx));
 	                    _20274[_13039] = _14755;
-	                    _5785[2u][uint2(int2(_6312 * uint2(16u, 16u)) + int2(int(_18055 + uint((_13039 - 2 * (_13039 / 2)) * 8)), int(_21604 + uint((_13039 / 2) * 8))))] = _14755.x.xxxx;
+	                    g_tImgDst[2u][uint2(int2(_6312 * uint2(16u, 16u)) + int2(int(_18055 + uint((_13039 - 2 * (_13039 / 2)) * 8)), int(_21604 + uint((_13039 / 2) * 8))))] = _14755.x.xxxx;
 	                }
 	                GroupMemoryBarrierWithGroupSync();
 	                _7459 = _13039 + 1;
@@ -160,7 +160,7 @@ CS
 	        } while(false);
 	        do
 	        {
-	            if (_5474_m0 <= 2u)
+	            if (DownsamplePushConstants_t_1_m0 <= 2u)
 	            {
 	                break;
 	            }
@@ -172,10 +172,10 @@ CS
 	                uint _12553 = 16u * (_10507 + 1u);
 	                float4 _21564 = max(max(_3286[_11495 + _17923].xxxx, _3286[_21226 + _17923].xxxx), max(_3286[_11495 + _12553].xxxx, _3286[_21226 + _12553].xxxx));
 	                float _14081 = _21564.x;
-	                _5785[3u][uint2(int2(_6312 * uint2(8u, 8u)) + _16009)] = _14081.xxxx;
+	                g_tImgDst[3u][uint2(int2(_6312 * uint2(8u, 8u)) + _16009)] = _14081.xxxx;
 	                _3286[(_11495 + (_21604 % 2u)) + _17923] = _14081;
 	            }
-	            if (_5474_m0 <= 3u)
+	            if (DownsamplePushConstants_t_1_m0 <= 3u)
 	            {
 	                break;
 	            }
@@ -187,10 +187,10 @@ CS
 	                uint _12554 = 16u * ((_21604 * 4u) + 2u);
 	                float4 _21565 = max(max(_3286[_6756 + _17924].xxxx, _3286[(_6756 + 2u) + _17924].xxxx), max(_3286[(_6756 + 1u) + _12554].xxxx, _3286[(_6756 + 3u) + _12554].xxxx));
 	                float _14082 = _21565.x;
-	                _5785[4u][uint2(int2(_6312 * uint2(4u, 4u)) + _16009)] = _14082.xxxx;
+	                g_tImgDst[4u][uint2(int2(_6312 * uint2(4u, 4u)) + _16009)] = _14082.xxxx;
 	                _3286[(_6756 + _21604) + _17924] = _14082;
 	            }
-	            if (_5474_m0 <= 4u)
+	            if (DownsamplePushConstants_t_1_m0 <= 4u)
 	            {
 	                break;
 	            }
@@ -202,32 +202,32 @@ CS
 	                uint _12555 = 16u * ((_21604 * 8u) + 4u);
 	                float4 _21566 = max(max(_3286[(_7524 + _10507) + _17925].xxxx, _3286[((_7524 + 4u) + _10507) + _17925].xxxx), max(_3286[((_7524 + 1u) + _10507) + _12555].xxxx, _3286[((_7524 + 5u) + _10507) + _12555].xxxx));
 	                float _14083 = _21566.x;
-	                _5785[5u][uint2(int2(_6312 * uint2(2u, 2u)) + _16009)] = _14083.xxxx;
+	                g_tImgDst[5u][uint2(int2(_6312 * uint2(2u, 2u)) + _16009)] = _14083.xxxx;
 	                _3286[_18055 + _10507] = _14083;
 	            }
-	            if (_5474_m0 <= 5u)
+	            if (DownsamplePushConstants_t_1_m0 <= 5u)
 	            {
 	                break;
 	            }
 	            GroupMemoryBarrierWithGroupSync();
 	            if (gl_LocalInvocationIndex < 1u)
 	            {
-	                _4300[_6312] = max(max(_3286[0u].xxxx, _3286[1u].xxxx), max(_3286[2u].xxxx, _3286[3u].xxxx)).x.xxxx;
+	                g_tImgDst6[_6312] = max(max(_3286[0u].xxxx, _3286[1u].xxxx), max(_3286[2u].xxxx, _3286[3u].xxxx)).x.xxxx;
 	            }
 	            break;
 	        } while(false);
-	        if (_5474_m0 <= 6u)
+	        if (DownsamplePushConstants_t_1_m0 <= 6u)
 	        {
 	            break;
 	        }
 	        if (gl_LocalInvocationIndex == 0u)
 	        {
 	            uint _12637;
-	            undetermined.InterlockedAdd(0, 1u, _12637);
+	            g_spdGlobalAtomic.InterlockedAdd(0, 1u, _12637);
 	            _3044 = _12637;
 	        }
 	        GroupMemoryBarrierWithGroupSync();
-	        if (_3044 != (_5474_m1 - 1u))
+	        if (_3044 != (DownsamplePushConstants_t_1_m1 - 1u))
 	        {
 	            break;
 	        }
@@ -236,7 +236,7 @@ CS
 	        uint _16999;
 	        uint _21382;
 	        uint _21383;
-	        undetermined.Store(0, 0u);
+	        g_spdGlobalAtomic.Store<uint>(0, 0u);
 	        do
 	        {
 	            _12251 = _18055 * 4u;
@@ -245,57 +245,57 @@ CS
 	            int _12385 = int(_10508);
 	            int2 _17893 = int2(_19466, _12385);
 	            uint2 _11848 = uint2(_17893);
-	            float4 _17947 = _4300[_17893];
-	            float4 _21178 = _4300[int2(_11848 + uint2(0u, 1u))];
-	            float4 _21179 = _4300[int2(_11848 + uint2(1u, 0u))];
-	            float4 _21180 = _4300[int2(_11848 + uint2(1u, 1u))];
+	            float4 _17947 = g_tImgDst6[_17893];
+	            float4 _21178 = g_tImgDst6[int2(_11848 + uint2(0u, 1u))];
+	            float4 _21179 = g_tImgDst6[int2(_11848 + uint2(1u, 0u))];
+	            float4 _21180 = g_tImgDst6[int2(_11848 + uint2(1u, 1u))];
 	            float4 _14084 = max(max(_17947.x.xxxx, _21178.x.xxxx), max(_21179.x.xxxx, _21180.x.xxxx));
-	            _5785[7u][uint2(_17277)] = _14084.x.xxxx;
+	            g_tImgDst[7u][uint2(_17277)] = _14084.x.xxxx;
 	            _21382 = _12251 + 2u;
 	            int _15896 = int(_21382);
 	            int2 _20356 = int2(_15896, _12385);
 	            _16998 = _11495 + 1u;
 	            int _10180 = int(_16998);
 	            uint2 _11849 = uint2(_20356);
-	            float4 _17948 = _4300[_20356];
-	            float4 _21181 = _4300[int2(_11849 + uint2(0u, 1u))];
-	            float4 _21182 = _4300[int2(_11849 + uint2(1u, 0u))];
-	            float4 _21183 = _4300[int2(_11849 + uint2(1u, 1u))];
+	            float4 _17948 = g_tImgDst6[_20356];
+	            float4 _21181 = g_tImgDst6[int2(_11849 + uint2(0u, 1u))];
+	            float4 _21182 = g_tImgDst6[int2(_11849 + uint2(1u, 0u))];
+	            float4 _21183 = g_tImgDst6[int2(_11849 + uint2(1u, 1u))];
 	            float4 _22131 = max(max(_17948.x.xxxx, _21181.x.xxxx), max(_21182.x.xxxx, _21183.x.xxxx));
-	            _5785[7u][uint2(int2(_10180, _12461))] = _22131.x.xxxx;
+	            g_tImgDst[7u][uint2(int2(_10180, _12461))] = _22131.x.xxxx;
 	            _21383 = _10508 + 2u;
 	            int _15897 = int(_21383);
 	            int2 _20357 = int2(_19466, _15897);
 	            _16999 = _10507 + 1u;
 	            int _10181 = int(_16999);
 	            uint2 _11850 = uint2(_20357);
-	            float4 _17949 = _4300[_20357];
-	            float4 _21184 = _4300[int2(_11850 + uint2(0u, 1u))];
-	            float4 _21185 = _4300[int2(_11850 + uint2(1u, 0u))];
-	            float4 _21186 = _4300[int2(_11850 + uint2(1u, 1u))];
+	            float4 _17949 = g_tImgDst6[_20357];
+	            float4 _21184 = g_tImgDst6[int2(_11850 + uint2(0u, 1u))];
+	            float4 _21185 = g_tImgDst6[int2(_11850 + uint2(1u, 0u))];
+	            float4 _21186 = g_tImgDst6[int2(_11850 + uint2(1u, 1u))];
 	            float4 _22132 = max(max(_17949.x.xxxx, _21184.x.xxxx), max(_21185.x.xxxx, _21186.x.xxxx));
-	            _5785[7u][uint2(int2(_22460, _10181))] = _22132.x.xxxx;
+	            g_tImgDst[7u][uint2(int2(_22460, _10181))] = _22132.x.xxxx;
 	            int2 _22601 = int2(_15896, _15897);
 	            uint2 _8647 = uint2(_22601);
-	            float4 _17950 = _4300[_22601];
-	            float4 _21187 = _4300[int2(_8647 + uint2(0u, 1u))];
-	            float4 _21188 = _4300[int2(_8647 + uint2(1u, 0u))];
-	            float4 _21189 = _4300[int2(_8647 + uint2(1u, 1u))];
+	            float4 _17950 = g_tImgDst6[_22601];
+	            float4 _21187 = g_tImgDst6[int2(_8647 + uint2(0u, 1u))];
+	            float4 _21188 = g_tImgDst6[int2(_8647 + uint2(1u, 0u))];
+	            float4 _21189 = g_tImgDst6[int2(_8647 + uint2(1u, 1u))];
 	            float4 _22133 = max(max(_17950.x.xxxx, _21187.x.xxxx), max(_21188.x.xxxx, _21189.x.xxxx));
-	            _5785[7u][uint2(int2(_10180, _10181))] = _22133.x.xxxx;
-	            if (_5474_m0 <= 7u)
+	            g_tImgDst[7u][uint2(int2(_10180, _10181))] = _22133.x.xxxx;
+	            if (DownsamplePushConstants_t_1_m0 <= 7u)
 	            {
 	                break;
 	            }
 	            float4 _14086 = max(max(_14084, _22131), max(_22132, _22133));
 	            float _14087 = _14086.x;
-	            _5785[8u][uint2(_16009)] = _14087.xxxx;
+	            g_tImgDst[8u][uint2(_16009)] = _14087.xxxx;
 	            _3286[_18055 + (16u * _21604)] = _14087;
 	            break;
 	        } while(false);
 	        do
 	        {
-	            if (_5474_m0 <= 8u)
+	            if (DownsamplePushConstants_t_1_m0 <= 8u)
 	            {
 	                break;
 	            }
@@ -306,10 +306,10 @@ CS
 	                uint _12556 = 16u * _16999;
 	                float4 _14088 = max(max(_3286[_11495 + _6251].xxxx, _3286[_16998 + _6251].xxxx), max(_3286[_11495 + _12556].xxxx, _3286[_16998 + _12556].xxxx));
 	                float _14089 = _14088.x;
-	                _5785[9u][uint2(_16009)] = _14089.xxxx;
+	                g_tImgDst[9u][uint2(_16009)] = _14089.xxxx;
 	                _3286[(_11495 + (_21604 % 2u)) + _6251] = _14089;
 	            }
-	            if (_5474_m0 <= 9u)
+	            if (DownsamplePushConstants_t_1_m0 <= 9u)
 	            {
 	                break;
 	            }
@@ -320,10 +320,10 @@ CS
 	                uint _12557 = 16u * _21383;
 	                float4 _14092 = max(max(_3286[_12251 + _17926].xxxx, _3286[_21382 + _17926].xxxx), max(_3286[(_12251 + 1u) + _12557].xxxx, _3286[(_12251 + 3u) + _12557].xxxx));
 	                float _14093 = _14092.x;
-	                _5785[10u][uint2(_16009)] = _14093.xxxx;
+	                g_tImgDst[10u][uint2(_16009)] = _14093.xxxx;
 	                _3286[(_12251 + _21604) + _17926] = _14093;
 	            }
-	            if (_5474_m0 <= 10u)
+	            if (DownsamplePushConstants_t_1_m0 <= 10u)
 	            {
 	                break;
 	            }
@@ -335,17 +335,17 @@ CS
 	                uint _12558 = 16u * ((_21604 * 8u) + 4u);
 	                float4 _14094 = max(max(_3286[(_7525 + _10507) + _17927].xxxx, _3286[((_7525 + 4u) + _10507) + _17927].xxxx), max(_3286[((_7525 + 1u) + _10507) + _12558].xxxx, _3286[((_7525 + 5u) + _10507) + _12558].xxxx));
 	                float _14095 = _14094.x;
-	                _5785[11u][uint2(_16009)] = _14095.xxxx;
+	                g_tImgDst[11u][uint2(_16009)] = _14095.xxxx;
 	                _3286[_18055 + _10507] = _14095;
 	            }
-	            if (_5474_m0 <= 11u)
+	            if (DownsamplePushConstants_t_1_m0 <= 11u)
 	            {
 	                break;
 	            }
 	            GroupMemoryBarrierWithGroupSync();
 	            if (gl_LocalInvocationIndex < 1u)
 	            {
-	                _5785[12u][uint2(0u, 0u)] = max(max(_3286[0u].xxxx, _3286[1u].xxxx), max(_3286[2u].xxxx, _3286[3u].xxxx)).x.xxxx;
+	                g_tImgDst[12u][uint2(0u, 0u)] = max(max(_3286[0u].xxxx, _3286[1u].xxxx), max(_3286[2u].xxxx, _3286[3u].xxxx)).x.xxxx;
 	            }
 	            break;
 	        } while(false);

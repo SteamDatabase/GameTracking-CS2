@@ -121,8 +121,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float2 vPositionSs : TEXCOORD0;
-	    float2 vTextureCoords : TEXCOORD1;
+	    float2 vPositionSs : POSITION0;
+	    float2 vTextureCoords : TEXCOORD0;
 	};
 	
 	struct PS_INPUT

@@ -44,7 +44,7 @@ CS
 	// Source 2 Viewer - https://valveresourceformat.github.io
 	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	RWTexture2DArray<uint4> _5248 : register(u158, space0);
+	RWTexture2DArray<uint4> g_tTileAtlas : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -62,7 +62,7 @@ CS
 	        {
 	            break;
 	        }
-	        _5248[uint3(gl_GlobalInvocationID.xy, _13039)] = uint4(0u, 0u, 0u, 0u);
+	        g_tTileAtlas[uint3(gl_GlobalInvocationID.xy, _13039)] = uint4(0u, 0u, 0u, 0u);
 	        _16380 = _13039 + 1u;
 	        _13039 = _16380;
 	        continue;

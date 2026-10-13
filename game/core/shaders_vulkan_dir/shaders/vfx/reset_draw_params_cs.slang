@@ -45,7 +45,7 @@ CS
 	    uint _Globals_1_g_nDrawStride : packoffset(c0.y);
 	};
 	
-	RWBuffer<uint> _4937 : register(u158, space0);
+	RWBuffer<uint> g_drawInstancedParamsOutput : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -58,7 +58,7 @@ CS
 	    if (gl_GlobalInvocationID.x < _Globals_1_g_nMaxDraws)
 	    {
 	        uint _10371;
-	        InterlockedMin(_4937[(gl_GlobalInvocationID.x * _Globals_1_g_nDrawStride) + 1u], 0u, _10371);
+	        InterlockedMin(g_drawInstancedParamsOutput[(gl_GlobalInvocationID.x * _Globals_1_g_nDrawStride) + 1u], 0u, _10371);
 	    }
 	}
 	

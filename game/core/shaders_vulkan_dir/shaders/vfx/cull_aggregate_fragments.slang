@@ -170,12 +170,12 @@ CS
 	    uint _m0[];
 	} g_InputIndices_1;
 	
-	layout(set = 0, binding = 166, std430) buffer undetermined
+	layout(set = 0, binding = 166, std430) buffer g_OutputIndices
 	{
 	    uint _m0[];
-	} undetermined_1;
+	} g_OutputIndices_1;
 	
-	layout(set = 0, binding = 161, r32ui) uniform uimageBuffer _4767;
+	layout(set = 0, binding = 161, r32ui) uniform uimageBuffer g_DrawArgs;
 	
 	void main()
 	{
@@ -211,10 +211,10 @@ CS
 	        if (_5517 == 0u)
 	        {
 	            uint _8597 = _24369 * 5u;
-	            imageStore(_4767, int(_8597 + 1u), uvec4(1u));
-	            imageStore(_4767, int(_8597 + 2u), uvec4(_24371));
-	            imageStore(_4767, int(_8597 + 3u), uvec4(_24372));
-	            imageStore(_4767, int(_8597 + 4u), uvec4(_24373));
+	            imageStore(g_DrawArgs, int(_8597 + 1u), uvec4(1u));
+	            imageStore(g_DrawArgs, int(_8597 + 2u), uvec4(_24371));
+	            imageStore(g_DrawArgs, int(_8597 + 3u), uvec4(_24372));
+	            imageStore(g_DrawArgs, int(_8597 + 4u), uvec4(_24373));
 	        }
 	        uint _17109 = (_8524 + _5517) * 32u;
 	        uint _6233 = g_MeshletData_1._m0[_17109 / 4u];
@@ -275,7 +275,7 @@ CS
 	        }
 	        if (_12885)
 	        {
-	            uint _18763 = imageAtomicAdd(_4767, int(_24369 * 5u), _5882 * 3u);
+	            uint _18763 = imageAtomicAdd(g_DrawArgs, int(_24369 * 5u), _5882 * 3u);
 	            uint _14025 = _5882 * 6u;
 	            uint _16134 = _14025 / 128u;
 	            uint _10045 = (_14025 % 128u) / 16u;
@@ -310,10 +310,10 @@ CS
 	                    uint _6239 = g_InputIndices_1._m0[(_23357 + 8u) / 4u];
 	                    uint _6240 = g_InputIndices_1._m0[(_23357 + 12u) / 4u];
 	                    uint _20865 = _13136 + _9984;
-	                    undetermined_1._m0[_20865 / 4u] = g_InputIndices_1._m0[_23357 / 4u];
-	                    undetermined_1._m0[(_20865 + 4u) / 4u] = _6238;
-	                    undetermined_1._m0[(_20865 + 8u) / 4u] = _6239;
-	                    undetermined_1._m0[(_20865 + 12u) / 4u] = _6240;
+	                    g_OutputIndices_1._m0[_20865 / 4u] = g_InputIndices_1._m0[_23357 / 4u];
+	                    g_OutputIndices_1._m0[(_20865 + 4u) / 4u] = _6238;
+	                    g_OutputIndices_1._m0[(_20865 + 8u) / 4u] = _6239;
+	                    g_OutputIndices_1._m0[(_20865 + 12u) / 4u] = _6240;
 	                    _23262 = _13039 + 1u;
 	                    _13039 = _23262;
 	                    continue;
@@ -344,10 +344,10 @@ CS
 	                uint _6242 = g_InputIndices_1._m0[(_13137 + 4u) / 4u];
 	                uint _6243 = g_InputIndices_1._m0[(_13137 + 8u) / 4u];
 	                uint _22955 = g_InputIndices_1._m0[(_13137 + 12u) / 4u];
-	                undetermined_1._m0[_16325 / 4u] = g_InputIndices_1._m0[_13137 / 4u];
-	                undetermined_1._m0[(_16325 + 4u) / 4u] = _6242;
-	                undetermined_1._m0[(_16325 + 8u) / 4u] = _6243;
-	                undetermined_1._m0[(_16325 + 12u) / 4u] = _22955;
+	                g_OutputIndices_1._m0[_16325 / 4u] = g_InputIndices_1._m0[_13137 / 4u];
+	                g_OutputIndices_1._m0[(_16325 + 4u) / 4u] = _6242;
+	                g_OutputIndices_1._m0[(_16325 + 8u) / 4u] = _6243;
+	                g_OutputIndices_1._m0[(_16325 + 12u) / 4u] = _22955;
 	                _22844 = _13137 + 16u;
 	                _8018 = _16325 + 16u;
 	                _14168 = _17018 + 1u;
@@ -369,7 +369,7 @@ CS
 	                {
 	                    break;
 	                }
-	                undetermined_1._m0[_13138 / 4u] = g_InputIndices_1._m0[_16326 / 4u];
+	                g_OutputIndices_1._m0[_13138 / 4u] = g_InputIndices_1._m0[_16326 / 4u];
 	                _22845 = _16326 + 4u;
 	                _8019 = _13138 + 4u;
 	                _14169 = _17019 + 1u;

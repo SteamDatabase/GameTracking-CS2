@@ -51,7 +51,7 @@ CS
 	Texture2D<float4> g_tHeightmap : register(t30, space0);
 	SamplerState AddressU_Wrap_AddressV_Wrap_Filter_MinMagMipPoint : register(s14, space0);
 	SamplerState AddressU_Wrap_AddressV_Wrap_Filter_MinMagLinearMipPoint : register(s15, space0);
-	RWTexture2D<uint> _5369 : register(u158, space0);
+	RWTexture2D<uint> g_tDstCones : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_LocalInvocationID;
@@ -257,7 +257,7 @@ CS
 	    }
 	    if (_17840)
 	    {
-	        _5369[gl_WorkGroupID.xy] = _4495.x;
+	        g_tDstCones[gl_WorkGroupID.xy] = _4495.x;
 	    }
 	}
 	

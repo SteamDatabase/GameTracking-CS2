@@ -59,6 +59,7 @@ CS
 	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
 	
 	#version 460
+	#extension GL_EXT_samplerless_texture_functions : require
 	layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 	
 	struct _990
@@ -107,18 +108,18 @@ CS
 	    _1022 _m0[];
 	} g_Particles_1;
 	
-	layout(set = 0, binding = 159, std430) buffer undetermined
+	layout(set = 0, binding = 159, std430) buffer g_VertexBuffer
 	{
 	    uint _m0[];
-	} undetermined_1;
+	} g_VertexBuffer_1;
 	
-	layout(set = 0, binding = 160, std430) buffer undetermined_2
+	layout(set = 0, binding = 160, std430) buffer g_IndexBuffer
 	{
 	    uint _m0[];
-	} undetermined_3;
+	} g_IndexBuffer_1;
 	
-	layout(set = 0, binding = 30) uniform usamplerBuffer undetermined_unexpectedTypeId408_1045;
-	layout(set = 0, binding = 158, r32ui) uniform uimageBuffer _4008;
+	layout(set = 0, binding = 30) uniform usamplerBuffer g_LookupTables;
+	layout(set = 0, binding = 158, r32ui) uniform uimageBuffer g_IndirectDrawArgs;
 	
 	shared uint _5696;
 	shared uint _5501;
@@ -250,7 +251,7 @@ CS
 	            uint _7596 = (_11305.y * 8u) + _11305.x;
 	            uvec2 _11306 = gl_LocalInvocationID.xy + uvec2(1u);
 	            uint _7597 = (_11306.y * 8u) + _11306.x;
-	            uvec4 _9781 = texelFetch(undetermined_unexpectedTypeId408_1045, int(_Globals_.g_nClassDataOffset + (((((((((floatBitsToUint(_3739[_5563][0u]) & 2147483648u) >> uint(31)) | ((floatBitsToUint(_3739[_7595][0u]) & 2147483648u) >> uint(30))) | ((floatBitsToUint(_3739[_7596][0u]) & 2147483648u) >> uint(29))) | ((floatBitsToUint(_3739[_7597][0u]) & 2147483648u) >> uint(28))) | ((floatBitsToUint(_3739[_5563][1u]) & 2147483648u) >> uint(27))) | ((floatBitsToUint(_3739[_7595][1u]) & 2147483648u) >> uint(26))) | ((floatBitsToUint(_3739[_7596][1u]) & 2147483648u) >> uint(25))) | ((floatBitsToUint(_3739[_7597][1u]) & 2147483648u) >> uint(24)))));
+	            uvec4 _9781 = texelFetch(g_LookupTables, int(_Globals_.g_nClassDataOffset + (((((((((floatBitsToUint(_3739[_5563][0u]) & 2147483648u) >> uint(31)) | ((floatBitsToUint(_3739[_7595][0u]) & 2147483648u) >> uint(30))) | ((floatBitsToUint(_3739[_7596][0u]) & 2147483648u) >> uint(29))) | ((floatBitsToUint(_3739[_7597][0u]) & 2147483648u) >> uint(28))) | ((floatBitsToUint(_3739[_5563][1u]) & 2147483648u) >> uint(27))) | ((floatBitsToUint(_3739[_7595][1u]) & 2147483648u) >> uint(26))) | ((floatBitsToUint(_3739[_7596][1u]) & 2147483648u) >> uint(25))) | ((floatBitsToUint(_3739[_7597][1u]) & 2147483648u) >> uint(24)))));
 	            uint _16997 = _9781.x;
 	            uint _24537 = (_16997 >> uint(4)) & 15u;
 	            uint _23149 = (_16997 >> uint(8)) & 15u;
@@ -259,8 +260,8 @@ CS
 	                bool _16059 = all(greaterThan(gl_LocalInvocationID.xy, uvec2(0u)));
 	                uint _23718 = _16059 ? ((_16997 >> uint(24)) & 15u) : _24537;
 	                uint _13990 = atomicMax(_5501, max(_23718, _23149));
-	                uint _23496 = imageAtomicAdd(_4008, int(8u), _16059 ? ((_16997 >> uint(28)) & 15u) : ((_16997 >> uint(12)) & 15u));
-	                uint _5156 = imageAtomicAdd(_4008, int(0u), _23149 * 3u);
+	                uint _23496 = imageAtomicAdd(g_IndirectDrawArgs, int(8u), _16059 ? ((_16997 >> uint(28)) & 15u) : ((_16997 >> uint(12)) & 15u));
+	                uint _5156 = imageAtomicAdd(g_IndirectDrawArgs, int(0u), _23149 * 3u);
 	                bool _12886;
 	                if (_23496 < _Globals_.g_nVertexBufferSize)
 	                {
@@ -309,7 +310,7 @@ CS
 	            if (_3354 < ((_3560[_4009]._m0 >> uint(4)) & 15u))
 	            {
 	                vec3 _4278 = _14716 + vec3(vec2(_5072) * _Globals_.g_vSystemStepSize.xy, 0.0);
-	                uvec4 _9876 = texelFetch(undetermined_unexpectedTypeId408_1045, int((_Globals_.g_nVertexDataOffset + (_4688 * 12u)) + _3354));
+	                uvec4 _9876 = texelFetch(g_LookupTables, int((_Globals_.g_nVertexDataOffset + (_4688 * 12u)) + _3354));
 	                uint _16037 = _9876.x;
 	                uint _4758 = _16037 & 15u;
 	                uint _18698 = _16037 >> uint(4);
@@ -430,14 +431,14 @@ CS
 	                }
 	                uint _13526 = (_4676[(_22527 * 7u) + _23151] + ((_16037 >> uint(12)) & 15u)) * 16u;
 	                uvec3 _9171 = floatBitsToUint(_12090);
-	                undetermined_1._m0[_13526 / 4u] = _9171.x;
-	                undetermined_1._m0[(_13526 + 4u) / 4u] = _9171.y;
-	                undetermined_1._m0[(_13526 + 8u) / 4u] = _9171.z;
-	                undetermined_1._m0[(_13526 + 12u) / 4u] = (1u | (uint(round(((_19321.x * 0.5) + 0.5) * 1023.0)) << 12u)) | (uint(round(((_19321.y * 0.5) + 0.5) * 1023.0)) << 22u);
+	                g_VertexBuffer_1._m0[_13526 / 4u] = _9171.x;
+	                g_VertexBuffer_1._m0[(_13526 + 4u) / 4u] = _9171.y;
+	                g_VertexBuffer_1._m0[(_13526 + 8u) / 4u] = _9171.z;
+	                g_VertexBuffer_1._m0[(_13526 + 12u) / 4u] = (1u | (uint(round(((_19321.x * 0.5) + 0.5) * 1023.0)) << 12u)) | (uint(round(((_19321.y * 0.5) + 0.5) * 1023.0)) << 22u);
 	            }
 	            if (_3354 < ((_3560[_4009]._m0 >> uint(8)) & 15u))
 	            {
-	                uvec4 _3300 = texelFetch(undetermined_unexpectedTypeId408_1045, int((_Globals_.g_nTriangleDataOffset + (_4688 * 5u)) + _3354));
+	                uvec4 _3300 = texelFetch(g_LookupTables, int((_Globals_.g_nTriangleDataOffset + (_4688 * 5u)) + _3354));
 	                uint _16038 = _3300.x;
 	                uint _16517 = _16038 >> uint(24);
 	                uint _5913 = _16517 & 3u;
@@ -501,9 +502,9 @@ CS
 	                    _23170 = _5072;
 	                }
 	                uint _20110 = (_3560[_4009]._m1 + (_3354 * 3u)) * 4u;
-	                undetermined_3._m0[_20110 / 4u] = (_12887 ? ((_16038 >> uint(12)) & 15u) : (_16038 & 15u)) + _4676[(_23168.y * 7u) + _23168.x];
-	                undetermined_3._m0[(_20110 + 4u) / 4u] = (_12888 ? ((_16038 >> uint(16)) & 15u) : ((_16038 >> uint(4)) & 15u)) + _4676[(_23169.y * 7u) + _23169.x];
-	                undetermined_3._m0[(_20110 + 8u) / 4u] = (_12889 ? ((_16038 >> uint(20)) & 15u) : ((_16038 >> uint(8)) & 15u)) + _4676[(_23170.y * 7u) + _23170.x];
+	                g_IndexBuffer_1._m0[_20110 / 4u] = (_12887 ? ((_16038 >> uint(12)) & 15u) : (_16038 & 15u)) + _4676[(_23168.y * 7u) + _23168.x];
+	                g_IndexBuffer_1._m0[(_20110 + 4u) / 4u] = (_12888 ? ((_16038 >> uint(16)) & 15u) : ((_16038 >> uint(4)) & 15u)) + _4676[(_23169.y * 7u) + _23169.x];
+	                g_IndexBuffer_1._m0[(_20110 + 8u) / 4u] = (_12889 ? ((_16038 >> uint(20)) & 15u) : ((_16038 >> uint(8)) & 15u)) + _4676[(_23170.y * 7u) + _23170.x];
 	            }
 	            _3750 = _13040 + _4097;
 	            _13040 = _3750;

@@ -8,7 +8,7 @@ HEADER
 	Version = 1;
 	
 	// Platform: VULKAN_SM_50
-	// Programs: ps, psrs, vs
+	// Programs: ps, vs, psrs
 }
 
 MODES
@@ -102,11 +102,11 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    float2 vTexCoord : TEXCOORD1;
-	    float3 vNormalOs : TEXCOORD2;
-	    uint4 vBlendIndices : TEXCOORD3;
-	    uint nInstanceIdx : TEXCOORD4;
+	    float3 vPositionOs : POSITION0;
+	    float2 vTexCoord : TEXCOORD0;
+	    float3 vNormalOs : NORMAL0;
+	    uint4 vBlendIndices : BLENDINDICES0;
+	    uint nInstanceIdx : TEXCOORD13;
 	};
 	
 	struct PS_INPUT
@@ -121,28 +121,28 @@ VS
 	
 	void MainVs_inner()
 	{
-	    uint _13771 = (g_instanceBuffer.Load(nInstanceIdx * 32 + 20) >> uint(16)) & 15u;
+	    uint _13771 = (g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 20) >> uint(16)) & 15u;
 	    uint _21785;
 	    if (_13771 == 1u)
 	    {
-	        _21785 = g_instanceBuffer.Load(nInstanceIdx * 32 + 4) + (2u + vBlendIndices.x);
+	        _21785 = g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) + (2u + vBlendIndices.x);
 	    }
 	    else
 	    {
-	        _21785 = g_instanceBuffer.Load(nInstanceIdx * 32 + 4);
+	        _21785 = g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4);
 	    }
-	    float3x4 _12618 = asfloat(uint3x4(g_transformBuffer.Load4(_21785 * 48 + 0), g_transformBuffer.Load4(_21785 * 48 + 16), g_transformBuffer.Load4(_21785 * 48 + 32)));
+	    float3x4 _12618 = float3x4(g_transformBuffer.Load<float4>(_21785 * 48 + 0), g_transformBuffer.Load<float4>(_21785 * 48 + 16), g_transformBuffer.Load<float4>(_21785 * 48 + 32));
 	    float3 _21709;
 	    if (_13771 > 0u)
 	    {
-	        float3x4 _25207 = asfloat(uint3x4(g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 32)));
+	        float3x4 _25207 = float3x4(g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 32));
 	        _21709 = _25207[0].z.xxx;
 	    }
 	    else
 	    {
 	        _21709 = 1.0f.xxx;
 	    }
-	    float4 _23812 = float4(uint4(g_instanceBuffer.Load(nInstanceIdx * 32 + 0) & 255u, (g_instanceBuffer.Load(nInstanceIdx * 32 + 0) & 65280u) >> uint(8), (g_instanceBuffer.Load(nInstanceIdx * 32 + 0) & 16711680u) >> uint(16), (g_instanceBuffer.Load(nInstanceIdx * 32 + 0) & 4278190080u) >> uint(24))) * 0.0039215688593685626983642578125f.xxxx;
+	    float4 _23812 = float4(uint4(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 0) & 255u, (g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 0) & 65280u) >> uint(8), (g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 0) & 16711680u) >> uint(16), (g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 0) & 4278190080u) >> uint(24))) * 0.0039215688593685626983642578125f.xxxx;
 	    float3 _6253 = _23812.xyz;
 	    float3 _17828 = _6253 * 0.077399380505084991455078125f.xxx;
 	    float3 _7676 = pow((_6253 * 0.947867333889007568359375f.xxx) + 0.052132703363895416259765625f.xxx, 2.400000095367431640625f.xxx);
@@ -175,14 +175,14 @@ VS
 	    }
 	    float _7654 = _23812.w;
 	    float4 _20063 = float4(_21354, _21355, _17978, _7654);
-	    _20063.w = _7654 * asfloat(g_instanceBuffer.Load(nInstanceIdx * 32 + 28));
+	    _20063.w = _7654 * g_instanceBuffer.Load<float>(nInstanceIdx * 32 + 28);
 	    float3 _12151 = mul(_12618, float4(vPositionOs.xyz * _21709.xyz, 1.0f));
 	    float4 _18237 = mul(PerViewConstantBuffer_t_1_m0, (float4(_12151.xyz, 1.0f) + (PerViewConstantBuffer_t_1_m1 * 1.0f)).xyzw);
 	    output_0 = _12151.xyz - PerViewConstantBufferCsgo_t_1_m0.xyz;
 	    output_1 = normalize(mul(_12618, float4(vNormalOs.xyz, 0.0f)));
 	    output_2 = vTexCoord.xyxy;
 	    output_3 = _20063;
-	    output_4 = g_instanceBuffer.Load(nInstanceIdx * 32 + 20) & 65535u;
+	    output_4 = g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 20) & 65535u;
 	    _18237.y = -_18237.y;
 	    gl_Position = _18237;
 	}

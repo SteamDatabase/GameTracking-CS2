@@ -50,7 +50,7 @@ CS
 	};
 	
 	Texture3D<float4> g_tColorCorrection0 : register(t30, space0);
-	RWTexture3D<float4> _3407 : register(u158, space0);
+	RWTexture3D<float4> OutputTexture : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -61,7 +61,7 @@ CS
 	void MainCs_inner()
 	{
 	    int4 _10344 = int4(uint4(gl_GlobalInvocationID.xyz, 0u));
-	    _3407[gl_GlobalInvocationID.xyz] = float4((g_tColorCorrection0.Load(int4(_10344.xyz, _10344.w)).xyz * _Globals_1_g_vColorCorrectionWeights0.x).xyz, 1.0f);
+	    OutputTexture[gl_GlobalInvocationID.xyz] = float4((g_tColorCorrection0.Load(int4(_10344.xyz, _10344.w)).xyz * _Globals_1_g_vColorCorrectionWeights0.x).xyz, 1.0f);
 	}
 	
 	[numthreads(4, 4, 4)]

@@ -49,9 +49,9 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionSs : TEXCOORD0;
-	    uint nPrimMaskLo : TEXCOORD1;
-	    uint nPrimMaskHi : TEXCOORD2;
+	    float3 vPositionSs : POSITION0;
+	    uint nPrimMaskLo : TEXCOORD0;
+	    uint nPrimMaskHi : TEXCOORD1;
 	};
 	
 	struct PS_INPUT

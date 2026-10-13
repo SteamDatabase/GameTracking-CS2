@@ -69,8 +69,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionWs : TEXCOORD0;
-	    float4 vColor : TEXCOORD1;
+	    float3 vPositionWs : POSITION0;
+	    float4 vColor : COLOR0;
 	};
 	
 	struct PS_INPUT
@@ -144,96 +144,147 @@ GS
 	StaticComboRule( Allow1( S_CULL_LARGER_THAN_BOX, S_WORLD_SPACE_SIZE ) );
 	
 	
-	// SPIR-V reflection failed for backend HLSL:
-	// Unsupported shader stage.
-	//
-	// Re-attempting reflection with the GLSL backend.
-	
 	// Source 2 Viewer - https://valveresourceformat.github.io
-	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
+	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	#version 460
-	layout(points) in;
-	layout(max_vertices = 4, triangle_strip) out;
+	static float4 _2;
 	
-	vec4 _2;
-	
-	struct _1278
+	cbuffer PerViewConstantBuffer_t : register(b0, space2)
 	{
-	    mat4 _m0;
-	    vec2 _m1;
-	    vec4 _m2;
+	    column_major float4x4 PerViewConstantBuffer_t_1_m0 : packoffset(c0);
+	    float2 PerViewConstantBuffer_t_1_m1 : packoffset(c21);
+	    float4 PerViewConstantBuffer_t_1_m2 : packoffset(c24);
 	};
 	
-	layout(set = 2) uniform _1278 PerViewConstantBuffer_t;
 	
-	layout(location = 0) in vec4 input_0[1];
-	layout(location = 1) in vec4 input_1[1];
-	layout(location = 2) in float input_2[1];
-	layout(location = 0) out vec4 output_0;
-	layout(location = 1) out vec2 output_1;
-	layout(location = 2) out vec4 output_2;
+	static float4 gl_Position;
+	static float4 input_0[1];
+	static float4 input_1[1];
+	static float input_2[1];
+	static float4 output_0;
+	static float2 output_1;
+	static float4 output_2;
 	
-	void main()
+	struct SPIRV_Cross_Input
 	{
-	    vec4 _20663 = (vec4(input_0[0].xyz, 1.0) + (PerViewConstantBuffer_t._m2 * 1.0)).xyzw * PerViewConstantBuffer_t._m0;
-	    vec2 _13731 = _20663.xy;
-	    vec2 _14654 = PerViewConstantBuffer_t._m1.xy * input_2[0];
+	    float4 input_0 : TEXCOORD0;
+	    float4 input_1 : TEXCOORD1;
+	    float input_2 : TEXCOORD2;
+	};
+	
+	struct SPIRV_Cross_Output
+	{
+	    float4 output_0 : TEXCOORD0;
+	    float2 output_1 : TEXCOORD1;
+	    float4 output_2 : TEXCOORD2;
+	    float4 gl_Position : SV_Position;
+	};
+	
+	void MainGs_inner(point SPIRV_Cross_Input stage_input[1], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    float4 _20663 = mul(PerViewConstantBuffer_t_1_m0, (float4(input_0[0].xyz, 1.0f) + (PerViewConstantBuffer_t_1_m2 * 1.0f)).xyzw);
+	    float2 _13731 = _20663.xy;
+	    float2 _14654 = PerViewConstantBuffer_t_1_m1.xy * input_2[0];
 	    float _12129 = _20663.w;
-	    vec2 _6635 = _13731 + ((_14654 * vec2(-1.0)) * _12129);
+	    float2 _6635 = _13731 + ((_14654 * (-1.0f).xx) * _12129);
 	    float _9979 = _6635.x;
-	    vec4 _20488;
+	    float4 _20488;
 	    _20488.x = _9979;
 	    float _21775 = _6635.y;
 	    _20488.y = _21775;
-	    vec2 _7534 = vec2(_12129);
-	    vec2 _9003 = ((_20488.xy / _7534) * 0.5) + vec2(0.5);
-	    vec2 _22603 = vec2(_9003.x, 1.0 - _9003.y) / PerViewConstantBuffer_t._m1.xy;
-	    vec2 _9022 = _13731 + (_14654 * _12129);
+	    float2 _7534 = _12129.xx;
+	    float2 _9003 = ((_20488.xy / _7534) * 0.5f) + 0.5f.xx;
+	    float2 _22603 = float2(_9003.x, 1.0f - _9003.y) / PerViewConstantBuffer_t_1_m1.xy;
+	    float2 _9022 = _13731 + (_14654 * _12129);
 	    float _9980 = _9022.x;
-	    vec4 _20489;
+	    float4 _20489;
 	    _20489.x = _9980;
 	    float _21776 = _9022.y;
 	    _20489.y = _21776;
-	    vec2 _9004 = ((_20489.xy / _7534) * 0.5) + vec2(0.5);
-	    vec4 _5752 = vec4(_22603.x, (vec2(_9004.x, 1.0 - _9004.y) / PerViewConstantBuffer_t._m1.xy).yx, _22603.y);
-	    vec2 _9831 = _13731 + ((_14654 * vec2(-1.0, 1.0)) * _12129);
-	    vec4 _20108 = _20663;
+	    float2 _9004 = ((_20489.xy / _7534) * 0.5f) + 0.5f.xx;
+	    float4 _5752 = float4(_22603.x, (float2(_9004.x, 1.0f - _9004.y) / PerViewConstantBuffer_t_1_m1.xy).yx, _22603.y);
+	    float2 _9831 = _13731 + ((_14654 * float2(-1.0f, 1.0f)) * _12129);
+	    float4 _20108 = _20663;
 	    _20108.x = _9831.x;
 	    output_0 = input_1[0];
-	    output_1 = vec2(0.0);
+	    output_1 = 0.0f.xx;
 	    output_2 = _5752;
 	    _20108.y = -_9831.y;
 	    gl_Position = _20108;
-	    EmitVertex();
-	    vec4 _18816 = _20663;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float4 _18816 = _20663;
 	    _18816.x = _9979;
 	    output_0 = input_1[0];
-	    output_1 = vec2(0.0, 1.0);
+	    output_1 = float2(0.0f, 1.0f);
 	    output_2 = _5752;
 	    _18816.y = -_21775;
 	    gl_Position = _18816;
-	    EmitVertex();
-	    vec4 _18817 = _20663;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float4 _18817 = _20663;
 	    _18817.x = _9980;
 	    output_0 = input_1[0];
-	    output_1 = vec2(1.0, 0.0);
+	    output_1 = float2(1.0f, 0.0f);
 	    output_2 = _5752;
 	    _18817.y = -_21776;
 	    gl_Position = _18817;
-	    EmitVertex();
-	    vec2 _9832 = _13731 + ((_14654 * vec2(1.0, -1.0)) * _12129);
-	    vec4 _20109 = _20663;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float2 _9832 = _13731 + ((_14654 * float2(1.0f, -1.0f)) * _12129);
+	    float4 _20109 = _20663;
 	    _20109.x = _9832.x;
 	    output_0 = input_1[0];
-	    output_1 = vec2(1.0);
+	    output_1 = 1.0f.xx;
 	    output_2 = _5752;
 	    _20109.y = -_9832.y;
 	    gl_Position = _20109;
-	    EmitVertex();
-	    EndPrimitive();
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        geometry_stream.Append(stage_output);
+	    }
+	    geometry_stream.RestartStrip();
 	}
 	
+	[maxvertexcount(4)]
+	void MainGs(point SPIRV_Cross_Input stage_input[1], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    for (int i = 0; i < 1; i++)
+	    {
+	        input_0[i] = stage_input[i].input_0;
+	    }
+	    for (int i = 0; i < 1; i++)
+	    {
+	        input_1[i] = stage_input[i].input_1;
+	    }
+	    for (int i = 0; i < 1; i++)
+	    {
+	        input_2[i] = stage_input[i].input_2;
+	    }
+	    MainGs_inner(stage_input, geometry_stream);
+	}
 	
 	// ---------  SPIRV -> HLSL end  --------- 
 	

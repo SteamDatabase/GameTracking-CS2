@@ -61,9 +61,9 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionWs : TEXCOORD0;
-	    float2 vLightmapUv : TEXCOORD1;
-	    uint nPackedFrame : TEXCOORD2;
+	    float3 vPositionWs : POSITION0;
+	    float2 vLightmapUv : TEXCOORD0;
+	    uint nPackedFrame : NORMAL0;
 	};
 	
 	struct PS_INPUT
@@ -136,43 +136,54 @@ GS
 	
 	StructuredBuffer g_ChartIDs < Attribute("g_ChartIDs"); >;
 	
-	// SPIR-V reflection failed for backend HLSL:
-	// Unsupported builtin in HLSL.
-	//
-	// Re-attempting reflection with the GLSL backend.
-	
 	// Source 2 Viewer - https://valveresourceformat.github.io
-	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
+	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	#version 460
-	layout(triangles) in;
-	layout(max_vertices = 3, triangle_strip) out;
+	ByteAddressBuffer g_ChartIDs : register(t30, space2);
 	
-	layout(set = 2, binding = 30, std430) readonly buffer g_ChartIDs
+	static float4 gl_PositionIn[3];
+	static float4 gl_Position;
+	static uint gl_PrimitiveIDIn;
+	static float3 input_0[3];
+	static float3 input_1[3];
+	static float4 input_3[3];
+	static float2 input_4[3];
+	static float3 output_0;
+	static float3 output_1;
+	static float3 output_2;
+	static float4 output_3;
+	static float2 output_4;
+	static uint output_5;
+	
+	struct SPIRV_Cross_Input
 	{
-	    uint _m0[];
-	} g_ChartIDs_1;
+	    float3 input_0 : TEXCOORD0;
+	    float3 input_1 : TEXCOORD1;
+	    float4 input_3 : TEXCOORD3;
+	    float2 input_4 : TEXCOORD4;
+	    float4 gl_PositionIn : SV_Position;
+	};
 	
-	layout(location = 0) in vec3 input_0[3];
-	layout(location = 1) in vec3 input_1[3];
-	layout(location = 3) in vec4 input_3[3];
-	layout(location = 4) in vec2 input_4[3];
-	layout(location = 0) out vec3 output_0;
-	layout(location = 1) out vec3 output_1;
-	layout(location = 2) out vec3 output_2;
-	layout(location = 3) out vec4 output_3;
-	layout(location = 4) out vec2 output_4;
-	layout(location = 5) flat out uint output_5;
-	
-	void main()
+	struct SPIRV_Cross_Output
 	{
-	    vec3 _7777 = normalize(cross(input_0[1] - input_0[0], input_0[2] - input_0[0]));
+	    float3 output_0 : TEXCOORD0;
+	    float3 output_1 : TEXCOORD1;
+	    float3 output_2 : TEXCOORD2;
+	    float4 output_3 : TEXCOORD3;
+	    float2 output_4 : TEXCOORD4;
+	    nointerpolation uint output_5 : TEXCOORD5;
+	    float4 gl_Position : SV_Position;
+	};
+	
+	void MainGs_inner(triangle SPIRV_Cross_Input stage_input[3], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    float3 _7777 = normalize(cross(input_0[1] - input_0[0], input_0[2] - input_0[0]));
 	    uint _11093 = uint(gl_PrimitiveIDIn);
-	    uvec2 _16324;
-	    _16324 = uvec2(_11093, 0u);
+	    uint2 _16324;
+	    _16324 = uint2(_11093, 0u);
 	    int _6352;
 	    uint _15272;
-	    uvec2 _16189;
+	    uint2 _16189;
 	    uint _13136 = 0u;
 	    int _17017 = 0;
 	    for (;;)
@@ -182,53 +193,109 @@ GS
 	            break;
 	        }
 	        _15272 = _13136 + 2654435769u;
-	        _16189 = _16324.xy + ((((_16324.yx << uvec2(ivec2(4))) + uvec2(2738958700u, 2911926141u)) ^ (_16324.yx + uvec2(_15272))) ^ ((_16324.yx >> uvec2(ivec2(5))) + uvec2(3355524772u, 2123724318u)));
+	        _16189 = _16324.xy + ((((_16324.yx << uint2(int2(4, 4))) + uint2(2738958700u, 2911926141u)) ^ (_16324.yx + _15272.xx)) ^ ((_16324.yx >> uint2(int2(5, 5))) + uint2(3355524772u, 2123724318u)));
 	        _6352 = _17017 + 1;
 	        _13136 = _15272;
 	        _16324 = _16189;
 	        _17017 = _6352;
 	        continue;
 	    }
-	    float _21748 = float(_16324.x & 1048575u) * 9.5367431640625e-07;
-	    vec4 _9829 = gl_in[0].gl_Position;
-	    vec4 _12875 = _9829;
+	    float _21748 = float(_16324.x & 1048575u) * 9.5367431640625e-07f;
+	    float4 _9829 = gl_PositionIn[0];
+	    float4 _12875 = _9829;
 	    _12875.z = _21748;
 	    output_0 = input_0[0];
 	    output_1 = input_1[0];
 	    output_2 = _7777;
 	    output_3 = input_3[0];
 	    output_4 = input_4[0];
-	    output_5 = g_ChartIDs_1._m0[_11093];
+	    output_5 = g_ChartIDs.Load<uint>(_11093 * 4 + 0);
 	    _12875.y = -_9829.y;
 	    gl_Position = _12875;
-	    EmitVertex();
-	    vec4 _9830 = gl_in[1].gl_Position;
-	    vec4 _12876 = _9830;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        stage_output.output_3 = output_3;
+	        stage_output.output_4 = output_4;
+	        stage_output.output_5 = output_5;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float4 _9830 = gl_PositionIn[1];
+	    float4 _12876 = _9830;
 	    _12876.z = _21748;
 	    output_0 = input_0[1];
 	    output_1 = input_1[1];
 	    output_2 = _7777;
 	    output_3 = input_3[1];
 	    output_4 = input_4[1];
-	    output_5 = g_ChartIDs_1._m0[_11093];
+	    output_5 = g_ChartIDs.Load<uint>(_11093 * 4 + 0);
 	    _12876.y = -_9830.y;
 	    gl_Position = _12876;
-	    EmitVertex();
-	    vec4 _9831 = gl_in[2].gl_Position;
-	    vec4 _12877 = _9831;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        stage_output.output_3 = output_3;
+	        stage_output.output_4 = output_4;
+	        stage_output.output_5 = output_5;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float4 _9831 = gl_PositionIn[2];
+	    float4 _12877 = _9831;
 	    _12877.z = _21748;
 	    output_0 = input_0[2];
 	    output_1 = input_1[2];
 	    output_2 = _7777;
 	    output_3 = input_3[2];
 	    output_4 = input_4[2];
-	    output_5 = g_ChartIDs_1._m0[_11093];
+	    output_5 = g_ChartIDs.Load<uint>(_11093 * 4 + 0);
 	    _12877.y = -_9831.y;
 	    gl_Position = _12877;
-	    EmitVertex();
-	    EndPrimitive();
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        stage_output.output_2 = output_2;
+	        stage_output.output_3 = output_3;
+	        stage_output.output_4 = output_4;
+	        stage_output.output_5 = output_5;
+	        geometry_stream.Append(stage_output);
+	    }
+	    geometry_stream.RestartStrip();
 	}
 	
+	[maxvertexcount(3)]
+	void MainGs(triangle SPIRV_Cross_Input stage_input[3], uint gl_PrimitiveID : SV_PrimitiveID, inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    for (int i = 0; i < 3; i++)
+	    {
+	        gl_PositionIn[i] = stage_input[i].gl_PositionIn;
+	    }
+	    gl_PrimitiveIDIn = gl_PrimitiveID;
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_0[i] = stage_input[i].input_0;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_1[i] = stage_input[i].input_1;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_3[i] = stage_input[i].input_3;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_4[i] = stage_input[i].input_4;
+	    }
+	    MainGs_inner(stage_input, geometry_stream);
+	}
 	
 	// ---------  SPIRV -> HLSL end  --------- 
 	

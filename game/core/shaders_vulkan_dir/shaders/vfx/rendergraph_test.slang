@@ -48,7 +48,7 @@ CS
 	    int _Globals_1_g_nBranchOffset : packoffset(c0.y);
 	};
 	
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer g_OutputBuffer : register(u158, space0);
 	ByteAddressBuffer g_InputBuffer : register(t30, space0);
 	
 	static uint3 gl_GlobalInvocationID;
@@ -65,7 +65,7 @@ CS
 	        {
 	            break;
 	        }
-	        undetermined.Store(gl_GlobalInvocationID.x * 4 + 0, g_InputBuffer.Load(gl_GlobalInvocationID.x * 4 + 0) + uint(_Globals_1_g_nBranchOffset));
+	        g_OutputBuffer.Store<uint>(gl_GlobalInvocationID.x * 4 + 0, g_InputBuffer.Load<uint>(gl_GlobalInvocationID.x * 4 + 0) + uint(_Globals_1_g_nBranchOffset));
 	        break;
 	    } while(false);
 	}

@@ -126,9 +126,9 @@ VS
 	{
 	    float2 input_TEXCOORD0 : TEXCOORD0;
 	    float4 input_TEXCOORD1 : TEXCOORD1;
-	    float4 input_COLOR0 : TEXCOORD3;
-	    float3 input_POSITION0 : TEXCOORD4;
-	    float4 input_TEXCOORD3 : TEXCOORD5;
+	    float4 input_COLOR0 : COLOR0;
+	    float3 input_POSITION0 : POSITION0;
+	    float4 input_TEXCOORD3 : TEXCOORD3;
 	};
 	
 	struct PS_INPUT

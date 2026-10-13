@@ -68,15 +68,15 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float4 vPositionSs : TEXCOORD0;
-	    float4 vTexcoordgradientcoord : TEXCOORD1;
-	    float4 vOutercornercoord0 : TEXCOORD2;
-	    float4 vOutercornercoord1 : TEXCOORD3;
-	    float4 vColor0 : TEXCOORD4;
-	    float4 vColor1 : TEXCOORD5;
-	    float4 vInnercornercoord0 : TEXCOORD6;
-	    float4 vInnercornercoord1 : TEXCOORD7;
-	    float4 vOpacitytexcoord : TEXCOORD8;
+	    float4 vPositionSs : POSITION0;
+	    float4 vTexcoordgradientcoord : TEXCOORD0;
+	    float4 vOutercornercoord0 : TEXCOORD1;
+	    float4 vOutercornercoord1 : TEXCOORD2;
+	    float4 vColor0 : TEXCOORD3;
+	    float4 vColor1 : TEXCOORD4;
+	    float4 vInnercornercoord0 : TEXCOORD5;
+	    float4 vInnercornercoord1 : TEXCOORD6;
+	    float4 vOpacitytexcoord : TEXCOORD7;
 	};
 	
 	struct PS_INPUT

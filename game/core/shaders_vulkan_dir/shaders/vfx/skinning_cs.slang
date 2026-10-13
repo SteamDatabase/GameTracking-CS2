@@ -66,20 +66,20 @@ CS
 	ByteAddressBuffer g_instances : register(t37, space0);
 	ByteAddressBuffer g_inputVB : register(t36, space0);
 	ByteAddressBuffer g_transformBuffer : register(t30, space0);
-	RWByteAddressBuffer undetermined : register(u158, space0);
-	cbuffer _1206_3444
+	RWByteAddressBuffer g_outputVB : register(u158, space0);
+	cbuffer VertexCachePushConstants
 	{
-	    uint _3444_m0 : packoffset(c0);
-	    uint _3444_m1 : packoffset(c0.y);
-	    uint _3444_m2 : packoffset(c0.z);
-	    uint _3444_m3 : packoffset(c0.w);
-	    uint _3444_m4 : packoffset(c1);
-	    uint _3444_m5 : packoffset(c1.y);
-	    uint _3444_m6 : packoffset(c1.z);
-	    uint _3444_m7 : packoffset(c1.w);
-	    uint _3444_m8 : packoffset(c2);
-	    uint _3444_m9 : packoffset(c2.y);
-	    uint _3444_m10 : packoffset(c2.z);
+	    uint VertexCachePushConstants_1_m0 : packoffset(c0);
+	    uint VertexCachePushConstants_1_m1 : packoffset(c0.y);
+	    uint VertexCachePushConstants_1_m2 : packoffset(c0.z);
+	    uint VertexCachePushConstants_1_m3 : packoffset(c0.w);
+	    uint VertexCachePushConstants_1_m4 : packoffset(c1);
+	    uint VertexCachePushConstants_1_m5 : packoffset(c1.y);
+	    uint VertexCachePushConstants_1_m6 : packoffset(c1.z);
+	    uint VertexCachePushConstants_1_m7 : packoffset(c1.w);
+	    uint VertexCachePushConstants_1_m8 : packoffset(c2);
+	    uint VertexCachePushConstants_1_m9 : packoffset(c2.y);
+	    uint VertexCachePushConstants_1_m10 : packoffset(c2.z);
 	};
 	
 	
@@ -93,26 +93,26 @@ CS
 	{
 	    do
 	    {
-	        if (gl_GlobalInvocationID.x >= _3444_m0)
+	        if (gl_GlobalInvocationID.x >= VertexCachePushConstants_1_m0)
 	        {
 	            break;
 	        }
-	        if (gl_GlobalInvocationID.y >= _3444_m9)
+	        if (gl_GlobalInvocationID.y >= VertexCachePushConstants_1_m9)
 	        {
 	            break;
 	        }
-	        uint _13724 = _3444_m8 + gl_GlobalInvocationID.y;
-	        uint _24369 = g_instances.Load(_13724 * 16 + 4);
-	        uint _3973 = g_instances.Load(_13724 * 16 + 0) + (gl_GlobalInvocationID.x * _3444_m3);
-	        uint _20858 = _3973 + _3444_m1;
-	        uint _6233 = g_inputVB.Load((_20858 / 4u) * 4 + 0);
-	        uint _6234 = g_inputVB.Load(((_20858 + 4u) / 4u) * 4 + 0);
-	        uint _14347 = g_inputVB.Load(((_20858 + 8u) / 4u) * 4 + 0);
+	        uint _13724 = VertexCachePushConstants_1_m8 + gl_GlobalInvocationID.y;
+	        uint _24369 = g_instances.Load<uint>(_13724 * 16 + 4);
+	        uint _3973 = g_instances.Load<uint>(_13724 * 16 + 0) + (gl_GlobalInvocationID.x * VertexCachePushConstants_1_m3);
+	        uint _20858 = _3973 + VertexCachePushConstants_1_m1;
+	        uint _6233 = g_inputVB.Load<uint>((_20858 / 4u) * 4 + 0);
+	        uint _6234 = g_inputVB.Load<uint>(((_20858 + 4u) / 4u) * 4 + 0);
+	        uint _14347 = g_inputVB.Load<uint>(((_20858 + 8u) / 4u) * 4 + 0);
 	        float4 _12167;
 	        float3 _24254;
 	        do
 	        {
-	            if (_3444_m6 == 4294967295u)
+	            if (VertexCachePushConstants_1_m6 == 4294967295u)
 	            {
 	                _12167 = float4(0.0f, 0.0f, 1.0f, 1.0f);
 	                _24254 = float3(0.0f, 1.0f, 0.0f);
@@ -120,11 +120,11 @@ CS
 	            }
 	            float4 _13212;
 	            float3 _15670;
-	            if (_3444_m7 == 4294967295u)
+	            if (VertexCachePushConstants_1_m7 == 4294967295u)
 	            {
-	                uint _12586 = (_3973 + _3444_m6) / 4u;
-	                float _22483 = (float((g_inputVB.Load(_12586 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
-	                float _7589 = (float((g_inputVB.Load(_12586 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                uint _12586 = (_3973 + VertexCachePushConstants_1_m6) / 4u;
+	                float _22483 = (float((g_inputVB.Load<uint>(_12586 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _7589 = (float((g_inputVB.Load<uint>(_12586 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
 	                float _23404 = (1.0f - abs(_22483)) - abs(_7589);
 	                float3 _8254 = float3(_22483, _7589, _23404);
 	                float _24228 = saturate(-_23404);
@@ -141,58 +141,58 @@ CS
 	                float _16417 = (-1.0f) / (_8220 + _6384);
 	                float _14755 = _21001.x;
 	                float3 _23176 = float3(1.0f + (((_8220 * _14755) * _14755) * _16417), _8220 * ((_14755 * _21001.y) * _16417), (-_8220) * _14755);
-	                float _23966 = float((g_inputVB.Load(_12586 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
-	                _13212 = float4((_23176 * cos(_23966)) + (cross(_21001, _23176) * sin(_23966)), ((g_inputVB.Load(_12586 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f);
+	                float _23966 = float((g_inputVB.Load<uint>(_12586 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
+	                _13212 = float4((_23176 * cos(_23966)) + (cross(_21001, _23176) * sin(_23966)), ((g_inputVB.Load<uint>(_12586 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f);
 	                _15670 = _21001;
 	            }
 	            else
 	            {
-	                uint _18914 = _3973 + _3444_m6;
+	                uint _18914 = _3973 + VertexCachePushConstants_1_m6;
 	                float4 _12501;
-	                if (_3444_m7 < 4294967295u)
+	                if (VertexCachePushConstants_1_m7 < 4294967295u)
 	                {
-	                    uint _21336 = _3973 + _3444_m7;
-	                    _12501 = asfloat(uint4(g_inputVB.Load((_21336 / 4u) * 4 + 0), g_inputVB.Load(((_21336 + 4u) / 4u) * 4 + 0), g_inputVB.Load(((_21336 + 8u) / 4u) * 4 + 0), g_inputVB.Load(((_21336 + 12u) / 4u) * 4 + 0)));
+	                    uint _21336 = _3973 + VertexCachePushConstants_1_m7;
+	                    _12501 = asfloat(uint4(g_inputVB.Load<uint>((_21336 / 4u) * 4 + 0), g_inputVB.Load<uint>(((_21336 + 4u) / 4u) * 4 + 0), g_inputVB.Load<uint>(((_21336 + 8u) / 4u) * 4 + 0), g_inputVB.Load<uint>(((_21336 + 12u) / 4u) * 4 + 0)));
 	                }
 	                else
 	                {
 	                    _12501 = float4(0.0f, 0.0f, 1.0f, 1.0f);
 	                }
 	                _13212 = _12501;
-	                _15670 = asfloat(uint3(g_inputVB.Load((_18914 / 4u) * 4 + 0), g_inputVB.Load(((_18914 + 4u) / 4u) * 4 + 0), g_inputVB.Load(((_18914 + 8u) / 4u) * 4 + 0)));
+	                _15670 = asfloat(uint3(g_inputVB.Load<uint>((_18914 / 4u) * 4 + 0), g_inputVB.Load<uint>(((_18914 + 4u) / 4u) * 4 + 0), g_inputVB.Load<uint>(((_18914 + 8u) / 4u) * 4 + 0)));
 	            }
 	            _12167 = _13212;
 	            _24254 = _15670;
 	            break;
 	        } while(false);
-	        uint _3718 = g_instances.Load(_13724 * 16 + 8) & 15u;
+	        uint _3718 = g_instances.Load<uint>(_13724 * 16 + 8) & 15u;
 	        uint4 _18844;
-	        if (_3444_m2 < 4294967295u)
+	        if (VertexCachePushConstants_1_m2 < 4294967295u)
 	        {
 	            uint4 _12503;
-	            if (_3444_m4 == 16u)
+	            if (VertexCachePushConstants_1_m4 == 16u)
 	            {
-	                uint _21339 = _3973 + _3444_m2;
+	                uint _21339 = _3973 + VertexCachePushConstants_1_m2;
 	                uint _12589 = _21339 / 4u;
 	                uint _6759 = (_21339 + 4u) / 4u;
-	                _12503 = uint4(g_inputVB.Load(_12589 * 4 + 0) & 65535u, g_inputVB.Load(_12589 * 4 + 0) >> uint(16), g_inputVB.Load(_6759 * 4 + 0) & 65535u, g_inputVB.Load(_6759 * 4 + 0) >> uint(16));
+	                _12503 = uint4(g_inputVB.Load<uint>(_12589 * 4 + 0) & 65535u, g_inputVB.Load<uint>(_12589 * 4 + 0) >> uint(16), g_inputVB.Load<uint>(_6759 * 4 + 0) & 65535u, g_inputVB.Load<uint>(_6759 * 4 + 0) >> uint(16));
 	            }
 	            else
 	            {
 	                uint4 _12502;
-	                if (_3444_m4 == 10u)
+	                if (VertexCachePushConstants_1_m4 == 10u)
 	                {
-	                    uint _12588 = (_3973 + _3444_m2) / 4u;
+	                    uint _12588 = (_3973 + VertexCachePushConstants_1_m2) / 4u;
 	                    uint4 _25107 = uint4(4294967295u, 4294967295u, 4294967295u, 4294967295u);
-	                    _25107.x = g_inputVB.Load(_12588 * 4 + 0) & 1023u;
-	                    _25107.y = (g_inputVB.Load(_12588 * 4 + 0) >> uint(10)) & 1023u;
-	                    _25107.z = (g_inputVB.Load(_12588 * 4 + 0) >> uint(20)) & 1023u;
+	                    _25107.x = g_inputVB.Load<uint>(_12588 * 4 + 0) & 1023u;
+	                    _25107.y = (g_inputVB.Load<uint>(_12588 * 4 + 0) >> uint(10)) & 1023u;
+	                    _25107.z = (g_inputVB.Load<uint>(_12588 * 4 + 0) >> uint(20)) & 1023u;
 	                    _12502 = _25107;
 	                }
 	                else
 	                {
-	                    uint _12587 = (_3973 + _3444_m2) / 4u;
-	                    _12502 = uint4(g_inputVB.Load(_12587 * 4 + 0) & 255u, (g_inputVB.Load(_12587 * 4 + 0) >> uint(8)) & 255u, (g_inputVB.Load(_12587 * 4 + 0) >> uint(16)) & 255u, (g_inputVB.Load(_12587 * 4 + 0) >> uint(24)) & 255u);
+	                    uint _12587 = (_3973 + VertexCachePushConstants_1_m2) / 4u;
+	                    _12502 = uint4(g_inputVB.Load<uint>(_12587 * 4 + 0) & 255u, (g_inputVB.Load<uint>(_12587 * 4 + 0) >> uint(8)) & 255u, (g_inputVB.Load<uint>(_12587 * 4 + 0) >> uint(16)) & 255u, (g_inputVB.Load<uint>(_12587 * 4 + 0) >> uint(24)) & 255u);
 	                }
 	                _12503 = _12502;
 	            }
@@ -205,20 +205,20 @@ CS
 	        float4 _19210;
 	        _19210.x = 1.0f;
 	        float4 _11521;
-	        if (_3444_m5 < 4294967295u)
+	        if (VertexCachePushConstants_1_m5 < 4294967295u)
 	        {
 	            float4 _12504;
-	            if (_3444_m10 != 0u)
+	            if (VertexCachePushConstants_1_m10 != 0u)
 	            {
-	                uint _21340 = _3973 + _3444_m5;
+	                uint _21340 = _3973 + VertexCachePushConstants_1_m5;
 	                uint _12591 = _21340 / 4u;
 	                uint _12369 = (_21340 + 4u) / 4u;
-	                _12504 = float4(float(g_inputVB.Load(_12591 * 4 + 0) & 65535u), float((g_inputVB.Load(_12591 * 4 + 0) >> uint(16)) & 65535u), float(g_inputVB.Load(_12369 * 4 + 0) & 65535u), float((g_inputVB.Load(_12369 * 4 + 0) >> uint(16)) & 65535u)) * 1.525902189314365386962890625e-05f;
+	                _12504 = float4(float(g_inputVB.Load<uint>(_12591 * 4 + 0) & 65535u), float((g_inputVB.Load<uint>(_12591 * 4 + 0) >> uint(16)) & 65535u), float(g_inputVB.Load<uint>(_12369 * 4 + 0) & 65535u), float((g_inputVB.Load<uint>(_12369 * 4 + 0) >> uint(16)) & 65535u)) * 1.525902189314365386962890625e-05f;
 	            }
 	            else
 	            {
-	                uint _12590 = (_3973 + _3444_m5) / 4u;
-	                _12504 = float4(float(g_inputVB.Load(_12590 * 4 + 0) & 255u), float((g_inputVB.Load(_12590 * 4 + 0) >> uint(8)) & 255u), float((g_inputVB.Load(_12590 * 4 + 0) >> uint(16)) & 255u), float((g_inputVB.Load(_12590 * 4 + 0) >> uint(24)) & 255u)) * 0.0039215688593685626983642578125f;
+	                uint _12590 = (_3973 + VertexCachePushConstants_1_m5) / 4u;
+	                _12504 = float4(float(g_inputVB.Load<uint>(_12590 * 4 + 0) & 255u), float((g_inputVB.Load<uint>(_12590 * 4 + 0) >> uint(8)) & 255u), float((g_inputVB.Load<uint>(_12590 * 4 + 0) >> uint(16)) & 255u), float((g_inputVB.Load<uint>(_12590 * 4 + 0) >> uint(24)) & 255u)) * 0.0039215688593685626983642578125f;
 	            }
 	            _11521 = _12504;
 	        }
@@ -231,8 +231,8 @@ CS
 	        float3x4 _20691;
 	        if (_18844.x < 4294967295u)
 	        {
-	            uint _13628 = uint(int(g_instances.Load(_13724 * 16 + 8) >> uint(4)) + 2);
-	            float3x4 _7296 = asfloat(uint3x4(g_transformBuffer.Load4((_13628 + _18844.x) * 48 + 0), g_transformBuffer.Load4((_13628 + _18844.x) * 48 + 16), g_transformBuffer.Load4((_13628 + _18844.x) * 48 + 32)));
+	            uint _13628 = uint(int(g_instances.Load<uint>(_13724 * 16 + 8) >> uint(4)) + 2);
+	            float3x4 _7296 = float3x4(g_transformBuffer.Load<float4>((_13628 + _18844.x) * 48 + 0), g_transformBuffer.Load<float4>((_13628 + _18844.x) * 48 + 16), g_transformBuffer.Load<float4>((_13628 + _18844.x) * 48 + 32));
 	            float3x4 _13155;
 	            _13155 = float3x4(_7296[0] * _11521.x, _7296[1] * _11521.x, _7296[2] * _11521.x);
 	            uint _18440;
@@ -244,7 +244,7 @@ CS
 	                {
 	                    break;
 	                }
-	                float3x4 _7297 = asfloat(uint3x4(g_transformBuffer.Load4((_13628 + _24078[_16208]) * 48 + 0), g_transformBuffer.Load4((_13628 + _24078[_16208]) * 48 + 16), g_transformBuffer.Load4((_13628 + _24078[_16208]) * 48 + 32)));
+	                float3x4 _7297 = float3x4(g_transformBuffer.Load<float4>((_13628 + _24078[_16208]) * 48 + 0), g_transformBuffer.Load<float4>((_13628 + _24078[_16208]) * 48 + 16), g_transformBuffer.Load<float4>((_13628 + _24078[_16208]) * 48 + 32));
 	                _25251 = float3x4(_13155[0] + (_7297[0] * _14049[_16208]), _13155[1] + (_7297[1] * _14049[_16208]), _13155[2] + (_7297[2] * _14049[_16208]));
 	                _18440 = _16208 + 1u;
 	                _13155 = _25251;
@@ -255,7 +255,7 @@ CS
 	        }
 	        else
 	        {
-	            float3x4 _7295 = asfloat(uint3x4(g_transformBuffer.Load4(int(g_instances.Load(_13724 * 16 + 8) >> uint(4)) * 48 + 0), g_transformBuffer.Load4(int(g_instances.Load(_13724 * 16 + 8) >> uint(4)) * 48 + 16), g_transformBuffer.Load4(int(g_instances.Load(_13724 * 16 + 8) >> uint(4)) * 48 + 32)));
+	            float3x4 _7295 = float3x4(g_transformBuffer.Load<float4>(int(g_instances.Load<uint>(_13724 * 16 + 8) >> uint(4)) * 48 + 0), g_transformBuffer.Load<float4>(int(g_instances.Load<uint>(_13724 * 16 + 8) >> uint(4)) * 48 + 16), g_transformBuffer.Load<float4>(int(g_instances.Load<uint>(_13724 * 16 + 8) >> uint(4)) * 48 + 32));
 	            _20691 = float3x4(_7295[0] * _11521.x, _7295[1] * _11521.x, _7295[2] * _11521.x);
 	        }
 	        float3 _11198 = normalize(mul(_20691, float4(_24254.xyz, 0.0f)));
@@ -286,12 +286,12 @@ CS
 	        }
 	        uint _5273 = 24u * (gl_GlobalInvocationID.x + _24369);
 	        uint3 _9171 = asuint(mul(_20691, float4(asfloat(uint3(_6233, _6234, _14347)), 1.0f)));
-	        undetermined.Store((_5273 / 4u) * 4 + 0, _9171.x);
-	        undetermined.Store(((_5273 + 4u) / 4u) * 4 + 0, _9171.y);
-	        undetermined.Store(((_5273 + 8u) / 4u) * 4 + 0, _9171.z);
-	        undetermined.Store(((_5273 + 12u) / 4u) * 4 + 0, uint((saturate(saturate((_19321.x * 0.5f) + 0.5f)) * 65535.0f) + 0.5f) | (uint((saturate(saturate((_19321.y * 0.5f) + 0.5f)) * 65535.0f) + 0.5f) << uint(16)));
-	        undetermined.Store(((_5273 + 16u) / 4u) * 4 + 0, (uint((_12167.w < 0.0f) ? 0 : 1) | (uint((saturate(saturate((_19322.x * 0.5f) + 0.5f)) * 32767.0f) + 0.5f) << uint(1))) | (uint((saturate(saturate((_19322.y * 0.5f) + 0.5f)) * 32767.0f) + 0.5f) << uint(16)));
-	        undetermined.Store(((_5273 + 20u) / 4u) * 4 + 0, 0u);
+	        g_outputVB.Store<uint>((_5273 / 4u) * 4 + 0, _9171.x);
+	        g_outputVB.Store<uint>(((_5273 + 4u) / 4u) * 4 + 0, _9171.y);
+	        g_outputVB.Store<uint>(((_5273 + 8u) / 4u) * 4 + 0, _9171.z);
+	        g_outputVB.Store<uint>(((_5273 + 12u) / 4u) * 4 + 0, uint((saturate(saturate((_19321.x * 0.5f) + 0.5f)) * 65535.0f) + 0.5f) | (uint((saturate(saturate((_19321.y * 0.5f) + 0.5f)) * 65535.0f) + 0.5f) << uint(16)));
+	        g_outputVB.Store<uint>(((_5273 + 16u) / 4u) * 4 + 0, (uint((_12167.w < 0.0f) ? 0 : 1) | (uint((saturate(saturate((_19322.x * 0.5f) + 0.5f)) * 32767.0f) + 0.5f) << uint(1))) | (uint((saturate(saturate((_19322.y * 0.5f) + 0.5f)) * 32767.0f) + 0.5f) << uint(16)));
+	        g_outputVB.Store<uint>(((_5273 + 20u) / 4u) * 4 + 0, 0u);
 	        break;
 	    } while(false);
 	}

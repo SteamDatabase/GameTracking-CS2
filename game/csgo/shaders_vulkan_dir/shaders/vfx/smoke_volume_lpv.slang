@@ -189,7 +189,7 @@ CS
 	layout(set = 0, binding = 23) uniform samplerShadow g_tShadowDepthBufferCmpSampler;
 	layout(set = 0, binding = 36) uniform texture2D g_tShadowDepthBufferDepth;
 	layout(set = 0, binding = 46) uniform texture3D g_tLPV_Shadows;
-	layout(set = 0, binding = 158) uniform writeonly image3D _4931;
+	layout(set = 0, binding = 158) uniform writeonly image3D g_SmokeVolumeLPV;
 	
 	void main()
 	{
@@ -583,7 +583,7 @@ CS
 	            _16208 = _4283;
 	            continue;
 	        }
-	        imageStore(_4931, ivec3(uvec3(ivec3(ivec2(_14205), _13039))), vec4(_23714.xyz + _13155, 1.0 - dot(textureLod(sampler3D(g_tLPV_Shadows, g_sBilinearClamp), ((saturate(_6343).xyz * PerViewLightProbeVolumeConstantBuffer_t._m0._m0[_21017]._m4).xyz + PerViewLightProbeVolumeConstantBuffer_t._m0._m0[_21017]._m5).xyz, 0.0).xyzw, PerViewLightingConstantBufferGpu_t._m4)));
+	        imageStore(g_SmokeVolumeLPV, ivec3(uvec3(ivec3(ivec2(_14205), _13039))), vec4(_23714.xyz + _13155, 1.0 - dot(textureLod(sampler3D(g_tLPV_Shadows, g_sBilinearClamp), ((saturate(_6343).xyz * PerViewLightProbeVolumeConstantBuffer_t._m0._m0[_21017]._m4).xyz + PerViewLightProbeVolumeConstantBuffer_t._m0._m0[_21017]._m5).xyz, 0.0).xyzw, PerViewLightingConstantBufferGpu_t._m4)));
 	        _4300 = _13039 + 1;
 	        _13039 = _4300;
 	        continue;

@@ -120,11 +120,11 @@ CS
 	layout(set = 0, binding = 34) uniform texture2D g_tSmokeDepthHalf;
 	layout(set = 0, binding = 39) uniform texture2D g_tMomentsHalf;
 	layout(set = 0, binding = 40) uniform texture2D g_tExtraHalf;
-	layout(set = 0, binding = 158) uniform writeonly image2D _3675;
+	layout(set = 0, binding = 158) uniform writeonly image2D g_tSmokeDepthCombined;
 	layout(set = 0, binding = 32) uniform texture2D g_tLinearDepthFull;
-	layout(set = 0, binding = 159) uniform image2D _4494;
-	layout(set = 0, binding = 160) uniform image2D _3327;
-	layout(set = 0, binding = 161) uniform image2D _5667;
+	layout(set = 0, binding = 159) uniform image2D g_tZerothFull;
+	layout(set = 0, binding = 160) uniform image2D g_tMomentsFull;
+	layout(set = 0, binding = 161) uniform image2D g_tExtraFull;
 	
 	shared float _3449[25];
 	shared vec2 _5300[25];
@@ -328,7 +328,7 @@ CS
 	                    {
 	                        _22781 = _16932;
 	                    }
-	                    imageStore(_3675, ivec2((gl_WorkGroupID.xy * uvec2(4u)) + (gl_LocalInvocationID.xy - uvec2(1u))), vec4(_22781, 0.0, 0.0));
+	                    imageStore(g_tSmokeDepthCombined, ivec2((gl_WorkGroupID.xy * uvec2(4u)) + (gl_LocalInvocationID.xy - uvec2(1u))), vec4(_22781, 0.0, 0.0));
 	                }
 	            }
 	        }
@@ -406,11 +406,11 @@ CS
 	                _23104 = vec4(_19632, _20717, _22331, _22332) * vec4(exp((-(_14876 * _14876)) / _21157), exp((-(_6512 * _6512)) / _21157), exp((-(_6513 * _6513)) / _21157), exp((-(_6514 * _6514)) / _21157));
 	                break;
 	            } while(false);
-	            vec4 _15540 = imageLoad(_3327, _11480);
-	            vec4 _3300 = imageLoad(_5667, _11480);
-	            imageStore(_4494, ivec2(_3849), vec4(imageLoad(_4494, _11480).x + ((((_5504[_4275] * _23104.x) + (_5504[_13651] * _23104.y)) + (_5504[_13652] * _23104.z)) + (_5504[_13653] * _23104.w))));
-	            imageStore(_3327, ivec2(_3849), vec4(_15540.xy + ((((_3430[_4275] * _23104.x) + (_3430[_13651] * _23104.y)) + (_3430[_13652] * _23104.z)) + (_3430[_13653] * _23104.w)), 0.0, 0.0));
-	            imageStore(_5667, ivec2(_3849), _3300 + ((((_4077[_4275] * _23104.x) + (_4077[_13651] * _23104.y)) + (_4077[_13652] * _23104.z)) + (_4077[_13653] * _23104.w)));
+	            vec4 _15540 = imageLoad(g_tMomentsFull, _11480);
+	            vec4 _3300 = imageLoad(g_tExtraFull, _11480);
+	            imageStore(g_tZerothFull, ivec2(_3849), vec4(imageLoad(g_tZerothFull, _11480).x + ((((_5504[_4275] * _23104.x) + (_5504[_13651] * _23104.y)) + (_5504[_13652] * _23104.z)) + (_5504[_13653] * _23104.w))));
+	            imageStore(g_tMomentsFull, ivec2(_3849), vec4(_15540.xy + ((((_3430[_4275] * _23104.x) + (_3430[_13651] * _23104.y)) + (_3430[_13652] * _23104.z)) + (_3430[_13653] * _23104.w)), 0.0, 0.0));
+	            imageStore(g_tExtraFull, ivec2(_3849), _3300 + ((((_4077[_4275] * _23104.x) + (_4077[_13651] * _23104.y)) + (_4077[_13652] * _23104.z)) + (_4077[_13653] * _23104.w)));
 	        }
 	        break;
 	    } while(false);

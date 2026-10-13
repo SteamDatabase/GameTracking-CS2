@@ -44,8 +44,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionSs : TEXCOORD0;
-	    float3 vCameraToFarPlaneRayWs : TEXCOORD1;
+	    float3 vPositionSs : POSITION0;
+	    float3 vCameraToFarPlaneRayWs : TEXCOORD0;
 	};
 	
 	struct PS_INPUT

@@ -50,7 +50,7 @@ CS
 	};
 	
 	ByteAddressBuffer g_VertexLightSamples : register(t30, space0);
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer g_Result : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -94,7 +94,7 @@ CS
 	                    break;
 	                }
 	                uint2 _6349 = (_9668.xy * uint2(4u, 4u)) + uint2(_16209, _16208);
-	                _3273 = _13156 + asfloat(g_VertexLightSamples.Load4(((_6349.y * _16799) + _6349.x) * 16 + 0)).xyz;
+	                _3273 = _13156 + g_VertexLightSamples.Load<float4>(((_6349.y * _16799) + _6349.x) * 16 + 0).xyz;
 	                _9913 = _16209 + 1u;
 	                _13156 = _3273;
 	                _16209 = _9913;
@@ -132,7 +132,7 @@ CS
 	                        break;
 	                    }
 	                    uint2 _5745 = (_9668.xy * uint2(4u, 4u)) + uint2(_16211, _16210);
-	                    float3 _20166 = max(0.0f.xxx, asfloat(g_VertexLightSamples.Load4(((_5745.y * _16799) + _5745.x) * 16 + 0)).xyz);
+	                    float3 _20166 = max(0.0f.xxx, g_VertexLightSamples.Load<float4>(((_5745.y * _16799) + _5745.x) * 16 + 0).xyz);
 	                    float3 _9380 = _13088 * 8.0f;
 	                    if (any(bool3(_20166.x > _9380.x, _20166.y > _9380.y, _20166.z > _9380.z)))
 	                    {
@@ -162,9 +162,9 @@ CS
 	        }
 	        float3 _24698 = _13157.xyz / max(_13157.w, 1.0f).xxx;
 	        uint _7290 = 3u * gl_GlobalInvocationID.x;
-	        undetermined.Store(_7290 * 4 + 0, asuint(_24698.x));
-	        undetermined.Store((_7290 + 1u) * 4 + 0, asuint(_24698.y));
-	        undetermined.Store((_7290 + 2u) * 4 + 0, asuint(_24698.z));
+	        g_Result.Store<float>(_7290 * 4 + 0, _24698.x);
+	        g_Result.Store<float>((_7290 + 1u) * 4 + 0, _24698.y);
+	        g_Result.Store<float>((_7290 + 2u) * 4 + 0, _24698.z);
 	        break;
 	    } while(false);
 	}

@@ -73,8 +73,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    uint nInstanceIdx : TEXCOORD3;
+	    float3 vPositionOs : POSITION0;
+	    uint nInstanceIdx : TEXCOORD13;
 	};
 	
 	struct PS_INPUT
@@ -85,9 +85,9 @@ VS
 	
 	void MainVs_inner()
 	{
-	    float3x4 _8524 = asfloat(uint3x4(g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 32)));
+	    float3x4 _8524 = float3x4(g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 32));
 	    float3 _22743;
-	    if (((g_instanceBuffer.Load(nInstanceIdx * 32 + 20) >> uint(16)) & 15u) > 0u)
+	    if (((g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 20) >> uint(16)) & 15u) > 0u)
 	    {
 	        _22743 = _8524[0].z.xxx;
 	    }

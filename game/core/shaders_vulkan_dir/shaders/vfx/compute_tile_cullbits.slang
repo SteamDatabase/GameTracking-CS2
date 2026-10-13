@@ -91,7 +91,7 @@ CS
 	
 	ByteAddressBuffer g_CullItems : register(t31, space0);
 	ByteAddressBuffer g_CullPlanes : register(t30, space0);
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer g_OutputCullBits : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_LocalInvocationID;
@@ -123,8 +123,8 @@ CS
 	    }
 	    uint _24395 = CullParams_t_1_m5._m0[_22151]._m2 + (_3251 * 32u);
 	    uint _7606 = _24395 + _3716;
-	    float2 _4241 = asfloat(g_CullItems.Load2(_7606 * 80 + 16)) - _3512;
-	    float2 _5212 = asfloat(g_CullItems.Load2(_7606 * 80 + 24)) + _3512;
+	    float2 _4241 = g_CullItems.Load<float2>(_7606 * 80 + 16) - _3512;
+	    float2 _5212 = g_CullItems.Load<float2>(_7606 * 80 + 24) + _3512;
 	    bool2 _17472 = bool2(_4823.x >= _4241.x, _4823.y >= _4241.y);
 	    bool2 _8020 = bool2(_5212.x >= _4823.x, _5212.y >= _4823.y);
 	    uint _15363;
@@ -149,8 +149,8 @@ CS
 	    uint _12503;
 	    bool _13175;
 	    bool _13177;
-	    bool _13136;
-	    bool _16305;
+	    bool _13136 = false;
+	    bool _16305 = false;
 	    uint _17017 = _5602;
 	    for (;;)
 	    {
@@ -164,17 +164,17 @@ CS
 	        bool _12885;
 	        do
 	        {
-	            if (asfloat(g_CullItems.Load(_24956 * 80 + 72)) == 0.0f)
+	            if (g_CullItems.Load<float>(_24956 * 80 + 72) == 0.0f)
 	            {
 	                _12885 = true;
 	                break;
 	            }
 	            float _16377 = _23453.x;
 	            float _23301 = _23453.y;
-	            float _7753 = asfloat(g_CullItems.Load(_24956 * 80 + 48)) * _16377;
-	            float _19133 = asfloat(g_CullItems.Load(_24956 * 80 + 52)) * _23301;
-	            float _22329 = asfloat(g_CullItems.Load(_24956 * 80 + 56)) * _16377;
-	            _12885 = ((((((((_7753 * _16377) + (_19133 * _23301)) + (_22329 * _23301)) + (asfloat(g_CullItems.Load(_24956 * 80 + 60)) * _16377)) + (asfloat(g_CullItems.Load(_24956 * 80 + 64)) * _23301)) + asfloat(g_CullItems.Load(_24956 * 80 + 68))) + (abs(((2.0f * _7753) + (asfloat(g_CullItems.Load(_24956 * 80 + 56)) * _23301)) + asfloat(g_CullItems.Load(_24956 * 80 + 60))) * _11958.x)) + (abs(((2.0f * _19133) + _22329) + asfloat(g_CullItems.Load(_24956 * 80 + 64))) * _11958.y)) >= 0.0f;
+	            float _7753 = g_CullItems.Load<float>(_24956 * 80 + 48) * _16377;
+	            float _19133 = g_CullItems.Load<float>(_24956 * 80 + 52) * _23301;
+	            float _22329 = g_CullItems.Load<float>(_24956 * 80 + 56) * _16377;
+	            _12885 = ((((((((_7753 * _16377) + (_19133 * _23301)) + (_22329 * _23301)) + (g_CullItems.Load<float>(_24956 * 80 + 60) * _16377)) + (g_CullItems.Load<float>(_24956 * 80 + 64) * _23301)) + g_CullItems.Load<float>(_24956 * 80 + 68)) + (abs(((2.0f * _7753) + (g_CullItems.Load<float>(_24956 * 80 + 56) * _23301)) + g_CullItems.Load<float>(_24956 * 80 + 60)) * _11958.x)) + (abs(((2.0f * _19133) + _22329) + g_CullItems.Load<float>(_24956 * 80 + 64)) * _11958.y)) >= 0.0f;
 	            break;
 	        } while(false);
 	        bool _16055;
@@ -189,14 +189,14 @@ CS
 	                uint _13039 = 0u;
 	                for (;;)
 	                {
-	                    if (!(_13039 < g_CullItems.Load(_24956 * 80 + 8)))
+	                    if (!(_13039 < g_CullItems.Load<uint>(_24956 * 80 + 8)))
 	                    {
 	                        _13174 = _16305;
 	                        _16054 = false;
 	                        break;
 	                    }
-	                    uint _14202 = g_CullItems.Load(_24956 * 80 + 0) + _13039;
-	                    if ((dot(asfloat(g_CullPlanes.Load2(_14202 * 16 + 0)), _23453) + asfloat(g_CullPlanes.Load(_14202 * 16 + 8))) < 0.0f)
+	                    uint _14202 = g_CullItems.Load<uint>(_24956 * 80 + 0) + _13039;
+	                    if ((dot(g_CullPlanes.Load<float2>(_14202 * 16 + 0), _23453) + g_CullPlanes.Load<float>(_14202 * 16 + 8)) < 0.0f)
 	                    {
 	                        _13174 = false;
 	                        _16054 = true;
@@ -225,7 +225,7 @@ CS
 	        bool _16057;
 	        if (_16055)
 	        {
-	            uint _24392 = g_CullItems.Load(_24956 * 80 + 0) + g_CullItems.Load(_24956 * 80 + 8);
+	            uint _24392 = g_CullItems.Load<uint>(_24956 * 80 + 0) + g_CullItems.Load<uint>(_24956 * 80 + 8);
 	            bool _12502;
 	            do
 	            {
@@ -235,14 +235,14 @@ CS
 	                uint _13040 = 0u;
 	                for (;;)
 	                {
-	                    if (!(_13040 < g_CullItems.Load(_24956 * 80 + 12)))
+	                    if (!(_13040 < g_CullItems.Load<uint>(_24956 * 80 + 12)))
 	                    {
 	                        _13176 = _13136;
 	                        _16056 = false;
 	                        break;
 	                    }
 	                    uint _14203 = _24392 + _13040;
-	                    if ((dot(asfloat(g_CullPlanes.Load2(_14203 * 16 + 0)), _23453) + asfloat(g_CullPlanes.Load(_14203 * 16 + 8))) < 0.0f)
+	                    if ((dot(g_CullPlanes.Load<float2>(_14203 * 16 + 0), _23453) + g_CullPlanes.Load<float>(_14203 * 16 + 8)) < 0.0f)
 	                    {
 	                        _13176 = false;
 	                        _16056 = true;
@@ -293,7 +293,7 @@ CS
 	    }
 	    if (_12886)
 	    {
-	        undetermined.Store(((CullParams_t_1_m5._m0[_22151]._m0 + (((gl_GlobalInvocationID.y * CullParams_t_1_m0) + gl_GlobalInvocationID.x) * CullParams_t_1_m5._m0[_22151]._m1)) + _3251) * 4 + 0, _17133);
+	        g_OutputCullBits.Store<uint>(((CullParams_t_1_m5._m0[_22151]._m0 + (((gl_GlobalInvocationID.y * CullParams_t_1_m0) + gl_GlobalInvocationID.x) * CullParams_t_1_m5._m0[_22151]._m1)) + _3251) * 4 + 0, _17133);
 	    }
 	}
 	

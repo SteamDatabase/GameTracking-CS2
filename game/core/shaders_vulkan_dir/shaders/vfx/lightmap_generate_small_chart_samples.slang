@@ -96,7 +96,7 @@ CS
 	};
 	
 	ByteAddressBuffer g_TriangleListForThreadGroup : register(t31, space0);
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer g_LightmapSamples : register(u158, space0);
 	ByteAddressBuffer g_TriangleArea : register(t32, space0);
 	ByteAddressBuffer g_Vertices : register(t30, space0);
 	ByteAddressBuffer g_Vertices_1 : register(t30, space0);
@@ -121,18 +121,18 @@ CS
 	    do
 	    {
 	        uint _5156 = gl_WorkGroupID.x + (gl_WorkGroupID.y * uint(_Globals_1_g_nLightmapBlockRectWidth / 8));
-	        int _6540 = int(g_TriangleListForThreadGroup.Load(_5156 * 4 + 0));
+	        int _6540 = g_TriangleListForThreadGroup.Load<int>(_5156 * 4 + 0);
 	        uint _13648 = _5156 + 1u;
-	        int _18397 = int(g_TriangleListForThreadGroup.Load(_13648 * 4 + 0));
+	        int _18397 = g_TriangleListForThreadGroup.Load<int>(_13648 * 4 + 0);
 	        uint _5963 = (gl_GlobalInvocationID.y * uint(_Globals_1_g_nLightmapBlockRectWidth)) + gl_GlobalInvocationID.x;
-	        undetermined.Store4(_5963 * 96 + 0, asuint(0.0f.xxxx));
-	        undetermined.Store4(_5963 * 96 + 16, asuint(0.0f.xxxx));
-	        undetermined.Store4(_5963 * 96 + 32, asuint(0.0f.xxxx));
-	        undetermined.Store4(_5963 * 96 + 48, asuint(0.0f.xxxx));
-	        undetermined.Store4(_5963 * 96 + 64, asuint(0.0f.xxxx));
-	        undetermined.Store2(_5963 * 96 + 80, asuint((-1.0f).xx));
-	        undetermined.Store(_5963 * 96 + 88, uint(0));
-	        undetermined.Store(_5963 * 96 + 92, 0u);
+	        g_LightmapSamples.Store<float4>(_5963 * 96 + 0, 0.0f.xxxx);
+	        g_LightmapSamples.Store<float4>(_5963 * 96 + 16, 0.0f.xxxx);
+	        g_LightmapSamples.Store<float4>(_5963 * 96 + 32, 0.0f.xxxx);
+	        g_LightmapSamples.Store<float4>(_5963 * 96 + 48, 0.0f.xxxx);
+	        g_LightmapSamples.Store<float4>(_5963 * 96 + 64, 0.0f.xxxx);
+	        g_LightmapSamples.Store<float2>(_5963 * 96 + 80, (-1.0f).xx);
+	        g_LightmapSamples.Store<int>(_5963 * 96 + 88, 0);
+	        g_LightmapSamples.Store<uint>(_5963 * 96 + 92, 0u);
 	        [branch]
 	        if (_6540 >= _18397)
 	        {
@@ -235,14 +235,14 @@ CS
 	                bool _23989;
 	                do
 	                {
-	                    _10256 = _13139 + asfloat(g_TriangleArea.Load(_17020 * 4 + 0));
+	                    _10256 = _13139 + g_TriangleArea.Load<float>(_17020 * 4 + 0);
 	                    if (_10256 == 0.0f)
 	                    {
 	                        _10039 = _16306.y;
 	                        _23989 = false;
 	                        break;
 	                    }
-	                    float _16061 = asfloat(g_TriangleArea.Load(_17020 * 4 + 0)) / _10256;
+	                    float _16061 = g_TriangleArea.Load<float>(_17020 * 4 + 0) / _10256;
 	                    float _13212;
 	                    bool _15670;
 	                    do
@@ -289,11 +289,11 @@ CS
 	                int _19496 = _17134 * 3;
 	                int _10198 = _19496 * _Globals_1_g_nVertexStride;
 	                uint _12154 = uint(_10198);
-	                float3 _6421 = float3(asfloat(g_Vertices.Load((_12154 / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_12154 + 4u) / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_12154 + 8u) / 4u) * 4 + 0)));
+	                float3 _6421 = float3(g_Vertices.Load<float>((_12154 / 4u) * 4 + 0), g_Vertices.Load<float>(((_12154 + 4u) / 4u) * 4 + 0), g_Vertices.Load<float>(((_12154 + 8u) / 4u) * 4 + 0));
 	                uint _19607 = uint(_10198 + _Globals_1_g_nLightmapUVOffsetInBytes);
 	                uint _19813 = uint(_10198 + _Globals_1_g_nPackedNormalTangentOffsetInBytes) / 4u;
-	                float _22483 = (float((g_Vertices_1.Load(_19813 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
-	                float _7589 = (float((g_Vertices_1.Load(_19813 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _22483 = (float((g_Vertices_1.Load<uint>(_19813 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _7589 = (float((g_Vertices_1.Load<uint>(_19813 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
 	                float _23404 = (1.0f - abs(_22483)) - abs(_7589);
 	                float3 _8254 = float3(_22483, _7589, _23404);
 	                float _24228 = saturate(-_23404);
@@ -310,14 +310,14 @@ CS
 	                float _16417 = (-1.0f) / (_8220 + _6384);
 	                float _14755 = _21001.x;
 	                float3 _23176 = float3(1.0f + (((_8220 * _14755) * _14755) * _16417), _8220 * ((_14755 * _21001.y) * _16417), (-_8220) * _14755);
-	                float _23966 = float((g_Vertices_1.Load(_19813 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
+	                float _23966 = float((g_Vertices_1.Load<uint>(_19813 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
 	                int _13498 = (_19496 + 1) * _Globals_1_g_nVertexStride;
 	                uint _17762 = uint(_13498);
-	                float3 _15790 = float3(asfloat(g_Vertices.Load((_17762 / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_17762 + 4u) / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_17762 + 8u) / 4u) * 4 + 0)));
+	                float3 _15790 = float3(g_Vertices.Load<float>((_17762 / 4u) * 4 + 0), g_Vertices.Load<float>(((_17762 + 4u) / 4u) * 4 + 0), g_Vertices.Load<float>(((_17762 + 8u) / 4u) * 4 + 0));
 	                uint _18788 = uint(_13498 + _Globals_1_g_nLightmapUVOffsetInBytes);
 	                uint _19815 = uint(_13498 + _Globals_1_g_nPackedNormalTangentOffsetInBytes) / 4u;
-	                float _22484 = (float((g_Vertices_1.Load(_19815 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
-	                float _7590 = (float((g_Vertices_1.Load(_19815 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _22484 = (float((g_Vertices_1.Load<uint>(_19815 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _7590 = (float((g_Vertices_1.Load<uint>(_19815 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
 	                float _23405 = (1.0f - abs(_22484)) - abs(_7590);
 	                float3 _8255 = float3(_22484, _7590, _23405);
 	                float _24229 = saturate(-_23405);
@@ -334,14 +334,14 @@ CS
 	                float _16418 = (-1.0f) / (_8221 + _6385);
 	                float _14756 = _21002.x;
 	                float3 _23177 = float3(1.0f + (((_8221 * _14756) * _14756) * _16418), _8221 * ((_14756 * _21002.y) * _16418), (-_8221) * _14756);
-	                float _23967 = float((g_Vertices_1.Load(_19815 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
+	                float _23967 = float((g_Vertices_1.Load<uint>(_19815 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
 	                int _13499 = (_19496 + 2) * _Globals_1_g_nVertexStride;
 	                uint _17763 = uint(_13499);
-	                float3 _15792 = float3(asfloat(g_Vertices.Load((_17763 / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_17763 + 4u) / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_17763 + 8u) / 4u) * 4 + 0)));
+	                float3 _15792 = float3(g_Vertices.Load<float>((_17763 / 4u) * 4 + 0), g_Vertices.Load<float>(((_17763 + 4u) / 4u) * 4 + 0), g_Vertices.Load<float>(((_17763 + 8u) / 4u) * 4 + 0));
 	                uint _18790 = uint(_13499 + _Globals_1_g_nLightmapUVOffsetInBytes);
 	                uint _19817 = uint(_13499 + _Globals_1_g_nPackedNormalTangentOffsetInBytes) / 4u;
-	                float _22485 = (float((g_Vertices_1.Load(_19817 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
-	                float _7593 = (float((g_Vertices_1.Load(_19817 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _22485 = (float((g_Vertices_1.Load<uint>(_19817 * 4 + 0) >> 12u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
+	                float _7593 = (float((g_Vertices_1.Load<uint>(_19817 * 4 + 0) >> 22u) & 1023u) * 0.00195503421127796173095703125f) - 1.0f;
 	                float _23406 = (1.0f - abs(_22485)) - abs(_7593);
 	                float3 _8256 = float3(_22485, _7593, _23406);
 	                float _24230 = saturate(-_23406);
@@ -358,7 +358,7 @@ CS
 	                float _16419 = (-1.0f) / (_8222 + _6386);
 	                float _14757 = _21003.x;
 	                float3 _23178 = float3(1.0f + (((_8222 * _14757) * _14757) * _16419), _8222 * ((_14757 * _21003.y) * _16419), (-_8222) * _14757);
-	                float _23968 = float((g_Vertices_1.Load(_19817 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
+	                float _23968 = float((g_Vertices_1.Load<uint>(_19817 * 4 + 0) >> uint(1)) & 2047u) * 0.003069460391998291015625f;
 	                float _10266 = sqrt(_16306.x);
 	                float _11861 = 1.0f - _10266;
 	                float _16310 = _16306.y * _10266;
@@ -378,8 +378,8 @@ CS
 	                _16886.x = _22590.x;
 	                _16886.y = _22590.y;
 	                _16886.z = _22590.z;
-	                float2 _16199 = ((float2(asfloat(g_Vertices.Load((_19607 / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_19607 + 4u) / 4u) * 4 + 0))) * _15062) + (float2(asfloat(g_Vertices.Load((_18788 / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_18788 + 4u) / 4u) * 4 + 0))) * _11861)) + (float2(asfloat(g_Vertices.Load((_18790 / 4u) * 4 + 0)), asfloat(g_Vertices.Load(((_18790 + 4u) / 4u) * 4 + 0))) * _16310);
-	                _1531 _21868 = { _20493, 0.0f.xxxx, _20494, _16886, ((float4((_23176 * cos(_23966)) + (cross(_21001, _23176) * sin(_23966)), ((g_Vertices_1.Load(_19813 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f) * _15062) + (float4((_23177 * cos(_23967)) + (cross(_21002, _23177) * sin(_23967)), ((g_Vertices_1.Load(_19815 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f) * _11861)) + (float4((_23178 * cos(_23968)) + (cross(_21003, _23178) * sin(_23968)), ((g_Vertices_1.Load(_19817 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f) * _16310), _16199, 0, 0u };
+	                float2 _16199 = ((float2(g_Vertices.Load<float>((_19607 / 4u) * 4 + 0), g_Vertices.Load<float>(((_19607 + 4u) / 4u) * 4 + 0)) * _15062) + (float2(g_Vertices.Load<float>((_18788 / 4u) * 4 + 0), g_Vertices.Load<float>(((_18788 + 4u) / 4u) * 4 + 0)) * _11861)) + (float2(g_Vertices.Load<float>((_18790 / 4u) * 4 + 0), g_Vertices.Load<float>(((_18790 + 4u) / 4u) * 4 + 0)) * _16310);
+	                _1531 _21868 = { _20493, 0.0f.xxxx, _20494, _16886, ((float4((_23176 * cos(_23966)) + (cross(_21001, _23176) * sin(_23966)), ((g_Vertices_1.Load<uint>(_19813 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f) * _15062) + (float4((_23177 * cos(_23967)) + (cross(_21002, _23177) * sin(_23967)), ((g_Vertices_1.Load<uint>(_19815 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f) * _11861)) + (float4((_23178 * cos(_23968)) + (cross(_21003, _23178) * sin(_23968)), ((g_Vertices_1.Load<uint>(_19817 * 4 + 0) & 1u) == 0u) ? (-1.0f) : 1.0f) * _16310), _16199, 0, 0u };
 	                _5633[gl_LocalInvocationIndex] = _21868;
 	                _5704[gl_LocalInvocationIndex] = int2(_16199.xy * float2(int2(_Globals_1_g_nLightmapWidth, _Globals_1_g_nLightmapHeight)));
 	            }
@@ -622,15 +622,15 @@ CS
 	            _13639.x = _24205;
 	            _13639.y = _21816;
 	            _13639.z = _21832;
-	            uint _9062 = g_ChartInfo.Load(_17171 * 8 + 4);
-	            undetermined.Store4(_5963 * 96 + 0, asuint(_17119));
-	            undetermined.Store4(_5963 * 96 + 16, asuint(_13639));
-	            undetermined.Store4(_5963 * 96 + 32, asuint(_16887));
-	            undetermined.Store4(_5963 * 96 + 48, asuint(_16305));
-	            undetermined.Store4(_5963 * 96 + 64, asuint(float4(normalize(_17116.xyz), float(int(sign(_17116.w))))));
-	            undetermined.Store2(_5963 * 96 + 80, asuint(_17114));
-	            undetermined.Store(_5963 * 96 + 88, uint(_17115));
-	            undetermined.Store(_5963 * 96 + 92, _9062);
+	            uint _9062 = g_ChartInfo.Load<uint>(_17171 * 8 + 4);
+	            g_LightmapSamples.Store<float4>(_5963 * 96 + 0, _17119);
+	            g_LightmapSamples.Store<float4>(_5963 * 96 + 16, _13639);
+	            g_LightmapSamples.Store<float4>(_5963 * 96 + 32, _16887);
+	            g_LightmapSamples.Store<float4>(_5963 * 96 + 48, _16305);
+	            g_LightmapSamples.Store<float4>(_5963 * 96 + 64, float4(normalize(_17116.xyz), float(int(sign(_17116.w)))));
+	            g_LightmapSamples.Store<float2>(_5963 * 96 + 80, _17114);
+	            g_LightmapSamples.Store<int>(_5963 * 96 + 88, _17115);
+	            g_LightmapSamples.Store<uint>(_5963 * 96 + 92, _9062);
 	        }
 	        break;
 	    } while(false);

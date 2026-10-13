@@ -58,7 +58,7 @@ CS
 	
 	Texture2D<float4> g_tSrcMip0 : register(t30, space0);
 	SamplerState AddressU_Clamp_AddressV_Clamp_AllowGlobalMipBiasOverride_0_Filter_MinMagMipPoint : register(s14, space0);
-	RWTexture2D<float4> _4286 : register(u158, space0);
+	RWTexture2D<float4> g_tDstMip1 : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_LocalInvocationID;
@@ -77,10 +77,10 @@ CS
 	    float4 _25001 = g_tSrcMip0.GatherRed(AddressU_Clamp_AddressV_Clamp_AllowGlobalMipBiasOverride_0_Filter_MinMagMipPoint, _11517, int2(1, 3));
 	    float4 _21268 = g_tSrcMip0.GatherRed(AddressU_Clamp_AddressV_Clamp_AllowGlobalMipBiasOverride_0_Filter_MinMagMipPoint, _11517, int2(3, 3));
 	    int2 _13024 = _7101 >> int2(1, 1);
-	    _4286[uint2(_13024)] = max(max(_24999.w, _24999.z), max(_24999.x, _24999.y)).xxxx;
-	    _4286[uint2(_13024 + int2(1, 0))] = max(max(_25000.w, _25000.z), max(_25000.x, _25000.y)).xxxx;
-	    _4286[uint2(_13024 + int2(0, 1))] = max(max(_25001.w, _25001.z), max(_25001.x, _25001.y)).xxxx;
-	    _4286[uint2(_13024 + int2(1, 1))] = max(max(_21268.w, _21268.z), max(_21268.x, _21268.y)).xxxx;
+	    g_tDstMip1[uint2(_13024)] = max(max(_24999.w, _24999.z), max(_24999.x, _24999.y)).xxxx;
+	    g_tDstMip1[uint2(_13024 + int2(1, 0))] = max(max(_25000.w, _25000.z), max(_25000.x, _25000.y)).xxxx;
+	    g_tDstMip1[uint2(_13024 + int2(0, 1))] = max(max(_25001.w, _25001.z), max(_25001.x, _25001.y)).xxxx;
+	    g_tDstMip1[uint2(_13024 + int2(1, 1))] = max(max(_21268.w, _21268.z), max(_21268.x, _21268.y)).xxxx;
 	}
 	
 	[numthreads(256, 1, 1)]

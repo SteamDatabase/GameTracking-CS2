@@ -51,7 +51,7 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 m_vPositionWs : TEXCOORD0;
+	    float3 m_vPositionWs : POSITION0;
 	};
 	
 	struct PS_INPUT

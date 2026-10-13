@@ -63,7 +63,7 @@ CS
 	
 	ByteAddressBuffer g_Grids : register(t30, space0);
 	ByteAddressBuffer g_OccupiedMask : register(t31, space0);
-	RWByteAddressBuffer undetermined : register(u159, space0);
+	RWByteAddressBuffer g_CellSamples : register(u159, space0);
 	uniform RaytracingAccelerationStructure _5615 : register(t30, space3);
 	
 	static uint3 gl_GlobalInvocationID;
@@ -83,18 +83,18 @@ CS
 	        }
 	        uint _3077 = _5053 / 8u;
 	        uint _5746 = _5053 % 8u;
-	        uint _8746 = _3077 % g_Grids.Load3(128).x;
-	        uint _12559 = _3077 / g_Grids.Load3(128).x;
-	        uint _19174 = _12559 % g_Grids.Load3(128).y;
-	        uint _12732 = _12559 / g_Grids.Load3(128).y;
-	        float4x3 _16509 = asfloat(uint4x3(g_Grids.Load(48), g_Grids.Load(64), g_Grids.Load(80), g_Grids.Load(52), g_Grids.Load(68), g_Grids.Load(84), g_Grids.Load(56), g_Grids.Load(72), g_Grids.Load(88), g_Grids.Load(60), g_Grids.Load(76), g_Grids.Load(92)));
+	        uint _8746 = _3077 % g_Grids.Load<uint3>(128).x;
+	        uint _12559 = _3077 / g_Grids.Load<uint3>(128).x;
+	        uint _19174 = _12559 % g_Grids.Load<uint3>(128).y;
+	        uint _12732 = _12559 / g_Grids.Load<uint3>(128).y;
+	        float4x3 _16509 = float4x3(g_Grids.Load<float>(48), g_Grids.Load<float>(64), g_Grids.Load<float>(80), g_Grids.Load<float>(52), g_Grids.Load<float>(68), g_Grids.Load<float>(84), g_Grids.Load<float>(56), g_Grids.Load<float>(72), g_Grids.Load<float>(88), g_Grids.Load<float>(60), g_Grids.Load<float>(76), g_Grids.Load<float>(92));
 	        float3 _16496 = mul(float4(float3(uint3(_8746, _19174, _12732)) + float3((float(_5746 % 2u) + 0.5f) * 0.5f, (float((_5746 / 2u) % 2u) + 0.5f) * 0.5f, (float(_5746 / 4u) + 0.5f) * 0.5f), 1.0f), _16509).xyz;
-	        uint _12752 = _8746 + (g_Grids.Load3(128).x * (_19174 + (g_Grids.Load3(128).y * _12732)));
+	        uint _12752 = _8746 + (g_Grids.Load<uint3>(128).x * (_19174 + (g_Grids.Load<uint3>(128).y * _12732)));
 	        uint _6692;
 	        float _13138;
 	        float _13694;
 	        float _16307;
-	        if (((g_OccupiedMask.Load((_12752 >> uint(5)) * 4 + 0) >> (_12752 & 31u)) & 1u) == 0u)
+	        if (((g_OccupiedMask.Load<uint>((_12752 >> uint(5)) * 4 + 0) >> (_12752 & 31u)) & 1u) == 0u)
 	        {
 	            _13138 = 0.0f;
 	            _16307 = 0.0f;
@@ -228,10 +228,10 @@ CS
 	            _13694 = _17114 * 0.015625f;
 	            _6692 = uint(_7289);
 	        }
-	        undetermined.Store(_5053 * 16 + 0, asuint(_13138));
-	        undetermined.Store(_5053 * 16 + 4, asuint(_16307));
-	        undetermined.Store(_5053 * 16 + 8, asuint(_13694));
-	        undetermined.Store(_5053 * 16 + 12, _6692);
+	        g_CellSamples.Store<float>(_5053 * 16 + 0, _13138);
+	        g_CellSamples.Store<float>(_5053 * 16 + 4, _16307);
+	        g_CellSamples.Store<float>(_5053 * 16 + 8, _13694);
+	        g_CellSamples.Store<uint>(_5053 * 16 + 12, _6692);
 	        break;
 	    } while(false);
 	}

@@ -87,10 +87,10 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    float2 vTexCoord : TEXCOORD1;
-	    float3 vNormalOs : TEXCOORD2;
-	    uint nInstanceIdx : TEXCOORD4;
+	    float3 vPositionOs : POSITION0;
+	    float2 vTexCoord : TEXCOORD0;
+	    float3 vNormalOs : NORMAL0;
+	    uint nInstanceIdx : TEXCOORD13;
 	};
 	
 	struct PS_INPUT
@@ -103,7 +103,7 @@ VS
 	
 	void MainVs_inner()
 	{
-	    float3x4 _6463 = asfloat(uint3x4(g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 32)));
+	    float3x4 _6463 = float3x4(g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 32));
 	    float3 _19956 = mul(_6463, float4(vPositionOs.xyz, 1.0f));
 	    float4 _17914 = mul(PerViewConstantBuffer_t_1_m0, (float4(_19956.xyz, 1.0f) + (PerViewConstantBuffer_t_1_m1 * 1.0f)).xyzw);
 	    output_0 = normalize(mul(_6463, float4(vNormalOs.xyz, 0.0f)));

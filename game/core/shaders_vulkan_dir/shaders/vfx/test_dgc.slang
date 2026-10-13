@@ -39,10 +39,10 @@ VS
 	// Source 2 Viewer - https://valveresourceformat.github.io
 	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	cbuffer _1080_3900
+	cbuffer DGCTestPushConstant
 	{
-	    float4 _3900_m0 : packoffset(c0);
-	    float4 _3900_m1 : packoffset(c1);
+	    float4 DGCTestPushConstant_1_m0 : packoffset(c0);
+	    float4 DGCTestPushConstant_1_m1 : packoffset(c1);
 	};
 	
 	
@@ -53,8 +53,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    float4 vColor : TEXCOORD3;
+	    float3 vPositionOs : POSITION0;
+	    float4 vColor : COLOR0;
 	};
 	
 	struct PS_INPUT
@@ -65,9 +65,9 @@ VS
 	
 	void MainVs_inner()
 	{
-	    float3 _7673 = vPositionOs.xyz + _3900_m0.xyz;
+	    float3 _7673 = vPositionOs.xyz + DGCTestPushConstant_1_m0.xyz;
 	    float4 _13745 = float4(_7673, 1.0f);
-	    output_0 = _3900_m1.xyzw * vColor;
+	    output_0 = DGCTestPushConstant_1_m1.xyzw * vColor;
 	    _13745.y = -_7673.y;
 	    gl_Position = _13745;
 	}

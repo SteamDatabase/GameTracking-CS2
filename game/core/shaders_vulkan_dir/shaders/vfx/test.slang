@@ -66,13 +66,13 @@ MS
 	{
 	    SetMeshOutputCounts(4u, 2u);
 	    uint _11265 = gl_GlobalInvocationID.x * 36u;
-	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_0.x = asfloat(g_inputVB.Load(((_11265 + 12u) / 4u) * 4 + 0));
-	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_0.y = asfloat(g_inputVB.Load(((_11265 + 16u) / 4u) * 4 + 0));
-	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_0.z = asfloat(g_inputVB.Load(((_11265 + 20u) / 4u) * 4 + 0));
-	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_1.x = asfloat(g_inputVB.Load(((_11265 + 28u) / 4u) * 4 + 0));
-	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_1.y = asfloat(g_inputVB.Load(((_11265 + 32u) / 4u) * 4 + 0));
-	    float4 _15926 = float4(asfloat(g_inputVB.Load((_11265 / 4u) * 4 + 0)), _4, asfloat(g_inputVB.Load(((_11265 + 8u) / 4u) * 4 + 0)), 1.0f);
-	    _15926.y = asfloat(g_inputVB.Load(((_11265 + 4u) / 4u) * 4 + 0));
+	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_0.x = g_inputVB.Load<float>(((_11265 + 12u) / 4u) * 4 + 0);
+	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_0.y = g_inputVB.Load<float>(((_11265 + 16u) / 4u) * 4 + 0);
+	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_0.z = g_inputVB.Load<float>(((_11265 + 20u) / 4u) * 4 + 0);
+	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_1.x = g_inputVB.Load<float>(((_11265 + 28u) / 4u) * 4 + 0);
+	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].output_1.y = g_inputVB.Load<float>(((_11265 + 32u) / 4u) * 4 + 0);
+	    float4 _15926 = float4(g_inputVB.Load<float>((_11265 / 4u) * 4 + 0), _4, g_inputVB.Load<float>(((_11265 + 8u) / 4u) * 4 + 0), 1.0f);
+	    _15926.y = g_inputVB.Load<float>(((_11265 + 4u) / 4u) * 4 + 0);
 	    gl_MeshVerticesEXT[gl_GlobalInvocationID.x].gl_Position = _15926;
 	    if (gl_GlobalInvocationID.x == 0u)
 	    {
@@ -125,9 +125,9 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    float3 vNormalOs : TEXCOORD1;
-	    float2 vUv0 : TEXCOORD3;
+	    float3 vPositionOs : POSITION0;
+	    float3 vNormalOs : NORMAL0;
+	    float2 vUv0 : TEXCOORD0;
 	};
 	
 	struct PS_INPUT
@@ -171,71 +171,87 @@ GS
 	DynamicCombo( D_MS_TEST, 0..1 );
 	
 	
-	// SPIR-V reflection failed for backend HLSL:
-	// Unsupported shader stage.
-	//
-	// Re-attempting reflection with the GLSL backend.
-	
 	// Source 2 Viewer - https://valveresourceformat.github.io
-	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
+	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	// Static combos: S_GS_FORCE_ENABLE
 	// Dynamic combos: D_GS_TEST
 	
-	#version 460
-	#if defined(GL_EXT_control_flow_attributes)
-	#extension GL_EXT_control_flow_attributes : require
-	#define SPIRV_CROSS_FLATTEN [[flatten]]
-	#define SPIRV_CROSS_BRANCH [[dont_flatten]]
-	#define SPIRV_CROSS_UNROLL [[unroll]]
-	#define SPIRV_CROSS_LOOP [[dont_unroll]]
-	#else
-	#define SPIRV_CROSS_FLATTEN
-	#define SPIRV_CROSS_BRANCH
-	#define SPIRV_CROSS_UNROLL
-	#define SPIRV_CROSS_LOOP
-	#endif
-	layout(triangles) in;
-	layout(max_vertices = 3, triangle_strip) out;
-	
-	struct _985
+	cbuffer ExternalTestCB1 : register(b1, space2)
 	{
-	    float _m0;
+	    float ExternalTestCB1_1_m0 : packoffset(c0);
 	};
 	
-	layout(set = 2) uniform _985 ExternalTestCB1;
 	
-	layout(location = 0) in vec4 input_0[3];
-	layout(location = 1) in vec3 input_1[3];
-	layout(location = 2) in vec2 input_2[3];
-	layout(location = 0) out vec3 output_0;
-	layout(location = 1) out vec2 output_1;
+	static float4 gl_Position;
+	static float4 input_0[3];
+	static float3 input_1[3];
+	static float2 input_2[3];
+	static float3 output_0;
+	static float2 output_1;
 	
-	void main()
+	struct SPIRV_Cross_Input
 	{
-	    vec4 _25074 = ((input_0[0] + input_0[1]) + input_0[2]).xyzw * vec4(0.3333333432674407958984375);
-	    float _11735 = (0.5 * ExternalTestCB1._m0) + 0.5;
+	    float4 input_0 : TEXCOORD0;
+	    float3 input_1 : TEXCOORD1;
+	    float2 input_2 : TEXCOORD2;
+	};
+	
+	struct SPIRV_Cross_Output
+	{
+	    float3 output_0 : TEXCOORD0;
+	    float2 output_1 : TEXCOORD1;
+	    float4 gl_Position : SV_Position;
+	};
+	
+	void MainGs_inner(triangle SPIRV_Cross_Input stage_input[3], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    float4 _25074 = ((input_0[0] + input_0[1]) + input_0[2]).xyzw * 0.3333333432674407958984375f.xxxx;
+	    float _11735 = (0.5f * ExternalTestCB1_1_m0) + 0.5f;
 	    int _7155;
 	    int _13039 = 0;
-	    SPIRV_CROSS_UNROLL
+	    [unroll]
 	    for (;;)
 	    {
 	        if (!(_13039 < 3))
 	        {
 	            break;
 	        }
-	        vec4 _17221 = mix(_25074, input_0[_13039], vec4((0.300000011920928955078125 * _11735) + 0.699999988079071044921875));
+	        float4 _17221 = lerp(_25074, input_0[_13039], ((0.300000011920928955078125f * _11735) + 0.699999988079071044921875f).xxxx);
 	        output_0 = input_1[_13039];
 	        output_1 = input_2[_13039];
 	        _17221.y = -_17221.y;
 	        gl_Position = _17221;
-	        EmitVertex();
+	        {
+	            SPIRV_Cross_Output stage_output;
+	            stage_output.gl_Position = gl_Position;
+	            stage_output.output_0 = output_0;
+	            stage_output.output_1 = output_1;
+	            geometry_stream.Append(stage_output);
+	        }
 	        _7155 = _13039 + 1;
 	        _13039 = _7155;
 	        continue;
 	    }
-	    EndPrimitive();
+	    geometry_stream.RestartStrip();
 	}
 	
+	[maxvertexcount(3)]
+	void MainGs(triangle SPIRV_Cross_Input stage_input[3], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_0[i] = stage_input[i].input_0;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_1[i] = stage_input[i].input_1;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_2[i] = stage_input[i].input_2;
+	    }
+	    MainGs_inner(stage_input, geometry_stream);
+	}
 	
 	// ---------  SPIRV -> HLSL end  --------- 
 	
@@ -294,10 +310,10 @@ PS
 	
 	layout(set = 1) uniform _1048 ExternalTestCB1;
 	
-	layout(push_constant, std430) uniform _997_4179
+	layout(push_constant, std430) uniform ExternalTestCB2
 	{
 	    vec2 _m0;
-	} _4179;
+	} ExternalTestCB2_1;
 	
 	layout(set = 1, binding = 30) uniform texture2D g_tColor;
 	layout(set = 1, binding = 14) uniform sampler Filter_MinMagMipLinear_MaxAniso_1_MipBias_0;
@@ -319,7 +335,7 @@ PS
 	    _4360.y = _23713.y;
 	    vec4 _3300 = texture(sampler2D(g_tColor, Filter_MinMagMipLinear_MaxAniso_1_MipBias_0), _4360.xy);
 	    vec4 _20506 = _3300;
-	    vec3 _14381 = _3300.xyz * ((ExternalTestCB1._m0 * _4179._m0.x) + _4179._m0.y);
+	    vec3 _14381 = _3300.xyz * ((ExternalTestCB1._m0 * ExternalTestCB2_1._m0.x) + ExternalTestCB2_1._m0.y);
 	    _20506.x = _14381.x;
 	    _20506.y = _14381.y;
 	    _20506.z = _14381.z;

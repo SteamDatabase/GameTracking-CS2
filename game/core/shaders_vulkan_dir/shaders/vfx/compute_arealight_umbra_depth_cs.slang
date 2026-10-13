@@ -93,8 +93,8 @@ CS
 	
 	layout(set = 0, binding = 30) uniform texture2DArray g_ShadowViewSamples;
 	layout(set = 0, binding = 14) uniform sampler AddressU_Clamp_AddressV_Clamp_AddressW_Clamp_Filter_MinMagLinearMipPoint;
-	layout(set = 0, binding = 158) uniform writeonly image2D _5026;
-	layout(set = 0, binding = 159) uniform writeonly image2D _4773;
+	layout(set = 0, binding = 158) uniform writeonly image2D g_RWDepthMap;
+	layout(set = 0, binding = 159) uniform writeonly image2D g_RWBlockerDepth;
 	
 	void main()
 	{
@@ -261,8 +261,8 @@ CS
 	        _17018 = _4878;
 	        continue;
 	    }
-	    imageStore(_5026, ivec2(gl_GlobalInvocationID.xy), vec4(_17134));
-	    imageStore(_4773, ivec2(gl_GlobalInvocationID.xy), vec4(_16305));
+	    imageStore(g_RWDepthMap, ivec2(gl_GlobalInvocationID.xy), vec4(_17134));
+	    imageStore(g_RWBlockerDepth, ivec2(gl_GlobalInvocationID.xy), vec4(_16305));
 	}
 	
 	

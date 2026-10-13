@@ -54,8 +54,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float2 vPositionPs : TEXCOORD0;
-	    float2 vTexCoord : TEXCOORD1;
+	    float2 vPositionPs : POSITION0;
+	    float2 vTexCoord : TEXCOORD0;
 	};
 	
 	struct PS_INPUT
@@ -166,133 +166,116 @@ PS
 	
 	// Variant parameters
 	
-	// SPIR-V reflection failed for backend HLSL:
-	// cbuffer ID 4023 (name: SmokeConstantBuffer_t), member index 14 (name: _m14) cannot be expressed with either HLSL packing layout or packoffset.
-	//
-	// Re-attempting reflection with the GLSL backend.
-	
 	// Source 2 Viewer - https://valveresourceformat.github.io
-	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
-	
-	#version 460
-	#extension GL_EXT_samplerless_texture_functions : require
-	#if defined(GL_EXT_control_flow_attributes)
-	#extension GL_EXT_control_flow_attributes : require
-	#define SPIRV_CROSS_FLATTEN [[flatten]]
-	#define SPIRV_CROSS_BRANCH [[dont_flatten]]
-	#define SPIRV_CROSS_UNROLL [[unroll]]
-	#define SPIRV_CROSS_LOOP [[dont_unroll]]
-	#else
-	#define SPIRV_CROSS_FLATTEN
-	#define SPIRV_CROSS_BRANCH
-	#define SPIRV_CROSS_UNROLL
-	#define SPIRV_CROSS_LOOP
-	#endif
-	layout(early_fragment_tests) in;
+	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
 	struct _1017
 	{
-	    vec4 _m0;
+	    float4 _m0;
 	};
 	
 	struct _2284
 	{
-	    vec4 _m0[16];
+	    float4 _m0[16];
 	};
 	
 	struct _2410
 	{
-	    vec4 _m0[5];
+	    float4 _m0[5];
 	};
 	
 	struct _2536
 	{
-	    vec4 _m0[2];
+	    float4 _m0[2];
 	};
 	
-	vec4 _3;
+	static float4 _3;
 	
-	struct _1228
+	cbuffer PerViewConstantBuffer_t : register(b1, space1)
 	{
-	    vec4 _m0;
-	    float _m1;
-	    float _m2;
-	    vec3 _m3;
-	    vec3 _m4;
+	    float4 PerViewConstantBuffer_t_1_m0 : packoffset(c16);
+	    float PerViewConstantBuffer_t_1_m1 : packoffset(c23);
+	    float PerViewConstantBuffer_t_1_m2 : packoffset(c23.y);
+	    float3 PerViewConstantBuffer_t_1_m3 : packoffset(c26);
+	    float3 PerViewConstantBuffer_t_1_m4 : packoffset(c28);
 	};
 	
-	layout(set = 1) uniform _1228 PerViewConstantBuffer_t;
-	
-	struct _2884
+	cbuffer SmokeConstantBuffer_t : register(b4, space1)
 	{
-	    _2284 _m0;
-	    _2284 _m1;
-	    _2284 _m2;
-	    _2284 _m3;
-	    _2284 _m4;
-	    _2284 _m5;
-	    vec4 _m6;
-	    vec4 _m7;
-	    vec4 _m8;
-	    _2284 _m9;
-	    _2284 _m10;
-	    _2284 _m11;
-	    _2410 _m12;
-	    _2536 _m13;
-	    uint _m14;
-	    float _m15;
-	    uint _m16;
+	    _2284 SmokeConstantBuffer_t_1_m0 : packoffset(c0);
+	    _2284 SmokeConstantBuffer_t_1_m1 : packoffset(c16);
+	    _2284 SmokeConstantBuffer_t_1_m2 : packoffset(c32);
+	    _2284 SmokeConstantBuffer_t_1_m3 : packoffset(c48);
+	    _2284 SmokeConstantBuffer_t_1_m4 : packoffset(c64);
+	    _2284 SmokeConstantBuffer_t_1_m5 : packoffset(c80);
+	    float4 SmokeConstantBuffer_t_1_m6 : packoffset(c96);
+	    float4 SmokeConstantBuffer_t_1_m7 : packoffset(c97);
+	    float4 SmokeConstantBuffer_t_1_m8 : packoffset(c98);
+	    _2284 SmokeConstantBuffer_t_1_m9 : packoffset(c99);
+	    _2284 SmokeConstantBuffer_t_1_m10 : packoffset(c115);
+	    _2284 SmokeConstantBuffer_t_1_m11 : packoffset(c131);
+	    _2410 SmokeConstantBuffer_t_1_m12 : packoffset(c147);
+	    _2536 SmokeConstantBuffer_t_1_m13 : packoffset(c152);
+	    uint SmokeConstantBuffer_t_1_m14 : packoffset(c155.y);
+	    float SmokeConstantBuffer_t_1_m15 : packoffset(c155.z);
+	    uint SmokeConstantBuffer_t_1_m16 : packoffset(c155.w);
 	};
 	
-	layout(set = 1) uniform _2884 SmokeConstantBuffer_t;
-	
-	struct _983
+	cbuffer _Globals_ : register(b0, space1)
 	{
-	    int g_MixedResolutionScale;
+	    int _Globals_1_g_MixedResolutionScale : packoffset(c8.y);
 	};
 	
-	layout(set = 1) uniform _983 _Globals_;
-	
-	struct _1080
+	cbuffer PerViewLightingConstantBufferGpu_t : register(b0, space3)
 	{
-	    vec4 _m0;
-	    vec4 _m1;
+	    float4 PerViewLightingConstantBufferGpu_t_1_m0 : packoffset(c1945);
+	    float4 PerViewLightingConstantBufferGpu_t_1_m1 : packoffset(c1946);
 	};
 	
-	layout(set = 3) uniform _1080 PerViewLightingConstantBufferGpu_t;
+	Texture2D<float4> g_tDepthTexture : register(t54, space1);
+	Texture2D<float4> g_tDepthNoCharacters : register(t56, space1);
+	Texture2D<float4> g_tMaskTexture : register(t55, space1);
+	Texture3D<float4> g_tSmokeVolumeTexA_Atlas : register(t51, space1);
+	SamplerState g_sTrilinearClamp : register(s17, space1);
+	Texture3D<float4> g_tSmokeVolumeLPV_Atlas : register(t52, space1);
 	
-	layout(set = 1, binding = 54) uniform texture2D g_tDepthTexture;
-	layout(set = 1, binding = 56) uniform texture2D g_tDepthNoCharacters;
-	layout(set = 1, binding = 55) uniform texture2D g_tMaskTexture;
-	layout(set = 1, binding = 51) uniform texture3D g_tSmokeVolumeTexA_Atlas;
-	layout(set = 1, binding = 17) uniform sampler g_sTrilinearClamp;
-	layout(set = 1, binding = 52) uniform texture3D g_tSmokeVolumeLPV_Atlas;
+	static float4 gl_FragCoord;
+	static float3 input_0;
+	static float4 output_0;
 	
-	layout(location = 0) in vec3 input_0;
-	layout(location = 0) out vec4 output_0;
-	
-	void main()
+	struct PS_INPUT
 	{
-	    vec3 _15861 = normalize(input_0);
-	    vec3 _23296 = vec3(1.0) / _15861;
-	    vec3 _8251 = _23296 * (SmokeConstantBuffer_t._m6.xyz - PerViewConstantBuffer_t._m3);
-	    vec3 _6243 = _23296 * (SmokeConstantBuffer_t._m7.xyz - PerViewConstantBuffer_t._m3);
-	    vec3 _7415 = min(_6243, _8251);
-	    vec3 _13037 = max(_6243, _8251);
-	    vec2 _11253 = max(_7415.xx, _7415.yz);
+	    float3 input_0 : TEXCOORD0;
+	    float4 gl_FragCoord : SV_Position;
+	};
+	
+	struct PS_OUTPUT
+	{
+	    float4 output_0 : SV_Target0;
+	};
+	
+	void MainPs_inner()
+	{
+	    float3 _15861 = normalize(input_0);
+	    float3 _23296 = 1.0f.xxx / _15861;
+	    float3 _8251 = _23296 * (SmokeConstantBuffer_t_1_m6.xyz - PerViewConstantBuffer_t_1_m3);
+	    float3 _6243 = _23296 * (SmokeConstantBuffer_t_1_m7.xyz - PerViewConstantBuffer_t_1_m3);
+	    float3 _7415 = min(_6243, _8251);
+	    float3 _13037 = max(_6243, _8251);
+	    float2 _11253 = max(_7415.xx, _7415.yz);
 	    float _12676 = max(_11253.x, _11253.y);
-	    vec2 _16933 = min(_13037.xx, _13037.yz);
+	    float2 _16933 = min(_13037.xx, _13037.yz);
 	    float _15651 = min(_16933.x, _16933.y);
 	    if (_12676 > _15651)
 	    {
 	        discard;
 	    }
-	    float _17986 = ((_12676 < 0.0) ? 0.0 : _12676) + 6.0;
-	    ivec2 _11700 = ivec3(ivec2(gl_FragCoord.xy), 0).xy;
-	    float _10955 = PerViewConstantBuffer_t._m2 - PerViewConstantBuffer_t._m1;
-	    float _15694 = dot(PerViewConstantBuffer_t._m4.xyz, _15861);
-	    float _10558 = 1.0 / (((saturate((texelFetch(g_tDepthTexture, _11700, 0).x - PerViewConstantBuffer_t._m1) / _10955) * PerViewConstantBuffer_t._m0.z) + PerViewConstantBuffer_t._m0.w) * _15694);
-	    bool _6681 = SmokeConstantBuffer_t._m16 > 0u;
+	    float _17986 = ((_12676 < 0.0f) ? 0.0f : _12676) + 6.0f;
+	    int2 _11700 = int3(int2(gl_FragCoord.xy), 0).xy;
+	    float _10955 = PerViewConstantBuffer_t_1_m2 - PerViewConstantBuffer_t_1_m1;
+	    float _15694 = dot(PerViewConstantBuffer_t_1_m4.xyz, _15861);
+	    float _10558 = 1.0f / (((saturate((g_tDepthTexture.Load(int3(_11700, 0)).x - PerViewConstantBuffer_t_1_m1) / _10955) * PerViewConstantBuffer_t_1_m0.z) + PerViewConstantBuffer_t_1_m0.w) * _15694);
+	    bool _6681 = SmokeConstantBuffer_t_1_m16 > 0u;
 	    bool _12885;
 	    if (_6681)
 	    {
@@ -300,27 +283,27 @@ PS
 	    }
 	    else
 	    {
-	        _12885 = SmokeConstantBuffer_t._m8.w > 0.0;
+	        _12885 = SmokeConstantBuffer_t_1_m8.w > 0.0f;
 	    }
 	    bool _12666;
-	    SPIRV_CROSS_BRANCH
+	    [branch]
 	    if (_12885)
 	    {
-	        _12666 = ((1.0 / (((saturate((texelFetch(g_tDepthNoCharacters, ivec3(ivec2(gl_FragCoord.xy * float(_Globals_.g_MixedResolutionScale)), 0).xy, 0).x - PerViewConstantBuffer_t._m1) / _10955) * PerViewConstantBuffer_t._m0.z) + PerViewConstantBuffer_t._m0.w) * _15694)) - _10558) > 10.0;
+	        _12666 = ((1.0f / (((saturate((g_tDepthNoCharacters.Load(int3(int3(int2(gl_FragCoord.xy * float(_Globals_1_g_MixedResolutionScale)), 0).xy, 0)).x - PerViewConstantBuffer_t_1_m1) / _10955) * PerViewConstantBuffer_t_1_m0.z) + PerViewConstantBuffer_t_1_m0.w) * _15694)) - _10558) > 10.0f;
 	    }
 	    else
 	    {
 	        _12666 = false;
 	    }
-	    float _4364 = _10558 - 2.0;
-	    SPIRV_CROSS_BRANCH
+	    float _4364 = _10558 - 2.0f;
+	    [branch]
 	    if (_17986 > _4364)
 	    {
 	        discard;
 	    }
-	    vec3 _5607 = PerViewConstantBuffer_t._m3 + (_15861 * _17986);
-	    vec3 _4987 = PerViewConstantBuffer_t._m3 + (_15861 * min(_15651, _4364));
-	    uint _19697 = uint(texelFetch(g_tMaskTexture, _11700, 0).x);
+	    float3 _5607 = PerViewConstantBuffer_t_1_m3 + (_15861 * _17986);
+	    float3 _4987 = PerViewConstantBuffer_t_1_m3 + (_15861 * min(_15651, _4364));
+	    uint _19697 = uint(g_tMaskTexture.Load(int3(_11700, 0)).x);
 	    uint _4249;
 	    uint _15529;
 	    _1017 _5767[1];
@@ -338,12 +321,12 @@ PS
 	        }
 	        if ((_17017 & 1u) != 0u)
 	        {
-	            vec3 _8252 = _23296 * (SmokeConstantBuffer_t._m0._m0[_13136].xyz - PerViewConstantBuffer_t._m3);
-	            vec3 _6244 = _23296 * (SmokeConstantBuffer_t._m1._m0[_13136].xyz - PerViewConstantBuffer_t._m3);
-	            vec3 _7416 = min(_6244, _8252);
-	            vec3 _13038 = max(_6244, _8252);
-	            vec2 _11254 = max(_7416.xx, _7416.yz);
-	            vec2 _16934 = min(_13038.xx, _13038.yz);
+	            float3 _8252 = _23296 * (SmokeConstantBuffer_t_1_m0._m0[_13136].xyz - PerViewConstantBuffer_t_1_m3);
+	            float3 _6244 = _23296 * (SmokeConstantBuffer_t_1_m1._m0[_13136].xyz - PerViewConstantBuffer_t_1_m3);
+	            float3 _7416 = min(_6244, _8252);
+	            float3 _13038 = max(_6244, _8252);
+	            float2 _11254 = max(_7416.xx, _7416.yz);
+	            float2 _16934 = min(_13038.xx, _13038.yz);
 	            _5767[_16324]._m0.x = max(_11254.x, _11254.y);
 	            _5767[_16324]._m0.y = min(_16934.x, _16934.y);
 	            _5767[_16324]._m0.z = float(_13136);
@@ -366,33 +349,33 @@ PS
 	        continue;
 	    }
 	    _1017 _22684[1] = _5767;
-	    vec4 _13174;
+	    float4 _13174;
 	    do
 	    {
-	        vec3 _24182 = _4987 - _5607;
-	        int _18242 = int(max(2.0, length(_24182) * 0.25));
-	        vec3 _14798 = _24182 / vec3(float(_18242 - 1));
+	        float3 _24182 = _4987 - _5607;
+	        int _18242 = int(max(2.0f, length(_24182) * 0.25f));
+	        float3 _14798 = _24182 / float(_18242 - 1).xxx;
 	        float _24637 = length(_14798);
-	        vec4 _16305;
-	        vec3 _17115;
-	        vec3 _17118;
-	        _16305 = vec4(0.0);
-	        _17115 = vec3(0.0, 0.0, 0.00999999977648258209228515625);
+	        float4 _16305;
+	        float3 _17115;
+	        float3 _17118;
+	        _16305 = 0.0f.xxxx;
+	        _17115 = float3(0.0f, 0.0f, 0.00999999977648258209228515625f);
 	        _17118 = _5607;
 	        float _7831;
 	        int _11496;
-	        vec3 _12783;
+	        float3 _12783;
 	        float _13150;
 	        bool _16054;
-	        vec3 _16312;
+	        float3 _16312;
 	        bool _16863;
 	        float _17123;
 	        uint _17124;
-	        vec4 _17153;
+	        float4 _17153;
 	        bool _13137 = false;
 	        int _17018 = 0;
-	        float _17114 = 0.0;
-	        float _17116 = 0.0;
+	        float _17114 = 0.0f;
+	        float _17116 = 0.0f;
 	        uint _17117 = 0u;
 	        float _17133 = _17986;
 	        for (;;)
@@ -404,7 +387,7 @@ PS
 	                break;
 	            }
 	            bool _23149;
-	            if (SmokeConstantBuffer_t._m14 != 0u)
+	            if (SmokeConstantBuffer_t_1_m14 != 0u)
 	            {
 	                bool _12501;
 	                if ((_17018 & 15) == 0)
@@ -421,18 +404,19 @@ PS
 	            {
 	                _23149 = false;
 	            }
-	            float _24117 = _23149 ? 0.0 : _17114;
-	            float _17855 = _23149 ? 0.0 : _17116;
+	            float _24117 = _23149 ? 0.0f : _17114;
+	            bool3 _9204 = _23149.xxx;
+	            float _17855 = _23149 ? 0.0f : _17116;
 	            uint _14433 = _23149 ? 0u : _17117;
-	            vec4 _13138;
-	            vec3 _17119;
+	            float4 _13138;
+	            float3 _17119;
 	            _13138 = _16305;
-	            _17119 = mix(_17115, vec3(0.0, 0.0, 0.00999999977648258209228515625), bvec3(_23149));
+	            _17119 = float3(_9204.x ? float3(0.0f, 0.0f, 0.00999999977648258209228515625f).x : _17115.x, _9204.y ? float3(0.0f, 0.0f, 0.00999999977648258209228515625f).y : _17115.y, _9204.z ? float3(0.0f, 0.0f, 0.00999999977648258209228515625f).z : _17115.z);
 	            uint _8897;
-	            vec4 _13149;
+	            float4 _13149;
 	            float _14891;
 	            float _16311;
-	            vec3 _17121;
+	            float3 _17121;
 	            uint _18361;
 	            float _16306 = _24117;
 	            uint _17019 = 0u;
@@ -475,12 +459,12 @@ PS
 	                    }
 	                    uint _13141;
 	                    float _16308;
-	                    vec3 _16882;
+	                    float3 _16882;
 	                    float _17152;
 	                    do
 	                    {
 	                        bool _12886;
-	                        if (SmokeConstantBuffer_t._m14 == 0u)
+	                        if (SmokeConstantBuffer_t_1_m14 == 0u)
 	                        {
 	                            _12886 = true;
 	                        }
@@ -497,44 +481,44 @@ PS
 	                            break;
 	                        }
 	                        float _13139;
-	                        vec3 _16307;
+	                        float3 _16307;
 	                        float _17135;
 	                        _13139 = _16306;
 	                        _16307 = _17119;
 	                        _17135 = _17120;
 	                        uint _8087;
-	                        vec3 _13140;
+	                        float3 _13140;
 	                        float _13189;
 	                        float _14382;
 	                        uint _17020 = 0u;
 	                        for (;;)
 	                        {
-	                            if (!(_17020 < min(SmokeConstantBuffer_t._m14, 16u)))
+	                            if (!(_17020 < min(SmokeConstantBuffer_t_1_m14, 16u)))
 	                            {
 	                                break;
 	                            }
-	                            vec3 _21554 = SmokeConstantBuffer_t._m10._m0[_17020].xyz - SmokeConstantBuffer_t._m9._m0[_17020].xyz;
-	                            vec3 _14636 = _17118 - SmokeConstantBuffer_t._m9._m0[_17020].xyz;
-	                            float _19448 = saturate((length(_14636 - (_21554 * saturate(dot(_14636, _21554) / dot(_21554, _21554)))) * 0.0500000007450580596923828125) * SmokeConstantBuffer_t._m11._m0[_17020].x);
-	                            float _14626 = smoothstep(0.0, 0.00999999977648258209228515625, SmokeConstantBuffer_t._m9._m0[_17020].w) * (1.0 - smoothstep(0.00999999977648258209228515625, 0.20000000298023223876953125, SmokeConstantBuffer_t._m9._m0[_17020].w));
+	                            float3 _21554 = SmokeConstantBuffer_t_1_m10._m0[_17020].xyz - SmokeConstantBuffer_t_1_m9._m0[_17020].xyz;
+	                            float3 _14636 = _17118 - SmokeConstantBuffer_t_1_m9._m0[_17020].xyz;
+	                            float _19448 = saturate((length(_14636 - (_21554 * saturate(dot(_14636, _21554) / dot(_21554, _21554)))) * 0.0500000007450580596923828125f) * SmokeConstantBuffer_t_1_m11._m0[_17020].x);
+	                            float _14626 = smoothstep(0.0f, 0.00999999977648258209228515625f, SmokeConstantBuffer_t_1_m9._m0[_17020].w) * (1.0f - smoothstep(0.00999999977648258209228515625f, 0.20000000298023223876953125f, SmokeConstantBuffer_t_1_m9._m0[_17020].w));
 	                            float _6223;
-	                            SPIRV_CROSS_BRANCH
-	                            if (_19448 < 1.0)
+	                            [branch]
+	                            if (_19448 < 1.0f)
 	                            {
-	                                float _18731 = max(_17135, smoothstep(0.0, 1.0, 1.0 - saturate(SmokeConstantBuffer_t._m9._m0[_17020].w + saturate(_19448 + (1.0 - saturate(length(_17118 - SmokeConstantBuffer_t._m10._m0[_17020].xyz) * 0.00999999977648258209228515625))))));
-	                                _13140 = mix(_16307, normalize(SmokeConstantBuffer_t._m9._m0[_17020].xyz - SmokeConstantBuffer_t._m10._m0[_17020].xyz), vec3(_18731));
+	                                float _18731 = max(_17135, smoothstep(0.0f, 1.0f, 1.0f - saturate(SmokeConstantBuffer_t_1_m9._m0[_17020].w + saturate(_19448 + (1.0f - saturate(length(_17118 - SmokeConstantBuffer_t_1_m10._m0[_17020].xyz) * 0.00999999977648258209228515625f))))));
+	                                _13140 = lerp(_16307, normalize(SmokeConstantBuffer_t_1_m9._m0[_17020].xyz - SmokeConstantBuffer_t_1_m10._m0[_17020].xyz), _18731.xxx);
 	                                _13189 = _18731;
-	                                _6223 = (pow(1.0 - _19448, 64.0) * _14626) * 10.0;
+	                                _6223 = (pow(1.0f - _19448, 64.0f) * _14626) * 10.0f;
 	                            }
 	                            else
 	                            {
 	                                _13140 = _16307;
 	                                _13189 = _17135;
-	                                _6223 = 0.0;
+	                                _6223 = 0.0f;
 	                            }
-	                            if (SmokeConstantBuffer_t._m10._m0[_17020].w > 0.0)
+	                            if (SmokeConstantBuffer_t_1_m10._m0[_17020].w > 0.0f)
 	                            {
-	                                float _10368 = (1.0 - saturate(length(_14636) * 0.00999999977648258209228515625)) * _14626;
+	                                float _10368 = (1.0f - saturate(length(_14636) * 0.00999999977648258209228515625f)) * _14626;
 	                                _14382 = max(_13139, max(_10368 * _10368, _6223));
 	                            }
 	                            else
@@ -554,54 +538,54 @@ PS
 	                        _16882 = _16307;
 	                        break;
 	                    } while(false);
-	                    vec4 _21317;
+	                    float4 _21317;
 	                    do
 	                    {
-	                        vec3 _25170 = _17118 + ((normalize(_16882) * pow(_17152, 3.0)) * 20.0);
-	                        vec3 _14658 = saturate((((_25170 - SmokeConstantBuffer_t._m2._m0[int(_20424)].xyz) * vec3(0.0500000007450580596923828125)) + vec3(16.0)) * vec3(0.03125));
-	                        vec3 _21495 = saturate(_14658);
-	                        uint _14092 = uint(SmokeConstantBuffer_t._m3._m0[_20424].z);
-	                        _21495.x = ((34.0 * float(_14092)) + (_21495.x * 32.0)) * 0.0018450184725224971771240234375;
-	                        vec4 _11487 = textureLod(sampler3D(g_tSmokeVolumeTexA_Atlas, g_sTrilinearClamp), _21495.xyz, 0.0);
-	                        vec2 _7714 = mix(_11487.xz, _11487.yw, vec2(SmokeConstantBuffer_t._m3._m0[_20424].y));
+	                        float3 _25170 = _17118 + ((normalize(_16882) * pow(_17152, 3.0f)) * 20.0f);
+	                        float3 _14658 = clamp((((_25170 - SmokeConstantBuffer_t_1_m2._m0[int(_20424)].xyz) * 0.0500000007450580596923828125f.xxx) + 16.0f.xxx) * 0.03125f.xxx, 0.0f.xxx, 1.0f.xxx);
+	                        float3 _21495 = clamp(_14658, 0.0f.xxx, 1.0f.xxx);
+	                        uint _14092 = uint(SmokeConstantBuffer_t_1_m3._m0[_20424].z);
+	                        _21495.x = ((34.0f * float(_14092)) + (_21495.x * 32.0f)) * 0.0018450184725224971771240234375f;
+	                        float4 _11487 = g_tSmokeVolumeTexA_Atlas.SampleLevel(g_sTrilinearClamp, _21495.xyz, 0.0f);
+	                        float2 _7714 = lerp(_11487.xz, _11487.yw, SmokeConstantBuffer_t_1_m3._m0[_20424].y.xx);
 	                        float _20593 = _7714.x;
 	                        float _6734 = _7714.y;
-	                        vec4 _13144;
+	                        float4 _13144;
 	                        _13144.w = _6734;
 	                        float _8283 = distance(_25170, _4987);
-	                        vec4 _18056;
+	                        float4 _18056;
 	                        if (_20593 > _6734)
 	                        {
-	                            vec4 _11248;
-	                            _11248.w = mix(_6734, _20593, smoothstep(10.0, 40.0, _8283));
+	                            float4 _11248;
+	                            _11248.w = lerp(_6734, _20593, smoothstep(10.0f, 40.0f, _8283));
 	                            _18056 = _11248;
 	                        }
 	                        else
 	                        {
 	                            _18056 = _13144.xyzw;
 	                        }
-	                        float _6665 = saturate(mix(_18056.w, -0.0500000007450580596923828125, _17152));
-	                        SPIRV_CROSS_BRANCH
-	                        if (_6665 > 0.00999999977648258209228515625)
+	                        float _6665 = saturate(lerp(_18056.w, -0.0500000007450580596923828125f, _17152));
+	                        [branch]
+	                        if (_6665 > 0.00999999977648258209228515625f)
 	                        {
-	                            vec4 _20413 = textureLod(sampler3D(g_tSmokeVolumeLPV_Atlas, g_sTrilinearClamp), _21495.xyz, 0.0);
-	                            float _15720 = saturate(saturate((_6665 - 0.00999999977648258209228515625) * 1.01010096073150634765625) * max(0.5, saturate((abs(sin((_14658.x * 18.840000152587890625) + (SmokeConstantBuffer_t._m15 * 0.699999988079071044921875))) + abs(cos((_14658.y * 31.40000152587890625) + (SmokeConstantBuffer_t._m15 * 0.5)))) * 0.5))) * saturate((SmokeConstantBuffer_t._m5._m0[_20424].x * 2.0) - 0.5);
-	                            float _22281 = saturate(_15720 + ((1.0 - saturate(distance(PerViewConstantBuffer_t._m3, _25170) * 0.100000001490116119384765625)) * _15720));
+	                            float4 _20413 = g_tSmokeVolumeLPV_Atlas.SampleLevel(g_sTrilinearClamp, _21495.xyz, 0.0f);
+	                            float _15720 = saturate(saturate((_6665 - 0.00999999977648258209228515625f) * 1.01010096073150634765625f) * max(0.5f, saturate((abs(sin((_14658.x * 18.840000152587890625f) + (SmokeConstantBuffer_t_1_m15 * 0.699999988079071044921875f))) + abs(cos((_14658.y * 31.40000152587890625f) + (SmokeConstantBuffer_t_1_m15 * 0.5f)))) * 0.5f))) * saturate((SmokeConstantBuffer_t_1_m5._m0[_20424].x * 2.0f) - 0.5f);
+	                            float _22281 = saturate(_15720 + ((1.0f - saturate(distance(PerViewConstantBuffer_t_1_m3, _25170) * 0.100000001490116119384765625f)) * _15720));
 	                            float _13147;
-	                            vec3 _13734;
+	                            float3 _13734;
 	                            float _15157;
 	                            float _16310;
-	                            SPIRV_CROSS_BRANCH
+	                            [branch]
 	                            if (_6681)
 	                            {
 	                                float _13142;
-	                                vec3 _16309;
+	                                float3 _16309;
 	                                float _17136;
-	                                _13142 = SmokeConstantBuffer_t._m15;
+	                                _13142 = SmokeConstantBuffer_t_1_m15;
 	                                _16309 = _25170;
-	                                _17136 = 1.0;
+	                                _17136 = 1.0f;
 	                                uint _8896;
-	                                vec3 _13146;
+	                                float3 _13146;
 	                                float _14082;
 	                                float _18360;
 	                                uint _17021 = 0u;
@@ -610,43 +594,43 @@ PS
 	                                    bool _7957_ladder_break = false;
 	                                    do
 	                                    {
-	                                        if (!(_17021 < SmokeConstantBuffer_t._m16))
+	                                        if (!(_17021 < SmokeConstantBuffer_t_1_m16))
 	                                        {
 	                                            _7957_ladder_break = true;
 	                                            break;
 	                                        }
-	                                        if ((uint(SmokeConstantBuffer_t._m13._m0[_17021 >> uint(2)][_17021 & 3u]) & (1u << _14092)) == 0u)
+	                                        if ((uint(SmokeConstantBuffer_t_1_m13._m0[_17021 >> uint(2)][_17021 & 3u]) & (1u << _14092)) == 0u)
 	                                        {
 	                                            _13146 = _16309;
 	                                            _14082 = _17136;
 	                                            _18360 = _13142;
 	                                            break;
 	                                        }
-	                                        float _10810 = SmokeConstantBuffer_t._m15 - SmokeConstantBuffer_t._m12._m0[_17021].w;
-	                                        vec3 _13145;
+	                                        float _10810 = SmokeConstantBuffer_t_1_m15 - SmokeConstantBuffer_t_1_m12._m0[_17021].w;
+	                                        float3 _13145;
 	                                        float _16382;
 	                                        float _16480;
-	                                        if (_10810 < (SmokeConstantBuffer_t._m3._m0[_20424].x - 0.4000000059604644775390625))
+	                                        if (_10810 < (SmokeConstantBuffer_t_1_m3._m0[_20424].x - 0.4000000059604644775390625f))
 	                                        {
-	                                            float _13668 = distance(_16309, SmokeConstantBuffer_t._m12._m0[_17021].xyz);
-	                                            vec3 _13143;
+	                                            float _13668 = distance(_16309, SmokeConstantBuffer_t_1_m12._m0[_17021].xyz);
+	                                            float3 _13143;
 	                                            float _16381;
 	                                            float _16479;
-	                                            if (_13668 < 250.0)
+	                                            if (_13668 < 250.0f)
 	                                            {
-	                                                float _16611 = pow(1.0 - smoothstep(0.0, 2.0, _10810), 128.0);
+	                                                float _16611 = pow(1.0f - smoothstep(0.0f, 2.0f, _10810), 128.0f);
 	                                                float _13560;
 	                                                if (!_12666)
 	                                                {
-	                                                    _13560 = step(_8283, 16.0) * (1.0 - smoothstep(0.0, 7.0, _10810));
+	                                                    _13560 = step(_8283, 16.0f) * (1.0f - smoothstep(0.0f, 7.0f, _10810));
 	                                                }
 	                                                else
 	                                                {
-	                                                    _13560 = 0.0;
+	                                                    _13560 = 0.0f;
 	                                                }
-	                                                _13143 = mix(_16309, SmokeConstantBuffer_t._m12._m0[_17021].xyz, vec3(((1.0 - smoothstep(100.0, 250.0, _13668)) * step(_10810 * 1250.0, _13668)) * (1.0 - _16611)));
-	                                                _16381 = min(_17136, max(smoothstep(200.0, 240.0, _13668 + (_16611 * 250.0)) + pow(smoothstep(0.5, 5.0, _10810), 1.7999999523162841796875), _13560));
-	                                                _16479 = min(_13142, SmokeConstantBuffer_t._m15 - (_10810 * (1.0 - smoothstep(0.0, 5.0, _10810))));
+	                                                _13143 = lerp(_16309, SmokeConstantBuffer_t_1_m12._m0[_17021].xyz, (((1.0f - smoothstep(100.0f, 250.0f, _13668)) * step(_10810 * 1250.0f, _13668)) * (1.0f - _16611)).xxx);
+	                                                _16381 = min(_17136, max(smoothstep(200.0f, 240.0f, _13668 + (_16611 * 250.0f)) + pow(smoothstep(0.5f, 5.0f, _10810), 1.7999999523162841796875f), _13560));
+	                                                _16479 = min(_13142, SmokeConstantBuffer_t_1_m15 - (_10810 * (1.0f - smoothstep(0.0f, 5.0f, _10810))));
 	                                            }
 	                                            else
 	                                            {
@@ -681,148 +665,146 @@ PS
 	                                    continue;
 	                                }
 	                                _13147 = _17136;
-	                                _16310 = mix(_22281 * 0.0199999995529651641845703125, _22281, _17136);
+	                                _16310 = lerp(_22281 * 0.0199999995529651641845703125f, _22281, _17136);
 	                                _15157 = _13142;
 	                                _13734 = _16309;
 	                            }
 	                            else
 	                            {
-	                                _13147 = 1.0;
+	                                _13147 = 1.0f;
 	                                _16310 = _22281;
-	                                _15157 = SmokeConstantBuffer_t._m15;
+	                                _15157 = SmokeConstantBuffer_t_1_m15;
 	                                _13734 = _25170;
 	                            }
-	                            vec3 _6444 = _13734 * 0.00999999977648258209228515625;
-	                            float _23715 = _6444.z - (_15157 * 0.0500000007450580596923828125);
-	                            vec3 _14064 = _6444;
+	                            float3 _6444 = _13734 * 0.00999999977648258209228515625f;
+	                            float _23715 = _6444.z - (_15157 * 0.0500000007450580596923828125f);
+	                            float3 _14064 = _6444;
 	                            _14064.z = _23715;
-	                            vec3 _10565 = _14064 * 2.2999999523162841796875;
-	                            vec3 _22220 = floor(_10565);
-	                            vec3 _8476 = fract(_10565);
+	                            float3 _10565 = _14064 * 2.2999999523162841796875f;
+	                            float3 _22220 = floor(_10565);
+	                            float3 _8476 = frac(_10565);
 	                            float _13155;
-	                            _13155 = 1.0;
+	                            _13155 = 1.0f;
 	                            float _13374;
 	                            float _13156;
-	                            float _16208 = -1.0;
+	                            float _16208 = -1.0f;
 	                            for (;;)
 	                            {
-	                                if (!(_16208 <= 1.0))
+	                                if (!(_16208 <= 1.0f))
 	                                {
 	                                    break;
 	                                }
 	                                _13156 = _13155;
 	                                float _13375;
 	                                float _13157;
-	                                float _16209 = -1.0;
+	                                float _16209 = -1.0f;
 	                                for (;;)
 	                                {
-	                                    if (!(_16209 <= 1.0))
+	                                    if (!(_16209 <= 1.0f))
 	                                    {
 	                                        break;
 	                                    }
 	                                    _13157 = _13156;
 	                                    float _7744;
 	                                    float _11312;
-	                                    float _16210 = -1.0;
+	                                    float _16210 = -1.0f;
 	                                    for (;;)
 	                                    {
-	                                        if (!(_16210 <= 1.0))
+	                                        if (!(_16210 <= 1.0f))
 	                                        {
 	                                            break;
 	                                        }
-	                                        vec3 _16399 = vec3(_16208, _16209, _16210);
-	                                        vec3 _10495 = _22220 + _16399;
-	                                        vec3 _23449 = fract((_10495 - vec3(2.2999999523162841796875) * trunc(_10495 / vec3(2.2999999523162841796875))) * vec3(0.103100001811981201171875, 0.113689996302127838134765625, 0.13786999881267547607421875));
-	                                        vec3 _22705 = _23449 + vec3(dot(_23449, _23449.yxz + vec3(19.1900005340576171875)));
+	                                        float3 _16399 = float3(_16208, _16209, _16210);
+	                                        float3 _23449 = frac(fmod(_22220 + _16399, 2.2999999523162841796875f.xxx) * float3(0.103100001811981201171875f, 0.113689996302127838134765625f, 0.13786999881267547607421875f));
+	                                        float3 _22705 = _23449 + dot(_23449, _23449.yxz + 19.1900005340576171875f.xxx).xxx;
 	                                        float _18874 = _22705.x;
 	                                        float _20358 = _22705.y;
 	                                        float _13913 = _22705.z;
-	                                        vec3 _22245 = (_16399 + (((vec3(-1.0) + (fract(vec3((_18874 + _20358) * _13913, (_18874 + _13913) * _20358, (_20358 + _13913) * _18874)) * 2.0)) * 0.5) + vec3(0.5))) - _8476;
+	                                        float3 _22245 = (_16399 + ((((-1.0f).xxx + (frac(float3((_18874 + _20358) * _13913, (_18874 + _13913) * _20358, (_20358 + _13913) * _18874)) * 2.0f)) * 0.5f) + 0.5f.xxx)) - _8476;
 	                                        float _9450 = dot(_22245, _22245);
 	                                        _11312 = (_9450 < _13157) ? _9450 : _13157;
-	                                        _7744 = _16210 + 1.0;
+	                                        _7744 = _16210 + 1.0f;
 	                                        _13157 = _11312;
 	                                        _16210 = _7744;
 	                                        continue;
 	                                    }
-	                                    _13375 = _16209 + 1.0;
+	                                    _13375 = _16209 + 1.0f;
 	                                    _13156 = _13157;
 	                                    _16209 = _13375;
 	                                    continue;
 	                                }
-	                                _13374 = _16208 + 1.0;
+	                                _13374 = _16208 + 1.0f;
 	                                _13155 = _13156;
 	                                _16208 = _13374;
 	                                continue;
 	                            }
-	                            _14064.z = _23715 - (_15157 * 0.02999999932944774627685546875);
-	                            vec3 _10566 = _14064 * 6.0;
-	                            vec3 _22221 = floor(_10566);
-	                            vec3 _8477 = fract(_10566);
+	                            _14064.z = _23715 - (_15157 * 0.02999999932944774627685546875f);
+	                            float3 _10566 = _14064 * 6.0f;
+	                            float3 _22221 = floor(_10566);
+	                            float3 _8477 = frac(_10566);
 	                            float _13158;
-	                            _13158 = 1.0;
+	                            _13158 = 1.0f;
 	                            float _13376;
 	                            float _13159;
-	                            float _16211 = -1.0;
+	                            float _16211 = -1.0f;
 	                            for (;;)
 	                            {
-	                                if (!(_16211 <= 1.0))
+	                                if (!(_16211 <= 1.0f))
 	                                {
 	                                    break;
 	                                }
 	                                _13159 = _13158;
 	                                float _13377;
 	                                float _13160;
-	                                float _16212 = -1.0;
+	                                float _16212 = -1.0f;
 	                                for (;;)
 	                                {
-	                                    if (!(_16212 <= 1.0))
+	                                    if (!(_16212 <= 1.0f))
 	                                    {
 	                                        break;
 	                                    }
 	                                    _13160 = _13159;
 	                                    float _7745;
 	                                    float _11313;
-	                                    float _16213 = -1.0;
+	                                    float _16213 = -1.0f;
 	                                    for (;;)
 	                                    {
-	                                        if (!(_16213 <= 1.0))
+	                                        if (!(_16213 <= 1.0f))
 	                                        {
 	                                            break;
 	                                        }
-	                                        vec3 _16400 = vec3(_16211, _16212, _16213);
-	                                        vec3 _10496 = _22221 + _16400;
-	                                        vec3 _23450 = fract((_10496 - vec3(6.0) * trunc(_10496 / vec3(6.0))) * vec3(0.103100001811981201171875, 0.113689996302127838134765625, 0.13786999881267547607421875));
-	                                        vec3 _22706 = _23450 + vec3(dot(_23450, _23450.yxz + vec3(19.1900005340576171875)));
+	                                        float3 _16400 = float3(_16211, _16212, _16213);
+	                                        float3 _23450 = frac(fmod(_22221 + _16400, 6.0f.xxx) * float3(0.103100001811981201171875f, 0.113689996302127838134765625f, 0.13786999881267547607421875f));
+	                                        float3 _22706 = _23450 + dot(_23450, _23450.yxz + 19.1900005340576171875f.xxx).xxx;
 	                                        float _18875 = _22706.x;
 	                                        float _20359 = _22706.y;
 	                                        float _13914 = _22706.z;
-	                                        vec3 _22246 = (_16400 + (((vec3(-1.0) + (fract(vec3((_18875 + _20359) * _13914, (_18875 + _13914) * _20359, (_20359 + _13914) * _18875)) * 2.0)) * 0.5) + vec3(0.5))) - _8477;
+	                                        float3 _22246 = (_16400 + ((((-1.0f).xxx + (frac(float3((_18875 + _20359) * _13914, (_18875 + _13914) * _20359, (_20359 + _13914) * _18875)) * 2.0f)) * 0.5f) + 0.5f.xxx)) - _8477;
 	                                        float _9451 = dot(_22246, _22246);
 	                                        _11313 = (_9451 < _13160) ? _9451 : _13160;
-	                                        _7745 = _16213 + 1.0;
+	                                        _7745 = _16213 + 1.0f;
 	                                        _13160 = _11313;
 	                                        _16213 = _7745;
 	                                        continue;
 	                                    }
-	                                    _13377 = _16212 + 1.0;
+	                                    _13377 = _16212 + 1.0f;
 	                                    _13159 = _13160;
 	                                    _16212 = _13377;
 	                                    continue;
 	                                }
-	                                _13376 = _16211 + 1.0;
+	                                _13376 = _16211 + 1.0f;
 	                                _13158 = _13159;
 	                                _16211 = _13376;
 	                                continue;
 	                            }
-	                            float _8377 = saturate((((1.0 - _13155) * 0.60000002384185791015625) + ((1.0 - _13158) * 0.2800000011920928955078125)) + 0.119999997317790985107421875);
+	                            float _8377 = saturate((((1.0f - _13155) * 0.60000002384185791015625f) + ((1.0f - _13158) * 0.2800000011920928955078125f)) + 0.119999997317790985107421875f);
 	                            float _9429;
-	                            SPIRV_CROSS_BRANCH
-	                            if (SmokeConstantBuffer_t._m5._m0[_20424].w < 1.0)
+	                            [branch]
+	                            if (SmokeConstantBuffer_t_1_m5._m0[_20424].w < 1.0f)
 	                            {
-	                                float _17097 = clamp(SmokeConstantBuffer_t._m5._m0[_20424].w, 9.9999997473787516355514526367188e-05, 0.99989998340606689453125);
-	                                float _8419 = smoothstep(0.0, 0.800000011920928955078125, _17097);
-	                                float _14551 = smoothstep(0.20000000298023223876953125, 1.0, _17097);
+	                                float _17097 = clamp(SmokeConstantBuffer_t_1_m5._m0[_20424].w, 9.9999997473787516355514526367188e-05f, 0.99989998340606689453125f);
+	                                float _8419 = smoothstep(0.0f, 0.800000011920928955078125f, _17097);
+	                                float _14551 = smoothstep(0.20000000298023223876953125f, 1.0f, _17097);
 	                                float _12502;
 	                                if (_8419 == _14551)
 	                                {
@@ -830,8 +812,8 @@ PS
 	                                }
 	                                else
 	                                {
-	                                    vec3 _23867 = _14658 - vec3(0.5);
-	                                    _23867.z = _23867.z * 1.2000000476837158203125;
+	                                    float3 _23867 = _14658 - 0.5f.xxx;
+	                                    _23867.z = _23867.z * 1.2000000476837158203125f;
 	                                    _12502 = _16310 * saturate(smoothstep(_8419, _14551, saturate(length(_23867))));
 	                                }
 	                                _9429 = _12502;
@@ -840,10 +822,10 @@ PS
 	                            {
 	                                _9429 = _16310;
 	                            }
-	                            float _15862 = pow(saturate((dot(normalize(_14658 - vec3(0.5)), PerViewLightingConstantBufferGpu_t._m0.xyz) * 0.800000011920928955078125) + 0.20000000298023223876953125), 2.0);
+	                            float _15862 = pow(saturate((dot(normalize(_14658 - 0.5f.xxx), PerViewLightingConstantBufferGpu_t_1_m0.xyz) * 0.800000011920928955078125f) + 0.20000000298023223876953125f), 2.0f);
 	                            float _11659;
-	                            SPIRV_CROSS_BRANCH
-	                            if (_15862 > 0.0)
+	                            [branch]
+	                            if (_15862 > 0.0f)
 	                            {
 	                                _11659 = _15862 * _20413.w;
 	                            }
@@ -851,21 +833,21 @@ PS
 	                            {
 	                                _11659 = _15862;
 	                            }
-	                            vec3 _7844 = (((_20413.xyz * (1.0 - _9429)) * 0.5) + (saturate(PerViewLightingConstantBufferGpu_t._m1.xyz) * (_11659 * (1.0 - _17152)))) * _8377;
-	                            vec3 _23772 = _7844 * SmokeConstantBuffer_t._m4._m0[_20424].xyz;
-	                            vec3 _25142 = mix(_7844, _23772 * (dot(_7844.xyz, vec3(0.2125000059604644775390625, 0.7153999805450439453125, 0.07209999859333038330078125)) / dot((_23772 + vec3(0.001000000047497451305389404296875)).xyz, vec3(0.2125000059604644775390625, 0.7153999805450439453125, 0.07209999859333038330078125))), vec3(0.5 * (1.0 - SmokeConstantBuffer_t._m5._m0[_20424].z))).xyz;
-	                            vec3 _21313 = mix(_25142, _25142 * _13147, vec3(0.60000002384185791015625)).xyz;
-	                            float _9049 = smoothstep(0.0, 0.20000000298023223876953125, saturate(mix(_9429 - (1.0 - _8377), _9429 + _8377, _9429)));
-	                            _21317 = _13138 + (vec4(saturate((_21313 + ((_21313 * vec3(8.0, 4.0, 0.0)) * _16308)) * _9049), _9049) * (1.0 - _13138.w));
+	                            float3 _7844 = (((_20413.xyz * (1.0f - _9429)) * 0.5f) + (clamp(PerViewLightingConstantBufferGpu_t_1_m1.xyz, 0.0f.xxx, 1.0f.xxx) * (_11659 * (1.0f - _17152)))) * _8377;
+	                            float3 _23772 = _7844 * SmokeConstantBuffer_t_1_m4._m0[_20424].xyz;
+	                            float3 _25142 = lerp(_7844, _23772 * (dot(_7844.xyz, float3(0.2125000059604644775390625f, 0.7153999805450439453125f, 0.07209999859333038330078125f)) / dot((_23772 + 0.001000000047497451305389404296875f.xxx).xyz, float3(0.2125000059604644775390625f, 0.7153999805450439453125f, 0.07209999859333038330078125f))), (0.5f * (1.0f - SmokeConstantBuffer_t_1_m5._m0[_20424].z)).xxx).xyz;
+	                            float3 _21313 = lerp(_25142, _25142 * _13147, 0.60000002384185791015625f.xxx).xyz;
+	                            float _9049 = smoothstep(0.0f, 0.20000000298023223876953125f, saturate(lerp(_9429 - (1.0f - _8377), _9429 + _8377, _9429)));
+	                            _21317 = _13138 + (float4(clamp((_21313 + ((_21313 * float3(8.0f, 4.0f, 0.0f)) * _16308)) * _9049, 0.0f.xxx, 1.0f.xxx), _9049) * (1.0f - _13138.w));
 	                            break;
 	                        }
 	                        _21317 = _13138;
 	                        break;
 	                    } while(false);
-	                    if (_21317.w > 0.990999996662139892578125)
+	                    if (_21317.w > 0.990999996662139892578125f)
 	                    {
-	                        vec4 _23482 = _21317;
-	                        _23482.w = 1.0;
+	                        float4 _23482 = _21317;
+	                        _23482.w = 1.0f;
 	                        _13150 = _16308;
 	                        _16312 = _16882;
 	                        _17123 = _17152;
@@ -921,13 +903,24 @@ PS
 	        }
 	        break;
 	    } while(false);
-	    if (_13174.w < 9.9999997473787516355514526367188e-06)
+	    if (_13174.w < 9.9999997473787516355514526367188e-06f)
 	    {
 	        discard;
 	    }
 	    output_0 = _13174;
 	}
 	
+	[earlydepthstencil]
+	PS_OUTPUT MainPs(PS_INPUT stage_input)
+	{
+	    gl_FragCoord = stage_input.gl_FragCoord;
+	    gl_FragCoord.w = 1.0 / gl_FragCoord.w;
+	    input_0 = stage_input.input_0;
+	    MainPs_inner();
+	    PS_OUTPUT stage_output;
+	    stage_output.output_0 = output_0;
+	    return stage_output;
+	}
 	
 	// ---------  SPIRV -> HLSL end  --------- 
 	

@@ -82,12 +82,12 @@ CS
 	};
 	
 	ByteAddressBuffer g_constantBuffer : register(t30, space0);
-	globallycoherent RWByteAddressBuffer undetermined : register(u163, space0);
-	RWByteAddressBuffer undetermined_1 : register(u162, space0);
-	globallycoherent RWByteAddressBuffer undetermined_2 : register(u164, space0);
-	cbuffer _981_4645
+	globallycoherent RWByteAddressBuffer b_passHist : register(u163, space0);
+	RWByteAddressBuffer b_globalHist : register(u162, space0);
+	globallycoherent RWByteAddressBuffer b_index : register(u164, space0);
+	cbuffer g_consts
 	{
-	    uint _4645_m0 : packoffset(c0);
+	    uint g_consts_1_m0 : packoffset(c0);
 	};
 	
 	
@@ -99,7 +99,7 @@ CS
 	
 	void MainCs_inner()
 	{
-	    uint _20090 = g_constantBuffer.Load(_4645_m0 * 8 + 4) * 1024u;
+	    uint _20090 = g_constantBuffer.Load<uint>(g_consts_1_m0 * 8 + 4) * 1024u;
 	    uint _4283;
 	    uint _13039 = gl_GlobalInvocationID.x;
 	    for (;;)
@@ -108,18 +108,18 @@ CS
 	        {
 	            break;
 	        }
-	        undetermined.Store(_13039 * 4 + 0, 0u);
+	        b_passHist.Store<uint>(_13039 * 4 + 0, 0u);
 	        _4283 = _13039 + 65536u;
 	        _13039 = _4283;
 	        continue;
 	    }
 	    if (gl_GlobalInvocationID.x < 1024u)
 	    {
-	        undetermined_1.Store(gl_GlobalInvocationID.x * 4 + 0, 0u);
+	        b_globalHist.Store<uint>(gl_GlobalInvocationID.x * 4 + 0, 0u);
 	    }
 	    if (gl_GlobalInvocationID.x < 4u)
 	    {
-	        undetermined_2.Store(gl_GlobalInvocationID.x * 4 + 0, 0u);
+	        b_index.Store<uint>(gl_GlobalInvocationID.x * 4 + 0, 0u);
 	    }
 	}
 	

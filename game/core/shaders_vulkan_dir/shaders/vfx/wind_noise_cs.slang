@@ -60,7 +60,7 @@ CS
 	
 	layout(set = 0) uniform _117 WindControllerConstantBuffer_t;
 	
-	layout(set = 0, binding = 158) uniform writeonly image3D _4363;
+	layout(set = 0, binding = 158) uniform writeonly image3D g_WindNoise;
 	
 	void main()
 	{
@@ -207,7 +207,7 @@ CS
 	        vec4 _18720 = _20587 * sqrt(vec4(1.0) - (_21064 * _21064));
 	        vec4 _12204 = max(vec4(0.5) - vec4(dot(_22557, _22557), dot(_7023, _7023), dot(_8427, _8427), dot(_7487, _7487)), vec4(0.0));
 	        vec2 _12295 = vec2(39.5 * dot((_12203 * _12203) * _12203, vec4(dot(vec3(_16959.x, _15971.x, _18719.x), _22556), dot(vec3(_16959.y, _15971.y, _18719.y), _7022), dot(vec3(_16959.z, _15971.z, _18719.z), _6660), dot(vec3(_16959.w, _15971.w, _18719.w), _23519))), 39.5 * dot((_12204 * _12204) * _12204, vec4(dot(vec3(_16960.x, _15972.x, _18720.x), _22557), dot(vec3(_16960.y, _15972.y, _18720.y), _7023), dot(vec3(_16960.z, _15972.z, _18720.z), _8427), dot(vec3(_16960.w, _15972.w, _18720.w), _7487)))) * 0.5;
-	        imageStore(_4363, ivec3(uvec3(gl_GlobalInvocationID.xy, _13039)), vec4(_12295 + vec2(0.5), 0.0, 0.0));
+	        imageStore(g_WindNoise, ivec3(uvec3(gl_GlobalInvocationID.xy, _13039)), vec4(_12295 + vec2(0.5), 0.0, 0.0));
 	        _4300 = _13039 + 1u;
 	        _13039 = _4300;
 	        continue;

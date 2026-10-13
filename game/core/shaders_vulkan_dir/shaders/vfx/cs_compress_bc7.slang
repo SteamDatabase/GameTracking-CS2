@@ -47,7 +47,7 @@ CS
 	
 	Texture2D<float4> g_tSrc : register(t30, space0);
 	SamplerState AddressU_Clamp_AddressV_Clamp_Filter_MinMagLinearMipPoint : register(s14, space0);
-	RWTexture2D<uint4> _3592 : register(u158, space0);
+	RWTexture2D<uint4> OutputBC7Texture : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -2303,7 +2303,7 @@ CS
 	            _23123 = _23136;
 	            break;
 	        } while(false);
-	        _3592[gl_GlobalInvocationID.xy] = _23123;
+	        OutputBC7Texture[gl_GlobalInvocationID.xy] = _23123;
 	        break;
 	    } while(false);
 	}

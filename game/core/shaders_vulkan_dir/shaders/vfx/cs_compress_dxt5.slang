@@ -56,7 +56,7 @@ CS
 	};
 	
 	Texture2D<float4> g_tSrc : register(t30, space0);
-	RWTexture2D<uint4> _5094 : register(u158, space0);
+	RWTexture2D<uint4> OutputDXT5Texture : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_GlobalInvocationID;
@@ -272,7 +272,7 @@ CS
 	    GroupMemoryBarrierWithGroupSync();
 	    if (_22868)
 	    {
-	        _5094[(gl_WorkGroupID.xy * uint2(2u, 1u)) + uint2(_12596, _14209 >> uint(1))] = uint4((_4472[_3122] | (_3699[_3122] << uint(8))) | (_5769[_3122][0] << uint(16)), _5769[_3122][1], (_4616[_3122]._m1 << uint(16)) | _4616[_3122]._m0, _5995[_3122]);
+	        OutputDXT5Texture[(gl_WorkGroupID.xy * uint2(2u, 1u)) + uint2(_12596, _14209 >> uint(1))] = uint4((_4472[_3122] | (_3699[_3122] << uint(8))) | (_5769[_3122][0] << uint(16)), _5769[_3122][1], (_4616[_3122]._m1 << uint(16)) | _4616[_3122]._m0, _5995[_3122]);
 	    }
 	}
 	

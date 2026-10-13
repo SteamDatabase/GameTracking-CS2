@@ -53,8 +53,8 @@ VS
 	struct VS_INPUT
 	{
 	    float2 vTexCoord : TEXCOORD0;
-	    float3 vNormalOs : TEXCOORD1;
-	    float4 vTangentUOs_flTangentVSign : TEXCOORD2;
+	    float3 vNormalOs : NORMAL0;
+	    float4 vTangentUOs_flTangentVSign : TANGENT0;
 	};
 	
 	struct PS_INPUT

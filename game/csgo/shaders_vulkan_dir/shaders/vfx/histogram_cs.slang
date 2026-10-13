@@ -53,8 +53,8 @@ CS
 	};
 	
 	Texture2D<float4> g_tInput : register(t31, space0);
-	RWTexture2D<float4> _5853 : register(u158, space0);
-	RWBuffer<uint> _3900 : register(u159, space0);
+	RWTexture2D<float4> g_tOutput : register(u158, space0);
+	RWBuffer<uint> g_bHistogramBins : register(u159, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	static uint gl_LocalInvocationIndex;
@@ -109,7 +109,7 @@ CS
 	                float3 _22086 = _3300.xyz;
 	                uint _19618;
 	                InterlockedAdd(_5922[uint(saturate((log2(max(dot(_22086, float3(0.2125000059604644775390625f, 0.7153999805450439453125f, 0.07209999859333038330078125f)), 0.004999999888241291046142578125f)) - Histogram_t_1_m1) * Histogram_t_1_m2) * 255.0f)], 1u, _19618);
-	                _5853[_4370] = float4(clamp(_22086, 0.0f.xxx, 65504.0f.xxx), _3300.w);
+	                g_tOutput[_4370] = float4(clamp(_22086, 0.0f.xxx, 65504.0f.xxx), _3300.w);
 	                break;
 	            } while(false);
 	            if (_7956_ladder_break)
@@ -128,7 +128,7 @@ CS
 	    if (_5922[gl_LocalInvocationIndex] > 0u)
 	    {
 	        uint _16104;
-	        InterlockedAdd(_3900[gl_LocalInvocationIndex], _5922[gl_LocalInvocationIndex], _16104);
+	        InterlockedAdd(g_bHistogramBins[gl_LocalInvocationIndex], _5922[gl_LocalInvocationIndex], _16104);
 	    }
 	}
 	

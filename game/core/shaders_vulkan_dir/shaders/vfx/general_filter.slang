@@ -44,8 +44,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 input_POSITION0 : TEXCOORD0;
-	    float2 input_TEXCOORD0 : TEXCOORD1;
+	    float3 input_POSITION0 : POSITION0;
+	    float2 input_TEXCOORD0 : TEXCOORD0;
 	};
 	
 	struct PS_INPUT

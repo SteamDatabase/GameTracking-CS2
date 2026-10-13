@@ -112,7 +112,7 @@ CS
 	    _1407 _m0[];
 	} g_WindVolumes_1;
 	
-	layout(set = 0, binding = 158) uniform writeonly image3D _4903;
+	layout(set = 0, binding = 158) uniform writeonly image3D g_WindOut;
 	
 	void main()
 	{
@@ -586,7 +586,7 @@ CS
 	            continue;
 	        }
 	        float _22021 = (_17133 - WindControllerConstantBuffer_t._m0._m2) / ((WindControllerConstantBuffer_t._m0._m2 + WindControllerConstantBuffer_t._m0._m3) - WindControllerConstantBuffer_t._m0._m2);
-	        imageStore(_4903, ivec3(uvec3(gl_GlobalInvocationID.xy, _9810 + _13155)), vec4(((_16305 * _22021) * 0.5) + vec3(0.5), _22021));
+	        imageStore(g_WindOut, ivec3(uvec3(gl_GlobalInvocationID.xy, _9810 + _13155)), vec4(((_16305 * _22021) * 0.5) + vec3(0.5), _22021));
 	        _4300 = _13155 + 1u;
 	        _13155 = _4300;
 	        _16208 = _13136;

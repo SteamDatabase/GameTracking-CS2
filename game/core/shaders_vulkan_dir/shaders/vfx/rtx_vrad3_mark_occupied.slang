@@ -75,7 +75,7 @@ CS
 	ByteAddressBuffer g_MeshInstances : register(t33, space0);
 	ByteAddressBuffer g_MeshIndices : register(t32, space0);
 	ByteAddressBuffer g_MeshPositions : register(t31, space0);
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer g_OccupiedMask : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -88,7 +88,7 @@ CS
 	    do
 	    {
 	        uint _4129 = gl_GlobalInvocationID.x + (gl_GlobalInvocationID.y * 512u);
-	        if (_4129 >= g_InstanceTriangleOffsets.Load(_Globals_1_g_nMeshInstances * 4 + 0))
+	        if (_4129 >= g_InstanceTriangleOffsets.Load<uint>(_Globals_1_g_nMeshInstances * 4 + 0))
 	        {
 	            break;
 	        }
@@ -104,38 +104,38 @@ CS
 	                break;
 	            }
 	            uint _10393 = (_16208 + _13155) >> uint(1);
-	            bool _7620 = g_InstanceTriangleOffsets.Load(_10393 * 4 + 0) <= _4129;
+	            bool _7620 = g_InstanceTriangleOffsets.Load<uint>(_10393 * 4 + 0) <= _4129;
 	            _16133 = _7620 ? _13155 : _10393;
 	            _18463 = _7620 ? _10393 : _16208;
 	            _13155 = _16133;
 	            _16208 = _18463;
 	            continue;
 	        }
-	        float4x3 _24370 = asfloat(uint4x3(g_MeshInstances.Load(_16208 * 64 + 16), g_MeshInstances.Load(_16208 * 64 + 32), g_MeshInstances.Load(_16208 * 64 + 48), g_MeshInstances.Load(_16208 * 64 + 20), g_MeshInstances.Load(_16208 * 64 + 36), g_MeshInstances.Load(_16208 * 64 + 52), g_MeshInstances.Load(_16208 * 64 + 24), g_MeshInstances.Load(_16208 * 64 + 40), g_MeshInstances.Load(_16208 * 64 + 56), g_MeshInstances.Load(_16208 * 64 + 28), g_MeshInstances.Load(_16208 * 64 + 44), g_MeshInstances.Load(_16208 * 64 + 60)));
-	        uint _17535 = g_MeshInstances.Load(_16208 * 64 + 8) + ((_4129 - g_InstanceTriangleOffsets.Load(_16208 * 4 + 0)) * 3u);
-	        float3 _11222 = mul(float4(asfloat(g_MeshPositions.Load3((g_MeshInstances.Load(_16208 * 64 + 0) + g_MeshIndices.Load(_17535 * 4 + 0)) * 12 + 0)), 1.0f), _24370);
-	        float3 _20855 = mul(float4(asfloat(g_MeshPositions.Load3((g_MeshInstances.Load(_16208 * 64 + 0) + g_MeshIndices.Load((_17535 + 1u) * 4 + 0)) * 12 + 0)), 1.0f), _24370);
-	        float3 _25208 = mul(float4(asfloat(g_MeshPositions.Load3((g_MeshInstances.Load(_16208 * 64 + 0) + g_MeshIndices.Load((_17535 + 2u) * 4 + 0)) * 12 + 0)), 1.0f), _24370);
+	        float4x3 _24370 = float4x3(g_MeshInstances.Load<float>(_16208 * 64 + 16), g_MeshInstances.Load<float>(_16208 * 64 + 32), g_MeshInstances.Load<float>(_16208 * 64 + 48), g_MeshInstances.Load<float>(_16208 * 64 + 20), g_MeshInstances.Load<float>(_16208 * 64 + 36), g_MeshInstances.Load<float>(_16208 * 64 + 52), g_MeshInstances.Load<float>(_16208 * 64 + 24), g_MeshInstances.Load<float>(_16208 * 64 + 40), g_MeshInstances.Load<float>(_16208 * 64 + 56), g_MeshInstances.Load<float>(_16208 * 64 + 28), g_MeshInstances.Load<float>(_16208 * 64 + 44), g_MeshInstances.Load<float>(_16208 * 64 + 60));
+	        uint _17535 = g_MeshInstances.Load<uint>(_16208 * 64 + 8) + ((_4129 - g_InstanceTriangleOffsets.Load<uint>(_16208 * 4 + 0)) * 3u);
+	        float3 _11222 = mul(float4(g_MeshPositions.Load<float3>((g_MeshInstances.Load<uint>(_16208 * 64 + 0) + g_MeshIndices.Load<uint>(_17535 * 4 + 0)) * 12 + 0), 1.0f), _24370);
+	        float3 _20855 = mul(float4(g_MeshPositions.Load<float3>((g_MeshInstances.Load<uint>(_16208 * 64 + 0) + g_MeshIndices.Load<uint>((_17535 + 1u) * 4 + 0)) * 12 + 0), 1.0f), _24370);
+	        float3 _25208 = mul(float4(g_MeshPositions.Load<float3>((g_MeshInstances.Load<uint>(_16208 * 64 + 0) + g_MeshIndices.Load<uint>((_17535 + 2u) * 4 + 0)) * 12 + 0), 1.0f), _24370);
 	        float3 _9415 = min(_11222, min(_20855, _25208));
 	        float3 _8559 = max(_11222, max(_20855, _25208));
 	        bool _12885;
-	        if (any(bool3(_9415.x > asfloat(g_Grids.Load4(112)).xyz.x, _9415.y > asfloat(g_Grids.Load4(112)).xyz.y, _9415.z > asfloat(g_Grids.Load4(112)).xyz.z)))
+	        if (any(bool3(_9415.x > g_Grids.Load<float4>(112).xyz.x, _9415.y > g_Grids.Load<float4>(112).xyz.y, _9415.z > g_Grids.Load<float4>(112).xyz.z)))
 	        {
 	            _12885 = true;
 	        }
 	        else
 	        {
-	            _12885 = any(bool3(_8559.x < asfloat(g_Grids.Load4(96)).xyz.x, _8559.y < asfloat(g_Grids.Load4(96)).xyz.y, _8559.z < asfloat(g_Grids.Load4(96)).xyz.z));
+	            _12885 = any(bool3(_8559.x < g_Grids.Load<float4>(96).xyz.x, _8559.y < g_Grids.Load<float4>(96).xyz.y, _8559.z < g_Grids.Load<float4>(96).xyz.z));
 	        }
 	        if (_12885)
 	        {
 	            break;
 	        }
-	        float4x3 _16528 = asfloat(uint4x3(g_Grids.Load(0), g_Grids.Load(16), g_Grids.Load(32), g_Grids.Load(4), g_Grids.Load(20), g_Grids.Load(36), g_Grids.Load(8), g_Grids.Load(24), g_Grids.Load(40), g_Grids.Load(12), g_Grids.Load(28), g_Grids.Load(44)));
+	        float4x3 _16528 = float4x3(g_Grids.Load<float>(0), g_Grids.Load<float>(16), g_Grids.Load<float>(32), g_Grids.Load<float>(4), g_Grids.Load<float>(20), g_Grids.Load<float>(36), g_Grids.Load<float>(8), g_Grids.Load<float>(24), g_Grids.Load<float>(40), g_Grids.Load<float>(12), g_Grids.Load<float>(28), g_Grids.Load<float>(44));
 	        float3 _6865 = mul(float4(_11222, 1.0f), _16528);
 	        float3 _20856 = mul(float4(_20855, 1.0f), _16528);
 	        float3 _9240 = mul(float4(_25208, 1.0f), _16528);
-	        int3 _4744 = int3(g_Grids.Load3(128)) - int3(1, 1, 1);
+	        int3 _4744 = int3(g_Grids.Load<uint3>(128)) - int3(1, 1, 1);
 	        int3 _14766 = clamp(int3(floor(min(_6865, min(_20856, _9240)))), int3(0, 0, 0), _4744);
 	        int3 _12824 = clamp(int3(floor(max(_6865, max(_20856, _9240)))), int3(0, 0, 0), _4744);
 	        float3 _3765 = _20856 - _6865;
@@ -433,9 +433,9 @@ CS
 	                    } while(false);
 	                    if (_12899)
 	                    {
-	                        uint _12752 = uint(_13041) + (g_Grids.Load3(128).x * (uint(_13040) + (g_Grids.Load3(128).y * uint(_13039))));
+	                        uint _12752 = uint(_13041) + (g_Grids.Load<uint3>(128).x * (uint(_13040) + (g_Grids.Load<uint3>(128).y * uint(_13039))));
 	                        uint _13239;
-	                        undetermined.InterlockedOr((_12752 >> uint(5)) * 4 + 0, 1u << (_12752 & 31u), _13239);
+	                        g_OccupiedMask.InterlockedOr((_12752 >> uint(5)) * 4 + 0, 1u << (_12752 & 31u), _13239);
 	                    }
 	                    _23989 = _13041 + 1;
 	                    _13041 = _23989;

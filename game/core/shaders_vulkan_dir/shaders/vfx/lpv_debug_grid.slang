@@ -73,8 +73,8 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    uint nInstanceIdx : TEXCOORD1;
+	    float3 vPositionOs : POSITION0;
+	    uint nInstanceIdx : TEXCOORD13;
 	};
 	
 	struct PS_INPUT
@@ -84,7 +84,7 @@ VS
 	
 	void MainVs_inner()
 	{
-	    float3x4 _6463 = asfloat(uint3x4(g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 32)));
+	    float3x4 _6463 = float3x4(g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 32));
 	    output_0 = mul(_6463, float4(vPositionOs.xyz, 1.0f));
 	}
 	
@@ -116,84 +116,118 @@ GS
 	// Color
 	float g_flPointSize < Default(4); Range(0, 16); UiType(Slider); UiGroup("Color, 10/25"); Expression(PointSize); >;
 	
-	// SPIR-V reflection failed for backend HLSL:
-	// Unsupported shader stage.
-	//
-	// Re-attempting reflection with the GLSL backend.
-	
 	// Source 2 Viewer - https://valveresourceformat.github.io
-	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
+	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	#version 460
-	layout(points) in;
-	layout(max_vertices = 4, triangle_strip) out;
-	
-	struct _1368
+	cbuffer PerViewConstantBuffer_t : register(b1, space2)
 	{
-	    mat4 _m0;
-	    vec4 _m1;
-	    vec3 _m2;
-	    vec3 _m3;
+	    column_major float4x4 PerViewConstantBuffer_t_1_m0 : packoffset(c0);
+	    float4 PerViewConstantBuffer_t_1_m1 : packoffset(c24);
+	    float3 PerViewConstantBuffer_t_1_m2 : packoffset(c26);
+	    float3 PerViewConstantBuffer_t_1_m3 : packoffset(c27);
 	};
 	
-	layout(set = 2) uniform _1368 PerViewConstantBuffer_t;
-	
-	struct _1032
+	cbuffer _Globals_ : register(b0, space2)
 	{
-	    vec4 _m0;
-	    float _m1;
+	    float4 _Globals_1_g_vHighPrecisionLightingOffsetWs : packoffset(c0);
+	    float _Globals_1_g_flPointSize : packoffset(c1);
 	};
 	
-	layout(set = 2) uniform _1032 undetermined;
 	
-	layout(location = 0) in vec3 input_0[1];
-	layout(location = 0) out vec3 output_0;
-	layout(location = 1) out vec4 output_1;
+	static float4 gl_Position;
+	static float3 input_0[1];
+	static float3 output_0;
+	static float4 output_1;
 	
-	void main()
+	struct SPIRV_Cross_Input
 	{
-	    vec3 _17615 = normalize(input_0[0] - PerViewConstantBuffer_t._m2);
-	    vec3 _11686 = cross(_17615, PerViewConstantBuffer_t._m3).xyz;
-	    vec4 _9918 = vec4(input_0[0], undetermined._m1 * 0.5);
-	    vec3 _16500 = input_0[0] - (_17615 * undetermined._m1);
-	    float _25224 = undetermined._m1 * (-0.60000002384185791015625);
-	    vec3 _21046 = _16500 + (_11686 * _25224);
-	    float _13108 = 0.60000002384185791015625 * undetermined._m1;
-	    vec3 _8702 = PerViewConstantBuffer_t._m3 * _13108;
-	    vec3 _7336 = (_21046 + _8702).xyz;
-	    vec4 _21447 = PerViewConstantBuffer_t._m1 * 1.0;
-	    vec4 _20663 = (vec4(_7336, 1.0) + _21447).xyzw * PerViewConstantBuffer_t._m0;
-	    output_0 = _7336 - undetermined._m0.xyz;
+	    float3 input_0 : TEXCOORD0;
+	};
+	
+	struct SPIRV_Cross_Output
+	{
+	    float3 output_0 : TEXCOORD0;
+	    float4 output_1 : TEXCOORD1;
+	    float4 gl_Position : SV_Position;
+	};
+	
+	void MainGs_inner(point SPIRV_Cross_Input stage_input[1], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    float3 _17615 = normalize(input_0[0] - PerViewConstantBuffer_t_1_m2);
+	    float3 _11686 = cross(_17615, PerViewConstantBuffer_t_1_m3).xyz;
+	    float4 _9918 = float4(input_0[0], _Globals_1_g_flPointSize * 0.5f);
+	    float3 _16500 = input_0[0] - (_17615 * _Globals_1_g_flPointSize);
+	    float _25224 = _Globals_1_g_flPointSize * (-0.60000002384185791015625f);
+	    float3 _21046 = _16500 + (_11686 * _25224);
+	    float _13108 = 0.60000002384185791015625f * _Globals_1_g_flPointSize;
+	    float3 _8702 = PerViewConstantBuffer_t_1_m3 * _13108;
+	    float3 _7336 = (_21046 + _8702).xyz;
+	    float4 _21447 = PerViewConstantBuffer_t_1_m1 * 1.0f;
+	    float4 _20663 = mul(PerViewConstantBuffer_t_1_m0, (float4(_7336, 1.0f) + _21447).xyzw);
+	    output_0 = _7336 - _Globals_1_g_vHighPrecisionLightingOffsetWs.xyz;
 	    output_1 = _9918;
 	    _20663.y = -_20663.y;
 	    gl_Position = _20663;
-	    EmitVertex();
-	    vec3 _24428 = PerViewConstantBuffer_t._m3 * _25224;
-	    vec3 _8552 = (_21046 + _24428).xyz;
-	    vec4 _18907 = (vec4(_8552, 1.0) + _21447).xyzw * PerViewConstantBuffer_t._m0;
-	    output_0 = _8552 - undetermined._m0.xyz;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float3 _24428 = PerViewConstantBuffer_t_1_m3 * _25224;
+	    float3 _8552 = (_21046 + _24428).xyz;
+	    float4 _18907 = mul(PerViewConstantBuffer_t_1_m0, (float4(_8552, 1.0f) + _21447).xyzw);
+	    output_0 = _8552 - _Globals_1_g_vHighPrecisionLightingOffsetWs.xyz;
 	    output_1 = _9918;
 	    _18907.y = -_18907.y;
 	    gl_Position = _18907;
-	    EmitVertex();
-	    vec3 _15138 = _16500 + (_11686 * _13108);
-	    vec3 _7753 = (_15138 + _8702).xyz;
-	    vec4 _18908 = (vec4(_7753, 1.0) + _21447).xyzw * PerViewConstantBuffer_t._m0;
-	    output_0 = _7753 - undetermined._m0.xyz;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float3 _15138 = _16500 + (_11686 * _13108);
+	    float3 _7753 = (_15138 + _8702).xyz;
+	    float4 _18908 = mul(PerViewConstantBuffer_t_1_m0, (float4(_7753, 1.0f) + _21447).xyzw);
+	    output_0 = _7753 - _Globals_1_g_vHighPrecisionLightingOffsetWs.xyz;
 	    output_1 = _9918;
 	    _18908.y = -_18908.y;
 	    gl_Position = _18908;
-	    EmitVertex();
-	    vec3 _18190 = (_15138 + _24428).xyz;
-	    vec4 _18909 = (vec4(_18190, 1.0) + _21447).xyzw * PerViewConstantBuffer_t._m0;
-	    output_0 = _18190 - undetermined._m0.xyz;
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        geometry_stream.Append(stage_output);
+	    }
+	    float3 _18190 = (_15138 + _24428).xyz;
+	    float4 _18909 = mul(PerViewConstantBuffer_t_1_m0, (float4(_18190, 1.0f) + _21447).xyzw);
+	    output_0 = _18190 - _Globals_1_g_vHighPrecisionLightingOffsetWs.xyz;
 	    output_1 = _9918;
 	    _18909.y = -_18909.y;
 	    gl_Position = _18909;
-	    EmitVertex();
-	    EndPrimitive();
+	    {
+	        SPIRV_Cross_Output stage_output;
+	        stage_output.gl_Position = gl_Position;
+	        stage_output.output_0 = output_0;
+	        stage_output.output_1 = output_1;
+	        geometry_stream.Append(stage_output);
+	    }
+	    geometry_stream.RestartStrip();
 	}
 	
+	[maxvertexcount(4)]
+	void MainGs(point SPIRV_Cross_Input stage_input[1], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    for (int i = 0; i < 1; i++)
+	    {
+	        input_0[i] = stage_input[i].input_0;
+	    }
+	    MainGs_inner(stage_input, geometry_stream);
+	}
 	
 	// ---------  SPIRV -> HLSL end  --------- 
 	

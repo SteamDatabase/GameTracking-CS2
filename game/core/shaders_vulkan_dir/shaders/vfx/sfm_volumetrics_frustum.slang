@@ -57,10 +57,10 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 input_POSITION0 : TEXCOORD0;
-	    float input_TEXCOORD0 : TEXCOORD1;
-	    float input_TEXCOORD1 : TEXCOORD2;
-	    float input_TEXCOORD2 : TEXCOORD3;
+	    float3 input_POSITION0 : POSITION0;
+	    float input_TEXCOORD0 : TEXCOORD0;
+	    float input_TEXCOORD1 : TEXCOORD1;
+	    float input_TEXCOORD2 : TEXCOORD2;
 	};
 	
 	struct PS_INPUT

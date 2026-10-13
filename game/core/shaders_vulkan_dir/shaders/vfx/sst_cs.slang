@@ -70,7 +70,7 @@ CS
 	};
 	
 	ByteAddressBuffer g_SST : register(t30, space0);
-	RWTexture2D<float4> _3177 : register(u158, space0);
+	RWTexture2D<float4> g_tOutDepth : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -139,7 +139,7 @@ CS
 	        do
 	        {
 	            bool _18261;
-	            uint _21397 = g_SST.Load(_17785 * 4 + 0);
+	            uint _21397 = g_SST.Load<uint>(_17785 * 4 + 0);
 	            do
 	            {
 	                _18261 = (_21397 & 1073741824u) != 0u;
@@ -154,22 +154,22 @@ CS
 	            if (_18261)
 	            {
 	                float4 _10876 = _12889.xxxx;
-	                _3177[_15314] = _10876;
-	                _3177[_15314 + uint2(1u, 0u)] = _10876;
-	                _3177[_15314 + uint2(0u, 1u)] = _10876;
-	                _3177[_15314 + uint2(1u, 1u)] = _10876;
-	                _3177[_15314 + uint2(2u, 0u)] = _10876;
-	                _3177[_15314 + uint2(3u, 0u)] = _10876;
-	                _3177[_15314 + uint2(2u, 1u)] = _10876;
-	                _3177[_15314 + uint2(3u, 1u)] = _10876;
-	                _3177[_15314 + uint2(0u, 2u)] = _10876;
-	                _3177[_15314 + uint2(1u, 2u)] = _10876;
-	                _3177[_15314 + uint2(0u, 3u)] = _10876;
-	                _3177[_15314 + uint2(1u, 3u)] = _10876;
-	                _3177[_15314 + uint2(2u, 2u)] = _10876;
-	                _3177[_15314 + uint2(3u, 2u)] = _10876;
-	                _3177[_15314 + uint2(2u, 3u)] = _10876;
-	                _3177[_15314 + uint2(3u, 3u)] = _10876;
+	                g_tOutDepth[_15314] = _10876;
+	                g_tOutDepth[_15314 + uint2(1u, 0u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(0u, 1u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(1u, 1u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(2u, 0u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(3u, 0u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(2u, 1u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(3u, 1u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(0u, 2u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(1u, 2u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(0u, 3u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(1u, 3u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(2u, 2u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(3u, 2u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(2u, 3u)] = _10876;
+	                g_tOutDepth[_15314 + uint2(3u, 3u)] = _10876;
 	                _11518 = _Globals_1_g_nSSTForest;
 	                _14842 = _17785;
 	                _11402 = true;
@@ -193,7 +193,7 @@ CS
 	            do
 	            {
 	                bool _18262;
-	                uint _21398 = g_SST.Load(_14842 * 4 + 0);
+	                uint _21398 = g_SST.Load<uint>(_14842 * 4 + 0);
 	                do
 	                {
 	                    _18262 = (_21398 & 1073741824u) != 0u;
@@ -208,22 +208,22 @@ CS
 	                if (_18262)
 	                {
 	                    float4 _10877 = _12890.xxxx;
-	                    _3177[_15314] = _10877;
-	                    _3177[_15314 + uint2(1u, 0u)] = _10877;
-	                    _3177[_15314 + uint2(0u, 1u)] = _10877;
-	                    _3177[_15314 + uint2(1u, 1u)] = _10877;
-	                    _3177[_15314 + uint2(2u, 0u)] = _10877;
-	                    _3177[_15314 + uint2(3u, 0u)] = _10877;
-	                    _3177[_15314 + uint2(2u, 1u)] = _10877;
-	                    _3177[_15314 + uint2(3u, 1u)] = _10877;
-	                    _3177[_15314 + uint2(0u, 2u)] = _10877;
-	                    _3177[_15314 + uint2(1u, 2u)] = _10877;
-	                    _3177[_15314 + uint2(0u, 3u)] = _10877;
-	                    _3177[_15314 + uint2(1u, 3u)] = _10877;
-	                    _3177[_15314 + uint2(2u, 2u)] = _10877;
-	                    _3177[_15314 + uint2(3u, 2u)] = _10877;
-	                    _3177[_15314 + uint2(2u, 3u)] = _10877;
-	                    _3177[_15314 + uint2(3u, 3u)] = _10877;
+	                    g_tOutDepth[_15314] = _10877;
+	                    g_tOutDepth[_15314 + uint2(1u, 0u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(0u, 1u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(1u, 1u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(2u, 0u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(3u, 0u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(2u, 1u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(3u, 1u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(0u, 2u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(1u, 2u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(0u, 3u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(1u, 3u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(2u, 2u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(3u, 2u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(2u, 3u)] = _10877;
+	                    g_tOutDepth[_15314 + uint2(3u, 3u)] = _10877;
 	                    _11519 = float3(1.0f, 0.0f, 0.0f);
 	                    _14843 = _14842;
 	                    _11403 = true;
@@ -239,7 +239,7 @@ CS
 	                        _18263 = (_21398 & 2147483648u) != 0u;
 	                        if (_18263)
 	                        {
-	                            _12891 = float3(float((min16float)f16tof32(min16uint(g_SST.Load(_21970 * 4 + 0) >> uint(16)))), float((min16float)f16tof32(min16uint(g_SST.Load(_21970 * 4 + 0) & 65535u))), asfloat((_21398 & 2147483647u) << uint(1)));
+	                            _12891 = float3(float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21970 * 4 + 0) >> uint(16)))), float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21970 * 4 + 0) & 65535u))), asfloat((_21398 & 2147483647u) << uint(1)));
 	                            break;
 	                        }
 	                        _12891 = float3(1.0f, 0.0f, 0.0f);
@@ -254,22 +254,22 @@ CS
 	                        float4 _21802 = (_22382 + _12891.yyyy) + _22821;
 	                        float4 _20890 = (_22382 + (_12891.yyyy * 2.0f)) + _22821;
 	                        float4 _16200 = (_22382 + (_12891.yyyy * 3.0f)) + _22821;
-	                        _3177[_15314] = _9987.x.xxxx;
-	                        _3177[_15314 + uint2(1u, 0u)] = _9987.y.xxxx;
-	                        _3177[_15314 + uint2(2u, 0u)] = _9987.z.xxxx;
-	                        _3177[_15314 + uint2(3u, 0u)] = _9987.w.xxxx;
-	                        _3177[_15314 + uint2(0u, 1u)] = _21802.x.xxxx;
-	                        _3177[_15314 + uint2(1u, 1u)] = _21802.y.xxxx;
-	                        _3177[_15314 + uint2(2u, 1u)] = _21802.z.xxxx;
-	                        _3177[_15314 + uint2(3u, 1u)] = _21802.w.xxxx;
-	                        _3177[_15314 + uint2(0u, 2u)] = _20890.x.xxxx;
-	                        _3177[_15314 + uint2(1u, 2u)] = _20890.y.xxxx;
-	                        _3177[_15314 + uint2(2u, 2u)] = _20890.z.xxxx;
-	                        _3177[_15314 + uint2(3u, 2u)] = _20890.w.xxxx;
-	                        _3177[_15314 + uint2(0u, 3u)] = _16200.x.xxxx;
-	                        _3177[_15314 + uint2(1u, 3u)] = _16200.y.xxxx;
-	                        _3177[_15314 + uint2(2u, 3u)] = _16200.z.xxxx;
-	                        _3177[_15314 + uint2(3u, 3u)] = _16200.w.xxxx;
+	                        g_tOutDepth[_15314] = _9987.x.xxxx;
+	                        g_tOutDepth[_15314 + uint2(1u, 0u)] = _9987.y.xxxx;
+	                        g_tOutDepth[_15314 + uint2(2u, 0u)] = _9987.z.xxxx;
+	                        g_tOutDepth[_15314 + uint2(3u, 0u)] = _9987.w.xxxx;
+	                        g_tOutDepth[_15314 + uint2(0u, 1u)] = _21802.x.xxxx;
+	                        g_tOutDepth[_15314 + uint2(1u, 1u)] = _21802.y.xxxx;
+	                        g_tOutDepth[_15314 + uint2(2u, 1u)] = _21802.z.xxxx;
+	                        g_tOutDepth[_15314 + uint2(3u, 1u)] = _21802.w.xxxx;
+	                        g_tOutDepth[_15314 + uint2(0u, 2u)] = _20890.x.xxxx;
+	                        g_tOutDepth[_15314 + uint2(1u, 2u)] = _20890.y.xxxx;
+	                        g_tOutDepth[_15314 + uint2(2u, 2u)] = _20890.z.xxxx;
+	                        g_tOutDepth[_15314 + uint2(3u, 2u)] = _20890.w.xxxx;
+	                        g_tOutDepth[_15314 + uint2(0u, 3u)] = _16200.x.xxxx;
+	                        g_tOutDepth[_15314 + uint2(1u, 3u)] = _16200.y.xxxx;
+	                        g_tOutDepth[_15314 + uint2(2u, 3u)] = _16200.z.xxxx;
+	                        g_tOutDepth[_15314 + uint2(3u, 3u)] = _16200.w.xxxx;
 	                        _11519 = _12891;
 	                        _14843 = _14842;
 	                        _11403 = true;
@@ -304,11 +304,11 @@ CS
 	                                uint _12501;
 	                                if (_21709 == 2u)
 	                                {
-	                                    _12501 = (g_SST.Load(_21970 * 4 + 0) >> uint(15)) & 32767u;
+	                                    _12501 = (g_SST.Load<uint>(_21970 * 4 + 0) >> uint(15)) & 32767u;
 	                                }
 	                                else
 	                                {
-	                                    _12501 = g_SST.Load(_21970 * 4 + 0) & 32767u;
+	                                    _12501 = g_SST.Load<uint>(_21970 * 4 + 0) & 32767u;
 	                                }
 	                                _12502 = _12501;
 	                            }
@@ -332,7 +332,7 @@ CS
 	                do
 	                {
 	                    bool _18264;
-	                    uint _21399 = g_SST.Load(_14843 * 4 + 0);
+	                    uint _21399 = g_SST.Load<uint>(_14843 * 4 + 0);
 	                    do
 	                    {
 	                        _18264 = (_21399 & 1073741824u) != 0u;
@@ -347,22 +347,22 @@ CS
 	                    if (_18264)
 	                    {
 	                        float4 _10878 = _12892.xxxx;
-	                        _3177[_15314] = _10878;
-	                        _3177[_15314 + uint2(1u, 0u)] = _10878;
-	                        _3177[_15314 + uint2(0u, 1u)] = _10878;
-	                        _3177[_15314 + uint2(1u, 1u)] = _10878;
-	                        _3177[_15314 + uint2(2u, 0u)] = _10878;
-	                        _3177[_15314 + uint2(3u, 0u)] = _10878;
-	                        _3177[_15314 + uint2(2u, 1u)] = _10878;
-	                        _3177[_15314 + uint2(3u, 1u)] = _10878;
-	                        _3177[_15314 + uint2(0u, 2u)] = _10878;
-	                        _3177[_15314 + uint2(1u, 2u)] = _10878;
-	                        _3177[_15314 + uint2(0u, 3u)] = _10878;
-	                        _3177[_15314 + uint2(1u, 3u)] = _10878;
-	                        _3177[_15314 + uint2(2u, 2u)] = _10878;
-	                        _3177[_15314 + uint2(3u, 2u)] = _10878;
-	                        _3177[_15314 + uint2(2u, 3u)] = _10878;
-	                        _3177[_15314 + uint2(3u, 3u)] = _10878;
+	                        g_tOutDepth[_15314] = _10878;
+	                        g_tOutDepth[_15314 + uint2(1u, 0u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(0u, 1u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(1u, 1u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(2u, 0u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(3u, 0u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(2u, 1u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(3u, 1u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(0u, 2u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(1u, 2u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(0u, 3u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(1u, 3u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(2u, 2u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(3u, 2u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(2u, 3u)] = _10878;
+	                        g_tOutDepth[_15314 + uint2(3u, 3u)] = _10878;
 	                        _11520 = _11519;
 	                        _14844 = _14843;
 	                        _11404 = true;
@@ -378,7 +378,7 @@ CS
 	                            _18265 = (_21399 & 2147483648u) != 0u;
 	                            if (_18265)
 	                            {
-	                                _12893 = float3(float((min16float)f16tof32(min16uint(g_SST.Load(_21971 * 4 + 0) >> uint(16)))), float((min16float)f16tof32(min16uint(g_SST.Load(_21971 * 4 + 0) & 65535u))), asfloat((_21399 & 2147483647u) << uint(1)));
+	                                _12893 = float3(float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21971 * 4 + 0) >> uint(16)))), float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21971 * 4 + 0) & 65535u))), asfloat((_21399 & 2147483647u) << uint(1)));
 	                                break;
 	                            }
 	                            _12893 = _11519;
@@ -393,22 +393,22 @@ CS
 	                            float4 _21803 = (_22383 + _12893.yyyy) + _22822;
 	                            float4 _20891 = (_22383 + (_12893.yyyy * 2.0f)) + _22822;
 	                            float4 _16201 = (_22383 + (_12893.yyyy * 3.0f)) + _22822;
-	                            _3177[_15314] = _9988.x.xxxx;
-	                            _3177[_15314 + uint2(1u, 0u)] = _9988.y.xxxx;
-	                            _3177[_15314 + uint2(2u, 0u)] = _9988.z.xxxx;
-	                            _3177[_15314 + uint2(3u, 0u)] = _9988.w.xxxx;
-	                            _3177[_15314 + uint2(0u, 1u)] = _21803.x.xxxx;
-	                            _3177[_15314 + uint2(1u, 1u)] = _21803.y.xxxx;
-	                            _3177[_15314 + uint2(2u, 1u)] = _21803.z.xxxx;
-	                            _3177[_15314 + uint2(3u, 1u)] = _21803.w.xxxx;
-	                            _3177[_15314 + uint2(0u, 2u)] = _20891.x.xxxx;
-	                            _3177[_15314 + uint2(1u, 2u)] = _20891.y.xxxx;
-	                            _3177[_15314 + uint2(2u, 2u)] = _20891.z.xxxx;
-	                            _3177[_15314 + uint2(3u, 2u)] = _20891.w.xxxx;
-	                            _3177[_15314 + uint2(0u, 3u)] = _16201.x.xxxx;
-	                            _3177[_15314 + uint2(1u, 3u)] = _16201.y.xxxx;
-	                            _3177[_15314 + uint2(2u, 3u)] = _16201.z.xxxx;
-	                            _3177[_15314 + uint2(3u, 3u)] = _16201.w.xxxx;
+	                            g_tOutDepth[_15314] = _9988.x.xxxx;
+	                            g_tOutDepth[_15314 + uint2(1u, 0u)] = _9988.y.xxxx;
+	                            g_tOutDepth[_15314 + uint2(2u, 0u)] = _9988.z.xxxx;
+	                            g_tOutDepth[_15314 + uint2(3u, 0u)] = _9988.w.xxxx;
+	                            g_tOutDepth[_15314 + uint2(0u, 1u)] = _21803.x.xxxx;
+	                            g_tOutDepth[_15314 + uint2(1u, 1u)] = _21803.y.xxxx;
+	                            g_tOutDepth[_15314 + uint2(2u, 1u)] = _21803.z.xxxx;
+	                            g_tOutDepth[_15314 + uint2(3u, 1u)] = _21803.w.xxxx;
+	                            g_tOutDepth[_15314 + uint2(0u, 2u)] = _20891.x.xxxx;
+	                            g_tOutDepth[_15314 + uint2(1u, 2u)] = _20891.y.xxxx;
+	                            g_tOutDepth[_15314 + uint2(2u, 2u)] = _20891.z.xxxx;
+	                            g_tOutDepth[_15314 + uint2(3u, 2u)] = _20891.w.xxxx;
+	                            g_tOutDepth[_15314 + uint2(0u, 3u)] = _16201.x.xxxx;
+	                            g_tOutDepth[_15314 + uint2(1u, 3u)] = _16201.y.xxxx;
+	                            g_tOutDepth[_15314 + uint2(2u, 3u)] = _16201.z.xxxx;
+	                            g_tOutDepth[_15314 + uint2(3u, 3u)] = _16201.w.xxxx;
 	                            _11520 = _12893;
 	                            _14844 = _14843;
 	                            _11404 = true;
@@ -443,11 +443,11 @@ CS
 	                                    uint _12503;
 	                                    if (_21710 == 2u)
 	                                    {
-	                                        _12503 = (g_SST.Load(_21971 * 4 + 0) >> uint(15)) & 32767u;
+	                                        _12503 = (g_SST.Load<uint>(_21971 * 4 + 0) >> uint(15)) & 32767u;
 	                                    }
 	                                    else
 	                                    {
-	                                        _12503 = g_SST.Load(_21971 * 4 + 0) & 32767u;
+	                                        _12503 = g_SST.Load<uint>(_21971 * 4 + 0) & 32767u;
 	                                    }
 	                                    _12504 = _12503;
 	                                }
@@ -471,7 +471,7 @@ CS
 	                    do
 	                    {
 	                        bool _18266;
-	                        uint _21400 = g_SST.Load(_14844 * 4 + 0);
+	                        uint _21400 = g_SST.Load<uint>(_14844 * 4 + 0);
 	                        do
 	                        {
 	                            _18266 = (_21400 & 1073741824u) != 0u;
@@ -486,22 +486,22 @@ CS
 	                        if (_18266)
 	                        {
 	                            float4 _10879 = _12894.xxxx;
-	                            _3177[_15314] = _10879;
-	                            _3177[_15314 + uint2(1u, 0u)] = _10879;
-	                            _3177[_15314 + uint2(0u, 1u)] = _10879;
-	                            _3177[_15314 + uint2(1u, 1u)] = _10879;
-	                            _3177[_15314 + uint2(2u, 0u)] = _10879;
-	                            _3177[_15314 + uint2(3u, 0u)] = _10879;
-	                            _3177[_15314 + uint2(2u, 1u)] = _10879;
-	                            _3177[_15314 + uint2(3u, 1u)] = _10879;
-	                            _3177[_15314 + uint2(0u, 2u)] = _10879;
-	                            _3177[_15314 + uint2(1u, 2u)] = _10879;
-	                            _3177[_15314 + uint2(0u, 3u)] = _10879;
-	                            _3177[_15314 + uint2(1u, 3u)] = _10879;
-	                            _3177[_15314 + uint2(2u, 2u)] = _10879;
-	                            _3177[_15314 + uint2(3u, 2u)] = _10879;
-	                            _3177[_15314 + uint2(2u, 3u)] = _10879;
-	                            _3177[_15314 + uint2(3u, 3u)] = _10879;
+	                            g_tOutDepth[_15314] = _10879;
+	                            g_tOutDepth[_15314 + uint2(1u, 0u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(0u, 1u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(1u, 1u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(2u, 0u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(3u, 0u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(2u, 1u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(3u, 1u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(0u, 2u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(1u, 2u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(0u, 3u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(1u, 3u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(2u, 2u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(3u, 2u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(2u, 3u)] = _10879;
+	                            g_tOutDepth[_15314 + uint2(3u, 3u)] = _10879;
 	                            _11521 = _11520;
 	                            _14845 = _14844;
 	                            _11405 = true;
@@ -517,7 +517,7 @@ CS
 	                                _18267 = (_21400 & 2147483648u) != 0u;
 	                                if (_18267)
 	                                {
-	                                    _12895 = float3(float((min16float)f16tof32(min16uint(g_SST.Load(_21972 * 4 + 0) >> uint(16)))), float((min16float)f16tof32(min16uint(g_SST.Load(_21972 * 4 + 0) & 65535u))), asfloat((_21400 & 2147483647u) << uint(1)));
+	                                    _12895 = float3(float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21972 * 4 + 0) >> uint(16)))), float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21972 * 4 + 0) & 65535u))), asfloat((_21400 & 2147483647u) << uint(1)));
 	                                    break;
 	                                }
 	                                _12895 = _11520;
@@ -532,22 +532,22 @@ CS
 	                                float4 _21804 = (_22384 + _12895.yyyy) + _22823;
 	                                float4 _20892 = (_22384 + (_12895.yyyy * 2.0f)) + _22823;
 	                                float4 _16202 = (_22384 + (_12895.yyyy * 3.0f)) + _22823;
-	                                _3177[_15314] = _9989.x.xxxx;
-	                                _3177[_15314 + uint2(1u, 0u)] = _9989.y.xxxx;
-	                                _3177[_15314 + uint2(2u, 0u)] = _9989.z.xxxx;
-	                                _3177[_15314 + uint2(3u, 0u)] = _9989.w.xxxx;
-	                                _3177[_15314 + uint2(0u, 1u)] = _21804.x.xxxx;
-	                                _3177[_15314 + uint2(1u, 1u)] = _21804.y.xxxx;
-	                                _3177[_15314 + uint2(2u, 1u)] = _21804.z.xxxx;
-	                                _3177[_15314 + uint2(3u, 1u)] = _21804.w.xxxx;
-	                                _3177[_15314 + uint2(0u, 2u)] = _20892.x.xxxx;
-	                                _3177[_15314 + uint2(1u, 2u)] = _20892.y.xxxx;
-	                                _3177[_15314 + uint2(2u, 2u)] = _20892.z.xxxx;
-	                                _3177[_15314 + uint2(3u, 2u)] = _20892.w.xxxx;
-	                                _3177[_15314 + uint2(0u, 3u)] = _16202.x.xxxx;
-	                                _3177[_15314 + uint2(1u, 3u)] = _16202.y.xxxx;
-	                                _3177[_15314 + uint2(2u, 3u)] = _16202.z.xxxx;
-	                                _3177[_15314 + uint2(3u, 3u)] = _16202.w.xxxx;
+	                                g_tOutDepth[_15314] = _9989.x.xxxx;
+	                                g_tOutDepth[_15314 + uint2(1u, 0u)] = _9989.y.xxxx;
+	                                g_tOutDepth[_15314 + uint2(2u, 0u)] = _9989.z.xxxx;
+	                                g_tOutDepth[_15314 + uint2(3u, 0u)] = _9989.w.xxxx;
+	                                g_tOutDepth[_15314 + uint2(0u, 1u)] = _21804.x.xxxx;
+	                                g_tOutDepth[_15314 + uint2(1u, 1u)] = _21804.y.xxxx;
+	                                g_tOutDepth[_15314 + uint2(2u, 1u)] = _21804.z.xxxx;
+	                                g_tOutDepth[_15314 + uint2(3u, 1u)] = _21804.w.xxxx;
+	                                g_tOutDepth[_15314 + uint2(0u, 2u)] = _20892.x.xxxx;
+	                                g_tOutDepth[_15314 + uint2(1u, 2u)] = _20892.y.xxxx;
+	                                g_tOutDepth[_15314 + uint2(2u, 2u)] = _20892.z.xxxx;
+	                                g_tOutDepth[_15314 + uint2(3u, 2u)] = _20892.w.xxxx;
+	                                g_tOutDepth[_15314 + uint2(0u, 3u)] = _16202.x.xxxx;
+	                                g_tOutDepth[_15314 + uint2(1u, 3u)] = _16202.y.xxxx;
+	                                g_tOutDepth[_15314 + uint2(2u, 3u)] = _16202.z.xxxx;
+	                                g_tOutDepth[_15314 + uint2(3u, 3u)] = _16202.w.xxxx;
 	                                _11521 = _12895;
 	                                _14845 = _14844;
 	                                _11405 = true;
@@ -582,11 +582,11 @@ CS
 	                                        uint _12505;
 	                                        if (_21711 == 2u)
 	                                        {
-	                                            _12505 = (g_SST.Load(_21972 * 4 + 0) >> uint(15)) & 32767u;
+	                                            _12505 = (g_SST.Load<uint>(_21972 * 4 + 0) >> uint(15)) & 32767u;
 	                                        }
 	                                        else
 	                                        {
-	                                            _12505 = g_SST.Load(_21972 * 4 + 0) & 32767u;
+	                                            _12505 = g_SST.Load<uint>(_21972 * 4 + 0) & 32767u;
 	                                        }
 	                                        _12506 = _12505;
 	                                    }
@@ -610,7 +610,7 @@ CS
 	                        do
 	                        {
 	                            bool _18268;
-	                            uint _21401 = g_SST.Load(_14845 * 4 + 0);
+	                            uint _21401 = g_SST.Load<uint>(_14845 * 4 + 0);
 	                            do
 	                            {
 	                                _18268 = (_21401 & 1073741824u) != 0u;
@@ -625,22 +625,22 @@ CS
 	                            if (_18268)
 	                            {
 	                                float4 _10880 = _12896.xxxx;
-	                                _3177[_15314] = _10880;
-	                                _3177[_15314 + uint2(1u, 0u)] = _10880;
-	                                _3177[_15314 + uint2(0u, 1u)] = _10880;
-	                                _3177[_15314 + uint2(1u, 1u)] = _10880;
-	                                _3177[_15314 + uint2(2u, 0u)] = _10880;
-	                                _3177[_15314 + uint2(3u, 0u)] = _10880;
-	                                _3177[_15314 + uint2(2u, 1u)] = _10880;
-	                                _3177[_15314 + uint2(3u, 1u)] = _10880;
-	                                _3177[_15314 + uint2(0u, 2u)] = _10880;
-	                                _3177[_15314 + uint2(1u, 2u)] = _10880;
-	                                _3177[_15314 + uint2(0u, 3u)] = _10880;
-	                                _3177[_15314 + uint2(1u, 3u)] = _10880;
-	                                _3177[_15314 + uint2(2u, 2u)] = _10880;
-	                                _3177[_15314 + uint2(3u, 2u)] = _10880;
-	                                _3177[_15314 + uint2(2u, 3u)] = _10880;
-	                                _3177[_15314 + uint2(3u, 3u)] = _10880;
+	                                g_tOutDepth[_15314] = _10880;
+	                                g_tOutDepth[_15314 + uint2(1u, 0u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(0u, 1u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(1u, 1u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(2u, 0u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(3u, 0u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(2u, 1u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(3u, 1u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(0u, 2u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(1u, 2u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(0u, 3u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(1u, 3u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(2u, 2u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(3u, 2u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(2u, 3u)] = _10880;
+	                                g_tOutDepth[_15314 + uint2(3u, 3u)] = _10880;
 	                                _11522 = _11521;
 	                                _14846 = _14845;
 	                                _11406 = true;
@@ -656,7 +656,7 @@ CS
 	                                    _18269 = (_21401 & 2147483648u) != 0u;
 	                                    if (_18269)
 	                                    {
-	                                        _12897 = float3(float((min16float)f16tof32(min16uint(g_SST.Load(_21973 * 4 + 0) >> uint(16)))), float((min16float)f16tof32(min16uint(g_SST.Load(_21973 * 4 + 0) & 65535u))), asfloat((_21401 & 2147483647u) << uint(1)));
+	                                        _12897 = float3(float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21973 * 4 + 0) >> uint(16)))), float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21973 * 4 + 0) & 65535u))), asfloat((_21401 & 2147483647u) << uint(1)));
 	                                        break;
 	                                    }
 	                                    _12897 = _11521;
@@ -671,22 +671,22 @@ CS
 	                                    float4 _21805 = (_22385 + _12897.yyyy) + _22824;
 	                                    float4 _20893 = (_22385 + (_12897.yyyy * 2.0f)) + _22824;
 	                                    float4 _16203 = (_22385 + (_12897.yyyy * 3.0f)) + _22824;
-	                                    _3177[_15314] = _9990.x.xxxx;
-	                                    _3177[_15314 + uint2(1u, 0u)] = _9990.y.xxxx;
-	                                    _3177[_15314 + uint2(2u, 0u)] = _9990.z.xxxx;
-	                                    _3177[_15314 + uint2(3u, 0u)] = _9990.w.xxxx;
-	                                    _3177[_15314 + uint2(0u, 1u)] = _21805.x.xxxx;
-	                                    _3177[_15314 + uint2(1u, 1u)] = _21805.y.xxxx;
-	                                    _3177[_15314 + uint2(2u, 1u)] = _21805.z.xxxx;
-	                                    _3177[_15314 + uint2(3u, 1u)] = _21805.w.xxxx;
-	                                    _3177[_15314 + uint2(0u, 2u)] = _20893.x.xxxx;
-	                                    _3177[_15314 + uint2(1u, 2u)] = _20893.y.xxxx;
-	                                    _3177[_15314 + uint2(2u, 2u)] = _20893.z.xxxx;
-	                                    _3177[_15314 + uint2(3u, 2u)] = _20893.w.xxxx;
-	                                    _3177[_15314 + uint2(0u, 3u)] = _16203.x.xxxx;
-	                                    _3177[_15314 + uint2(1u, 3u)] = _16203.y.xxxx;
-	                                    _3177[_15314 + uint2(2u, 3u)] = _16203.z.xxxx;
-	                                    _3177[_15314 + uint2(3u, 3u)] = _16203.w.xxxx;
+	                                    g_tOutDepth[_15314] = _9990.x.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(1u, 0u)] = _9990.y.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(2u, 0u)] = _9990.z.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(3u, 0u)] = _9990.w.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(0u, 1u)] = _21805.x.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(1u, 1u)] = _21805.y.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(2u, 1u)] = _21805.z.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(3u, 1u)] = _21805.w.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(0u, 2u)] = _20893.x.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(1u, 2u)] = _20893.y.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(2u, 2u)] = _20893.z.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(3u, 2u)] = _20893.w.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(0u, 3u)] = _16203.x.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(1u, 3u)] = _16203.y.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(2u, 3u)] = _16203.z.xxxx;
+	                                    g_tOutDepth[_15314 + uint2(3u, 3u)] = _16203.w.xxxx;
 	                                    _11522 = _12897;
 	                                    _14846 = _14845;
 	                                    _11406 = true;
@@ -721,11 +721,11 @@ CS
 	                                            uint _12507;
 	                                            if (_21712 == 2u)
 	                                            {
-	                                                _12507 = (g_SST.Load(_21973 * 4 + 0) >> uint(15)) & 32767u;
+	                                                _12507 = (g_SST.Load<uint>(_21973 * 4 + 0) >> uint(15)) & 32767u;
 	                                            }
 	                                            else
 	                                            {
-	                                                _12507 = g_SST.Load(_21973 * 4 + 0) & 32767u;
+	                                                _12507 = g_SST.Load<uint>(_21973 * 4 + 0) & 32767u;
 	                                            }
 	                                            _12508 = _12507;
 	                                        }
@@ -749,7 +749,7 @@ CS
 	                            do
 	                            {
 	                                bool _18270;
-	                                uint _21402 = g_SST.Load(_14846 * 4 + 0);
+	                                uint _21402 = g_SST.Load<uint>(_14846 * 4 + 0);
 	                                do
 	                                {
 	                                    _18270 = (_21402 & 1073741824u) != 0u;
@@ -764,22 +764,22 @@ CS
 	                                if (_18270)
 	                                {
 	                                    float4 _10881 = _12898.xxxx;
-	                                    _3177[_15314] = _10881;
-	                                    _3177[_15314 + uint2(1u, 0u)] = _10881;
-	                                    _3177[_15314 + uint2(0u, 1u)] = _10881;
-	                                    _3177[_15314 + uint2(1u, 1u)] = _10881;
-	                                    _3177[_15314 + uint2(2u, 0u)] = _10881;
-	                                    _3177[_15314 + uint2(3u, 0u)] = _10881;
-	                                    _3177[_15314 + uint2(2u, 1u)] = _10881;
-	                                    _3177[_15314 + uint2(3u, 1u)] = _10881;
-	                                    _3177[_15314 + uint2(0u, 2u)] = _10881;
-	                                    _3177[_15314 + uint2(1u, 2u)] = _10881;
-	                                    _3177[_15314 + uint2(0u, 3u)] = _10881;
-	                                    _3177[_15314 + uint2(1u, 3u)] = _10881;
-	                                    _3177[_15314 + uint2(2u, 2u)] = _10881;
-	                                    _3177[_15314 + uint2(3u, 2u)] = _10881;
-	                                    _3177[_15314 + uint2(2u, 3u)] = _10881;
-	                                    _3177[_15314 + uint2(3u, 3u)] = _10881;
+	                                    g_tOutDepth[_15314] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(1u, 0u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(0u, 1u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(1u, 1u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(2u, 0u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(3u, 0u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(2u, 1u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(3u, 1u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(0u, 2u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(1u, 2u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(0u, 3u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(1u, 3u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(2u, 2u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(3u, 2u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(2u, 3u)] = _10881;
+	                                    g_tOutDepth[_15314 + uint2(3u, 3u)] = _10881;
 	                                    _11523 = _14846;
 	                                    _14847 = _11522;
 	                                    _11407 = true;
@@ -795,7 +795,7 @@ CS
 	                                        _18271 = (_21402 & 2147483648u) != 0u;
 	                                        if (_18271)
 	                                        {
-	                                            _12899 = float3(float((min16float)f16tof32(min16uint(g_SST.Load(_21974 * 4 + 0) >> uint(16)))), float((min16float)f16tof32(min16uint(g_SST.Load(_21974 * 4 + 0) & 65535u))), asfloat((_21402 & 2147483647u) << uint(1)));
+	                                            _12899 = float3(float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21974 * 4 + 0) >> uint(16)))), float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21974 * 4 + 0) & 65535u))), asfloat((_21402 & 2147483647u) << uint(1)));
 	                                            break;
 	                                        }
 	                                        _12899 = _11522;
@@ -810,22 +810,22 @@ CS
 	                                        float4 _21806 = (_22386 + _12899.yyyy) + _22825;
 	                                        float4 _20894 = (_22386 + (_12899.yyyy * 2.0f)) + _22825;
 	                                        float4 _16204 = (_22386 + (_12899.yyyy * 3.0f)) + _22825;
-	                                        _3177[_15314] = _9991.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 0u)] = _9991.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 0u)] = _9991.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 0u)] = _9991.w.xxxx;
-	                                        _3177[_15314 + uint2(0u, 1u)] = _21806.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 1u)] = _21806.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 1u)] = _21806.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 1u)] = _21806.w.xxxx;
-	                                        _3177[_15314 + uint2(0u, 2u)] = _20894.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 2u)] = _20894.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 2u)] = _20894.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 2u)] = _20894.w.xxxx;
-	                                        _3177[_15314 + uint2(0u, 3u)] = _16204.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 3u)] = _16204.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 3u)] = _16204.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 3u)] = _16204.w.xxxx;
+	                                        g_tOutDepth[_15314] = _9991.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 0u)] = _9991.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 0u)] = _9991.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 0u)] = _9991.w.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(0u, 1u)] = _21806.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 1u)] = _21806.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 1u)] = _21806.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 1u)] = _21806.w.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(0u, 2u)] = _20894.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 2u)] = _20894.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 2u)] = _20894.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 2u)] = _20894.w.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(0u, 3u)] = _16204.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 3u)] = _16204.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 3u)] = _16204.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 3u)] = _16204.w.xxxx;
 	                                        _11523 = _14846;
 	                                        _14847 = _12899;
 	                                        _11407 = true;
@@ -860,11 +860,11 @@ CS
 	                                                uint _12509;
 	                                                if (_21713 == 2u)
 	                                                {
-	                                                    _12509 = (g_SST.Load(_21974 * 4 + 0) >> uint(15)) & 32767u;
+	                                                    _12509 = (g_SST.Load<uint>(_21974 * 4 + 0) >> uint(15)) & 32767u;
 	                                                }
 	                                                else
 	                                                {
-	                                                    _12509 = g_SST.Load(_21974 * 4 + 0) & 32767u;
+	                                                    _12509 = g_SST.Load<uint>(_21974 * 4 + 0) & 32767u;
 	                                                }
 	                                                _12510 = _12509;
 	                                            }
@@ -881,7 +881,7 @@ CS
 	                            } while(false);
 	                            if (!_11407)
 	                            {
-	                                uint _21403 = g_SST.Load(_11523 * 4 + 0);
+	                                uint _21403 = g_SST.Load<uint>(_11523 * 4 + 0);
 	                                float _13174;
 	                                bool _16054;
 	                                do
@@ -899,22 +899,22 @@ CS
 	                                if (_16054)
 	                                {
 	                                    float4 _10882 = _13174.xxxx;
-	                                    _3177[_15314] = _10882;
-	                                    _3177[_15314 + uint2(1u, 0u)] = _10882;
-	                                    _3177[_15314 + uint2(0u, 1u)] = _10882;
-	                                    _3177[_15314 + uint2(1u, 1u)] = _10882;
-	                                    _3177[_15314 + uint2(2u, 0u)] = _10882;
-	                                    _3177[_15314 + uint2(3u, 0u)] = _10882;
-	                                    _3177[_15314 + uint2(2u, 1u)] = _10882;
-	                                    _3177[_15314 + uint2(3u, 1u)] = _10882;
-	                                    _3177[_15314 + uint2(0u, 2u)] = _10882;
-	                                    _3177[_15314 + uint2(1u, 2u)] = _10882;
-	                                    _3177[_15314 + uint2(0u, 3u)] = _10882;
-	                                    _3177[_15314 + uint2(1u, 3u)] = _10882;
-	                                    _3177[_15314 + uint2(2u, 2u)] = _10882;
-	                                    _3177[_15314 + uint2(3u, 2u)] = _10882;
-	                                    _3177[_15314 + uint2(2u, 3u)] = _10882;
-	                                    _3177[_15314 + uint2(3u, 3u)] = _10882;
+	                                    g_tOutDepth[_15314] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(1u, 0u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(0u, 1u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(1u, 1u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(2u, 0u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(3u, 0u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(2u, 1u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(3u, 1u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(0u, 2u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(1u, 2u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(0u, 3u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(1u, 3u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(2u, 2u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(3u, 2u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(2u, 3u)] = _10882;
+	                                    g_tOutDepth[_15314 + uint2(3u, 3u)] = _10882;
 	                                }
 	                                else
 	                                {
@@ -925,7 +925,7 @@ CS
 	                                    {
 	                                        if ((_21403 & 2147483648u) != 0u)
 	                                        {
-	                                            _13175 = float3(float((min16float)f16tof32(min16uint(g_SST.Load(_21975 * 4 + 0) >> uint(16)))), float((min16float)f16tof32(min16uint(g_SST.Load(_21975 * 4 + 0) & 65535u))), asfloat((_21403 & 2147483647u) << uint(1)));
+	                                            _13175 = float3(float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21975 * 4 + 0) >> uint(16)))), float((half)f16tof32(uint16_t(g_SST.Load<uint>(_21975 * 4 + 0) & 65535u))), asfloat((_21403 & 2147483647u) << uint(1)));
 	                                            _16055 = true;
 	                                            break;
 	                                        }
@@ -942,96 +942,96 @@ CS
 	                                        float4 _21807 = (_22387 + _13175.yyyy) + _22826;
 	                                        float4 _20895 = (_22387 + (_13175.yyyy * 2.0f)) + _22826;
 	                                        float4 _16205 = (_22387 + (_13175.yyyy * 3.0f)) + _22826;
-	                                        _3177[_15314] = _9992.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 0u)] = _9992.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 0u)] = _9992.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 0u)] = _9992.w.xxxx;
-	                                        _3177[_15314 + uint2(0u, 1u)] = _21807.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 1u)] = _21807.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 1u)] = _21807.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 1u)] = _21807.w.xxxx;
-	                                        _3177[_15314 + uint2(0u, 2u)] = _20895.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 2u)] = _20895.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 2u)] = _20895.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 2u)] = _20895.w.xxxx;
-	                                        _3177[_15314 + uint2(0u, 3u)] = _16205.x.xxxx;
-	                                        _3177[_15314 + uint2(1u, 3u)] = _16205.y.xxxx;
-	                                        _3177[_15314 + uint2(2u, 3u)] = _16205.z.xxxx;
-	                                        _3177[_15314 + uint2(3u, 3u)] = _16205.w.xxxx;
+	                                        g_tOutDepth[_15314] = _9992.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 0u)] = _9992.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 0u)] = _9992.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 0u)] = _9992.w.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(0u, 1u)] = _21807.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 1u)] = _21807.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 1u)] = _21807.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 1u)] = _21807.w.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(0u, 2u)] = _20895.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 2u)] = _20895.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 2u)] = _20895.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 2u)] = _20895.w.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(0u, 3u)] = _16205.x.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(1u, 3u)] = _16205.y.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(2u, 3u)] = _16205.z.xxxx;
+	                                        g_tOutDepth[_15314 + uint2(3u, 3u)] = _16205.w.xxxx;
 	                                    }
 	                                    else
 	                                    {
 	                                        if ((_21403 & 536870912u) != 0u)
 	                                        {
-	                                            uint _24813 = g_SST.Load(_21975 * 4 + 0);
+	                                            uint _24813 = g_SST.Load<uint>(_21975 * 4 + 0);
 	                                            uint _13655 = _11523 + 2u;
-	                                            uint _6546 = g_SST.Load(_13655 * 4 + 0);
+	                                            uint _6546 = g_SST.Load<uint>(_13655 * 4 + 0);
 	                                            uint _13656 = _11523 + 3u;
-	                                            uint _6547 = g_SST.Load(_13656 * 4 + 0);
+	                                            uint _6547 = g_SST.Load<uint>(_13656 * 4 + 0);
 	                                            uint _13657 = _11523 + 4u;
-	                                            uint _16740 = g_SST.Load(_13657 * 4 + 0);
-	                                            float4 _11451 = float((min16float)f16tof32(min16uint(_21403 & 32767u))).xxxx;
-	                                            float4 _17844 = float((min16float)f16tof32(min16uint((_21403 >> uint(14)) & 32766u))).xxxx;
+	                                            uint _16740 = g_SST.Load<uint>(_13657 * 4 + 0);
+	                                            float4 _11451 = float((half)f16tof32(uint16_t(_21403 & 32767u))).xxxx;
+	                                            float4 _17844 = float((half)f16tof32(uint16_t((_21403 >> uint(14)) & 32766u))).xxxx;
 	                                            float4 _12210 = (_11451 * float4(float((_24813 >> uint(24)) & 255u), float((_24813 >> uint(16)) & 255u), float((_24813 >> uint(8)) & 255u), float(_24813 & 255u))) + _17844;
 	                                            float4 _20116 = (_11451 * float4(float((_6546 >> uint(24)) & 255u), float((_6546 >> uint(16)) & 255u), float((_6546 >> uint(8)) & 255u), float(_6546 & 255u))) + _17844;
 	                                            float4 _20117 = (_11451 * float4(float((_6547 >> uint(24)) & 255u), float((_6547 >> uint(16)) & 255u), float((_6547 >> uint(8)) & 255u), float(_6547 & 255u))) + _17844;
 	                                            float4 _8748 = (_11451 * float4(float((_16740 >> uint(24)) & 255u), float((_16740 >> uint(16)) & 255u), float((_16740 >> uint(8)) & 255u), float(_16740 & 255u))) + _17844;
-	                                            _3177[_15314] = _12210.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 0u)] = _12210.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 0u)] = _12210.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 0u)] = _12210.w.xxxx;
-	                                            _3177[_15314 + uint2(0u, 1u)] = _20116.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 1u)] = _20116.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 1u)] = _20116.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 1u)] = _20116.w.xxxx;
-	                                            _3177[_15314 + uint2(0u, 2u)] = _20117.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 2u)] = _20117.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 2u)] = _20117.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 2u)] = _20117.w.xxxx;
-	                                            _3177[_15314 + uint2(0u, 3u)] = _8748.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 3u)] = _8748.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 3u)] = _8748.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 3u)] = _8748.w.xxxx;
+	                                            g_tOutDepth[_15314] = _12210.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 0u)] = _12210.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 0u)] = _12210.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 0u)] = _12210.w.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(0u, 1u)] = _20116.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 1u)] = _20116.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 1u)] = _20116.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 1u)] = _20116.w.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(0u, 2u)] = _20117.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 2u)] = _20117.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 2u)] = _20117.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 2u)] = _20117.w.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(0u, 3u)] = _8748.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 3u)] = _8748.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 3u)] = _8748.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 3u)] = _8748.w.xxxx;
 	                                        }
 	                                        else
 	                                        {
-	                                            uint _24812 = g_SST.Load(_21975 * 4 + 0);
+	                                            uint _24812 = g_SST.Load<uint>(_21975 * 4 + 0);
 	                                            uint _13648 = _11523 + 2u;
-	                                            uint _6540 = g_SST.Load(_13648 * 4 + 0);
+	                                            uint _6540 = g_SST.Load<uint>(_13648 * 4 + 0);
 	                                            uint _13649 = _11523 + 3u;
-	                                            uint _6541 = g_SST.Load(_13649 * 4 + 0);
+	                                            uint _6541 = g_SST.Load<uint>(_13649 * 4 + 0);
 	                                            uint _13650 = _11523 + 4u;
-	                                            uint _6542 = g_SST.Load(_13650 * 4 + 0);
+	                                            uint _6542 = g_SST.Load<uint>(_13650 * 4 + 0);
 	                                            uint _13651 = _11523 + 5u;
-	                                            uint _6543 = g_SST.Load(_13651 * 4 + 0);
+	                                            uint _6543 = g_SST.Load<uint>(_13651 * 4 + 0);
 	                                            uint _13652 = _11523 + 6u;
-	                                            uint _6544 = g_SST.Load(_13652 * 4 + 0);
+	                                            uint _6544 = g_SST.Load<uint>(_13652 * 4 + 0);
 	                                            uint _13653 = _11523 + 7u;
-	                                            uint _6545 = g_SST.Load(_13653 * 4 + 0);
+	                                            uint _6545 = g_SST.Load<uint>(_13653 * 4 + 0);
 	                                            uint _13654 = _11523 + 8u;
-	                                            uint _16739 = g_SST.Load(_13654 * 4 + 0);
-	                                            float4 _11450 = float((min16float)f16tof32(min16uint(_21403 & 32767u))).xxxx;
-	                                            float4 _17843 = float((min16float)f16tof32(min16uint((_21403 >> uint(14)) & 32766u))).xxxx;
+	                                            uint _16739 = g_SST.Load<uint>(_13654 * 4 + 0);
+	                                            float4 _11450 = float((half)f16tof32(uint16_t(_21403 & 32767u))).xxxx;
+	                                            float4 _17843 = float((half)f16tof32(uint16_t((_21403 >> uint(14)) & 32766u))).xxxx;
 	                                            float4 _12209 = (_11450 * float4(float((_24812 >> uint(16)) & 65535u), float(_24812 & 65535u), float((_6540 >> uint(16)) & 65535u), float(_6540 & 65535u))) + _17843;
 	                                            float4 _20114 = (_11450 * float4(float((_6541 >> uint(16)) & 65535u), float(_6541 & 65535u), float((_6542 >> uint(16)) & 65535u), float(_6542 & 65535u))) + _17843;
 	                                            float4 _20115 = (_11450 * float4(float((_6543 >> uint(16)) & 65535u), float(_6543 & 65535u), float((_6544 >> uint(16)) & 65535u), float(_6544 & 65535u))) + _17843;
 	                                            float4 _8747 = (_11450 * float4(float((_6545 >> uint(16)) & 65535u), float(_6545 & 65535u), float((_16739 >> uint(16)) & 65535u), float(_16739 & 65535u))) + _17843;
-	                                            _3177[_15314] = _12209.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 0u)] = _12209.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 0u)] = _12209.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 0u)] = _12209.w.xxxx;
-	                                            _3177[_15314 + uint2(0u, 1u)] = _20114.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 1u)] = _20114.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 1u)] = _20114.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 1u)] = _20114.w.xxxx;
-	                                            _3177[_15314 + uint2(0u, 2u)] = _20115.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 2u)] = _20115.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 2u)] = _20115.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 2u)] = _20115.w.xxxx;
-	                                            _3177[_15314 + uint2(0u, 3u)] = _8747.x.xxxx;
-	                                            _3177[_15314 + uint2(1u, 3u)] = _8747.y.xxxx;
-	                                            _3177[_15314 + uint2(2u, 3u)] = _8747.z.xxxx;
-	                                            _3177[_15314 + uint2(3u, 3u)] = _8747.w.xxxx;
+	                                            g_tOutDepth[_15314] = _12209.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 0u)] = _12209.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 0u)] = _12209.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 0u)] = _12209.w.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(0u, 1u)] = _20114.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 1u)] = _20114.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 1u)] = _20114.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 1u)] = _20114.w.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(0u, 2u)] = _20115.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 2u)] = _20115.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 2u)] = _20115.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 2u)] = _20115.w.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(0u, 3u)] = _8747.x.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(1u, 3u)] = _8747.y.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(2u, 3u)] = _8747.z.xxxx;
+	                                            g_tOutDepth[_15314 + uint2(3u, 3u)] = _8747.w.xxxx;
 	                                        }
 	                                    }
 	                                }

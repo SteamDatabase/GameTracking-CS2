@@ -79,7 +79,7 @@ CS
 	};
 	
 	ByteAddressBuffer g_CullItems : register(t30, space0);
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer g_OutputCullBits : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_GlobalInvocationID;
@@ -109,9 +109,9 @@ CS
 	            break;
 	        }
 	        bool _12885;
-	        if (asfloat(g_CullItems.Load(_16208 * 80 + 32)) <= _15813)
+	        if (g_CullItems.Load<float>(_16208 * 80 + 32) <= _15813)
 	        {
-	            _12885 = asfloat(g_CullItems.Load(_16208 * 80 + 36)) >= _17281;
+	            _12885 = g_CullItems.Load<float>(_16208 * 80 + 36) >= _17281;
 	        }
 	        else
 	        {
@@ -130,7 +130,7 @@ CS
 	        _16208 = _4284;
 	        continue;
 	    }
-	    undetermined.Store(((CullParams_t_1_m4._m0[_22151]._m0 + (gl_GlobalInvocationID.x * CullParams_t_1_m4._m0[_22151]._m1)) + _3251) * 4 + 0, _13155);
+	    g_OutputCullBits.Store<uint>(((CullParams_t_1_m4._m0[_22151]._m0 + (gl_GlobalInvocationID.x * CullParams_t_1_m4._m0[_22151]._m1)) + _3251) * 4 + 0, _13155);
 	}
 	
 	[numthreads(32, 1, 1)]

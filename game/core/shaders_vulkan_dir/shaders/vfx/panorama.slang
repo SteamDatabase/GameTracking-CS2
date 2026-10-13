@@ -50,9 +50,9 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float4 vPositionSs : TEXCOORD0;
-	    float4 vTex : TEXCOORD1;
-	    float4 vColor : TEXCOORD2;
+	    float4 vPositionSs : POSITION0;
+	    float4 vTex : TEXCOORD0;
+	    float4 vColor : TEXCOORD1;
 	};
 	
 	struct PS_INPUT

@@ -60,8 +60,8 @@ CS
 	
 	ByteAddressBuffer Buffer0 : register(t30, space0);
 	ByteAddressBuffer Buffer1 : register(t31, space0);
-	Buffer<float4> undetermined_unexpectedTypeId410_1047 : register(t32, space0);
-	RWTexture2D<float4> _3407 : register(u158, space0);
+	Buffer<float4> Buffer2 : register(t32, space0);
+	RWTexture2D<float4> OutputTexture : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -72,7 +72,7 @@ CS
 	void MainCs_inner()
 	{
 	    uint _7595 = (gl_GlobalInvocationID.y * Dimensions_t_1_m0) + gl_GlobalInvocationID.x;
-	    _3407[gl_GlobalInvocationID.xy] = ((asfloat(Buffer0.Load4(_7595 * 32 + 0)) + asfloat(Buffer0.Load4(_7595 * 32 + 16))) + (asfloat(Buffer1.Load4(_7595 * 32 + 0)) + asfloat(Buffer1.Load4(_7595 * 32 + 16)))) + undetermined_unexpectedTypeId410_1047.Load(int(_7595));
+	    OutputTexture[gl_GlobalInvocationID.xy] = ((Buffer0.Load<float4>(_7595 * 32 + 0) + Buffer0.Load<float4>(_7595 * 32 + 16)) + (Buffer1.Load<float4>(_7595 * 32 + 0) + Buffer1.Load<float4>(_7595 * 32 + 16))) + Buffer2.Load(int(_7595));
 	}
 	
 	[numthreads(32, 32, 1)]

@@ -107,11 +107,11 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float3 vPositionOs : TEXCOORD0;
-	    float2 vTexCoord : TEXCOORD1;
-	    float3 vNormalOs : TEXCOORD2;
-	    float4 vTangentUOs_flTangentVSign : TEXCOORD3;
-	    uint nInstanceIdx : TEXCOORD4;
+	    float3 vPositionOs : POSITION0;
+	    float2 vTexCoord : TEXCOORD0;
+	    float3 vNormalOs : NORMAL0;
+	    float4 vTangentUOs_flTangentVSign : TANGENT0;
+	    uint nInstanceIdx : TEXCOORD13;
 	};
 	
 	struct PS_INPUT
@@ -125,7 +125,7 @@ VS
 	
 	void MainVs_inner()
 	{
-	    float3x4 _9216 = asfloat(uint3x4(g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load4(g_instanceBuffer.Load(nInstanceIdx * 32 + 4) * 48 + 32)));
+	    float3x4 _9216 = float3x4(g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 0), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 16), g_transformBuffer.Load<float4>(g_instanceBuffer.Load<uint>(nInstanceIdx * 32 + 4) * 48 + 32));
 	    float3 _14293 = normalize(mul(_9216, float4(vNormalOs.xyz, 0.0f)));
 	    float3 _12861 = mul(_9216, float4(vTangentUOs_flTangentVSign.xyz, 0.0f)).xyz;
 	    float3 _24912 = _14293.xyz;

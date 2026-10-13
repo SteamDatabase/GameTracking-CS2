@@ -55,14 +55,14 @@ CS
 	    uint _m5;
 	};
 	
-	RWByteAddressBuffer undetermined : register(u158, space0);
+	RWByteAddressBuffer CBufferUAV : register(u158, space0);
 	cbuffer _Globals_ : register(b0, space0)
 	{
 	    uint _Globals_1_CShiftBit : packoffset(c0.z);
 	};
 	
-	RWByteAddressBuffer undetermined_1 : register(u159, space0);
-	RWByteAddressBuffer undetermined_2 : register(u163, space0);
+	RWByteAddressBuffer SrcBuffer : register(u159, space0);
+	RWByteAddressBuffer ScratchBuffer : register(u163, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_LocalInvocationID;
@@ -76,10 +76,10 @@ CS
 	
 	void MainCs_inner()
 	{
-	    uint _8524 = undetermined.Load(0);
-	    int _24369 = int(undetermined.Load(4));
-	    uint _24370 = undetermined.Load(8);
-	    uint _6370 = undetermined.Load(12);
+	    uint _8524 = CBufferUAV.Load<uint>(0);
+	    int _24369 = CBufferUAV.Load<int>(4);
+	    uint _24370 = CBufferUAV.Load<uint>(8);
+	    uint _6370 = CBufferUAV.Load<uint>(12);
 	    int _23262;
 	    int _13039 = 0;
 	    for (;;)
@@ -121,10 +121,10 @@ CS
 	        {
 	            break;
 	        }
-	        _19582[0] = undetermined_1.Load(_13155 * 4 + 0);
-	        _19582[1] = undetermined_1.Load((_13155 + 128u) * 4 + 0);
-	        _19582[2] = undetermined_1.Load((_13155 + 256u) * 4 + 0);
-	        _19582[3] = undetermined_1.Load((_13155 + 384u) * 4 + 0);
+	        _19582[0] = SrcBuffer.Load<uint>(_13155 * 4 + 0);
+	        _19582[1] = SrcBuffer.Load<uint>((_13155 + 128u) * 4 + 0);
+	        _19582[2] = SrcBuffer.Load<uint>((_13155 + 256u) * 4 + 0);
+	        _19582[3] = SrcBuffer.Load<uint>((_13155 + 384u) * 4 + 0);
 	        uint _8087;
 	        uint _14382;
 	        uint _13156 = _13155;
@@ -176,7 +176,7 @@ CS
 	            _16210 = _8559;
 	            continue;
 	        }
-	        undetermined_2.Store(((gl_LocalInvocationID.x * _24370) + gl_WorkGroupID.x) * 4 + 0, _13157);
+	        ScratchBuffer.Store<uint>(((gl_LocalInvocationID.x * _24370) + gl_WorkGroupID.x) * 4 + 0, _13157);
 	    }
 	}
 	

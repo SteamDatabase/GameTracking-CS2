@@ -213,17 +213,17 @@ CS
 	    uint _m0[];
 	} g_InstanceData_1;
 	
-	layout(set = 4, binding = 167, std430) buffer undetermined
+	layout(set = 4, binding = 167, std430) buffer g_RWTransformBuffer
 	{
 	    _1119 _m0[];
-	} undetermined_1;
+	} g_RWTransformBuffer_1;
 	
-	layout(set = 4, binding = 163, std430) buffer undetermined_2
+	layout(set = 4, binding = 163, std430) buffer g_RWInstanceBuffer
 	{
 	    _1125 _m0[];
-	} undetermined_3;
+	} g_RWInstanceBuffer_1;
 	
-	layout(set = 0, binding = 159, r32ui) uniform uimageBuffer _5506;
+	layout(set = 0, binding = 159, r32ui) uniform uimageBuffer g_InstancedDrawArgs;
 	
 	void main()
 	{
@@ -281,8 +281,8 @@ CS
 	            }
 	            else
 	            {
-	                _10932 = sqrt(max(dot(undetermined_1._m0[_5325]._m0[0].xyz, undetermined_1._m0[_5325]._m0[0].xyz), max(dot(undetermined_1._m0[_5325]._m0[1].xyz, undetermined_1._m0[_5325]._m0[1].xyz), dot(undetermined_1._m0[_5325]._m0[2].xyz, undetermined_1._m0[_5325]._m0[2].xyz))));
-	                _15345 = undetermined_1._m0[_5325]._m0;
+	                _10932 = sqrt(max(dot(g_RWTransformBuffer_1._m0[_5325]._m0[0].xyz, g_RWTransformBuffer_1._m0[_5325]._m0[0].xyz), max(dot(g_RWTransformBuffer_1._m0[_5325]._m0[1].xyz, g_RWTransformBuffer_1._m0[_5325]._m0[1].xyz), dot(g_RWTransformBuffer_1._m0[_5325]._m0[2].xyz, g_RWTransformBuffer_1._m0[_5325]._m0[2].xyz))));
+	                _15345 = g_RWTransformBuffer_1._m0[_5325]._m0;
 	            }
 	            vec3 _6371 = (g_MeshData_1._m0[_5056]._m0 + g_MeshData_1._m0[_5056]._m2) * 0.5;
 	            vec3 _17098 = g_MeshData_1._m0[_5056]._m2 - _6371;
@@ -446,7 +446,7 @@ CS
 	            SPIRV_CROSS_BRANCH
 	            if (_3779 ? _7251 : false)
 	            {
-	                undetermined_1._m0[_5325]._m0 = _15345;
+	                g_RWTransformBuffer_1._m0[_5325]._m0 = _15345;
 	            }
 	            _12888 = _7251;
 	        }
@@ -458,7 +458,7 @@ CS
 	        {
 	            uint _8369 = g_MeshData_1._m0[_5056]._m12;
 	            uint _6372 = _8369 & 15u;
-	            uint _3737 = imageAtomicAdd(_5506, int((_5516 * 5u) + 1u), 1u);
+	            uint _3737 = imageAtomicAdd(g_InstancedDrawArgs, int((_5516 * 5u) + 1u), 1u);
 	            uint _24498 = g_CullRequests_1._m0[_13724]._m6;
 	            uint _3056 = _24498 + _3737;
 	            uint _5186;
@@ -469,7 +469,7 @@ CS
 	                {
 	                    break;
 	                }
-	                uint _17760 = imageAtomicAdd(_5506, int(((_5516 + (_13039 * 2u)) * 5u) + 1u), 1u);
+	                uint _17760 = imageAtomicAdd(g_InstancedDrawArgs, int(((_5516 + (_13039 * 2u)) * 5u) + 1u), 1u);
 	                _5186 = _13039 + 1u;
 	                _13039 = _5186;
 	                continue;
@@ -483,14 +483,14 @@ CS
 	            {
 	                _9848 = _5611 + (gl_LocalInvocationID.x * 4u);
 	            }
-	            undetermined_3._m0[_3056]._m0 = g_InstanceData_1._m0[_9848 / 4u];
-	            undetermined_3._m0[_3056]._m1 = _5325;
-	            undetermined_3._m0[_3056]._m2 = _25111;
-	            undetermined_3._m0[_3056]._m3 = 4294967295u;
-	            undetermined_3._m0[_3056]._m4 = 4294967295u;
-	            undetermined_3._m0[_3056]._m5 = 0u;
-	            undetermined_3._m0[_3056]._m6 = 0u;
-	            undetermined_3._m0[_3056]._m7 = 1.0;
+	            g_RWInstanceBuffer_1._m0[_3056]._m0 = g_InstanceData_1._m0[_9848 / 4u];
+	            g_RWInstanceBuffer_1._m0[_3056]._m1 = _5325;
+	            g_RWInstanceBuffer_1._m0[_3056]._m2 = _25111;
+	            g_RWInstanceBuffer_1._m0[_3056]._m3 = 4294967295u;
+	            g_RWInstanceBuffer_1._m0[_3056]._m4 = 4294967295u;
+	            g_RWInstanceBuffer_1._m0[_3056]._m5 = 0u;
+	            g_RWInstanceBuffer_1._m0[_3056]._m6 = 0u;
+	            g_RWInstanceBuffer_1._m0[_3056]._m7 = 1.0;
 	        }
 	    }
 	}

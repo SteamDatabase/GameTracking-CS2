@@ -40,7 +40,7 @@ CS
 	};
 	
 	ByteAddressBuffer g_VisRegions : register(t33, space0);
-	RWBuffer<uint> _3898 : register(u158, space0);
+	RWBuffer<uint> g_RWVisBits : register(u158, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_LocalInvocationID;
@@ -63,12 +63,12 @@ CS
 	        {
 	            break;
 	        }
-	        uint _25020 = g_VisRegions.Load(_13155 * 4 + 0) & 4095u;
-	        if ((_3898[int(_25020 / 32u)].xxxx.x & (1u << (_25020 % 32u))) != 0u)
+	        uint _25020 = g_VisRegions.Load<uint>(_13155 * 4 + 0) & 4095u;
+	        if ((g_RWVisBits[int(_25020 / 32u)].xxxx.x & (1u << (_25020 % 32u))) != 0u)
 	        {
-	            uint _13532 = g_VisRegions.Load(_13155 * 4 + 0) >> uint(12);
+	            uint _13532 = g_VisRegions.Load<uint>(_13155 * 4 + 0) >> uint(12);
 	            uint _6313;
-	            InterlockedOr(_3898[_13532 / 32u], 1u << (_13532 % 32u), _6313);
+	            InterlockedOr(g_RWVisBits[_13532 / 32u], 1u << (_13532 % 32u), _6313);
 	        }
 	        _4901 = _13155 + 64u;
 	        _4283 = _16208 + 1u;

@@ -52,21 +52,21 @@ CS
 	// Source 2 Viewer - https://valveresourceformat.github.io
 	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	RWByteAddressBuffer undetermined : register(u159, space0);
-	RWBuffer<uint> _5971 : register(u163, space0);
-	RWBuffer<uint> _3472 : register(u164, space0);
+	RWByteAddressBuffer g_workingShapeCandidates : register(u159, space0);
+	RWBuffer<uint> g_workingControlBuffer : register(u163, space0);
+	RWBuffer<uint> g_workingExecuteIndirectBuffer : register(u164, space0);
 	
 	void MainCs_inner()
 	{
-	    uint4 _3300 = _5971[4].xxxx;
+	    uint4 _3300 = g_workingControlBuffer[4].xxxx;
 	    uint _11756;
-	    undetermined.GetDimensions(_11756);
+	    g_workingShapeCandidates.GetDimensions(_11756);
 	    _11756 = (_11756 - 0) / 4;
 	    uint _20977 = min(_3300.x, _11756);
-	    _3472[0u] = ((_20977 + 127u) / 128u).x;
-	    _3472[1u] = uint4(1u, 1u, 1u, 1u).x;
-	    _3472[2u] = uint4(1u, 1u, 1u, 1u).x;
-	    _5971[3u] = _20977.x;
+	    g_workingExecuteIndirectBuffer[0u] = ((_20977 + 127u) / 128u).x;
+	    g_workingExecuteIndirectBuffer[1u] = uint4(1u, 1u, 1u, 1u).x;
+	    g_workingExecuteIndirectBuffer[2u] = uint4(1u, 1u, 1u, 1u).x;
+	    g_workingControlBuffer[3u] = _20977.x;
 	}
 	
 	[numthreads(1, 1, 1)]

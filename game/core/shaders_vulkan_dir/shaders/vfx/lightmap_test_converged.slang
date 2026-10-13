@@ -68,7 +68,7 @@ CS
 	};
 	
 	ByteAddressBuffer g_Luxels : register(t30, space0);
-	RWTexture3D<uint> _3474 : register(u158, space0);
+	RWTexture3D<uint> g_BlockConverged : register(u158, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	static uint gl_LocalInvocationIndex;
@@ -90,7 +90,7 @@ CS
 	        }
 	        uint _15834 = uint(_Globals_1_g_nBlockWidth);
 	        uint _10826 = (((gl_GlobalInvocationID.z * _15834) * uint(_Globals_1_g_nBlockHeight)) + (gl_GlobalInvocationID.y * _15834)) + gl_GlobalInvocationID.x;
-	        bool _6817 = asfloat(g_Luxels.Load4(_10826 * 224 + 0)).w > 0.0f;
+	        bool _6817 = g_Luxels.Load<float4>(_10826 * 224 + 0).w > 0.0f;
 	        int _12919 = WaveActiveSum(int(_6817));
 	        if (_12919 == 0)
 	        {
@@ -108,7 +108,7 @@ CS
 	        float3 _20940;
 	        if (_6817)
 	        {
-	            _20940 = asfloat(g_Luxels.Load4(_10826 * 224 + 0)).xyz;
+	            _20940 = g_Luxels.Load<float4>(_10826 * 224 + 0).xyz;
 	        }
 	        else
 	        {
@@ -122,7 +122,7 @@ CS
 	    } while(false);
 	    if (gl_LocalInvocationIndex == 0u)
 	    {
-	        _3474[gl_GlobalInvocationID / uint3(4u, 4u, 1u)] = uint(int(_24472)).x;
+	        g_BlockConverged[gl_GlobalInvocationID / uint3(4u, 4u, 1u)] = uint(int(_24472)).x;
 	    }
 	}
 	

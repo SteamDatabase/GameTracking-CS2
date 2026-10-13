@@ -58,10 +58,10 @@ CS
 	};
 	
 	Texture2D<float4> g_tColor : register(t30, space0);
-	RWTexture2D<unorm float> _4695 : register(u162, space0);
-	RWBuffer<uint> _5959 : register(u158, space0);
-	RWBuffer<uint> _3823 : register(u159, space0);
-	RWBuffer<float> _5402 : register(u160, space0);
+	RWTexture2D<unorm float> g_tLuma : register(u162, space0);
+	RWBuffer<uint> g_WorkCount : register(u158, space0);
+	RWBuffer<uint> g_WorkQueue : register(u159, space0);
+	RWBuffer<float> g_ColorQueue : register(u160, space0);
 	
 	static uint3 gl_WorkGroupID;
 	static uint3 gl_LocalInvocationID;
@@ -86,11 +86,11 @@ CS
 	        {
 	            uint2 _19079 = ((FxaaConstants_t_1_m2 + uint2(gl_LocalInvocationIndex % 10u, gl_LocalInvocationIndex / 10u)) + (gl_WorkGroupID.xy * uint2(8u, 8u))) - uint2(1u, 1u);
 	            float _21479 = log2(1.0f + (dot(g_tColor.Load(int3(_19079, 0)).xyz, float3(0.21267099678516387939453125f, 0.71516001224517822265625f, 0.072168998420238494873046875f)) * 15.0f)) * 0.25f;
-	            _4695[_19079] = _21479.x;
+	            g_tLuma[_19079] = _21479.x;
 	            _5396[gl_LocalInvocationIndex] = _21479;
 	            uint2 _19343 = uint2(int2(_19079) + int2(0, 5));
 	            float _21480 = log2(1.0f + (dot(g_tColor.Load(int3(_19343, 0)).xyz, float3(0.21267099678516387939453125f, 0.71516001224517822265625f, 0.072168998420238494873046875f)) * 15.0f)) * 0.25f;
-	            _4695[_19343] = _21480.x;
+	            g_tLuma[_19343] = _21480.x;
 	            _5396[gl_LocalInvocationIndex + 50u] = _21480;
 	        }
 	        GroupMemoryBarrierWithGroupSync();
@@ -120,25 +120,25 @@ CS
 	        if (_17147)
 	        {
 	            uint _7294;
-	            InterlockedAdd(_5959[0u], 1u, _7294);
-	            _3823[_7294] = _4421.x;
+	            InterlockedAdd(g_WorkCount[0u], 1u, _7294);
+	            g_WorkQueue[_7294] = _4421.x;
 	            float4 _14651 = g_tColor.Load(int3(_3873 + uint2(0u, (2u * _5884) - 1u), 0));
 	            uint _16572 = 3u * _7294;
-	            _5402[_16572] = _14651.x.x;
-	            _5402[_16572 + 1u] = _14651.y.x;
-	            _5402[_16572 + 2u] = _14651.z.x;
+	            g_ColorQueue[_16572] = _14651.x.x;
+	            g_ColorQueue[_16572 + 1u] = _14651.y.x;
+	            g_ColorQueue[_16572 + 2u] = _14651.z.x;
 	        }
 	        else
 	        {
 	            uint _6241;
-	            InterlockedAdd(_5959[1u], 1u, _6241);
+	            InterlockedAdd(g_WorkCount[1u], 1u, _6241);
 	            uint _4591 = FxaaConstants_t_1_m3 - _6241;
-	            _3823[_4591] = _4421.x;
+	            g_WorkQueue[_4591] = _4421.x;
 	            float4 _14652 = g_tColor.Load(int3(_3873 + uint2((2u * _5884) - 1u, 0u), 0));
 	            uint _16573 = 3u * _4591;
-	            _5402[_16573] = _14652.x.x;
-	            _5402[_16573 + 1u] = _14652.y.x;
-	            _5402[_16573 + 2u] = _14652.z.x;
+	            g_ColorQueue[_16573] = _14652.x.x;
+	            g_ColorQueue[_16573 + 1u] = _14652.y.x;
+	            g_ColorQueue[_16573 + 2u] = _14652.z.x;
 	        }
 	        break;
 	    } while(false);

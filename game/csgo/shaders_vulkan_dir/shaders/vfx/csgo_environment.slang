@@ -8,7 +8,7 @@ HEADER
 	Version = 5;
 	
 	// Platform: VULKAN_SM_60
-	// Programs: ps, psrs, rtx, vs
+	// Programs: ps, vs, rtx, psrs
 }
 
 MODES

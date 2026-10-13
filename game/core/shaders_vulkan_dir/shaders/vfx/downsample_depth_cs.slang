@@ -54,7 +54,7 @@ CS
 	};
 	
 	Texture2D<float4> g_tSrcDepth : register(t30, space0);
-	RWTexture2D<float4> _4304 : register(u159, space0);
+	RWTexture2D<float4> g_tOutDepthMIP1 : register(u159, space0);
 	
 	static uint3 gl_GlobalInvocationID;
 	struct SPIRV_Cross_Input
@@ -70,7 +70,7 @@ CS
 	    int3 _8202 = int3(uint3(min(_16426, (_3829 + uint2(1u, 0u))), 0u));
 	    int3 _8203 = int3(uint3(min(_16426, (_3829 + uint2(0u, 1u))), 0u));
 	    int3 _8204 = int3(uint3(min(_16426, (_3829 + uint2(1u, 1u))), 0u));
-	    _4304[gl_GlobalInvocationID.xy] = max(max(g_tSrcDepth.Load(int3(_8201.xy, _8201.z)).x, g_tSrcDepth.Load(int3(_8202.xy, _8202.z)).x), max(g_tSrcDepth.Load(int3(_8203.xy, _8203.z)).x, g_tSrcDepth.Load(int3(_8204.xy, _8204.z)).x)).xxxx;
+	    g_tOutDepthMIP1[gl_GlobalInvocationID.xy] = max(max(g_tSrcDepth.Load(int3(_8201.xy, _8201.z)).x, g_tSrcDepth.Load(int3(_8202.xy, _8202.z)).x), max(g_tSrcDepth.Load(int3(_8203.xy, _8203.z)).x, g_tSrcDepth.Load(int3(_8204.xy, _8204.z)).x)).xxxx;
 	    GroupMemoryBarrierWithGroupSync();
 	    GroupMemoryBarrierWithGroupSync();
 	    GroupMemoryBarrierWithGroupSync();

@@ -54,10 +54,10 @@ VS
 	
 	struct VS_INPUT
 	{
-	    float4 vPositionWeights : TEXCOORD0;
-	    float4 vTexCoords : TEXCOORD1;
-	    float4 vOffsetsPositionSpeed : TEXCOORD2;
-	    float4 vRangesPositionSpeed : TEXCOORD3;
+	    float4 vPositionWeights : POSITION0;
+	    float4 vTexCoords : TEXCOORD0;
+	    float4 vOffsetsPositionSpeed : TEXCOORD1;
+	    float4 vRangesPositionSpeed : TEXCOORD2;
 	};
 	
 	struct PS_INPUT

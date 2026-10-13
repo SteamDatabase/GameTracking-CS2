@@ -172,73 +172,93 @@ GS
 	[[layer_constant]] ExternalDescriptorSet g_globalLateBoundBindlessSet < Source(ExternalDescSet); Attribute("g_globalLateBoundBindlessSet"); >;
 	[[layer_constant]] ExternalDescriptorSet g_lightBinnerGpuSet < Source(ExternalDescSet); Attribute("g_lightBinnerGpuSet"); >;
 	
-	// SPIR-V reflection failed for backend HLSL:
-	// Unsupported shader stage.
-	//
-	// Re-attempting reflection with the GLSL backend.
-	
 	// Source 2 Viewer - https://valveresourceformat.github.io
-	// SPIR-V source, GLSL reflection with SPIRV-Cross by KhronosGroup
+	// SPIR-V source, HLSL reflection with SPIRV-Cross by KhronosGroup
 	
-	#version 460
-	#if defined(GL_EXT_control_flow_attributes)
-	#extension GL_EXT_control_flow_attributes : require
-	#define SPIRV_CROSS_FLATTEN [[flatten]]
-	#define SPIRV_CROSS_BRANCH [[dont_flatten]]
-	#define SPIRV_CROSS_UNROLL [[unroll]]
-	#define SPIRV_CROSS_LOOP [[dont_unroll]]
-	#else
-	#define SPIRV_CROSS_FLATTEN
-	#define SPIRV_CROSS_BRANCH
-	#define SPIRV_CROSS_UNROLL
-	#define SPIRV_CROSS_LOOP
-	#endif
-	layout(triangles) in;
-	layout(max_vertices = 3, triangle_strip) out;
-	
-	struct _1224
+	cbuffer PerViewConstantBuffer_t : register(b0, space2)
 	{
-	    mat4 _m0;
-	    vec4 _m1;
+	    column_major float4x4 PerViewConstantBuffer_t_1_m0 : packoffset(c0);
+	    float4 PerViewConstantBuffer_t_1_m1 : packoffset(c24);
 	};
 	
-	layout(set = 2) uniform _1224 PerViewConstantBuffer_t;
 	
-	layout(location = 0) in vec3 input_0[3];
-	layout(location = 1) in vec4 input_1[3];
-	layout(location = 2) in vec3 input_2[3];
-	layout(location = 0) out vec3 output_0;
-	layout(location = 1) out vec3 output_1;
-	layout(location = 2) out vec4 output_2;
-	layout(location = 3) out vec3 output_3;
+	static float4 gl_Position;
+	static float3 input_0[3];
+	static float4 input_1[3];
+	static float3 input_2[3];
+	static float3 output_0;
+	static float3 output_1;
+	static float4 output_2;
+	static float3 output_3;
 	
-	void main()
+	struct SPIRV_Cross_Input
 	{
-	    vec3 _15752 = normalize(cross(input_0[1] - input_0[0], input_0[2] - input_0[0]));
+	    float3 input_0 : TEXCOORD0;
+	    float4 input_1 : TEXCOORD1;
+	    float3 input_2 : TEXCOORD2;
+	};
+	
+	struct SPIRV_Cross_Output
+	{
+	    float3 output_0 : TEXCOORD0;
+	    float3 output_1 : TEXCOORD1;
+	    float4 output_2 : TEXCOORD2;
+	    float3 output_3 : TEXCOORD3;
+	    float4 gl_Position : SV_Position;
+	};
+	
+	void MainGs_inner(triangle SPIRV_Cross_Input stage_input[3], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    float3 _15752 = normalize(cross(input_0[1] - input_0[0], input_0[2] - input_0[0]));
 	    int _7155;
 	    int _13039 = 0;
-	    SPIRV_CROSS_UNROLL
+	    [unroll]
 	    for (;;)
 	    {
 	        if (!(_13039 < 3))
 	        {
 	            break;
 	        }
-	        vec4 _17895 = (vec4(input_0[_13039].xyz, 1.0) + (PerViewConstantBuffer_t._m1 * 1.0)).xyzw * PerViewConstantBuffer_t._m0;
+	        float4 _17895 = mul(PerViewConstantBuffer_t_1_m0, (float4(input_0[_13039].xyz, 1.0f) + (PerViewConstantBuffer_t_1_m1 * 1.0f)).xyzw);
 	        output_0 = _15752;
 	        output_1 = input_0[_13039];
 	        output_2 = input_1[_13039];
 	        output_3 = input_2[_13039];
 	        _17895.y = -_17895.y;
 	        gl_Position = _17895;
-	        EmitVertex();
+	        {
+	            SPIRV_Cross_Output stage_output;
+	            stage_output.gl_Position = gl_Position;
+	            stage_output.output_0 = output_0;
+	            stage_output.output_1 = output_1;
+	            stage_output.output_2 = output_2;
+	            stage_output.output_3 = output_3;
+	            geometry_stream.Append(stage_output);
+	        }
 	        _7155 = _13039 + 1;
 	        _13039 = _7155;
 	        continue;
 	    }
-	    EndPrimitive();
+	    geometry_stream.RestartStrip();
 	}
 	
+	[maxvertexcount(3)]
+	void MainGs(triangle SPIRV_Cross_Input stage_input[3], inout TriangleStream<SPIRV_Cross_Output> geometry_stream)
+	{
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_0[i] = stage_input[i].input_0;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_1[i] = stage_input[i].input_1;
+	    }
+	    for (int i = 0; i < 3; i++)
+	    {
+	        input_2[i] = stage_input[i].input_2;
+	    }
+	    MainGs_inner(stage_input, geometry_stream);
+	}
 	
 	// ---------  SPIRV -> HLSL end  --------- 
 	
