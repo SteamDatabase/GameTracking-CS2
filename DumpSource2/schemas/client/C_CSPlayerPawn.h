@@ -45,7 +45,6 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	VectorWS m_vRagdollServerOrigin;
 	GameTime_t m_lastLandTime;
 	bool m_bOnGroundLastTick;
-	CHandle< CCSMinimapVolume > m_hActiveMinimapVolume;
 	CHandle< C_CS2HudModelArms > m_hHudModelArms;
 	QAngle m_qDeathEyeAngles;
 	bool m_bLeftHanded;
@@ -65,6 +64,7 @@ class C_CSPlayerPawn : public C_CSPlayerPawnBase
 	bool m_bIsGrabbingHostage;
 	CSPlayerBlockingUseAction_t m_iBlockingUseActionInProgress;
 	GameTime_t m_flEmitSoundTime;
+	GameTime_t m_flEmitSoundTime_Client;
 	bool m_bInNoDefuseArea;
 	int32 m_nWhichBombZone;
 	int32 m_iShotsFired;

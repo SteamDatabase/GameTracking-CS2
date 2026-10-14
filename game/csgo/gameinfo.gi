@@ -586,6 +586,7 @@
 			"game" "Forward"
 			"game" "GBuffer" // For Particle Shadows
 			"game" "FirstpersonLegsPrepass"
+			"game" "SkyOccluder"
 
 			"dev" "ToolsShadingComplexity"
 			"dev" "ToolsVis" // Visualization modes for all shaders (lighting only, normal maps only, etc.)

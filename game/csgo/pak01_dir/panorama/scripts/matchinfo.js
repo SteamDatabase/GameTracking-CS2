@@ -143,6 +143,17 @@ var matchInfo;
             }
         }
     }
+    function _UpdateDownloadProgress(elParentPanel) {
+        if (!elParentPanel.IsValid())
+            return;
+        elParentPanel.Data().downloadProgressHandler = undefined;
+        let flProgress = elParentPanel.visible ? MatchInfoAPI.GetDownloadProgress(elParentPanel.Data().matchId) : -1;
+        elParentPanel.FindChildInLayoutFile('id-mi-download-progress').value = Math.max(flProgress, 0);
+        elParentPanel.FindChildInLayoutFile('id-mi-download-percent').text = (flProgress < 0) ? '' : Math.floor(flProgress * 100) + '%';
+        if (flProgress < 0)
+            return;
+        elParentPanel.Data().downloadProgressHandler = $.Schedule(0.1, _UpdateDownloadProgress.bind(undefined, elParentPanel));
+    }
     function _UpdateMatchMenu(elParentPanel) {
         let matchState = MatchInfoAPI.GetMatchState(elParentPanel.Data().matchId);
         let elDownloadButton = elParentPanel.FindChildInLayoutFile('id-mi-download');
@@ -199,6 +210,8 @@ var matchInfo;
                     _ShowButton(elWatchHighlightsButton, false);
                     _ShowButton(elWatchLowlightsButton, false);
                     _ShowButton(elWatchButton, false);
+                    if (!elParentPanel.Data().downloadProgressHandler)
+                        _UpdateDownloadProgress(elParentPanel);
                 }
                 else if (MatchInfoAPI.CanDownload(elParentPanel.Data().matchId)) {
                     _EnableButton(elDownloadButton, true);
@@ -328,6 +341,10 @@ var matchInfo;
         if (elParentPanel.Data().downloadFailedHandler) {
             $.CancelScheduled(elParentPanel.Data().downloadFailedHandler);
             elParentPanel.Data().downloadFailedHandler = undefined;
+        }
+        if (elParentPanel.Data().downloadProgressHandler) {
+            $.CancelScheduled(elParentPanel.Data().downloadProgressHandler);
+            elParentPanel.Data().downloadProgressHandler = undefined;
         }
         if (elParentPanel.Data().updateMatchInfoHandler) {
             $.UnregisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', elParentPanel.Data().updateMatchInfoHandler);

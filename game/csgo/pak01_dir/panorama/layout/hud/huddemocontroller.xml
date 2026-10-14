@@ -41,6 +41,8 @@
 					</Panel>
 				</Panel>
 			</Panel>
+			<Panel id="PlayerList" hittest="true" onactivate="HudDemoController.EatClick()" />
+			<Panel id="RoundMenu" hittest="true" onactivate="HudDemoController.EatClick()" />
 			<Panel id="Contents" hittest="true" onactivate="HudDemoController.EatClick()">
 				<Panel id="SliderRow">
 					<Panel id="RoundMarkers" />
@@ -49,37 +51,61 @@
 					<Slider id="Slider" class="HorizontalSlider" direction="horizontal" />
 				</Panel>
 				<Panel id="ControlRow">
-					<Panel id="PlayButton" onactivate="HudDemoController.OnPlayClicked()">
+					<Panel id="PlayButton" onmouseover="HudDemoController.ShowPlayButtonTooltip()" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnPlayClicked()">
 						<Image id="PlayIcon" src="s2r://panorama/images/icons/ui/play.vsvg" />
 						<Image id="PauseIcon" src="s2r://panorama/images/icons/ui/pause.vsvg" />
 					</Panel>
-					<Image id="HighlightsButton" class="interactive" src="s2r://panorama/images/icons/ui/film.vsvg" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;HighlightsButton&apos;, &apos;#tooltip_demo_highlights_toggle&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnHighlightsToggle()" />
-					<Label id="TimeLabel" text="#CSGO_Demo_Time" />
+					<Panel id="SpeedControls">
+						<Panel id="SpeedSliderContainer">
+							<Panel id="SpeedTicks" />
+							<Slider id="SpeedSlider" class="HorizontalSlider" direction="horizontal" />
+						</Panel>
+						<Label id="TimeScale" />
+					</Panel>
+					<Panel id="TimeLabel">
+						<Label text="#CSGO_Demo_Time_Label" />
+						<Label id="TimeValue" text="#CSGO_Demo_Time" />
+						<Label id="TickLabel" text="#CSGO_Demo_Tick_Label" />
+						<Label id="TickValue" text="{s:current_tick}" />
+					</Panel>
 					<Panel id="TimeControls">
-						<Label class="interactive" text="#CSGO_Demo_MinusSeconds" onactivate="HudDemoController.OnStepTimeBackward()" />
+						<Label id="TimeStepBackward" class="interactive" text="#CSGO_Demo_MinusSeconds" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;TimeStepBackward&apos;, &apos;#tooltip_demo_time_step_backward&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStepTimeBackward()" />
 						<Image id="TimeIcon" src="s2r://panorama/images/icons/ui/clock.vsvg" />
-						<Label class="interactive" text="#CSGO_Demo_PlusSeconds" onactivate="HudDemoController.OnStepTimeForward()" />
+						<Label id="TimeStepForward" class="interactive" text="#CSGO_Demo_PlusSeconds" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;TimeStepForward&apos;, &apos;#tooltip_demo_time_step_forward&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStepTimeForward()" />
 					</Panel>
 					<Panel id="RoundControls">
-						<Image id="RoundPrev" class="interactive" src="s2r://panorama/images/icons/ui/skip.vsvg" onactivate="HudDemoController.OnStepInterval(-1)" />
-						<Panel id="RoundRestart" class="interactive" onactivate="HudDemoController.OnStepInterval(0)">
+						<Image id="RoundPrev" class="interactive" src="s2r://panorama/images/icons/ui/skip.vsvg" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;RoundPrev&apos;, &apos;#tooltip_demo_round_prev&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStepInterval(-1)" />
+						<Panel id="RoundRestart" class="interactive" onactivate="HudDemoController.OnRoundButtonActivate()">
 							<Label id="IntervalLabel" text="#CSGO_Demo_Round" />
 							<Label id="RoundNumber" text="{d:round_number}" />
 						</Panel>
-						<Image id="RoundNext" class="interactive" src="s2r://panorama/images/icons/ui/skip.vsvg" onactivate="HudDemoController.OnStepInterval(1)" />
+						<Image id="RoundNext" class="interactive" src="s2r://panorama/images/icons/ui/skip.vsvg" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;RoundNext&apos;, &apos;#tooltip_demo_round_next&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStepInterval(1)" />
 					</Panel>
-					<Panel id="SpeedControls">
-						<Label id="TimeScale" class="interactive" onactivate="HudDemoController.OnShowTimeScaleContextMenu()" />
+					<Panel id="PlayerControls">
+						<Panel id="PlayerPrev" class="interactive" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;PlayerPrev&apos;, &apos;#tooltip_demo_player_prev&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStepPlayer(-1)">
+							<Image src="s2r://panorama/images/icons/ui/message_arrow.vsvg" />
+						</Panel>
+						<Label id="PlayerName" class="interactive" html="true" text="#CSGO_Demo_Player_None" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;PlayerName&apos;, &apos;#tooltip_demo_player_list&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.TogglePlayerListVisible()" />
+						<Panel id="PlayerNext" class="interactive" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;PlayerNext&apos;, &apos;#tooltip_demo_player_next&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStepPlayer(1)">
+							<Image src="s2r://panorama/images/icons/ui/message_arrow.vsvg" />
+						</Panel>
 					</Panel>
-					<Panel id="HotKeyLabels">
-						<Label id="HotKey_Next_Camera" class="hotkeylabel" text="#CSGO_Demo_Next_Camera" />
-						<Label id="HotKey_Player_Next" class="hotkeylabel" text="#CSGO_Demo_Player_Next" />
-						<Label id="HotKey_Toggle_Mouse_Cursor" class="hotkeylabel" text="{s:mouse-mode}" />
+					<Panel id="NextEventButton" class="interactive" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;NextEventButton&apos;, &apos;#tooltip_demo_next_event&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnNextEvent()">
+						<Image class="next-event-arrows" src="s2r://panorama/images/hud/double_arrows.vsvg" />
+						<Image src="s2r://panorama/images/hud/deathnotice/domination.vsvg" />
 					</Panel>
-					<Panel id="SettingsButton" class="interactive" onactivate="HudDemoController.ToggleSettingsVisible()">
-						<Image id="TimeIcon" src="s2r://panorama/images/icons/ui/settings.vsvg" />
+					<Panel id="ControlRowSpacer" />
+					<Panel id="CameraButton" class="interactive" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;CameraButton&apos;, &apos;#tooltip_demo_camera_mode&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnNextCamera()">
+						<Image src="s2r://panorama/images/icons/ui/camera.vsvg" />
+						<Label id="CameraModeLabel" />
 					</Panel>
-					<Label id="EndPlayback" class="interactive" text="{s:end-playback}" onactivate="HudDemoController.OnStopPlayback()" />
+					<Panel id="HighlightsButton" class="interactive" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;HighlightsButton&apos;, &apos;#tooltip_demo_highlights_toggle&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnHighlightsToggle()">
+						<Image src="s2r://panorama/images/icons/ui/film.vsvg" />
+					</Panel>
+					<Panel id="SettingsButton" class="interactive" onmouseover="UiToolkitAPI.ShowTextTooltip( &apos;SettingsButton&apos;, &apos;#tooltip_demo_settings&apos; );" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.ToggleSettingsVisible()">
+						<Image id="SettingsIcon" src="s2r://panorama/images/icons/ui/settings.vsvg" />
+					</Panel>
+					<Label id="EndPlayback" class="interactive" text="{s:end-playback}" onmouseover="HudDemoController.ShowEndPlaybackTooltip()" onmouseout="UiToolkitAPI.HideTextTooltip();" onactivate="HudDemoController.OnStopPlayback()" />
 				</Panel>
 			</Panel>
 		</Panel>

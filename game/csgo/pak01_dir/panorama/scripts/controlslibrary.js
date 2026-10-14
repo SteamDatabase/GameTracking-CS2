@@ -160,6 +160,17 @@ function UpdateDialogVariables() {
 function InitCaseTest() {
     $("#CaseTest").SetDialogVariable("casetest", "iİıI");
 }
+function InitMonoNumbersTest() {
+    UpdateMonoNumbersTest();
+}
+function UpdateMonoNumbersTest() {
+    const panel = $("#MonoNumbersTest");
+    if (!panel || !panel.IsValid())
+        return;
+    const RandomDigits = () => String(Math.floor(Math.random() * 100000)).padStart(5, '0');
+    panel.SetDialogVariable("mono_numbers", RandomDigits() + '+' + RandomDigits());
+    $.Schedule(0.1, UpdateMonoNumbersTest);
+}
 function OnImageFailLoad() {
     $("#ControlsLibPanelImageFallback").SetImage("file://{images}/icons/knife.psd");
 }

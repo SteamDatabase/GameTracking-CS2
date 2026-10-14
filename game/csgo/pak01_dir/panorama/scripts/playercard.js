@@ -25,11 +25,11 @@ var PlayerCard;
         FillOutFriendCard();
     }
     function _RegisterForInventoryUpdate() {
-        _m_InventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', UpdateAvatar);
+        _m_InventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', OnPlayerUpdatedOrInventoryUpdated);
         _m_cp.RegisterForReadyEvents(true);
         $.RegisterEventHandler('ReadyForDisplay', _m_cp, () => {
             if (!_m_InventoryUpdatedHandler) {
-                _m_InventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', UpdateAvatar);
+                _m_InventoryUpdatedHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_InventoryUpdated', OnPlayerUpdatedOrInventoryUpdated);
             }
         });
         $.RegisterEventHandler('UnreadyForDisplay', _m_cp, () => {
@@ -44,12 +44,7 @@ var PlayerCard;
             _m_currentLvl = FriendsListAPI.GetFriendLevel(_m_xuid);
             _m_ShowLockedRankSkillGroupState = !_IsPlayerPrime() && _HasXpProgressToFreeze();
             UpdateName();
-            _SetHonorIcon();
-            _SetAvatar();
-            _SetFlairItems();
-            _SetPlayerBackground();
-            _SetRank();
-            _SetPrimeUpsell();
+            OnPlayerUpdatedOrInventoryUpdated();
             if (_m_isSelf) {
                 if (MyPersonaAPI.GetPipRankWins("Premier") >= 0) {
                     if (_m_bShownInFriendsList)
@@ -64,15 +59,6 @@ var PlayerCard;
             }
             else {
                 SetAllSkillGroups();
-            }
-            if (_m_bShownInFriendsList) {
-                $.GetContextPanel().FindChildInLayoutFile('JsPlayerCommendations').AddClass('hidden');
-                $.GetContextPanel().FindChildInLayoutFile('JsPlayerPrime').AddClass('hidden');
-                _SetTeam();
-            }
-            else {
-                let bHasNoCommendsToShow = _SetCommendations();
-                _SetPrime(bHasNoCommendsToShow);
             }
         }
     }
@@ -394,12 +380,22 @@ var PlayerCard;
         }
         UiToolkitAPI.HideTextTooltip();
     }
-    function UpdateAvatar() {
+    function OnPlayerUpdatedOrInventoryUpdated() {
+        _SetHonorIcon();
         _SetAvatar();
-        _SetPlayerBackground();
         _SetFlairItems();
-        _SetPrimeUpsell();
+        _SetPlayerBackground();
         _SetRank();
+        _SetPrimeUpsell();
+        if (_m_bShownInFriendsList) {
+            $.GetContextPanel().FindChildInLayoutFile('JsPlayerCommendations').AddClass('hidden');
+            $.GetContextPanel().FindChildInLayoutFile('JsPlayerPrime').AddClass('hidden');
+            _SetTeam();
+        }
+        else {
+            let bHasNoCommendsToShow = _SetCommendations();
+            _SetPrime(bHasNoCommendsToShow);
+        }
     }
     function ShowHideAdditionalRanks() {
         let elToggleBtn = $.GetContextPanel().FindChildInLayoutFile('SkillGroupExpand');
@@ -418,6 +414,6 @@ var PlayerCard;
         $.RegisterForUnhandledEvent('PanoramaComponent_GC_Hello', FillOutFriendCard);
         $.RegisterForUnhandledEvent('PanoramaComponent_FriendsList_ProfileUpdated', ProfileUpdated);
         $.RegisterForUnhandledEvent('PanoramaComponent_MyPersona_PipRankUpdate', SetAllSkillGroups);
-        $.RegisterForUnhandledEvent("PanoramaComponent_Lobby_PlayerUpdated", UpdateAvatar);
+        $.RegisterForUnhandledEvent("PanoramaComponent_Lobby_PlayerUpdated", OnPlayerUpdatedOrInventoryUpdated);
     }
 })(PlayerCard || (PlayerCard = {}));
