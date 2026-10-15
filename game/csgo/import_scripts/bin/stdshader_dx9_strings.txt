@@ -172,6 +172,7 @@ $COLOR_FLOW_UVSCROLLDISTANCE
 $COMPOSITEMODE
 $COMPRESS
 $CONTACTSHADOWS
+$CONTRAST
 $COOKIEFRAMENUM
 $COOKIETEXTURE
 $COPYALPHA
@@ -642,6 +643,7 @@ $PARALLAXSTRENGTH
 $PASSCOUNT
 $PATTERN
 $PATTERN1
+$PATTERN1COLOR1
 $PATTERN1COLOR2
 $PATTERN1COLOR3
 $PATTERN1COLOR4
@@ -967,6 +969,7 @@ $color2
 $detail texcoord transform
 $envmapmask texcoord transform
 $envmapmask2 texcoord transform
+$flags
 $flags2
 $flags_defined
 $flags_defined2
@@ -1201,7 +1204,6 @@ $texture2 texcoord transform
 .?AVIShaderDLL@@
 .?AVIShaderDLLInternal@@
 .?AVIShaderDLLVerification@@
-.eBSSE and SSE2 are required.
 .gfids$x
 .gfids$y
 0 - support three color streams, 1 - use avg of three streams, 2 - single color stream
@@ -1227,7 +1229,6 @@ $texture2 texcoord transform
 0.45
 0.59
 0.66
-0@unused
 0vB-
 1 1 1
 1 = use shader srgb texture reads, 0 = use HW
@@ -1246,32 +1247,20 @@ $texture2 texcoord transform
 2ieO=
 2st vomit blend color
 333?333?333?333?
+33s?333333
 4 n\v>sAC4
 400.0
-4_rt_WaterRefraction
 50.0
 700WP
 9999999
-;specify that this is the back surface of the blob
 ========================================================================\n
-=Y?DepthOfField
-=cos
->$flags
 >S]c5
-?$CONTRAST
 ?3ScR.>
 ?5Wg4p
-?ColorCorrection
-?CustomClothing
 ?DevWarning@@YAXPBDZZ
 ?IT$7
-?Shadow Depth Texture
-?Texture 1
 ?fff?
 ?gibQ^AX>
-?sin
-@$PATTERN1COLOR1
-@Amount of the static blend texture to blend into the base texture
 AA_ENABLE
 ABOVEWATER
 ACTIVE
@@ -1294,7 +1283,6 @@ AccumBuff4Sample_ps20
 AccumBuff4Sample_ps20b
 Activate special mode to use this shader on a static prop
 Add bump map 1 and 2 together, renormalize
-Adetail map 1
 Aftershock
 Aftershock_dx9
 Aim at camera using orientation type 1
@@ -1305,6 +1293,7 @@ Allow vignette
 Alpha reference value
 Ambient occlusion color
 Amount of screen space ambient occlusion to use (0..1 range)
+Amount of the static blend texture to blend into the base texture
 Amount of vertex fog to apply
 Amount to brighten the shadow at max dist
 Amount to darken or brighten the teeth
@@ -1397,6 +1386,7 @@ Cloak_DX90
 Color and alpha
 Color texture
 Color tint
+ColorCorrection
 ColorOut
 ConVar(%s) defined with infinite float value (%s)\n
 ConVarRef %s doesn't point to an existing ConVar\n
@@ -1410,6 +1400,7 @@ Cr Bink Texture
 Crosshair mode
 Culling control - 0 = nocull, 1 = do cull
 CustomCharacter
+CustomClothing
 CustomClothing shader cannot run in preview quality mode on non-sm3 hardware.\n
 CustomWeapon
 CustomWeapon_dx9
@@ -1475,6 +1466,7 @@ DecalModulate_DX9
 DecalModulate_dx9
 Degree to which Fresnel should be applied to env map
 Depth is stored in alpha channel
+DepthOfField
 DepthOfField_dx9
 DepthWrite
 Desaturate basemap and affect tint
@@ -1680,7 +1672,6 @@ Highlight size opposite drop shadow effect
 Highlight the edges of the sticker
 How cloaked?  Zero is not cloaked, 1 is fully cloaked.
 How much the lightmap effects environment map reflection, 0.0 is off, 1.0 will allow complete blackness of the environment map if the lightmap is black
-I@VortWarp_DX9
 INTERIOR_LAYER
 INVERSEDEPTHBLEND
 ISCUBEMAP
@@ -1919,6 +1910,7 @@ RGB: Greyscale wear speed factor, white wears soonest
 RGB: High-precision object-space position
 RGB: Hologram mask texture: R 
 RGB: Hologram spectrum texture
+RGB: Object-space normal, A: Cavity
 RGB: Tiling grunge A: spec, black dulls the paint finish
 RIMLIGHT
 R\vn>
@@ -1985,6 +1977,7 @@ ShaderDLL004
 ShaderSystem002
 Shadow
 Shadow Attenuation
+Shadow Depth Texture
 Shadow filter size
 Shadow jitter seed
 ShadowBuild
@@ -2037,6 +2030,7 @@ Teeth
 Teeth_DX9
 Tells to client code whether the shader is using DX8 vertex/pixel shaders or not
 Texcoord transform
+Texture 1
 Texture 2
 Texture 3
 The alternate view matrix to use when $usealternateviewmatrix is enabled
@@ -2120,6 +2114,7 @@ Volume Texture Weight 3
 VolumeClouds
 VolumeClouds_dx9
 VortWarp
+VortWarp_DX9
 VortWarp_dx9
 WARPINGIN
 WATER_DX90
@@ -2193,6 +2188,7 @@ _rt_FullFrameFB
 _rt_SmallFB1
 _rt_SmallHDR0
 _rt_WaterReflection
+_rt_WaterRefraction
 _rt_character_ssao
 _vs20
 aDJ=
@@ -2588,6 +2584,7 @@ depthwrite_vs30
 detail 1 blend factor
 detail 1 blend mode: 0=add, 1=mod2x, 2=mul, 3=alphamul (mul masked by base alpha)
 detail 1 blend mode: 0=add, 1=mod2x, 2=mul, 3=detailmul (mul with detail1)
+detail map 1
 detail map 2
 detail scale
 detail texture 2
@@ -2963,7 +2960,6 @@ outer end value for outline
 outer start value for outline
 overbright factor for texture. For HDR effects.
 override
-p?RGB: Object-space normal, A: Cavity
 pAttr->GetValue( ATTR_D_COLORCORRECTION )
 pAttr->GetValue( ATTR_D_GRADIENT_COMPLEX )
 pAttr->GetValue( ATTR_D_GRADIENT_TWOSTOP )
@@ -3059,7 +3055,6 @@ prototype_ps20b
 prototype_vs20
 qo-W>
 r7Yr7=
-r?33s?333333
 r_bloomtintb
 r_bloomtintexponent
 r_bloomtintg
@@ -3164,6 +3159,7 @@ solidenergy_ps30
 solidenergy_vs20
 solidenergy_vs30
 special shader to reload Zcull memory on ps3
+specify that this is the back surface of the blob
 specify that this is the back surface of the ice
 specify vertex normal (compressed) in material format
 specular boost
