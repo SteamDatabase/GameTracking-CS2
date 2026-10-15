@@ -147,7 +147,7 @@ var matchInfo;
         if (!elParentPanel.IsValid())
             return;
         elParentPanel.Data().downloadProgressHandler = undefined;
-        let flProgress = elParentPanel.visible ? MatchInfoAPI.GetDownloadProgress(elParentPanel.Data().matchId) : -1;
+        let flProgress = MatchInfoAPI.GetDownloadProgress(elParentPanel.Data().matchId);
         elParentPanel.FindChildInLayoutFile('id-mi-download-progress').value = Math.max(flProgress, 0);
         elParentPanel.FindChildInLayoutFile('id-mi-download-percent').text = (flProgress < 0) ? '' : Math.floor(flProgress * 100) + '%';
         if (flProgress < 0)
@@ -319,6 +319,8 @@ var matchInfo;
         elParentPanel.SetReadyForDisplay(true);
         elParentPanel.visible = true;
         elParentPanel.RemoveClass('mi-sb--hidden');
+        if (elParentPanel.Data().updateMatchMenuHandler)
+            $.UnregisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', elParentPanel.Data().updateMatchMenuHandler);
         elParentPanel.Data().updateMatchMenuHandler = $.RegisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', _UpdateMatchMenu.bind(undefined, elParentPanel));
     }
     function _OnFadeOutEnd(elParentPanel) {
@@ -349,6 +351,10 @@ var matchInfo;
         if (elParentPanel.Data().updateMatchInfoHandler) {
             $.UnregisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', elParentPanel.Data().updateMatchInfoHandler);
             elParentPanel.Data().updateMatchInfoHandler = undefined;
+        }
+        if (elParentPanel.Data().updateMatchMenuHandler) {
+            $.UnregisterForUnhandledEvent('PanoramaComponent_MatchInfo_StateChange', elParentPanel.Data().updateMatchMenuHandler);
+            elParentPanel.Data().updateMatchMenuHandler = undefined;
         }
         let elTitle = elParentPanel.FindChildInLayoutFile('id-mi-player-stats-title');
         if (elTitle.Data().nameUpdateHandler) {
