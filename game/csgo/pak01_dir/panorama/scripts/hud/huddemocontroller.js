@@ -206,6 +206,7 @@ var HudDemoController;
             SetRoundNumberLabel();
         }
         CreateSpeedTicks();
+        UpdateControlRowFit();
         if (!speedSlider.mousedown) {
             speedSlider.SetValueNoEvents(state.bIsPaused ? 0 : TimeScaleToSpeedStop(state.fTimeScale));
         }
@@ -278,6 +279,34 @@ var HudDemoController;
         }
         cp.SetHasClass("paused", fSpeed == 0);
         timescale.text = SpeedToText(fSpeed);
+    }
+    const rowFitSteps = [
+        { sPanel: "#CameraButton", sClass: "hide-label", nWidthBefore: 0 },
+        { sPanel: "#TimeLabel", sClass: "hide-tick", nWidthBefore: 0 },
+        { sPanel: "#TimeLabel", sClass: "short-time", nWidthBefore: 0 },
+    ];
+    let nRowFitCollapsed = 0;
+    function UpdateControlRowFit() {
+        const nSpacerWidth = $("#ControlRowSpacer").actuallayoutwidth;
+        if ($("#ControlRow").actuallayoutwidth <= 0)
+            return;
+        if (nSpacerWidth <= 0) {
+            if (nRowFitCollapsed < rowFitSteps.length) {
+                const step = rowFitSteps[nRowFitCollapsed++];
+                const pPanel = $(step.sPanel);
+                step.nWidthBefore = pPanel.actuallayoutwidth;
+                pPanel.AddClass(step.sClass);
+            }
+            return;
+        }
+        if (nRowFitCollapsed > 0) {
+            const step = rowFitSteps[nRowFitCollapsed - 1];
+            const pPanel = $(step.sPanel);
+            if (nSpacerWidth > step.nWidthBefore - pPanel.actuallayoutwidth + 1) {
+                pPanel.RemoveClass(step.sClass);
+                nRowFitCollapsed--;
+            }
+        }
     }
     let sSpeedTicksLayout = "";
     function CreateSpeedTicks() {
@@ -383,9 +412,12 @@ var HudDemoController;
             SetRoundMenuVisible(false);
             sPlayerListSignature = "";
             UpdatePlayerList();
-            const pName = $("#PlayerName");
-            const pos = pName.GetPositionWithinAncestor(cp);
-            PlayerListPanel.style.marginLeft = (pos.x / pName.actualuiscale_x) + "px";
+            const pPrev = $("#PlayerPrev");
+            const pNext = $("#PlayerNext");
+            const fLeft = pPrev.GetPositionWithinAncestor(cp).x;
+            const fRight = pNext.GetPositionWithinAncestor(cp).x + pNext.actuallayoutwidth;
+            PlayerListPanel.style.marginLeft = (fLeft / pPrev.actualuiscale_x) + "px";
+            PlayerListPanel.style.width = ((fRight - fLeft) / pPrev.actualuiscale_x) + "px";
         }
     }
     HudDemoController.TogglePlayerListVisible = TogglePlayerListVisible;

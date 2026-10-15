@@ -242,7 +242,7 @@ var g_PromotedSettings = [
         loc_desc: "#settings_crosshair_info",
         section: "CrosshairSettings",
         start_date: new Date('September 21, 2026'),
-        end_date: new Date('December 1, 2026')
+        end_date: new Date('October 13, 2026')
     },
 ]
     .reverse();
