@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EventClientOutput_t
 {
 	EngineLoopState_t m_LoopState;

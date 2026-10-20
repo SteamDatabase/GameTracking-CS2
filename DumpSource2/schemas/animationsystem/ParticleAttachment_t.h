@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum ParticleAttachment_t : uint32_t
 {
 	PATTACH_INVALID = -1,

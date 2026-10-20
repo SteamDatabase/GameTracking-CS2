@@ -24,6 +24,7 @@
   %-14s %10s instances  (%s geometries, %s tris)\n
   %-14s %10s\n
   %-14s %12s %12s %12s\n
+  %-5s
   %s empty indirect draws compacted\n
   %s objects starting to fade\n
   %s pre-cull   ->   %s tested   ->   %s passing  (%.1f%%)\n
@@ -59,7 +60,7 @@
   w/ large threshold: %d,
   w/ zero threshold: %d,
   w/ zero threshold: (%.1f, %.1f)
- !"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$H
+ !"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
  %s | Flags %lld \n
  (EXTERN)
  (Frozen)
@@ -152,12 +153,16 @@
  [RE-RENDER: different object flags requested]
  [cur %i, targ %i %s, %.1fs]
  [lod
+ [mesh %i]
+ [shd %i]
+ [sz %.2f]
  adding views while previous rendering is running. Someone needed to call WaitForRenderingToComplete()!!!!!\n
  to break in item call-stack, or 
  trying to move layer %s after unfound layer %s
  trying to move non existent layer
 !pObj->HasFlags( SCENEOBJECTFLAG_DELETED )
 !pObj->IsDeleted()
+"%s" %d
 "%s" [window]
 "Context" functions are simple helpers to associate a Popup to a given Item or Window identifier.
 "imgui"
@@ -325,7 +330,11 @@
 #%02X%02X%02X%02X
 #%02X%02X%02X%02X\nR:%d, G:%d, B:%d, A:%d\n(%.3f, %.3f, %.3f, %.3f)
 #%02X%02X%02X\nR: %d, G: %d, B: %d\n(%.3f, %.3f, %.3f)
+#%03d: 
 #%d: %s 0x%p @ (%g,%g,%g)
+#%s/%s
+#%s/%s%s
+#%s/%s/%s
 #%s/%s/LayerClear
 #%s/%s/Render2DDebugOverlays
 #%s/%s/Render3DDebugOverlays
@@ -353,34 +362,52 @@
 #TabBar
 #UNHIDE
 #WindowMenu
+$%.0f
 %!FontType
 %!PS-Adobe-3.0 Resource-CIDFont
 %!PS-AdobeFont
+%%s: %s
+%*s%.*s
+%*s%s%*s
 %*sHello, sailor! Making this line long enough for the example.
 %*sThis is line %d
+%-16s 
+%.*s
+%.*s\n
 %.02f
 %.06f ns
+%.0f
 %.0f (Always)
 %.0f deg
 %.0f us
+%.0f%%
+%.0f/%.0f
 %.0fx%.0f
 %.10f
 %.10f grams
+%.1f s
 %.1fmb / %.1fmb filtered resident
 %.1fmb / %.1fmb resident
 %.1fms
 %.1fms culling, %.1fms rendering in %i jobs\n
+%.2f
 %.2f ms
 %.2f px
 %.2f x %.2f
 %.2f\nsec
 %.2fms
+%.3f
+%.3f V
 %.3f ms
 %.3f | %i%% %i/%i
+%.3g
 %.3s %s %.*s %s %.3s\n
 %.3s %s %.*s\n
+%.4f
+%.8f
 %0.2f
 %0.3f
+%0.f
 %02X%02X%02X
 %02X%02X%02X%02X
 %02d Hz
@@ -395,10 +422,13 @@
 %04d: scrollable region
 %08X
 %08dx.geo
+%3d: %s\n
 %ADOBeginFontDict
 %I64d
 %I64u
 %c [%02d] where %03d, insert %03d, delete %03d, char_storage %03d "%.*s"
+%c%c
+%c%c%c
 %d assets
 %d columns
 %d current allocations
@@ -406,16 +436,24 @@
 %d some text
 %d vertices, %d indices (%d triangles)
 %d visible windows, %d current allocations
+%d%%
+%d%s
 %d-%02d
 %d-%02d-%02d
+%d-%d
+%d/%d
+%d/%d/%02d
+%d: %8.4g
 %d: %8.4g\n%d: %8.4g
 %d:%02d%s
 %d:%02d:%02d%s
 %d:%02d:%02d.%03d%s
 %dx%dTriStrippedVB
 %e grams
+%g %s%s
 %g dB
 %g ms
+%i - %i
 %i The quick brown fox jumps over the lazy dog
 %i The quick brown fox jumps over the lazy dog\n
 %i dynamic, %i cached, %i failed, %i lru'd in %ix%i atlas | %i requests, %i reused, %i re-renders drawn (%i held)
@@ -430,12 +468,16 @@
 %ix%i %s:%i (%d)
 %ix%ix%i
 %llu ms
+%s %.*s%s
 %s %.1f %.1f %.1f %s
 %s %04d: pos (%8.2f,%8.2f), uv (%.6f,%.6f), col %08X\n
+%s %d,%d
 %s %d: DPI %.0f%%\n MainMin (%.0f,%.0f), MainMax (%.0f,%.0f), MainSize (%.0f,%.0f)\n WorkMin (%.0f,%.0f), WorkMax (%.0f,%.0f), WorkSize (%.0f,%.0f)
+%s '%s'%s
 %s (%-14s): FAIL %s\n
 %s (%-14s): FAIL aborted\n
 %s (%-14s): pass\n
+%s (%i)
 %s - Dynamic Shadow %d
 %s - Mixed Shadow %d
 %s 0x%04X%s: %d windows (vis: '%s')
@@ -446,15 +488,23 @@
 %s is not a 2D texture!\n
 %s is wrong format %s - expected %s!\n
 %s###Menu_%02d
+%s###doc%d
 %s##path
+%s%s%s%s%s
+%s'%s'
+%s, %s
 %s, 0x%08x+%s -- Overlaps:
 %s.ini
 %s.log
 %s/%08X
 %s/%s's viewport (%d,%d - %d,%d) extends outside of the framebuffer (%d,%d)
+%s/%s_%08X
 %s/DockSpace_%08X
+%s: %.3f
+%s: %d
 %s: %d entries, %d bytes
 %s: %i dynamic, %i cached, %i failed, %i lru, %i requests, %i reused, %i re-renders (%i held)
+%s: %s
 %s: '%s' %d vtx, %d indices, %d cmds
 %s: 0x%08X (scored %d)
 %s: 0x%08X%s
@@ -469,6 +519,7 @@
 %s\nLOD Level: %d Draw Calls: %d Triangles: %d
 %u ms
 '%c' (0x%04X)
+(%.02f)
 (%.1f,%.1f)
 (%.3ff, %.3ff, %.3ff, %.3ff)
 (%6.1f,%6.1f) (%6.1f,%6.1f) Size (%6.1f,%6.1f) %s
@@ -498,6 +549,7 @@
 (\?=\nW>=\nW>=\nW>
 (also access from 'Examples->Assets Browser' in menu)
 (and more errors)
+(as %s)
 (c) 2014-2025 Omar Cornut
 (demo menu)
 (dump)
@@ -513,12 +565,14 @@
 (see Demo->Configuration for details & more)
 (unnamed)
 (void*)0x%p
+(w: %5.1f)
 ** %d instances of same table! Some data below will refer to last instance.
 **DebugBreak**
 *COPIED*
 *EXPERIMENTAL* Ctrl+C copy the contents of focused window into the clipboard.\n\nExperimental because:\n- (1) has known issues with nested Begin/End pairs.\n- (2) text output quality varies.\n- (3) text output is in submission order rather than spatial order.
 *Missing Text*
 *Unknown item*
++%.0f px
 +Alts
 , %s alpha-tested
 - First Input that contains the glyph is used.\n- Use ImFontConfig::GlyphExcludeRanges[] to specify ranges to ignore glyph in given Input.\n- Prefer using a small number of ranges as the list is scanned every time a new glyph is loaded,\n  - e.g. GlyphExcludeRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };\n- This tool doesn't cache results and is slow, don't keep it open!
@@ -529,6 +583,7 @@
 - This is scaling font only. General scaling will come later.
 -- %d Scene Worlds: --\n
 -- Dumping Scene World %d: 0x%p '%s': %d objects --\n
+--%02d
 --%02d-%02d
 --> granting current route\n
 ->\n  [%s:%s]
@@ -863,6 +918,7 @@
 /path/two
 /rsrc
 /sfnts
+0 %s
 0 1 2 3 4 5 6 7 8 9
 0 < %.10f < 1
 0..255
@@ -1222,6 +1278,7 @@ BLAS Compaction
 BLAS build requires %i bytes, we only have %i\n
 BLAS dynamic
 BVH::Build( void (*customGetAABB)( .. ), instCount ), instCount == 0.
+B[%d]=%.2f
 Bachman
 Backend Flags
 Backend does not support ImGuiBackendFlags_RendererHasTextures, and font atlas is not built! Update backend OR make sure you called ImGui_ImplXXXX_NewFrame() function for renderer backend, which should call io.Fonts->GetTexDataAsRGBA32() / GetTexDataAsAlpha8().
@@ -1906,6 +1963,7 @@ Data: %p\nSize: %d\nCapacity: %d
 Data_Branch1xy
 Data_Branch1zBranch2x
 Data_Branch2yz
+Day:   %s
 Days
 Dear ImGui %s (%d)
 Dear ImGui 1.92.5 (19250)
@@ -3721,6 +3779,7 @@ Pos: %2.3f, %2.3f, %2.3f\nRange: %2.3f, Falloff: %2.3f\nAtten0: %2.3f Atten1: %2
 Pos: %2.3f, %2.3f, %2.3f\nRange: %2.3f, Falloff: %2.3f\nAtten0: %2.3f Atten1: %2.3f Atten2: %2.3f\nColor: %1.3f, %1.3f, %1.3f\nTheta: %3.1f Phi: %3.1f
 Pos: (%.1f,%.1f), Size: (%.1f,%.1f), ContentSize (%.1f,%.1f) Ideal (%.1f,%.1f)
 Pos: (%.2f,%.2f)->(%.2f,%.2f)
+Pos=%d,%d\n
 Pos=%i,%i
 PosColorUVNormalTangentVertexLayout
 Position2D
@@ -4502,6 +4561,7 @@ Synced instances
 System file
 SystemRoot
 T H E Z O C Q S
+T: %7.3f\n
 TEST
 TEST##1
 TEST##2
@@ -4601,6 +4661,7 @@ Text aligned to framed item
 Text baseline:
 Text wrapped
 Text() elements don't have stable identifiers so we need to provide one.
+Text: "%s"
 TextDisabled
 TextInput
 TextLen: %d, Cursor: %d%s, Selection: %d..%d
@@ -4915,6 +4976,7 @@ VolumetricFogManifest
 Voxelize Density
 Voxelize Tangents
 Vsmall
+W: %.1f
 WANTS_FRAMEBUFFER_COPY_TEXTURE 
 WANTS_PROBE_LIGHTING 
 WARNING: Encountered %d total problems with vertex data (first %d shown above)\n
@@ -5156,6 +5218,7 @@ Zoom Constraints
 Zoom and pan the X-axis. Disable Stems to see a difference in fit.
 Zsmall
 [%04d] Window
+[%05d] 
 [%05d] [%s] Hello, current time is %.1f, here's a word: '%s'\n
 [%s] [%05d] 
 [%s][0x%08X,%d]\n
@@ -5379,6 +5442,8 @@ atilde
 autofitter
 avg %f
 b%d (%.02f secs)
+b%d (%d)
+b%d: %d
 bDisableDynamicRefractionMap
 bNeedsDynamicReflectionMap
 bReflectDynamicObjectsOnly

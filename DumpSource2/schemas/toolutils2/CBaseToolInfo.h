@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class CBaseToolInfo
 {
 	CUtlString m_Name;

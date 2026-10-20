@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EngineLoopState_t
 {
 	int32 m_nPlatWindowWidth;

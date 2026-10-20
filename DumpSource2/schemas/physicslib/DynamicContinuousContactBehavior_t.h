@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum DynamicContinuousContactBehavior_t : uint8_t
 {
 	DYNAMIC_CONTINUOUS_ALLOW_IF_REQUESTED_BY_OTHER_BODY = 0,

@@ -14,6 +14,7 @@
   HEAP_ZERO_MEMORY is specified.\n
   Scope                                                      Calls Calls/Frame  Time+Child    Pct        Time    Pct   Avg/Frame    Avg/Call Avg-NoChild        Peak\n
  !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+ %%%d.%ds 
  %%-%d.%ds 
  %02u:%02u:%02u
  (%i core%s
@@ -29,6 +30,7 @@
  + light verifier
  + mem init
  + stackstats
+ - %uP/%uE
  - SymFindFileInPath failed\n
  - SymFindFileInPath_ returned %s\n
  - context match\n
@@ -40,11 +42,14 @@
  Complete Object Locator'
  File
  Type Descriptor'
+ [%llu]
  [clone 
  at offset 
  bytes
  delete
  delete[]
+ max. %s
+ min. %s
  new
  with base 
 !V_isempty( pSecretKey )
@@ -129,9 +134,17 @@ $xmm6
 $xmm7
 $xmm8
 $xmm9
+%%-%ds 
+%%.%if
+%%.%if%s
+%*s%s
+%-*s 
+%-32s    
+%-32s\n
 %-4d    %-32s    %-10s    
 %-4s    %-32s    %-10s    %-10s    %-32s    %-32s\n
 %-80s : %-16s : %-32s : %s\n
+%.*f
 %.0f pct of time accounted for\n
 %0*llx bytes at %0*llx is the largest open user-space VA region%s\n
 %0*llx bytes of %s at %0*llx%s\n
@@ -147,6 +160,7 @@ $xmm9
 %08x %s size %08x\n
 %10s:
 %10s: %11s %11s %11s %11s %11s\n
+%10s: %5i\n
 %10s: %5lld.%lld avg\n
 %10s: %5zu.%03zu s\n
 %10s: user: %zu.%03zu s, system: %zu.%03zu s, faults: %zu, peak rss: 
@@ -174,10 +188,14 @@ $xmm9
 %SYSTEMROOT%\system32\dbghelp.dll
 %WINDIR%\system32\dbghelp.dll
 %WinDir%\SysWOW64\
+%d %d %d
 %d %d %d %d
 %d frames sampled for %.2f seconds\n
 %d.%d.%d.%d:%d
+%f %f
+%f %f %f
 %f %f %f %f
+%i%s
 %i.%i.%i.%i
 %i.%i.%i.%i:%i
 %ld.%ld %-3s
@@ -187,15 +205,23 @@ $xmm9
 %llu %s entries but no formats were defined\n
 %llu,%u,%u,%s\r\n
 %llud.%02u:%02u:%02u
+%p::%p:%d
+%s %c%s
+%s %d +
+%s %i %s\n
+%s %s
+%s %s %s
 %s %s %s %s
 %s %s %s %s\n
 %s %s -nominidumps
 %s %s has conflicting %s flags (child: %s%s, parent: %s%s, parent wins)\n
 %s %s has multiple help strings:\n\tparent (wins): "%s"\n\tchild: "%s"\n
+%s (%d)
 %s (%d) : %s
 %s (%d) : %s\n
 %s (before "%s")
 %s (tweaked to NOT wait for child outflows)
+%s * %f
 %s -contextstart %d -codefile "%s" -codeline %d
 %s [wstring, len = %d]
 %s allocation count overflow
@@ -221,7 +247,14 @@ $xmm9
 %s test: single thread push/pop, interleaved... 
 %s total bytes in user-space regions (%s bytes in kernel-space regions)\n
 %s unable to allocate %u bytes\n
+%s%s
+%s%s#%d
+%s%s%s
+%s%s\n
+%s.%d
+%s.0
 %s.exe
+%s/%s%d
 %s: -nominidumps in command line, not generating minidump.\n
 %s: Attempting to mail.\n
 %s: CDwarfVector count overflow\n
@@ -267,14 +300,17 @@ $xmm9
 %s: unable to load '%s', error %d\n
 %s\DefaultIcon
 %s\Shell\Open\Command
+%s_%s
 %s_singleton_mutex
 %sthread 0x%tx: 
+%u - %u
 %u CPU%s
 %u MB address space used assuming maximum PageHeap overhead.\n
 %u MB allocated.\n
 %u MB memory used assuming maximum PageHeap overhead.\n
 %u lifetime allocations (%u delta).\n
 %u outstanding allocations (%d delta).\n
+%u_%u_%u
 %uh:%02u:%02u
 %um:%02u
 &AElig;
@@ -393,6 +429,7 @@ $xmm9
 ( %u: group %u, mask 0x%llx )
 ( %u: max procs %u, active proc %u, active mask 0x%llx )
 ( cubGap & 15 ) == 0
+(%d,%d)
 (Missing)
 (None)
 (Unaccounted)
@@ -718,6 +755,7 @@ $xmm9
 0123456789abcdef
 0123456789abcdefghijklmnopqrstuvwxyz
 0x%016llX
+0x%08X    
 0x%p
 1#IND
 1#INF
@@ -4581,6 +4619,7 @@ Number contains invalid character 0x%02x
 Number contains invalid character 0x%02x ('%c')
 NvOptimusEnablement
 OS type: %s (%d)\n
+OS: %s\n
 OSTypesAreCompatible
 OVERRIDE_MINIDUMP_PATH
 October
@@ -6576,14 +6615,25 @@ ZwSetTimerResolution
 [/code]
 [/list]
 [A:%u:%u:%u]
+[C:%u:%u]
 [ConsoleOnly]
 [DoNotEcho]
+[G:%u:%u]
+[I:%u:%u]
+[L:%u:%u]
 [M:%u:%u:%u]
+[P:%u:%u]
 [PID:%d TIME:%s EXE:%s CWD:%s] 
 [Running headless mode, no notes collected.]
+[T:%u:%u]
 [U:%u:%u:%u]
+[U:%u:%u]
+[a:%u:%u]
 [abi:
+[c:%u:%u]
 [code]
+[g:%u:%u]
+[i:%u:%u]
 [img src="
 [img]
 [list]
@@ -6621,6 +6671,7 @@ ZwSetTimerResolution
 \v_dbghelp_home_linked
 \v_dbghelp_home_unlinked
 _%d_%02d%02d_%02d%02d%02d_%d
+_%llx_%x
 _-report-_
 _CCallStackStatsGatherer_GetSharedGlobalInstance
 _CCallStackStatsGatherer_Internal_DumpStatsToFile

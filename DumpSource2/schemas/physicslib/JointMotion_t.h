@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum JointMotion_t : uint32_t
 {
 	JOINT_MOTION_FREE = 0,

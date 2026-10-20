@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum RenderMultisampleType_t : uint8_t
 {
 	RENDER_MULTISAMPLE_INVALID = -1,

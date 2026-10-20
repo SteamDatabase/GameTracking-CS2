@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EventSetTime_t
 {
 	EngineLoopState_t m_LoopState;

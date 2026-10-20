@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum soundlevel_t : uint32_t
 {
 	SNDLVL_NONE = 0,

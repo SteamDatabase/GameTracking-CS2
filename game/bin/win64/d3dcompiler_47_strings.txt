@@ -27,7 +27,15 @@
   special
   v%-4u %-3u 
  !"#$%&'().
+ %-20s
+ %4u
+ %5u
+ %7s
+ %8s
+ %8u
+ %c%-4u
  %u, %u, %u
+ (%.9g
  (%u texture, %u arithmetic)
  (ordinal)
  (second)
@@ -183,10 +191,19 @@ $clip_outputs
 $super
 %-17s
 %-20s
+%-5u
+%.*s
 %.14fl
+%.9g
 %08x
+%2u %9u 
+%4u%c 
 %4u: Illegal instruction index\n
+%7u 
+%7u\n
+%c%u
 %cnorm can not be used with type
+%cs_%d_%d
 %d constant registers (c#) read by instruction.  Max. constant registers readable per instruction (even if they are the same) is %d.  This is in addition to the read port limit of %d for constants, which restricts how many *different* constants can be read. (There is one exception: none of this applies to the SINCOS macro instruction.)
 %d different constant registers (c#) read by instruction.  Max. different constant registers readable per instruction is %d.
 %d different constant registers (c#) read by instruction.  Max. different constant registers readable per instruction is %d. 
@@ -203,8 +220,11 @@ $super
 %d different texture coordinate registers (t#) read by instruction.  Max. different texture registers readable per instruction is %d.
 %d different texture registers (t#) read by instruction.  Max. different texture registers readable per instruction is %d.
 %d different texture registers (t#) read over 2 co-issued instructions. Max. different register numbers from any one register type readable across co-issued instructions is %d.
+%d%s
+%d[%d].
 %s %s[%d] = \n{\n
 %s FAILED!\n
+%s X%u: 
 %s array index must be a literal expression
 %s array signature parameter %s cannot be indexed dynamically.
 %s bem cannot be co-issued.
@@ -299,14 +319,24 @@ $super
 %s target does not support texture lookups
 %s tessfactor %ss missing
 %s%d must be a four-component vector
+%s%d%s
 %s%s contains a system-interpreted value (%s) which must be written in every execution path of the shader.  Unconditional initialization may help. <| A%u (B%u)
 %s%s contains a system-interpreted value (%s) which should be written in every execution path of the shader <| A%u (B%u)
 %s%s requires replicate swizzle for this parameter in order to select component. i.e. .x | .y | .z | .w (or rgba equivalent)
+%s%u
 %s%u,space%u
+%s%u.%c
+%s%u[%u:
 %s%ux%u
+%s+%s
+%s.a
+%s.b
+%s.g
+%s.r
 %s: ERROR: If either a HullShader or DomainShader is set then both must be set. Technique %s, Pass %s.
 %s: ERROR: No valid %s-%s combination could be found in Technique %s, Pass %s.
 %s: WARNING: There exist invalid %s-%s combinations in Technique %s, Pass %s, depending on which elements of the specified shader array(s) are chosen.
+%s<%d
 %sInvalid register number: %d.  Max allowed for this type is %d.
 %sInvalid register number: %d. Max allowed for this type is %d.
 %sInvalid register type.
@@ -326,11 +356,17 @@ $super
 %sSource swizzles not allowed on tex* instruction.
 %sTexture coordinate registers (t#) are not available to arithmetic instructions.
 %sUnexpected source parameter.
+%s[%s]
+%s[%u +
+%s[%u]
+%s[%u].%c
 %s[%u][%u].%c
 %s[eval(
 %s[r%u.%c/%u]<
 %s[r%u.%c]<
 %s_%s_n%u_%u
+%s_n%u_%u
+%u%s
 %ux%u
 '#pragma def' is no longer supported on DX10+ and 10level9 targets.  Use compatibility mode to allow compilation for now.
 '%s' : macro redefinition
@@ -488,6 +524,8 @@ $super
 'label' is only permitted directly after a 'ret' instruction. Aborting shader validation. 
 'ret' instruction not permitted from inside any flow control block. Aborting shader validation. 
 (%f, %f, %f, %f)
+(%fl, %fl)
+(%i,%i,%i)
 (%s source param) Invalid register number: %d.  Max allowed for this type is %d.
 (%s source param) Modifiers are not allowed on constants for ps_1_x.
 (%s source param) Negate or abs modifiers not permitted on source parameters to texld*
@@ -580,8 +618,11 @@ $super
 ***globals***
 +#INF
 +,,,,,,,,,,,,,,,,-----....///000111112223344556677889:;<
+, %.9g
 , dynamicIndexed
+, fb%u
 , forcing loop to unroll
+, ft%u
 , immediateIndexed
 , mode_comparison
 , mode_default
@@ -600,6 +641,7 @@ $super
 .$super
 .Base
 .CRT$XIAA
+._m%u%u
 .data$brc
 .data$r$brc
 .debug$S
@@ -831,6 +873,7 @@ $super
 ??1type_info@@UEAA@XZ
 ?terminate@@YAXXZ
 @ILT
+@ILT+%d(
 A 'ret' instruction must be followed by either (1) the end of the shader or (2) a 'label' instruction. Aborting shader validation.
 A * (1/A) = 1 <| Explicit
 A * B for boolean A & B -> AND A, B <| MR.GenSimplifyInstructionsOpt1_NoExcl
@@ -993,6 +1036,7 @@ CAMERASPACENORMAL
 CAMERASPACEPOSITION
 CAMERASPACEREFLECTIONVECTOR
 CB%d
+CB%d[%d:
 CB[%d] already declared, repeated declaration on opcode #%d (count is 1-based). 
 CCW_STENCILFAIL
 CCW_STENCILFUNC
@@ -3434,7 +3478,9 @@ ZFUNC
 ZWRITEENABLE
 Zero character semantics aren't allowed
 [%8I64u] 
+[%s%d.%c]
 [%s%d[%s].%c]
+[%s.%c]
 [%s[%s].%c]
 [%s[%u + %s].%c]
 [%s[%u].%c]
@@ -3450,6 +3496,7 @@ Zero character semantics aren't allowed
 \n// | Table ID |         |
 \n\n[RootSignature(%s)]void ___DummyMainForRS(){}\n
 \nvoid main(
+_%d_%d.
 _CxxThrowException
 _XcptFilter
 __%s_n%u_%u
@@ -3698,6 +3745,7 @@ b = ubfe/ushr(a,o), movc((b >> o) & iv_pow2, bfi(w, 0, b, -iv_pow2)) -> ibfe(get
 b | (a & c) | (a & d) -> or(b, and(a, or(c,d)) <| MR.GenSimplifyInstructionsOpt1_Excl
 b%d already def'd in the shader. 
 b%d must only be defined as true (0x00000001) or false (0x00000000). 
+b_%s
 back-propagate negate through iadd <| MR.GenSimplifyInstructionsOpt1_Excl
 back-propagate negate through imul <| MR.GenSimplifyInstructionsOpt1_Excl
 base type is not a struct, class or interface
@@ -3849,6 +3897,7 @@ byte
 byteOffset
 c%d already def'd in the shader. 
 c1, c2, c3, c4, c5, c6
+c_%s
 calclod1d fp_flags <| SFPS
 calclod1d_a fp_flags <| SFPS
 calclod1d_u fp_flags <| SFPS
@@ -4044,6 +4093,7 @@ countbits fp_flags <| SFPS
 countbits int_literal <| SFPS
 countbits(i) -> and/shift/add sequence <| MR.Gen_RequiredTranslate
 cross
+cs_%d_%d\n
 cs_4_0
 cs_4_1
 cs_5_0
@@ -4282,6 +4332,7 @@ drcp_approx float_literal <| SFPS
 drcp_approx fp_flags <| SFPS
 drcp_approx fp_range <| SFPS
 drcp_approx fp_specials <| SFPS
+ds_%d_%d\n
 ds_5_0
 ds_5_1
 dsat float_literal <| SFPS
@@ -4638,6 +4689,7 @@ gradient operation uses a value that may not be defined for all pixels (in %s UA
 gradient-based operations must be moved out of flow control to prevent divergence. Performance may improve by using a non-gradient operation
 groupshared
 groupshared variables cannot contain resources such as textures, samplers or UAVs
+gs_%d_%d\n
 gs_4_0
 gs_4_1
 gs_5_0
@@ -4647,6 +4699,7 @@ hex value truncated to 64 bits
 hlslDefines
 hlslTarget
 hlsl_full_path
+hs_%d_%d\n
 hs_5_0
 hs_5_0 control point
 hs_5_0 patch constant
@@ -4666,6 +4719,7 @@ i%d.x (which represents rep iteration count) cannot be negative. i%d.x is curren
 i%d.y (which represents loop initial value) must be in the range [0, %d]. i%d.y is currently def'd as %d. 
 i%d.yzw have no meaning in this shader model; they must simply be 0. 
 i%d.z (which represents loop step value) must be in the range [-%d, %d]. i%d.z is currently def'd as %d. 
+i_%s
 iadd
 iadd bits_known <| SFPS
 iadd fp_flags <| SFPS
@@ -5094,6 +5148,7 @@ lerp(fbool, a, b) -> append_arg(a,b) <| SMR.RangeDataAnalysis
 lerp(fbool, finite a, 0) -> append_arg(a,0) <| SMR.RangeDataAnalysis
 lerp(fbool, finite a, finite b) -> append_arg(a,b) <| SMR.RangeDataAnalysis
 levels
+lib_%d_%d\n
 lib_4_0
 lib_4_0_level_9_1
 lib_4_0_level_9_1_ps
@@ -5158,6 +5213,7 @@ lt fp_flags <| SFPS
 lt fp_range <| SFPS
 lt of known range reduction <| Explicit
 lt(a, b) -> cmp(a - b, 0f, 1f) <| MR.Gen_RequiredTranslate
+m%u:
 m3x2
 m3x3
 m3x4
@@ -5535,6 +5591,7 @@ ps.2.sw
 ps.2.x
 ps.3.0
 ps.3.sw
+ps_%d_%d\n
 ps_1_0
 ps_1_0 is no longer supported.  It turned out that pixel shader capable hardware will always support at least ps_1_1 (which is not as limited a model as ps_1_0 was). To convert a ps_1_0 shader up to ps_1_1, the only change needed is to make the version number 1_1. 
 ps_1_0 is no longer supported; using ps_1_1
@@ -5678,6 +5735,7 @@ rsq(x) * rsq(x) -> rcp(x) <| MR.GenSimplifyInstructionsOpt1_Excl
 rsq(x) * rsq(x) -> rcp(x) for positive x <| MR.GenSimplifyInstructionsOpt1_Excl
 rsqrt
 ruledisable
+s_%s
 sample
 sample 
 sample count must be non-zero
@@ -6359,6 +6417,7 @@ vs.2.sw
 vs.2.x
 vs.3.0
 vs.3.sw
+vs_%d_%d\n
 vs_1_0
 vs_1_0 is no longer supported.  It turned out that vertex shader capable hardware will always support at least vs_1_1 (which is not as limited a model as vs_1_0 was). To convert a vs_1_0 shader up to vs_1_1, the only change needed is to make the version number 1_1. 
 vs_1_0 is no longer supported; using vs_1_1

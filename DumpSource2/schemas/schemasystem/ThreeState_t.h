@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum ThreeState_t : uint32_t
 {
 	TRS_FALSE = 0,

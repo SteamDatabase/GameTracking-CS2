@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum MeshDrawPrimitiveFlags_t : uint32_t
 {
 	MESH_DRAW_FLAGS_NONE = 0,

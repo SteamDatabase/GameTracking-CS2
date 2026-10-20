@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EventClientProcessGameInput_t
 {
 	EngineLoopState_t m_LoopState;

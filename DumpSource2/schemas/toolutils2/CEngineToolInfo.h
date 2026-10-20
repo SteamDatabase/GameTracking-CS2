@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class CEngineToolInfo : public CBaseToolInfo
 {
 	CUtlString m_Library;

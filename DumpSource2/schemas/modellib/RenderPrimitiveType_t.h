@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum RenderPrimitiveType_t : uint32_t
 {
 	RENDER_PRIM_POINTS = 0,

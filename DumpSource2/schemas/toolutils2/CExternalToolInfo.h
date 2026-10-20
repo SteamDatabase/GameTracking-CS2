@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class CExternalToolInfo : public CBaseToolInfo
 {
 	CUtlString m_Executable;

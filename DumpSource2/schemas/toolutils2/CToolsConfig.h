@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class CToolsConfig
 {
 	CUtlVector< CEngineToolInfo > m_EngineTools;

@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 // MNetworkNoBase
 class CParticleProperty
 {

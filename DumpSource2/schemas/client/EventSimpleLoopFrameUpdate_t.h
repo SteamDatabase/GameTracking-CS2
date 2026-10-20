@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EventSimpleLoopFrameUpdate_t
 {
 	EngineLoopState_t m_LoopState;

@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EventPostAdvanceTick_t : public EventSimulate_t
 {
 	int32 m_nCurrentTick;

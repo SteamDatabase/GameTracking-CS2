@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum RenderBufferFlags_t : uint32_t
 {
 	RENDER_BUFFER_USAGE_NONE = 0,

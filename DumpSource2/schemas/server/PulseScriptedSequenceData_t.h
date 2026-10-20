@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class PulseScriptedSequenceData_t
 {
 	int32 m_nActorID;

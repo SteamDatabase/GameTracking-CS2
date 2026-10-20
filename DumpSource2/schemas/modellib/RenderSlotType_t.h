@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum RenderSlotType_t : uint8_t
 {
 	RENDER_SLOT_INVALID = -1,

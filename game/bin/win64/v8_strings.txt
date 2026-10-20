@@ -135,6 +135,7 @@
  "const(nostack):
  "fp_stack:
  "stack:
+ %s:%d
  %smap = %p
  (+ %.1f ms in %d steps since start of marking, biggest step %.1f ms, walltime since start of marking %.f ms)
  (B0 entered 
@@ -211,6 +212,7 @@
  AbortedCodeGeneration\n
  AdvanceCurrentPosition(by=%d);\n
  AdvanceRegister(register=%d, by=%d);\n
+ B#%d
  Backtrack();\n
  CheckAtStart(cp_offset=%d, label[%08x]);\n
  CheckBitInTable(label[%08x] 
@@ -236,6 +238,7 @@
  Ctx:
  Deferred heap object 
  Deferring heap object: 
+ E#%d
  Eff:
  Encoding attached reference %d\n
  Encoding back reference to: 
@@ -247,6 +250,7 @@
  GetCode(%s);\n
  GoTo(label[%08x]);\n\n
  Goto
+ H#%d
  IfRegisterEqPos(register=%d, label[%08x]);\n
  IfRegisterGE(register=%d, number=%d, label[%08x]);\n
  IfRegisterLT(register=%d, number=%d, label[%08x]);\n
@@ -300,6 +304,7 @@
  and 
  anonymous(
  as it has already been optimized.\n
+ at %s:%d
  at <unknown>:%d
  at <unknown>:<unknown>
  at FieldIndex 
@@ -695,6 +700,8 @@
 "type": "unallocated", 
 "type_data":{
 #################################################\n
+#%d:%s
+#%d:%s 
 #%d:%s if followed by IfSuccess/IfException, there should be no direct control uses, but direct use #%d:%s was found
 #%d:%s should be followed by IfSuccess/IfException, but is only followed by single #%d:%s
 #constructor
@@ -737,6 +744,7 @@
 %*s;;;     Inline point: script_id %d position: %zu.\n
 %*s;;; deopted at script_id: %d position: %zu with reason '%s'.\n
 %.0Lf
+%.0f
 %016llx
 %02d:%02d:%02d GMT%c%02d%02d (%s)
 %02hhx
@@ -754,6 +762,8 @@
 %16zu
 %34s %10.3f (%4.1f%%)  %10zu (%4.1f%%) %10zu %10zu               
 %34s %10.3f (%4.1f%%)  %10zu (%4.1f%%) %10zu %10zu   %5.3f %6.2f
+%4d:%*s
+%5d: 
 %5u %*s %s:%d %d %d #%d
 %6zu @%6u %*c %s%s: 
 %8.0f ms: evacuation-summary: parallel=%s pages=%zu wanted_tasks=%zu cores=%d live_bytes=%lld compaction_speed=%.f aborted=%zu\n
@@ -807,6 +817,7 @@
 %closure
 %context
 %d / %m / %y
+%d / %s
 %d ; (int32) [fp %c %3d] 
 %d detached contexts are collected out of %d\n
 %d duplicates of size %d each (%dKB)\n
@@ -814,6 +825,7 @@
 %d pages. Free space: %.1f MB (waste: %.2f). Usage: %.1f/%.1f (MB) -> %.2f%%.\n
 %d.%d.%d%s%s
 %d.%d.%d.%d%s%s
+%d: %o\n
 %e ; %s (double)
 %e ; %s (float)
 %e ; (double) [fp %c %d] 
@@ -830,25 +842,47 @@
 %llx
 %m / %d / %y
 %new.target
+%p  %4Ix  
+%p %5d %s\n
 %p is not within the current isolate's code or embedded spaces\n
+%s #%u
+%s %.40s\n
 %s %s %02d %04d
 %s %s %02d %04d %02d:%02d:%02d GMT%c%02d%02d (%s)
 %s %s %02d %05d
 %s %s %02d %05d %02d:%02d:%02d GMT%c%02d%02d (%s)
+%s %s,
+%s %s,%s,
+%s / %s
+%s B%d\n
 %s Builtin, %s, %d\n
 %s handle not serialized: 
 %s is not isolate-independent.\n
 %s mutator utilization = %.3f (mutator_speed=%.f, gc_speed=%.f)\n
 %s rax,0x%x
 %s st%d
+%s%.*llx
+%s%c
+%s%c 
+%s%c %s
+%s%c %s,
+%s%s-%s.%s
+%s%s.%s
 %s%s_%s-%s.%s
+%s%s_%s.%s
 %s, %02d %s %04d %02d:%02d:%02d GMT
 %s, %02d %s %05d %02d:%02d:%02d GMT
+%s-%p-%i
+%s-%s-%i
 %s-none-%i
+%s.\n%s
+%s:%i: %s\n
 %s\n\nFROM\n
 %this
+%u #%u
 %u ; (bool) [fp %c %3d] 
 %u ; (uint32) [fp %c %3d] 
+%zu: 
 %zu: %dx%zu\n
 &Bme
 &page_allocator == &global_table_->allocator()
@@ -1136,6 +1170,7 @@
 , "tagged_fields": %zu
 , "type":"instructions"
 , "value":"
+, %02x
 , <context>:
 , Feedback type: 
 , Loads: 
@@ -1166,8 +1201,10 @@
 , initializing
 , input_rep: 
 , js frame count=
+, line %d\n
 , live range: [
 , loop until B
+, mode: %s
 , no bytecode
 , nullopt
 , offset: 
@@ -1234,6 +1271,8 @@
 ,"tooltip": "REGISTER_OR_SLOT_OR_CONSTANT"
 ,"tooltip": "SAME_AS_INPUT: 
 ,"trace_function_count":
+,%s,0x%x
+,%s,cl
 ,0x%x
 ,<xmm0>
 ,ZZZZZZZZZZ\t\f<
@@ -34641,6 +34680,7 @@ AttachedRefIndex
 Australia/ACT
 Australia/LHI
 Australia/NSW
+B%d\n
 BASELINE
 BBBB
 BBBBB
@@ -44907,11 +44947,14 @@ ZonedDateTime
 [%d:%p] %8.0f ms: 
 [%d:%p] %8.0f ms: %s%s %.1f (%.1f) -> %.1f (%.1f) MB, %.2f / %.2f ms %s (average mu = %.3f, current mu = %.3f) %s; %s\n
 [%p - %p] => %u\n
+[%s%s0x%x]
 [%s*%d%s0x%x]
 [%s+%s*%d%s0x%x]
+[%s+%s*%d]
 [%s] Limit: old size: %zu KB, new limit: %zu KB (%.1f)\n
 [%s] factor %.1f based on mu=%.3f, speed_ratio=%.f (gc=%.f, mutator=%.f)\n
 [%s]: %d pages, %d (%.1f%%) free\n
+[-B%d-%s
 [0;34m
 [1;34m
 [31mNo ISEL support for: %s
@@ -45151,6 +45194,7 @@ ZonedDateTime
 \u%04x
 \u2028
 \u2029
+\u{%06x}
 \x%02x
 \x2C
 ] in groups [
@@ -47842,6 +47886,7 @@ iterator_prototype->map().ptr() != isolate_->initial_object_prototype()->map().p
 iterator_result_map
 iterator_symbol
 iterator_take_helper_map
+j%s %s
 javascript
 javascript_execution_assert
 jit_fuzzing

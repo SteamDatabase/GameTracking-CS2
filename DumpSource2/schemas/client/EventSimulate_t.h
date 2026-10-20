@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 class EventSimulate_t
 {
 	EngineLoopState_t m_LoopState;

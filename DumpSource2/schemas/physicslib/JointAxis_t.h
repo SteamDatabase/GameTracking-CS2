@@ -1,3 +1,4 @@
+// MGlobalTypeScope
 enum JointAxis_t : uint32_t
 {
 	JOINT_AXIS_X = 0,
