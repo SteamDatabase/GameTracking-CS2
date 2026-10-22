@@ -7,6 +7,8 @@ import {
 	CSObservablePoint,
 	CSRoundEndReason,
 	CSTeamMoneyReason,
+	Console,
+	GameRules,
 	Instance,
 	CSRadarIcon,
 } from "cs_script/point_script";
@@ -31,9 +33,6 @@ var _gameOver = false;
                                                                                             
                                 
 var _lastRoundsPlayed = 0;
-
-                                                                                   
-var _teamWins = {};
 
 var _teamEliminated = false;
 var _legitimateKillsPerTeamThisRound = {}; 
@@ -154,14 +153,13 @@ var _uiEntity = null;
 
 Instance.OnActivate(() =>
 {
-	                                                    
+	                                                   
 
 	ResetGameState();
 });
 
 function ResetGameState() {
 	_gameOver = false;
-	_teamWins = { [TEAM_T]: 0, [TEAM_CT]: 0 };
 
 	UIClear();
 
@@ -193,6 +191,7 @@ function RandomizeRooms() {
 		const remaining = possibilities.filter((item) => !_roomIds.includes(item));
 
 		if (remaining.length == 0) {
+			                                                                          
 			_roomIds.push(possibilities[0]);
 			return;
 		}
@@ -200,6 +199,8 @@ function RandomizeRooms() {
 		const randomIndex = Math.floor(Math.random() * remaining.length);
 		_roomIds.push(remaining[randomIndex]);
 	});
+
+	                                               
 }
 
 function GoToRoom(roomIndex) {
@@ -210,7 +211,7 @@ function GoToRoom(roomIndex) {
 
 	                                                                                            
 	                                                                                         
-	Instance.ServerCommand(`mp_roundtime ${RoundTimeMinutesForRoom(roomIndex)}`);
+	Console.SetConvar("mp_roundtime", RoundTimeMinutesForRoom(roomIndex));
 }
 
                                                                                            
@@ -247,15 +248,17 @@ function TeleportEntitiesToTargets(entityTargetMap) {
 		                                                                                   
 		const target = Instance.FindEntityByName(targetName);
 		if (!target) {
+			                                                                        
 			continue;
 		}
 
 		const entity = Instance.FindEntityByName(entityName);
 		if (!entity) {
+			                                                                           
 			continue;
 		}
 
-		entity.Teleport(target.GetAbsOrigin(), target.GetAbsAngles());
+		entity.Teleport({ position: target.GetAbsOrigin(), angles: target.GetAbsAngles() });
 	}
 }
 
@@ -273,10 +276,11 @@ Instance.OnRoundStart(() => {
 	                                                                                            
 	                                                                           
 	                                                                                      
-	                                                                                          
+	                                                  
 	                            
-	const roundsPlayed = Instance.GetRoundsPlayed();
+	const roundsPlayed = GameRules.GetRoundsPlayed();
 	if (roundsPlayed < _lastRoundsPlayed) {
+		                                                                                                                     
 		ResetGameState();
 	}
 	_lastRoundsPlayed = roundsPlayed;
@@ -285,27 +289,26 @@ Instance.OnRoundStart(() => {
 	                                                               
 	UIUpdateRoomControl( _roomStates[_currentRoomIndex] );
 
-	if (!Instance.IsWarmupPeriod()) {
+	if (!GameRules.IsWarmupPeriod()) {
 		const roundNum = roundsPlayed + 1;
-		Instance.ServerCommand(
-			`mp_default_team_winner_no_objective ${_roomStates[_currentRoomIndex]}`,
-		);
+		                                                                                                                      
+		Console.SetConvar("mp_default_team_winner_no_objective", _roomStates[_currentRoomIndex]);
 
 		UIOnRoundStart();
 
 		                                           
 		if (IsFinalRoom(_currentRoomIndex) &&
-			_teamWins[TEAM_CT] < ROUNDS_TO_WIN - 1 &&
-			_teamWins[TEAM_T] < ROUNDS_TO_WIN - 1)
+			GameRules.GetTeamScore(TEAM_CT) < ROUNDS_TO_WIN - 1 &&
+			GameRules.GetTeamScore(TEAM_T) < ROUNDS_TO_WIN - 1)
 		{
 			StartSoundEntity(MATCH_POINT_ENTITY);
 		}
 
-		Instance.ServerCommand("mp_ignore_round_win_conditions 1");
+		Console.SetConvar("mp_ignore_round_win_conditions", true);
 
 		                                                                                   
 	} else {
-		Instance.ServerCommand("mp_ignore_round_win_conditions 0");
+		Console.SetConvar("mp_ignore_round_win_conditions", false);
 	}
 
 	                                                                                            
@@ -318,6 +321,10 @@ Instance.OnRoundStart(() => {
 	SetAntennaGlow(true);
 
 	ButtonOnRoundStart();
+
+	          
+	                       
+	          
 });
 
 function IsFinalRoom(roomIndex) {
@@ -333,11 +340,10 @@ function EndRound(winningTeam) {
 		case TEAM_CT: endReason = CSRoundEndReason.CTS_WIN; break;
 	}
 
-	Instance.EntFireAtName({
-		name: "map_params",
-		input: "FireWinCondition",
-		value: endReason,
-	});
+	if (winningTeam == TEAM_T || winningTeam == TEAM_CT) {
+		GameRules.AddTeamScore(winningTeam, 1);
+	}
+	GameRules.TerminateRound(endReason, Console.GetConvarNumber("mp_round_restart_delay"));
 }
 
                                                                                              
@@ -376,18 +382,14 @@ function CheckEliminationRoundEnd() {
 Instance.OnRoundEnd((args) => {
 
 	                                                                                             
-	if (Instance.IsWarmupPeriod()) return;
+	if (GameRules.IsWarmupPeriod()) return;
 
 	                       
 	if (args.winningTeam == TEAM_SPECTATOR)
 		args.winningTeam = TEAM_NONE;
 
+	                                                                                                   
 	_roundOver = true;
-
-	                                                                     
-	if (args.winningTeam == TEAM_T || args.winningTeam == TEAM_CT) {
-		++_teamWins[args.winningTeam];
-	}
 
 	                                                                                               
 	                                                                                            
@@ -395,7 +397,7 @@ Instance.OnRoundEnd((args) => {
 	SetRoomControl(_currentRoomIndex, args.winningTeam,                 false,                    false);
 
 	if (args.winningTeam != TEAM_NONE) {
-		Instance.AddTeamMoney( args.winningTeam, IsTeamEliminated( OtherTeam( args.winningTeam ) )
+		GameRules.AddTeamMoney( args.winningTeam, IsTeamEliminated( OtherTeam( args.winningTeam ) )
 			? ( ( args.winningTeam == TEAM_CT )
 					? CSTeamMoneyReason.ELIMINATION_HOSTAGE_MAP_CT
 					: CSTeamMoneyReason.ELIMINATION_HOSTAGE_MAP_T )
@@ -425,6 +427,7 @@ Instance.OnRoundEnd((args) => {
 	if (nextRoomIndex < T_FINAL_ROOM || nextRoomIndex > CT_FINAL_ROOM)
 	{
 		                                                          
+		                                                                          
 		EndMatch(args.winningTeam);
 	}
 	else
@@ -442,9 +445,11 @@ function MaybeSwapInDeciderRoom(roomIndex) {
 	_forceDeciderNextRound = false;
 
 	if (!forced) {
-		if (_teamWins[TEAM_T] != ROUNDS_TO_WIN - 1) return;
-		if (_teamWins[TEAM_CT] != ROUNDS_TO_WIN - 1) return;
+		if (GameRules.GetTeamScore(TEAM_T) != ROUNDS_TO_WIN - 1) return;
+		if (GameRules.GetTeamScore(TEAM_CT) != ROUNDS_TO_WIN - 1) return;
 	}
+
+	                                                                                                 
 
 	_roomIds[roomIndex] = DECIDER_ROOM_ID;
 }
@@ -452,8 +457,10 @@ function MaybeSwapInDeciderRoom(roomIndex) {
                                                                                             
                                                                           
 function WinnerOnRoundsExhausted(frontlineRoomIndex) {
-	if (_teamWins[TEAM_T] != _teamWins[TEAM_CT]) {
-		return _teamWins[TEAM_T] > _teamWins[TEAM_CT] ? TEAM_T : TEAM_CT;
+	const tScore = GameRules.GetTeamScore(TEAM_T);
+	const ctScore = GameRules.GetTeamScore(TEAM_CT);
+	if (tScore != ctScore) {
+		return tScore > ctScore ? TEAM_T : TEAM_CT;
 	}
 
 	                                                                                                  
@@ -466,14 +473,17 @@ function WinnerOnRoundsExhausted(frontlineRoomIndex) {
 function EndMatch(winningTeam) {
 	_gameOver = true;
 
+	                                                            
+
 	                                                                                                
-	Instance.ServerCommand(`mp_roundtime ${RoundTimeMinutesForRoom(START_ROOM)}`);
-	Instance.ServerCommand(`mp_maxrounds ${Instance.GetRoundsPlayed()}`);
+	Console.SetConvar("mp_roundtime", RoundTimeMinutesForRoom(START_ROOM));
+	Console.SetConvar("mp_maxrounds", GameRules.GetRoundsPlayed());
 }
 
                                      
 function StartSoundEntity(entityName) {
 	if (!Instance.FindEntityByName(entityName)) {
+		                                                                     
 		return;
 	}
 
@@ -481,8 +491,8 @@ function StartSoundEntity(entityName) {
 }
 
 function IsInActiveRound() {
-	if (Instance.IsWarmupPeriod()) return false;
-	if (Instance.IsFreezePeriod()) return false;
+	if (GameRules.IsWarmupPeriod()) return false;
+	if (GameRules.IsFreezePeriod()) return false;
 	if (_gameOver) return false;
 	if (_roundOver) return false;
 
@@ -491,7 +501,7 @@ function IsInActiveRound() {
 
 Instance.SetThink(() => {
 	if (IsInActiveRound()) {
-		const remaining = Instance.GetRoundRemainingTime();
+		const remaining = GameRules.GetRoundRemainingTime();
 
 		                                                                                  
 		if (remaining > 0 && remaining <= TEN_SECOND_WARNING_SECONDS && !_tenSecondWarningPlayed) {
@@ -510,9 +520,13 @@ Instance.SetThink(() => {
 	}
 
 	                                                                                       
-	if (_antennaGlowing && !Instance.IsFreezePeriod()) {
+	if (_antennaGlowing && !GameRules.IsFreezePeriod()) {
 		SetAntennaGlow(false);
 	}
+
+	          
+	                
+	          
 
 	UIThink();
 
@@ -534,10 +548,11 @@ Instance.SetThink(() => {
 function SetRoomControl(roomIndex, team, playSound, updateLights = true) {
 	if (_roomStates[roomIndex] == team) return;
 
+	                                                                    
 	if (updateLights) SetRoomLights(roomIndex, team);
 
 	if (roomIndex == _currentRoomIndex) {
-		Instance.ServerCommand(`mp_default_team_winner_no_objective ${team}`);
+		Console.SetConvar("mp_default_team_winner_no_objective", team);
 		UIUpdateRoomControl(team);
 	}
 	_roomStates[roomIndex] = team;
@@ -582,10 +597,13 @@ function SetRoomLights(roomIndex, team) {
 	const teamColor = TEAM_COLORS[team];
 	const antennaSkin = TEAM_ANTENNA_SKINS[team];
 	if (teamColor === undefined || antennaSkin === undefined) {
+		                                                                         
 		return;
 	}
 
 	const lightColor = ColorInputValue(teamColor);
+
+	                                                             
 
 	ApplyAntennaLights(team);
 
@@ -611,11 +629,11 @@ function SetRoomLights(roomIndex, team) {
 
 async function NotifySmokeLightingChanged() {
 	await Instance.Delay(0.1);
-	Instance.ServerCommand("sv_smoke_lighting_changed");
+	Console.ServerCommand("sv_smoke_lighting_changed");
 }
 
 Instance.OnPlayerKill((event) => {
-	if (Instance.IsWarmupPeriod()) return;
+	if (GameRules.IsWarmupPeriod()) return;
 	if (event.player && event.attacker && event.attacker instanceof CSPlayerPawn)
 	{
 		const victimTeam = event.player.GetPlayerController().GetTeamNumber();
@@ -636,8 +654,8 @@ Instance.OnPlayerKill((event) => {
 		if (_legitimateKillsPerTeamThisRound[OtherTeam(owningTeam)] && _legitimateKillsPerTeamThisRound[OtherTeam(owningTeam)] > 0)
 		{
 		_countdownActive = true;
-		const newRoundTime = Math.min(Instance.GetRoundRemainingTime(), CountdownTimeSecondsForRoom(_currentRoomIndex));
-		Instance.SetRoundRemainingTime(newRoundTime);
+		const newRoundTime = Math.min(GameRules.GetRoundRemainingTime(), CountdownTimeSecondsForRoom(_currentRoomIndex));
+		GameRules.SetRoundRemainingTime(newRoundTime);
 		}
 	}
 });
@@ -672,6 +690,7 @@ function PlaySoundForTeam(soundName, team) {
 
 	                                                            
 	if (!Instance.FindEntityByName(soundName)) {
+		                                                                    
 		return;
 	}
 
@@ -746,19 +765,24 @@ const FOG_INPUTS = [
 function SetRoomFog(roomIndex) {
 	const roomId = _roomIds[roomIndex];
 	if (roomId === undefined) {
+		                                                                                    
 		return;
 	}
 
 	                                                                          
 	if (!Instance.FindEntityByName(FOG_ENTITY_NAME)) {
+		                                                                        
 		return;
 	}
 
 	const presetName = ROOM_FOG[roomId] ?? FOG_DEFAULT_PRESET;
 	const preset = FOG_PRESETS[presetName];
 	if (!preset) {
+		                                                                                       
 		return;
 	}
+
+	                                                                
 
 	FOG_INPUTS.forEach(([field, input]) => {
 		const value = preset[field];
@@ -853,6 +877,7 @@ function ApplyAntennaLights(team) {
 			                               
 			const entity = FindPrefabEntity(name);
 			if (!entity) {
+				                                                                
 				return;
 			}
 
@@ -872,15 +897,19 @@ const ANTENNA_BUTTON_ENTITY_NAME = "ant.button";
 function MoveAntennaToRoom(roomId) {
 	_antennaTopRootName = AntennaTopForRoom(roomId);
 
+	                                                                                   
+
 	ANTENNA_ROOT_TARGETS.forEach(([rootName, markerPrefix]) => {
 		const root = FindPrefabEntity(rootName);
 		if (!root) {
+			                                                                          
 			return;
 		}
 
 		const markerName = `${markerPrefix}${roomId}`;
 		const marker = FindPrefabEntity(markerName);
 		if (!marker) {
+			                                                                       
 			return;
 		}
 
@@ -915,6 +944,7 @@ function MoveAntennaToRoom(roomId) {
 function SetAntennaTopEnabled(rootName, enabled) {
 	const root = FindPrefabEntity(rootName);
 	if (!root) {
+		                                                                                                         
 		return;
 	}
 
@@ -934,13 +964,14 @@ function DistanceSquared( a, b ) {
 
                                                                       
 var _forceDeciderNextRound = false;
-Instance.RegisterCheatCommand( "rush_force_decider", () => {
+Console.RegisterCheatCommand( "rush_force_decider", () => {
 	_forceDeciderNextRound = true;
+	                                                             
 } );
 
                                   
 let _forceAntennaGlow = false;
-Instance.RegisterCheatCommand( "move_antenna", () => {
+Console.RegisterCheatCommand( "move_antenna", () => {
 
 	let cameraPosition = null;
 	for ( const controller of Instance.GetAllPlayerControllers() ) {
@@ -1011,9 +1042,12 @@ function SetAntennaGlow(enabled) {
 	const glowColor = TEAM_COLORS[team] ?? TEAM_COLORS[TEAM_NONE];
 
 	                                                                              
+
+	                                                                              
 	GlowingAntennaRootNames().forEach((rootName) => {
 		const root = FindPrefabEntity(rootName);
 		if (!root) {
+			                                                                                  
 			return;
 		}
 
@@ -1021,6 +1055,7 @@ function SetAntennaGlow(enabled) {
 		                                                                  
 		if (typeof root.Glow != "function" || typeof root.Unglow != "function")
 		{
+			                                                                                                   
 			return;
 		}
 
@@ -1041,8 +1076,61 @@ function FindPrefabEntity(name) {
 	if (direct) return direct;
 
 	const wildcard = Instance.FindEntityByName(`*${name}`);
+	if (wildcard) {
+		                                                                                      
+	}
+
 	return wildcard;
 }
+
+          
+                                                                                              
+           
+                                                                                              
+
+                                                                                             
+                                                                  
+                          
+	                                    
+	                                     
+	                                             
+  
+
+                                         
+
+                                                                                               
+                                                    
+                                    
+	                                                 
+	                                     
+
+	                                               
+ 
+
+                                
+	                                                             
+		                                                                        
+		                                               
+			                                                                                    
+		   
+	   
+ 
+
+                                                                                                 
+                               
+                                 
+	                      
+	                                    
+ 
+
+                                                                              
+                          
+	                                                                        
+
+	                                     
+	                     
+ 
+          
 
                                                                                               
          
@@ -1059,6 +1147,7 @@ function ButtonOnRoundStart() {
 
 	const buttonEnt = FindPrefabEntity(ANTENNA_BUTTON_ENTITY_NAME);
 	if (!buttonEnt) {
+		                                                                                      
 		return;
 	}
 
@@ -1086,6 +1175,7 @@ function PlayBeaconAtButton(beaconName, buttonEnt) {
                                                                                              
 function PointBeaconAtButton(beaconName, buttonEnt) {
 	if (!Instance.FindEntityByName(beaconName)) {
+		                                                                     
 		return false;
 	}
 
@@ -1146,6 +1236,7 @@ function TimerBeepInterval(beepIndex) {
 	}
 
 	                                                                                            
+	                                                                                                            
 	return TIMER_BEEP_STAGES[TIMER_BEEP_STAGES.length - 1].interval;
 }
 
@@ -1162,7 +1253,7 @@ function PlayTimerEndSound() {
                                                                                                
                                                                   
 function IsRoundDecided() {
-	return _roundOver || _gameOver || Instance.GetRoundRemainingTime() <= 0;
+	return _roundOver || _gameOver || GameRules.GetRoundRemainingTime() <= 0;
 }
 
 function GetActiveRoomTowerSpottingState( team ) {
@@ -1203,7 +1294,7 @@ function OnButtonPressed(inputData) {
 		return;
 	}
 
-	if (Instance.IsWarmupPeriod()) {
+	if (GameRules.IsWarmupPeriod()) {
 		SetRoomLights(_currentRoomIndex, activatorTeam);
 		UIUpdateRoomControl(activatorTeam);
 	} else {
@@ -1253,6 +1344,11 @@ const ROOM_PANEL_CLASSES = Object.keys(ROOM_NAMES).map((id) => `room_${id}`);
 function GetUIEntity()
 {
 	_uiEntity = Instance.FindEntityByName(UI_ENTITY_NAME);
+	if (!_uiEntity)
+	{
+		                                                                      
+	}
+
 	return _uiEntity;
 }
 
@@ -1277,14 +1373,14 @@ async function UIOnRoundStart()
 {
 	_countdownActive = false;
 
-	while (!Instance.IsFreezePeriod() || Instance.IsTeamIntroPeriod())
+	while (!GameRules.IsFreezePeriod() || GameRules.IsTeamIntroPeriod())
 		await Instance.Delay(0);
 
 	UIShowProgression();
 	await Instance.Delay(UI_DURATION_SECONDS);
 
 	UIMinimizeProgression();
-	while (Instance.IsFreezePeriod())
+	while (GameRules.IsFreezePeriod())
 		await Instance.Delay(0);
 
 	UIHideProgression();
@@ -1346,10 +1442,10 @@ async function UIShowProgression()
 		_uiEntity.SetHasClass(roomPanelId, roomClass, true );
 
 		_uiEntity.SetHasClass( roomPanelId, 'arrow-ct', ( _currentRoomIndex == i )
-			&& ( Instance.GetRoundsPlayed() > 0 )
+			&& ( GameRules.GetRoundsPlayed() > 0 )
 			&& ( _roomStates[i] == TEAM_T ) );
 		_uiEntity.SetHasClass( roomPanelId, 'arrow-t', ( _currentRoomIndex == i )
-			&& ( Instance.GetRoundsPlayed() > 0 )
+			&& ( GameRules.GetRoundsPlayed() > 0 )
 			&& ( _roomStates[i] == TEAM_CT ) );
 	}
 
@@ -1412,7 +1508,7 @@ function UIThink()
 	{
 		_uiEntity.SetHasClass('rush_countdown', 'visible', true);
 
-		const timeLeft = Math.round(Instance.GetRoundRemainingTime());
+		const timeLeft = Math.round(GameRules.GetRoundRemainingTime());
 		_uiEntity.SetDialogVariableString('rush_countdown', 'countdown_time', String(timeLeft));
 
 		const spectatorString = _roomStates[_currentRoomIndex] == TEAM_T ? "#rush_countdown_capture_ct" : "#rush_countdown_capture_t";

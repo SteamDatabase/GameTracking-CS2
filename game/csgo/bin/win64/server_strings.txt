@@ -838,6 +838,7 @@
 #Team_Cash_Award_Elim_Bomb
 #Team_Cash_Award_Elim_Hostage
 #Team_Cash_Award_Generic
+#Team_Cash_Award_Generic_Negative
 #Team_Cash_Award_Hostage_Alive
 #Team_Cash_Award_Hostage_Interaction
 #Team_Cash_Award_Loser_Bonus
@@ -969,6 +970,7 @@ $tH@T\tI
 %-32s (p:%8.2f %8.2f %8.2f a:%5.2f %5.2f %5.2f) landmark %s\n
 %-8d
 %.*s
+%.*s...
 %.0f
 %.14s.%03dZ
 %.1f: Zone %d, area %d (%.0f %.0f %.0f) is blocked from spawn area %d (%.0f %.0f %.0f)\n
@@ -1207,10 +1209,13 @@ $tH@T\tI
 %s( %s, %s )\n
 %s(%-4.1f->%-4.1f avg %-4.1f dev %-4.2f)
 %s(%d): OpenSSL internal error, assertion failed: %s\n
+%s(%s "%s")
 %s(%s)
 %s(%s) could not find scene %d, named %s\n
 %s(%s) found an entity that wasn't a logic_choreographed_scene or logic_scene_list_manager in slot %d, named %s\n
 %s(%s[%d]%s)
+%s(deleted)
+%s(unloaded)
 %s,%u,%s
 %s------%s%s
 %s------%s--%s%s
@@ -1522,6 +1527,7 @@ $tH@T\tI
 (config:{center: Vector, radius: number, duration: number, color: Color})
 (config:{mins: Vector, maxs: Vector, duration: number, color: Color})
 (config:{name: string, input: string, value:any, caller:Entity, activator:Entity, delay:number})
+(config:{resources: string[]})
 (config:{start: Vector, end: Vector, duration: number, color: Color})
 (config:{target: Entity, input: string, value:any, caller:Entity, activator:Entity, delay:number})
 (config:{text: string, x: number, y: number, duration: number, color: Color})
@@ -1532,6 +1538,7 @@ $tH@T\tI
 (default)
 (delay: number)
 (entmodel:Entity,index?:number)
+(exception)
 (followConfig: CameraFollowConfig)
 (from angle, to angle, time) - Spherical lerp of angle from->to based on time
 (hInflictor, hAttacker, flDamage) - Allocate a damageinfo object, used as an argument to TakeDamage(). Call DestroyDamageInfo( hInfo ) to free the object.
@@ -1551,6 +1558,7 @@ $tH@T\tI
 (name: string)
 (name: string, autoDeploy?: boolean )
 (name: string, callback: function)
+(name: string, value: boolean | number | string | Vector | QAngle | ColorArg)
 (name:string)
 (name:string, callback:function)
 (needs match)
@@ -1567,19 +1575,20 @@ $tH@T\tI
 (playerSlot: number, panelId: string, variableName: string, value?: string )
 (quaternion,quaternion,float) very basic interpolation of v0 to v1 over t on [0,1]
 (quaternion,vector,float) rotates a quaternion by the specified angle around the specified vector axis
+(reason: CSRoundEndReason, delay?: number)
 (scale:number)
 (score:number)
 (slot: number)
 (slot: number, command: string)
 (slot:number)
 (slot:number, team?:number)
-(start:Vector, end:Vector, config:object)
 (target: entity | undefined)
 (target: entity, output: string, callback: function)
 (target: weapon)
 (team: number)
 (team: number, observable: boolean)
 (team: number, reason: CSTeamMoneyReason, amount?: number)
+(team: number, score: number)
 (team: number, visible: boolean)
 (team:number)
 (text: string)
@@ -2699,6 +2708,7 @@ $tH@T\tI
 .?AV?$CGameSystemStaticFactory@VCCSInventoryManager@@V1@@@
 .?AV?$CGameSystemStaticFactory@VCCSPointPulseSystem@@V1@@@
 .?AV?$CGameSystemStaticFactory@VCCSScriptSystem@@V1@@@
+.?AV?$CGameSystemStaticFactory@VCCSSpawnGroupSystem@@V1@@@
 .?AV?$CGameSystemStaticFactory@VCCSWeaponSystem@@V1@@@
 .?AV?$CGameSystemStaticFactory@VCCamPathfindGameSystem@@V1@@@
 .?AV?$CGameSystemStaticFactory@VCCleanupRelationshipsGameSystem@@V1@@@
@@ -5507,6 +5517,7 @@ $tH@T\tI
 .?AVCCSScriptConCommand@@
 .?AVCCSScriptSystem@@
 .?AVCCSScript_EntityScript@@
+.?AVCCSSpawnGroupSystem@@
 .?AVCCSSprite@@
 .?AVCCSTeam@@
 .?AVCCSTraceFilterSimple@@
@@ -8319,7 +8330,6 @@ $tH@T\tI
 3DES
 3DES(168)
 3|2;#GameUI_Retake_Card_UmpInSmoke,1,1,weapon_ump45,grenade1|2;#GameUI_Retake_Card_FunNGun,1,1,weapon_mp9,grenade2|2;#GameUI_Retake_Card_Sharpshooter,1,1,weapon_ssg08,grenade0|2;#GameUI_Retake_Card_BurstBullpup,1,1,weapon_famas
-4a\v6;
 4|2;#GameUI_Retake_Card_LightEmUp,1,1,rifle1,grenade0|2;#GameUI_Retake_Card_Kobe,1,1,rifle1,grenade2|1;#GameUI_Retake_Card_1g,1,1,rifle1,grenade3|1;#GameUI_Retake_Card_DisappearingAct,1,1,rifle1,grenade1|1;#GameUI_Retake_Card_EyesOnTarget,1,1,weapon_aug
 5_seconds
 6666666666666666
@@ -8403,6 +8413,8 @@ $tH@T\tI
 ?CompileModule@ScriptCompiler@v8@@SA?AV?$MaybeLocal@VModule@v8@@@2@PEAVIsolate@2@PEAVSource@12@W4CompileOptions@12@W4NoCacheReason@12@@Z
 ?CreateHandle@HandleScope@v8@@KAPEA_KPEAVIsolate@internal@2@_K@Z
 ?CreateSyntheticModule@Module@v8@@SA?AV?$Local@VModule@v8@@@2@PEAVIsolate@2@V?$Local@VString@v8@@@2@AEBV?$MemorySpan@$$CBV?$Local@VString@v8@@@v8@@@2@P6A?AV?$MaybeLocal@VValue@v8@@@2@V?$Local@VContext@v8@@@2@V32@@Z@Z
+?CurrentStackTrace@StackTrace@v8@@SA?AV?$Local@VStackTrace@v8@@@2@PEAVIsolate@2@HW4StackTraceOptions@12@@Z
+?Description@Symbol@v8@@QEBA?AV?$Local@VValue@v8@@@2@PEAVIsolate@2@@Z
 ?DisposeGlobal@api_internal@v8@@YAXPEA_K@Z
 ?Enter@Context@v8@@QEAAXXZ
 ?Enter@Isolate@v8@@QEAAXXZ
@@ -8412,13 +8424,16 @@ $tH@T\tI
 ?Exit@Isolate@v8@@QEAAXXZ
 ?Get@Object@v8@@QEAA?AV?$MaybeLocal@VValue@v8@@@2@V?$Local@VContext@v8@@@2@I@Z
 ?Get@Object@v8@@QEAA?AV?$MaybeLocal@VValue@v8@@@2@V?$Local@VContext@v8@@@2@V?$Local@VValue@v8@@@2@@Z
+?GetConstructorName@Object@v8@@QEAA?AV?$Local@VString@v8@@@2@XZ
 ?GetCurrent@Isolate@v8@@SAPEAV12@XZ
 ?GetCurrentContext@Isolate@v8@@QEAA?AV?$Local@VContext@v8@@@2@XZ
+?GetDebugName@Function@v8@@QEBA?AV?$Local@VValue@v8@@@2@XZ
 ?GetFrame@StackTrace@v8@@QEBA?AV?$Local@VStackFrame@v8@@@2@PEAVIsolate@2@I@Z
 ?GetFrameCount@StackTrace@v8@@QEBAHXZ
 ?GetFunction@FunctionTemplate@v8@@QEAA?AV?$MaybeLocal@VFunction@v8@@@2@V?$Local@VContext@v8@@@2@@Z
 ?GetFunctionName@StackFrame@v8@@QEBA?AV?$Local@VString@v8@@@2@XZ
 ?GetIsolate@Context@v8@@QEAAPEAVIsolate@2@XZ
+?GetIsolate@Object@v8@@QEAAPEAVIsolate@2@XZ
 ?GetLineNumber@Message@v8@@QEBA?AV?$Maybe@H@2@V?$Local@VContext@v8@@@2@@Z
 ?GetLocation@StackFrame@v8@@QEBA?AVLocation@2@XZ
 ?GetMicrotaskQueue@Context@v8@@QEAAPEAVMicrotaskQueue@2@XZ
@@ -8434,10 +8449,12 @@ $tH@T\tI
 ?InstantiateModule@Module@v8@@QEAA?AV?$Maybe@_N@2@V?$Local@VContext@v8@@@2@P6A?AV?$MaybeLocal@VModule@v8@@@2@0V?$Local@VString@v8@@@2@V?$Local@VFixedArray@v8@@@2@V?$Local@VModule@v8@@@2@@Z@Z
 ?InternalFieldCount@Object@v8@@QEBAHXZ
 ?IsArray@Value@v8@@QEBA_NXZ
+?IsBigInt@Value@v8@@QEBA_NXZ
 ?IsBoolean@Value@v8@@QEBA_NXZ
 ?IsFunction@Value@v8@@QEBA_NXZ
 ?IsNumber@Value@v8@@QEBA_NXZ
 ?IsObject@Value@v8@@QEBA_NXZ
+?IsSymbol@Value@v8@@QEBA_NXZ
 ?Length@Array@v8@@QEBAIXZ
 ?MakeWeak@api_internal@v8@@YAXPEA_KPEAXP6AXAEBV?$WeakCallbackInfo@X@2@@ZW4WeakCallbackType@2@@Z
 ?Message@TryCatch@v8@@QEBA?AV?$Local@VMessage@v8@@@2@XZ
@@ -8464,6 +8481,7 @@ $tH@T\tI
 ?SetInternalFieldCount@ObjectTemplate@v8@@QEAAXH@Z
 ?SetSyntheticModuleExport@Module@v8@@QEAA?AV?$Maybe@_N@2@PEAVIsolate@2@V?$Local@VString@v8@@@2@V?$Local@VValue@v8@@@2@@Z
 ?SlowGetAlignedPointerFromInternalField@Object@v8@@AEAAPEAXH@Z
+?Stringify@JSON@v8@@SA?AV?$MaybeLocal@VString@v8@@@2@V?$Local@VContext@v8@@@2@V?$Local@VValue@v8@@@2@V?$Local@VString@v8@@@2@@Z
 ?ThrowException@Isolate@v8@@QEAA?AV?$Local@VValue@v8@@@2@V32@@Z
 ?ToInt32@Value@v8@@QEBA?AV?$MaybeLocal@VInt32@v8@@@2@V?$Local@VContext@v8@@@2@@Z
 ?ToInteger@Value@v8@@QEBA?AV?$MaybeLocal@VInteger@v8@@@2@V?$Local@VContext@v8@@@2@@Z
@@ -8472,6 +8490,7 @@ $tH@T\tI
 ?ToObject@Value@v8@@QEBA?AV?$MaybeLocal@VObject@v8@@@2@V?$Local@VContext@v8@@@2@@Z
 ?ToString@Value@v8@@QEBA?AV?$MaybeLocal@VString@v8@@@2@V?$Local@VContext@v8@@@2@@Z
 ?ToUint32@Value@v8@@QEBA?AV?$MaybeLocal@VUint32@v8@@@2@V?$Local@VContext@v8@@@2@@Z
+?TypeOf@Value@v8@@QEAA?AV?$Local@VString@v8@@@2@PEAVIsolate@2@@Z
 ?Utf8Length@String@v8@@QEBAHPEAVIsolate@2@@Z
 ?Value@Int32@v8@@QEBAHXZ
 ?Value@Integer@v8@@QEBA_JXZ
@@ -8480,7 +8499,6 @@ $tH@T\tI
 ?VerifyHostDefinedOptions@ScriptOrigin@v8@@AEBAXXZ
 ?WriteUtf8@String@v8@@QEBAHPEAVIsolate@2@PEADHPEAHH@Z
 @333?
-@33s@
 @Aff
 @fff>fff>fff>fff>
 @player_start_teleport_destination
@@ -8781,6 +8799,7 @@ AddOutput fired with bad string. Format: outputname>targetname>inputname>paramet
 AddOverlaps
 AddScore
 AddTeamMoney
+AddTeamScore
 AddVelocity
 AddViewsToSceneSystem
 AddWorkItem
@@ -9983,6 +10002,7 @@ CCSPointScriptEntity_API
 CCSPointScriptEntity_API::RunScriptInput
 CCSRadarElement_API
 CCSScriptSystem
+CCSSpawnGroupSystem
 CCSUsrMsg_AdjustMoney_t
 CCSUsrMsg_CallVoteFailed_t
 CCSUsrMsg_CurrentRoundOdds_t
@@ -12028,6 +12048,7 @@ CSGearSlot
 CSGrenadeProjectileBase
 CSGrenadeType
 CSHitGroup
+CSHostage
 CSInputs
 CSLoadoutSlot
 CSMoveType
@@ -12040,6 +12061,7 @@ CSPlantedC4
 CSPlayerController
 CSPlayerController_SwitchTeam
 CSPlayerPawn
+CSPrecache
 CSRadarColor
 CSRadarIcon
 CSRadarPoint
@@ -12710,8 +12732,8 @@ CalcDistanceToLineSegment2D
 CalcRestorePos
 CalcRestorePos could not restore player position for client "%d" ( %.1f %.1f %.1f )\n
 Call C%d:I%d (%s)
-Callback "%s" already registered\n
-Callback "%s" not registered\n
+Callback "%s" already registered
+Callback "%s" not registered
 Callback for event "%s" is NULL!!!\n
 Called a short time after the parent entity has been activated. Equivalent to OnMapSpawn in logic_auto, and happens after the player is spawned. You can access !player from this hook.
 Called when the damage level of destructible part for a particular hit group has been changed.
@@ -13409,7 +13431,6 @@ Debug World Text
 Debug bits %s toggled %s for '%s'\n
 Debug bits %s toggled on for '%s'\n
 DebugBox
-DebugBreak
 DebugDrawBox
 DebugDrawBoxDirection
 DebugDrawCircle
@@ -14081,6 +14102,7 @@ End Time
 End Touch
 EndScriptDebug
 EndTime
+EndWarmup
 EnemyDown
 EnemySpotted
 Engine2/LightmapUVQuery
@@ -14918,6 +14940,12 @@ GetContext( name ): looks up a context and returns it if available. May return s
 GetContextForScript
 GetController
 GetController() : Returns the controller for this pawn
+GetConvarBoolean
+GetConvarColor
+GetConvarNumber
+GetConvarQAngle
+GetConvarString
+GetConvarVector
 GetCursorInfo
 GetCustomCamera
 GetDamage
@@ -14950,6 +14978,7 @@ GetGrenadeType
 GetGround
 GetGroundEntity
 GetHealth
+GetHostage
 GetInflictor
 GetInlineConst R%d <- C%d (%s)
 GetInputsForScriptClass
@@ -15025,6 +15054,8 @@ GetPawn() : Returns the pawn for this controller
 GetPenetration
 GetPhysAngularVelocity
 GetPhysVelocity
+GetPickUpFinishTime
+GetPickUpStartTime
 GetPlantFinishTime
 GetPlantStartTime
 GetPlantTime
@@ -15045,6 +15076,7 @@ GetRangeModifier
 GetRenderAlpha(): Get the alpha modulation of this entity.
 GetRenderColor(): Get the render color of the entity.
 GetReportedPosition
+GetRescuer
 GetReserveAmmo
 GetRightVector
 GetRoundRemainingTime
@@ -15061,18 +15093,17 @@ GetStr
 GetStr(name) : returns the convar as a string. May return null if no such convar.
 GetSystemTime
 GetTeam
+GetTeamScore
 GetTempVar R%d <- 
 GetThrower
 GetTimeFormatA
 GetTotalledDamage
-GetTraceHit
 GetType
 GetUpVector
 GetVar R%d <- V%d (%s)
 GetVar R%d <=MOVE*V%d (%s)
 GetWeaponCount
 GetWeaponCount() : Gets the number of weapons currently equipped
-GetWeaponData
 GetWeaponDataForLoadoutSlot
 Gets the current game mode.
 Gets the current game type.
@@ -15492,24 +15523,7 @@ InspectCurrentWeapon
 Install updater 
 InstallClasses
 Instance
-Instance.EntFireAtName invoked with bad config value.\n
-Instance.EntFireAtTarget invoked with bad config value.\n
-Instance.SpawnGrenadeProjectile invoked with bad type value.\n
-Instance.SpawnGrenadeProjectile requires at least thrower or position be specified.\n
-Instance.TraceBox invoked with bad end value.\n
-Instance.TraceBox invoked with bad maxs value.\n
-Instance.TraceBox invoked with bad mins value.\n
-Instance.TraceBox invoked with bad start value.\n
-Instance.TraceBullet invoked with bad end value.\n
-Instance.TraceBullet invoked with bad shooter value.\n
-Instance.TraceBullet invoked with bad start value.\n
-Instance.TraceLine invoked with bad end value.\n
-Instance.TraceLine invoked with bad start value.\n
-Instance.TracePlayer invoked with bad player value.\n
-Instance.TracePlayer invoked with bad start value.\n
-Instance.TraceSphere invoked with bad end value.\n
-Instance.TraceSphere invoked with bad radius value.\n
-Instance.TraceSphere invoked with bad start value.\n
+Instance.%s callback returned bad '%s' property. Got %s.
 InstanceData = %s
 InstancedAutoGeneratedSequenceScene:  Expecting non-NULL pActor for sound %s\n
 InstancedAutoGeneratedSoundScene:  Expecting non-NULL pActor for sound %s\n
@@ -15561,8 +15575,8 @@ Invalid radius: %0.3f
 Invalid request for mesh %d in model %s with %d entry remapping start table\n
 Invalid request for mesh %d in model %s with no remapping table starts\n
 Invalid request for mesh %d in model %s with no remapping table\n
-Invalid return type from Instance.OnBeforePlayerDamage.\n
-Invalid return type from Instance.OnModifyPlayerDamage.\n
+Invalid return value from Instance.OnBeforePlayerDamage callback: %s.
+Invalid return value from Instance.OnModifyPlayerDamage callback: %s.
 Invalid right effector bone ID ('%s') specified, there are not enough bones in the chain to solve the IK request
 Invalid save, failed to open file\n
 Invalid script. No valid imports found.\n
@@ -15616,11 +15630,14 @@ IsActive
 IsAlive
 IsAttachedToParent
 IsBeingCarried
+IsBeingPickedUp
 IsBombsiteA
 IsBombsiteB
 IsBot
 IsBuyMenuOpen
 IsClient
+IsClientLoaded
+IsClientLoading
 IsConnected
 IsCrouched
 IsCrouching
@@ -15637,6 +15654,7 @@ IsInToolsMode
 IsInputCaptureEnabled
 IsInputPressed
 IsLineBlockedBySmoke
+IsLoadedForAll
 IsMarkedForDeletion
 IsNPC
 IsNoclipping
@@ -15648,8 +15666,11 @@ IsPlayerController
 IsPlayerPawn
 IsPlayingBack
 IsPublicUniverse
+IsRescued
 IsScoped
 IsServer
+IsServerLoaded
+IsServerLoading
 IsSet()
 IsSilencerOn
 IsSpeaking() %f\n
@@ -15785,7 +15806,6 @@ LOOK_AT_WEAPON
 LOOK_TOWARDS_SPOT
 LOS check failed.  Obstructed.
 LOSER_BONUS
-LOSER_BONUS_CONSECUTIVE_ROUNDS
 LOST DAMAGE:\t\t
 Ladder FSM state: %s
 Ladder state: APPROACH
@@ -16127,37 +16147,49 @@ Metal.Large
 Metal.Medium
 Metal.SawbladeStick
 Metal.Small
+Method %s.%s cannot be used on official servers.
 Method %s.%s invoked in incorrect scope.
-Method %s.%s invoked with bad %s value. (parameter #%d)\n
+Method %s.%s invoked with bad '%s' property for argument %d (%s). Got %s.
+Method %s.%s invoked with bad value for argument %d (%s). Got %s.
+Method %s.%s invoked with bad value for argument 0 (reason). Got %s.
+Method %s.%s invoked with bad value for argument 0 (team). Got %s.
+Method %s.%s invoked with incompatible value for convar "%s". %s cannot be converted to %s.
 Method %s.%s invoked with incorrect 'this' value.
+Method %s.%s invoked with missing '%s' property for argument %d (%s).
+Method %s.%s invoked with name of incompatible convar "%s". Use %s.%s.
+Method %s.%s invoked with name of unknown convar "%s".
 Method %s.%s invoked with unrecognized 'this' value.
-Method %s.%s requires %d argument(s), %s.
-Method CSPlayerPawn.GetCustomCamera failed to spawn a custom_player_camera.\n
-Method CSPlayerPawn.SetHasHelmet cannot be called with `true` while armor value is 0.\n
-Method CustomPlayerCamera.SetFollowConfig invoked with bad followEntity value.\n
-Method Entity.Move invoked with bad newValues value.\n
-Method Entity.SetMoveType cannot be called with CSMoveType.INVALID. It is invalid...\n
-Method Entity.TakeDamage invoked with bad damage value.\n
-Method Instance.DebugBox invoked with bad config value.\n
-Method Instance.DebugBox invoked with bad maxs value.\n
-Method Instance.DebugBox invoked with bad mins value.\n
-Method Instance.DebugLine invoked with bad config value.\n
-Method Instance.DebugLine invoked with bad end value.\n
-Method Instance.DebugLine invoked with bad start value.\n
-Method Instance.DebugScreenText invoked with bad config value.\n
-Method Instance.DebugScreenText invoked with bad text value.\n
-Method Instance.DebugScreenText invoked with bad x value.\n
-Method Instance.DebugScreenText invoked with bad y value.\n
-Method Instance.DebugSphere invoked with bad center value.\n
-Method Instance.DebugSphere invoked with bad config value.\n
-Method Instance.DebugSphere invoked with bad radius value.\n
-Method Instance.DebugSphere invoked with bad start value.\n
-Method Instance.EntFireAtName invoked with bad input value.\n
-Method Instance.EntFireAtName invoked with bad inputData value.)\n
-Method Instance.EntFireAtName invoked with bad name value.\n
-Method Instance.EntFireAtTarget invoked with bad input value.\n
-Method Instance.EntFireAtTarget invoked with bad inputData value.)\n
-Method Instance.EntFireAtTarget invoked with bad target value.\n
+Method %s.%s requires %d argument%s but got %d. %s
+Method CSPlayerPawn.GetCustomCamera failed to spawn a custom_player_camera.
+Method CSPlayerPawn.SetHasHelmet cannot be called with `true` while armor value is 0.
+Method CSPrecache.Release did nothing. It was already released or failed to load.
+Method Entity.Move invoked with bad value for argument 0 (newValues). Got %s.
+Method Entity.SetMoveType cannot be called with CSMoveType.INVALID. It is invalid...
+Method Instance.DebugBox invoked with bad value for argument 0 (config). Got %s.
+Method Instance.DebugBox invoked with bad value for argument 0 (mins). Got %s.
+Method Instance.DebugBox invoked with bad value for argument 1 (maxs). Got %s.
+Method Instance.DebugLine invoked with bad value for argument 0 (config). Got %s.
+Method Instance.DebugLine invoked with bad value for argument 0 (start). Got %s.
+Method Instance.DebugLine invoked with bad value for argument 1 (end). Got %s.
+Method Instance.DebugScreenText invoked with bad value for argument 0 (config). Got %s.
+Method Instance.DebugScreenText invoked with bad value for argument 0 (text). Got %s.
+Method Instance.DebugScreenText invoked with bad value for argument 1 (x). Got %s.
+Method Instance.DebugScreenText invoked with bad value for argument 2 (y). Got %s.
+Method Instance.DebugSphere invoked with bad value for argument 0 (center). Got %s.
+Method Instance.DebugSphere invoked with bad value for argument 0 (config). Got %s.
+Method Instance.DebugSphere invoked with bad value for argument 1 (radius). Got %s.
+Method Instance.EntFireAtName invoked with bad value for argument 0 (config). Got %s.
+Method Instance.EntFireAtName invoked with bad value for argument 0 (name). Got %s.
+Method Instance.EntFireAtName invoked with bad value for argument 1 (input). Got %s.
+Method Instance.EntFireAtName invoked with bad value for argument 2 (inputData). Got %s.
+Method Instance.EntFireAtTarget invoked with bad value for argument 0 (config). Got %s.
+Method Instance.EntFireAtTarget invoked with bad value for argument 0 (target). Got %s.
+Method Instance.EntFireAtTarget invoked with bad value for argument 1 (input). Got %s.
+Method Instance.EntFireAtTarget invoked with bad value for argument 2 (inputData). Got %s.
+Method Instance.Precache failed.
+Method Instance.Precache invoked with bad resource "%s".
+Method Instance.Precache invoked with bad resource "%s". There is no compiled "%s_c".
+Method Instance.SpawnGrenadeProjectile requires at least thrower or position be specified.
 Microsoft CSP Name
 Microsoft Commercial Code Signing
 Microsoft Encrypted File System
@@ -16622,6 +16654,12 @@ OnGrenadeBounce
 OnGrenadeThrow
 OnGunFire
 OnGunReload
+OnHostageDrop
+OnHostageKill
+OnHostagePickUp
+OnHostagePickUpAbort
+OnHostagePickUpStart
+OnHostageRescue
 OnInterval
 OnKnifeAttack
 OnLoadoutChanged
@@ -17165,6 +17203,7 @@ Please move your current gameinfo.gi agent settings to a %s file and create a %s
 Please specify 0 or 1 with the -stream Parameter\n
 Please wait for broadcast to start ...
 Point entity.
+PointScript
 PointTemplate
 Policy Qualifier CPS
 Policy Qualifier User Notice
@@ -18357,6 +18396,7 @@ Sends colored text to all clients. (Valid context keys: player_id, value, team_i
 Sends colored text to one client.
 Sends colored text to one client. (Valid context keys: player_id, value, team_id)
 Sensor
+Sep 21 2026
 Separate Eye Ramp
 Seqnc
 Sequence %s(%d) - %s finished at %0.2f\n
@@ -18762,6 +18802,7 @@ SetContext( name , value, duration ): store any key/value pair in this entity's 
 SetContextNum
 SetContextNum( name , value, duration ): store any key/value pair in this entity's dialog contexts. Value must be a number (int or float). Will last for duration (set 0 to mean 'forever').
 SetContextThink
+SetConvar
 SetDamageCustom
 SetDamageForce
 SetDamagePosition
@@ -19096,6 +19137,7 @@ StartSoundEventUnreliable
 StartTime
 StartTimeOut
 StartTouch+Collision
+StartWarmup
 Started from Node [path=%s node=%i dir=%s speed=%.2f]
 Started off the nav mesh - moving to closest nav area...\n
 Starting Freeze period\n
@@ -19189,6 +19231,7 @@ SweptBox
 Switch to the selected map after lobby map veto finished.
 SwitchToWeapon
 Switching targets to retaliate against new attacker!\n
+Symbol(%s)
 Sync Cycle To Time
 Sync Exit tag to next gesture Entry tag
 SyncToFollowingGesture
@@ -19929,7 +19972,6 @@ WIN32_NAME_CONVERTER
 WIN32_PATHBYADDR
 WIN32_SPLITTER
 WIN32_UNLOAD
-WINNER_BONUS_CONSECUTIVE_ROUNDS
 WIN_BY_DEFUSING_BOMB
 WIN_BY_HOSTAGE_RESCUE
 WIN_BY_TIME_RUNNING_OUT_BOMB
@@ -20607,7 +20649,13 @@ _to_BombsiteB
 _to_curve_
 _tools_event_desc
 _var
+a Color
+a QAngle
+a Vector
+a boolean
 a null shared library handle was used
+a number
+a string
 a trigger_changelevel doesn't have a map
 a world layer in a dota map
 a2d_ASN1_OBJECT
@@ -21900,6 +21948,7 @@ cs_rush
 cs_script/%s
 cs_shelter
 cs_siege
+cs_spawn_group_resources
 cs_thunder
 cs_usercmd.proto
 cs_win_panel_match
@@ -23082,6 +23131,7 @@ func_interaction_layer_clip: invalid interact-with attribute %s\n
 func_mover count: %i\n
 func_track_train must be on a path of path_track\n
 function
+function %s
 functionality not supported
 g3sg1
 g:cs2,gt:%u,gm:%u,sk:%u,%s
@@ -23342,7 +23392,6 @@ hint_reset
 hint_vr_offset_x
 hint_vr_offset_y
 hint_vr_offset_z
-hitEnt
 hitEntity
 hitGroup
 hit_group
@@ -23699,7 +23748,6 @@ idp mismatch
 ignite
 ignite_halfhealth
 ignore
-ignoreEnt
 ignoreEntity
 ignorePlayers
 ignore_enabled
@@ -23794,6 +23842,7 @@ innermost
 inposition
 input not initialized
 input not reduced
+inputData
 input_angles
 input_chatter_enemies
 input_domain
@@ -23834,7 +23883,6 @@ interactAs
 interactExclude
 interactWith
 interactive
-interacts
 intermission duration: %f\n
 intermission start time: %f\n
 internal list error
@@ -24880,6 +24928,7 @@ net_debug_%s_%02d%02d%02d-%02d%02d%02d.csv
 netmsg
 networkid
 neutral
+newValues
 newer crl not newer
 newname
 newunit
@@ -25235,6 +25284,7 @@ p.ppBasis
 p.prime
 p.tpBasis
 p250
+p@33s@
 pActivator
 pAnimgraphEntity
 pAttachment
@@ -26637,7 +26687,6 @@ specific_physics_body_to_replace
 spectate
 speed_range
 speeds
-sphereRadius
 spin_none
 spin_zaxis
 spine_0
@@ -27747,7 +27796,6 @@ vecValueA
 vecValueB
 vecVelocity
 vecline
-vector<bool> too long
 velocity_cp
 verification failure
 version incompatibility

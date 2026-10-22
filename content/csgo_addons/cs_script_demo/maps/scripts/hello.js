@@ -1,2 +1,4 @@
-import { Instance } from "cs_script/point_script";
-Instance.Msg("Hello cs_script!");
+import { Console } from "cs_script/point_script";
+Console.Log("Hello cs_script!");
+
+Console.GetConvarString("sv_cheats");

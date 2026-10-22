@@ -7,4 +7,5 @@ class CVMixSubmix
 	// MPropertyFriendlyName = "Send Operator"
 	VMixSendOperator_t m_nSendOperator; // = "NAMED_SEND"
 	VMixMixDownRule_t m_nMixDownRule; // = "SUM"
+	VMixUpMixRule_t m_nUpMixRule; // = "DIVIDE"
 };

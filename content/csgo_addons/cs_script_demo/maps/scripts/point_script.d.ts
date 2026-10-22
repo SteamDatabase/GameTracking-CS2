@@ -37,15 +37,24 @@
  */
 declare module "cs_script/point_script"
 {
-    export const Instance: Domain;
+    export const Instance: IPointScript;
+    
+    export const Console: IConsole;
+
+    export const GameRules: IGameRules;
+
+    type Vector = { x: number, y: number, z: number };
+    type RotationVector = { x: number, y: number, z: number };
+    type QAngle = { pitch: number, yaw: number, roll: number };
+    type ColorArg = { r: number, g: number, b: number, a?: number };
+    type Color = { r: number, g: number, b: number, a: number };
+    type InputValue = boolean | number | string | Vector | Color | undefined;
 
     /**
-     * The top level API provided to scripts attached to a point_script entity.
+     * The API provided to scripts attached to a point_script entity.
      * Access these functions by importing Instance from "cs_script/point_script".
      */
-    class Domain {
-        /** Log a message to the console. */
-        Msg(text: any): void;
+    interface IPointScript {
         /** Print some text to the game window. Only works in dev environments. */
         DebugScreenText(config: { text: any, x: number, y: number, duration?: number, color?: ColorArg }): void;
         /** Draw a line in the world. Only works in dev environments. */
@@ -123,6 +132,18 @@ declare module "cs_script/point_script"
         OnBombDefuse(callback: (event: BombDefuseEvent) => void): void;
         /** Called when a c4 explodes */
         OnBombExplode(callback: (event: { plantedC4: CSPlantedC4 }) => void): void;
+        /** Called when a player starts picking up a hostage */
+        OnHostagePickUpStart(callback: (event: { hostage: CSHostage }) => void): void;
+        /** Called when a player aborts picking up a hostage */
+        OnHostagePickUpAbort(callback: (event: { hostage: CSHostage, player: CSPlayerPawn }) => void): void;
+        /** Called when a player finishes picking up a hostage */
+        OnHostagePickUp(callback: (event: { hostage: CSHostage }) => void): void;
+        /** Called when a carried hostage is dropped without being rescued */
+        OnHostageDrop(callback: (event: { hostage: CSHostage, dropper: CSPlayerPawn }) => void): void;
+        /** Called when a hostage reaches a rescue zone */
+        OnHostageRescue(callback: (event: { hostage: CSHostage }) => void): void;
+        /** Called when a hostage is killed */
+        OnHostageKill(callback: (event: { hostage: CSHostage, attacker?: CSPlayerPawn }) => void): void;
         /**
          * Called immediately before a CSPlayerPawn takes damage to armor and health.
          * Called after hitgroup modifications are applied such as headshot multiplier.
@@ -207,44 +228,23 @@ declare module "cs_script/point_script"
         IsDedicatedServer(): boolean;
         /** Get the game time in seconds. */
         GetGameTime(): number;
-        /** Get if the game is currently in a Warmup period. */
-        IsWarmupPeriod(): boolean;
-        /** Get if the game is currently in a Freeze period. */
-        IsFreezePeriod(): boolean;
-        /** Get if the game is currently in a Team Intro period. */
-        IsTeamIntroPeriod(): boolean;
         /** Get the current Game Type. */
         GetGameType(): number;
         /** Get the current Game Mode. */
         GetGameMode(): number;
         /** Get the name of the current map. */
         GetMapName(): string;
-        /** Get the number of rounds played in the current game. */
-        GetRoundsPlayed(): number;
-        /** Get the time remaining in the current round in seconds. */
-        GetRoundRemainingTime(): number;
-        /** Set the time remaining in the current round in seconds. */
-        SetRoundRemainingTime(time: number): void;
-
-        /**
-         * Adds the money to all player controllers on the team, following all classic rules.
-         * If players are not eligible to receive end-of-round money, then that restriction is honored.
-         * Disconnected players will get their account balance incremented, and will have correct
-         * amount of money after they reconnect to the server.
-         * If the `amount` parameter is 0 or undefined, then the amount will be determined using server convar
-         * setting corresponding to the reason parameter.
-         */
-        AddTeamMoney(team: number, reason: CSTeamMoneyReason, amount?: number): void;
 
         /** Spawns a live grenade projectile. */
         SpawnGrenadeProjectile(config: SpawnGrenadeProjectileConfig): CSGrenadeProjectileBase;
 
-        /** Issue the specified command to the specified client. */
-        ClientCommand(playerSlot: number, command: string): void;
-        /** Issue a command. */
-        ServerCommand(command: string): void;
-        /** Creates a console command that will run the specified callback. The command will only work when sv_cheats is true. */
-        RegisterCheatCommand(name: string, callback: (args: string) => void): void;
+        /**
+         * Loads resources on the server and clients to avoid hitches when later referenced.
+         * Supports .vmdl, .vpcf, .vmat, and .vsnd resources.
+         * @experimental This feature is experimental and may experience breaking changes.
+         * Please send feedback to CSGOTeamFeedback@valvesoftware.com with "cs_script Feedback" in the subject line.
+         */
+        Precache(config: { resources: string[] }): CSPrecache | undefined;
 
         /** @deprecated This method will be removed in a future update */
         OnBeforePlayerDamage(callback: () => any): void;
@@ -260,20 +260,107 @@ declare module "cs_script/point_script"
         DebugBox(mins: Vector, maxs: Vector, duration: number, color: ColorArg): void;
         /** @deprecated This overload will be removed in a future update */
         DebugSphere(center: Vector, radius: number, duration: number, color: ColorArg): void;
-        /** @deprecated This method will be removed in a future update */
-        GetTraceHit(start: Vector, end: Vector, config?: { ignoreEntity?: Entity, ignorePlayers?: boolean }): TraceResult;
         /** @deprecated This overload will be removed in a future update */
         EntFireAtName(name: string, input: string, inputData?: InputValue | { value?: InputValue, caller?: Entity, activator?: Entity }, delay?: number): void;
         /** @deprecated This overload will be removed in a future update */
         EntFireAtTarget(target: Entity, input: string, inputData?: InputValue | { value?: InputValue, caller?: Entity, activator?: Entity }, delay?: number): void;
+        /** @deprecated This method will be removed in a future update */
+        Msg(text: any): void;
+        /** @deprecated This method will be removed in a future update */
+        ClientCommand(playerSlot: number, command: string): void;
+        /** @deprecated This method will be removed in a future update */
+        ServerCommand(command: string): void;
+        /** @deprecated This method will be removed in a future update */
+        RegisterCheatCommand(name: string, callback: (args: string) => void): void;
+        /** @deprecated This method will be removed in a future update */
+        IsWarmupPeriod(): boolean;
+        /** @deprecated This method will be removed in a future update */
+        IsFreezePeriod(): boolean;
+        /** @deprecated This method will be removed in a future update */
+        IsTeamIntroPeriod(): boolean;
+        /** @deprecated This method will be removed in a future update */
+        GetRoundsPlayed(): number;
+        /** @deprecated This method will be removed in a future update */
+        GetRoundRemainingTime(): number;
+        /** @deprecated This method will be removed in a future update */
+        SetRoundRemainingTime(time: number): void;
+        /** @deprecated This method will be removed in a future update */
+        AddTeamMoney(team: number, reason: CSTeamMoneyReason, amount?: number): void;
+    }
+    
+    /**
+     * An API provided to scripts for the console: logging, ConVars, and ConCommands.
+     * Access these functions by importing Console from "cs_script/point_script".
+     */
+    interface IConsole
+    {
+        /** Log a message to the console. */
+        Log(text: any): void;
+
+        /** Get the value of a boolean convar. */
+        GetConvarBoolean(name: string): boolean | undefined;
+        /** Get the value of a numeric convar. */
+        GetConvarNumber(name: string): number | undefined;
+        /** Get the value of any convar, converted to a string. */
+        GetConvarString(name: string): string | undefined;
+        /** Get the value of a Vector convar. */
+        GetConvarVector(name: string): Vector | undefined;
+        /** Get the value of a QAngle convar. */
+        GetConvarQAngle(name: string): QAngle | undefined;
+        /** Get the value of a Color convar. */
+        GetConvarColor(name: string): Color | undefined;
+        /** Set the value of a convar. */
+        SetConvar(name: string, value: boolean | number | string | Vector | QAngle | ColorArg): void;
+
+        /** Issue the specified command to the specified client. */
+        ClientCommand(playerSlot: number, command: string): void;
+        /** Issue a command. */
+        ServerCommand(command: string): void;
+        /** Creates a console command that will run the specified callback. The command will only work when sv_cheats is true. */
+        RegisterCheatCommand(name: string, callback: (args: string) => void): void;
     }
 
-    type Vector = { x: number, y: number, z: number };
-    type RotationVector = { x: number, y: number, z: number };
-    type QAngle = { pitch: number, yaw: number, roll: number };
-    type ColorArg = { r: number, g: number, b: number, a?: number };
-    type Color = { r: number, g: number, b: number, a: number };
-    type InputValue = boolean | number | string | Vector | Color | undefined;
+    /**
+     * An API provided to scripts for the state of the match: warmup, rounds, and team money.
+     * Access these functions by importing GameRules from "cs_script/point_script".
+     */
+    interface IGameRules
+    {
+        /** Get if the game is currently in a Warmup period. */
+        IsWarmupPeriod(): boolean;
+        /** Start the warmup period, restarting the round. */
+        StartWarmup(): void;
+        /** End the warmup period as if its timer had run out. The game mode then ends it the usual way, starting on the next tick. */
+        EndWarmup(): void;
+
+        /** Get if the game is currently in a Freeze period. */
+        IsFreezePeriod(): boolean;
+        /** Get if the game is currently in a Team Intro period. */
+        IsTeamIntroPeriod(): boolean;
+        /** Get the number of rounds played in the current game. */
+
+        GetRoundsPlayed(): number;
+        /** Get the time remaining in the current round in seconds. */
+        GetRoundRemainingTime(): number;
+        /** Set the time remaining in the current round in seconds. */
+        SetRoundRemainingTime(time: number): void;
+        /** Get the team's score. */
+        GetTeamScore(team: number): number;
+        /** Add to the team's score. Call before TerminateRound so the round end sees the new score. */
+        AddTeamScore(team: number, score: number): void;
+        /** Terminate the current round. Counts as a round played unless it is a draw. Will not add to team scores. Does nothing if the round has already ended. */
+        TerminateRound(reason: CSRoundEndReason, delay?: number): void;
+
+        /**
+         * Adds the money to all player controllers on the team, following all classic rules.
+         * If players are not eligible to receive end-of-round money, then that restriction is honored.
+         * Disconnected players will get their account balance incremented, and will have correct
+         * amount of money after they reconnect to the server.
+         * If the `amount` parameter is 0 or undefined, then the amount will be determined using server convar
+         * setting corresponding to the reason parameter.
+         */
+        AddTeamMoney(team: number, reason: CSTeamMoneyReason, amount?: number): void;
+    }
 
     export enum CSMoveType {
         INVALID = -1,
@@ -312,19 +399,19 @@ declare module "cs_script/point_script"
     }
 
     export enum CSRadarIcon {
-        TOWER = 0,
-        C4 = 1,
-        HOSTAGE = 2,
+        TOWER,
+        C4,
+        HOSTAGE,
     }
 
     export enum CSRadarColor {
-        PLAYERHUD = 0,
-        GRAY = 1,
-        WHITE = 2,
-        CT = 3,
-        T = 4,
-        RED = 5,
-        GREEN = 6,
+        PLAYERHUD,
+        GRAY,
+        WHITE,
+        CT,
+        T,
+        RED,
+        GREEN,
     }
 
     export enum CSTeamMoneyReason {
@@ -386,7 +473,7 @@ declare module "cs_script/point_script"
     }
 
     export enum CSWeaponAttackType {
-        INVALID = -1,
+        INVALID,
         PRIMARY,
         SECONDARY
     }
@@ -656,6 +743,16 @@ declare module "cs_script/point_script"
         angularVelocity?: RotationVector;
     }
 
+    export class CSPrecache {
+        IsServerLoading(): boolean;
+        IsServerLoaded(): boolean;
+        IsClientLoading(playerSlot: number): boolean;
+        IsClientLoaded(playerSlot: number): boolean;
+        IsLoadedForAll(): boolean;
+
+        Release(): void;
+    }
+
     /**
      * The base class for all entities
      */
@@ -796,6 +893,16 @@ declare module "cs_script/point_script"
         GetDefuseFinishTime(): number | undefined;
     }
 
+    export class CSHostage extends BaseModelEntity {
+        IsBeingPickedUp(): boolean;
+        IsBeingCarried(): boolean;
+        IsRescued(): boolean;
+        /** The player currently picking up or carrying this hostage, or the player who rescued it */
+        GetRescuer(): CSPlayerPawn | undefined;
+        GetPickUpStartTime(): number | undefined;
+        GetPickUpFinishTime(): number | undefined;
+    }
+
     /**
      * An entity that displays an icon on radar and overview map.
      */
@@ -877,6 +984,8 @@ declare module "cs_script/point_script"
         HasDefuser(): boolean;
         SetHasDefuser(hasDefuser: boolean): void;
         GetDefuseTarget(): CSPlantedC4 | undefined;
+        /** The hostage this player is picking up or carrying */
+        GetHostage(): CSHostage | undefined;
         IsDucking(): boolean;
         IsDucked(): boolean;
         IsScoped(): boolean;
@@ -904,6 +1013,8 @@ declare module "cs_script/point_script"
      *   * `HUD_SCOREBOARD_VISIBLE`
      *   * `HUD_WINPANEL_VISIBLE`
      *   * `HUD_ENDOFMATCH_VISIBLE`
+     *   * `HUD_TEAMMENU_VISIBLE`
+     *   * `HUD_CHAT_VISIBLE`
      * * Events and client side scripting are not supported.
      * 
      * To use

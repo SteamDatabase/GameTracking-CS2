@@ -1,16 +1,16 @@
-import { CSDamageFlags, CSDamageTypes, Entity, Instance } from "cs_script/point_script";
+import { CSDamageFlags, CSDamageTypes, Entity, Instance, Console } from "cs_script/point_script";
 
-Instance.ServerCommand("sv_cheats 1");
-Instance.ServerCommand("mp_warmup_offline_enabled 1");
-Instance.ServerCommand("mp_warmup_pausetimer 1");
+Console.SetConvar("sv_cheats", true);
+Console.SetConvar("mp_warmup_offline_enabled", true);
+Console.SetConvar("mp_warmup_pausetimer", 1);
 
 let bFirstActivate = true;
 Instance.OnPlayerActivate(({ player }) => {
     if (bFirstActivate) {
         bFirstActivate = false;
         player.JoinTeam(2);
-        Instance.ServerCommand("bot_stop 1");
-        Instance.ServerCommand("bot_add");
+        Console.SetConvar("bot_stop", "1");
+        Console.ServerCommand("bot_add");
     }
 
     ShowWelcome(player.GetPlayerSlot());
@@ -56,7 +56,7 @@ Instance.OnCustomHudClicked((event) => {
     }
 });
 
-Instance.RegisterCheatCommand("script_zoo_show_welcome", () => {
+Console.RegisterCheatCommand("script_zoo_show_welcome", () => {
     for (const player of Instance.GetAllPlayerControllers()) {
         ShowWelcome(player.GetPlayerSlot());
     }

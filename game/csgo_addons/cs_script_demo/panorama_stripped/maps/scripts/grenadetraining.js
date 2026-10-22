@@ -1,4 +1,4 @@
-import { Entity, Instance } from "cs_script/point_script";
+import { Console, Entity, Instance } from "cs_script/point_script";
 
 let Rounds = 0;
 let Hits = 0;
@@ -46,10 +46,10 @@ Instance.OnScriptInput("ResetAndCleanUp", () => {
     Instance.EntFireAtName({ name: "worldtext.hits", input: "SetMessage", value: "0" });
     Instance.EntFireAtName({ name: "worldtext.rounds", input: "SetMessage", value: "0" });
 
-    Instance.ServerCommand("sv_infinite_ammo 0");
+    Console.SetConvar("sv_infinite_ammo", 0);
     const player = Instance.GetPlayerController(0)?.GetPlayerPawn();
     player?.DestroyWeapons();
-    Instance.ClientCommand(0, "slot3");
+    Console.ClientCommand(0, "slot3");
 });
 
 Instance.OnScriptInput("StartTraining", () => {
@@ -58,7 +58,7 @@ Instance.OnScriptInput("StartTraining", () => {
     Instance.EntFireAtName({ name: "worldtext.go_here", input: "Disable" });
     Instance.EntFireAtName({ name: "relay.start_countdown", input: "Trigger" });
 
-    Instance.ServerCommand("sv_infinite_ammo 1");
+    Console.SetConvar("sv_infinite_ammo", 1);
     const player = Instance.GetPlayerController(0)?.GetPlayerPawn();
     player?.DestroyWeapons();
     player?.GiveNamedItem("weapon_hegrenade", true);
@@ -96,7 +96,7 @@ let trackedProjectile;
                                                       
 let trackedPos;
 Instance.OnGrenadeThrow(({ projectile }) => {
-    Instance.ClientCommand(0, "slot6");
+    Console.ClientCommand(0, "slot6");
     trackedProjectile = projectile;
     trackedPos = trackedProjectile.GetAbsOrigin();
     Instance.SetNextThink(Instance.GetGameTime());

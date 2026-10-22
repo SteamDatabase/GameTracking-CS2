@@ -1,11 +1,11 @@
-import { Instance, CSInputs, CSPlayerPawn } from "cs_script/point_script";
+import { Instance, CSInputs, CSPlayerPawn, Console } from "cs_script/point_script";
 
 const CSInputsValues = Object.values(CSInputs).filter((i) => typeof i === "number");
 
 /** @type {CSPlayerPawn | undefined} */
 let inputPawn = undefined;
 
-Instance.RegisterCheatCommand( "script_zoo_showinput", () => {
+Console.RegisterCheatCommand( "script_zoo_showinput", () => {
     const player = Instance.GetAllPlayerControllers()[0];
     inputPawn = inputPawn == player?.GetPlayerPawn() ? undefined : player?.GetPlayerPawn();
 });

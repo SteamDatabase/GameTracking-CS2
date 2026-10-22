@@ -30,6 +30,7 @@ class CHostage : public CHostageExpresserShim
 	bool m_bHandsHaveBeenCut;
 	CHandle< CCSPlayerPawn > m_hHostageGrabber;
 	GameTime_t m_fLastGrabTime;
+	GameTime_t m_flGrabStartTime;
 	VectorWS m_vecPositionWhenStartedDroppingToGround;
 	VectorWS m_vecGrabbedPos;
 	GameTime_t m_flRescueStartTime;

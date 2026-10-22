@@ -1,4 +1,4 @@
-import { CSHitGroup, CSPlayerPawn, Instance } from "cs_script/point_script";
+import { Console, CSHitGroup, CSPlayerPawn, Instance } from "cs_script/point_script";
 
 const traceFrequency = 0;
 const drawDuration = 0;
@@ -20,12 +20,12 @@ Instance.OnScriptReload({
     },
 });
 
-Instance.RegisterCheatCommand("script_zoo_trace", (args) => {
+Console.RegisterCheatCommand("script_zoo_trace", (args) => {
     tracePawn = Instance.GetAllPlayerControllers()[0].GetPlayerPawn();
     if (args === "line" || args === "sphere" || args === "box" || args === "player" || args === "bullet") {
         traceType = args;
     } else {
-        Instance.Msg("Usage: script_zoo_trace <type> - type can be line, sphere, box, player, or bullet.")
+        Console.Log("Usage: script_zoo_trace <type> - type can be line, sphere, box, player, or bullet.")
         traceType = null;
     }
 });

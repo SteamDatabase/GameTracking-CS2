@@ -1,8 +1,4 @@
-import { Instance, BaseModelEntity } from "cs_script/point_script";
-
-                                                                          
-                                                        
-                                                              
+import { Instance, BaseModelEntity, Console } from "cs_script/point_script";
 
 function GetProp() {
     const ent = Instance.FindEntityByName("mdlchange.prop_dyn");
@@ -34,29 +30,9 @@ Instance.OnScriptInput("ScaleDown", () => {
     }
 });
 
-Instance.OnScriptInput("SetModelVar1", () => {
-    const prop = GetProp();
-    if (prop) {
-        prop.SetModel("models/de_overpass/construction/ladder/ladder_stand_open_1.vmdl");
-        prop.Unglow();
-    }
-});
-
-Instance.OnScriptInput("SetModelVar2", () => {
-    const prop = GetProp();
-    if (prop) {
-        prop.SetModel("models/de_overpass/overpass_bike/bike_01.vmdl");
-        prop.Unglow();
-    }
-});
-
-Instance.OnScriptInput("SetModelVar3", () => {
-    const prop = GetProp();
-    if (prop) {
-        prop.SetModel("models/generic/terrace_set_01/terrace_chair_01.vmdl");
-        prop.Unglow();
-    }
-});
+Instance.OnScriptInput("SetModelVar1", () => SetModel("models/de_overpass/construction/ladder/ladder_stand_open_1.vmdl"));
+Instance.OnScriptInput("SetModelVar2", () => SetModel("models/de_overpass/overpass_bike/bike_01.vmdl"));
+Instance.OnScriptInput("SetModelVar3", () => SetModel("models/generic/terrace_set_01/terrace_chair_01.vmdl"));
 
 Instance.OnScriptInput("GlowToggle", () => {
     const prop = GetProp();
@@ -65,3 +41,24 @@ Instance.OnScriptInput("GlowToggle", () => {
         else prop.Unglow();
     }
 });
+
+const precaches = new Map();
+
+async function SetModel(model) {
+    const prop = GetProp();
+    if (!prop) return;
+
+    let precache = precaches.get(model);
+    if (!precache) {
+        precache = Instance.Precache({ resources: [model] });
+        if (!precache) return;
+        precaches.set(model, precache);
+    }
+    while (!precache.IsLoadedForAll()) {
+                                     
+        await Instance.Delay(0);
+    }
+
+    prop.SetModel(model);
+    prop.Unglow();
+}

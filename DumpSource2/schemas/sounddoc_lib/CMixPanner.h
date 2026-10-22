@@ -1,5 +1,5 @@
 // MPropertyFriendlyName = "VMix Panner Audio Node"
-// MPropertyDescription = "Adjust the stereo panning of an audio track."
+// MPropertyDescription = "Adjust the stereo panning of an audio track. -1 pans left, +1 pans right"
 // MHasKV3TransferPolymorphicClassname
 class CMixPanner : public CMixPropertyBase
 {

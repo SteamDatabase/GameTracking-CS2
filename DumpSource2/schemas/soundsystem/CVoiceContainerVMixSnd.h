@@ -3,4 +3,5 @@
 // MHasKV3TransferPolymorphicClassname
 class CVoiceContainerVMixSnd : public CVoiceContainerBase
 {
+	CUtlString m_resourceName;
 };
